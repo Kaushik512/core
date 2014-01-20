@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DevOps</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/redmond/jquery-ui.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <style>
+
+    .nav-options {
+      float: right;
+    }
+    .nav-settings {
+       
+   }
+   .nav-logout {
+     margin-top: 7px;
+   }
+
+   /* for navigation buttons */
+   .page_nav {
+       float: right;
+       margin-right: 10px;
+       margin-top: 10px;
+   } 
+   .page_nav ul {
+
+   } 
+   .page_nav ul li {
+
+    /*padding: 5px;*/
+    /* //background: #2184BE;*/
+}
+.page_nav ul li a {
+    color: white;
+}
+/* for selectable */
+
+.sidebar-collapse {
+   border-top: 1px solid #E0E0E0;
+   content: "";
+   display: inline-block;
+   margin-left: 9%;
+   margin-top: 7px;
+   text-align: center;
+   width: 80%;
+}
+.sidebar-collapse-arrow {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+    color: #000000;
+    display: inline-block;
+    font-size: 12px;
+    padding-bottom: 1px;
+    position: relative;
+    top: -12px;
+    width: 18px;
+    cursor: pointer;
+}
+.sidebar-collapse-arrow.left-arrow {
+    display: none;
+}
+.sidebar-collapse-arrow.right-arrow {
+    display: inline-block;
+}
+
+.collapse-menu {
+    width: 4% !important;
+}
+.collapse-menu-header-text {
+    display: none;
+}
+.main-content-expanded {
+    width: 96%;
+}
+.footer-expand {
+    left:4% !important;
+    width: 96% !important;
+}
+
+</style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-inverse" role="navigation">
+            <a class="navbar-brand" href="#">
+                <img src="img/version2.png" alt="logo" height="30" width="70">
+                <span class="logotext">DevOps for DevOps</span>
+            </a>
+            <div class="nav-options">
+            <a class="navbar-brand nav-settings" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
+                <img src="img/settings-icon.png" alt="settings" height="30" width="30">
+            </a>
+            <a class="navbar-brand nav-settings nav-logout" href="/signout" title="Logout">
+                <span>Logout</span>
+            </a>
+          </div>
+        </nav>
+    </header>
+
+
+    <!-- Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="settingsModalTitle">Settings</h4>
+      </div>
+      <div class="modal-body">
+        Some settings ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    <div  class="menu_left navbar-inverse">
+        <aside class='menuContent'>
+            <p class="menu-header"><span class="menu-header-text">Products</span>&nbsp;</p>
+            <ul id="main-nav">
+                <% if(products && products.length) {
+
+                  for(var i=0;i<products.length;i++) {
+                    var className = "";
+                    if(i == 0) {
+                     className = 'active';
+                 }
+                 %>
+                 <li class="nav-prod <%=className%>" data-pid="<%=products[i].pid%>"><a href="#"><i class="fa fa-th"></i> 
+                    <span class="prod-name"><%= products[i].name%></span></a></li>
+
+                    <% } %> 
+
+                    <% } %> 
+                </ul>
+                <div id="sidebar-collapse" class="sidebar-collapse">
+                    <span class="sidebar-collapse-arrow right-arrow" title="collapse">&#10094;</span>
+                    <span class="sidebar-collapse-arrow left-arrow" title="expand">&#10095;</span>
+                </div>
+            </aside>
+        </div>
+        <section class="main-content">
+            <ul class="nav nav-tabs">
+              <li><a href="#gallery">Gallery</a></li>
+              <li><a href="#cmdb">CMDB</a></li>
+              <li><a href="#instances">Instances</a></li>
+              <li><a href="#monitoring">Monitoring</a></li>
+          </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane" id="gallery"></div>
+      <div class="tab-pane" id="cmdb"></div>
+      <div class="tab-pane" id="instances"></div>
+      <div class="tab-pane" id="monitoring"></div>
+  </div>
+          <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
+          </div>--> 
+      </section>
+
+
+
+      <section class='footer'>
+        <div class="page_nav">
+            <ul>
+                <li  class="footer_panel">
+                    <a class="btn btn-info" href="#previous">Previous</a>
+                </li>
+                <li  class="footer_panel">
+                    <a class="btn btn-info" href="#next">Next</a>
+                </li>
+                <li class="footer_panel">
+                    <a class="btn btn-info" href="#finish">Finish</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+    window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')
+    </script>
+    <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/commons.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+    $(function() {
+        var $menu= $('.menu_left');
+        var $mainContent = $('.main-content');
+        var $menuHeaderText = $('.menu-header-text');
+        var $rightArr = $('.right-arrow');
+        var $leftArr = $('.left-arrow');
+        var $prodName = $('.prod-name');
+        var $footer = $('.footer');
+        
+        $rightArr.click(function(e){
+         $prodName.hide();
+         $menu.addClass('collapse-menu');
+         $menuHeaderText.hide();
+         $mainContent.addClass('main-content-expanded');
+         $footer.addClass('footer-expand');
+         $(this).hide();
+         $leftArr.css({'display':'inline-block'}); 
+     });
+        
+        $leftArr.click(function(e){
+            $prodName.show();
+            $menu.removeClass('collapse-menu');
+            $menuHeaderText.show();
+            $mainContent.removeClass('main-content-expanded');
+            $footer.removeClass('footer-expand');
+            $(this).hide();
+            $rightArr.css({'display':'inline-block'}); 
+        });
+
+        DEVOPS.navigation.hideAllBtns(); 
+
+        $('.nav-prod').click(function(e){
+         var $this = $(this);
+         var pid = $this.attr('data-pid');
+
+         $.get("/products/"+pid,function(data){
+           DEVOPS.navigation.hideAllBtns();
+           DEVOPS.navigation.showFirstTab(data);
+        
+        }).fail(function() {
+           alert( "error" );
+       });
+    });
+
+     
+
+        $('.nav-prod').filter('.active').trigger('click');
+
+    });
+        /*
+        $(document).ready(function () {
+            var selectedInstances = [];
+        }*/
+
+        </script>
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+
+        <script>
+        (function (b, o, i, l, e, r) {
+            b.GoogleAnalyticsObject = l;
+            b[l] || (b[l] =
+                function () {
+                    (b[l].q = b[l].q || []).push(arguments)
+                });
+            b[l].l = +new Date;
+            e = o.createElement(i);
+            r = o.getElementsByTagName(i)[0];
+            e.src = '//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e, r)
+        }(window, document, 'script', 'ga'));
+        ga('create', 'UA-XXXXX-X');
+        ga('send', 'pageview');
+        </script>
+    </body>
+
+    </html>

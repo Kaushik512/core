@@ -1,0 +1,207 @@
+<%if(cookbooks){%>
+<style type="text/css">
+        .recipies {
+            padding-top: 2%;
+            text-align: center;
+        }
+        .recipies-list-container {
+            padding-left: 20px;
+        padding-top: 8px;
+       text-align: left;
+
+        }
+
+        .sel-roles-container {
+          border-right: 1px solid;
+    height: 100%;
+    
+    padding-top: 2%;
+    text-align: center; 
+           
+        }
+   .sel-roles-container ul{
+     overflow-y: auto;
+     height: 100%;
+    padding-top: 8px;
+   }
+   .field-heading {
+    border-bottom: 1px solid;
+    font-size: 18px;
+
+   }
+
+        .sel-roles {
+            background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    display: block;
+    line-height: 1.42857;
+    margin-bottom: 20px;
+     margin-left: 4px;
+    margin-top: 3px;
+    max-width: 100px;
+    min-height: 138px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: center;
+    transition: all 0.2s ease-in-out 0s;
+    cursor: pointer;
+
+        }
+
+        .sel-roles-caption {
+            text-align: center;
+        }
+        .sel-role-thumbnail {
+    float: left;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    max-height: 145px;
+    max-width: 109px;
+    width: 41%;
+    border-radius: 5px 5px 5px 5px;
+        }
+
+        .sel-active {
+            background-color: green;
+        }
+
+        .sel-role-runlist {
+          border-top: 1px solid;
+          text-align: center;
+          font-size: 10px; 
+          padding-top: 10px; 
+        } 
+        .sel-role-runlist .runlist-item {
+        /*font-size: 8px;*/ 
+        }
+        .sel-role-heading {
+           font-size: 12px;
+    overflow: hidden;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+            }
+
+            .recipes-list {
+              height:300px !important;
+              width:90%;
+              margin-bottom:10px;
+              display: none;  
+            }
+
+</style>
+<link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
+<div class="" style="height:90%">
+    <div class="sel-roles-container col-md-6">
+        <span class="field-heading"> Roles </span>
+
+  <ul class="thumbnails list-unstyled">
+  <%
+  var rolesSelected = prodSelected.selectedInstances;
+  var keys = Object.keys(rolesSelected);
+  for(var i=0;i<keys.length;i++){ %>
+  <li class="sel-role-thumbnail">
+   <div class="sel-roles" data-recipe-list-id = "<%=rolesSelected[keys[i]].cid%>">
+   <div class="sel-roles-caption"> 
+   <div class="sel-role-heading" title="<%= rolesSelected[keys[i]].title%>"><%= rolesSelected[keys[i]].title%></div>
+   <div class="sel-role-runlist">
+   <% var runlistArr = rolesSelected[keys[i]].runlist.split(',');
+      for(var j=0;j<runlistArr.length;j++) {    
+   %>
+   <p class="runlist-item"><%=runlistArr[j]%></p>  
+   <% } %>
+</div>
+   </div>
+  
+  </li> 
+ <%}%>
+</ul>
+
+</div>
+
+<div class="recipies col-md-6">
+    <span class="field-heading"> Add Recipies </span>
+<div class="recipies-list-container">
+<%
+for(var j =0; j< keys.length; j++){%>
+   <select id="<%=rolesSelected[keys[j]].cid%>" class="recipes-list" multiple="multiple"> 
+ <%for(var i =0; i< cookbooks.length; i++){%>
+    <option data-id="<%=i%>" value='<%=cookbooks[i]%>'><%=cookbooks[i]%></option>
+<%}%>
+  </select>
+<%}%>
+</div>
+</div>
+</div>
+    <script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
+    <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
+    <script>
+      //$(".multiselect").multiselect();
+      (
+      function(){
+
+      
+       //DEVOPS.navigation.setNextBtnClickHandler(finish);
+
+       function finish(e,tabEl) {
+        var $message = $('<div class="alert alert-info fade in" id="message" style="margin: 10px 25px;width:92%;display: none"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div>');
+          //  DEVOPS.navigation.hideAllBtns(); 
+             $(tabEl).empty().append($message);
+            var selectedInstances = JSON.parse('<%-JSON.stringify(prodSelected.selectedInstances)%>');
+            var keys = Object.keys(selectedInstances);
+              if (keys.length > 0) {
+                var count = keys.length;
+                for (var i = 0; i < keys; i++) {
+                     $.post('/start', {
+                                    'image_id': selectedInstances[keys[i]].amiid,
+                                    'min': 1,
+                                    'max': 1
+                                }, function (data,success) {
+                                    console.log(data.error);
+                                    if (!data.error) {
+                                        if (count > 1) {
+                                            count -= 1;
+                                        } else {
+                                            $('#message').show();
+                                        }
+                                    }
+
+                                });
+                            }
+          }
+      } 
+
+
+       var $selLi = $('.sel-role-thumbnail'); 
+       $('.sel-roles').click(function(e){
+        var $this = $(this);
+        
+        // enabling background for current selected div
+        $selLi.removeClass('sel-active');
+        $this.parent().addClass('sel-active');
+        
+        // showing the recipies list for active role and hiding rest  
+        var recipeListId = $this.attr('data-recipe-list-id');
+        $('.ui-multiselect').hide();
+
+        //checking whether the plugin is already applied to this element
+        if($this.data('isMultiSelectInitialized')) {
+           var $multiselect = $('#multiselect-'+recipeListId);
+           $multiselect.show();       
+        } else {
+          var $recipeList = $('#'+recipeListId);
+          //$recipeList.show();
+          $recipeList.multiselect();
+          $this.data('isMultiSelectInitialized',true);
+        }
+        
+      });
+  })();
+
+    </script>
+
+
+<%}%>

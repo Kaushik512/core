@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>DevOps</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<style>
+    .step2 input[type="checkbox"]{
+display: none!important;        
+    }
+    #dynamiclist3 input[type="checkbox"] {
+        display: none!important;
+    }         
+.recepies{
+ float: right;
+ width: 72%;
+ }    
+table th{
+        background: #b1cfe4;
+    }
+
+ .recepies-row-head {
+   background: #b1cfe4;
+  
+ }
+ 
+ .no-margin {
+   margin-left:0;
+   margin-right: 0;
+ }
+
+ .recepies-row-head-col {
+  line-height: 1.42857;
+ padding: 8px;
+ font-weight:bold;      
+ }  
+ 
+ .recepies-list-entry {
+  line-height: 1.42857;
+  padding: 10px;
+ }
+ 
+ .recepies-list-entry-col {
+  line-height: 1.42857;
+  padding: 10px;
+  font-weight:bold; 
+ } 
+
+
+
+
+
+
+ /* for step progress */
+
+ /*progressbar*/
+.progressContainer {
+  width: 100%;
+  margin: 50px auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+
+#progressbar {
+  /*margin-bottom: 30px;*/
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+  margin-left: 20%;
+}
+#progressbar li {
+  list-style-type: none;
+  color: #EEEEEE;
+  text-transform: uppercase;
+  font-size: 15px;;
+  width: 33.33%;
+  float: left;
+  position: relative;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 12%;
+  line-height: 30px;
+  display: block;
+  font-size: 17px;
+  color: #333;
+  background: #EEEEEE;
+  border-radius: 3px;
+  margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: #EEEEEE;
+  position: absolute;
+  left: -50%;
+  top: 15px;
+  z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before {
+    background: #2184BE;
+  color: white; 
+}  
+
+#progressbar li.active:after{
+  background: #2184BE;
+  color: white;
+}
+#progressbar li.active {
+  color: #2184BE;
+}
+
+/* for navigation buttons */
+.page_nav {
+
+}
+.page_nav ul {
+
+}
+
+.page_nav ul li {
+    float: left;
+    list-style: none outside none;
+    padding: 5px;
+    background: #2184BE;
+
+}
+
+.page_nav ul li a {
+   color: white;
+}
+
+
+/* for selectable */
+
+.jq-selectable .ui-selecting { background: #2184BE; }
+.jq-selectable .ui-selected { background: #2184BE; color: white; }
+.jq-selectable { 
+  list-style-type: none; 
+  margin: 0; padding: 0; 
+}
+.jq-selectable li { 
+  text-align: center;
+  cursor: pointer;
+}
+
+#recepies-bt-container {
+  margin-top: 100%;
+}
+#recepies-bt-container .arrows {
+    display: block;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#recepie-selectable {
+ height: 350px;
+ overflow-y: auto;
+}
+#preset-recepies-list {
+
+ height: 100px;
+ overflow-y: auto;
+ 
+}
+#new-recepies-list {
+  height: 160px;
+  overflow-y: auto;
+}
+
+
+</style>
+<script>
+    function uncheck() {
+        $("input[type='checkbox']").attr("checked", false).checkboxradio("refresh");
+
+    }
+</script>
+    </head>
+    <body onload="uncheck()">
+      
+<header>
+<nav class="navbar navbar-inverse" role="navigation">
+    <a class="navbar-brand" href="#"><img src="img/version2.png" alt="logo" height="30" width="70">
+    <span class="logotext">DevOps for DevOps</span></a>
+
+</nav>
+</header>  
+<br style="clear: both">
+
+
+<article>
+<aside class="aside">
+<p class="menu">Products</p>
+ <ul id="main-nav"></ul>
+</aside>
+
+<section class="main-content">
+<h3>Gallery</h3>
+<hr>
+<div class="alert alert-info fade in" id="message"style="margin: 10px 25px;width: 92%;display: none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true" >×</button>
+        <strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.
+      </div>
+<div id="wizard" style="margin:0 auto" class="">
+  <div class="progressContainer"> 
+   <ul id="progressbar">
+     <li class="active">Choose Roles</li>
+     <li>Add Recepies</li>
+  </ul>
+</div>
+
+<section style="margin-left:8%" id="section1">
+<ul class="thumbnails list-unstyled" id="dynamiclist"></ul>
+</section>
+
+<section class="step2" id="section2" style="display:none">
+<ul class="thumbnails list-unstyled"  >
+    <li  class="col-md-3" id="dynamiclist2"></li>
+</ul>                   
+<div class="recepies">
+<!--<div class="table table-bordered table-striped" id="table2">-->
+<div class="table" style="">
+                    <div class="row no-margin">
+                                 <div class="col-md-5 table-bordered recepies-row-head-col" style="">
+                                    
+                                    <ol id="recepie-selectable" class="jq-selectable">
+                                     <li class="ui-widget-content" data-id="1" data-value="automount">automount</li>
+                                     <li class="ui-widget-content" data-id="2" data-value="buildrpms">buildrpms</li>
+                                     <li class="ui-widget-content" data-id="3" data-value="db2client">db2client</li>
+                                     <li class="ui-widget-content" data-id="4" data-value="dhcp">dhcp</li>
+                                     <li class="ui-widget-content" data-id="5" data-value="firewall">firewall</li>
+                                     <li class="ui-widget-content" data-id="6" data-value="group">group</li>
+                                     <li class="ui-widget-content" data-id="7" data-value="hostname">hostname</li>
+                                     <li class="ui-widget-content" data-id="8" data-value="informixclient">informixclient</li>
+                                     <li class="ui-widget-content" data-id="9" data-value="java">java</li>
+                                     <li class="ui-widget-content" data-id="10" data-value="monitoring">monitoring</li>
+                                     <li class="ui-widget-content" data-id="11" data-value="motd">motd</li>
+                                     <li class="ui-widget-content" data-id="12" data-value="mssqlclient">mssqlclient</li>
+                                     <li class="ui-widget-content" data-id="13" data-value="nis">nis</li>
+                                     <li class="ui-widget-content" data-id="14" data-value="ntp">ntp</li>
+                                     <li class="ui-widget-content" data-id="15" data-value="oracleclient">oracleclient</li>
+                                     <li class="ui-widget-content" data-id="16" data-value="profile">profile</li>
+                                     <li class="ui-widget-content" data-id="17" data-value="repomanager">repomanager</li>
+                                     <li class="ui-widget-content" data-id="18" data-value="slz_app_deploy">slz_app_deploy</li>
+                                     <li class="ui-widget-content" data-id="19" data-value="solrcloud">solrcloud</li>
+                                     <li class="ui-widget-content" data-id="20" data-value="sybaseclient">sybaseclient</li>
+                                     <li class="ui-widget-content" data-id="21" data-value="ulimit">ulimit</li>
+                                     <li class="ui-widget-content" data-id="22" data-value="user">user</li>
+                                     <li class="ui-widget-content" data-id="23" data-value="zookeeper">zookeeper</li>
+                                    </ol>
+
+
+                                 </div>
+                                   <div class="col-md-2 recepies-row-head-col" style="">
+                                    <div id="recepies-bt-container">
+                                    <span class="arrows arr-add" title="Add Selected">&#8594;</span> 
+                                    <span class="arrows arr-add-all" title="Add All">&#8658;</span>
+                                     <span class="arrows arr-remove" title="Remove">&#8592;</span> 
+                                    <span class="arrows arr-remove-all" title="Remove All">&#8656;</span>
+                                    </div>
+
+                                   </div>
+                            <div class="col-md-5 table-bordered recepies-row-head-col" style="">
+                             <div id="preset-recepies-container">
+                              <h3>Preset Recepies</h3>
+                              <ol id="preset-recepies-list" class="jq-selectable">
+                                    <li class="ui-widget-content">Recepie 1</li>
+                                    <li class="ui-widget-content">Recepie 2</li>
+                                    <li class="ui-widget-content">Recepie 3</li>
+                                    <li class="ui-widget-content">Recepie 4</li>
+                                    <li class="ui-widget-content">Recepie 5</li>
+                                    <li class="ui-widget-content">Recepie 6</li>
+                                    <li class="ui-widget-content">Recepie 7</li>
+                              </ol>
+                             </div>
+                             <div id="add-recepies-container">
+                              <h3>New Recepies</h3>
+                              <ol id="new-recepies-list" class="jq-selectable">
+                                 </ol>
+                             </div>
+                            </div> 
+                           
+
+                            
+
+                    </div>
+                    <div id="sortable" style="display:block;float:none"></div>
+                        
+</div>
+</div>                 
+</section>
+<div class="page_nav">
+<ul>
+  <li class="" style="display: none;">sadasdasdasd
+    <a href="#previous">Previous</a>
+  </li>
+  <li>
+    <a href="#next">Next</a>
+  </li>
+  <li style="display: none;">
+    <a href="#finish">Finish</a>
+  </li>
+</ul>
+</div>
+</div>
+</section>
+
+
+
+<br style="clear:  ">
+</article>
+        
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script>
+
+    $(function () {
+
+        var selectedRecepiesList = {};
+        var removeRecepiesList = {}; 
+   
+        var $recepiesList = $("#recepie-selectable" );
+        var $addedRecepiesList = $('#new-recepies-list');
+ 
+
+       $recepiesList.selectable({
+        tolerance:'fit',
+        selected: function( event, ui ) {
+         var id = $(ui.selected).attr('data-id');
+         selectedRecepiesList[id] = {};
+         selectedRecepiesList[id].id =  $(ui.selected).attr('data-value');
+         selectedRecepiesList[id].value =  $(ui.selected).attr('data-value');
+         selectedRecepiesList[id].elem =  ui.selected;
+         console.log(selectedRecepiesList);
+        },
+        unselected: function(event,ui) {
+          var id = $(ui.unselected).attr('data-id');
+          console.log(id);
+          delete selectedRecepiesList[id];
+        }
+       });
+
+
+       $addedRecepiesList.selectable({
+        selected: function( event, ui ) {
+         var id = $(ui.selected).attr('data-id');
+         removeRecepiesList[id] = {};
+         removeRecepiesList[id].id =  $(ui.selected).attr('data-value');
+         removeRecepiesList[id].value =  $(ui.selected).attr('data-value');
+         removeRecepiesList[id].elem =  ui.selected;
+        },
+        unselected: function(event,ui) {
+          var id = $(ui.unselected).attr('data-id');
+          console.log(id);
+          delete removeRecepiesList[id];
+        }
+       });
+
+       
+       $('.arr-add').click(function(e){
+          var key;
+          for(key in selectedRecepiesList) {
+              $(selectedRecepiesList[key].elem).removeClass('ui-selected'); 
+              $addedRecepiesList.append(selectedRecepiesList[key].elem);
+          }
+          selectedRecepiesList = {};
+          $addedRecepiesList.selectable( "refresh" );
+       });
+
+       $('.arr-add-all').click(function(e){
+          var $li = $recepiesList.find('li');
+          for(var i = 0;i<$li.length;i++) {
+              $($li.get(i)).removeClass('ui-selected'); 
+              $addedRecepiesList.append($li.get(i));
+              
+          }
+          selectedRecepiesList = {};
+           $addedRecepiesList.selectable( "refresh" );
+       });
+
+       $('.arr-remove').click(function(e){
+          var key;
+          for(key in removeRecepiesList) {
+              $(removeRecepiesList[key].elem).removeClass('ui-selected'); 
+              $recepiesList.append(removeRecepiesList[key].elem);
+          }
+          removeRecepiesList = {};
+          $recepiesList.selectable( "refresh" );
+       });
+
+       $('.arr-remove-all').click(function(e){
+          var $li = $addedRecepiesList.find('li');
+          for(var i = 0;i<$li.length;i++) {
+              $($li.get(i)).removeClass('ui-selected'); 
+              $recepiesList.append($li.get(i));
+              
+          }
+          removeRecepiesList = {};
+          $recepiesList.selectable( "refresh" );
+       });  
+
+
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "devopsData.xml",
+            dataType: "xml",
+            success: function (xml) {
+                $(xml).find('product').each(function () {
+                    var name = $(this).attr('name');
+                    $('#main-nav').append('<li><a href="#" class=""><i class="fa fa-th"></i>' + name + '</a></li>')
+                     $("#main-nav li:first").addClass("active");
+                    $(this).find('Components').each(function () {
+                        var id = $(this).attr('id');
+                        var title = $(this).find('title').text();
+                        var A = $(this).find('A').text();
+                        var B = $(this).find('B').text();
+                        var C = $(this).find('C').text();
+                        var D = $(this).find('D').text();
+                        $(this).find('sizing').each(function () {
+                            var cpu = $(this).find('CPU').text();
+                            var ram = $(this).find('RAM').text();
+                            var hdd = $(this).find('HDD').text();
+
+                            $('#dynamiclist').append('<li id="' + id + '"class="col-md-3"><input class="checkbox" type="checkbox"style="position:relative;left:47%;"> <div class="thumbnail" style="padding: 0"><div style="padding:4px"><div class="system"><i class="fa fa-laptop"></i></div><div class="caption"><h5>' + title + '</h5><p>' + A + '<span class="badge badge-warning"></span></p><p>' + B + '<span class="badge badge-warning"></span></p><p>' + C + '<span class="badge badge-warning"></span></p><p>' + D + '<span class="badge badge-warning"></span></p></div><div class="modal-footer2"><div class="col-md-4"><small><span class="badge badge-info">' + cpu + '</span></small><br/><small>CPU</small></div><div class="col-md-4"><small><span class="badge badge-info">' + ram + '</span></small><br/><small>RAM</small></div><div class="col-md-4"><small><span class="badge badge-warning">' + hdd + '</span></small><br/><small>HDD</small></div></div></div></li>');
+
+                        });
+                    });
+                });
+
+                var $actions = $('.page_nav');
+                var $section1 = $('#section1');
+                var $section2 = $('#section2');
+                var $progressbar = $('#progressbar');
+                    
+                $actions.find('a[href="#next"]').click(function () {
+                    var list = '';
+                    $('#dynamiclist input:checked').each(function () {
+                        list = list + $(this).parent("li").html();
+                    });
+                    $('#dynamiclist2').append(list);
+                    
+                    $section1.hide();
+                    $section2.show();
+                    $(this).parent().hide();
+                     $actions.find('a[href="#previous"]').parent().show(); 
+                    $actions.find('a[href="#finish"]').parent().show(); 
+                   $progressbar.find('li:nth-child(2)').addClass('active');
+            
+                });
+
+                $actions.find('a[href="#finish"]').click(function () {
+                        $section2.hide();
+                        $actions.find('a[href="#finish"]').parent().hide();
+                        $('#message').show();
+                });
+
+                  
+                $actions.find('a[href="#previous"]').click(function () {
+                        $section2.hide();
+                        $section1.show();
+                        $('#message').hide();
+
+                        $actions.find('a[href="#previous"]').parent().hide(); 
+                        $actions.find('a[href="#finish"]').parent().hide(); 
+                        $actions.find('a[href="#next"]').parent().show();
+                       $progressbar.find('li:nth-child(2)').removeClass('active'); 
+                });
+
+            }
+
+        });
+    });
+
+
+     </script>
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+    </body>
+</html>

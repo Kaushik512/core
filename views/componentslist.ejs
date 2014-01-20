@@ -1,0 +1,187 @@
+<%if(prod && prod.components && prod.components.length) { var list = prod.components; %>
+
+<style>
+.role-container{
+  /*padding: 3px;*/
+  background-color: white;
+  cursor: pointer;
+}
+.role-selected {
+   background-color: green !important;
+}
+
+.system{
+     color: #DCDCDC;
+    font-size: 50px;
+    text-align: center;
+}
+.system-runlist {
+  padding-bottom: 5px !important;
+    padding-top: 0 !important;
+    min-height: 112px;
+}
+.runlist-block {
+  display: block;
+}
+.center-alignment {
+  display: inline-block;
+    text-align: center;
+}
+.system-prop {
+  left: 18.5%;
+  position: relative; 
+}
+.system-prop li{
+  display: inline;
+}
+.system-prop-text {
+  display: block;
+  font-size: 10px;
+}
+
+</style>
+
+    
+<ul class="thumbnails list-unstyled" id="dynamiclist">
+<% for(var i = 0;i<list.length;i++) { %>
+
+<li class="col-sm-2"> 
+  <div class="thumbnail">
+    <div class="role-container" data-cid="<%=list[i].cid%>" data-amiid = "<%=list[i].amiid%>" data-title="<%=list[i].title%>" 
+    <% var runlist = list[i].runlist 
+      var str = ''
+      var A='',B='',C='',D='';
+      if(runlist){
+      for(var j=0;j<runlist.length;j++) {
+        str=str+runlist[j]+',';
+        switch(j) {
+          case 0:
+             A = runlist[j];
+             break;
+            case 1:
+             B = runlist[j];
+             break;
+            case 2:
+             C = runlist[j];
+             break;
+            case 3:
+             D = runlist[j];
+             break;
+        }
+       
+      }
+     }
+      var sizing = list[i].sizing;
+      var cpu='',ram='',hdd='';
+      if(sizing) {
+        if(sizing.CPU) {
+          cpu = sizing.CPU;
+        }
+        if(sizing.RAM) {
+          ram = sizing.RAM;
+        } 
+        if(sizing.HDD) {
+          hdd = sizing.HDD;
+        }
+      }       
+    %> 
+
+
+  data-runlist="<%=str%>" data-cpu="<%=cpu%>" data-ram="<%ram%>" data-hdd="<%=hdd%>">
+  
+    <div class="system">
+      <i class="fa fa-laptop"></i>
+    </div>
+    <div class="caption system-runlist">
+      <h5 style="text-align:center;"><%=list[i].title%></h5>
+      <span class="runlist-block"><small><%=A%></small></span>
+      <span class="runlist-block"><small><%=B%></small></span>
+      <span class="runlist-block"><small><%=C%></small></span>
+      <span class="runlist-block"><small><%=D%></small></span>
+    </div>
+    <ul class="row list-unstyled system-prop">
+      <li>
+        <div class="center-alignment">
+          <span class="badge badge-info system-prop-text "><%=cpu%></span>
+        <span class="system-prop-text">CPU</span>
+      </div>
+      </li>
+      <li>
+        <div class="center-alignment"> 
+        <span class="badge badge-info system-prop-text"><%=ram%></span>
+        <span class="system-prop-text">RAM</span>
+        </div>
+      </li>
+      <li>
+        <div class="center-alignment">
+        <span class="badge badge-warning system-prop-text"><%=hdd%></span>
+        <span class="system-prop-text">HDD</span>
+        </div>
+      </li>
+    </ul>
+    
+  </div>
+</div>
+</li>
+
+<%}%>
+
+<script type="text/javascript">
+(function(){
+
+   var product = {};
+   product.pid = <%=prod.pid%>;
+   product.name = "<%=prod.name%>";
+   product.selectedInstances = {};  
+   DEVOPS.navigation.setNextBtnClickHandler(next); 
+
+     $('.role-container').click(function (e) {
+                        e.stopImmediatePropagation();
+                        var $this = $(this);
+                        if(!$this.data('isSelected')) {
+                         var selectedItem= {};
+                         selectedItem.cid =  $(this).attr('data-cid');
+                         selectedItem.amiid = $(this).attr('data-amiid');
+                         selectedItem.title = $(this).attr('data-title');
+                         selectedItem.runlist = $(this).attr('data-runlist');
+                         selectedItem.cpu = $(this).attr('data-cpu');
+                         selectedItem.ram = $(this).attr('data-ram');
+                         selectedItem.hdd = $(this).attr('data-hdd');
+                         console.log(selectedItem);
+                         product.selectedInstances[selectedItem.cid] = selectedItem;
+                         $this.data('isSelected',true);
+                         $this.parent().addClass('role-selected');
+                        } else {
+                          delete product.selectedInstances[$(this).attr('data-cid')];
+                           $this.data('isSelected',false);
+                          $this.parent().removeClass('role-selected');
+                        }
+                       }); 
+     
+
+     function next(e,tabEl) {
+             
+            console.log(product.selectedInstances);
+            $.ajax({
+                type: "POST",
+                url: "/cookbooks",
+                data: JSON.stringify(product),
+                success: function(data){
+            
+                  $(tabEl).empty().append(data);
+                  //DEVOPS.navigation.hideAllBtns(); 
+                  //DEVOPS.navigation.showPreviousBtn(previos);
+                  //DEVOPS.navigation.showFinishBtn(finish);
+            
+                },
+                contentType : 'application/json'
+            });
+        }
+
+      
+
+})();
+</script>
+
+</ul>
+<%}%>
