@@ -27,7 +27,7 @@ $(function(){
     var $currentActiveTab = $tabsList.filter('.active');
     var clickHandler = $currentActiveTab.data('clickHandler');
     showNextTab();
-    DEVOPS.navigation.setContentOnCurrentTab('');
+    DEVOPS.navigation.setContentOnCurrentTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
     if(typeof clickHandler === 'function') {
       var $activeA = $tabsNavBar.find('li.active a');
       var tabContentId = $activeA.attr('href');

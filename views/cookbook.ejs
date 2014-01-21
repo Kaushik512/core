@@ -148,9 +148,9 @@ for(var j =0; j< keys.length; j++){%>
 
        function finish(e,tabEl) {
          //alert('here');
-        var $message = $('<div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div>');
+           var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div></div>');
           //  DEVOPS.navigation.hideAllBtns(); 
-            $(tabEl).empty().append($message);
+           
             var selectedInstances = JSON.parse('<%-JSON.stringify(prodSelected.selectedInstances)%>');
             console.log(selectedInstances)
             var keys = Object.keys(selectedInstances);
@@ -166,11 +166,12 @@ for(var j =0; j< keys.length; j++){%>
                                     console.log(data.error);
                                     if (!data.error) {
                                         var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none">&nbsp;Instance Id : '+data.data.Instances[0].InstanceId+' </div>');
-                                        $(tabEl).append($instanceData); 
+                                          $message.append($instanceData); 
                                         if (count > 1) {
                                             count -= 1;
                                         } else {
-                                            $('.instanceSuccess').show();
+                                           $message.find('.instanceSuccess').show();
+                                           $(tabEl).empty().append($message);
                                         }
                                     }
 
