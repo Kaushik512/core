@@ -107,8 +107,8 @@ app.post('/start',verifySession, function(req, resp){
 	console.log(req.body.min);
 	console.log(req.body.max);
 	if(req.body.image_id && req.body.min && req.body.max)
-		ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,function(err, data){
-			resp.json({"data" : data, "error" : err});
+		ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,{terminate:true,delay:300000},function(err, data){
+			resp.json({"data" :data, "error" : err});
 		});
 });
 

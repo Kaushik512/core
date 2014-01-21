@@ -143,18 +143,21 @@ for(var j =0; j< keys.length; j++){%>
       (
       function(){
 
-      
-       //DEVOPS.navigation.setNextBtnClickHandler(finish);
+       
+       DEVOPS.navigation.setNextBtnClickHandler(finish);
 
        function finish(e,tabEl) {
-        var $message = $('<div class="alert alert-info fade in" id="message" style="margin: 10px 25px;width:92%;display: none"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div>');
+         //alert('here');
+        var $message = $('<div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div>');
           //  DEVOPS.navigation.hideAllBtns(); 
-             $(tabEl).empty().append($message);
+            $(tabEl).empty().append($message);
             var selectedInstances = JSON.parse('<%-JSON.stringify(prodSelected.selectedInstances)%>');
+            console.log(selectedInstances)
             var keys = Object.keys(selectedInstances);
+            console.log(keys.length);
               if (keys.length > 0) {
                 var count = keys.length;
-                for (var i = 0; i < keys; i++) {
+                for (var i = 0; i < keys.length; i++) {
                      $.post('/start', {
                                     'image_id': selectedInstances[keys[i]].amiid,
                                     'min': 1,
@@ -162,10 +165,12 @@ for(var j =0; j< keys.length; j++){%>
                                 }, function (data,success) {
                                     console.log(data.error);
                                     if (!data.error) {
+                                        var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none">&nbsp;Instance Id : '+data.data.Instances[0].InstanceId+' </div>');
+                                        $(tabEl).append($instanceData); 
                                         if (count > 1) {
                                             count -= 1;
                                         } else {
-                                            $('#message').show();
+                                            $('.instanceSuccess').show();
                                         }
                                     }
 

@@ -38,14 +38,38 @@ module.exports.getImageNames = function (callback){
 	});
 };
 
-module.exports.runInstances = function (image_id, min, max, name, callback){
+module.exports.runInstances = function (image_id, min, max, name,schedTerminate, callback){
 	console.log();
-	ec.runInstances({"ImageId" : image_id, "MinCount" : parseInt(min), "MaxCount" : parseInt(max)}, function(err, data){
+	ec.runInstances({"ImageId" : image_id,"InstanceType":"t1.micro", "MinCount" : parseInt(min), "MaxCount" : parseInt(max)}, function(err, data){
 		console.log(err);
-		if(!err && data)
-			for(var i=0; i<data.Groups.length; i++)
-				console.log("Launched Instance Named : " + data.Instances[i].InstanceId);
+		if(!err && data) {
+			for(var i=0; i<data.Groups.length; i++) {
+              console.log("Launched Instance Named : " + data.Instances[i].InstanceId);
+              
+               // for terminating instance after some delay
+              if(schedTerminate && schedTerminate.terminate && schedTerminate.delay) {
+              	if(typeof schedTerminate.delay === 'number') {
+              		var instanceId = data.Instances[i].InstanceId;
+              		console.log("Enabling scheduled termination of node "+instanceId+" after "+schedTerminate.delay+" milliseconds" );
+              	    setTimeout(function() {
+                     ec.terminateInstances({InstanceIds:[instanceId]},function(err,data){
+                      if(err) {
+                        console.log("unable to terminate instance : "+instanceId);
+                        console.log(err);
+                        return;
+                      }	
+                      
+                      for(var j=0;j<data.TerminatingInstances.length;j++) {
+                      	console.log("instance "+ data.TerminatingInstances[j].InstanceId+" terminated with state : "+data.TerminatingInstances[j].CurrentState.Name+"");
+                      }
+                    
+                     });   
 
+              	    }, schedTerminate.delay);
+              	}
+              } 
+			}
+        } 
 		callback(err, data);
 	});
 }
