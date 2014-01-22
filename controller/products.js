@@ -33,7 +33,7 @@ module.exports.getProducts = function(callback) {
          console.log("error");
          callback("error",null);
        } else {
-          console.log(data);
+          //console.log(data);
          callback(null,data);
        }
   });

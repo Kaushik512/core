@@ -70,7 +70,7 @@ var cookbooks =  require('./controller/GetRecipies');
 
 app.post('/cookbooks',verifySession, function(req, res){
 	console.log('Returning Available Cookbooks...!!');
-	console.log(req.body);
+	//console.log(req.body);
 	//res.render('cookbooks');
 	cookbooks.getCookbooks(function(err, resp){
 		console.log('About to Render...!! ');
