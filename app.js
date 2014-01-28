@@ -118,7 +118,11 @@ app.post('/start',verifySession, function(req, resp){
     var launchedInstanceIds = [];
     for(var i = 0;i<keys.length;i++) {
       if(selectedInstances[keys[i]].amiid) {
-        ec2.launchInstance(selectedInstances[keys[i]].amiid,"CloudMgmtTest",{terminate:true,delay:900000},function(err,data){
+
+
+        (function(inst) {
+
+        ec2.launchInstance(inst.amiid,"CloudMgmtTest",{terminate:true,delay:900000},function(err,data) {
           
           //error handling here
 
@@ -148,10 +152,26 @@ app.post('/start',verifySession, function(req, resp){
             instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
           }
 
+          //generating runlist
+          var runlistSelected = inst.runlistSelected;
+          var runlistArg = [];
+          if(runlistSelected && runlistSelected.length) {
+            for(var k=0;k<runlistSelected.length;k++) {
+             runlistArg.push('recipe['+runlistSelected[k]+']');
+            }
+          }
+
           var spawn = childProcess.spawn;
-          var knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-xroot'],{
-            cwd:'/home/anshul/Downloads/chef-repo'
-          });
+          var knifeProcess;
+          if(runlistArg && runlistArg.length) {
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-r'+runlistArg.join(),'-xroot'],{
+             cwd:'/home/anshul/Downloads/chef-repo'
+            });  
+          } else {
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-xroot'],{
+             cwd:'/home/anshul/Downloads/chef-repo'
+            });
+          }
 
           knifeProcess.stdout.on('data', function (data) {
              console.log('stdout: ==> ' + data);
@@ -175,9 +195,11 @@ app.post('/start',verifySession, function(req, resp){
             }
            console.log('child process exited with code ' + code);
           });
+        });//ends here
+
+        })(selectedInstances[keys[i]]);
 
 
-        })
       }
     }
   } else {
@@ -185,19 +207,6 @@ app.post('/start',verifySession, function(req, resp){
   } 
 
 
-  
-   
-
-  /*
-  if(req.body.image_id && req.body.min && req.body.max) {
-		ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,"CloudMgmtTest",null,function(err, data){
-      resp.json({"data" :data, "error" : err});
-    });
-   /*ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,"CloudMgmtTest",{terminate:true,delay:900000},null,function(err, data){
-      resp.json({"data" :data, "error" : err});
-    });
-    
-  } */  
 });
 
 

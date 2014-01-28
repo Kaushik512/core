@@ -127,7 +127,7 @@
 <div class="recipies-list-container">
 <%
 for(var j =0; j< keys.length; j++){%>
-   <select id="recipes_list_<%=rolesSelected[keys[j]].cid%>" class="recipes-list" multiple="multiple"> 
+   <select id="<%=rolesSelected[keys[j]].cid%>" class="recipes-list" multiple="multiple"> 
  <%for(var i =0; i< cookbooks.length; i++){%>
     <option data-id="<%=i%>" value='<%=cookbooks[i]%>'><%=cookbooks[i]%></option>
 <%}%>
@@ -157,7 +157,7 @@ for(var j =0; j< keys.length; j++){%>
             var keys = Object.keys(selectedInstances);
             for(var i=0;i<keys.length;i++) {
                selectedInstances[keys[i]].runlistSelected = [];
-               $('#recipes_list_'+keys[i]+' :selected').each(function(k, selected){ 
+               $('#'+keys[i]+' :selected').each(function(k, selected){ 
                 selectedInstances[keys[i]].runlistSelected[k] = $(selected).val(); 
                });
             }            
@@ -224,9 +224,9 @@ for(var j =0; j< keys.length; j++){%>
                   var $output = $('#'+data.instanceId);
                   var $outputHeader =  $output.find('span:first');
                   if(data.code === 0) {
-                    $outputHeader.empty().append('<span style="color:green">Instanced Bootstrapped successfully</span>')
+                    $outputHeader.empty().append('<span style="color:green">Instance Bootstrapped Successfully</span>')
                   } else {
-                    $outputHeader.empty().append('<span style="color:red">Instanced Bootstrapped Failed</span>')
+                    $outputHeader.empty().append('<span style="color:red">Instance Bootstrapping Failed</span>')
                   }
                 }
               });
@@ -238,31 +238,6 @@ for(var j =0; j< keys.length; j++){%>
             });
 
 
-            /*var keys = Object.keys(selectedInstances);
-            console.log(keys.length);
-              if (keys.length > 0) {
-                var count = keys.length;
-                for (var i = 0; i < keys.length; i++) {
-                     $.post('/start', {
-                                    'image_id': selectedInstances[keys[i]].amiid,
-                                    'min': 1,
-                                    'max': 1
-                                }, function (data,success) {
-                                    console.log(data.error);
-                                    if (!data.error) {
-                                        var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none">&nbsp;Instance Id : '+data.data.Instances[0].InstanceId+' </div>');
-                                          $message.append($instanceData); 
-                                        if (count > 1) {
-                                            count -= 1;
-                                        } else {
-                                           $message.find('.instanceSuccess').show();
-                                           $(tabEl).empty().append($message);
-                                        }
-                                    }
-
-                                });
-                            }
-          }*/
       } 
 
 
@@ -280,10 +255,11 @@ for(var j =0; j< keys.length; j++){%>
 
         //checking whether the plugin is already applied to this element
         if($this.data('isMultiSelectInitialized')) {
+           console.log('id = '+recipeListId);
            var $multiselect = $('#multiselect-'+recipeListId);
            $multiselect.show();       
         } else {
-          var $recipeList = $('#recipes_list_'+recipeListId);
+          var $recipeList = $('#'+recipeListId);
           //$recipeList.show();
           $recipeList.multiselect();
           $this.data('isMultiSelectInitialized',true);
