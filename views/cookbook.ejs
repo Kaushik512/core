@@ -127,7 +127,7 @@
 <div class="recipies-list-container">
 <%
 for(var j =0; j< keys.length; j++){%>
-   <select id="<%=rolesSelected[keys[j]].cid%>" class="recipes-list" multiple="multiple"> 
+   <select id="recipes_list_<%=rolesSelected[keys[j]].cid%>" class="recipes-list" multiple="multiple"> 
  <%for(var i =0; i< cookbooks.length; i++){%>
     <option data-id="<%=i%>" value='<%=cookbooks[i]%>'><%=cookbooks[i]%></option>
 <%}%>
@@ -136,13 +136,14 @@ for(var j =0; j< keys.length; j++){%>
 </div>
 </div>
 </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
     <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
     <script>
       //$(".multiselect").multiselect();
       (
       function(){
-
+       
        
        DEVOPS.navigation.setNextBtnClickHandler(finish);
 
@@ -152,8 +153,92 @@ for(var j =0; j< keys.length; j++){%>
           //  DEVOPS.navigation.hideAllBtns(); 
            
             var selectedInstances = JSON.parse('<%-JSON.stringify(prodSelected.selectedInstances)%>');
-            console.log(selectedInstances)
+            
             var keys = Object.keys(selectedInstances);
+            for(var i=0;i<keys.length;i++) {
+               selectedInstances[keys[i]].runlistSelected = [];
+               $('#recipes_list_'+keys[i]+' :selected').each(function(k, selected){ 
+                selectedInstances[keys[i]].runlistSelected[k] = $(selected).val(); 
+               });
+            }            
+
+            console.log(selectedInstances);
+
+
+            $.post('/start',selectedInstances,function(data,success){
+
+               var launchInstances = {}; 
+               for(var j=0;j<data.launchedInstanceIds.length;j++){
+                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none">Instance Id : '+data.launchedInstanceIds[j]+' <div id="'+data.launchedInstanceIds[j]+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
+                $message.append($instanceData);
+                launchInstances[data.launchedInstanceIds[j]] ={}; 
+               }
+               $message.find('.instanceSuccess').show();
+               $(tabEl).empty().append($message);
+               var socket = io.connect();
+               
+               var waitingTextAdded = false;
+               socket.on('instance-starting', function (data) {
+                 if(launchInstances[data.instanceId]) {
+                   var $output = $('#'+data.instanceId);
+                  if($output.attr('data-waitingTest')=='false') {
+                    $output.append('<span>Waiting for instance...</span><img src="img/instance-waiting.gif"/>');
+                    $output.attr('data-waitingTest',"true");
+                  }
+                 }
+               });
+               //var bootstarppingTextAdded = false; 
+               socket.on('instance-start-bootstrapping',function(data){
+                 if(launchInstances[data.instanceId]) {
+                 var $output = $('#'+data.instanceId);
+                 //$output.data('bootstarppingTextAdded',false);
+                 var $terminal = null;
+                 if($output.attr('data-bootstrapText')=='false') {
+                   console.log('in if');
+                   $terminal = $('<div style="height:190px;width:auto;color:white;background-color:black;overflow:auto"></div>')
+                   $output.empty();
+                   $output.append('<span>Bootstrapping Instance...<img src="img/instance-waiting.gif"/><span><br/>');
+                   $output.append($terminal);
+                   $output.attr('data-bootstrapText',"true")
+                 } else {
+                    $terminal = $output.find('div');
+                    console.log($terminal.length);
+                 }
+                 $terminal.append('<span>'+data.status+'</span><br/>');
+                 $terminal.scrollTop($terminal[0].scrollHeight);
+                } 
+              });
+
+              socket.on('instance-bootstrapping',function(data){
+                 if(launchInstances[data.instanceId]) {
+                 var $output = $('#'+data.instanceId);
+                 //$output.data('bootstarppingTextAdded',false);
+                 var $terminal = $output.find('div');
+                 $terminal.append('<span>'+data.status+'</span><br/>');
+                 $terminal.scrollTop($terminal[0].scrollHeight);
+                } 
+              });
+
+              socket.on('instance-bootstrapped',function(data){
+                if(launchInstances[data.instanceId]) {
+                  var $output = $('#'+data.instanceId);
+                  var $outputHeader =  $output.find('span:first');
+                  if(data.code === 0) {
+                    $outputHeader.empty().append('<span style="color:green">Instanced Bootstrapped successfully</span>')
+                  } else {
+                    $outputHeader.empty().append('<span style="color:red">Instanced Bootstrapped Failed</span>')
+                  }
+                }
+              });
+
+              socket.emit('registerInstanceIds',{instanceIds:data.launchedInstanceIds}); 
+
+
+
+            });
+
+
+            /*var keys = Object.keys(selectedInstances);
             console.log(keys.length);
               if (keys.length > 0) {
                 var count = keys.length;
@@ -177,7 +262,7 @@ for(var j =0; j< keys.length; j++){%>
 
                                 });
                             }
-          }
+          }*/
       } 
 
 
@@ -198,7 +283,7 @@ for(var j =0; j< keys.length; j++){%>
            var $multiselect = $('#multiselect-'+recipeListId);
            $multiselect.show();       
         } else {
-          var $recipeList = $('#'+recipeListId);
+          var $recipeList = $('#recipes_list_'+recipeListId);
           //$recipeList.show();
           $recipeList.multiselect();
           $this.data('isMultiSelectInitialized',true);

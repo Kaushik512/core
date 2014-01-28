@@ -3,6 +3,8 @@ var app = express();
 var engine = require("./node_modules/ejs");
 var path = require("path");
 var http = require("http");
+var childProcess = require('child_process');
+var io = require('socket.io');
 
 var appConfig = require('./app_config');
 
@@ -85,7 +87,7 @@ app.get('/products/:pid',verifySession,function(req,res) {
   var pid = req.params.pid;
   if(pid) {
     products.getProductComponents(pid,function(err,data){
-      console.log(data); 	
+      //console.log(data); 	
       res.render('componentslist.ejs',{error:err,prod:data});
     });	
   } else {
@@ -102,18 +104,119 @@ app.get('/images', function(req, resp){
 	});
 });
 
+
+var instancesStatus = {};
+
+
+
 app.post('/start',verifySession, function(req, resp){
-	console.log(req.body.image_id);
-	console.log(req.body.min);
-	console.log(req.body.max);
-	if(req.body.image_id && req.body.min && req.body.max)
-		ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,{terminate:true,delay:300000},function(err, data){
-			resp.json({"data" :data, "error" : err});
-		});
+	console.log(req.body);
+  var selectedInstances = req.body;
+  if(selectedInstances) {
+    var keys = Object.keys(selectedInstances);
+    var count = keys.length;
+    var launchedInstanceIds = [];
+    for(var i = 0;i<keys.length;i++) {
+      if(selectedInstances[keys[i]].amiid) {
+        ec2.launchInstance(selectedInstances[keys[i]].amiid,"CloudMgmtTest",{terminate:true,delay:900000},function(err,data){
+          
+          //error handling here
+
+          launchedInstanceIds.push(data.Instances[0].InstanceId);
+          instancesStatus[data.Instances[0].InstanceId]= {};
+          instancesStatus[data.Instances[0].InstanceId].statusText = "Instance Started";
+          if(count>1) {
+            count--;
+          } else {
+            resp.json({launchedInstanceIds:launchedInstanceIds});
+          }
+        },function(instanceId){
+           instancesStatus[instanceId].statusText = "Waiting for instance.";
+           if(instancesStatus[instanceId].socket) {
+            instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
+           }
+
+        },function(instanceData){
+
+          //var decoder = new StringDecoder('utf8');
+
+          console.log("instance is now in running state");
+          console.log("bootstapping the instance");
+          
+          instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
+          if(instancesStatus[instanceData.InstanceId].socket) {
+            instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
+          }
+
+          var spawn = childProcess.spawn;
+          var knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-xroot'],{
+            cwd:'/home/anshul/Downloads/chef-repo'
+          });
+
+          knifeProcess.stdout.on('data', function (data) {
+             console.log('stdout: ==> ' + data);
+             if(instancesStatus[instanceData.InstanceId].socket) {
+              instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('utf8'),instanceId:instanceData.InstanceId});
+             }
+          });
+          knifeProcess.stderr.on('data', function (data) {
+            console.log('stderr: ==> ' + data);
+          });
+
+          knifeProcess.on('close', function (code) {
+            if(code === 0) {
+              if(instancesStatus[instanceData.InstanceId].socket) {
+               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
+              }
+            } else {
+              if(instancesStatus[instanceData.InstanceId].socket) {
+               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
+              }
+            }
+           console.log('child process exited with code ' + code);
+          });
+
+
+        })
+      }
+    }
+  } else {
+    resp.json({error:"Invalid input parameters"});
+  } 
+
+
+  
+   
+
+  /*
+  if(req.body.image_id && req.body.min && req.body.max) {
+		ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,"CloudMgmtTest",null,function(err, data){
+      resp.json({"data" :data, "error" : err});
+    });
+   /*ec2.runInstances(req.body.image_id, req.body.min, req.body.max, req.body.name == undefined?'':req.body.name ,"CloudMgmtTest",{terminate:true,delay:900000},null,function(err, data){
+      resp.json({"data" :data, "error" : err});
+    });
+    
+  } */  
 });
 
 
 
-http.createServer( app ).listen( app.get( 'port' ), function(){
+var server = http.createServer( app );
+io = io.listen(server);
+
+server.listen( app.get( 'port' ), function(){
   console.log( 'Express server listening on port ' + app.get( 'port' ));
-} );
+});
+
+io.sockets.on('connection', function (socket) {
+  socket.on('registerInstanceIds', function (data) {
+    for(var i=0;i<data.instanceIds.length;i++) {
+      if(instancesStatus[data.instanceIds[i]]) {
+        console.log("registering socket");
+        instancesStatus[data.instanceIds[i]].socket = socket;
+        socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:data.instanceIds[i]});
+      }
+    }
+  });
+});

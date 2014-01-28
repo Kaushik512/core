@@ -11,8 +11,7 @@
     "ejs": "~0.8.5",
     "express": "~3.4.7",
     "ldapjs": "~0.7.0",
-    "mongoose":"*",
-    "socket.io":"0.9.16"
+    "mongoose":"*"
   },
   "devDependencies": {},
   "scripts": {

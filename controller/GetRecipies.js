@@ -32,7 +32,7 @@ getCookbooks = function(callback){
 			callback(err, null);
 
 		//var jsonResp = JSON.parse(res)
-
+        console.log(res);
 		
 		var keys = Object.keys(res);
 		keys.sort(function(a,b){
