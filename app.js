@@ -105,6 +105,44 @@ app.get('/images', function(req, resp){
 });
 
 
+function getRolesListArguments(rolesArray) {
+  
+  var str = [];
+  console.log('rolesArray ==> ' + rolesArray);
+  for(var i=0;i<rolesArray.length;i++) {
+    var role = rolesArray[i];
+    switch(role) {
+      case 'JIRA':
+      str.push('recipe[jira-d4d]');
+      break;
+      case 'Crowd':
+      str.push('recipe[crowd-d4d]');
+      break;
+      case 'Confluence':
+      str.push('recipe[confluence-d4d]');
+      break;
+      case 'Jenkins':
+      str.push('recipe[jenkins-d4d]');
+      break;
+      case 'Nexus':
+      str.push('recipe[nexus-d4d]');
+      break;
+      case 'Rundeck':
+      str.push('recipe[rundeck-d4d]');
+      break;
+      case 'Nagios':
+      str.push('recipe[nagios-d4d]');
+      break;
+      case 'Selenium':
+      str.push('recipe[selenium-d4d]');
+      break;
+    }
+  }
+  return str;
+
+}
+
+
 var instancesStatus = {};
 
 
@@ -122,11 +160,12 @@ app.post('/start',verifySession, function(req, resp){
 
         (function(inst) {
 
-        ec2.launchInstance(inst.amiid,"CloudMgmtTest",{terminate:true,delay:900000},function(err,data) {
+        ec2.launchInstance(inst.amiid,"CloudMgmtTest",/*{terminate:true,delay:900000}*/null,function(err,data) {
           
+          //console.log(data);
           //error handling here
 
-          launchedInstanceIds.push(data.Instances[0].InstanceId);
+          launchedInstanceIds.push({instanceId:data.Instances[0].InstanceId,title:inst.title});
           instancesStatus[data.Instances[0].InstanceId]= {};
           instancesStatus[data.Instances[0].InstanceId].statusText = "Instance Started";
           if(count>1) {
@@ -152,19 +191,30 @@ app.post('/start',verifySession, function(req, resp){
             instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
           }
 
+          //genrating runlist for roles 
+          if(!inst.runlist) {
+            inst.runlist = '';
+          } 
+          var rolesArg =  getRolesListArguments(inst.runlist.split(','));
+
           //generating runlist
           var runlistSelected = inst.runlistSelected;
-          var runlistArg = [];
+          var runlistSelectedArg = [];
           if(runlistSelected && runlistSelected.length) {
             for(var k=0;k<runlistSelected.length;k++) {
-             runlistArg.push('recipe['+runlistSelected[k]+']');
+             runlistSelectedArg.push('recipe['+runlistSelected[k]+']');
             }
           }
+          
+          console.log(rolesArg);
+          console.log(runlistSelectedArg);
 
+          var combinedRunList =  rolesArg.concat(runlistSelectedArg);
+          console.log(combinedRunList);
           var spawn = childProcess.spawn;
           var knifeProcess;
-          if(runlistArg && runlistArg.length) {
-            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-r'+runlistArg.join(),'-xroot'],{
+          if(combinedRunList && combinedRunList.length) {
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-r'+combinedRunList.join(),'-xroot'],{
              cwd:'/home/anshul/Downloads/chef-repo'
             });  
           } else {
@@ -176,11 +226,14 @@ app.post('/start',verifySession, function(req, resp){
           knifeProcess.stdout.on('data', function (data) {
              console.log('stdout: ==> ' + data);
              if(instancesStatus[instanceData.InstanceId].socket) {
-              instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('utf8'),instanceId:instanceData.InstanceId});
+              instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
              }
           });
           knifeProcess.stderr.on('data', function (data) {
             console.log('stderr: ==> ' + data);
+             if(instancesStatus[instanceData.InstanceId].socket) {
+              instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
+             }
           });
 
           knifeProcess.on('close', function (code) {
@@ -212,7 +265,7 @@ app.post('/start',verifySession, function(req, resp){
 
 
 var server = http.createServer( app );
-io = io.listen(server);
+io = io.listen(server,{ log: false });
 
 server.listen( app.get( 'port' ), function(){
   console.log( 'Express server listening on port ' + app.get( 'port' ));
@@ -221,10 +274,11 @@ server.listen( app.get( 'port' ), function(){
 io.sockets.on('connection', function (socket) {
   socket.on('registerInstanceIds', function (data) {
     for(var i=0;i<data.instanceIds.length;i++) {
-      if(instancesStatus[data.instanceIds[i]]) {
+      console.log('ins ID ==> '+data.instanceIds[i].instanceId);
+      if(instancesStatus[data.instanceIds[i].instanceId]) {
         console.log("registering socket");
-        instancesStatus[data.instanceIds[i]].socket = socket;
-        socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:data.instanceIds[i]});
+        instancesStatus[data.instanceIds[i].instanceId].socket = socket;
+        socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:data.instanceIds[i].instanceId});
       }
     }
   });

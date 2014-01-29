@@ -143,7 +143,8 @@ $(function(){
       hideBtn($next_btn);
       hideBtn($prev_btn);
       hideBtn($finish_btn);
-  }
+  };
+  navigation.displayNavigationBtn = displayNavigationBtn;
 
   window.DEVOPS.navigation = navigation; 
 

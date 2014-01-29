@@ -136,6 +136,9 @@ for(var j =0; j< keys.length; j++){%>
 </div>
 </div>
 </div>
+<!-- DOMAIN name anchor-->
+<a class="navbar-brand nav-settings domain-settings" style="" href="#domainModal" data-target="#domainModal" data-toggle="modal" role="button" title="Domain"></a>
+
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
     <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
@@ -144,13 +147,26 @@ for(var j =0; j< keys.length; j++){%>
       (
       function(){
        
+       DEVOPS.navigation.displayNavigationBtn();       
        
-       DEVOPS.navigation.setNextBtnClickHandler(finish);
+
+       //DEVOPS.navigation.setNextBtnClickHandler(finish);
+       //DEVOPS.navigation.hideAllBtns();
+
+       DEVOPS.navigation.setNextBtnClickHandler(function(e,tabEl){
+        
+        $('.domain-settings').trigger('click');
+         $('.save-domain-btn').click(function(evt){
+             finish(e,tabEl);
+         });
+       });
+       
+
 
        function finish(e,tabEl) {
          //alert('here');
            var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div></div>');
-          //  DEVOPS.navigation.hideAllBtns(); 
+            DEVOPS.navigation.hideAllBtns(); 
            
             var selectedInstances = JSON.parse('<%-JSON.stringify(prodSelected.selectedInstances)%>');
             
@@ -167,11 +183,14 @@ for(var j =0; j< keys.length; j++){%>
 
             $.post('/start',selectedInstances,function(data,success){
 
-               var launchInstances = {}; 
+               var launchInstances = {};
+               var numberOfInstances = data.launchedInstanceIds.length;
+               var numberOfInstancesBootstrapped = 0;
+
                for(var j=0;j<data.launchedInstanceIds.length;j++){
-                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none">Instance Id : '+data.launchedInstanceIds[j]+' <div id="'+data.launchedInstanceIds[j]+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
+                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none"> Role :- '+data.launchedInstanceIds[j].title+'<br/> Instance Id : '+data.launchedInstanceIds[j].instanceId+' <div id="'+data.launchedInstanceIds[j].instanceId+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
                 $message.append($instanceData);
-                launchInstances[data.launchedInstanceIds[j]] ={}; 
+                launchInstances[data.launchedInstanceIds[j].instanceId] ={}; 
                }
                $message.find('.instanceSuccess').show();
                $(tabEl).empty().append($message);
@@ -179,6 +198,7 @@ for(var j =0; j< keys.length; j++){%>
                
                var waitingTextAdded = false;
                socket.on('instance-starting', function (data) {
+                console.log(data);
                  if(launchInstances[data.instanceId]) {
                    var $output = $('#'+data.instanceId);
                   if($output.attr('data-waitingTest')=='false') {
@@ -219,6 +239,16 @@ for(var j =0; j< keys.length; j++){%>
                 } 
               });
 
+              socket.on('instance-bootstrapping-error',function(data){
+                 if(launchInstances[data.instanceId]) {
+                 var $output = $('#'+data.instanceId);
+                 //$output.data('bootstarppingTextAdded',false);
+                 var $terminal = $output.find('div');
+                 $terminal.append('<span style="color:red">'+data.status+'</span><br/>');
+                 $terminal.scrollTop($terminal[0].scrollHeight);
+                } 
+              });
+
               socket.on('instance-bootstrapped',function(data){
                 if(launchInstances[data.instanceId]) {
                   var $output = $('#'+data.instanceId);
@@ -228,6 +258,10 @@ for(var j =0; j< keys.length; j++){%>
                   } else {
                     $outputHeader.empty().append('<span style="color:red">Instance Bootstrapping Failed</span>')
                   }
+                  numberOfInstancesBootstrapped++;
+                  if(numberOfInstances === numberOfInstancesBootstrapped) {
+                     DEVOPS.navigation.displayNavigationBtn();
+                  } 
                 }
               });
 

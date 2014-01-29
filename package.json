@@ -12,7 +12,8 @@
     "express": "~3.4.7",
     "ldapjs": "~0.7.0",
     "mongoose":"*",
-    "socket.io":"0.9.16"
+    "socket.io":"0.9.16",
+    "net-ping":"1.1.9"
   },
   "devDependencies": {},
   "scripts": {

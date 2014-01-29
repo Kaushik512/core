@@ -1,7 +1,8 @@
 //"use strict";
-var config = require('../config/aws_config')
+var ping = require('net-ping');
+var config = require('../config/aws_config');
 var aws = require('../node_modules/aws-sdk');
-var ec = new aws.EC2({"accessKeyId":'AKIAI5JPZ6FOH4K3NQXQ', "secretAccessKey": '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', 
+var ec = new aws.EC2({"accessKeyId":config.access_key, "secretAccessKey": config.secret_key, 
 	"region": config.region});
 
 console.log("Started...!!!")
@@ -41,7 +42,7 @@ module.exports.getImageNames = function (callback){
 
 module.exports.launchInstance = function(image_id,keyName,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback) {
   
-  ec.runInstances({"ImageId" : image_id,"InstanceType":"t1.micro", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName}, function(err, data){
+  ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName}, function(err, data){
 		console.log(err);
 		if(err) {
 			console.log("error occured while launching instance");
@@ -90,9 +91,38 @@ module.exports.launchInstance = function(image_id,keyName,schedTerminate,callbac
                    if(instanceState === 'running') {
                     console.log("instance has started running "); 
                     var instanceData = data.Reservations[0].Instances[0];
+                    
+                    
+                     function pingTimeoutFunc(instanceIp) {
+                      console.log("pinging instance");
+                      var ping_timeout = setTimeout(function(){
+
+                        var session = ping.createSession ();
+                        session.pingHost(instanceIp, function (pingError, target) {
+                        if (pingError) {
+                          if (pingError instanceof ping.RequestTimedOutError) {
+                            console.log (instanceIp + ": Not alive");
+                          }
+                          else {
+                            console.log (instanceIp + ": " + pingError.toString());
+                          }
+                          pingTimeoutFunc(instanceIp);
+                        } else {
+                          console.log (instanceIp + ": Alive");
+                          instanceRunningStateCallback(instanceData);
+                        }
+                       });
+                      },45000);                     
+                     }
+                     pingTimeoutFunc(instanceData.PublicIpAddress);
+
+
+                    /*
                     setTimeout(function(){
                     	instanceRunningStateCallback(instanceData);
                     },30000);
+                   */
+
                    } else {
                    	instancePendingStateCallback(instanceId);
                     timeoutFunc(instanceId);
@@ -107,7 +137,7 @@ module.exports.launchInstance = function(image_id,keyName,schedTerminate,callbac
 }
 
 module.exports.runInstances = function (image_id, min, max, name,KeyName,schedTerminate, callback){
-	ec.runInstances({"ImageId" : image_id,"InstanceType":"t1.micro", "MinCount" : parseInt(min), "MaxCount" : parseInt(max),"KeyName":KeyName}, function(err, data){
+	ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : parseInt(min), "MaxCount" : parseInt(max),"KeyName":KeyName}, function(err, data){
 		console.log(err);
 		if(!err && data) {
 			for(var i=0; i<data.Groups.length; i++) {
