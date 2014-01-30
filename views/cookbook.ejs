@@ -157,13 +157,14 @@ for(var j =0; j< keys.length; j++){%>
         
         $('.domain-settings').trigger('click');
          $('.save-domain-btn').click(function(evt){
-             finish(e,tabEl);
+             
+             finish(e,tabEl,$('#domainNameText').val()+'.relevancelab.com');
          });
        });
        
 
 
-       function finish(e,tabEl) {
+       function finish(e,tabEl,domainName) {
          //alert('here');
            var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;display: none"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.</div></div>');
             DEVOPS.navigation.hideAllBtns(); 
@@ -265,7 +266,7 @@ for(var j =0; j< keys.length; j++){%>
                   if(numberOfInstances === numberOfInstancesBootstrapped) {
                      DEVOPS.navigation.displayNavigationBtn();
                      DEVOPS.navigation.setNextBtnClickHandler(function(evt,tabEl){
-                        $.post('/domainDetails',launchInstances,function(res,success){
+                        $.post('/domainDetails',{domainName:domainName,launchInstances:launchInstances},function(res,success){
                            $(tabEl).empty().append(res);
                         });  
                      });

@@ -116,7 +116,9 @@ module.exports.launchInstance = function(image_id,keyName,schedTerminate,callbac
                           pingTimeoutFunc(instanceIp);
                         } else {
                           console.log (instanceIp + ": Alive");
-                          instanceRunningStateCallback(instanceData);
+                          setTimeout(function(){
+                           instanceRunningStateCallback(instanceData);
+                         },60000);
                         }
                        });
                       },45000);                     
@@ -135,7 +137,7 @@ module.exports.launchInstance = function(image_id,keyName,schedTerminate,callbac
                     timeoutFunc(instanceId);
                    }
                 });
-               },15000);            		
+               },30000);            		
               }
               timeoutFunc(checkInstanceId);  
 			} 

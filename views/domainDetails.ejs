@@ -2,25 +2,34 @@
  var keys = Object.keys(instancesDetails);
  console.log(keys);
  for(var i=0;i<keys.length;i++) {
+   var className = 'alert-danger';
+   if(instancesDetails[keys[i]].bootstrapSuccess=='true') {
+    className = 'alert-info';
+   }
 %>
-<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;">
+<div class="alert <%=className%> fade in instanceSuccess" style="margin: 10px 25px;">
 <div><%=instancesDetails[keys[i]].title%> :- Instance Id : <%=keys[i]%></div>
-
+<%if(instancesDetails[keys[i]].bootstrapSuccess=='true'){%>
 <%if(instancesDetails[keys[i]].title==='Planning'){%>
-<div>Jira :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080">/jira</a></div>
-<div>Confluence :- <a href="http://<%=instancesDetails[keys[i]].ip%>8090">/confluence</a></div>
-<div>Crowd :- <a href="<%=instancesDetails[keys[i]].ip%>:8090">/crowd</a></div>
+<div>Jira :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080"><%=domainName%>/jira</a></div>
+<div>Confluence :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090"><%=domainName%>/confluence</a></div>
+<div>Crowd :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090"><%=domainName%>/crowd</a></div>
 <%}%>
 <%if(instancesDetails[keys[i]].title==='Build') { %>
-<div>Jenkins :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080">/Jenkins</a></div>
-<div>Nexus :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8081">/confluence</a></div>
-<div>Crowd :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090">/crowd</a></div>
+<div>Jenkins :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080"><%=domainName%>/Jenkins</a></div>
+<div>Nexus :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8081"><%=domainName%>/nexus</a></div>
+<div>Rundeck :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090"><%=domainName%>/rundeck</a></div>
 <%}%>
 
 <%if(instancesDetails[keys[i]].title==='Monitoring') {%>
-<div>Nagios :- <a href="http://<%=instancesDetails[keys[i]].ip%>">/nagios</a></div>
+<div>Nagios :- <a href="http://<%=instancesDetails[keys[i]].ip%>"><%=domainName%>/nagios</a></div>
 <%}%>
-
+<%if(instancesDetails[keys[i]].title==='Test Management And Automation Suite') {%>
+<div>Selenium :- <a href="http://<%=instancesDetails[keys[i]].ip%>:4444"><%=domainName%>/selenium</a></div>
+<%}%>
+<%} else { %>
+	<div>Bootstrapping failed for this instance</div>
+<%}%>
 </div>	
 <% } 
 }%>

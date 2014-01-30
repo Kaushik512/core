@@ -213,7 +213,7 @@ app.post('/start',verifySession, function(req, resp){
           console.log(combinedRunList);
           var spawn = childProcess.spawn;
           var knifeProcess;
-          if(false && combinedRunList && combinedRunList.length) {
+          if(combinedRunList && combinedRunList.length) {
             knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-r'+combinedRunList.join(),'-xroot'],{
              cwd:'/home/anshul/Downloads/chef-repo'
             });  
@@ -265,26 +265,31 @@ app.post('/start',verifySession, function(req, resp){
 
 
 app.post('/domainDetails',verifySession,function(req,resp){
-  var launchedInstancesDetails = req.body;
+  var launchedInstancesDetails = req.body.launchInstances;
   var keys = Object.keys(launchedInstancesDetails);
   var instanceIds = [];
   for(var i=0;i<keys.length;i++) {
     instanceIds.push(keys[i]);
   }
   ec2.describeInstances(instanceIds,function(err,data){
+    console.log('desc');
+    console.log(data);
     if(err) {
         
     } else {
-        var instances = data.Reservations[0].Instances;
+       for(var j=0;j<data.Reservations.length;j++) {
+        var instances = data.Reservations[j].Instances;
+        console.log(instances);
         for(var i=0;i<instances.length;i++) {
              launchedInstancesDetails[instances[i].InstanceId].ip = instances[i].PublicIpAddress;
              launchedInstancesDetails[instances[i].InstanceId].publicDns = instances[i].PublicDnsName;  
         }
+      }
 
     }
     console.log('launchedInstancesDetails');
     console.log(launchedInstancesDetails);
-    resp.render('domainDetails',{error:err,instancesDetails:launchedInstancesDetails});
+    resp.render('domainDetails',{error:err,instancesDetails:launchedInstancesDetails,domainName:req.body.domainName});
   });
 
 
