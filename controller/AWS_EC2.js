@@ -39,9 +39,16 @@ module.exports.getImageNames = function (callback){
 	});
 };
 
+module.exports.describeInstances = function(instanceIds,callback){
+    ec.describeInstances({InstanceIds:instanceIds},function(err,data){
+       callback(err,data);
+    });
+
+}
 
 module.exports.launchInstance = function(image_id,keyName,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback) {
   
+  var that = this;//"m1.small"
   ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName}, function(err, data){
 		console.log(err);
 		if(err) {

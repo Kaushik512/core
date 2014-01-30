@@ -1,0 +1,26 @@
+<% if(!error) {  
+ var keys = Object.keys(instancesDetails);
+ console.log(keys);
+ for(var i=0;i<keys.length;i++) {
+%>
+<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;">
+<div><%=instancesDetails[keys[i]].title%> :- Instance Id : <%=keys[i]%></div>
+
+<%if(instancesDetails[keys[i]].title==='Planning'){%>
+<div>Jira :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080">/jira</a></div>
+<div>Confluence :- <a href="http://<%=instancesDetails[keys[i]].ip%>8090">/confluence</a></div>
+<div>Crowd :- <a href="<%=instancesDetails[keys[i]].ip%>:8090">/crowd</a></div>
+<%}%>
+<%if(instancesDetails[keys[i]].title==='Build') { %>
+<div>Jenkins :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080">/Jenkins</a></div>
+<div>Nexus :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8081">/confluence</a></div>
+<div>Crowd :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090">/crowd</a></div>
+<%}%>
+
+<%if(instancesDetails[keys[i]].title==='Monitoring') {%>
+<div>Nagios :- <a href="http://<%=instancesDetails[keys[i]].ip%>">/nagios</a></div>
+<%}%>
+
+</div>	
+<% } 
+}%>

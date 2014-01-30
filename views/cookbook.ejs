@@ -190,7 +190,8 @@ for(var j =0; j< keys.length; j++){%>
                for(var j=0;j<data.launchedInstanceIds.length;j++){
                 var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none"> Role :- '+data.launchedInstanceIds[j].title+'<br/> Instance Id : '+data.launchedInstanceIds[j].instanceId+' <div id="'+data.launchedInstanceIds[j].instanceId+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
                 $message.append($instanceData);
-                launchInstances[data.launchedInstanceIds[j].instanceId] ={}; 
+                launchInstances[data.launchedInstanceIds[j].instanceId] ={};
+                launchInstances[data.launchedInstanceIds[j].instanceId].title = data.launchedInstanceIds[j].title; 
                }
                $message.find('.instanceSuccess').show();
                $(tabEl).empty().append($message);
@@ -254,13 +255,20 @@ for(var j =0; j< keys.length; j++){%>
                   var $output = $('#'+data.instanceId);
                   var $outputHeader =  $output.find('span:first');
                   if(data.code === 0) {
+                    launchInstances[data.instanceId].bootstrapSuccess = true;
                     $outputHeader.empty().append('<span style="color:green">Instance Bootstrapped Successfully</span>')
                   } else {
                     $outputHeader.empty().append('<span style="color:red">Instance Bootstrapping Failed</span>')
+                    launchInstances[data.instanceId].bootstrapSuccess = false;
                   }
                   numberOfInstancesBootstrapped++;
                   if(numberOfInstances === numberOfInstancesBootstrapped) {
                      DEVOPS.navigation.displayNavigationBtn();
+                     DEVOPS.navigation.setNextBtnClickHandler(function(evt,tabEl){
+                        $.post('/domainDetails',launchInstances,function(res,success){
+                           $(tabEl).empty().append(res);
+                        });  
+                     });
                   } 
                 }
               });
