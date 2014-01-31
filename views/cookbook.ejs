@@ -183,6 +183,12 @@ for(var j =0; j< keys.length; j++){%>
 
 
             $.post('/start',selectedInstances,function(data,success){
+               
+               if(data.error) {
+                 var $errorMessage = $('<div class="instance-result"><div class="alert alert-danger fade in" id="message" style="margin: 10px 25px;"><strong>Error!</strong>&nbsp;Instance Launched Failed.</div></div>');
+                  $(tabEl).empty().append($errorMessage);
+                 return;
+               }
 
                var launchInstances = {};
                var numberOfInstances = data.launchedInstanceIds.length;

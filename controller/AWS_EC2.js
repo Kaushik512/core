@@ -46,11 +46,10 @@ module.exports.describeInstances = function(instanceIds,callback){
 
 }
 
-module.exports.launchInstance = function(image_id,keyName,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback) {
+module.exports.launchInstance = function(image_id,keyName,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback,instanceTerminateCallback) {
   
   var that = this;//"m1.small"
-  ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName}, function(err, data){
-		console.log(err);
+  ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName,BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
 		if(err) {
 			console.log("error occured while launching instance");
 			console.log(err);
@@ -70,12 +69,14 @@ module.exports.launchInstance = function(image_id,keyName,schedTerminate,callbac
                       if(err) {
                         console.log("unable to terminate instance : "+instanceId);
                         console.log(err);
+                        instanceTerminateCallback(null,err);
                         return;
                       }	
                       
                       for(var j=0;j<data.TerminatingInstances.length;j++) {
                       	console.log("instance "+ data.TerminatingInstances[j].InstanceId+" terminated with state : "+data.TerminatingInstances[j].CurrentState.Name+"");
                       }
+                      instanceTerminateCallback(data.TerminatingInstances[0]);
                     
                      });   
 
@@ -125,16 +126,11 @@ module.exports.launchInstance = function(image_id,keyName,schedTerminate,callbac
                      }
                      pingTimeoutFunc(instanceData.PublicIpAddress);
 
-
-                    /*
-                    setTimeout(function(){
-                    	instanceRunningStateCallback(instanceData);
-                    },30000);
-                   */
-
-                   } else {
+                   } else if(instanceState === 'pending'){
                    	instancePendingStateCallback(instanceId);
                     timeoutFunc(instanceId);
+                   } else if(instanceState === 'terminated') {
+                      instanceTerminateCallback(instanceData);
                    }
                 });
                },30000);            		

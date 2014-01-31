@@ -160,10 +160,13 @@ app.post('/start',verifySession, function(req, resp){
 
         (function(inst) {
 
-        ec2.launchInstance(inst.amiid,"CloudMgmtTest",/*{terminate:true,delay:900000}*/null,function(err,data) {
+        ec2.launchInstance(inst.amiid,"CloudMgmtTest",{terminate:true,delay:600000},function(err,data) {
           
           //console.log(data);
-          //error handling here
+          if(err) {
+            resp.json({error:err});
+            return;
+          }
 
           launchedInstanceIds.push({instanceId:data.Instances[0].InstanceId,title:inst.title});
           instancesStatus[data.Instances[0].InstanceId]= {};
@@ -187,7 +190,7 @@ app.post('/start',verifySession, function(req, resp){
           console.log("bootstapping the instance");
           
           instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
-          if(instancesStatus[instanceData.InstanceId].socket) {
+          if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
             instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
           }
 
@@ -225,29 +228,41 @@ app.post('/start',verifySession, function(req, resp){
 
           knifeProcess.stdout.on('data', function (data) {
              console.log('stdout: ==> ' + data);
-             if(instancesStatus[instanceData.InstanceId].socket) {
+             if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
              }
           });
           knifeProcess.stderr.on('data', function (data) {
             console.log('stderr: ==> ' + data);
-             if(instancesStatus[instanceData.InstanceId].socket) {
+             if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
              }
           });
 
           knifeProcess.on('close', function (code) {
             if(code === 0) {
-              if(instancesStatus[instanceData.InstanceId].socket) {
+              if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
                instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
               }
             } else {
-              if(instancesStatus[instanceData.InstanceId].socket) {
+              if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
                instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
               }
             }
            console.log('child process exited with code ' + code);
           });
+        },function(terminatedInstance,err){
+            if(err) {
+             return; 
+            }
+            if(instancesStatus[terminatedInstance.InstanceId]) {
+              console.log('Removin instance from list '+terminatedInstance.InstanceId);
+              console.log('before');
+              console.log(instancesStatus);
+              delete instancesStatus[terminatedInstance.InstanceId];
+
+            }
+
         });//ends here
 
         })(selectedInstances[keys[i]]);
@@ -313,6 +328,17 @@ io.sockets.on('connection', function (socket) {
         console.log("registering socket");
         instancesStatus[data.instanceIds[i].instanceId].socket = socket;
         socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:data.instanceIds[i].instanceId});
+      }
+    }
+  });
+
+  socket.on('disconnect', function () {
+    console.log('disconnecting ... ');
+    var keys = Object.keys(instancesStatus);
+    for(var i=0;i<keys.length;i++) {
+      if(instancesStatus[keys[i]].socket == this) {
+        console.log('disconnected ... removing socket');  
+        delete instancesStatus[keys[i]];
       }
     }
   });
