@@ -251,6 +251,12 @@ app.post('/start',verifySession, function(req, resp){
             }
            console.log('child process exited with code ' + code);
           });
+          
+          knifeProcess.on('error', function (error) {
+           console.log("Error is spawning process");
+           console.log(error); 
+          }); 
+
         },function(terminatedInstance,err){
             if(err) {
              return; 
