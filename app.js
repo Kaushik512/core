@@ -143,61 +143,64 @@ function getRolesListArguments(rolesArray) {
 }
 
 
+
+var domainsDao = require('./controller/domains.js')
+
 var instancesStatus = {};
 
 
 
 app.post('/start',verifySession, function(req, resp){
 	console.log(req.body);
-  var selectedInstances = req.body;
+  var domainName = req.body.domainName;
+  var selectedInstances = req.body.selectedInstances;
   if(selectedInstances) {
-    var keys = Object.keys(selectedInstances);
-    var count = keys.length;
-    var launchedInstanceIds = [];
-    for(var i = 0;i<keys.length;i++) {
-      if(selectedInstances[keys[i]].amiid) {
+   
+   //creating domain document
+   domainsDao.createDomainDocument(domainName,function(err,data){
+   if(err) {
+       resp.json({error:"Unable to create domain"});
+   } else {
+      var launchedInstances = [];
+      var launchedFailedInstance = [];
+      var keys = Object.keys(selectedInstances);
+      var count = keys.length;
+      var launchedInstanceIds = [];
+      for(var i = 0;i<keys.length;i++) {
+       (function(inst) {
+         ec2.launchInstance(inst.amiid,"CloudMgmtTest",{terminate:true,delay:3600000},function(err,data) {
+             if(err) {
+              launchedFailedInstance.push({instanceId:null,title:inst.title});
+             } else {
+              //instance launch is successful ... now preparing for bootstrapping
+              launchedInstances.push({instanceId:data.Instances[0].InstanceId,title:inst.title});
+              instancesStatus[data.Instances[0].InstanceId]= {};
+             }
+
+             if(count>1) {
+              count--;
+             } else {
+              resp.json({launchedInstances:launchedInstances,launchedFailedInstance:launchedFailedInstance});
+             }
+
+           },function(instanceId){
+             if(instancesStatus[instanceId].socket) {
+              instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
+             }
+          },function(instanceData){
 
 
-        (function(inst) {
-
-        ec2.launchInstance(inst.amiid,"CloudMgmtTest",{terminate:true,delay:600000},function(err,data) {
+            console.log("instance is now in running state");
+            console.log("bootstapping the instance");
           
-          //console.log(data);
-          if(err) {
-            resp.json({error:err});
-            return;
-          }
-
-          launchedInstanceIds.push({instanceId:data.Instances[0].InstanceId,title:inst.title});
-          instancesStatus[data.Instances[0].InstanceId]= {};
-          instancesStatus[data.Instances[0].InstanceId].statusText = "Instance Started";
-          if(count>1) {
-            count--;
-          } else {
-            resp.json({launchedInstanceIds:launchedInstanceIds});
-          }
-        },function(instanceId){
-           instancesStatus[instanceId].statusText = "Waiting for instance.";
-           if(instancesStatus[instanceId].socket) {
-            instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
-           }
-
-        },function(instanceData){
-
-          //var decoder = new StringDecoder('utf8');
-
-          console.log("instance is now in running state");
-          console.log("bootstapping the instance");
-          
-          instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
-          if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
-            instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
-          }
-
-          //genrating runlist for roles 
-          if(!inst.runlist) {
-            inst.runlist = '';
-          } 
+            instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
+            if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
+              instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
+            }
+            //genrating runlist for roles 
+            if(!inst.runlist) {
+             inst.runlist = '';
+           }  
           var rolesArg =  getRolesListArguments(inst.runlist.split(','));
 
           //generating runlist
@@ -225,7 +228,7 @@ app.post('/start',verifySession, function(req, resp){
              cwd:'/home/anshul/Downloads/chef-repo'
             });
           }
-
+           
           knifeProcess.stdout.on('data', function (data) {
              console.log('stdout: ==> ' + data);
              if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
@@ -237,25 +240,46 @@ app.post('/start',verifySession, function(req, resp){
              if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
              }
-          });
+          }); 
+
+          /////
 
           knifeProcess.on('close', function (code) {
+            var instance = {
+              instanceId:  instanceData.InstanceId,
+              instanceIP: instanceData.PublicIpAddress,
+              instanceRole: inst.title,
+              instanceActive:true,
+              bootStrapStatus:false,
+              runlist:inst.runlist.split(',')
+              }
             if(code === 0) {
               if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
                instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
               }
+              instance.bootStrapStatus = true;
+
             } else {
               if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
                instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
               }
+              instance.bootStrapStatus = false;
             }
+            domainsDao.saveDomainInstanceDetails(domainName,[instance],function(err,data) {
+              if(err) {
+                console.log("Unable to store instance in DB");
+              } else {
+                console.log("instance stored in DB");
+              }
+            });
+
            console.log('child process exited with code ' + code);
           });
           
           knifeProcess.on('error', function (error) {
            console.log("Error is spawning process");
            console.log(error); 
-          }); 
+          });
 
         },function(terminatedInstance,err){
             if(err) {
@@ -269,21 +293,40 @@ app.post('/start',verifySession, function(req, resp){
 
             }
 
-        });//ends here
-
-        })(selectedInstances[keys[i]]);
-
-
+        });//ends here;
+       })(selectedInstances[keys[i]]);
       }
-    }
-  } else {
-    resp.json({error:"Invalid input parameters"});
-  } 
+           
+   }
+  });
+ } else {
+       resp.json({error:"Invalid input parameters"});
+ }
+});
+    
+    
 
+   
+
+  
+
+
+app.get('/domainDetails',verifySession,function(req,resp){
+  /*var launchedInstancesDetails = req.body.launchInstances;
+  var keys = Object.keys(launchedInstancesDetails);
+  var instanceIds = [];
+  for(var i=0;i<keys.length;i++) {
+    instanceIds.push(keys[i]);
+  }*/
+
+  // fetch domain details from mongo 
+  domainsDao.getAllDomainData(function(err,data){
+     console.log("domain data ==>");
+     console.log(data);
+     resp.render('domainDetails',{error:err,domains:data});
+  });
 
 });
-
-
 
 app.post('/domainDetails',verifySession,function(req,resp){
   var launchedInstancesDetails = req.body.launchInstances;

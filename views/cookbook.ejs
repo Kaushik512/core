@@ -182,7 +182,7 @@ for(var j =0; j< keys.length; j++){%>
             console.log(selectedInstances);
 
 
-            $.post('/start',selectedInstances,function(data,success){
+            $.post('/start',{domainName:domainName,selectedInstances:selectedInstances},function(data,success){
                
                if(data.error) {
                  var $errorMessage = $('<div class="instance-result"><div class="alert alert-danger fade in" id="message" style="margin: 10px 25px;"><strong>Error!</strong>&nbsp;Instance Launched Failed.</div></div>');
@@ -191,14 +191,14 @@ for(var j =0; j< keys.length; j++){%>
                }
 
                var launchInstances = {};
-               var numberOfInstances = data.launchedInstanceIds.length;
+               var numberOfInstances = data.launchedInstances.length;
                var numberOfInstancesBootstrapped = 0;
 
-               for(var j=0;j<data.launchedInstanceIds.length;j++){
-                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none"> Role :- '+data.launchedInstanceIds[j].title+'<br/> Instance Id : '+data.launchedInstanceIds[j].instanceId+' <div id="'+data.launchedInstanceIds[j].instanceId+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
+               for(var j=0;j<data.launchedInstances.length;j++){
+                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none"> Role :- '+data.launchedInstances[j].title+'<br/> Instance Id : '+data.launchedInstances[j].instanceId+' <div id="'+data.launchedInstances[j].instanceId+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
                 $message.append($instanceData);
-                launchInstances[data.launchedInstanceIds[j].instanceId] ={};
-                launchInstances[data.launchedInstanceIds[j].instanceId].title = data.launchedInstanceIds[j].title; 
+                launchInstances[data.launchedInstances[j].instanceId] ={};
+                launchInstances[data.launchedInstances[j].instanceId].title = data.launchedInstances[j].title; 
                }
                $message.find('.instanceSuccess').show();
                $(tabEl).empty().append($message);
@@ -271,16 +271,24 @@ for(var j =0; j< keys.length; j++){%>
                   numberOfInstancesBootstrapped++;
                   if(numberOfInstances === numberOfInstancesBootstrapped) {
                      DEVOPS.navigation.displayNavigationBtn();
-                     DEVOPS.navigation.setNextBtnClickHandler(function(evt,tabEl){
-                        $.post('/domainDetails',{domainName:domainName,launchInstances:launchInstances},function(res,success){
-                           $(tabEl).empty().append(res);
-                        });  
+                     DEVOPS.navigation.setFinishBtnClickHandler(function(evt,tabEl){
+                         DEVOPS.navigation.hideAllBtns();
+                         DEVOPS.navigation.showFirstTab('');
+                         DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
+           
+                        $.get("/domainDetails",function(data){
+                          DEVOPS.navigation.showFirstTab(data);
+                           DEVOPS.navigation.hideAllBtns();
+        
+                         }).fail(function() {
+                            alert( "error" );
+                        });
                      });
                   } 
                 }
               });
 
-              socket.emit('registerInstanceIds',{instanceIds:data.launchedInstanceIds}); 
+              socket.emit('registerInstanceIds',{instanceIds:data.launchedInstances}); 
 
 
 

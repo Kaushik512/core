@@ -8,11 +8,11 @@ module.exports = {
 /*
 module.exports = {
 
-	access_key : "AKIAJPBJ4AA7VVTNGXHQ",
-	secret_key : "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",
+	access_key : "AKIAJW4FEMMDBYCCFGWQ",
+	secret_key : "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",
 	region : "us-east-1"
-}
-*/
+}*/
+
 
     //Access Key ID:
     //AKIAI5JPZ6FOH4K3NQXQ

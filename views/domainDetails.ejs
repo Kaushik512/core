@@ -1,35 +1,69 @@
 <% if(!error) {  
- var keys = Object.keys(instancesDetails);
- console.log(keys);
- for(var i=0;i<keys.length;i++) {
-   var className = 'alert-danger';
-   if(instancesDetails[keys[i]].bootstrapSuccess=='true') {
-    className = 'alert-info';
-   }
-%>
-<div class="alert <%=className%> fade in instanceSuccess" style="margin: 10px 25px;">
-<div><%=instancesDetails[keys[i]].title%> :- Instance Id : <%=keys[i]%></div>
-<%if(instancesDetails[keys[i]].bootstrapSuccess=='true'){%>
-<%if(instancesDetails[keys[i]].title==='Planning'){%>
-<div>Jira :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080"><%=domainName%>/jira</a></div>
-<div>Confluence :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090"><%=domainName%>/confluence</a></div>
-<div>Crowd :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090"><%=domainName%>/crowd</a></div>
-<%}%>
-<%if(instancesDetails[keys[i]].title==='Build') { %>
-<div>Jenkins :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8080"><%=domainName%>/Jenkins</a></div>
-<div>Nexus :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8081"><%=domainName%>/nexus</a></div>
-<div>Rundeck :- <a href="http://<%=instancesDetails[keys[i]].ip%>:8090"><%=domainName%>/rundeck</a></div>
-<%}%>
+ 
+ function getRolesLink(role,domainName,ip) {
+  
+  switch(role) {
+      case 'JIRA':
+      return {link:"http://"+ip+":8080/"};   
+      case 'Crowd':
+      return {link:"http://"+ip+":8090/"};   
+      case 'Confluence':
+      return {link:"http://"+ip+":8090/"};
+      case 'Jenkins':
+      return {link:"http://"+ip+":8080/"};
+      case 'Nexus':
+       return {link:"http://"+ip+":8081/"};
+      case 'Rundeck':
+       return {link:"http://"+ip+":8090/"};
+      case 'Nagios':
+       return {link:"http://"+ip+"/"};
+      case 'Selenium':
+       return {link:"http://"+ip+":4444/"};
+     }
 
-<%if(instancesDetails[keys[i]].title==='Monitoring') {%>
-<div>Nagios :- <a href="http://<%=instancesDetails[keys[i]].ip%>"><%=domainName%>/nagios</a></div>
-<%}%>
-<%if(instancesDetails[keys[i]].title==='Test Management And Automation Suite') {%>
-<div>Selenium :- <a href="http://<%=instancesDetails[keys[i]].ip%>:4444"><%=domainName%>/selenium</a></div>
-<%}%>
-<%} else { %>
-	<div>Bootstrapping failed for this instance</div>
-<%}%>
-</div>	
-<% } 
-}%>
+}
+
+
+
+ if(!domains.length){
+  %><div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;">No domains found</div>
+<% } else {
+ for(var i=0;i<domains.length;i++) {
+   var domain = domains[i];
+   if(domain.domainsInstaces && domain.domainsInstaces.length) {
+   %>
+   <div class="fade in instanceSuccess" style="margin: 10px 25px;">
+   	<div><strong><%=domain.domainName%></strong></div>
+   <%
+   var instances = domain.domainsInstaces;
+   for(var j=0;j<instances.length;j++) {
+     var instanceClassName = 'alert-info';
+     var instanceStatus = 'active';
+     if(!instances[j].instanceActive) {
+      instanceClassName = "alert-danger";
+      instanceStatus = "inactive";
+     }
+   %>
+   <div class="alert <%=instanceClassName%>">
+   <div><strong>Role :- <%=instances[j].instanceRole%> </strong></div>
+   <div>Instance Id :- <%=instances[j].instanceId%></div>
+   <div>Instance status :- <%=instanceStatus%></div> 
+   <% 
+    if(instances[j].bootStrapStatus) {
+     for(var k=0;k<instances[j].runlist.length;k++) {
+       var d = getRolesLink(instances[j].runlist[k],domain.domainName,instances[j].instanceIP);
+       if(d) {
+   %> 
+   <div><%=instances[j].runlist[k]%> :- <a href="<%=d.link%>"><%=domain.domainName%>/<%=instances[j].runlist[k]%></a></div>
+   <%
+    }}
+    } else {
+   %>
+   <div class="alert-danger">Bootstrapping of this instance failed</div>
+   <%
+   }
+%></div><% }
+%></div><%
+}}}}
+   %>
+
