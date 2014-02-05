@@ -161,6 +161,7 @@ app.post('/start',verifySession, function(req, resp){
    if(err) {
        resp.json({error:"Unable to create domain"});
    } else {
+
       var launchedInstances = [];
       var launchedFailedInstance = [];
       var keys = Object.keys(selectedInstances);
@@ -168,11 +169,12 @@ app.post('/start',verifySession, function(req, resp){
       var launchedInstanceIds = [];
       for(var i = 0;i<keys.length;i++) {
        (function(inst) {
-         ec2.launchInstance(inst.amiid,"CloudMgmtTest",{terminate:true,delay:3600000},function(err,data) {
+         ec2.launchInstance(inst.amiid,"devopstest",['sg-15aa6a70'],{terminate:true,delay:3600000},function(err,data) {
              if(err) {
               launchedFailedInstance.push({instanceId:null,title:inst.title});
              } else {
               //instance launch is successful ... now preparing for bootstrapping
+              console.log("Instance launced success");
               launchedInstances.push({instanceId:data.Instances[0].InstanceId,title:inst.title});
               instancesStatus[data.Instances[0].InstanceId]= {};
              }
@@ -220,11 +222,11 @@ app.post('/start',verifySession, function(req, resp){
           var spawn = childProcess.spawn;
           var knifeProcess;
           if(combinedRunList && combinedRunList.length) {
-            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-r'+combinedRunList.join(),'-xroot'],{
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/devopstest.pem','-r'+combinedRunList.join(),'-xroot'],{
              cwd:'/home/anshul/Downloads/chef-repo'
             });  
           } else {
-            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/CloudMgmtTest.pem','-xroot'],{
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/devopstest.pem','-xroot'],{
              cwd:'/home/anshul/Downloads/chef-repo'
             });
           }
@@ -327,38 +329,6 @@ app.get('/domainDetails',verifySession,function(req,resp){
   });
 
 });
-
-app.post('/domainDetails',verifySession,function(req,resp){
-  var launchedInstancesDetails = req.body.launchInstances;
-  var keys = Object.keys(launchedInstancesDetails);
-  var instanceIds = [];
-  for(var i=0;i<keys.length;i++) {
-    instanceIds.push(keys[i]);
-  }
-  ec2.describeInstances(instanceIds,function(err,data){
-    console.log('desc');
-    console.log(data);
-    if(err) {
-        
-    } else {
-       for(var j=0;j<data.Reservations.length;j++) {
-        var instances = data.Reservations[j].Instances;
-        console.log(instances);
-        for(var i=0;i<instances.length;i++) {
-             launchedInstancesDetails[instances[i].InstanceId].ip = instances[i].PublicIpAddress;
-             launchedInstancesDetails[instances[i].InstanceId].publicDns = instances[i].PublicDnsName;  
-        }
-      }
-
-    }
-    console.log('launchedInstancesDetails');
-    console.log(launchedInstancesDetails);
-    resp.render('domainDetails',{error:err,instancesDetails:launchedInstancesDetails,domainName:req.body.domainName});
-  });
-
-
-});
-
 
 
 

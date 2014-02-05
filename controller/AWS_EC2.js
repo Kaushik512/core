@@ -46,17 +46,21 @@ module.exports.describeInstances = function(instanceIds,callback){
 
 }
 
-module.exports.launchInstance = function(image_id,keyName,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback,instanceTerminateCallback) {
+module.exports.launchInstance = function(image_id,keyName,securityGroupIdsList,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback,instanceTerminateCallback) {
   
   var that = this;//"m1.small"
-  ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName,BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
+  if(!securityGroupIdsList) {
+    securityGroupIdsList = [];
+  }
+  ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName,SecurityGroupIds:securityGroupIdsList,BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
 		if(err) {
 			console.log("error occured while launching instance");
 			console.log(err);
 			callback(err,data);
 			return;
 		}
-		for(var i=0; i<data.Groups.length; i++) {
+    console.log(data);
+		for(var i=0; i<data.Instances.length; i++) {
               console.log("Launched Instance Named : " + data.Instances[i].InstanceId);
               
                // for terminating instance after some delay
@@ -145,7 +149,7 @@ module.exports.runInstances = function (image_id, min, max, name,KeyName,schedTe
 	ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.small", "MinCount" : parseInt(min), "MaxCount" : parseInt(max),"KeyName":KeyName}, function(err, data){
 		console.log(err);
 		if(!err && data) {
-			for(var i=0; i<data.Groups.length; i++) {
+			for(var i=0; i<data.Instances.length; i++) {
               console.log("Launched Instance Named : " + data.Instances[i].InstanceId);
               
                // for terminating instance after some delay
