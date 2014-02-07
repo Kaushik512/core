@@ -59,7 +59,7 @@ module.exports.launchInstance = function(image_id,keyName,securityGroupIdsList,s
 			callback(err,data);
 			return;
 		}
-    console.log(data);
+    //console.log(data);
 		for(var i=0; i<data.Instances.length; i++) {
               console.log("Launched Instance Named : " + data.Instances[i].InstanceId);
               

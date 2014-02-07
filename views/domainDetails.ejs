@@ -1,24 +1,91 @@
+<style>
+
+.domain-role-thumbnail {
+border-radius: 5px;
+    float: left;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    max-height: 145px;
+    max-width: 109px;
+    width: 41%;
+}
+.domain-roles {
+  background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    display: block;
+    line-height: 1.42857;
+    margin-bottom: 20px;
+    margin-left: 4px;
+    margin-top: 3px;
+    max-width: 100px;
+    min-height: 145px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: center;
+    transition: all 0.2s ease-in-out 0s;
+}
+.domain-roles-caption {
+  text-align: center;
+}
+.domain-roles-heading {
+  font-size: 12px;
+    overflow: hidden;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.instance-inactive {
+  color:red;
+}
+.instance-active {
+  color:green;
+}
+.instance-details-list {
+  border-top: 1px solid;
+    font-size: 10px;
+    padding-top: 10px;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.instance-details-item {
+  display: block;
+}
+.instance-bootstrap-list{
+  border-top: 1px solid;
+    font-size: 10px;
+    padding-top: 10px;
+    text-align: center;
+}
+</style>
+
+
 <% if(!error) {  
  
  function getRolesLink(role,domainName,ip) {
   
   switch(role) {
       case 'JIRA':
-      return {link:"http://"+ip+":8080/"};   
+      return '<a href="http://'+ip+':8080/">'+role+'</a>'
       case 'Crowd':
-      return {link:"http://"+ip+":8090/"};   
+      return '<a href="http://'+ip+':8090/">'+role+'</a>';   
       case 'Confluence':
-      return {link:"http://"+ip+":8090/"};
+      return '<a href="http://'+ip+':8090/">'+role+'</a>';
       case 'Jenkins':
-      return {link:"http://"+ip+":8080/"};
+      return '<a href="http://'+ip+':8080/">'+role+'</a>';
       case 'Nexus':
-       return {link:"http://"+ip+":8081/"};
+       return '<a href="http://'+ip+':8081/">'+role+'</a>';
       case 'Rundeck':
-       return {link:"http://"+ip+":8090/"};
+       return '<a href="http://'+ip+':8090/">'+role+'</a>';
       case 'Nagios':
-       return {link:"http://"+ip+"/"};
+       return '<a href="http://'+ip+'/">'+role+'</a>';
       case 'Selenium':
-       return {link:"http://"+ip+":4444/"};
+       return '<a href="http://'+ip+':4444/">'+role+'</a>';
+      default: 
+       return '<span>'+role+'</span>';
+
      }
 
 }
@@ -28,42 +95,82 @@
  if(!domains.length){
   %><div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;">No domains found</div>
 <% } else {
+ %>
+ <div class="panel-group" id="accordion">
+ <%
+ var firstPanelOpen=false;
+  var collapseClassName;
  for(var i=0;i<domains.length;i++) {
    var domain = domains[i];
+   
    if(domain.domainsInstaces && domain.domainsInstaces.length) {
+    collapseClassName = ''
+    if(!firstPanelOpen) {
+     
+      collapseClassName = 'in';
+      firstPanelOpen = true;
+    }
    %>
-   <div class="fade in instanceSuccess" style="margin: 10px 25px;">
-   	<div><strong><%=domain.domainName%></strong></div>
-   <%
-   var instances = domain.domainsInstaces;
-   for(var j=0;j<instances.length;j++) {
-     var instanceClassName = 'alert-info';
-     var instanceStatus = 'active';
-     if(!instances[j].instanceActive) {
-      instanceClassName = "alert-danger";
-      instanceStatus = "inactive";
-     }
-   %>
-   <div class="alert <%=instanceClassName%>">
-   <div><strong>Role :- <%=instances[j].instanceRole%> </strong></div>
-   <div>Instance Id :- <%=instances[j].instanceId%></div>
-   <div>Instance status :- <%=instanceStatus%></div> 
-   <% 
-    if(instances[j].bootStrapStatus) {
-     for(var k=0;k<instances[j].runlist.length;k++) {
-       var d = getRolesLink(instances[j].runlist[k],domain.domainName,instances[j].instanceIP);
-       if(d) {
-   %> 
-   <div><%=instances[j].runlist[k]%> :- <a href="<%=d.link%>"><%=domain.domainName%>/<%=instances[j].runlist[k]%></a></div>
-   <%
-    }}
-    } else {
-   %>
-   <div class="alert-danger">Bootstrapping of this instance failed</div>
-   <%
-   }
-%></div><% }
-%></div><%
-}}}}
-   %>
+   
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanel<%=i%>">
+          <%=domain.domainName%>
+        </a>
+      </h4>
+    </div> 
+   
+   <div id="domainPanel<%=i%>" class="panel-collapse collapse <%=collapseClassName%>">
+      <div class="panel-body">
+        <ul class="thumbnails list-unstyled">
+         <% var instances = domain.domainsInstaces;
+            for(var j=0;j<instances.length;j++) {
+          %>
+          <li class="domain-role-thumbnail">
+            <div class="domain-roles">
+            <div class="domain-roles-caption">
+              <div class="domain-roles-heading" title="Build"><%=instances[j].instanceRole%></div>
+              <div class="instance-details-list">
+              <span class="instance-details-item"> Id : <strong><%=instances[j].instanceId%></strong> </span>
+              <%
+               var classInstanceStatus = 'instance-inactive' 
+               var instanceStatusText = 'inactive'
+               if(instances[j].instanceActive) {
+                 classInstanceStatus = 'instance-active';
+                 instanceStatusText = 'active';
+               }
+              %>
+              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instanceStatusText%></span> </span>
+              
+              </div>
+              <div class="instance-bootstrap-list">
+               <% 
+                if(instances[j].bootStrapStatus) {
+                 for(var k=0;k<instances[j].runlist.length;k++) {
+                  var d = getRolesLink(instances[j].runlist[k],domain.domainName,instances[j].instanceIP);
+                 %>
+                 <span class="instance-details-item"><%-d%></span> 
+                 <%}
+               } else {
+               %><span class="instance-inactive">Bootstrapping Failed</span>
+             <% } %>
+              </div>
+            </div>
+          </div>
+            </li>
+            <%
+          }
+            %>
+
+ 
+         </ul> 
+
+      </div>
+    </div>
+  </div>
+  <%}}%>
+</div>
+<%}}%>
+
 

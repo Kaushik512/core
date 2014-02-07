@@ -36,7 +36,7 @@ var verifySession = function(req,res,next){
 app.post('/signin',function(req,res){
    console.log(req.body)
    if(req.body && req.body.username && req.body.pass) {
-   	if(req.body.username === 'admin' && req.body.pass === "pass"){
+   	if(req.body.username === 'admin' && req.body.pass === "ReleV@nce"){
       req.session.tempSession = true;
       products.getProducts(function(err,products){
 		res.render('index',{error:err,products:products});
