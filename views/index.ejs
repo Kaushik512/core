@@ -88,6 +88,10 @@
     left:4% !important;
     width: 96% !important;
 }
+.settings-content {
+   padding-top: 15px;
+    text-align: center;
+}
 
 </style>
 </head>
@@ -121,7 +125,43 @@
         <h4 class="modal-title" id="settingsModalTitle">Settings</h4>
       </div>
       <div class="modal-body">
-        Some settings ...
+        <div>
+             <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a data-toggle="tab" href="#amazon-settings">ASW</a></li>
+        <li class=""><a data-toggle="tab" href="#chef-settings">Chef</a></li>
+        <li class=""><a data-toggle="tab" href="#jenking-settings">Jenking</a></li>
+        <li class=""><a data-toggle="tab" href="#jira-settings">Jira</a></li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div id="amazon-settings" class="tab-pane fade active in settings-content">
+          
+          <span class="label label-default">Secret Key</span>:<input type="text"><br/>
+          <span class="label label-default">Secret Id</span>:<input type="text">
+          
+        </div>
+        
+        <div id="chef-settings" class="tab-pane fade ">
+        
+          
+        </div>
+        
+        <div id="jenking-settings" class="tab-pane fade settings-content">
+         
+          <span class="label label-default">User Name</span>:<input type="text"><br/>
+          <span class="label label-default">Password</span>:<input type="text">
+          
+        </div>
+        
+        <div id="jira-settings" class="tab-pane fade settings-content">
+          <span class="label label-default">User Name</span>:<input type="text"><br/>
+          <span class="label label-default">Password</span>:<input type="text">
+        </div>
+
+      </div>
+    </div>
+
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -133,7 +173,7 @@
 
     <div  class="menu_left navbar-inverse">
         <aside class='menuContent'>
-            <p class="menu-header"><span class="menu-header-text">Products</span>&nbsp;</p>
+            <p class="menu-header"><span class="menu-header-text">Providers</span>&nbsp;</p>
             <ul id="main-nav">
                 <% if(products && products.length) {
 
@@ -159,7 +199,7 @@
          <!--<span style="color:white">&nbsp; Domain Name : <input type="text" />.relevancelab.com</span>-->
         <section class="main-content">
 
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domain" data-toggle="tab">Domain</a></li>
               <li><a id="gallery_link" href="#gallery" data-toggle="tab">Gallery</a></li>
               <li><a href="#cmdb">Configuration</a></li>

@@ -12,7 +12,7 @@ $(function(){
   var $next_btn = $actions.find('a[href="#next"]');
   var $prev_btn = $actions.find('a[href="#previous"]');
   var $finish_btn = $actions.find('a[href="#finish"]');
-  var $tabsNavBar = $('.nav-tabs');
+  var $tabsNavBar = $('.main-tabs');
   var $tabsList = $tabsNavBar.find('li');
 
   
