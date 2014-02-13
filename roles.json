@@ -1,5 +1,5 @@
 {
-	"name" : "AWS-DevOPs",
+	"name" : "AWS-DevOps",
 	 "pid" : 1,
 	 "components" : [
 	 {
@@ -86,4 +86,11 @@
         "amiid":"ami-1711417e"
       } 
 	 ]
+}
+
+
+{
+	"name" : "Azure-DevOps",
+	 "pid" : 1,
+	 "components" : []
 }

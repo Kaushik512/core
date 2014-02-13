@@ -42,8 +42,8 @@ module.exports.getDomainData = function(domainName,callback) {
  
 };
 
-module.exports.getAllDomainData = function(callback){
-  Domains.find(function(err,data){
+module.exports.getAllDomainData = function(pid,callback){
+  Domains.find({pid:pid},function(err,data){
     if(err){
       callback(err,null);
       return;

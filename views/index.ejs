@@ -183,7 +183,7 @@
                      className = 'active';
                  }
                  %>
-                 <li class="nav-prod <%=className%>" data-pid="<%=products[i].pid%>"><a href="#"><i class="fa fa-th"></i> 
+                 <li class="nav-prod <%=className%>" data-pid="<%=products[i].pid%>"><a href="#"><img style="height: 30px;padding-bottom: 4px;" src="img/provider-icons/<%=products[i].pid%>.png"/>  
                     <span class="prod-name"><%= products[i].name%></span></a></li>
 
                     <% } %> 
@@ -200,19 +200,14 @@
         <section class="main-content">
 
             <ul class="nav nav-tabs main-tabs">
-              <li class="active"><a id="domain_link" href="#Domain" data-toggle="tab">Domain</a></li>
-              <li><a id="gallery_link" href="#gallery" data-toggle="tab">Gallery</a></li>
-              <li><a href="#cmdb">Configuration</a></li>
-              <li><a href="#instances">Instances</a></li>
-              
+              <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
+              <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li>             
           </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
-      <div class="tab-pane active" id="Domain"></div>
-      <div class="tab-pane" id="gallery"></div>
-      <div class="tab-pane" id="cmdb"></div>
-      <div class="tab-pane" id="instances"></div>     
+      <div class="tab-pane active" id="Domains"></div>
+      <div class="tab-pane" id="new_configuration"></div>     
   </div>
           <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
           </div>--> 
@@ -301,10 +296,15 @@
 
         DEVOPS.navigation.hideAllBtns(); 
 
-        $('.nav-prod').click(function(e){
+        var $providers = $('.nav-prod');
+
+
+       $providers.click(function(e){
          var $this = $(this);
          var pid = $this.attr('data-pid');
-
+          
+        $providers.removeClass('active');
+        $(this).addClass('active'); 
         /* $.get("/products/"+pid,function(data){
            DEVOPS.navigation.hideAllBtns();
            DEVOPS.navigation.showFirstTab(data);
@@ -317,7 +317,7 @@
        DEVOPS.navigation.showFirstTab('');
        DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
            
-       $.get("/domainDetails",function(data){
+       $.get("/domainDetails/"+pid,function(data){
            DEVOPS.navigation.showFirstTab(data);
            DEVOPS.navigation.hideAllBtns();
         
@@ -333,7 +333,7 @@
 
       loadDomainTab();
 
-      $('#gallery_link').on('shown.bs.tab',function (e) {
+      $('#new_link_tab').on('shown.bs.tab',function (e) {
          $.get("/products/"+pid,function(data){
            DEVOPS.navigation.hideAllBtns();
            //DEVOPS.navigation.showFirstTab(data);

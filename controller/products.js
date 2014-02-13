@@ -27,13 +27,13 @@ var roles = mongoose.model('roles', roleSchema);
 
 module.exports.getProducts = function(callback) {
   console.log('now i m here');
-  roles.find({pid:1},'name pid',function(err,data) {
+  roles.find({},'name pid',function(err,data) {
       
        if(err) {
          console.log("error");
          callback("error",null);
        } else {
-          //console.log(data);
+         console.log(data);
          callback(null,data);
        }
   });

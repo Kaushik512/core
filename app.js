@@ -64,6 +64,7 @@ var products = require('./controller/products.js')
 app.get('/',verifySession, function(req, res){
    
    products.getProducts(function(err,products){
+    console.log(products);
 		res.render('index',{error:err,products:products});
    });
 });
@@ -313,18 +314,10 @@ app.post('/start',verifySession, function(req, resp){
   
 
 
-app.get('/domainDetails',verifySession,function(req,resp){
-  /*var launchedInstancesDetails = req.body.launchInstances;
-  var keys = Object.keys(launchedInstancesDetails);
-  var instanceIds = [];
-  for(var i=0;i<keys.length;i++) {
-    instanceIds.push(keys[i]);
-  }*/
-
+app.get('/domainDetails/:pid',verifySession,function(req,resp){
+  var pid = req.params.pid; 
   // fetch domain details from mongo 
-  domainsDao.getAllDomainData(function(err,data){
-     console.log("domain data ==>");
-     console.log(data);
+  domainsDao.getAllDomainData(pid,function(err,data){
      resp.render('domainDetails',{error:err,domains:data});
   });
 
