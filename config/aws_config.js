@@ -8,8 +8,8 @@
 
 module.exports = {
 
-	access_key : "AKIAJW4FEMMDBYCCFGWQ",
-	secret_key : "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",
+	access_key : "AKIAJFEXRU3MVMRJEBFA",
+	secret_key : "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",
 	region : "us-east-1"
 }
 

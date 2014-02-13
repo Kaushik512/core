@@ -11,24 +11,26 @@
 }
 
 .system{
-     color: #DCDCDC;
-    font-size: 50px;
+    color: #DCDCDC;
     text-align: center;
+}
+.system-icon {
+   font-size: 35px;
 }
 .system-runlist {
   padding-bottom: 5px !important;
     padding-top: 0 !important;
-    min-height: 112px;
+    min-height: 90px;
 }
 .runlist-block {
   display: block;
+  font-size: 11px;
 }
 .center-alignment {
   display: inline-block;
     text-align: center;
 }
 .system-prop {
-  left: 18.5%;
   position: relative; 
 }
 .system-prop li{
@@ -36,7 +38,15 @@
 }
 .system-prop-text {
   display: block;
-  font-size: 10px;
+ font-size: 9px;
+}
+.role-heading {
+  text-align: center;
+  font-size: 11px;
+  text-decoration: underline;
+}
+.margin-bt {
+  margin-bottom: 10px !important;
 }
 
 </style>
@@ -45,8 +55,8 @@
 <ul class="thumbnails list-unstyled" id="dynamiclist">
 <% for(var i = 0;i<list.length;i++) { %>
 
-<li class="col-sm-2"> 
-  <div class="thumbnail">
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt">
     <div class="role-container" data-cid="<%=list[i].cid%>" data-amiid = "<%=list[i].amiid%>" data-title="<%=list[i].title%>" 
     <% var runlist = list[i].runlist 
       var str = ''
@@ -90,14 +100,14 @@
   data-runlist="<%=str%>" data-cpu="<%=cpu%>" data-ram="<%ram%>" data-hdd="<%=hdd%>">
   
     <div class="system">
-      <i class="fa fa-laptop"></i>
+      <i class="fa fa-laptop system-icon"></i>
     </div>
     <div class="caption system-runlist">
-      <h5 style="text-align:center;"><%=list[i].title%></h5>
-      <span class="runlist-block"><small><%=A%></small></span>
-      <span class="runlist-block"><small><%=B%></small></span>
-      <span class="runlist-block"><small><%=C%></small></span>
-      <span class="runlist-block"><small><%=D%></small></span>
+      <span class="role-heading"><strong><%=list[i].title%></strong></span>
+      <span class="runlist-block"><%=A%></span>
+      <span class="runlist-block"><%=B%></span>
+      <span class="runlist-block"><%=C%></span>
+      <span class="runlist-block"><%=D%></span>
     </div>
     <ul class="row list-unstyled system-prop">
       <li>
@@ -159,6 +169,68 @@
                         }
                        }); 
      
+
+     $(".goto-configuration").click(function(){
+      
+  
+      var current_fs = $(this).parent();
+      var next_fs = $(this).parent().next();
+  
+  //activate next step on progressbar using the index of next_fs
+  $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+  
+  //show the next fieldset
+  current_fs.hide();
+  next_fs.show(); 
+  //hide the current fieldset with style
+  /*current_fs.animate({opacity: 0}, {
+    step: function(now, mx) {
+      //as the opacity of current_fs reduces to 0 - stored in "now"
+      //1. scale current_fs down to 80%
+      scale = 1 - (1 - now) * 0.2;
+      //2. bring next_fs from the right(50%)
+      left = (now * 50)+"%";
+      //3. increase opacity of next_fs to 1 as it moves in
+      opacity = 1 - now;
+      current_fs.css({'transform': 'scale('+scale+')'});
+      next_fs.css({'left': left, 'opacity': opacity});
+    }, 
+    duration: 800, 
+    complete: function(){
+      current_fs.hide();
+      animating = false;
+    }, 
+    //this comes from the custom easing plugin
+    easing: 'easeInOutBack'
+  });*/
+  
+  var $configureRolesContainer = $('.configureRolesContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
+  $('.goto-launchInstances').hide();
+  $('.previous').hide();
+
+
+  $.ajax({
+                type: "POST",
+                url: "/cookbooks",
+                data: JSON.stringify(product),
+                success: function(data){
+            
+                  //$(tabEl).empty().append(data);
+                  $('.goto-launchInstances').show();
+                  $('.previous').show();
+
+                   $configureRolesContainer.empty().append(data);
+                  //DEVOPS.navigation.hideAllBtns(); 
+                  //DEVOPS.navigation.showPreviousBtn(previos);
+                  //DEVOPS.navigation.showFinishBtn(finish);
+            
+                },
+                contentType : 'application/json'
+            });
+
+
+});
+
 
      function next(e,tabEl) {
              DEVOPS.navigation.hideAllBtns();

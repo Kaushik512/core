@@ -73,7 +73,7 @@ var cookbooks =  require('./controller/GetRecipies');
 
 app.post('/cookbooks',verifySession, function(req, res){
 	console.log('Returning Available Cookbooks...!!');
-	//console.log(req.body);
+	console.log(req.body);
 	//res.render('cookbooks');
 	cookbooks.getCookbooks(function(err, resp){
 		console.log('About to Render...!! ');
@@ -152,13 +152,15 @@ var instancesStatus = {};
 
 
 app.post('/start',verifySession, function(req, resp){
-	console.log(req.body);
+	//console.log(req.body);
   var domainName = req.body.domainName;
+  var pid = req.body.pid;
   var selectedInstances = req.body.selectedInstances;
+  console.log(selectedInstances);
   if(selectedInstances) {
    
    //creating domain document
-   domainsDao.createDomainDocument(domainName,function(err,data){
+   domainsDao.createDomainDocument(domainName,pid,function(err,data){
    if(err) {
        resp.json({error:"Unable to create domain"});
    } else {
@@ -318,7 +320,7 @@ app.get('/domainDetails/:pid',verifySession,function(req,resp){
   var pid = req.params.pid; 
   // fetch domain details from mongo 
   domainsDao.getAllDomainData(pid,function(err,data){
-     resp.render('domainDetails',{error:err,domains:data});
+     resp.render('domainDetails',{error:err,domains:data,pid:pid});
   });
 
 });

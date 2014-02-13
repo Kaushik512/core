@@ -17,7 +17,11 @@
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 
     <style>
+    .top-header{
+      border-radius: 0 !important;
+      margin-bottom: 5px !important;
 
+    }
     .nav-options {
       float: right;
     }
@@ -93,13 +97,166 @@
     text-align: center;
 }
 
+
+/*  for new configuration*/
+
+/*custom font*/
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+
+/*basic reset*/
+* {margin: 0; padding: 0;}
+
+html {
+  height: 100%;
+  /*Image only BG fallback*/
+  background: url('http://thecodeplayer.com/uploads/media/gs.png');
+  /*background = gradient + image pattern combo*/
+  background: 
+    linear-gradient(rgba(196, 102, 0, 0.2), rgba(155, 89, 182, 0.2)), 
+    url('http://thecodeplayer.com/uploads/media/gs.png');
+}
+
+body {
+  font-family: montserrat, arial, verdana;
+}
+/*form styles*/
+#msform {
+  margin: 5px auto;
+  text-align: center;
+  position: relative;
+}
+#msform fieldset {
+  background: none repeat scroll 0 0 #FFFFFF;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    margin-left: 1%;
+    padding: 10px 30px;
+    position: absolute;
+    width: 98%;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+  display: none;
+}
+/*inputs*/
+/*
+#msform input, #msform textarea{
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: montserrat;
+  color: #2C3E50;
+  font-size: 13px;
+}*/
+/*buttons*/
+#msform .action-button {
+  width: 100px;
+  background: #428BCA;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 1px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+  border-radius: 5px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #428BCA;
+}
+/*headings*/
+.fs-title {
+  color: #2C3E50;
+    font-size: 15px;
+    margin-top: 2px;
+    text-transform: uppercase;
+}
+.fs-subtitle {
+  font-weight: normal;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+  margin-bottom: 10px;
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+}
+#progressbar li {
+  list-style-type: none;
+  color: black;
+  text-transform: uppercase;
+  font-size: 9px;
+  width: 33.33%;
+  float: left;
+  position: relative;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 20px;
+  line-height: 20px;
+  display: block;
+  font-size: 10px;
+  color: #333;
+  background: grey;
+  border-radius: 3px;
+  margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 9px;
+  z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+  background: #428BCA;
+  color: white;
+}
+
+.galleryContainer {
+    height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.configureRolesContainer {
+   height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.launchingInstanceContainer {
+   height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+
+
 </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-inverse" role="navigation">
+        <nav class="navbar navbar-inverse top-header" role="navigation">
             <a class="navbar-brand" href="#">
                 <img src="img/version2.png" alt="logo" height="30" width="70">
                 <span class="logotext">DevOps for DevOps</span>
@@ -207,7 +364,51 @@
   <!-- Tab panes -->
   <div class="tab-content">
       <div class="tab-pane active" id="Domains"></div>
-      <div class="tab-pane" id="new_configuration"></div>     
+      <div class="tab-pane" id="new_configuration">
+
+       <!-- multistep form -->
+<form id="msform">
+  <!-- progressbar -->
+  <ul id="progressbar">
+    <li class="active">Gallery</li>
+    <li>Configure Roles</li>
+    <li>Instances</li>
+  </ul>
+  <!-- fieldsets -->
+  <fieldset>
+    <h2 class="fs-title">Choose Roles</h2>
+    <div class="galleryContainer"></div>
+    <!--
+    <input type="text" name="email" placeholder="Email" />
+    <input type="password" name="pass" placeholder="Password" />
+    <input type="password" name="cpass" placeholder="Confirm Password" /> -->
+    <input type="button" name="next" class="next action-button goto-configuration" value="Next"/>
+    </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Configure Roles</h2>
+    <!--
+    <input type="text" name="twitter" placeholder="Twitter" />
+    <input type="text" name="facebook" placeholder="Facebook" />
+    <input type="text" name="gplus" placeholder="Google Plus" />-->
+    <div class="configureRolesContainer"></div>
+
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="next" class="next action-button goto-launchInstances" value="Next" />
+  </fieldset>
+  <fieldset>
+    <h2 class="fs-title">Launching Instances</h2>
+    <div class="launchingInstanceContainer"></div>
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="submit" class="submit action-button goto-finish" value="Finish" />
+  </fieldset>
+</form>
+
+
+
+<!-- jQuery easing plugin -->
+
+
+      </div>     
   </div>
           <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
           </div>--> 
@@ -215,7 +416,7 @@
 
 
 
-      <section class='footer'>
+     <!-- <section class='footer'>
         <div class="page_nav">
             <ul>
                 <li  class="footer_panel">
@@ -229,7 +430,7 @@
                 </li>
             </ul>
         </div>
-    </section>
+    </section>-->
 
 
    <!-- DOMAIN-->
@@ -239,7 +440,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
         <h4 class="modal-title" id="domainModalTitle">Domain Name</h4>
       </div>
       <div class="modal-body">
@@ -259,6 +460,7 @@
     window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')
     </script>
     <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/commons.js"></script>
@@ -298,10 +500,15 @@
 
         var $providers = $('.nav-prod');
 
-
+       var $new_link_tab = $('#new_link_tab');
        $providers.click(function(e){
          var $this = $(this);
          var pid = $this.attr('data-pid');
+         if(pid === '3') {
+          $new_link_tab.hide();
+         } else {
+           $new_link_tab.show();
+         }
           
         $providers.removeClass('active');
         $(this).addClass('active'); 
@@ -333,14 +540,15 @@
 
       loadDomainTab();
 
-      $('#new_link_tab').on('shown.bs.tab',function (e) {
+      $new_link_tab.on('shown.bs.tab',function (e) {
+        var $galleryContainer = $('.galleryContainer');
+        var $gotoConfigurationNextBtn = $('.goto-configuration').hide();
+        $galleryContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
          $.get("/products/"+pid,function(data){
-           DEVOPS.navigation.hideAllBtns();
-           //DEVOPS.navigation.showFirstTab(data);
-           console.log(data);
-           DEVOPS.navigation.setContentOnCurrentTab(data);
-           //$(e.target).empty().append(data);
-         }).fail(function() {
+          $gotoConfigurationNextBtn.show();
+           $('.galleryContainer').empty().append(data);
+
+          }).fail(function() {
            alert( "error" );
          });
       });
@@ -353,6 +561,32 @@
         $('.nav-prod').filter('.active').trigger('click');
 
     });
+
+/*//jQuery time
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+*/
+
+$(".previous").click(function(){
+
+  
+  var current_fs = $(this).parent();
+  var previous_fs = $(this).parent().prev();
+  
+  //de-activate current step on progressbar
+  $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+  
+  //show the previous fieldset
+  current_fs.hide();
+  previous_fs.show(); 
+
+});
+
+$(".submit").click(function(){
+  return false;
+})
+
         /*
         $(document).ready(function () {
             var selectedInstances = [];

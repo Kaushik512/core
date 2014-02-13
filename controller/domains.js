@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 
 var DomainsSchema = new Schema({
   domainName:String,
+  domainPid:Number,
   domainsInstaces : [{
   instanceId :  String,
   instanceIP : String,
@@ -19,8 +20,8 @@ var DomainsSchema = new Schema({
 var Domains = mongoose.model('domains', DomainsSchema);
 
 
-module.exports.createDomainDocument = function(domainName,callback){
-  var domain = new Domains({ domainName: domainName });
+module.exports.createDomainDocument = function(domainName,pid,callback){
+  var domain = new Domains({ domainName: domainName,domainPid:pid});
    domain.save(function(err,data){
       if(err) {
         callback(err,null);
@@ -43,7 +44,7 @@ module.exports.getDomainData = function(domainName,callback) {
 };
 
 module.exports.getAllDomainData = function(pid,callback){
-  Domains.find({pid:pid},function(err,data){
+  Domains.find({domainPid:pid},function(err,data){
     if(err){
       callback(err,null);
       return;

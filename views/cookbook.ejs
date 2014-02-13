@@ -1,7 +1,6 @@
 <%if(cookbooks){%>
 <style type="text/css">
         .recipies {
-            padding-top: 2%;
             text-align: center;
         }
         .recipies-list-container {
@@ -15,7 +14,6 @@
           border-right: 1px solid;
     height: 100%;
     
-    padding-top: 2%;
     text-align: center; 
            
         }
@@ -36,11 +34,11 @@
     border-radius: 4px 4px 4px 4px;
     display: block;
     line-height: 1.42857;
-    margin-bottom: 20px;
+    margin-bottom: 4px;
      margin-left: 4px;
     margin-top: 3px;
     max-width: 100px;
-    min-height: 138px;
+    min-height: 110px;
     padding-bottom: 4px;
     padding-left: 4px;
     padding-right: 4px;
@@ -55,8 +53,8 @@
         }
         .sel-role-thumbnail {
     float: left;
-    margin-bottom: 20px;
-    margin-right: 20px;
+    margin-bottom: 5px;
+    margin-right: 5px;
     max-height: 145px;
     max-width: 109px;
     width: 41%;
@@ -73,8 +71,8 @@
           font-size: 10px; 
           padding-top: 10px; 
         } 
-        .sel-role-runlist .runlist-item {
-        /*font-size: 8px;*/ 
+        .sel-role-runlist {
+
         }
         .sel-role-heading {
            font-size: 12px;
@@ -86,19 +84,25 @@
             }
 
             .recipes-list {
-              height:300px !important;
+              height:279px !important;
               width:90%;
               margin-bottom:10px;
               display: none;  
             }
-
+            .runlist-item  {
+              margin-bottom: 3px !important;
+            }
+.ul-roles-container {
+            padding-left: 20px;
+    padding-top: 30px !important;
+}
 </style>
 <link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
 <div class="" style="height:90%">
     <div class="sel-roles-container col-md-6">
         <span class="field-heading"> Roles </span>
 
-  <ul class="thumbnails list-unstyled">
+  <ul class="thumbnails list-unstyled ul-roles-container">
   <%
   var rolesSelected = prodSelected.selectedInstances;
   var keys = Object.keys(rolesSelected);
@@ -123,7 +127,7 @@
 </div>
 
 <div class="recipies col-md-6">
-    <span class="field-heading"> Add Recipies </span>
+    <span class="field-heading"> Add Chef Cookbooks </span>
 <div class="recipies-list-container">
 <%
 for(var j =0; j< keys.length; j++){%>
@@ -152,15 +156,40 @@ for(var j =0; j< keys.length; j++){%>
 
        //DEVOPS.navigation.setNextBtnClickHandler(finish);
        //DEVOPS.navigation.hideAllBtns();
+       $(".goto-launchInstances").click(function(){
+  
+       var current_fs = $(this).parent();
+       var next_fs = $(this).parent().next();
+  
+  //activate next step on progressbar using the index of next_fs
 
-       DEVOPS.navigation.setNextBtnClickHandler(function(e,tabEl){
-        
-        $('.domain-settings').trigger('click');
-         $('.save-domain-btn').click(function(evt){
-             
-             finish(e,tabEl,$('#domainNameText').val()+'.relevancelab.com');
+          
+
+       $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+  
+        //show the next fieldset
+       current_fs.hide();
+       next_fs.show(); 
+       
+       var $launchingInstanceContainer = $('.launchingInstanceContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
+       $('.goto-finish').hide();
+       $('.previous').hide();   
+
+
+       $('.domain-settings').trigger('click');
+        $('.save-domain-btn').click(function(evt){
+             finish(evt,$launchingInstanceContainer.get(0),$('#domainNameText').val()+'.relevancelab.com');
+             /*$('.goto-finish').show();
+             $('.previous').show();*/ 
          });
-       });
+  });
+      
+
+
+       /*$('.')function(e,tabEl){
+        
+       
+       });*/
        
 
 
@@ -170,7 +199,7 @@ for(var j =0; j< keys.length; j++){%>
             DEVOPS.navigation.hideAllBtns(); 
            
             var selectedInstances = JSON.parse('<%-JSON.stringify(prodSelected.selectedInstances)%>');
-            
+            var pid = <%=prodSelected.pid%>
             var keys = Object.keys(selectedInstances);
             for(var i=0;i<keys.length;i++) {
                selectedInstances[keys[i]].runlistSelected = [];
@@ -182,7 +211,7 @@ for(var j =0; j< keys.length; j++){%>
             console.log(selectedInstances);
 
 
-            $.post('/start',{domainName:domainName,selectedInstances:selectedInstances},function(data,success){
+            $.post('/start',{domainName:domainName,selectedInstances:selectedInstances,pid:pid},function(data,success){
                
                if(data.error) {
                  var $errorMessage = $('<div class="instance-result"><div class="alert alert-danger fade in" id="message" style="margin: 10px 25px;"><strong>Error!</strong>&nbsp;Instance Launched Failed.</div></div>');
@@ -195,7 +224,7 @@ for(var j =0; j< keys.length; j++){%>
                var numberOfInstancesBootstrapped = 0;
 
                for(var j=0;j<data.launchedInstances.length;j++){
-                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none"> Role :- '+data.launchedInstances[j].title+'<br/> Instance Id : '+data.launchedInstances[j].instanceId+' <div id="'+data.launchedInstances[j].instanceId+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
+                var $instanceData = $('<div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;display: none;text-align:left"> Role :- '+data.launchedInstances[j].title+'<br/> Instance Id : '+data.launchedInstances[j].instanceId+' <div id="'+data.launchedInstances[j].instanceId+'" data-waitingTest="false" data-bootstrapText="false"></div></div>');
                 $message.append($instanceData);
                 launchInstances[data.launchedInstances[j].instanceId] ={};
                 launchInstances[data.launchedInstances[j].instanceId].title = data.launchedInstances[j].title; 
@@ -223,7 +252,7 @@ for(var j =0; j< keys.length; j++){%>
                  var $terminal = null;
                  if($output.attr('data-bootstrapText')=='false') {
                    console.log('in if');
-                   $terminal = $('<div style="height:190px;width:auto;color:white;background-color:black;overflow:auto"></div>')
+                   $terminal = $('<div style="height:160px;width:auto;color:white;background-color:black;overflow:auto"></div>')
                    $output.empty();
                    $output.append('<span>Bootstrapping Instance...<img src="img/instance-waiting.gif"/><span><br/>');
                    $output.append($terminal);
@@ -270,13 +299,14 @@ for(var j =0; j< keys.length; j++){%>
                   }
                   numberOfInstancesBootstrapped++;
                   if(numberOfInstances === numberOfInstancesBootstrapped) {
-                     DEVOPS.navigation.displayNavigationBtn();
-                     DEVOPS.navigation.setFinishBtnClickHandler(function(evt,tabEl){
+                     var $finishBtn= $('.goto-finish').show();
+                     $('.previous').show();
+                      $finishBtn.click(function(evt,tabEl){
                          DEVOPS.navigation.hideAllBtns();
                          DEVOPS.navigation.showFirstTab('');
                          DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
            
-                        $.get("/domainDetails",function(data){
+                        $.get("/domainDetails/"+pid,function(data){
                           DEVOPS.navigation.showFirstTab(data);
                            DEVOPS.navigation.hideAllBtns();
         
