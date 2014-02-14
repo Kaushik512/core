@@ -84,6 +84,7 @@ app.post('/cookbooks',verifySession, function(req, res){
 });
 
 app.get('/products/:pid',verifySession,function(req,res) {
+  console.log("fetching for pid ");
   console.log(req.params);
   var pid = req.params.pid;
   if(pid) {
@@ -170,9 +171,10 @@ app.post('/start',verifySession, function(req, resp){
       var keys = Object.keys(selectedInstances);
       var count = keys.length;
       var launchedInstanceIds = [];
+      //3600000
       for(var i = 0;i<keys.length;i++) {
        (function(inst) {
-         ec2.launchInstance(inst.amiid,"devopstest",['sg-15aa6a70'],{terminate:true,delay:3600000},function(err,data) {
+         ec2.launchInstance(inst.amiid,"devopstest",['sg-15aa6a70'],{terminate:true,delay:1000*60*10},function(err,data) {
              if(err) {
               launchedFailedInstance.push({instanceId:null,title:inst.title});
              } else {
@@ -295,8 +297,17 @@ app.post('/start',verifySession, function(req, resp){
               console.log('before');
               console.log(instancesStatus);
               delete instancesStatus[terminatedInstance.InstanceId];
-
+              
+            } else {
+              console.log("instance not present");
             }
+            domainsDao.updateInstanceStatus(domainName,terminatedInstance.InstanceId,false,function(err,data){
+                if(err) {
+                  console.log("unable to update status of terminated instance");
+                } else {
+                  console.log("Instance status set to false successfully");
+                }
+            });
 
         });//ends here;
        })(selectedInstances[keys[i]]);

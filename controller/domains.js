@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var DomainsSchema = new Schema({
   domainName:String,
   domainPid:Number,
-  domainsInstaces : [{
+  domainInstances : [{
   instanceId :  String,
   instanceIP : String,
   instanceRole: String,
@@ -56,7 +56,7 @@ module.exports.getAllDomainData = function(pid,callback){
 
 module.exports.saveDomainInstanceDetails = function(domainName,instanceList,callback) {
 
-   Domains.update({domainName:domainName},{$pushAll: {domainsInstaces:instanceList}},{upsert:true},function(err,data){
+   Domains.update({domainName:domainName},{$pushAll: {domainInstances:instanceList}},{upsert:true},function(err,data){
 
     if(err){
       callback(err,null);
@@ -67,6 +67,18 @@ module.exports.saveDomainInstanceDetails = function(domainName,instanceList,call
   });
   
 };
+
+module.exports.updateInstanceStatus = function(domainName,instanceId,status,callback) {
+   Domains.update({domainName:domainName,"domainInstances.instanceId":instanceId},{$set: {"domainInstances.$.instanceActive":status}},{upsert:false},function(err,data){
+
+    if(err){
+      callback(err,null);
+      return;
+    } 
+    callback(null,data);
+
+  });
+}
 
 module.exports.deleteEmptyDomains = function(callback) {
 

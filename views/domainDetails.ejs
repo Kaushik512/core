@@ -92,7 +92,7 @@ border-radius: 5px;
 
 
  console.log('pid==>'+pid);
-  if(!domains.length && (pid != '3' && pid != '1')) {
+  if(!domains.length && (pid != '3' && pid != '1' && pid != '4' && pid != '5' && pid != '2')) {
   %><div class="alert alert-info fade in instanceSuccess" style="margin: 10px 25px;">No domains found</div>
 <% } else {
  %>
@@ -109,7 +109,7 @@ border-radius: 5px;
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid1">
           conztanz.relevancelab.com
-        </a>
+        </a>&nbsp;<a href="http://conztanz.relevancelab.com/" target="_blank"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
       </h4>
     </div> 
      <div id="domainPanelpid1" class="panel-collapse collapse in">
@@ -159,17 +159,16 @@ border-radius: 5px;
   </div>
 
    <% firstPanelOpen = true; 
-    } else if(pid === '3') {
-    %>
-      <div class="panel panel-default">
+    } else if(pid === '2') { %>
+         <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid21">
-          rlrnd.relevancelab.com
-        </a>
+        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid2">
+         rlevaldevops.cloudapp.net
+        </a>&nbsp;<a href="http://rlevaldevops.cloudapp.net/" target="_blank"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
       </h4>
     </div> 
-     <div id="domainPanelpid21" class="panel-collapse collapse in">
+     <div id="domainPanelpid2" class="panel-collapse collapse in">
       <div class="panel-body">
         <ul class="thumbnails list-unstyled">
           <li class="domain-role-thumbnail">
@@ -177,7 +176,41 @@ border-radius: 5px;
             <div class="domain-roles-caption">
               <div class="domain-roles-heading" title="Planning">Planning</div>
               <div class="instance-details-list">
-              <span class="instance-details-item"> Id : <strong>i-351f26y7</strong> </span>
+              <span class="instance-details-item"> Id : <strong>i-n54i09</strong> </span>
+              <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
+              
+              </div>
+              <div class="instance-bootstrap-list">
+                <span class="instance-details-item"><a href="http://rlevaldevops.cloudapp.net/" >A2A</a></span> 
+              </div>
+              </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+    <% firstPanelOpen = true;
+    } 
+    else if(pid === '3') {
+    %>
+      <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid31">
+          rlrnd.relevancelab.com
+        </a>&nbsp;<a href="http://192.168.101.43/" target="_blank"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
+      </h4>
+    </div> 
+     <div id="domainPanelpid31" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <ul class="thumbnails list-unstyled">
+          <li class="domain-role-thumbnail">
+            <div class="domain-roles">
+            <div class="domain-roles-caption">
+              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="instance-details-list">
+              <span class="instance-details-item"> Id : <strong>RLD3MONS01</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
               
               </div>
@@ -194,7 +227,7 @@ border-radius: 5px;
             <div class="domain-roles-caption">
               <div class="domain-roles-heading" title="Build">Build</div>
               <div class="instance-details-list">
-              <span class="instance-details-item"> Id : <strong>i-b5201g9c</strong> </span>
+              <span class="instance-details-item"> Id : <strong>RLD2MGMT01</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
               
               </div>
@@ -210,7 +243,7 @@ border-radius: 5px;
                <div class="domain-roles-caption">
                <div class="domain-roles-heading" title="Monitoring">Monitoring</div>
                <div class="instance-details-list">
-               <span class="instance-details-item"> Id : <strong>i-n2675g9c</strong> </span>
+               <span class="instance-details-item"> Id : <strong>RLTESTSRV03</strong> </span>
                <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
               </div>
               <div class="instance-bootstrap-list">
@@ -229,12 +262,12 @@ border-radius: 5px;
    <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid22">
+        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid32">
           rleval.relevancelab.com
-        </a>
+        </a>&nbsp;<a href="http://192.168.103.34/" target="_blank"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
       </h4>
     </div> 
-     <div id="domainPanelpid22" class="panel-collapse collapse">
+     <div id="domainPanelpid32" class="panel-collapse collapse">
       <div class="panel-body">
         <ul class="thumbnails list-unstyled">
           <li class="domain-role-thumbnail">
@@ -295,17 +328,79 @@ border-radius: 5px;
 
     <%
     firstPanelOpen = true; 
-     }
-    %><!-- ends here if -->
+     } else if(pid === '4') {
+    %>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid4">
+         rlopenstack.relevancelab.com
+        </a>&nbsp;<a href="http://192.168.150.240" target="_blank"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
+      </h4>
+    </div> 
+     <div id="domainPanelpid4" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <ul class="thumbnails list-unstyled">
+          <li class="domain-role-thumbnail">
+            <div class="domain-roles">
+            <div class="domain-roles-caption">
+              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="instance-details-list">
+              <span class="instance-details-item"> Id : <strong>i-19m2w6</strong> </span>
+              <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
+              
+              </div>
+              <div class="instance-bootstrap-list">
+                <span class="instance-details-item"><a href="http://192.168.150.240" >JIRA</a></span> 
+              </div>
+              </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
+   <% firstPanelOpen = true; 
+} else if(pid === '5') { %><!-- ends here if -->
+ <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#domainPanelpid5">
+         rlcloudstack.relevancelab.com
+        </a>&nbsp;<a href="http://192.168.101.44" target="_blank"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
+      </h4>
+    </div> 
+     <div id="domainPanelpid5" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <ul class="thumbnails list-unstyled">
+          <li class="domain-role-thumbnail">
+            <div class="domain-roles">
+            <div class="domain-roles-caption">
+              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="instance-details-list">
+              <span class="instance-details-item"> Id : <strong>i-s295i2</strong> </span>
+              <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
+              
+              </div>
+              <div class="instance-bootstrap-list">
+                <span class="instance-details-item"><a href="http://192.168.101.44" >JIRA</a></span> 
+              </div>
+              </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </div> 
 
- <%
-  
-
+ <% 
+   firstPanelOpen = true; 
+ }
  for(var i=0;i<domains.length;i++) {
    var domain = domains[i];
    
-   if(domain.domainsInstaces && domain.domainsInstaces.length) {
+   if(domain.domainInstances && domain.domainInstances.length) {
     collapseClassName = ''
     if(!firstPanelOpen) {
      
@@ -319,14 +414,14 @@ border-radius: 5px;
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#domainPanel<%=i%>">
           <%=domain.domainName%>
-        </a>
+        </a>&nbsp;<a id="domainPanelAnchor<%=i%>" href="#" target="_blank" style="display:none"><img src="img/openLinkBl.png" style="height: 14px ;width: 14px;margin-bottom: 3px;"/></a>
       </h4>
     </div> 
    
    <div id="domainPanel<%=i%>" class="panel-collapse collapse <%=collapseClassName%>">
       <div class="panel-body">
         <ul class="thumbnails list-unstyled">
-         <% var instances = domain.domainsInstaces;
+         <% var instances = domain.domainInstances;
             for(var j=0;j<instances.length;j++) {
           %>
           <li class="domain-role-thumbnail">
@@ -336,6 +431,14 @@ border-radius: 5px;
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong><%=instances[j].instanceId%></strong> </span>
               <%
+                if(instances[j].instanceRole === 'Planning') {
+               %><script>
+                 console.log('i m here');
+                $('#domainPanelAnchor<%=i%>').attr('href','http://<%=instances[j].instanceIP%>:8080');
+                $('#domainPanelAnchor<%=i%>').show();
+               </script>
+               <%}
+
                var classInstanceStatus = 'instance-inactive' 
                var instanceStatusText = 'inactive'
                if(instances[j].instanceActive) {

@@ -98,6 +98,7 @@
 }
 </style>
 <link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
+<div class="configureRolesContainer">
 <div class="" style="height:90%">
     <div class="sel-roles-container col-md-6">
         <span class="field-heading"> Roles </span>
@@ -140,6 +141,9 @@ for(var j =0; j< keys.length; j++){%>
 </div>
 </div>
 </div>
+</div>
+<input type="button" name="previous" class="previous action-button goto-gallery" value="Previous" />
+<input type="button" name="next" class="next action-button goto-launchInstances" value="Next" />
 <!-- DOMAIN name anchor-->
 <a class="navbar-brand nav-settings domain-settings" style="" href="#domainModal" data-target="#domainModal" data-toggle="modal" role="button" title="Domain"></a>
 
@@ -154,16 +158,12 @@ for(var j =0; j< keys.length; j++){%>
        DEVOPS.navigation.displayNavigationBtn();       
        
 
-       //DEVOPS.navigation.setNextBtnClickHandler(finish);
-       //DEVOPS.navigation.hideAllBtns();
        $(".goto-launchInstances").click(function(){
   
-       var current_fs = $(this).parent();
-       var next_fs = $(this).parent().next();
+       var current_fs = $(this).parent().parent();
+       var next_fs = $(this).parent().parent().next();
   
   //activate next step on progressbar using the index of next_fs
-
-          
 
        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
   
@@ -171,9 +171,9 @@ for(var j =0; j< keys.length; j++){%>
        current_fs.hide();
        next_fs.show(); 
        
-       var $launchingInstanceContainer = $('.launchingInstanceContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
-       $('.goto-finish').hide();
-       $('.previous').hide();   
+       var $launchingInstanceContainer = $('.launchingInstanceContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom:10%" src="img/loading.gif" />');
+         $('.goto-finish').hide();
+         $('.goto-configureRoles').hide();   
 
 
        $('.domain-settings').trigger('click');
@@ -182,14 +182,22 @@ for(var j =0; j< keys.length; j++){%>
              /*$('.goto-finish').show();
              $('.previous').show();*/ 
          });
-  });
-      
+      });
 
+       $(".goto-gallery").click(function(){
 
-       /*$('.')function(e,tabEl){
-        
-       
-       });*/
+  
+     var current_fs = $(this).parent().parent();
+     var previous_fs = $(this).parent().parent().prev();
+  
+     //de-activate current step on progressbar
+     $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+  
+  
+     current_fs.hide();
+     previous_fs.show(); 
+
+   });
        
 
 
@@ -213,9 +221,13 @@ for(var j =0; j< keys.length; j++){%>
 
             $.post('/start',{domainName:domainName,selectedInstances:selectedInstances,pid:pid},function(data,success){
                
-               if(data.error) {
-                 var $errorMessage = $('<div class="instance-result"><div class="alert alert-danger fade in" id="message" style="margin: 10px 25px;"><strong>Error!</strong>&nbsp;Instance Launched Failed.</div></div>');
+               console.log(data);
+               if(data.error || data.launchedInstances.length === 0) {
+                 var $errorMessage = $('<div class="instance-result"><div class="alert alert-danger fade in" id="message" style="margin: 10px 25px;"><strong>Error!</strong>&nbsp;Launching of instances failed.</div></div>');
                   $(tabEl).empty().append($errorMessage);
+                  var $finishBtn= $('.goto-finish').show();
+                  $('.goto-configureRoles').show();
+                  //alert('error');
                  return;
                }
 
@@ -300,7 +312,7 @@ for(var j =0; j< keys.length; j++){%>
                   numberOfInstancesBootstrapped++;
                   if(numberOfInstances === numberOfInstancesBootstrapped) {
                      var $finishBtn= $('.goto-finish').show();
-                     $('.previous').show();
+                     $('.goto-configureRoles').show();
                       $finishBtn.click(function(evt,tabEl){
                          DEVOPS.navigation.hideAllBtns();
                          DEVOPS.navigation.showFirstTab('');

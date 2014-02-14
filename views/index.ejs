@@ -377,28 +377,21 @@ body {
   <!-- fieldsets -->
   <fieldset>
     <h2 class="fs-title">Choose Roles</h2>
-    <div class="galleryContainer"></div>
-    <!--
-    <input type="text" name="email" placeholder="Email" />
-    <input type="password" name="pass" placeholder="Password" />
-    <input type="password" name="cpass" placeholder="Confirm Password" /> -->
-    <input type="button" name="next" class="next action-button goto-configuration" value="Next"/>
+    <div class="galleryArea">
+    </div>
+    
+   
     </fieldset>
   <fieldset>
     <h2 class="fs-title">Configure Roles</h2>
-    <!--
-    <input type="text" name="twitter" placeholder="Twitter" />
-    <input type="text" name="facebook" placeholder="Facebook" />
-    <input type="text" name="gplus" placeholder="Google Plus" />-->
-    <div class="configureRolesContainer"></div>
-
-    <input type="button" name="previous" class="previous action-button" value="Previous" />
-    <input type="button" name="next" class="next action-button goto-launchInstances" value="Next" />
+    <div class="configureRolesArea">
+    </div>
+    
   </fieldset>
   <fieldset>
     <h2 class="fs-title">Launching Instances</h2>
     <div class="launchingInstanceContainer"></div>
-    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="previous" class="previous action-button goto-configureRoles" value="Previous" />
     <input type="button" name="submit" class="submit action-button goto-finish" value="Finish" />
   </fieldset>
 </form>
@@ -520,6 +513,7 @@ body {
            alert( "error" );
        });*/
       function loadDomainTab() {
+       var pid  = $providers.filter('.active').attr('data-pid');
        DEVOPS.navigation.hideAllBtns();
        DEVOPS.navigation.showFirstTab('');
        DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
@@ -539,58 +533,56 @@ body {
       });
 
       loadDomainTab();
-
-      $new_link_tab.on('shown.bs.tab',function (e) {
-        var $galleryContainer = $('.galleryContainer');
-        var $gotoConfigurationNextBtn = $('.goto-configuration').hide();
-        $galleryContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
+  
+    });
+    
+     var $galleryArea = $('.galleryArea');
+    $new_link_tab.on('shown.bs.tab',function (e) {
+       
+        $galleryArea.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
          $.get("/products/"+pid,function(data){
-          $gotoConfigurationNextBtn.show();
-           $('.galleryContainer').empty().append(data);
-
+           $galleryArea.empty().append(data);
           }).fail(function() {
            alert( "error" );
          });
       });
 
-
-    });
-
      
+ $(".goto-configureRoles").click(function(){
 
-        $('.nav-prod').filter('.active').trigger('click');
+     alert('here')
+     var current_fs = $(this).parent();
+     var previous_fs = $(this).parent().prev();
+  
+     //de-activate current step on progressbar
+     $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+  
+  
+     current_fs.hide();
+     previous_fs.show(); 
+
+   });
+
+               var $finishBtn= $('.goto-finish').show();
+                $finishBtn.click(function(evt){
+                         DEVOPS.navigation.hideAllBtns();
+                         DEVOPS.navigation.showFirstTab('');
+                         DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
+                         var pid  = $providers.filter('.active').attr('data-pid');
+           
+                        $.get("/domainDetails/"+pid,function(data){
+                          DEVOPS.navigation.showFirstTab(data);
+                         }).fail(function() {
+                            alert( "error" );
+                        });
+                     });
+
+
+        $providers.filter('.active').trigger('click');
 
     });
 
-/*//jQuery time
-var current_fs, next_fs, previous_fs; //fieldsets
-var left, opacity, scale; //fieldset properties which we will animate
-var animating; //flag to prevent quick multi-click glitches
-*/
-
-$(".previous").click(function(){
-
-  
-  var current_fs = $(this).parent();
-  var previous_fs = $(this).parent().prev();
-  
-  //de-activate current step on progressbar
-  $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-  
-  //show the previous fieldset
-  current_fs.hide();
-  previous_fs.show(); 
-
-});
-
-$(".submit").click(function(){
-  return false;
-})
-
-        /*
-        $(document).ready(function () {
-            var selectedInstances = [];
-        }*/
 
         </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

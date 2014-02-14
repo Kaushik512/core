@@ -51,7 +51,8 @@
 
 </style>
 
-    
+  <div class="galleryContainer">
+      
 <ul class="thumbnails list-unstyled" id="dynamiclist">
 <% for(var i = 0;i<list.length;i++) { %>
 
@@ -136,15 +137,18 @@
 
 <%}%>
 
-<script type="text/javascript">
+
+
+</ul>
+</div>
+ <input type="button" name="next" class="next action-button goto-configuration" value="Next"/>
+ <script type="text/javascript">
 (function(){
 
    var product = {};
    product.pid = <%=prod.pid%>;
    product.name = "<%=prod.name%>";
    product.selectedInstances = {};  
-   DEVOPS.navigation.setNextBtnClickHandler(next); 
-   DEVOPS.navigation.displayNavigationBtn();
 
      $('.role-container').click(function (e) {
                         e.stopImmediatePropagation();
@@ -171,43 +175,21 @@
      
 
      $(".goto-configuration").click(function(){
-      
-  
-      var current_fs = $(this).parent();
-      var next_fs = $(this).parent().next();
+        if(!Object.keys(product.selectedInstances).length) {
+          alert("Please choose some roles");
+          return;
+        }  
+    
+      var current_fs = $(this).parent().parent();
+      var next_fs = $(this).parent().parent().next();
   
   //activate next step on progressbar using the index of next_fs
-  $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+      $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
   
   //show the next fieldset
-  current_fs.hide();
-  next_fs.show(); 
-  //hide the current fieldset with style
-  /*current_fs.animate({opacity: 0}, {
-    step: function(now, mx) {
-      //as the opacity of current_fs reduces to 0 - stored in "now"
-      //1. scale current_fs down to 80%
-      scale = 1 - (1 - now) * 0.2;
-      //2. bring next_fs from the right(50%)
-      left = (now * 50)+"%";
-      //3. increase opacity of next_fs to 1 as it moves in
-      opacity = 1 - now;
-      current_fs.css({'transform': 'scale('+scale+')'});
-      next_fs.css({'left': left, 'opacity': opacity});
-    }, 
-    duration: 800, 
-    complete: function(){
       current_fs.hide();
-      animating = false;
-    }, 
-    //this comes from the custom easing plugin
-    easing: 'easeInOutBack'
-  });*/
-  
-  var $configureRolesContainer = $('.configureRolesContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
-  $('.goto-launchInstances').hide();
-  $('.previous').hide();
-
+     next_fs.show(); 
+  var $configureRolesContainer = $('.configureRolesArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
   $.ajax({
                 type: "POST",
@@ -215,14 +197,7 @@
                 data: JSON.stringify(product),
                 success: function(data){
             
-                  //$(tabEl).empty().append(data);
-                  $('.goto-launchInstances').show();
-                  $('.previous').show();
-
                    $configureRolesContainer.empty().append(data);
-                  //DEVOPS.navigation.hideAllBtns(); 
-                  //DEVOPS.navigation.showPreviousBtn(previos);
-                  //DEVOPS.navigation.showFinishBtn(finish);
             
                 },
                 contentType : 'application/json'
@@ -230,31 +205,6 @@
 
 
 });
-
-
-     function next(e,tabEl) {
-             DEVOPS.navigation.hideAllBtns();
-            console.log(product.selectedInstances);
-            $.ajax({
-                type: "POST",
-                url: "/cookbooks",
-                data: JSON.stringify(product),
-                success: function(data){
-            
-                  $(tabEl).empty().append(data);
-                  //DEVOPS.navigation.hideAllBtns(); 
-                  //DEVOPS.navigation.showPreviousBtn(previos);
-                  //DEVOPS.navigation.showFinishBtn(finish);
-            
-                },
-                contentType : 'application/json'
-            });
-        }
-
-      
-
 })();
 </script>
-
-</ul>
 <%}%>
