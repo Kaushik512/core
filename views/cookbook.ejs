@@ -240,104 +240,145 @@ for(var j =0; j< keys.length; j++){%>
                 $message.append($instanceData);
                 launchInstances[data.launchedInstances[j].instanceId] ={};
                 launchInstances[data.launchedInstances[j].instanceId].title = data.launchedInstances[j].title; 
-               }
-               $message.find('.instanceSuccess').show();
-               $(tabEl).empty().append($message);
-               var socket = io.connect();
                
-               var waitingTextAdded = false;
-               socket.on('instance-starting', function (data) {
-                console.log(data);
-                 if(launchInstances[data.instanceId]) {
-                   var $output = $('#'+data.instanceId);
-                  if($output.attr('data-waitingTest')=='false') {
-                    $output.append('<span>Waiting for instance...</span><img src="img/instance-waiting.gif"/>');
-                    $output.attr('data-waitingTest',"true");
-                  }
-                 }
-               });
-               //var bootstarppingTextAdded = false; 
-               socket.on('instance-start-bootstrapping',function(data){
-                 if(launchInstances[data.instanceId]) {
-                 var $output = $('#'+data.instanceId);
-                 //$output.data('bootstarppingTextAdded',false);
-                 var $terminal = null;
-                 if($output.attr('data-bootstrapText')=='false') {
-                   console.log('in if');
-                   $terminal = $('<div style="height:160px;width:auto;color:white;background-color:black;overflow:auto"></div>')
-                   $output.empty();
-                   $output.append('<span>Bootstrapping Instance...<img src="img/instance-waiting.gif"/><span><br/>');
-                   $output.append($terminal);
-                   $output.attr('data-bootstrapText',"true")
-                 } else {
-                    $terminal = $output.find('div');
-                    console.log($terminal.length);
-                 }
-                 $terminal.append('<span>'+data.status+'</span><br/>');
-                 $terminal.scrollTop($terminal[0].scrollHeight);
-                } 
-              });
+               }
+              $message.find('.instanceSuccess').show();
+              $(tabEl).empty().append($message);
+              
+              //polling
+              
+              for(var j=0;j<data.launchedInstances.length;j++) {
+                (function(instId){
+                   var lastTime = null;
+                   var lastErrTime= null;
+                    function pollInstanceStatus(instId){
+                      var complete = false;
+                      $.get('/instanceStatus/'+instId,function(data) {
+                       switch (data.event_name) {
+                         case 'instance-starting':
+                               
+                               console.log(data);
+                               if(launchInstances[data.instanceId]) {
+                               var $output = $('#'+data.instanceId);
+                               if($output.attr('data-waitingTest')=='false') {
+                                $output.append('<span>Waiting for instance...</span><img src="img/instance-waiting.gif"/>');
+                                $output.attr('data-waitingTest',"true");
+                               }
+                              }
 
-              socket.on('instance-bootstrapping',function(data){
-                 if(launchInstances[data.instanceId]) {
-                 var $output = $('#'+data.instanceId);
-                 //$output.data('bootstarppingTextAdded',false);
-                 var $terminal = $output.find('div');
-                 $terminal.append('<span>'+data.status+'</span><br/>');
-                 $terminal.scrollTop($terminal[0].scrollHeight);
-                } 
-              });
+                               break;
+                         case 'instance-start-bootstrapping':
+                               
+                               if(launchInstances[data.instanceId]) {
+                                if(data.lastTime !== lastTime) {
+                                var $output = $('#'+data.instanceId);
+                                 //$output.data('bootstarppingTextAdded',false);
+                                var $terminal = null;
+                                if($output.attr('data-bootstrapText')=='false') {
+                                  console.log('in if');
+                                  $terminal = $('<div style="height:160px;width:auto;color:white;background-color:black;overflow:auto"></div>')
+                                  $output.empty();
+                                  $output.append('<span>Bootstrapping Instance...<img src="img/instance-waiting.gif"/><span><br/>');
+                                  $output.append($terminal);
+                                  $output.attr('data-bootstrapText',"true")
+                                } else {
+                                 $terminal = $output.find('div');
+                                 console.log($terminal.length);
+                                 if(!data.error) {
+                                  $terminal.append('<span>'+data.status+'</span><br/>');
+                                 } else {
+                                  $terminal.append('<span style="color:red">'+data.status+'</span><br/>');
+                                 } 
+                                 $terminal.scrollTop($terminal[0].scrollHeight);
+                                }
+                                 lastTime = data.lastTime;
+                               }
+                                
+                               }
 
-              socket.on('instance-bootstrapping-error',function(data){
-                 if(launchInstances[data.instanceId]) {
-                 var $output = $('#'+data.instanceId);
-                 //$output.data('bootstarppingTextAdded',false);
-                 var $terminal = $output.find('div');
-                 $terminal.append('<span style="color:red">'+data.status+'</span><br/>');
-                 $terminal.scrollTop($terminal[0].scrollHeight);
-                } 
-              });
-
-              socket.on('instance-bootstrapped',function(data){
-                if(launchInstances[data.instanceId]) {
-                  var $output = $('#'+data.instanceId);
-                  var $outputHeader =  $output.find('span:first');
-                  if(data.code === 0) {
-                    launchInstances[data.instanceId].bootstrapSuccess = true;
-                    $outputHeader.empty().append('<span style="color:green">Instance Bootstrapped Successfully</span>')
-                  } else {
-                    $outputHeader.empty().append('<span style="color:red">Instance Bootstrapping Failed</span>')
-                    launchInstances[data.instanceId].bootstrapSuccess = false;
-                  }
-                  numberOfInstancesBootstrapped++;
-                  if(numberOfInstances === numberOfInstancesBootstrapped) {
-                     var $finishBtn= $('.goto-finish').show();
-                     $('.goto-configureRoles').show();
-                      $finishBtn.click(function(evt,tabEl){
-                         DEVOPS.navigation.hideAllBtns();
-                         DEVOPS.navigation.showFirstTab('');
-                         DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
+                               break;
+                         case 'instance-bootstrapping':
+                                if(launchInstances[data.instanceId]) {
+                                 if(data.lastTime !== lastTime) { 
+                                 var $output = $('#'+data.instanceId);
+                                 //$output.data('bootstarppingTextAdded',false);
+                                 var $terminal = $output.find('div');
+                                 $terminal.append('<span>'+data.status+'</span><br/>');
+                                 $terminal.scrollTop($terminal[0].scrollHeight);
+                                  lastTime = data.lastTime;
+                                 } else {
+                                  console.log('same');
+                                 }
+                                }
+                               break;
+                         case 'instance-bootstrapping-error' :
+                                if(launchInstances[data.instanceId]) {
+                                  if(data.lastErrTime !== lastErrTime) { 
+                                  var $output = $('#'+data.instanceId);
+                                 //$output.data('bootstarppingTextAdded',false);
+                                  var $terminal = $output.find('div');
+                                   $terminal.append('<span style="color:red">'+data.status+'</span><br/>');
+                                   $terminal.scrollTop($terminal[0].scrollHeight);
+                                   lastErrTime = data.lastErrTime;
+                                 } else {
+                                   console.log('error same');
+                                 }
+                                }
+                                //complete = true; 
+                               break;
+                         case 'instance-bootstrapped':
+                              if(launchInstances[data.instanceId]) {
+                                var $output = $('#'+data.instanceId);
+                                var $outputHeader =  $output.find('span:first');
+                                if(data.code === 0) {
+                                  launchInstances[data.instanceId].bootstrapSuccess = true;
+                                  $outputHeader.empty().append('<span style="color:green">Instance Bootstrapped Successfully</span>')
+                                } else {
+                                 $outputHeader.empty().append('<span style="color:red">Instance Bootstrapping Failed</span>')
+                                 launchInstances[data.instanceId].bootstrapSuccess = false;
+                                }
+                                numberOfInstancesBootstrapped++;
+                                if(numberOfInstances === numberOfInstancesBootstrapped) {
+                                  var $finishBtn= $('.goto-finish').show();
+                                  $('.goto-configureRoles').show();
+                                  $finishBtn.click(function(evt,tabEl){
+                                    DEVOPS.navigation.hideAllBtns();
+                                    DEVOPS.navigation.showFirstTab('');
+                                    DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
            
-                        $.get("/domainDetails/"+pid,function(data){
-                          DEVOPS.navigation.showFirstTab(data);
-                           DEVOPS.navigation.hideAllBtns();
+                                    $.get("/domainDetails/"+pid,function(data){
+                                      DEVOPS.navigation.showFirstTab(data);
+                                      DEVOPS.navigation.hideAllBtns();
         
-                         }).fail(function() {
-                            alert( "error" );
-                        });
-                     });
-                  } 
-                }
-              });
+                                    }).fail(function() {
+                                    alert( "error" );
+                                  });
+                                });
+                              } 
+                             }
+                             complete = true;
+                             break;      
 
-              socket.emit('registerInstanceIds',{instanceIds:data.launchedInstances}); 
+                       }
 
+                       if(!complete) {
+                          var timeOut = setTimeout(function(){
+                            pollInstanceStatus(instId);
+                          },500);
+                       } else {
+                        console.log("polling complete");
+                       }
 
+                      }); //AJAX ENDS HERE
+                     
 
+                    } //POLLING FUNCTION ENDS HERE
+                    pollInstanceStatus(instId);
+                   
+                })(data.launchedInstances[j].instanceId);
+              }
             });
-
-
-      } 
+       } 
 
 
        var $selLi = $('.sel-role-thumbnail'); 

@@ -181,7 +181,7 @@ app.post('/start',verifySession, function(req, resp){
               //instance launch is successful ... now preparing for bootstrapping
               console.log("Instance launced success");
               launchedInstances.push({instanceId:data.Instances[0].InstanceId,title:inst.title});
-              instancesStatus[data.Instances[0].InstanceId]= {};
+              instancesStatus[data.Instances[0].InstanceId]= {status:"Waiting for instance.",instanceId:data.Instances[0].InstanceId,event_name:"instance-starting"};
              }
 
              if(count>1) {
@@ -191,8 +191,9 @@ app.post('/start',verifySession, function(req, resp){
              }
 
            },function(instanceId){
-             if(instancesStatus[instanceId].socket) {
-              instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
+             if(instancesStatus[instanceId]) {
+              instancesStatus[instanceId] ={status:"Waiting for instance.",instanceId:instanceId,event_name:"instance-starting"};
+              //instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
              }
           },function(instanceData){
 
@@ -200,9 +201,10 @@ app.post('/start',verifySession, function(req, resp){
             console.log("instance is now in running state");
             console.log("bootstapping the instance");
           
-            instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
-            if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
-              instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
+            //instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
+            if(instancesStatus[instanceData.InstanceId]) {
+             //instancesStatus[instanceData.InstanceId] = {status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId,event_name:"instance-start-bootstrapping"};
+             // instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
             }
             //genrating runlist for roles 
             if(!inst.runlist) {
@@ -238,14 +240,19 @@ app.post('/start',verifySession, function(req, resp){
            
           knifeProcess.stdout.on('data', function (data) {
              console.log('stdout: ==> ' + data);
-             if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
-              instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
+             if(instancesStatus[instanceData.InstanceId]) {
+              var date = new Date();
+              instancesStatus[instanceData.InstanceId] = {status:data.toString('ascii'),instanceId:instanceData.InstanceId,event_name:"instance-start-bootstrapping",lastTime:date.getTime()};
+              //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
              }
           });
           knifeProcess.stderr.on('data', function (data) {
             console.log('stderr: ==> ' + data);
-             if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
-              instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
+             if(instancesStatus[instanceData.InstanceId]) {
+              var date = new Date();
+              instancesStatus[instanceData.InstanceId] = {status:data.toString('ascii'),instanceId:instanceData.InstanceId,event_name:"instance-start-bootstrapping",lastTime:date.getTime(),error:true};
+              
+              //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
              }
           }); 
 
@@ -261,14 +268,17 @@ app.post('/start',verifySession, function(req, resp){
               runlist:inst.runlist.split(',')
               }
             if(code === 0) {
-              if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
-               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
+              if(instancesStatus[instanceData.InstanceId]) {
+                instancesStatus[instanceData.InstanceId] ={status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code,event_name:"instance-bootstrapped"}
+               //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
               }
               instance.bootStrapStatus = true;
 
             } else {
-              if(instancesStatus[instanceData.InstanceId] && instancesStatus[instanceData.InstanceId].socket) {
-               instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
+              if(instancesStatus[instanceData.InstanceId]) {
+                instancesStatus[instanceData.InstanceId] ={status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code,event_name:"instance-bootstrapped"}
+              
+               //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
               }
               instance.bootStrapStatus = false;
             }
@@ -337,6 +347,15 @@ app.get('/domainDetails/:pid',verifySession,function(req,resp){
 });
 
 
+app.get('/instanceStatus/:instanceId',verifySession,function(req,resp){
+  var instId = req.params.instanceId; 
+  // fetch domain details from mongo 
+  //console.log(instancesStatus[instId]);
+  resp.json(instancesStatus[instId]);
+
+});
+
+
 
 var server = http.createServer( app );
 io = io.listen(server,{ log: false });
@@ -345,7 +364,10 @@ server.listen( app.get( 'port' ), function(){
   console.log( 'Express server listening on port ' + app.get( 'port' ));
 });
 
-io.sockets.on('connection', function (socket) {
+
+
+
+/*io.sockets.on('connection', function (socket) {
   socket.on('registerInstanceIds', function (data) {
     for(var i=0;i<data.instanceIds.length;i++) {
       console.log('ins ID ==> '+data.instanceIds[i].instanceId);
@@ -359,12 +381,12 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     console.log('disconnecting ... ');
-    /* var keys = Object.keys(instancesStatus);
+     var keys = Object.keys(instancesStatus);
     for(var i=0;i<keys.length;i++) {
       if(instancesStatus[keys[i]].socket == this) {
         console.log('disconnected ... removing socket');  
         delete instancesStatus[keys[i]];
       }
-    } */
+    } 
   });
-});
+});*/
