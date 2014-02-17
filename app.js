@@ -171,10 +171,10 @@ app.post('/start',verifySession, function(req, resp){
       var keys = Object.keys(selectedInstances);
       var count = keys.length;
       var launchedInstanceIds = [];
-      //3600000
+      //{terminate:true,delay:3600000}
       for(var i = 0;i<keys.length;i++) {
        (function(inst) {
-         ec2.launchInstance(inst.amiid,"devopstest",['sg-15aa6a70'],{terminate:true,delay:1000*60*10},function(err,data) {
+         ec2.launchInstance(inst.amiid,"devopstest",['sg-15aa6a70'],null,function(err,data) {
              if(err) {
               launchedFailedInstance.push({instanceId:null,title:inst.title});
              } else {

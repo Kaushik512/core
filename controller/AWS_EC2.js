@@ -73,14 +73,18 @@ module.exports.launchInstance = function(image_id,keyName,securityGroupIdsList,s
                       if(err) {
                         console.log("unable to terminate instance : "+instanceId);
                         console.log(err);
-                        instanceTerminateCallback(null,err);
+                        if(instanceTerminateCallback) {
+                         instanceTerminateCallback(null,err);
+                        }
                         return;
                       }	
                       
                       for(var j=0;j<data.TerminatingInstances.length;j++) {
                       	console.log("instance "+ data.TerminatingInstances[j].InstanceId+" terminated with state : "+data.TerminatingInstances[j].CurrentState.Name+"");
                       }
-                      instanceTerminateCallback(data.TerminatingInstances[0]);
+                      if(instanceTerminateCallback) {
+                       instanceTerminateCallback(data.TerminatingInstances[0]);
+                      }
                     
                      });   
 
@@ -134,7 +138,9 @@ module.exports.launchInstance = function(image_id,keyName,securityGroupIdsList,s
                    	instancePendingStateCallback(instanceId);
                     timeoutFunc(instanceId);
                    } else if(instanceState === 'terminated') {
-                      instanceTerminateCallback(instanceData);
+                      if(instanceTerminateCallback) {
+                       instanceTerminateCallback(instanceData);
+                      }
                    }
                 });
                },30000);            		
