@@ -359,12 +359,12 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     console.log('disconnecting ... ');
-    var keys = Object.keys(instancesStatus);
+    /* var keys = Object.keys(instancesStatus);
     for(var i=0;i<keys.length;i++) {
       if(instancesStatus[keys[i]].socket == this) {
         console.log('disconnected ... removing socket');  
         delete instancesStatus[keys[i]];
       }
-    }
+    } */
   });
 });
