@@ -52,7 +52,8 @@ module.exports.launchInstance = function(image_id,keyName,securityGroupIdsList,s
   if(!securityGroupIdsList) {
     securityGroupIdsList = [];
   }
-  ec.runInstances({"ImageId" : "ami-eb6b0182","InstanceType":"m1.medium", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName,SecurityGroupIds:securityGroupIdsList,BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
+  //ami-eb6b0182
+  ec.runInstances({"ImageId" : "ami-b3bf2f83","InstanceType":"m1.medium", "MinCount" : 1, "MaxCount" : 1,"KeyName":keyName,SecurityGroupIds:securityGroupIdsList,BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
 		if(err) {
 			console.log("error occured while launching instance");
 			console.log(err);

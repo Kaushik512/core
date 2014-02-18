@@ -177,7 +177,8 @@ for(var j =0; j< keys.length; j++){%>
 
 
        $('.domain-settings').trigger('click');
-        $('.save-domain-btn').click(function(evt){
+        $('.save-domain-btn').unbind("click").click(function(evt){
+          console.log("save button clicked");
              finish(evt,$launchingInstanceContainer.get(0),$('#domainNameText').val()+'.relevancelab.com');
              /*$('.goto-finish').show();
              $('.previous').show();*/ 

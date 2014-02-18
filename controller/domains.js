@@ -21,15 +21,29 @@ var Domains = mongoose.model('domains', DomainsSchema);
 
 
 module.exports.createDomainDocument = function(domainName,pid,callback){
-  var domain = new Domains({ domainName: domainName,domainPid:pid});
-   domain.save(function(err,data){
+   Domains.find({domainName:domainName,domainPid:pid},function(err,data){
       if(err) {
         callback(err,null);
         return;
-      } 
-      console.log("Domain Document Created");
-      callback(null,data);
-    }); 
+      }
+      if(data.length) {
+        console.log("domain name already present");
+        callback(null,data);
+        console.log(data);
+      } else {
+         console.log("domain name does not exist creating a new one");
+         var domain = new Domains({ domainName: domainName,domainPid:pid});
+         domain.save(function(err,data){
+         if(err) {
+          callback(err,null);
+          return;
+         } 
+         console.log("Domain Document Created");
+         callback(null,data);
+       });
+      }
+   });
+    
 }
 
 module.exports.getDomainData = function(domainName,callback) {

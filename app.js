@@ -147,6 +147,8 @@ function getRolesListArguments(rolesArray) {
 
 
 var domainsDao = require('./controller/domains.js')
+var knifeConfig = require("./config/knife_config.js")
+
 
 var instancesStatus = {};
 
@@ -174,7 +176,7 @@ app.post('/start',verifySession, function(req, resp){
       //{terminate:true,delay:3600000}
       for(var i = 0;i<keys.length;i++) {
        (function(inst) {
-         ec2.launchInstance(inst.amiid,"devopstest",['sg-15aa6a70'],null,function(err,data) {
+         ec2.launchInstance(inst.amiid,"devopstest",['sg-c00ee1a5'],null,function(err,data) {
              if(err) {
               launchedFailedInstance.push({instanceId:null,title:inst.title});
              } else {
@@ -229,12 +231,12 @@ app.post('/start',verifySession, function(req, resp){
           var spawn = childProcess.spawn;
           var knifeProcess;
           if(combinedRunList && combinedRunList.length) {
-            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/devopstest.pem','-r'+combinedRunList.join(),'-xroot'],{
-             cwd:'/home/anshul/Downloads/chef-repo'
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i'+knifeConfig.instancePemFile,'-r'+combinedRunList.join(),'-x'+knifeConfig.instanceUserName],{
+             cwd:knifeConfig.knifeCWD
             });  
           } else {
-            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i/home/anshul/devopstest.pem','-xroot'],{
-             cwd:'/home/anshul/Downloads/chef-repo'
+            knifeProcess = spawn('knife', ['bootstrap',instanceData.PublicIpAddress,'-i'+knifeConfig.instancePemFile,'-x'+knifeConfig.instanceUserName],{
+             cwd:knifeConfig.knifeCWD
             });
           }
            
