@@ -357,7 +357,70 @@ app.get('/instanceStatus/:instanceId',verifySession,function(req,resp){
 
 });
 
+var fileIo = require('./controller/fileio');
 
+app.get('/userCookbooks/', verifySession, function(req, resp) {
+
+  var rootDir = './user-cookbooks/';
+  var path = req.query.path;
+  console.log(path);
+  if (path) {
+    if (path[0] == '/') {
+      path = path.slice(1);
+    }
+    if (path.length && path.length >= 2) {
+      if (path[path.length - 1] == '/') {
+        path = path.slice(0, path.length - 1);
+        console.log('after slicing');
+        console.log(path);
+      }
+    } else {
+      if (path[0] == '/') {
+        path = path.slice(1);
+      }
+    }
+  } else {
+    path = '';
+  }
+  console.log("full path");
+  console.log(rootDir + path);
+   
+  fileIo.isDir(rootDir + path, function(err, dir) {
+    if (err) {
+      console.log(err);
+      resp.send(404);
+      return;
+    }
+    if (dir) {
+      fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+        if (err) {
+          resp.send(500);
+          return;
+        }
+        resp.json({
+          resType: 'dir',
+          files: filesList,
+          dirs: dirList
+        });
+
+      });
+
+    } else { // this is a file
+      fileIo.readFile(rootDir + path, function(err, fileData) {
+        if (err) {
+          resp.send(500);
+          return;
+        }
+        resp.json({
+          resType: "file",
+          fileData: fileData
+        });
+      })
+    }
+
+  });
+
+});
 
 var server = http.createServer( app );
 io = io.listen(server,{ log: false });
@@ -368,27 +431,3 @@ server.listen( app.get( 'port' ), function(){
 
 
 
-
-/*io.sockets.on('connection', function (socket) {
-  socket.on('registerInstanceIds', function (data) {
-    for(var i=0;i<data.instanceIds.length;i++) {
-      console.log('ins ID ==> '+data.instanceIds[i].instanceId);
-      if(instancesStatus[data.instanceIds[i].instanceId]) {
-        console.log("registering socket");
-        instancesStatus[data.instanceIds[i].instanceId].socket = socket;
-        socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:data.instanceIds[i].instanceId});
-      }
-    }
-  });
-
-  socket.on('disconnect', function () {
-    console.log('disconnecting ... ');
-     var keys = Object.keys(instancesStatus);
-    for(var i=0;i<keys.length;i++) {
-      if(instancesStatus[keys[i]].socket == this) {
-        console.log('disconnected ... removing socket');  
-        delete instancesStatus[keys[i]];
-      }
-    } 
-  });
-});*/
