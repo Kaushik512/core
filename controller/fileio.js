@@ -1,5 +1,12 @@
 var fs = require('fs');
 
+
+module.exports.validateFilePath = function(rootPath, path) {
+
+
+
+}
+
 module.exports.readDir = function(root, path, callback) {
 	var dirList = [];
 	var filesList = [];
@@ -22,12 +29,18 @@ module.exports.readDir = function(root, path, callback) {
 						callback(err);
 						return;
 					}
-					
+
 					var itemPath = path + '/' + file;
 					if (stats.isDirectory()) {
-						dirList.push({fullPath:itemPath,name:file});
+						dirList.push({
+							fullPath: itemPath,
+							name: file
+						});
 					} else {
-						filesList.push({fullPath:itemPath,name:file});
+						filesList.push({
+							fullPath: itemPath,
+							name: file
+						});
 					}
 					if (totalItems < 1) {
 						callback(null, dirList, filesList);
@@ -57,11 +70,25 @@ module.exports.isDir = function(path, callback) {
 }
 
 module.exports.readFile = function(path, callback) {
-    fs.readFile(path,{encoding:'utf-8'},function(err,fileData){
-    	if(err) {
-    		callback(err);
-    		return;
-    	}
-    	callback(null,fileData);
-    })
+	fs.readFile(path, {
+		encoding: 'utf-8'
+	}, function(err, fileData) {
+		if (err) {
+			callback(err);
+			return;
+		}
+		callback(null, fileData);
+	})
+}
+
+module.exports.writeFile = function(path, data, callback) {
+	fs.writeFile(path, data, {
+		encoding: 'utf-8'
+	}, function(err) {
+		if (err) {
+			callback(err);
+			return;
+		}
+		callback(null);
+	});
 }
