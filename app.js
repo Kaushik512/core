@@ -7,6 +7,7 @@ var childProcess = require('child_process');
 var io = require('socket.io');
 
 var appConfig = require('./app_config');
+ var awsConfig = require('./config/aws_config');
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('views', path.join(__dirname, 'views'));
@@ -169,6 +170,8 @@ var instancesStatus = {};
 
 app.post('/start', verifySession, function(req, resp) {
   //console.log(req.body);
+  var awsSettings = awsConfig.getAwsSettings();
+
   var domainName = req.body.domainName;
   var pid = req.body.pid;
   var selectedInstances = req.body.selectedInstances;
@@ -191,7 +194,7 @@ app.post('/start', verifySession, function(req, resp) {
 
         for (var i = 0; i < keys.length; i++) {
           (function(inst) {
-            ec2.launchInstance(inst.amiid, "devopstest", ['sg-c00ee1a5'], {
+            ec2.launchInstance(inst.amiid,awsSettings, "devopstest", ['sg-c00ee1a5'], {
               terminate: true,
               delay: 3600000
             }, function(err, data) {
@@ -472,7 +475,7 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
         }
         resp.json({
           resType: "file",
-          fileData: fileData
+          fileData: fileData.toString('utf-8')
         });
       })
     }
@@ -504,7 +507,7 @@ app.post('/userCookbooks/save', verifySession, function(req, resp) {
     path = '';
   }
 
-  fileIo.writeFile(rootDir + path, fileContent, function(err) {
+  fileIo.writeFile(rootDir + path, fileContent,'utf-8', function(err) {
     if (err) {
       resp.send(500);
       return;
@@ -557,11 +560,33 @@ app.post('/userCookbooks/save', verifySession, function(req, resp) {
 
 
   });
+})
 
+/// settings 
+app.post('/settings/aws', verifySession, function(req, resp) {
+   if(req.body.aws_accessKey && req.body.aws_secretKey && req.body.aws_region && req.body.aws_keyPair && req.body.aws_securityGroupId && req.files.awsPemFile.size) {
+     var fileName =  req.files.awsPemFile.name;
+     console.log(req.files);
+     fileIo.readFile(req.files.awsPemFile.path, function(err, data) {
+    
+     var awsSettings = awsConfig.getAwsSettings();
 
+     fileIo.writeFile(awsSettings.pemFileLocation+fileName, data,null, function(err) {
+       if(err) {
+        resp.send(500);
+        return; 
+       } 
+      awsConfig.setAwsSettings(req.body.aws_accessKey,req.body.aws_secretKey,req.body.aws_region,req.body.aws_keyPair,req.body.aws_securityGroupId,awsSettings.pemFileLocation+fileName);
+      resp.send("ok"); 
+     });
+    });
+  } else {
+    resp.send(400);
+  }
+
+  
 
 });
-
 
 var server = http.createServer(app);
 io = io.listen(server, {

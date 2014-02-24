@@ -70,9 +70,7 @@ module.exports.isDir = function(path, callback) {
 }
 
 module.exports.readFile = function(path, callback) {
-	fs.readFile(path, {
-		encoding: 'utf-8'
-	}, function(err, fileData) {
+	fs.readFile(path, function(err, fileData) {
 		if (err) {
 			callback(err);
 			return;
@@ -81,10 +79,12 @@ module.exports.readFile = function(path, callback) {
 	})
 }
 
-module.exports.writeFile = function(path, data, callback) {
-	fs.writeFile(path, data, {
-		encoding: 'utf-8'
-	}, function(err) {
+module.exports.writeFile = function(path, data,encoding,callback) {
+    var options = {};
+    if(encoding) {
+      options.encoding = encoding;
+    }
+	fs.writeFile(path, data,options, function(err) {
 		if (err) {
 			callback(err);
 			return;

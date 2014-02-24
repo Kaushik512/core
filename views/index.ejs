@@ -247,8 +247,13 @@ body {
     overflow-y: auto;
 }
 
-
-
+.usercookbookArea {
+  display: none;
+  height: 100%;
+}
+.domainArea {
+  display: block;
+}
 
 </style>
 </head>
@@ -262,7 +267,7 @@ body {
                 <span class="logotext">DevOps for DevOps</span>
             </a>
             <div class="nav-options">
-            <a class="navbar-brand nav-settings" href="usercookbooks.html" role="button" title="Chef">
+            <a class="navbar-brand nav-settings chefBtn" href="#" role="button" title="Chef">
                 <img src="img/chef-icon.png" alt="settings" height="30" width="30">
             </a>
             <a class="navbar-brand nav-settings" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
@@ -287,17 +292,22 @@ body {
       <div class="modal-body">
         <div>
              <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a data-toggle="tab" href="#amazon-settings">ASW</a></li>
+        <li class="active"><a data-toggle="tab" href="#amazon-settings">AWS</a></li>
         <li class=""><a data-toggle="tab" href="#chef-settings">Chef</a></li>
-        <li class=""><a data-toggle="tab" href="#jenking-settings">Jenking</a></li>
+        <li class=""><a data-toggle="tab" href="#jenkins-settings">Jenkins</a></li>
         <li class=""><a data-toggle="tab" href="#jira-settings">Jira</a></li>
       </ul>
       <div class="tab-content" id="myTabContent">
         <div id="amazon-settings" class="tab-pane fade active in settings-content">
+          <form id="aws_form">
+          <span class="label label-default">AWS Access Key</span>:<input name="aws_accessKey" type="text"><br/>
+          <span class="label label-default">Secret Key</span>:<input name="aws_secretKey" type="text" /><br/>
+          <span class="label label-default">Region</span>:<input name="aws_region" type="text"><br/>
+          <span class="label label-default">Key Pair Name</span>:<input name="aws_keyPair" type="text"><br/>
+          <span class="label label-default">Security Group Id</span>:<input name="aws_securityGroupId" type="text"><br/>
+          <span class="label label-default">Pem File</span>:<input name="awsPemFile" type="file" style="display:inline !important"><br/>
           
-          <span class="label label-default">Secret Key</span>:<input type="text"><br/>
-          <span class="label label-default">Secret Id</span>:<input type="text">
-          
+          </form>
         </div>
         
         <div id="chef-settings" class="tab-pane fade ">
@@ -305,7 +315,7 @@ body {
           
         </div>
         
-        <div id="jenking-settings" class="tab-pane fade settings-content">
+        <div id="jenkins-settings" class="tab-pane fade settings-content">
          
           <span class="label label-default">Username</span>:<input type="text"><br/>
           <span class="label label-default">Password</span>:<input type="text">
@@ -316,7 +326,10 @@ body {
           <span class="label label-default">Username</span>:<input type="text"><br/>
           <span class="label label-default">Password</span>:<input type="text">
         </div>
-
+        <div id="settingsSaveMsg" style="width:100%;text-align:center;padding-top: 10px;display:none">
+        <div id="saveMsgFail" style="color:red"> Please fill all the fields </div>
+        <div id="saveMsgSuccess" style="color:green"> Settings Saved </div>
+        </div>
       </div>
     </div>
 
@@ -325,7 +338,7 @@ body {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary saveSettings">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -358,7 +371,7 @@ body {
         </div>
          <!--<span style="color:white">&nbsp; Domain Name : <input type="text" />.relevancelab.com</span>-->
         <section class="main-content">
-
+           <div class="domainArea">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
@@ -411,6 +424,11 @@ body {
      </div>
 -->
   </div>
+</div>
+<div class="usercookbookArea">
+ <iframe src="usercookbooks.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>
+</div>
+</div>
           <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
           </div>--> 
       </section>
@@ -469,6 +487,65 @@ body {
     
     <script>
     $(function() {
+
+       $('.chefBtn').click(function(e){
+         $('.domainArea').hide();
+         $('.usercookbookArea').show();
+       });
+
+        $('#settingsModal').on('show.bs.modal', function(e) {
+           $('#saveMsgFail').hide();
+           $('#saveMsgSuccess').hide();
+           $('#settingsSaveMsg').hide();
+           document.getElementById("aws_form").reset();
+           //$('#amazon-settings').get(0).reset();  
+        })
+   
+
+        $('.saveSettings').click(function(e){
+          e.preventDefault();
+          var url;
+          var data;
+          var formValid = false;
+          if($('#amazon-settings').is(':visible')) {
+             data = new FormData($('#aws_form').get(0));
+             url = '/settings/aws';
+             formValid = true;
+          } else if($('chef-settings').is(':visible')) {
+
+          }
+          if(formValid) {
+           $.ajax({
+            url:url,
+            data:data,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success:function(data,success){
+                 $('#saveMsgSuccess').html("Settings saved").show();
+                 $('#saveMsgFail').hide();
+                 $('#settingsSaveMsg').show();  
+           },
+           error:function(jqxhr){
+            if(jqxhr.status === 400) {
+              $('#saveMsgFail').html("Please fill all the fields").show();
+              $('#saveMsgSuccess').hide();
+             $('#settingsSaveMsg').show();  
+            } else {
+                 $('#saveMsgFail').html("Something went wrong. Please try again later").show();
+              $('#saveMsgSuccess').hide();
+             $('#settingsSaveMsg').show();  
+           
+            }
+
+           }});
+          }
+         return false;
+
+        });   
+       
+
+
         var $menu= $('.menu_left');
         var $mainContent = $('.main-content');
         var $menuHeaderText = $('.menu-header-text');
@@ -503,6 +580,8 @@ body {
 
        var $new_link_tab = $('#new_link_tab');
        $providers.click(function(e){
+         $('.domainArea').show();
+         $('.usercookbookArea').hide();
          var $this = $(this);
          var pid = $this.attr('data-pid');
          if(pid === '3') {
