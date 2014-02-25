@@ -24,15 +24,7 @@ var awsSettings = {
 	pemFile:"/home/anshul/devopstest-us-west-2.pem"
 }
 
-module.exports.getAwsSettings = function() {
-	return awsSettings;
-}
-module.exports.setAwsSettings = function(access_key,secret_key,region,keyPairName,securityGroupId,pemFile) {
-   awsSettings.access_key = access_key;
-   awsSettings.secret_key=secret_key;
-   awsSettings.region=region;
-   awsSettings.keyPairName=keyPairName;
-   awsSettings.securityGroupId=securityGroupId;
-   awsSettings.pemFile = pemFile;
-}
+
+module.exports = awsSettings;
+
 

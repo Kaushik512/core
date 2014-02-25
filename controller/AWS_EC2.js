@@ -46,17 +46,15 @@ module.exports.describeInstances = function(instanceIds,callback){
 
 }
 
-module.exports.launchInstance = function(image_id,awsSettings,keyName,securityGroupIdsList,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback,instanceTerminateCallback) {
+module.exports.launchInstance = function(image_id,awsSettings,schedTerminate,callback,instancePendingStateCallback,instanceRunningStateCallback,instanceTerminateCallback) {
   
   var that = this;//"m1.small"
-  if(!securityGroupIdsList) {
-    securityGroupIdsList = [];
-  }
   var ec = new aws.EC2({"accessKeyId":awsSettings.access_key, "secretAccessKey": awsSettings.secret_key, 
   "region": awsSettings.region});
 
   //ami-eb6b0182
-  ec.runInstances({"ImageId" : "ami-b3bf2f83","InstanceType":"m1.medium", "MinCount" : 1, "MaxCount" : 1,"KeyName":awsSettings.keyPairName,SecurityGroupIds:[awsSettings.securityGroupId],BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
+  //m1.medium
+  ec.runInstances({"ImageId" : "ami-b3bf2f83","InstanceType":"t1.micro", "MinCount" : 1, "MaxCount" : 1,"KeyName":awsSettings.keyPairName,SecurityGroupIds:[awsSettings.securityGroupId],BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
 		if(err) {
 			console.log("error occured while launching instance");
 			console.log(err);

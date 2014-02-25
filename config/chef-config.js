@@ -15,3 +15,12 @@ module.exports.chefConfig = {
 	url: "https://api.opscode.com/organizations/adityacheforg"
 	*/
 }
+/*
+module.exports = {
+	instanceUserName:"root",
+	chefRepoLocation : "/home/anshul/chef-repos/anshul/chef-repo",
+	chefUserName: "anshul",
+	chefUserPemFile: "anshul.pem",
+	chefValidationFile:"anshul_rl-validator.pem",
+	chefUrl: "https://api.opscode.com/organizations/anshul_rl"
+}*/

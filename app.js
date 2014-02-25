@@ -7,7 +7,7 @@ var childProcess = require('child_process');
 var io = require('socket.io');
 
 var appConfig = require('./app_config');
- var awsConfig = require('./config/aws_config');
+var awsSettings = require('./controller/aws_settings');
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('views', path.join(__dirname, 'views'));
@@ -170,227 +170,227 @@ var instancesStatus = {};
 
 app.post('/start', verifySession, function(req, resp) {
   //console.log(req.body);
-  var awsSettings = awsConfig.getAwsSettings();
+  awsSettings.getAwsSettings(function(settings) {
+    var domainName = req.body.domainName;
+    var pid = req.body.pid;
+    var selectedInstances = req.body.selectedInstances;
+    console.log(selectedInstances);
+    if (selectedInstances) {
 
-  var domainName = req.body.domainName;
-  var pid = req.body.pid;
-  var selectedInstances = req.body.selectedInstances;
-  console.log(selectedInstances);
-  if (selectedInstances) {
+      //creating domain document
+      domainsDao.createDomainDocument(domainName, pid, function(err, data) {
+        if (err) {
+          resp.json({
+            error: "Unable to create domain"
+          });
+        } else {
 
-    //creating domain document
-    domainsDao.createDomainDocument(domainName, pid, function(err, data) {
-      if (err) {
-        resp.json({
-          error: "Unable to create domain"
-        });
-      } else {
+          var launchedInstances = [];
+          var launchedFailedInstance = [];
+          var keys = Object.keys(selectedInstances);
+          var count = keys.length;
+          var launchedInstanceIds = [];
 
-        var launchedInstances = [];
-        var launchedFailedInstance = [];
-        var keys = Object.keys(selectedInstances);
-        var count = keys.length;
-        var launchedInstanceIds = [];
-
-        for (var i = 0; i < keys.length; i++) {
-          (function(inst) {
-            ec2.launchInstance(inst.amiid,awsSettings, "devopstest", ['sg-c00ee1a5'], {
-              terminate: true,
-              delay: 3600000
-            }, function(err, data) {
-              if (err) {
-                launchedFailedInstance.push({
-                  instanceId: null,
-                  title: inst.title
-                });
-              } else {
-                //instance launch is successful ... now preparing for bootstrapping
-                console.log("Instance launced success");
-                launchedInstances.push({
-                  instanceId: data.Instances[0].InstanceId,
-                  title: inst.title
-                });
-                instancesStatus[data.Instances[0].InstanceId] = {
-                  status: "Waiting for instance.",
-                  instanceId: data.Instances[0].InstanceId,
-                  event_name: "instance-starting"
-                };
-              }
-
-              if (count > 1) {
-                count--;
-              } else {
-                resp.json({
-                  launchedInstances: launchedInstances,
-                  launchedFailedInstance: launchedFailedInstance
-                });
-              }
-
-            }, function(instanceId) {
-              if (instancesStatus[instanceId]) {
-                instancesStatus[instanceId] = {
-                  status: "Waiting for instance.",
-                  instanceId: instanceId,
-                  event_name: "instance-starting"
-                };
-                //instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
-              }
-            }, function(instanceData) {
-
-
-              console.log("instance is now in running state");
-              console.log("bootstapping the instance");
-
-              //instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
-              if (instancesStatus[instanceData.InstanceId]) {
-                //instancesStatus[instanceData.InstanceId] = {status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId,event_name:"instance-start-bootstrapping"};
-                // instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
-              }
-              //genrating runlist for roles 
-              if (!inst.runlist) {
-                inst.runlist = '';
-              }
-              var rolesArg = getRolesListArguments(inst.runlist.split(','));
-
-              //generating runlist
-              var runlistSelected = inst.runlistSelected;
-              var runlistSelectedArg = [];
-              if (runlistSelected && runlistSelected.length) {
-                for (var k = 0; k < runlistSelected.length; k++) {
-                  runlistSelectedArg.push('recipe[' + runlistSelected[k] + ']');
-                }
-              }
-
-              console.log(rolesArg);
-              console.log(runlistSelectedArg);
-
-              var combinedRunList = rolesArg.concat(runlistSelectedArg);
-              console.log(combinedRunList);
-              var spawn = childProcess.spawn;
-              var knifeProcess;
-              if (combinedRunList && combinedRunList.length) {
-                knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + knifeConfig.instancePemFile, '-r' + combinedRunList.join(), '-x' + knifeConfig.instanceUserName], {
-                  cwd: knifeConfig.knifeCWD
-                });
-              } else {
-                knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + knifeConfig.instancePemFile, '-x' + knifeConfig.instanceUserName], {
-                  cwd: knifeConfig.knifeCWD
-                });
-              }
-
-              knifeProcess.stdout.on('data', function(data) {
-                console.log('stdout: ==> ' + data);
-                if (instancesStatus[instanceData.InstanceId]) {
-                  var date = new Date();
-                  instancesStatus[instanceData.InstanceId] = {
-                    status: data.toString('ascii'),
-                    instanceId: instanceData.InstanceId,
-                    event_name: "instance-start-bootstrapping",
-                    lastTime: date.getTime()
-                  };
-                  //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
-                }
-              });
-              knifeProcess.stderr.on('data', function(data) {
-                console.log('stderr: ==> ' + data);
-                if (instancesStatus[instanceData.InstanceId]) {
-                  var date = new Date();
-                  instancesStatus[instanceData.InstanceId] = {
-                    status: data.toString('ascii'),
-                    instanceId: instanceData.InstanceId,
-                    event_name: "instance-start-bootstrapping",
-                    lastTime: date.getTime(),
-                    error: true
-                  };
-
-                  //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
-                }
-              });
-
-              /////
-
-              knifeProcess.on('close', function(code) {
-                var instance = {
-                  instanceId: instanceData.InstanceId,
-                  instanceIP: instanceData.PublicIpAddress,
-                  instanceRole: inst.title,
-                  instanceActive: true,
-                  bootStrapStatus: false,
-                  runlist: inst.runlist.split(',')
-                }
-                if (code === 0) {
-                  if (instancesStatus[instanceData.InstanceId]) {
-                    instancesStatus[instanceData.InstanceId] = {
-                      status: "Instance Successfully Bootstrapped.",
-                      instanceId: instanceData.InstanceId,
-                      code: code,
-                      event_name: "instance-bootstrapped"
-                    }
-                    //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
-                  }
-                  instance.bootStrapStatus = true;
-
-                } else {
-                  if (instancesStatus[instanceData.InstanceId]) {
-                    instancesStatus[instanceData.InstanceId] = {
-                      status: "Instance Bootstrapping failed.",
-                      instanceId: instanceData.InstanceId,
-                      code: code,
-                      event_name: "instance-bootstrapped"
-                    }
-
-                    //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
-                  }
-                  instance.bootStrapStatus = false;
-                }
-                domainsDao.saveDomainInstanceDetails(domainName, [instance], function(err, data) {
-                  if (err) {
-                    console.log("Unable to store instance in DB");
-                  } else {
-                    console.log("instance stored in DB");
-                  }
-                });
-
-                console.log('child process exited with code ' + code);
-              });
-
-              knifeProcess.on('error', function(error) {
-                console.log("Error is spawning process");
-                console.log(error);
-              });
-
-            }, function(terminatedInstance, err) {
-              if (err) {
-                return;
-              }
-              if (instancesStatus[terminatedInstance.InstanceId]) {
-                console.log('Removin instance from list ' + terminatedInstance.InstanceId);
-                console.log('before');
-                console.log(instancesStatus);
-                delete instancesStatus[terminatedInstance.InstanceId];
-
-              } else {
-                console.log("instance not present");
-              }
-              domainsDao.updateInstanceStatus(domainName, terminatedInstance.InstanceId, false, function(err, data) {
+          for (var i = 0; i < keys.length; i++) {
+            (function(inst) {
+              ec2.launchInstance(inst.amiid, settings, {
+                terminate: true,
+                delay: 3600000
+              }, function(err, data) {
                 if (err) {
-                  console.log("unable to update status of terminated instance");
+                  launchedFailedInstance.push({
+                    instanceId: null,
+                    title: inst.title
+                  });
                 } else {
-                  console.log("Instance status set to false successfully");
+                  //instance launch is successful ... now preparing for bootstrapping
+                  console.log("Instance launced success");
+                  launchedInstances.push({
+                    instanceId: data.Instances[0].InstanceId,
+                    title: inst.title
+                  });
+                  instancesStatus[data.Instances[0].InstanceId] = {
+                    status: "Waiting for instance.",
+                    instanceId: data.Instances[0].InstanceId,
+                    event_name: "instance-starting"
+                  };
                 }
-              });
 
-            }); //ends here;
-          })(selectedInstances[keys[i]]);
+                if (count > 1) {
+                  count--;
+                } else {
+                  resp.json({
+                    launchedInstances: launchedInstances,
+                    launchedFailedInstance: launchedFailedInstance
+                  });
+                }
+
+              }, function(instanceId) {
+                if (instancesStatus[instanceId]) {
+                  instancesStatus[instanceId] = {
+                    status: "Waiting for instance.",
+                    instanceId: instanceId,
+                    event_name: "instance-starting"
+                  };
+                  //instancesStatus[instanceId].socket.emit('instance-starting',{status:"Waiting for instance.",instanceId:instanceId});
+                }
+              }, function(instanceData) {
+
+
+                console.log("instance is now in running state");
+                console.log("bootstapping the instance");
+
+                //instancesStatus[instanceData.InstanceId].statusText = "Bootstraping the instance.";
+                if (instancesStatus[instanceData.InstanceId]) {
+                  //instancesStatus[instanceData.InstanceId] = {status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId,event_name:"instance-start-bootstrapping"};
+                  // instancesStatus[instanceData.InstanceId].socket.emit('instance-start-bootstrapping',{status:"Bootstrapping the instance.",instanceId:instanceData.InstanceId});
+                }
+                //genrating runlist for roles 
+                if (!inst.runlist) {
+                  inst.runlist = '';
+                }
+                var rolesArg = getRolesListArguments(inst.runlist.split(','));
+
+                //generating runlist
+                var runlistSelected = inst.runlistSelected;
+                var runlistSelectedArg = [];
+                if (runlistSelected && runlistSelected.length) {
+                  for (var k = 0; k < runlistSelected.length; k++) {
+                    runlistSelectedArg.push('recipe[' + runlistSelected[k] + ']');
+                  }
+                }
+
+                console.log(rolesArg);
+                console.log(runlistSelectedArg);
+
+                var combinedRunList = rolesArg.concat(runlistSelectedArg);
+                console.log(combinedRunList);
+                var spawn = childProcess.spawn;
+                var knifeProcess;
+                if (combinedRunList && combinedRunList.length) {
+                  knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + settings.pemFile, '-r' + combinedRunList.join(), '-x' + knifeConfig.instanceUserName], {
+                    cwd: knifeConfig.knifeCWD
+                  });
+                } else {
+                  knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + settings.pemFile, '-x' + knifeConfig.instanceUserName], {
+                    cwd: knifeConfig.knifeCWD
+                  });
+                }
+
+                knifeProcess.stdout.on('data', function(data) {
+                  console.log('stdout: ==> ' + data);
+                  if (instancesStatus[instanceData.InstanceId]) {
+                    var date = new Date();
+                    instancesStatus[instanceData.InstanceId] = {
+                      status: data.toString('ascii'),
+                      instanceId: instanceData.InstanceId,
+                      event_name: "instance-start-bootstrapping",
+                      lastTime: date.getTime()
+                    };
+                    //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
+                  }
+                });
+                knifeProcess.stderr.on('data', function(data) {
+                  console.log('stderr: ==> ' + data);
+                  if (instancesStatus[instanceData.InstanceId]) {
+                    var date = new Date();
+                    instancesStatus[instanceData.InstanceId] = {
+                      status: data.toString('ascii'),
+                      instanceId: instanceData.InstanceId,
+                      event_name: "instance-start-bootstrapping",
+                      lastTime: date.getTime(),
+                      error: true
+                    };
+
+                    //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapping-error',{status:data.toString('ascii'),instanceId:instanceData.InstanceId});
+                  }
+                });
+
+                /////
+
+                knifeProcess.on('close', function(code) {
+                  var instance = {
+                    instanceId: instanceData.InstanceId,
+                    instanceIP: instanceData.PublicIpAddress,
+                    instanceRole: inst.title,
+                    instanceActive: true,
+                    bootStrapStatus: false,
+                    runlist: inst.runlist.split(',')
+                  }
+                  if (code === 0) {
+                    if (instancesStatus[instanceData.InstanceId]) {
+                      instancesStatus[instanceData.InstanceId] = {
+                        status: "Instance Successfully Bootstrapped.",
+                        instanceId: instanceData.InstanceId,
+                        code: code,
+                        event_name: "instance-bootstrapped"
+                      }
+                      //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Successfully Bootstrapped.",instanceId:instanceData.InstanceId,code:code});
+                    }
+                    instance.bootStrapStatus = true;
+
+                  } else {
+                    if (instancesStatus[instanceData.InstanceId]) {
+                      instancesStatus[instanceData.InstanceId] = {
+                        status: "Instance Bootstrapping failed.",
+                        instanceId: instanceData.InstanceId,
+                        code: code,
+                        event_name: "instance-bootstrapped"
+                      }
+
+                      //instancesStatus[instanceData.InstanceId].socket.emit('instance-bootstrapped',{status:"Instance Bootstrapping failed.",instanceId:instanceData.InstanceId,code:code});
+                    }
+                    instance.bootStrapStatus = false;
+                  }
+                  domainsDao.saveDomainInstanceDetails(domainName, [instance], function(err, data) {
+                    if (err) {
+                      console.log("Unable to store instance in DB");
+                    } else {
+                      console.log("instance stored in DB");
+                    }
+                  });
+
+                  console.log('child process exited with code ' + code);
+                });
+
+                knifeProcess.on('error', function(error) {
+                  console.log("Error is spawning process");
+                  console.log(error);
+                });
+
+              }, function(terminatedInstance, err) {
+                if (err) {
+                  return;
+                }
+                if (instancesStatus[terminatedInstance.InstanceId]) {
+                  console.log('Removin instance from list ' + terminatedInstance.InstanceId);
+                  console.log('before');
+                  console.log(instancesStatus);
+                  delete instancesStatus[terminatedInstance.InstanceId];
+
+                } else {
+                  console.log("instance not present");
+                }
+                domainsDao.updateInstanceStatus(domainName, terminatedInstance.InstanceId, false, function(err, data) {
+                  if (err) {
+                    console.log("unable to update status of terminated instance");
+                  } else {
+                    console.log("Instance status set to false successfully");
+                  }
+                });
+
+              }); //ends here;
+            })(selectedInstances[keys[i]]);
+          }
+
         }
-
-      }
-    });
-  } else {
-    resp.json({
-      error: "Invalid input parameters"
-    });
-  }
+      });
+    } else {
+      resp.json({
+        error: "Invalid input parameters"
+      });
+    }
+  });
 });
 
 
@@ -419,7 +419,7 @@ app.get('/instanceStatus/:instanceId', verifySession, function(req, resp) {
 
 var fileIo = require('./controller/fileio');
 
-var rootDir = knifeConfig.knifeCWD+'/cookbooks/';
+var rootDir = knifeConfig.knifeCWD + '/cookbooks/';
 
 app.get('/userCookbooks/', verifySession, function(req, resp) {
 
@@ -507,7 +507,7 @@ app.post('/userCookbooks/save', verifySession, function(req, resp) {
     path = '';
   }
 
-  fileIo.writeFile(rootDir + path, fileContent,'utf-8', function(err) {
+  fileIo.writeFile(rootDir + path, fileContent, 'utf-8', function(err) {
     if (err) {
       resp.send(500);
       return;
@@ -520,43 +520,43 @@ app.post('/userCookbooks/save', verifySession, function(req, resp) {
       cookbookName = path.substring(0, indexOfSlash);
     }
 
-    if(cookbookName) {
-    var spawn = childProcess.spawn;
-    var knifeProcess;
-    knifeProcess = spawn('knife', ['cookbook', 'upload', cookbookName], {
-      cwd: knifeConfig.knifeCWD
-    });
+    if (cookbookName) {
+      var spawn = childProcess.spawn;
+      var knifeProcess;
+      knifeProcess = spawn('knife', ['cookbook', 'upload', cookbookName], {
+        cwd: knifeConfig.knifeCWD
+      });
 
-    knifeProcess.stdout.on('data', function(data) {
-      console.log('cookbook upload : stdout: ==> ' + data);
-    });
-    knifeProcess.stderr.on('data', function(data) {
-      console.log('cookbook upload : stderr: ==> ' + data);
-    });
+      knifeProcess.stdout.on('data', function(data) {
+        console.log('cookbook upload : stdout: ==> ' + data);
+      });
+      knifeProcess.stderr.on('data', function(data) {
+        console.log('cookbook upload : stderr: ==> ' + data);
+      });
 
-    knifeProcess.on('close', function(code) {
-      if (code == 0) {
-        resp.json({
-          msg: "success"
-        });
-      } else {
-        resp.send(500);
-        /*resp.json({
+      knifeProcess.on('close', function(code) {
+        if (code == 0) {
+          resp.json({
+            msg: "success"
+          });
+        } else {
+          resp.send(500);
+          /*resp.json({
           msg: "cookbook upload failed"
         });*/
-      }
-    });
+        }
+      });
 
-    knifeProcess.on('error', function(error) {
-      console.log("Error is spawning process");
-      console.log(error);
-      resp.send(500);
-    });
-  } else {
-    resp.json({
-          msg: "success"
-    });
-  }
+      knifeProcess.on('error', function(error) {
+        console.log("Error is spawning process");
+        console.log(error);
+        resp.send(500);
+      });
+    } else {
+      resp.json({
+        msg: "success"
+      });
+    }
 
 
   });
@@ -564,28 +564,33 @@ app.post('/userCookbooks/save', verifySession, function(req, resp) {
 
 /// settings 
 app.post('/settings/aws', verifySession, function(req, resp) {
-   if(req.body.aws_accessKey && req.body.aws_secretKey && req.body.aws_region && req.body.aws_keyPair && req.body.aws_securityGroupId && req.files.awsPemFile.size) {
-     var fileName =  req.files.awsPemFile.name;
-     console.log(req.files);
-     fileIo.readFile(req.files.awsPemFile.path, function(err, data) {
-    
-     var awsSettings = awsConfig.getAwsSettings();
-
-     fileIo.writeFile(awsSettings.pemFileLocation+fileName, data,null, function(err) {
-       if(err) {
-        resp.send(500);
-        return; 
-       } 
-      awsConfig.setAwsSettings(req.body.aws_accessKey,req.body.aws_secretKey,req.body.aws_region,req.body.aws_keyPair,req.body.aws_securityGroupId,awsSettings.pemFileLocation+fileName);
-      resp.send("ok"); 
-     });
+  if (req.body.aws_accessKey && req.body.aws_secretKey && req.body.aws_region && req.body.aws_keyPair && req.body.aws_securityGroupId && req.files.awsPemFile.size) {
+    var fileName = req.files.awsPemFile.name;
+    //console.log(req.files);
+    fileIo.readFile(req.files.awsPemFile.path, function(err, data) {
+       console.log("reading file");
+      awsSettings.getAwsSettings(function(settings) {
+        console.log("I m here");
+        fileIo.writeFile(settings.pemFileLocation + fileName, data, null, function(err) {
+          console.log("file writing callback");
+          if (err) {
+            resp.send(500);
+            return;
+          }
+          awsSettings.setAwsSettings(req.body.aws_accessKey, req.body.aws_secretKey, req.body.aws_region, req.body.aws_keyPair, req.body.aws_securityGroupId, awsSettings.pemFileLocation + fileName, function(err) {
+             console.log("aws settings callback");
+            if (err) {
+              resp.send(500);
+              return;
+            }
+            resp.send("ok");
+          });
+        });
+      });
     });
   } else {
     resp.send(400);
   }
-
-  
-
 });
 
 var server = http.createServer(app);
