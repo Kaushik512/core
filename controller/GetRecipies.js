@@ -1,18 +1,13 @@
 
-var fs = require('fs');
-
 
 var ChefApi = require("../node_modules/chef-api");
-var chef = new ChefApi();
-
-var options = require('../config/chef-config.js').chefConfig;
-
-chef.config(options);
 
 
 
 
-getCookbooks = function(callback){
+getCookbooks = function(options,callback){
+    var chef = new ChefApi();
+    chef.config(options);
 
 	chef.getCookbooks(null,function(err, res){
 		if(err)

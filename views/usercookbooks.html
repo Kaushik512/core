@@ -14,6 +14,7 @@ html {
     overflow: auto;
     width: 19.9%;
     float:left;
+    display: none;
 }
 #fileEditorArea {
 	height: 100%;
@@ -38,10 +39,15 @@ html {
 	z-index: 10;
 	height: 100%;
 	width: 100%;
-	background-color:rgba(0,0,0,0.5); 
+	background-color:rgba(255,255,255,0.8); 
 	padding-top: 18%;
 	display: none;
 	
+}
+
+#workingMsg{
+	display: block;
+    padding-top: 10px;
 }
 
 </style>
@@ -59,6 +65,7 @@ html {
 </div>
 <div id="workingIndicatorContainer" class="text-center">
 <img src="img/loading.gif" style="height:10%;width:auto"/>
+<span id="workingMsg"></span>
 </div>
 </body>
 
@@ -74,19 +81,28 @@ $(function() {
 	var $fileEditorDiv = $('#fileEditorDiv').hide();
 	var $savebutton = $('.save').hide();
 	var $workingIndicatorContainer = $('#workingIndicatorContainer');
+	var $workingMsg = $('#workingMsg');
 	var editor = ace.edit("fileEditorDiv");
 
     editor.setTheme("ace/theme/clouds");
     editor.getSession().setMode("ace/mode/ruby");
-
-	$('#cookbookdir').fileTree({
+    $workingMsg.empty().append('Please Wait ... Syncing Cookbooks');
+    $workingIndicatorContainer.show();
+    $cookbookdir = $('#cookbookdir');
+	$cookbookdir.fileTree({
 		root: '/',
-		script : 'userCookbooks'
+		script : 'userCookbooks',
+		onFolderLoad : function(path) {
+           if(path === '/') {
+             $cookbookdir.show();
+             $workingIndicatorContainer.hide()
+           }
+		}
 	}, function(file) {
-		$fileEditorDiv.show();
-		$savebutton.show();
 		$.get('userCookbooks/?path='+file,function(data){
            if(data.resType == 'file') {
+           	 $fileEditorDiv.show();
+		     $savebutton.show();
            	 $fileEditorDiv.attr('data-file-path',file);
            	 editor.setValue(data.fileData);
            }
@@ -96,6 +112,7 @@ $(function() {
 	$('.save').click(function(e){
 		var filePath = $fileEditorDiv.attr('data-file-path');
 		var fileContent =editor.getValue();
+		 $workingMsg.empty().append('Please Wait ... Uploading Cookbook');
 		$workingIndicatorContainer.show();
 		$.post('/userCookbooks/save',{filePath:filePath,fileContent:fileContent},function(data,success){
 			$workingIndicatorContainer.hide();

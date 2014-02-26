@@ -21,7 +21,8 @@ var awsSettings = {
 	keyPairName:"devopstest",
 	securityGroupId : "sg-c00ee1a5",
 	pemFileLocation : "/home/anshul/",
-	pemFile:"/home/anshul/devopstest-us-west-2.pem"
+	pemFile:"devopstest-us-west-2.pem",
+	instanceUserName:"root"
 }
 
 

@@ -45,6 +45,7 @@ if(jQuery) (function($){
 			if( o.collapseEasing == undefined ) o.collapseEasing = null;
 			if( o.multiFolder == undefined ) o.multiFolder = true;
 			if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
+			if( o.onFolderLoad == undefined ) o.onFolderLoad = null;
 			
 			$(this).each( function() {
 				
@@ -72,6 +73,9 @@ if(jQuery) (function($){
 						$(c).removeClass('wait').append(htmlStr);
 						if( o.root == t ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
 						bindTree(c);
+						if(typeof o.onFolderLoad === 'function') {
+							o.onFolderLoad(t);
+						}
 					});
 				}
 				

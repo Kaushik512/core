@@ -7,7 +7,7 @@ var childProcess = require('child_process');
 var io = require('socket.io');
 
 var appConfig = require('./app_config');
-var awsSettings = require('./controller/aws_settings');
+var settingsController = require('./controller/settings');
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('views', path.join(__dirname, 'views'));
@@ -81,17 +81,24 @@ var cookbooks = require('./controller/GetRecipies');
 app.post('/cookbooks', verifySession, function(req, res) {
   console.log('Returning Available Cookbooks...!!');
   console.log(req.body);
-  //res.render('cookbooks');
-  cookbooks.getCookbooks(function(err, resp) {
-    console.log('About to Render...!! ');
-    //console.log(err);
-    //console.log(resp);
-    res.render('cookbook', {
-      error: err,
-      cookbooks: resp,
-      prodSelected: req.body
+  settingsController.getChefSettings(function(settings) {
+    //res.render('cookbooks');
+    cookbooks.getCookbooks({
+      user_name: settings.chefUserName,
+      key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
+      url: settings.hostedChefUrl
+    }, function(err, resp) {
+      console.log('About to Render...!! ');
+      //console.log(err);
+      //console.log(resp);
+      res.render('cookbook', {
+        error: err,
+        cookbooks: resp,
+        prodSelected: req.body
+      });
     });
   });
+
 });
 
 app.get('/products/:pid', verifySession, function(req, res) {
@@ -161,7 +168,7 @@ function getRolesListArguments(rolesArray) {
 
 
 var domainsDao = require('./controller/domains.js');
-var knifeConfig = require("./config/chef-config.js").knifeConfig;
+var knifeConfig;
 
 
 var instancesStatus = {};
@@ -170,7 +177,7 @@ var instancesStatus = {};
 
 app.post('/start', verifySession, function(req, resp) {
   //console.log(req.body);
-  awsSettings.getAwsSettings(function(settings) {
+  settingsController.getSettings(function(settings) {
     var domainName = req.body.domainName;
     var pid = req.body.pid;
     var selectedInstances = req.body.selectedInstances;
@@ -193,7 +200,7 @@ app.post('/start', verifySession, function(req, resp) {
 
           for (var i = 0; i < keys.length; i++) {
             (function(inst) {
-              ec2.launchInstance(inst.amiid, settings, {
+              ec2.launchInstance(inst.amiid, settings.aws, {
                 terminate: true,
                 delay: 3600000
               }, function(err, data) {
@@ -268,12 +275,12 @@ app.post('/start', verifySession, function(req, resp) {
                 var spawn = childProcess.spawn;
                 var knifeProcess;
                 if (combinedRunList && combinedRunList.length) {
-                  knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + settings.pemFile, '-r' + combinedRunList.join(), '-x' + knifeConfig.instanceUserName], {
-                    cwd: knifeConfig.knifeCWD
+                  knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + settings.aws.pemFileLocation + settings.aws.pemFile, '-r' + combinedRunList.join(), '-x' + settings.aws.instanceUserName], {
+                    cwd: settings.chef.chefReposLocation + settings.chef.userChefRepoName
                   });
                 } else {
-                  knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + settings.pemFile, '-x' + knifeConfig.instanceUserName], {
-                    cwd: knifeConfig.knifeCWD
+                  knifeProcess = spawn('knife', ['bootstrap', instanceData.PublicIpAddress, '-i' + settings.aws.pemFileLocation + settings.aws.pemFile, '-x' + settings.aws.instanceUserName], {
+                    cwd: settings.chef.chefReposLocation + settings.chef.userChefRepoName
                   });
                 }
 
@@ -419,9 +426,8 @@ app.get('/instanceStatus/:instanceId', verifySession, function(req, resp) {
 
 var fileIo = require('./controller/fileio');
 
-var rootDir = knifeConfig.knifeCWD + '/cookbooks/';
-
 app.get('/userCookbooks/', verifySession, function(req, resp) {
+
 
 
   var path = req.query.path;
@@ -444,40 +450,82 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
   } else {
     path = '';
   }
-  console.log("full path");
-  console.log(rootDir + path);
 
-  fileIo.isDir(rootDir + path, function(err, dir) {
-    if (err) {
-      console.log(err);
-      resp.send(404);
-      return;
-    }
-    if (dir) {
-      fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
-        if (err) {
-          resp.send(500);
-          return;
-        }
-        resp.json({
-          resType: 'dir',
-          files: filesList,
-          dirs: dirList
+  function getCookbooksData(rootDir) {
+
+    console.log("full path");
+    console.log(rootDir + path);
+
+    fileIo.isDir(rootDir + path, function(err, dir) {
+      if (err) {
+        console.log(err);
+        resp.send(404);
+        return;
+      }
+      if (dir) {
+        fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+          if (err) {
+            resp.send(500);
+            return;
+          }
+          resp.json({
+            resType: 'dir',
+            files: filesList,
+            dirs: dirList
+          });
+
         });
 
+      } else { // this is a file
+        fileIo.readFile(rootDir + path, function(err, fileData) {
+          if (err) {
+            resp.send(500);
+            return;
+          }
+          resp.json({
+            resType: "file",
+            fileData: fileData.toString('utf-8')
+          });
+        })
+      }
+
+    });
+  }
+
+  settingsController.getChefSettings(function(chefSettings) {
+
+    if (path === '') {
+      var spawn = childProcess.spawn;
+      var knifeProcess;
+      knifeProcess = spawn('knife', ['download', 'cookbooks'], {
+        cwd: chefSettings.chefReposLocation + chefSettings.userChefRepoName
       });
 
-    } else { // this is a file
-      fileIo.readFile(rootDir + path, function(err, fileData) {
-        if (err) {
+      knifeProcess.stdout.on('data', function(data) {
+        console.log('cookbook download : stdout: ==> ' + data);
+      });
+      knifeProcess.stderr.on('data', function(data) {
+        console.log('cookbook download : stderr: ==> ' + data);
+      });
+
+      knifeProcess.on('close', function(code) {
+        if (code == 0) {
+          getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/');
+        } else {
           resp.send(500);
-          return;
+          /*resp.json({
+          msg: "cookbook upload failed"
+        });*/
         }
-        resp.json({
-          resType: "file",
-          fileData: fileData.toString('utf-8')
-        });
-      })
+      });
+
+      knifeProcess.on('error', function(error) {
+        console.log("Error is spawning process");
+        console.log(error);
+        resp.send(500);
+      });
+    } else {
+      getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/');
     }
 
   });
@@ -507,59 +555,64 @@ app.post('/userCookbooks/save', verifySession, function(req, resp) {
     path = '';
   }
 
-  fileIo.writeFile(rootDir + path, fileContent, 'utf-8', function(err) {
-    if (err) {
-      resp.send(500);
-      return;
-    }
-    //extracting cookbook name;
-    var cookbookName = '';
+  settingsController.getChefSettings(function(chefSettings) {
+    fileIo.writeFile(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/' + path, fileContent, 'utf-8', function(err) {
+      if (err) {
+        resp.send(500);
+        return;
+      }
+      //extracting cookbook name;
+      var cookbookName = '';
 
-    var indexOfSlash = path.indexOf('/');
-    if (indexOfSlash != -1) {
-      cookbookName = path.substring(0, indexOfSlash);
-    }
+      var indexOfSlash = path.indexOf('/');
+      if (indexOfSlash != -1) {
+        cookbookName = path.substring(0, indexOfSlash);
+      }
 
-    if (cookbookName) {
-      var spawn = childProcess.spawn;
-      var knifeProcess;
-      knifeProcess = spawn('knife', ['cookbook', 'upload', cookbookName], {
-        cwd: knifeConfig.knifeCWD
-      });
+      if (cookbookName) {
+        var spawn = childProcess.spawn;
+        var knifeProcess;
+        knifeProcess = spawn('knife', ['cookbook', 'upload', cookbookName], {
+          cwd: chefSettings.chefReposLocation + chefSettings.userChefRepoName
+        });
 
-      knifeProcess.stdout.on('data', function(data) {
-        console.log('cookbook upload : stdout: ==> ' + data);
-      });
-      knifeProcess.stderr.on('data', function(data) {
-        console.log('cookbook upload : stderr: ==> ' + data);
-      });
+        knifeProcess.stdout.on('data', function(data) {
+          console.log('cookbook upload : stdout: ==> ' + data);
+        });
+        knifeProcess.stderr.on('data', function(data) {
+          console.log('cookbook upload : stderr: ==> ' + data);
+        });
 
-      knifeProcess.on('close', function(code) {
-        if (code == 0) {
-          resp.json({
-            msg: "success"
-          });
-        } else {
-          resp.send(500);
-          /*resp.json({
+        knifeProcess.on('close', function(code) {
+          if (code == 0) {
+            resp.json({
+              msg: "success"
+            });
+          } else {
+            resp.send(500);
+            /*resp.json({
           msg: "cookbook upload failed"
         });*/
-        }
-      });
+          }
+        });
 
-      knifeProcess.on('error', function(error) {
-        console.log("Error is spawning process");
-        console.log(error);
-        resp.send(500);
-      });
-    } else {
-      resp.json({
-        msg: "success"
-      });
-    }
+        knifeProcess.on('error', function(error) {
+          console.log("Error is spawning process");
+          console.log(error);
+          resp.send(500);
+        });
+      } else {
+        resp.json({
+          msg: "success"
+        });
+      }
 
 
+    });
   });
+
+
+
 })
 
 /// settings 
@@ -568,8 +621,8 @@ app.post('/settings/aws', verifySession, function(req, resp) {
     var fileName = req.files.awsPemFile.name;
     //console.log(req.files);
     fileIo.readFile(req.files.awsPemFile.path, function(err, data) {
-       console.log("reading file");
-      awsSettings.getAwsSettings(function(settings) {
+      console.log("reading file");
+      settingsController.getAwsSettings(function(settings) {
         console.log("I m here");
         fileIo.writeFile(settings.pemFileLocation + fileName, data, null, function(err) {
           console.log("file writing callback");
@@ -577,8 +630,8 @@ app.post('/settings/aws', verifySession, function(req, resp) {
             resp.send(500);
             return;
           }
-          awsSettings.setAwsSettings(req.body.aws_accessKey, req.body.aws_secretKey, req.body.aws_region, req.body.aws_keyPair, req.body.aws_securityGroupId, awsSettings.pemFileLocation + fileName, function(err) {
-             console.log("aws settings callback");
+          settingsController.setAwsSettings(req.body.aws_accessKey, req.body.aws_secretKey, req.body.aws_region, req.body.aws_keyPair, req.body.aws_securityGroupId, fileName, function(err) {
+            console.log("aws settings callback");
             if (err) {
               resp.send(500);
               return;
@@ -587,6 +640,68 @@ app.post('/settings/aws', verifySession, function(req, resp) {
           });
         });
       });
+    });
+  } else {
+    resp.send(400);
+  }
+});
+
+app.post('/settings/chef', verifySession, function(req, resp) {
+  if (req.body.chefUserName && req.body.hostedChefUrl && req.files.chefUserPemFile.size && req.files.chefValidationPemFile.size && req.files.chefKnifeConfigFile.size) {
+    //getting chef settings
+    settingsController.getChefSettings(function(settings) {
+      //checking whether user chef-repo directory is created 
+      var chefRepoPath = settings.chefReposLocation + req.body.chefUserName
+
+        function storeUploadedFiles() {
+          var filesNames = Object.keys(req.files);
+          var count = filesNames.length;
+
+          filesNames.forEach(function(item) {
+            console.log(item);
+            fileIo.readFile(req.files[item].path, function(err, data) {
+              fileIo.writeFile(chefRepoPath + '/.chef/' + req.files[item].name, data, null, function(err) {
+                count--;
+                if (count === 0) { // all files uploaded
+                  // savings in setting 
+                  settingsController.setChefSettings(req.body.chefUserName, req.body.chefUserName, req.files.chefUserPemFile.name, req.files.chefValidationPemFile.name, req.body.hostedChefUrl, function(err) {
+                    console.log("chef settings callback");
+                    if (err) {
+                      resp.send(500);
+                      return;
+                    }
+                    resp.send("ok");
+                  });
+                }
+              });
+            });
+
+          });
+        }
+
+      fileIo.exists(chefRepoPath, function(exists) {
+        if (!exists) { // does not exist
+          //creating chef repo
+          fileIo.mkdir(chefRepoPath, function(err) {
+            if (err) {
+              resp.send(500);
+              return;
+            }
+            //creating .chef dir 
+            fileIo.mkdir(chefRepoPath + '/.chef', function(err) {
+              if (err) {
+                resp.send(500);
+                return;
+              }
+              storeUploadedFiles();
+            });
+          });
+        } else {
+          storeUploadedFiles();
+        }
+      })
+
+
     });
   } else {
     resp.send(400);

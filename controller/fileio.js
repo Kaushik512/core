@@ -92,3 +92,23 @@ module.exports.writeFile = function(path, data,encoding,callback) {
 		callback(null);
 	});
 }
+
+module.exports.exists = function(path,callback) {
+  fs.exists(path, function(exists) {
+    if (exists) {
+       callback(exists);
+    } else {
+    	callback(false);
+    }
+});
+}
+
+module.exports.mkdir = function(path,callback) {
+	fs.mkdir(path,function(err) {
+		if(err) {
+			callback(err);
+		} else {
+			callback(null);
+		}
+	});
+}
