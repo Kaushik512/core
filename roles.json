@@ -1,4 +1,4 @@
-{
+[{
 	"name" : "AWS-Production",
 	 "pid" : 1,
 	 "components" : [
@@ -88,7 +88,7 @@
 	 ]
 },
 {
-    "name" : "AWS-Support",
+    "name" : "AWS-DevOps",
      "pid" : 2,
      "components" : [
      {
