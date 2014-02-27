@@ -310,27 +310,29 @@ body {
       <div class="tab-content" id="settingsTabContent">
         <div id="amazon-settings" class="tab-pane fade active in settings-content">
           <form id="aws_form">
-          <span class="label label-default">AWS Access Key</span>:<input name="aws_accessKey" type="text"><br/>
-          <span class="label label-default">Secret Key</span>:<input name="aws_secretKey" type="text" /><br/>
-          <span class="label label-default">Region</span>:<input name="aws_region" type="text"><br/>
-          <span class="label label-default">Key Pair Name</span>:<input name="aws_keyPair" type="text"><br/>
-          <span class="label label-default">Security Group Id</span>:<input name="aws_securityGroupId" type="text"><br/>
-          <span class="label label-default">Pem File</span>:<input name="awsPemFile" type="file" style="display:inline !important"><br/>
-          
+            <table>
+          <tr><td><span class="">AWS Access Key</span></td><td>:<input name="aws_accessKey" type="text"></td></tr>
+          <tr><td><span class="">Secret Key</span></td><td>:<input name="aws_secretKey" type="text" /></td></tr>
+          <tr><td><span class="">Region</span></td><td>:<input name="aws_region" type="text"></td></tr>
+          <tr><td><span class="">Key Pair Name</span></td><td>:<input name="aws_keyPair" type="text"></td></tr>
+          <tr><td><span class="">Security Group Id</span></td><td>:<input name="aws_securityGroupId" type="text"></td></tr>
+          <tr><td><span class="">Pem File</span></td><td>:<input name="awsPemFile" type="file" style="display:inline !important"></td></tr>
+          </table>
           </form>
         </div>
         
         <div id="chef-settings" class="tab-pane fade settings-content">
            <form id="chef_form">
-          <span class="label label-default">Chef UserName</span>:<input name="chefUserName" type="text"><br/>
-          <span class="label label-default">*Chef Url</span>:<input name="hostedChefUrl" type="text" /><br/>
-          <span class="label label-default">User Pem File</span>:<input name="chefUserPemFile" type="file" style="display:inline !important"><br/>
-          <span class="label label-default">Validator Pem File</span>:<input name="chefValidationPemFile" type="file" style="display:inline !important"><br/>
-          <span class="label label-default">Knife.rb File</span>:<input name="chefKnifeConfigFile" type="file" style="display:inline !important"><br/>
-          
+             <table>
+          <tr><td><span class="">Chef UserName</span></td><td>:<input name="chefUserName" type="text"></td></tr>
+          <tr><td><span class="">*Chef Url</span></td><td>:<input name="hostedChefUrl" type="text" /></td></tr>
+          <tr><td><span class="">User Pem File</span></td><td>:<input name="chefUserPemFile" type="file" style="display:inline !important"></td></tr>
+          <tr><td><span class="">Validator Pem File</span></td><td>:<input name="chefValidationPemFile" type="file" style="display:inline !important"></td></tr>
+          <tr><td><span class="">Knife.rb File</span></td><td>:<input name="chefKnifeConfigFile" type="file" style="display:inline !important"></td></tr>
+          </table>
           </form>
           <br/>
-          <span> * Ex Url : https://api.opscode.com/organizations/anshul_rl</span>
+          <span> * Eg Url : https://api.opscode.com/organizations/anshul_rl</span>
         </div>
         
         <div id="jenkins-settings" class="tab-pane fade settings-content">
