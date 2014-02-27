@@ -708,6 +708,29 @@ app.post('/settings/chef', verifySession, function(req, resp) {
   }
 });
 
+app.get('/hiddenSettings',verifySession,function(req,resp) {
+   products.getProducts(function(err, products) {
+    console.log(products);
+    resp.render('hiddensettings', {
+      error: err,
+      products: products
+    });
+  });
+});
+
+app.post('/hiddenSettings',verifySession,function(req,resp) {
+ console.log(req.body);
+ products.setProductStatus(req.body.prd,function(err,data){
+    if(err) {
+      resp.send(500);
+      return;
+    } else {
+      resp.send("success");
+    }
+ });
+});
+
+
 var server = http.createServer(app);
 io = io.listen(server, {
   log: false

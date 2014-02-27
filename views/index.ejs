@@ -246,12 +246,16 @@ body {
     overflow-y: auto;
 }
 
-.usercookbookArea {
+.content-container {
   display: none;
-  height: 100%;
-}
-.domainArea {
+  height: 99%;
   display: block;
+}
+.navbar-fontsize {
+ font-size: 15px !important;
+}
+#console_tab_link {
+  float:right;
 }
 
 </style>
@@ -266,13 +270,20 @@ body {
                 <span class="logotext">DevOps for DevOps</span>
             </a>
             <div class="nav-options">
-            <a class="navbar-brand nav-settings chefBtn" href="#" role="button" title="Chef">
-                <img src="img/chef-icon.png" alt="settings" height="30" width="30">
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="zabbix-auto-login.html" target="_blank" role="button" title="Chef">
+                <span>Monitoring</span>
+            </a>
+            <a class="navbar-brand nav-settings chefBtn nav-logout navbar-fontsize" href="#" role="button" title="Chef">
+                <span>Config Management</span>
+            </a>   
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize chefLibraryBtn" href="#" role="button" title="Chef">
+                <!--<img src="img/chef-icon.png" alt="settings" height="30" width="30">-->
+                <span>Chef Library<span>
             </a>
             <a class="navbar-brand nav-settings" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
                 <img src="img/settings-icon.png" alt="settings" height="30" width="30">
             </a>
-            <a class="navbar-brand nav-settings nav-logout" href="/signout" title="Logout">
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="/signout" title="Logout">
                 <span>Logout</span>
             </a>
           </div>
@@ -312,13 +323,14 @@ body {
         <div id="chef-settings" class="tab-pane fade settings-content">
            <form id="chef_form">
           <span class="label label-default">Chef UserName</span>:<input name="chefUserName" type="text"><br/>
-          <span class="label label-default">Chef url</span>:<input name="hostedChefUrl" type="text" /><br/>
+          <span class="label label-default">*Chef Url</span>:<input name="hostedChefUrl" type="text" /><br/>
           <span class="label label-default">User Pem File</span>:<input name="chefUserPemFile" type="file" style="display:inline !important"><br/>
           <span class="label label-default">Validator Pem File</span>:<input name="chefValidationPemFile" type="file" style="display:inline !important"><br/>
           <span class="label label-default">Knife.rb File</span>:<input name="chefKnifeConfigFile" type="file" style="display:inline !important"><br/>
           
           </form>
-          
+          <br/>
+          <span> * Ex Url : https://api.opscode.com/organizations/anshul_rl</span>
         </div>
         
         <div id="jenkins-settings" class="tab-pane fade settings-content">
@@ -354,18 +366,23 @@ body {
         <aside class='menuContent'>
             <p class="menu-header"><span class="menu-header-text">Providers</span>&nbsp;</p>
             <ul id="main-nav">
-                <% if(products && products.length) {
 
+                <%  
+                if(products && products.length) {
+                    var activeClassAdded = false;
                   for(var i=0;i<products.length;i++) {
+                    if(products[i].status) {
+                    
                     var className = "";
-                    if(i == 0) {
+                    if(!activeClassAdded) {
                      className = 'active';
-                 }
+                     activeClassAdded = true;
+                   }
                  %>
                  <li class="nav-prod <%=className%>" data-pid="<%=products[i].pid%>"><a href="#"><img style="height: 30px;padding-bottom: 4px;" src="img/provider-icons/<%=products[i].pid%>.png"/>  
                     <span class="prod-name"><%= products[i].name%></span></a></li>
 
-                    <% } %> 
+                    <% }} %> 
 
                     <% } %> 
                 </ul>
@@ -377,11 +394,11 @@ body {
         </div>
          <!--<span style="color:white">&nbsp; Domain Name : <input type="text" />.relevancelab.com</span>-->
         <section class="main-content">
-           <div class="domainArea">
+           <div class="domainArea content-container">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
-              <!--<li><a id="monitoring_tab_link" href="zabbix-auto-login.html" target="_blank" >Monitoring</a></li>-->             
+              <li style="float:right"><a id="console_tab_link" href="#">Console</a></li>             
           </ul>
 
   <!-- Tab panes -->
@@ -431,9 +448,11 @@ body {
 -->
   </div>
 </div>
-<div class="usercookbookArea">
+<div class="usercookbookArea content-container">
  
 </div>
+<div class="cheflibraryArea content-container">
+  </div>
 </div>
           <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
           </div>--> 
@@ -493,11 +512,17 @@ body {
     
     <script>
     $(function() {
-
+       $contentContainer = $('.content-container');
        $('.chefBtn').click(function(e){
-         $('.domainArea').hide();
+         $contentContainer.hide();
+         $providers.removeClass('active');
          $('.usercookbookArea').empty().append('<iframe src="usercookbooks.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
          
+       });
+       $('.chefLibraryBtn').click(function(e){
+          $contentContainer.hide();
+          $providers.removeClass('active');
+          $('.cheflibraryArea').empty().append('<iframe src="chef-library/Chef.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
        });
 
         $('#settingsModal').on('show.bs.modal', function(e) {
@@ -560,6 +585,33 @@ body {
          return false;
 
         });   
+        
+        $('#console_tab_link').click(function(e){
+          e.preventDefault();
+          var pid  = $providers.filter('.active').attr('data-pid');
+          pid = parseInt(pid);
+          function openLink(url) {
+            window.open(url);
+          }
+          switch(pid){
+            case 1:
+             openLink('https://console.aws.amazon.com/console/home');
+            break;
+            case 2:
+             openLink('http://rlevaldevops.cloudapp.net/');
+            break;
+            case 3:
+             openLink('http://rlevaldevops.cloudapp.net/');
+            break;
+            case 4:
+             openLink('http://192.168.101.41/dashboard');
+            break;
+            case 5:
+             openLink('http://192.168.101.44:8080/client');
+            break;
+          }
+          return false;
+        }); 
        
 
 
@@ -597,11 +649,11 @@ body {
 
        var $new_link_tab = $('#new_link_tab');
        $providers.click(function(e){
+         $contentContainer.hide();
          $('.domainArea').show();
-         $('.usercookbookArea').hide();
          var $this = $(this);
          var pid = $this.attr('data-pid');
-         if(pid === '3') {
+         if(pid === '1' || pid === '4') {
           $new_link_tab.hide();
          } else {
            $new_link_tab.show();
