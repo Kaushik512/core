@@ -451,7 +451,7 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
     path = '';
   }
 
-  function getCookbooksData(rootDir) {
+  function getCookbooksData(rootDir,chefSettings) {
 
     console.log("full path");
     console.log(rootDir + path);
@@ -468,10 +468,15 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
             resp.send(500);
             return;
           }
+          var chefUserName;  
+          if(chefSettings) {
+            chefUserName = chefSettings.chefUserName
+          }
           resp.json({
             resType: 'dir',
             files: filesList,
-            dirs: dirList
+            dirs: dirList,
+            chefUserName:chefUserName
           });
 
         });
@@ -510,7 +515,7 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
 
       knifeProcess.on('close', function(code) {
         if (code == 0) {
-          getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/');
+          getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/',chefSettings);
         } else {
           resp.send(500);
           /*resp.json({

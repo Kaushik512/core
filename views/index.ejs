@@ -257,6 +257,13 @@ body {
 #console_tab_link {
   float:right;
 }
+.configManagementDropdown {
+  padding-bottom: 2px !important;
+}
+.configManamentLabel{
+  float: none !important;
+  padding: 0 !important; 
+}
 
 </style>
 </head>
@@ -270,18 +277,33 @@ body {
                 <span class="logotext">DevOps for DevOps</span>
             </a>
             <div class="nav-options">
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="zabbix-auto-login.html" target="_blank" role="button" title="Chef">
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="zabbix-auto-login.html" target="_blank" role="button" title="Monitoring">
                 <span>Monitoring</span>
             </a>
-            <a class="navbar-brand nav-settings chefBtn nav-logout navbar-fontsize" href="#" role="button" title="Chef">
+            <div class="btn-group navbar-brand nav-settings nav-logout configManagementDropdown">
+              <a type="button" class="navbar-brand dropdown-toggle navbar-fontsize configManamentLabel" data-toggle="dropdown" href="#">
+               Config Management <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" class='chefBtn'>Chef Factory</a></li>
+                <li><a href="#" class='chefLibraryBtn'>Chef Library</a></li>
+                
+                <!--<li class="divider"></li>
+                <li><a href="#">Separated link</a></li>-->
+              </ul>
+          </div>
+
+
+            <!--<a class="navbar-brand nav-settings chefBtn nav-logout navbar-fontsize" href="#" role="button" title="Chef" >
                 <span>Config Management</span>
-            </a>   
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize chefLibraryBtn" href="#" role="button" title="Chef">
-                <!--<img src="img/chef-icon.png" alt="settings" height="30" width="30">-->
+            </a>-->   
+            <!--<a class="navbar-brand nav-settings nav-logout navbar-fontsize chefLibraryBtn" href="#" role="button" title="Chef">
+                <img src="img/chef-icon.png" alt="settings" height="30" width="30">
                 <span>Chef Library<span>
-            </a>
-            <a class="navbar-brand nav-settings" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
-                <img src="img/settings-icon.png" alt="settings" height="30" width="30">
+            </a>-->
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
+                <!--<img src="img/settings-icon.png" alt="settings" height="30" width="30">-->
+                <i class="fa fa-gear"></i>&nbsp;Settings
             </a>
             <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="/signout" title="Logout">
                 <span>Logout</span>
@@ -516,12 +538,14 @@ body {
     $(function() {
        $contentContainer = $('.content-container');
        $('.chefBtn').click(function(e){
+         $rightArr.triggerHandler('click');
          $contentContainer.hide();
          $providers.removeClass('active');
          $('.usercookbookArea').empty().append('<iframe src="usercookbooks.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
          
        });
        $('.chefLibraryBtn').click(function(e){
+        $rightArr.triggerHandler('click');
           $contentContainer.hide();
           $providers.removeClass('active');
           $('.cheflibraryArea').empty().append('<iframe src="chef-library/Chef.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
@@ -650,7 +674,7 @@ body {
 
         DEVOPS.navigation.hideAllBtns(); 
 
-        var $providers = $('.nav-prod');
+       var $providers = $('.nav-prod');
 
        var $new_link_tab = $('#new_link_tab');
        $providers.click(function(e){

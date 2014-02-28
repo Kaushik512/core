@@ -21,10 +21,12 @@ html {
     overflow: auto;
     width: 80%;
     float:right;
+    display: none;
 }
 #fileEditorContainer {
 	height: 90%;
     width: 100%;
+    display:none;
 
 }
 #fileEditorDiv{
@@ -44,10 +46,25 @@ html {
 	display: none;
 	
 }
+#editorBtnContainer {
+	display: none;
+    padding-left: 21%;
+    padding-top: 10px;
+}
+
+#fileEditorMsgContainer{
+	height: 100%;
+    padding-top: 15%;
+    text-align: center;
+    width: 100%;
+}
 
 #workingMsg{
 	display: block;
     padding-top: 10px;
+}
+.editorBtn {
+	margin-left: 10%;
 }
 
 </style>
@@ -61,7 +78,14 @@ html {
 		<div id="fileEditorDiv"></div>
 
 	</div>
-	<div class="text-center" style="padding-top: 10px;"><a class="btn btn-primary btn-lg save" role="button">Save</a></div>
+	<div id="editorBtnContainer"><button class="btn btn-primary btn-lg editorBtn" role="button" disabled>Clone</button><button class="btn btn-primary btn-lg save editorBtn" role="button">Save</button><button class="btn btn-primary btn-lg editorBtn" role="button" disabled>Test</button></div>
+	<div id="fileEditorMsgContainer">
+     <span id='chefAccountMsg' style="display:block;position:absolute;top:4px"></span>
+     <span id='chefInstructionMsg'> <span style="font-size:24px">Welcome to Chef Factory </span><br/><br/>
+     <span style="font-size:20px">You can Clone, Edit and Upload a Cookbook to Chef Server.</span><br/>
+     <span style="font-size:20px">
+     Please select a Cookbook. </span> </span>
+	</div>
 </div>
 <div id="workingIndicatorContainer" class="text-center">
 <img src="img/loading.gif" style="height:10%;width:auto"/>
@@ -78,10 +102,12 @@ html {
 <script src="js/js-plugins/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(function() {
-	var $fileEditorDiv = $('#fileEditorDiv').hide();
-	var $savebutton = $('.save').hide();
+	var $fileEditorDivContianer = $('#fileEditorContainer').hide();
+	var $fileEditorDiv = $('#fileEditorDiv');
+	var $editorBtnContainer = $('#editorBtnContainer').hide();
 	var $workingIndicatorContainer = $('#workingIndicatorContainer');
 	var $workingMsg = $('#workingMsg');
+	var $fileEditorMsgContainer = $('#fileEditorMsgContainer');
 	var editor = ace.edit("fileEditorDiv");
 
     editor.setTheme("ace/theme/clouds");
@@ -92,18 +118,21 @@ $(function() {
 	$cookbookdir.fileTree({
 		root: '/',
 		script : 'userCookbooks',
-		onFolderLoad : function(path) {
+		onFolderLoad : function(path,data) {
            if(path === '/') {
              $cookbookdir.show();
+             $('#fileEditorArea').show();
+             $('#chefAccountMsg').append('Chef Account : '+data.chefUserName);          
              $workingIndicatorContainer.hide()
-           }
+           } 
 		}
 	}, function(file) {
+		$fileEditorMsgContainer.hide();
 		$.get('userCookbooks/?path='+file,function(data){
            if(data.resType == 'file') {
-           	 $fileEditorDiv.show();
-		     $savebutton.show();
-           	 $fileEditorDiv.attr('data-file-path',file);
+           	 $fileEditorDivContianer.show();
+           	 $editorBtnContainer.show();
+		     $fileEditorDiv.attr('data-file-path',file);
            	 editor.setValue(data.fileData);
            }
 		});
