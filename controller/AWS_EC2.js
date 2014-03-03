@@ -39,8 +39,15 @@ module.exports.getImageNames = function (callback){
 	});
 };
 
-module.exports.describeInstances = function(instanceIds,callback){
-    ec.describeInstances({InstanceIds:instanceIds},function(err,data){
+module.exports.describeInstances = function(instanceIds,awsSettings,callback){
+    var ec = new aws.EC2({"accessKeyId":awsSettings.access_key, "secretAccessKey": awsSettings.secret_key, 
+    "region": awsSettings.region});
+    var options = {};
+    if(instanceIds) {
+      options.InstanceIds = instanceIds;
+    }
+    options.MaxResults = 1000;
+    ec.describeInstances(options,function(err,data){
        callback(err,data);
     });
 

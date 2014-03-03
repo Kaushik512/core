@@ -405,13 +405,75 @@ app.post('/start', verifySession, function(req, resp) {
 app.get('/domainDetails/:pid', verifySession, function(req, resp) {
   var pid = req.params.pid;
   // fetch domain details from mongo 
-  domainsDao.getAllDomainData(pid, function(err, data) {
-    resp.render('domainDetails', {
-      error: err,
-      domains: data,
-      pid: pid
-    });
+
+
+  domainsDao.getAllDomainData(pid, function(err, domainsdata) {
+    if(err) {
+      resp.render('domainDetails', {
+        error: err,
+        domains: domainsdata,
+        pid: pid
+      });
+      return;
+    }
+
+    if (pid === '2') {
+      settingsController.getAwsSettings(function(awsSettings) {
+        ec2.describeInstances(null, awsSettings, function(err, data) {
+          if (err) {
+            resp.render('domainDetails', {
+              error: err,
+              domains: domainsdata,
+              pid: pid,
+              unallocatedInstances : null
+            });
+          } else {
+            var unallocatedInstances = [];
+            var allocatedInstances = [];
+            for (var i = 0; i < domainsdata.length; i++) {
+               allocatedInstances = allocatedInstances.concat(domainsdata[i].domainInstances);
+            }
+
+            var reservations = data.Reservations;
+            for (var i = 0; i < reservations.length; i++) {
+              var instances = reservations[i].Instances;
+              for (var j = 0; j < instances.length; j++) {
+                
+                var found = false;
+                for(var k=0;k<allocatedInstances.length;k++) {
+                   if(allocatedInstances[k].instanceId ==instances[j].InstanceId) {
+                    found = true;
+                    break;
+                   } 
+                }
+                if(!found) {
+                  unallocatedInstances.push(instances[j]);
+                }
+              }
+            }
+           // console.log(unallocatedInstances);
+            // console.log(unallocatedInstances.length);
+            resp.render('domainDetails', {
+             error: err,
+             domains: domainsdata,
+             pid: pid,
+             unallocatedInstances : unallocatedInstances
+           });
+          }
+        });
+      });
+
+    } else {
+
+      resp.render('domainDetails', {
+        error: err,
+        domains: domainsdata,
+        pid: pid,
+         unallocatedInstances : null
+      });
+    }
   });
+
 
 });
 
@@ -451,7 +513,7 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
     path = '';
   }
 
-  function getCookbooksData(rootDir,chefSettings) {
+  function getCookbooksData(rootDir, chefSettings) {
 
     console.log("full path");
     console.log(rootDir + path);
@@ -468,15 +530,15 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
             resp.send(500);
             return;
           }
-          var chefUserName;  
-          if(chefSettings) {
+          var chefUserName;
+          if (chefSettings) {
             chefUserName = chefSettings.chefUserName
           }
           resp.json({
             resType: 'dir',
             files: filesList,
             dirs: dirList,
-            chefUserName:chefUserName
+            chefUserName: chefUserName
           });
 
         });
@@ -515,7 +577,7 @@ app.get('/userCookbooks/', verifySession, function(req, resp) {
 
       knifeProcess.on('close', function(code) {
         if (code == 0) {
-          getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/',chefSettings);
+          getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/', chefSettings);
         } else {
           resp.send(500);
           /*resp.json({
@@ -713,8 +775,8 @@ app.post('/settings/chef', verifySession, function(req, resp) {
   }
 });
 
-app.get('/hiddenSettings',verifySession,function(req,resp) {
-   products.getProducts(function(err, products) {
+app.get('/hiddenSettings', verifySession, function(req, resp) {
+  products.getProducts(function(err, products) {
     console.log(products);
     resp.render('hiddensettings', {
       error: err,
@@ -723,16 +785,16 @@ app.get('/hiddenSettings',verifySession,function(req,resp) {
   });
 });
 
-app.post('/hiddenSettings',verifySession,function(req,resp) {
- console.log(req.body);
- products.setProductStatus(req.body.prd,function(err,data){
-    if(err) {
+app.post('/hiddenSettings', verifySession, function(req, resp) {
+  console.log(req.body);
+  products.setProductStatus(req.body.prd, function(err, data) {
+    if (err) {
       resp.send(500);
       return;
     } else {
       resp.send("success");
     }
- });
+  });
 });
 
 
