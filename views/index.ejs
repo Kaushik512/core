@@ -247,9 +247,9 @@ body {
 }
 
 .content-container {
-  display: none;
-  height: 99%;
-  display: block;
+  background: linear-gradient(to bottom, #FFFFFF 0%, #F0F0F0 100%) repeat-x scroll 0 0 #066ECD;
+  height: 89%;
+  display: :none;
 }
 .navbar-fontsize {
  font-size: 15px !important;
@@ -272,7 +272,7 @@ body {
 
     <header>
         <nav class="navbar navbar-inverse top-header" role="navigation">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand hompage_link" href="#">
                 <img src="img/version2.png" alt="logo" height="30" width="70">
                 <span class="logotext">DevOps for DevOps</span>
             </a>
@@ -385,7 +385,7 @@ body {
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+<div class="mainarea content-container">
     <div  class="menu_left navbar-inverse">
         <aside class='menuContent'>
             <p class="menu-header"><span class="menu-header-text">Providers</span>&nbsp;</p>
@@ -418,7 +418,7 @@ body {
         </div>
          <!--<span style="color:white">&nbsp; Domain Name : <input type="text" />.relevancelab.com</span>-->
         <section class="main-content">
-           <div class="domainArea content-container">
+           
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
@@ -471,16 +471,17 @@ body {
      </div>
 -->
   </div>
+
+ </section>
 </div>
 <div class="usercookbookArea content-container">
  
 </div>
 <div class="cheflibraryArea content-container">
   </div>
-</div>
           <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
           </div>--> 
-      </section>
+     
 
 
 
@@ -537,17 +538,22 @@ body {
     <script>
     $(function() {
        $contentContainer = $('.content-container');
+       $homePageLink = $('.hompage_link');
+       $homePageLink.click(function(e){
+        $contentContainer.hide();
+         $('.mainarea').show();
+       });
        $('.chefBtn').click(function(e){
-         $rightArr.triggerHandler('click');
+         //$rightArr.triggerHandler('click');
          $contentContainer.hide();
-         $providers.removeClass('active');
+         //$providers.removeClass('active');
          $('.usercookbookArea').empty().append('<iframe src="usercookbooks.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
          
        });
        $('.chefLibraryBtn').click(function(e){
-        $rightArr.triggerHandler('click');
+        //$rightArr.triggerHandler('click');
           $contentContainer.hide();
-          $providers.removeClass('active');
+          //$providers.removeClass('active');
           $('.cheflibraryArea').empty().append('<iframe src="chef-library/Chef.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
        });
 
@@ -679,7 +685,7 @@ body {
        var $new_link_tab = $('#new_link_tab');
        $providers.click(function(e){
          $contentContainer.hide();
-         $('.domainArea').show();
+         $('.mainarea').show();
          var $this = $(this);
          var pid = $this.attr('data-pid');
          if(pid === '1' || pid === '4') {
