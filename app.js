@@ -835,11 +835,11 @@ app.post('/userRoles/save', verifySession, function(req, resp) {
       if(!cookbookName) {
         cookbookName = path;
       } 
-
+      console.log('cookbookname ==> ' +cookbookName);
       if (cookbookName) {
         var spawn = childProcess.spawn;
         var knifeProcess;
-        knifeProcess = spawn('knife', ['upload', 'role', cookbookName], {
+        knifeProcess = spawn('knife', ['upload', 'roles'], {
           cwd: chefSettings.chefReposLocation + chefSettings.userChefRepoName
         });
 
