@@ -8,18 +8,18 @@ html {
 	height:100%;
 	width:100%;
 }
-#cookbookdir {
+#dirArea {
 	border-right: 1px solid #000000;
     height: 100%;
     overflow: auto;
-    width: 19.9%;
+    width: 21%;
     float:left;
     display: none;
 }
 #fileEditorArea {
 	height: 100%;
     overflow: auto;
-    width: 80%;
+    width: 79%;
     float:right;
     display: none;
 }
@@ -70,8 +70,16 @@ html {
 </style>
 </head>
 <body>
-	
-<div id="cookbookdir">
+ 	
+<div id="dirArea">
+ <ul class="nav nav-tabs">
+              <li class="active"><a id="cookbook_link" href="#cookbookDirArea" data-toggle="tab">Cookbooks</a></li>
+              <li><a id="roles_tab" href="#rolesDirArea" data-toggle="tab">Roles</a></li>        
+ </ul>
+ <div class="tab-content">
+      <div class="tab-pane active" id="cookbookDirArea"></div>
+      <div class="tab-pane active" id="rolesDirArea"></div>
+</div>
 </div>
 
 <div id="fileEditorArea">
@@ -83,9 +91,9 @@ html {
 	<div id="fileEditorMsgContainer">
      <span id='chefAccountMsg' style="display:block;position:absolute;top:4px"></span>
      <span id='chefInstructionMsg'> <span style="font-size:24px">Welcome to Chef Factory </span><br/><br/>
-     <span style="font-size:20px">You can Clone, Edit and Upload a Cookbook to Chef Server.</span><br/>
+     <span style="font-size:20px">You can Clone, Edit and Upload a Cookbook,Roles to Chef Server.</span><br/>
      <span style="font-size:20px">
-     Please select a Cookbook. </span> </span>
+     Please select a Cookbook or Role. </span> </span>
 	</div>
 </div>
 <div id="workingIndicatorContainer" class="text-center">
@@ -115,13 +123,64 @@ $(function() {
     editor.getSession().setMode("ace/mode/ruby");
     $workingMsg.empty().append('Please Wait ... Syncing Cookbooks');
     $workingIndicatorContainer.show();
-    $cookbookdir = $('#cookbookdir');
+    var  $dirArea = $('#dirArea'); 
+    $cookbookdir = $('#cookbookDirArea');
+    $rolesDirArea = $('#rolesDirArea');
+    $databagDirArea = $('#databagDirArea');
+    //$workingIndicatorContainer.hide();
+    var url = '/userCookbooks/save';
+    var isCookBook = true;
+    var rolesSynced = false;
+    $('#cookbook_link').on('shown.bs.tab', function (e) {
+     url = '/userCookbooks/save';
+     isCookBook = true;
+    });
+    $('#roles_tab').on('shown.bs.tab', function (e) {
+    	url = '/userRoles/save';
+    	isCookBook = false;
+    	$fileEditorDivContianer.hide();
+    	$editorBtnContainer.hide();
+    	$fileEditorMsgContainer.show();
+      if(!rolesSynced) {
+      	$workingMsg.empty().append('Please Wait ... Syncing Roles');
+      	$workingIndicatorContainer.show();
+      	$rolesDirArea.fileTree({
+		root: '/',
+		script : 'userRoles',
+		onFolderLoad : function(path,data) {
+           if(path === '/') {
+             $dirArea.show();
+             $('#fileEditorArea').show();
+             $workingIndicatorContainer.hide()
+           } 
+		}
+	}, function(file) {
+		$fileEditorMsgContainer.hide();
+		$.get('userRoles/?path='+file,function(data){
+           if(data.resType == 'file') {
+           	 $fileEditorDivContianer.show();
+           	 $editorBtnContainer.show();
+		     $fileEditorDiv.attr('data-file-path',file);
+           	 editor.setValue(data.fileData);
+           }
+		});
+	  });
+      	rolesSynced =true;
+      }
+    });
+    $('#databag_link').on('shown.bs.tab', function (e) {
+      alert('here');
+    });
+    
+
+
+
 	$cookbookdir.fileTree({
 		root: '/',
 		script : 'userCookbooks',
 		onFolderLoad : function(path,data) {
            if(path === '/') {
-             $cookbookdir.show();
+             $dirArea.show();
              $('#fileEditorArea').show();
              $('#chefAccountMsg').append('Chef Account : '+data.chefUserName);          
              $workingIndicatorContainer.hide()
@@ -138,13 +197,17 @@ $(function() {
            }
 		});
 	});
-
+    
 	$('.save').click(function(e){
 		var filePath = $fileEditorDiv.attr('data-file-path');
 		var fileContent =editor.getValue();
-		 $workingMsg.empty().append('Please Wait ... Uploading Cookbook');
+		var str = 'Please Wait ... Uploading Cookbook';
+		if(!isCookBook) {
+           str = 'Please Wait ... Uploading Roles';
+		}
+		 $workingMsg.empty().append(str);
 		$workingIndicatorContainer.show();
-		$.post('/userCookbooks/save',{filePath:filePath,fileContent:fileContent},function(data,success){
+		$.post(url,{filePath:filePath,fileContent:fileContent},function(data,success){
 			$workingIndicatorContainer.hide();
 			console.log(data);
 		});
