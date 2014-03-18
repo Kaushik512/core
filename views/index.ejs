@@ -264,6 +264,9 @@ body {
   float: none !important;
   padding: 0 !important; 
 }
+.monitoringContainer {
+  display: none;
+}
 
 </style>
 </head>
@@ -277,7 +280,7 @@ body {
                 <span class="logotext">DevOps for DevOps</span>
             </a>
             <div class="nav-options">
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="zabbix-auto-login.html" target="_blank" role="button" title="Monitoring">
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize monitoringBtn" href="#" role="button" title="Monitoring">
                 <span>Monitoring</span>
             </a>
             <div class="btn-group navbar-brand nav-settings nav-logout configManagementDropdown">
@@ -418,7 +421,7 @@ body {
         </div>
          <!--<span style="color:white">&nbsp; Domain Name : <input type="text" />.relevancelab.com</span>-->
         <section class="main-content">
-           
+           <div class="domainsContainer">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
@@ -471,6 +474,10 @@ body {
      </div>
 -->
   </div>
+   </div>
+   <div class="monitoringContainer" style="height:99%">
+     <iframe src="monitoring/backup.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>
+   </div>
 
  </section>
 </div>
@@ -540,7 +547,10 @@ body {
        $contentContainer = $('.content-container');
        $homePageLink = $('.hompage_link');
        $homePageLink.click(function(e){
+         $('.domainsContainer').show();
+          $('.monitoringContainer').hide();
         $contentContainer.hide();
+
          $('.mainarea').show();
        });
        $('.chefBtn').click(function(e){
@@ -572,7 +582,10 @@ body {
            //$('#amazon-settings').get(0).reset();  
         })
 
-   
+      $('.monitoringBtn').click(function(e){
+          $('.domainsContainer').hide();
+          $('.monitoringContainer').show();
+      });
 
         $('.saveSettings').click(function(e){
           e.preventDefault();
@@ -696,6 +709,8 @@ body {
           
         $providers.removeClass('active');
         $(this).addClass('active'); 
+        $('.domainsContainer').show();
+        $('.monitoringContainer').hide();
         /* $.get("/products/"+pid,function(data){
            DEVOPS.navigation.hideAllBtns();
            DEVOPS.navigation.showFirstTab(data);

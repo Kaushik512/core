@@ -1,0 +1,26 @@
+/*Sample page*/
+.content1
+{
+    float: left;
+    width: 100%;
+    margin-left: 0px;
+    font-size: 12px;
+    }
+
+.col-new
+{
+    width: 20% !important;
+    margin-left: 0px !important;
+}
+
+.col-lgnew
+{
+    width: 100% !important;
+}
+
+.rowwidth
+{
+    width: 5%;
+}
+
+/*Sample page ends*/
