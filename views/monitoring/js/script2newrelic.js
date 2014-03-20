@@ -29,6 +29,32 @@ $(function(){
       "nodeIp": "12.0.0.1.1", 
       "gId": "1239" 
 
+  },
+  {
+   "thresholdName": "CPU", 
+   "metricTime": "00:00", 
+   "metricValue": "75", 
+   "networkIp": "255.255.12.1", 
+   "nodeIp": "12.0.0.1.1", 
+   "gId": "1239"
+  }, 
+  {
+   "thresholdName": "APP", 
+   "metricTime": "00", 
+   "metricValue": "75", 
+   "networkIp": "255.255.12.1", 
+   "nodeIp": "12.0.0.1.1", 
+   "gId": "1239" 
+   
+   },    
+  {
+   "thresholdName": "Memory", 
+      "metricTime": "00", 
+      "metricValue": "75", 
+      "networkIp": "255.255.12.1", 
+      "nodeIp": "12.0.0.1.1", 
+      "gId": "1239" 
+
   }
  ]
 }
@@ -43,12 +69,12 @@ showData(data["volumes1"]);
     $divnewreliccont = $('<div class="row" style="border-bottom:1px solid white"></div>');
     
     $(div).append($divnewreliccont);
-  /*  $divnewreliccont.append('<div class="col-md-2"> Threshold :- '+item.thresholdName+'</div>'); */
+    $divnewreliccont.append('<div class="col-md-2"> Threshold :- '+item.thresholdName+'</div>'); 
      $n0 =$('<div class="col-md-1"></div>').append("n0");
 /*    $divBeginTime =$('<div class="col-md-2"></div>').append(item.networkIp);
     $divEndTime =$('<div class="col-md-2"></div>').append(item.nodeIp);*/
     $divnewreliccont.append($n0)/*.append($divBeginTime).append($divEndTime); */
-    $divnewreliccont.append('<div class="col-md-11">'+JSON.stringify(item, null, "\t")+'</div>');
+    $divnewreliccont.append('<div class="col-md-9">'+JSON.stringify(item, null, "\t")+'</div>');
 
     /*
     for(key in item) {

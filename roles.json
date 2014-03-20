@@ -271,8 +271,13 @@
      "components" : []
 },
 {
-    "name" : "Open Stack",
+    "name" : "Managed Domains",
      "pid" : 5,
+     "components" : []
+},
+{
+    "name" : "Open Stack",
+     "pid" : 6,
     "components" : [
      {
        "cid" : 1,
@@ -361,7 +366,7 @@
 },
 {
     "name" : "Cloud Stack",
-     "pid" : 6,
+     "pid" : 7,
     "components" : [
      {
        "cid" : 1,

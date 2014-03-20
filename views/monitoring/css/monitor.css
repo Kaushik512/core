@@ -1,0 +1,85 @@
+/*Sample page*/
+
+/*body
+{
+    background-color: #707273!important;
+}*/
+
+
+.content1
+{
+    float: left;
+    width: 100%;
+    margin-left: 0px;
+    font-size: 12px;
+    }
+
+
+
+.col-lgnew
+{
+    width: 100% !important;
+}
+
+.rowwidth
+{
+    width: 5%;
+}
+
+.rownew
+{
+    width: 30%;
+}
+
+.align
+{
+    text-align: center;
+    font-size: 13px;
+}
+
+
+/*monitor page*/
+
+    .leftcontainer
+{
+    width: 40%;
+    border: 1px  black;
+   
+    height: 100%;
+    float: left;
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px #888888;
+   /* border-radius: 5px;
+  -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0.4);
+*/    
+}        
+
+
+.rightcontainer
+{
+    margin-left: 10px;
+    width: 58%;
+    float: left;
+    border: 1px black;
+    background-color: white;
+    box-shadow: 1px 1px 5px 5px #888888;
+    }
+
+.panel1
+{
+    border: none;
+}
+
+.panel-default1 {
+  border-color: none ;
+}
+.panel-default1 > .panel-heading1 {
+  color: none;
+  background-color: white ;
+  border-color: none ;
+}
+.panel-default1 > .panel-heading1 + .panel-collapse1 .panel-body1 {
+  border-top-color: none ;
+}

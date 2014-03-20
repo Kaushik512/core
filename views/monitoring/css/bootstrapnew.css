@@ -275,7 +275,7 @@ html {
 }
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.428571429;
   color: #333;
   background-color:#fff;
@@ -1283,7 +1283,7 @@ pre code {
     
   }
   .col-lg-1 {
-    width: 8.333333333333332%;
+    width: 16.5%; /*Change from 8.3333 to 16.5%*/
   }
   .col-lg-pull-12 {
     right: 100%;
@@ -1662,7 +1662,7 @@ input[type="search"] {
 input[type="radio"],
 input[type="checkbox"] {
   margin: 4px 0 0;
-  margin-top: 1px \9;
+  margin-top: 1px ;
   /* IE8-9 */
   line-height: normal;
 }
@@ -2362,11 +2362,11 @@ input[type="button"].btn-block {
   display: block;
 }
 .collapsing {
-  /*position: relative;*/
-  /*height: 0;
-  /*overflow: hidden;
+  position: relative;
+  height: 0;
+  overflow: hidden;
   -webkit-transition: height .35s ease;
-          transition: height .35s ease;*/
+          transition: height .35s ease;
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
@@ -4943,7 +4943,7 @@ a.list-group-item-danger.active:focus {
   margin-bottom: 0;
   font-size: 16px;
   color: inherit;
-}
+  }
 .panel-title > a {
   color: inherit;
 }
@@ -5571,7 +5571,7 @@ button.close {
   margin: 1px;
   text-indent: -999px;
   cursor: pointer;
-  background-color: #000 \9;
+  background-color: #000 ;
   background-color: rgba(0, 0, 0, 0);
   border: 1px solid #fff;
   border-radius: 10px;
@@ -5698,9 +5698,8 @@ button.close {
 .affix {
   position: fixed;
 }
-@-ms-viewport {
-  width: device-width;
-}
+
+
 .visible-xs,
 tr.visible-xs,
 th.visible-xs,

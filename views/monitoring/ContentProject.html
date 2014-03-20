@@ -165,82 +165,110 @@
     
    
     <!--Zabbix-->
-    <div class="row nolrmargin">
-    <div class="col-lg-8">
-
-        <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title" style="text-align: center"> System Monitoring </h3>
-              </div>
-             <div class="panel-body nobody">
-
-        <!-- <div class="zabbix"> -->
-       
-        <div class="zabbixcont">
-
-
-</div> <!--zabbixcont ends-->
-        </div> <!--zabbix ends-->
-        </div> <!--col-lg-12 ends-->
-      </div>   <!--row ends-->
-    
-
-    
-
-    <!--New Relic-->
-     
-    
+    <div id="accordion" class="panel-group">
     <div class="row nolrmargin"> 
-        <div class="col-lg-8">
-        <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title" style="text-align: center"> App Monitoring </h3>
-              </div>
-             <div class="panel-body nobody">
-          
-        <div class="newreliccont">
+        <div class="col-lg-12">
+        <div class="panel panel-default">
+              <div class="panel-heading" style="padding:2px 2px">
+                <div class="panel-title" style="float: left;font-size: 13px">
+                <h5> System Monitoring </h5>
+             </div>
+                  <div class="panel-widgets">
+                                    
+                                    <a style="color: black" href="#collapseOne" data-parent="#accordion" data-toggle="collapse" ><i class="fa-chevron-down fa"></i></a>
+                                </div>  <div class="clearfix"></div> </div> <!--panel heading ends-->
+
+            <div class="panel-collapse collapse in" id="collapseOne">
+              
+                                       <div class="panel-body nobody">
+                                     <div class="zabbixcont">
+                                       
+                                    </div> <!--zabbix cont ends here-->
+                                </div> <!--panel-body ends-->
+                            </div> <!--panel-collapse ends-->
+             
+
+        
+       
+       
 
 
-</div> <!--newreliccont ends-->
-            </div> 
-            </div>
-        </div> <!--row ends-->
+</div> <!--panel-primary ends here-->
+        </div> <!--col-lg-12 ends here-->
+        </div> <!--row nolrmargin ends here-->
+         <!--row ends-->
+    </div> <!--accordion ends here-->
 
+    
     <!--Logstash-->
 
-    
+    <div id="accordion" class="panel-group">
    <div class="row nolrmargin">
-       <div class="col-lg-8">
-        <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title" style="text-align: center"> Logstash </h3>
-              </div>
+       <div class="col-lg-12">
+        <div class="panel panel-default">
+              <div class="panel-heading" style="padding:2px 2px">
+                <div class="panel-title" style="float:left;font-size: 13px">
+                <h5> Logstash </h5>
+             </div>
+                  <div class="panel-widgets">
+                                    
+                                    <a style="color: black" href="#collapseTwo" data-parent="#accordion" data-toggle="collapse"><i class="fa-chevron-down fa"></i></a>
+                                </div>  <div class="clearfix"></div> </div> <!--panel heading ends-->
+
+            <div class="panel-collapse collapse in" id="collapseTwo">
+              
              <div class="panel-body nobody">
                  
         <div class="logstashcont">
 
 
 </div> <!--logstachcont ends-->
-            </div> <!--logstash ends-->
+            </div> <!--body ends-->
 </div> <!--row ends-->
 </div> <!--col-lg-12 ends-->
 
+ </div> </div> </div>
+    
+     <!--New Relic-->
      
-       <div class="source">
-    <h3 style="text-align:center;   color: #a60a0a">DataSource</h3>
-    <p>
-<input type="checkbox" name="type" value="Zabbix" class="chkbox" checked> System Monitoring </input> <br>
-<input  type="checkbox" name="type" value="New Relic" class="chkbox" checked> App Monitoring </input> <br>
-       <input  type="checkbox" name="type" value="Logstash" class="chkbox" checked> Logstash </input>
+    <div id="accordion" class="panel-group">
+    <div class="row nolrmargin"> 
+        <div class="col-lg-12">
+        <div class="panel panel-default">
+              <div class="panel-heading" style="padding:2px 2px">
+                <div class="panel-title" style="float: left;font-size: 13px">
+                <h5> APP Monitoring </h5>
+             </div>
+                  <div class="panel-widgets">
+                                    
+                                    <a style="color: black" href="#collapseThree" data-parent="#accordion" data-toggle="collapse"><i class="fa-chevron-down fa"></i></a>
+                                </div>  <div class="clearfix"></div> </div> <!--panel heading ends-->
 
-       <!-- <input type="checkbox" name="type" value="Splunk" checked> Splunk </input> <br><br>
-        <input type="checkbox" name="type" value="Chef" checked> Chef </input> -->
-        </p>
-         </div>
+            <div class="panel-collapse collapse in" id="collapseThree">
+              
+             <div class="panel-body nobody">
+          
+        <div class="newreliccont">
 
 
+</div> <!--newreliccont ends-->
+            </div>  <!--panel-body ends-->
+            </div> <!--panel collapse ends-->
+        </div> <!--panel-default ends-->
+</div> <!--col-lg-12 ends-->
+        </div> <!--row no-lrmargin ends-->
+        </div> <!--accordion ends here-->
 
-  </div> </div> </div> </div> <!--Content Ends-->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     </div> <!--Content Ends-->
 
 
 
@@ -264,7 +292,7 @@
     <!--Bootstrap JS-->
     <script src="js/bootstrap.js"></script>
   <script src="js/plugins.js"></script>
-  <script>
+ <!-- <script>
       $('.chkbox').click(function () {
           var $content;
           if (this.value == 'Zabbix') {
@@ -284,7 +312,7 @@
               $content.hide();
           }
       });
-  </script>
+  </script> -->
     <!--Custom-->
     <script src="js/script1zabbix.js"></script>
     <script src="js/script2newrelic.js"></script>
@@ -301,6 +329,8 @@
     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
     s.parentNode.insertBefore(g,s)}(document,'script'));
  </script>
+
+    
 
 
 

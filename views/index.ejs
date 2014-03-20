@@ -476,7 +476,7 @@ body {
   </div>
    </div>
    <div class="monitoringContainer" style="height:99%">
-     <iframe src="monitoring/backup.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>
+    <!-- <iframe src="monitoring/mainbackup.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>-->
    </div>
 
  </section>
@@ -546,6 +546,7 @@ body {
     $(function() {
        $contentContainer = $('.content-container');
        $homePageLink = $('.hompage_link');
+       $consoleTabLink =  $('#console_tab_link');
        $homePageLink.click(function(e){
          $('.domainsContainer').show();
           $('.monitoringContainer').hide();
@@ -583,8 +584,14 @@ body {
         })
 
       $('.monitoringBtn').click(function(e){
+          var pid  = $providers.filter('.active').attr('data-pid');
           $('.domainsContainer').hide();
-          $('.monitoringContainer').show();
+          /*$('.monitoringContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom:10%" src="img/loading.gif" />').show();*/
+          // $.get('monitoring/index?pid='+pid,function(data){
+          //    $('.monitoringContainer').empty().append(data);
+          // });
+          $('.monitoringContainer').empty().append('<iframe src="monitoring/index?pid='+pid+'" style="height: 100%;width: 100%;" frameBorder="0"></iframe>').show();
+          
       });
 
         $('.saveSettings').click(function(e){
@@ -631,7 +638,7 @@ body {
 
         });   
         
-        $('#console_tab_link').click(function(e){
+       $consoleTabLink.click(function(e){
           e.preventDefault();
           var pid  = $providers.filter('.active').attr('data-pid');
           pid = parseInt(pid);
@@ -701,10 +708,16 @@ body {
          $('.mainarea').show();
          var $this = $(this);
          var pid = $this.attr('data-pid');
-         if(pid === '1' || pid === '4') {
+         if(pid === '1' || pid === '4' || pid === '5') {
           $new_link_tab.hide();
          } else {
            $new_link_tab.show();
+         }
+
+         if(pid==='5') {
+          $consoleTabLink.hide();
+         } else {
+          $consoleTabLink.show();
          }
           
         $providers.removeClass('active');
