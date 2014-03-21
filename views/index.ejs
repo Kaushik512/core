@@ -565,6 +565,7 @@ body {
        $homePageLink = $('.hompage_link');
        $consoleTabLink =  $('#console_tab_link');
        $usageTabLink = $('#usage_tab_link');
+       $domainTab= $('#Domains');
        $homePageLink.click(function(e){
          $('.domainsContainer').show();
           $('.monitoringContainer').hide();
@@ -728,7 +729,8 @@ body {
        DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
            
        $.get("/domainDetails/"+pid,function(data){
-           DEVOPS.navigation.showFirstTab(data);
+          $domainTab.empty().append(data);
+
            DEVOPS.navigation.hideAllBtns();
         
         }).fail(function() {

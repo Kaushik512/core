@@ -171,19 +171,12 @@
       google.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Months', 'RI Cost', 'Demand'],
-          ['Jan',  8000,      0],
-          ['Feb',  8500,      2000],
-          ['Mar',  9000,       4000],
-          ['April',  9500,      6000],
-          ['May',  10000,      8000],
-          ['June',  10500,      10000],
-          ['July',  11000,      12000],
-          ['Aug',  11500,      14000],
-          ['Sep',  12000,      16000],
-          ['Oct',  12500,      18000],
-          ['Nov',  13000,      20000],
-          ['Dec',  13500,      22000]
+          ['Months', 'Planned', 'Actual'],
+          ['Oct',  300,      263.81],
+          ['Nov',  450,      540.53],
+          ['Dec',  650,      655.05],
+          ['Jan',  750,      980.35],
+          ['Feb',  900,      698.40]
         ]);
 
         var options = {
@@ -208,18 +201,11 @@
         var data = google.visualization.arrayToDataTable([
           ['Month', 'm1.large', 'm1.medium', 'm1.small','t1.micro'],
           
-          ['Jan',  900,      340,       300,   290],
-          ['Feb',  600,      460,       400,   300],  
-          ['Mar',  1000,       570,       300,    200],
-          ['April',  1170,      480,        370,    300],
-          ['May',  1000,      590,        480,    180],
-          ['June',  1170,      520,        400,    300],
-          ['July',  1000,      640,        490,    400],
-          ['Aug',  1170,      560,        400,    300],
-          ['Sep',  1000,      500,        460,    400],
-          ['Oct',  1170,      660,        360,    320],
-          ['Nov',  1000,      520,        410,    400],
-          ['Dec',  1170,     425,        400,    200]
+           ['Oct',  100,      70,        50,    40],
+          ['Nov',  200,      120,       100,    80],
+          ['Dec',  250,     200,        120,    100],
+          ['Jan',  600,      180,       150,   50],
+          ['Feb',  300,      200,       100,   80]
         ]);
 
         var options = {
@@ -243,6 +229,12 @@
       * Run all morris chart on this page
       */
       $(document).ready(function () {
+          
+          var oct = false;
+          var nov = false;
+          var dec = false;
+          var jan = false;
+          var feb = false; 
 
           // DO NOT REMOVE : GLOBAL FUNCTIONS!
           pageSetUp();
@@ -252,104 +244,72 @@
               Morris.Area({
                   element: 'sales-graph',
                   data: [{
-                      month: '2013-01',
-                      
-                      cost: 2647
-                  }, {
-                      month: '2013-02',
-                      
-                      cost: 2441
-                  }, {
-                      month: '2013-03',
-                      
-                      cost: 2501
-                  }, {
-                      month: '2013-04',
-                      
-                      cost: 5689
-                  }, {
-                      month: '2013-05',
-                      
-                      cost: 2293
-                  }, {
-                      month: '2013-06',
-                      
-                      cost: 1881
-                  }, {
-                      month: '2013-07',
-                      
-                      cost: 1588
-                  }, {
-                      month: '2013-08',
-                      
-                      cost: 5175
-                  }, {
-                      month: '2013-09',
-                      
-                      cost: 2028
-                  }, {
-                      month: '2013-10',
-                      
-                      cost: 1791
-                  }, {
+                       month: '2013-10',
+                      cost: 263.81
+                  },
+                   {
                       month: '2013-11',
-                      
-                      cost: 1791
-                  }, {
+                      cost: 540.53
+                  }, 
+                  {
                       month: '2013-12',
-                      
-                      cost: 1791
+                      cost: 655.05
+                  },
+                  {
+                      month: '2014-01',
+                      cost: 980.35
+                  },
+                  {
+                      month: '2014-02',
+                      cost: 698.40
                   }],
                   xkey: 'month',
                   ykeys: [ 'cost'],
                   labels: ['cost'],
                   pointSize: 2,
                   hideHover: 'auto',
-                  gridTextSize: 8,
+                  gridTextSize: 12,
                   yLabelFormat:function(y) {
-                    return y +' $';
+                    return y +'$';
                   },
+                  parseTime:false,
 
                   xLabelFormat: function (x) {
-                      var str = '';
+                      var str = ' ';
 
                       switch (x.getMonth()) {
 
                           case 0:
-                              str = 'Jan ' + 13;
+                              if(!jan) {
+                                str = 'Jan ' + 14;
+                                jan = true;
+                              }
                               break;
                           case 1:
-                              str = 'Feb ' + 13;
-                              break;
-                          case 2:
-                              str = 'March ' + 13;
-                              break;
-                          case 3:
-                              str = 'April ' + 13;
-                              break;
-                          case 4:
-                              str = 'May ' + 13;
-                              break;
-                          case 5:
-                              str = 'June ' + 13;
-                              break;
-                          case 6:
-                              str = 'July ' + 13;
-                              break;
-                          case 7:
-                              str = 'Aug' + 13;
-                              break;
-                          case 8:
-                              str = 'Sept ' + 13;
+                          if(!feb) {
+                                str = 'Feb ' + 14;
+                                feb = true;
+                              }
+                              
                               break;
                           case 9:
-                              str = 'Oct' + 13;
+                          if(!oct) {
+                                str = 'Oct' + 13;
+                                oct = true;
+                              }
+                              
                               break;
                           case 10:
-                              str = 'Nov ' + 13;
+                          if(!nov) {
+                                str = 'Nov ' + 13;
+                                nov = true;
+                              }
                               break;
                           case 11:
-                              str = 'Dec ' + 13;
+                             if(!dec) {
+                                 str = 'Dec ' + 13;
+                                dec = true;
+                              }
                               break;
 
                       }

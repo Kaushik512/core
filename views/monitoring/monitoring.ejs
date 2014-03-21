@@ -225,6 +225,20 @@
 
 <%
 
+function generateDialData() {
+      var str = generateRandomInlineGraphData(3);
+      var dataValues = str.split(',');
+      dataValues[0] = parseInt(dataValues[0]);
+      dataValues[1] = parseInt(dataValues[1]);
+      dataValues[2] = parseInt(dataValues[2]);
+      if(dataValues[1]<90) {
+       dataValues[2] = Math.floor(Math.random()*(90))+1;
+      } else {
+       dataValues[2] = Math.floor(Math.random()*(100-90+1))+90;
+      }
+      return dataValues.toString();
+}
+
 function generateRandomInlineGraphData(count) {
   var data = [];
   for(var i=0;i<count;i++) {
@@ -265,7 +279,7 @@ strVar += "                                                ";
 strVar += "                                                <td> ";
 strVar += "                                                    ";
 strVar += "";
-strVar += " <div class=\"chart_div\" style=\"position: relative; display: inline-block;\" ><\/div>";
+strVar += " <div class=\"chart_div\" style=\"position: relative; display: inline-block;margin-left: 25px;cursor:pointer\" ><img style=\"height:28px\" src=\"img/dials_t.png\" data-toggle=\"modal\" data-target=\"#dialModelBox\" data-dial-val=\""+generateDialData(3)+"\"/><\/div>";
 strVar += "                                                    <\/td>";
 strVar += "";
 strVar += "                                                    ";
@@ -601,6 +615,22 @@ strVar += "                                            <\/tr>";
     </div> <!--col-lg-12 ends-->
     </div>
   </div>
+
+
+  <!-- Modal -->
+<div class="modal fade" id="dialModelBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Health</h4>
+      </div>
+      <div class="modal-body" id="dialArea">
+       
+      </div>
+    </div>
+  </div>
+</div>
   
         <!-- JavaScript at the bottom for fast page loading -->
 
@@ -655,7 +685,7 @@ strVar += "                                            <\/tr>";
 
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
-        google.load('visualization', '1', { packages: ['gauge'] });
+       /* google.load('visualization', '1', { packages: ['gauge'] });
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
@@ -665,28 +695,74 @@ strVar += "                                            <\/tr>";
             ['', 68]
           ]);
 
-            var options = {
-                width: 170, height: 100,
+          $chartDiv = $('.chart_div');
+          var options = {
+                width: 500, height: 240,
                 redFrom: 90, redTo: 100,
                 yellowFrom: 75, yellowTo: 90,
-                minorTicks: 1
-            };
-            $chartDiv = $('.chart_div');
-            for (var i = 0; i < $chartDiv.length;i++) {
-                  var chart = new google.visualization.Gauge($chartDiv.get(i));
-                chart.draw(data, options);
+                minorTicks: 2
+           };
+          
+          var chart = new google.visualization.Gauge($('#dialArea').get(0));
+          chart.draw(data, options);
+           // for (var i = 0; i < $chartDiv.length;i++) {
+           //   var chart = new google.visualization.Gauge($chartDiv.get(i));
+           //   chart.draw(data, options);
     
-            }
-       }
+           //  }
+       }*/
+
+
     </script>
   
     
     
 
 <script>
+google.load('visualization', '1', { packages: ['gauge'] });
+google.setOnLoadCallback(function(){
 $(document).ready(function(){
   $('.loadingContainer').hide();
   $('.content1').show();
+   
+ 
+  $('#dialModelBox').on('show.bs.modal',function(e){
+
+   
+      var dataValues = $(e.relatedTarget).attr('data-dial-val');
+      dataValues = dataValues.split(',');
+      dataValues[0] = parseInt(dataValues[0]);
+      dataValues[1] = parseInt(dataValues[1]);
+      dataValues[2] = parseInt(dataValues[2]);
+      
+
+      var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Budget', dataValues[0]],
+            ['Utilization', dataValues[1]],
+            ['Health', dataValues[2]]
+      ]);
+       /*var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['', 80],
+            ['', 55],
+            ['', 68]
+          ]);*/
+      var options = {
+                width: 575, height: 240,
+                redFrom: 90, redTo: 100,
+               
+                minorTicks: 2
+      };
+      console.log(dataValues);
+      console.log($('#dialArea').get(0));
+      var chart = new google.visualization.Gauge($('#dialArea').get(0));
+      chart.draw(data, options);  
+    }); 
+
+    
+
+  
 
 	// hide #back-top first
 	$("#back-top").hide();
@@ -710,6 +786,7 @@ $(document).ready(function(){
 		});
 	});
 
+});
 });
 </script>
     
