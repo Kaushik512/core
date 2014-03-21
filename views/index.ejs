@@ -267,6 +267,18 @@ body {
 .monitoringContainer {
   display: none;
 }
+#usage_tab_link {
+  display: none;
+  float:right;
+}
+#new_link_tab {
+  display: none;
+  float:right;
+}
+#console_tab_link {
+  display: none;
+
+}
 
 </style>
 </head>
@@ -421,15 +433,17 @@ body {
         </div>
          <!--<span style="color:white">&nbsp; Domain Name : <input type="text" />.relevancelab.com</span>-->
         <section class="main-content">
-           <div class="domainsContainer">
+           <div class="domainsContainer" style="height:91%;">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
-              <li style="float:right"><a id="console_tab_link" href="#">Console</a></li>             
+              
+              <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
+               <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li>                 
           </ul>
 
   <!-- Tab panes -->
-  <div class="tab-content">
+  <div class="tab-content" style="height:100%;">
       <div class="tab-pane active" id="Domains"></div>
       <div class="tab-pane" id="new_configuration">
 
@@ -469,6 +483,9 @@ body {
 
 
       </div> 
+      <div id="usageTab" class="tab-pane" style="height:100%;">
+         
+      </div>
     <!-- <div class="tab-pane" id="monitoring_tab">
        <iframe src="zabbix-auto-login.html" style="height: 515px;width: 100%;" frameBorder="0"></iframe>
      </div>
@@ -547,6 +564,7 @@ body {
        $contentContainer = $('.content-container');
        $homePageLink = $('.hompage_link');
        $consoleTabLink =  $('#console_tab_link');
+       $usageTabLink = $('#usage_tab_link');
        $homePageLink.click(function(e){
          $('.domainsContainer').show();
           $('.monitoringContainer').hide();
@@ -702,36 +720,8 @@ body {
 
        var $providers = $('.nav-prod');
 
-       var $new_link_tab = $('#new_link_tab');
-       $providers.click(function(e){
-         $contentContainer.hide();
-         $('.mainarea').show();
-         var $this = $(this);
-         var pid = $this.attr('data-pid');
-         if(pid === '1' || pid === '4' || pid === '5') {
-          $new_link_tab.hide();
-         } else {
-           $new_link_tab.show();
-         }
 
-         if(pid==='5') {
-          $consoleTabLink.hide();
-         } else {
-          $consoleTabLink.show();
-         }
-          
-        $providers.removeClass('active');
-        $(this).addClass('active'); 
-        $('.domainsContainer').show();
-        $('.monitoringContainer').hide();
-        /* $.get("/products/"+pid,function(data){
-           DEVOPS.navigation.hideAllBtns();
-           DEVOPS.navigation.showFirstTab(data);
-        
-        }).fail(function() {
-           alert( "error" );
-       });*/
-      function loadDomainTab() {
+       function loadDomainTab() {
        var pid  = $providers.filter('.active').attr('data-pid');
        DEVOPS.navigation.hideAllBtns();
        DEVOPS.navigation.showFirstTab('');
@@ -744,16 +734,54 @@ body {
         }).fail(function() {
            alert( "error" );
       });
-     }
+      }
 
+       var $new_link_tab = $('#new_link_tab');
+       $providers.click(function(e){
+         $contentContainer.hide();
+         $('.mainarea').show();
+         var $this = $(this);
+         var pid = $this.attr('data-pid');
+         
+         if(pid === '1' || pid === '4' || pid === '5') {
+          $new_link_tab.hide();
+         } else {
+           $new_link_tab.show();
+         }
+         if(pid==='2' || pid==='1') {
+          $usageTabLink.show();
+         } else {
+          $usageTabLink.hide();
+         }
 
-      $('#domain_link').on('shown.bs.tab',function (e) {
-         loadDomainTab();
-      });
-
+         if(pid==='5') {
+          $consoleTabLink.hide();
+         } else {
+          $consoleTabLink.show();
+         }
+         
+          
+        $providers.removeClass('active');
+        $(this).addClass('active'); 
+        $('.domainsContainer').show();
+        $('.monitoringContainer').hide();
+        /* $.get("/products/"+pid,function(data){
+           DEVOPS.navigation.hideAllBtns();
+           DEVOPS.navigation.showFirstTab(data);
+        
+        }).fail(function() {
+           alert( "error" );
+       });*/
+      
       loadDomainTab();
   
     });
+      $('#domain_link').on('shown.bs.tab',function (e) {
+         loadDomainTab();
+      });
+      $('#usage_tab_link').on('shown.bs.tab',function (e) {
+         $('#usageTab').empty().append('<iframe src="usage/usage.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>');
+      });
     
      var $galleryArea = $('.galleryArea');
       $new_link_tab.on('shown.bs.tab',function (e) {
