@@ -234,6 +234,45 @@ body {
     height: 350px;
     overflow-x: hidden;
     overflow-y: auto;
+    
+}
+.appStoreArea {
+     background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    margin-left: 20px;
+    margin-top: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 97%;
+    height: 97%;
+}
+.appStoreConfigurationArea {
+   
+    overflow-x: hidden;
+    overflow-y: auto;
+   
+    height: 98%;
+}
+
+.appStoreLaunchResultArea {
+     background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    margin-left: 20px;
+    margin-top: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 97%;
+    height: 97%;
+    display: none;
+}
+
+.appStoreConfigurationArea {
+  display: none;
+}
+.appStoregalleryContainer {
+  height: 355px;
 }
 .configureRolesContainer {
    height: 350px;
@@ -275,9 +314,53 @@ body {
   display: none;
   float:right;
 }
+#app_store_link_tab {
+  display: none;
+  float:right;
+}
 #console_tab_link {
   display: none;
 
+}
+.appConfig {
+  display: none;
+  padding-left: 20px;
+  padding-top: 16px;
+}
+.appStoreSelectedInstanceContainer {
+  height: 40%;
+   background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+     margin-left: 20px;
+    margin-top: 25px;
+     width: 97%;
+     padding-top: 14px;
+   
+}
+.selectedInstanceConfigurationContainer {
+  margin-top: 5%;
+   background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+     margin-left: 20px;
+    margin-top: 15px;
+     width: 97%;
+      height: 40%;
+}
+
+.numberOfInstance {
+ margin-left: 11px;
+}
+
+.securityGroupData {
+ margin-left: 49px;
+}
+.sizeData {
+ margin-left: 60px;
+}
+.osmenu {
+  margin-left: 30px;
 }
 
 </style>
@@ -437,13 +520,14 @@ body {
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
+              <li><a id="app_store_link_tab" href="#app_store_configuration" data-toggle="tab">App Store</a></li> 
               
               <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
                <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li>                 
           </ul>
 
   <!-- Tab panes -->
-  <div class="tab-content" style="height:100%;">
+  <div class="tab-content" style="height: 96%;">
       <div class="tab-pane active" id="Domains"></div>
       <div class="tab-pane" id="new_configuration">
 
@@ -483,6 +567,245 @@ body {
 
 
       </div> 
+        <!-- for app store -->
+      <div class="tab-pane" id="app_store_configuration" style="height: 100%;">
+         <div class="appStoreArea">
+
+<style>
+.app-item-container{
+  /*padding: 3px;*/
+  background-color: white;
+  cursor: pointer;
+}
+.app-store-item-selected {
+   background-color: green !important;
+}
+
+.instance-icon-container{
+    color: #DCDCDC;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.instance-icon {
+   font-size: 35px;
+}
+.app-instance-runlist {
+  padding-bottom: 5px !important;
+    padding-top: 0 !important;
+    min-height: 90px;
+}
+.app-item-runlist-block {
+  display: block;
+  font-size: 11px;
+  text-align: center;; 
+}
+.center-alignment {
+  display: inline-block;
+    text-align: center;
+}
+
+.app-item-heading {
+  text-align: center;
+  font-size: 11px;
+  text-decoration: underline;
+  display: block;
+   margin-bottom: 5px;
+}
+.margin-bt-appItem {
+  margin-bottom: 10px !important;
+}
+.configureInstancesBtn {
+  background: none repeat scroll 0 0 #428BCA;
+    border: 0 none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+   margin: 10px 5px 10px 46%;
+    padding: 10px 5px;
+    width: 100px
+}
+.launchInstancesBtn {
+  background: none repeat scroll 0 0 #428BCA;
+    border: 0 none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 5px;
+    width: 100px 
+} 
+.backappStoreBtn {
+    background: none repeat scroll 0 0 #428BCA;
+    border: 0 none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 5px;
+    width: 100px 
+}
+.appStoreBtnContainer {
+  margin-top: 17px;
+    padding-left: 80%;
+}
+
+</style>
+
+  <div class="appStoregalleryContainer">
+      
+<ul id="dynamiclist" class="thumbnails list-unstyled" style="margin-top: 30px;">
+
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/lamp-icon.png" alt="Lamp Stack" style="height: 50px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>LAMP</strong></span>
+      <span class="app-item-runlist-block">Apache</span>
+      <span class="app-item-runlist-block">Mysql</span>
+      <span class="app-item-runlist-block">PHP</span>
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/nodejs.png" alt="NodeJS Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>NodeJS</strong></span>
+      <span class="app-item-runlist-block">NodeJS</span>
+      <span class="app-item-runlist-block">MongoDb</span>
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/apache-tomcat.jpeg" alt="Tomcat Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Tomcat</strong></span>
+      <span class="app-item-runlist-block">Java</span>
+      <span class="app-item-runlist-block">Tomcat</span>
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/apache-logo.png" alt="Apache Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Apache</strong></span>
+      <span class="app-item-runlist-block">Apache</span>
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/jboss-icon.png" alt="JBoss Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>JBoss</strong></span>
+      <span class="app-item-runlist-block">Java</span>
+      <span class="app-item-runlist-block">JBoss 7.1</span>
+    </div>      
+  </div>
+</div>
+</li>
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/hadoop.png" alt="Hadoop Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Hadoop</strong></span>
+      <span class="app-item-runlist-block">HBase</span>
+      <span class="app-item-runlist-block">Hive</span>
+      <span class="app-item-runlist-block">Map Reduce</span>
+      <span class="app-item-runlist-block">Pig</span>
+    </div>      
+  </div>
+</div>
+</li>
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/mysql-icon.jpg" alt="Mysql Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Mysql</strong></span>
+      <span class="app-item-runlist-block">Mysql Server</span>
+    </div>      
+  </div>
+</div>
+</li>
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/oracle.png" alt="Oracle Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Oracle</strong></span>
+      <span class="app-item-runlist-block">Oracle Server</span>
+    </div>      
+  </div>
+</div>
+</li>
+
+</ul>
+
+
+</div>
+<input type="button" value="Next" class="configureInstancesBtn action-button" name="Launch">
+
+</div>
+
+<div class="appStoreConfigurationArea"> 
+ <div class="appStoreSelectedInstanceContainer">
+
+ </div>
+ <div class="selectedInstanceConfigurationContainer"></div>
+  <div class="appStoreBtnContainer">
+  <input type="button" value="Back" class="backappStoreBtn action-button" name="Launch">
+  <input type="button" value="Launch" class="launchInstancesBtn action-button" name="Launch">
+  <a class="app_store_domain_settings" style="" href="#domainModal" data-target="#domainModal" data-toggle="modal" role="button" title="Domain"></a>
+  </div> 
+</div>
+<div class="appStoreLaunchResultArea">
+</div>
+
+      </div>
+
       <div id="usageTab" class="tab-pane" style="height:100%;">
          
       </div>
@@ -499,7 +822,6 @@ body {
  </section>
 </div>
 <div class="usercookbookArea content-container">
- 
 </div>
 <div class="cheflibraryArea content-container">
   </div>
@@ -739,6 +1061,7 @@ body {
       }
 
        var $new_link_tab = $('#new_link_tab');
+       var $app_store_link_tab = $('#app_store_link_tab');
        $providers.click(function(e){
          $contentContainer.hide();
          $('.mainarea').show();
@@ -747,8 +1070,10 @@ body {
          
          if(pid === '1' || pid === '4' || pid === '5') {
           $new_link_tab.hide();
+          $app_store_link_tab.hide();
          } else {
            $new_link_tab.show();
+           $app_store_link_tab.show();
          }
          if(pid==='2' || pid==='1') {
           $usageTabLink.show();
@@ -803,6 +1128,14 @@ body {
          });
       });
 
+
+      $app_store_link_tab.on('shown.bs.tab',function (e) {
+         $('.appStoreArea').show();
+          $('.appStoreConfigurationArea').hide();
+          ('.appStoreLaunchResultArea').hide();
+  
+      });
+
      
  $(".goto-configureRoles").click(function(){
 
@@ -835,9 +1168,92 @@ body {
 
 
         $providers.filter('.active').trigger('click');
+      
+    $('.app-item-container').click(function(e){
+      var $this = $(this);
+      if($this.parent().hasClass('app-store-item-selected')) {
+        $this.parent().removeClass('app-store-item-selected');
+      } else {
+        $this.parent().addClass('app-store-item-selected');
+      }
+    });
+    $('.configureInstancesBtn').click(function(e){
+      var $selectedItems = $('.app-store-item-selected');
+      if(!$selectedItems.length) {
+         alert('Please choose an instance');
+         return;
+      }
+      var $ul = $('<ul class="thumbnails list-unstyled"></ul>');
+       $('.selectedInstanceConfigurationContainer').empty();
+       var firstElement = null;
+
+      $selectedItems.each(function(index,item){
+           var $clone = $(item).removeClass('app-store-item-selected').parent().clone(false,false)
+           if(!firstElement) {
+             firstElement = $clone;
+           }
+           $ul.append($clone);
+           $clone.click(function(e){
+            var $this = $(this);
+            if(!$this.data('containerAdded')) {
+              var $form = $('<form role="form" class="appConfig"></form>');
+
+               var $dropdownOS = $('<div class="form-group"><label for="osmenu">Choose Operating System</label><select class="osmenu"><option value="Ubuntu" selected>Ubuntu</option><option value="Cent OS">Cent OS</option><option value="Red Hat">Red Hat</option><option value="windows">Windows</option></select></div>');
+             
+              var $dropdown = $('<div class="form-group"><label for="numberOfInstance">Choose number of Instances</label><select class="numberOfInstance"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>');
+             
+             var $dropdown1 = $('<div class="form-group"><label for="securityGroupData">Choose Security Group</label><select class="securityGroupData"><option value="Default-d4d" selected>Default-d4d</option><option value="VPC-1">VPC-1</option><option value="VPC-2">VPC-2</option><option value="Default-VPC">Default-VPC</option><option value="Create New">Create New</option></select></div>');
+
+
+             var $dropdown2 = $('<div class="form-group"><label for="sizeData">Choose Instance Size</label><select class="sizeData"><option value="micro" selected>t1.micro</option><option value="m1.small">m1.small</option><option value="m1.medium">m1.medium</option><option value="m1.large">m1.large</option><option value="m1.xlarge">m1.xlarge</option></select></div>'); 
+              
+              $form.append($dropdownOS);
+              $form.append($dropdown);
+              $form.append($dropdown1);
+              $form.append($dropdown2);
+               $('.selectedInstanceConfigurationContainer').append($form);
+
+              $this.data('formEl',$form);
+              $this.data('containerAdded',true);
+            } 
+
+            $('.appConfig').hide();
+            var $form = $this.data('formEl');
+            $form.show();
+            $('.app-store-item-selected').removeClass('app-store-item-selected');
+            $clone.children().addClass('app-store-item-selected');
+           });
+      });
+
+      $('.appStoreSelectedInstanceContainer').empty().append($ul);
+      $('.appStoreArea').hide();
+      $('.appStoreConfigurationArea').show();
+       firstElement.trigger('click');
+    });
+
+    $('.launchInstancesBtn').click(function(e){
+     
+       $('.app_store_domain_settings').trigger('click');
+         $('.save-domain-btn').unbind("click").click(function(evt){
+             var $appStoreLaunchResultArea = $('.appStoreLaunchResultArea').empty();      
+             var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instances Launched Successfully.</div></div>');
+             $appStoreLaunchResultArea.append($message);
+              $('.appStoreArea').hide();
+              $('.appStoreConfigurationArea').hide();
+               $appStoreLaunchResultArea.show();
+          });
+    });
+    $('.backappStoreBtn').click(function(e){
+        $('.appStoreArea').show();
+      $('.appStoreConfigurationArea').hide();
+    });
+
+
 
     });
 
+    
+     
 
         </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
