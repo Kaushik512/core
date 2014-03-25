@@ -130,7 +130,6 @@ body {
     border-radius: 3px;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     margin-left: 1%;
-    padding: 10px 30px;
     position: absolute;
     width: 98%;
 }
@@ -170,9 +169,9 @@ body {
 /*headings*/
 .fs-title {
   color: #2C3E50;
-    font-size: 15px;
+    font-size: 19px;
     margin-top: 2px;
-    text-transform: uppercase;
+   /* text-transform: uppercase;*/
 }
 .fs-subtitle {
   font-weight: normal;
@@ -519,7 +518,7 @@ body {
            <div class="domainsContainer" style="height:91%;">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
-              <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">New</a></li> 
+              <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Platform</a></li> 
               <li><a id="app_store_link_tab" href="#app_store_configuration" data-toggle="tab">App Store</a></li> 
               
               <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
@@ -541,7 +540,7 @@ body {
   </ul>
   <!-- fieldsets -->
   <fieldset id="step1">
-    <h2 class="fs-title">Choose Roles</h2>
+    <h2 class="fs-title"><!--Choose Roles-->Create a New DevOps Platform</h2>
     <div class="galleryArea">
     </div>
     
@@ -745,9 +744,9 @@ body {
     </div>
     <div class="caption app-instance-runlist">
       <span class="app-item-heading"><strong>Hadoop</strong></span>
+      <span class="app-item-runlist-block">Hadoop</span>
       <span class="app-item-runlist-block">HBase</span>
       <span class="app-item-runlist-block">Hive</span>
-      <span class="app-item-runlist-block">Map Reduce</span>
       <span class="app-item-runlist-block">Pig</span>
     </div>      
   </div>
@@ -777,6 +776,23 @@ body {
     <div class="caption app-instance-runlist">
       <span class="app-item-heading"><strong>Oracle</strong></span>
       <span class="app-item-runlist-block">Oracle Server</span>
+    </div>      
+  </div>
+</div>
+</li>
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/wso2.jpeg" alt="Oracle Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>WSO2</strong></span>
+      <span class="app-item-runlist-block">ESB</span>
+      <span class="app-item-runlist-block">BAM</span>
+      <span class="app-item-runlist-block">CEP</span>
+      <span class="app-item-runlist-block">Active MQ</span>
     </div>      
   </div>
 </div>
