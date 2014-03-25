@@ -125,7 +125,7 @@ body {
   position: relative;
 }
 #msform fieldset {
-  background: none repeat scroll 0 0 #FFFFFF;
+    background: none repeat scroll 0 0 #FFFFFF;
     border: 0 none;
     border-radius: 3px;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
@@ -275,8 +275,7 @@ body {
 }
 .configureRolesContainer {
    height: 350px;
-    overflow-x: hidden;
-    overflow-y: auto;
+   
 }
 .launchingInstanceContainer {
    height: 350px;
@@ -360,6 +359,10 @@ body {
 }
 .osmenu {
   margin-left: 30px;
+}
+.noglowbox {
+ background:none !important;
+ box-shadow: 0 0 0 0 !important;
 }
 
 </style>
@@ -546,7 +549,7 @@ body {
     
    
     </fieldset>
-  <fieldset id="step2">
+  <fieldset id="step2" class ="noglowbox">
     <h2 class="fs-title">Configure Roles</h2>
     <div class="configureRolesArea">
     </div>
@@ -1148,7 +1151,7 @@ body {
       $app_store_link_tab.on('shown.bs.tab',function (e) {
          $('.appStoreArea').show();
           $('.appStoreConfigurationArea').hide();
-          ('.appStoreLaunchResultArea').hide();
+          $('.appStoreLaunchResultArea').hide();
   
       });
 
