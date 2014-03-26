@@ -7,7 +7,7 @@
         .recipies-list-container {
             padding-left: 20px;
        padding-top: 20px;
-       text-align: right;
+       text-align: left;
 
         }
 
@@ -413,12 +413,14 @@
         
         // showing the recipies list for active role and hiding rest  
         var recipeListId = $this.attr('data-recipe-list-id');
-          $('.instance-configuration-container').hide();
-        $('#configContainer'+recipeListId).show();
-        $('.ui-multiselect').hide();
+        $('.instance-configuration-container').hide();
+        $('#configContainer'+recipeListId).show({
+          duration:10,
+          complete:function() {
+            $('.ui-multiselect').hide();
 
         //checking whether the plugin is already applied to this element
-        if($this.data('isMultiSelectInitialized')) {
+          if($this.data('isMultiSelectInitialized')) {
            console.log('id = '+recipeListId);
            var $multiselect = $('#multiselect-'+recipeListId);
            $multiselect.show();       
@@ -428,7 +430,11 @@
           $recipeList.multiselect();
           $this.data('isMultiSelectInitialized',true);
         }
+          }
+        });
       
+        
+
         
       }).first().trigger('click');
      })();
