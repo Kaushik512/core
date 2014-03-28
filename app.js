@@ -1074,6 +1074,10 @@ app.get('/monitoring/index',verifySession,function(req,resp) {
 });
 
 
+app.get('/app_factory',verifySession,function(req,res){
+  res.render('appFactory');
+});
+
 var server = http.createServer(app);
 io = io.listen(server, {
   log: false
