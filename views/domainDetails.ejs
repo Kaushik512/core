@@ -5,12 +5,13 @@ border-radius: 5px;
     float: left;
     margin-bottom: 20px;
     margin-right: 20px;
-    max-height: 145px;
+    max-height: 181px;
     max-width: 109px;
     width: 41%;
 }
 .domain-roles {
-  background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);
+  /*background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);*/
+    background: white;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
     display: block;
@@ -19,7 +20,7 @@ border-radius: 5px;
     margin-left: 4px;
     margin-top: 3px;
     max-width: 100px;
-    min-height: 145px;
+    min-height: 181px;
     padding-bottom: 4px;
     padding-left: 4px;
     padding-right: 4px;
@@ -66,6 +67,9 @@ border-radius: 5px;
   margin-bottom: 3px;
   float:right;
 }
+.domain-roles-icon {
+  display: block;
+}
 </style>
 
 
@@ -97,6 +101,30 @@ border-radius: 5px;
 
 }
 
+function getCardHeadingHtml(role) {
+  switch(role) {
+      case 'Planning':
+      return '<span class="domain-roles-icon"><img src="img/galleryIcons/1.png"/></span><span>Planning</span>'
+      case 'Build':
+      return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png"/></span><span>Build</span>';   
+      case 'Code Repository':
+      return '<span class="domain-roles-icon"><img src="img/galleryIcons/3.png"/></span><span>Code Repository</span>';
+      case 'Config Management':
+      return '<span class="domain-roles-icon"><img src="img/galleryIcons/4.png"/></span><span>Config Management</span>';
+      case 'Monitoring':
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/5.png"/></span><span>Monitoring</span>';
+      case 'Test Management And Automation Suite':
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/6.png"/></span><span>Test Management And Automation Suite</span>';
+      case 'Security And Service Provisioning':
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/7.png"/></span><span>Security And Service Provisioning</span>';
+      case 'Custom Role':
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/8.png"/></span><span>Custom Role</span>';
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png"/></span><span>'+role+'</span>';
+
+     }
+}
+
 
  console.log('pid==>'+pid);
   if(!domains.length && (pid != '3' && pid != '1' && pid != '4' && pid != '5' && pid != '6' && pid != '2' && pid != '7')) {
@@ -125,7 +153,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-371f2617</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -143,7 +171,7 @@ border-radius: 5px;
             <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Build">Build</div>
+              <div class="domain-roles-heading" title="Build"><%-getCardHeadingHtml('Build')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-bc271e9c</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -182,7 +210,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-371f2617</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -200,7 +228,7 @@ border-radius: 5px;
             <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Build">Build</div>
+              <div class="domain-roles-heading" title="Build"><%-getCardHeadingHtml('Build')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-bc271e9c</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -219,7 +247,7 @@ border-radius: 5px;
               <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Deployment Node">Deployment Node</div>
+              <div class="domain-roles-heading" title="Deployment Node"><%-getCardHeadingHtml('Deployment Node')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-gn8109c</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -254,7 +282,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-n54i09</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -284,7 +312,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-bz67i0</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -299,7 +327,7 @@ border-radius: 5px;
              <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Build</div>
+              <div class="domain-roles-heading" title="Build"><%-getCardHeadingHtml('Build')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-se47u9</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -314,7 +342,7 @@ border-radius: 5px;
              <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Web Server">Web Server</div>
+              <div class="domain-roles-heading" title="Web Server"><%-getCardHeadingHtml('Web Server')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-za71k2</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -349,7 +377,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>RLD3MONS01</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -366,7 +394,7 @@ border-radius: 5px;
             <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Build">Build</div>
+              <div class="domain-roles-heading" title="Build"><%-getCardHeadingHtml('Build')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>RLD2MGMT01</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -382,7 +410,7 @@ border-radius: 5px;
               <li class="domain-role-thumbnail">
                <div class="domain-roles">
                <div class="domain-roles-caption">
-               <div class="domain-roles-heading" title="Monitoring">Monitoring</div>
+               <div class="domain-roles-heading" title="Monitoring"><%-getCardHeadingHtml('Monitoring')%></div>
                <div class="instance-details-list">
                <span class="instance-details-item"> Id : <strong>RLTESTSRV03</strong> </span>
                <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -414,7 +442,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-611f2zf7</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -431,7 +459,7 @@ border-radius: 5px;
             <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Build">Build</div>
+              <div class="domain-roles-heading" title="Build"><%-getCardHeadingHtml('Build')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-b5201g9c</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -448,7 +476,7 @@ border-radius: 5px;
               <li class="domain-role-thumbnail">
                <div class="domain-roles">
                <div class="domain-roles-caption">
-               <div class="domain-roles-heading" title="Monitoring">Monitoring</div>
+               <div class="domain-roles-heading" title="Monitoring"><%-getCardHeadingHtml('Monitoring')%></div>
                <div class="instance-details-list">
                <span class="instance-details-item"> Id : <strong>i-n2675g9c</strong> </span>
                <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -483,7 +511,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Config Management">Config Management</div>
+              <div class="domain-roles-heading" title="Config Management"><%-getCardHeadingHtml('Config Management')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-27h9a7</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -514,7 +542,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Config Management">Config Management</div>
+              <div class="domain-roles-heading" title="Config Management"><%-getCardHeadingHtml('Config Management')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-18lf2p</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -548,7 +576,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-19m2w6</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -581,7 +609,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="Planning">Planning</div>
+              <div class="domain-roles-heading" title="Planning"><%-getCardHeadingHtml('Planning')%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong>i-s295i2</strong> </span>
               <span class="instance-details-item"> Instance : <span class="instance-active">active</span> </span>
@@ -631,7 +659,7 @@ border-radius: 5px;
           <li class="domain-role-thumbnail">
             <div class="domain-roles">
             <div class="domain-roles-caption">
-              <div class="domain-roles-heading" title="<%=instances[j].instanceRole%>"><%=instances[j].instanceRole%></div>
+              <div class="domain-roles-heading" title="<%=instances[j].instanceRole%>"><%-getCardHeadingHtml(instances[j].instanceRole)%></div>
               <div class="instance-details-list">
               <span class="instance-details-item"> Id : <strong><%=instances[j].instanceId%></strong> </span>
               <%

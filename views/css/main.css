@@ -67,7 +67,8 @@ background-image: linear-gradient(to bottom, #FFFFFF 0%, #EEEEEE 100%);
 }
 
 .main-content{
-    background: linear-gradient(to bottom, #FFFFFF 0%, #F0F0F0 100%) repeat-x scroll 0 0 #066ECD;
+    /*background: linear-gradient(to bottom, #FFFFFF 0%, #F0F0F0 100%) repeat-x scroll 0 0 #066ECD;*/
+    background: white;,
     display: block;
     float: right;
     height: 100%;
