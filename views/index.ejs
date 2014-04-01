@@ -523,7 +523,7 @@ body {
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Roles</li> 
               <li><a id="app_store_link_tab" href="#app_store_configuration" data-toggle="tab">App Factory</a></li> 
-              
+              <li><a id="enviorment_link_tab" href="#enviorment_tab" data-toggle="tab">Enviorment</a></li> 
               <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
                <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li>                 
           </ul>
@@ -575,6 +575,28 @@ body {
       </div>
       <div id="usageTab" class="tab-pane" style="height:100%;">
         
+      </div>
+      <div id="enviorment_tab" class="tab-pane" style="height: 96%;">
+         <ul class="nav nav-tabs enviorment-tabs">
+              <li class="active"><a id="env_dev_link" href="#env_dev_tab" data-toggle="tab">Dev</a></li>
+              <li><a id="env_test_link" href="#env_test_tab" data-toggle="tab">Test</a></li> 
+              <li><a id="env_stage_link" href="#env_stage_tab" data-toggle="tab">Stage</a></li> 
+              <li><a id="env_production_link" href="#env_production_tab" data-toggle="tab">Production</a></li> 
+          </ul>
+          <div class="tab-content" style="height: 100%;">
+             <div id="env_dev_tab" class="tab-pane active" style="height: 100%;">
+              <iframe src="/enviorments?envType=\"dev\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             </div>
+             <div id="env_test_tab" class="tab-pane" style="height: 100%;">
+              <iframe src="/enviorments?envType=\"test\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             </div>
+             <div id="env_stage_tab" class="tab-pane" style="height: 100%;">
+              <iframe src="/enviorments?envType=\"stage\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             </div>
+             <div id="env_production_tab" class="tab-pane" style="height: 100%;">
+              <iframe src="enviorments?envType=\"production\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             </div>
+          </div>
       </div>
     <!-- <div class="tab-pane" id="monitoring_tab">
        <iframe src="zabbix-auto-login.html" style="height: 515px;width: 100%;" frameBorder="0"></iframe>

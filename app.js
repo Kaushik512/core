@@ -1078,6 +1078,11 @@ app.get('/app_factory',verifySession,function(req,res){
   res.render('appFactory');
 });
 
+app.get('/enviorments',verifySession,function(req,res){
+   console.log(req.query.envType);
+   res.render('enviorments',{envType:req.query.envType});
+});
+
 var server = http.createServer(app);
 io = io.listen(server, {
   log: false

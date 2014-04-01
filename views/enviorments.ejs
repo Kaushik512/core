@@ -1,0 +1,298 @@
+<html>
+<head>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/redmond/jquery-ui.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+<style>
+html,body {
+	height:100%;
+}
+.enviormentContainer {
+padding-top: 10px;
+}
+.topRow {
+	height: 10%;
+}
+.middleRow {
+	height: 98%;
+}
+.middle-row-item {
+ height: 100%;
+}
+.draggableContainer,.droppableContainer {
+ border : 1px solid black;
+}
+.droppable-layer {
+ height: 16.67%;
+ border: 1px solid red;
+}
+.right-draggable-items-container{
+	height: 50%;
+}
+.enviorment-heading{
+	display: block;
+    text-align: center;
+   
+}
+.layer-heading {
+	display: block;
+    text-align: left;
+    text-decoration: underline;
+}
+.left-draggable-list {
+	 margin-top: 20px;
+    padding-left: 0;
+    text-align: center;
+}
+.left-draggable-item {
+	list-style: none outside none; 
+    margin-bottom: 10px;
+     width: 100%;
+     cursor: crosshair;
+     z-index: 100;
+}
+
+.rt-draggable-item-content {
+
+}
+.droppable-area {
+  width: 100%;
+  height: 78%;
+  overflow-y: auto;
+}
+
+.lt-draggable-item-icon {
+  height:50px;
+}
+.left-draggable-items-container {
+  height: 96%;
+  overflow-y: auto;
+}
+.dropped-item {
+  float: left;
+  margin-left: 2%;
+}
+.tier-draggable-container {
+    border-bottom: 1px solid #000000;
+    height: 5%;
+}
+.enviorment-canvas {
+  height: 93%;
+  padding-top: 2%;
+  overflow-y: auto;
+}
+.tier-list {
+ 
+  
+}
+.tier-clickable-item {
+   list-style: none outside none; 
+   float: left;
+   padding-left: 4.5%;
+}
+
+.tier-area {
+   border: 1px dashed #000000;
+    margin-bottom: 2%;
+    min-height: 20%;
+}
+.tier-heading {
+  margin-left: 1%;
+}
+.tier-item-area{
+ overflow: auto;
+ }
+</style>
+
+</head>
+<body>
+<div class="enviormentContainer">
+  <!--<div class="topRow col-md-12" ></div>-->
+  <div class="middleRow col-md-12">
+  	<div class="draggableContainer draggableContainer-l middle-row-item col-sm-2">
+      <span class="enviorment-heading"><strong>Components</strong></span>
+      <div class="left-draggable-items-container">
+        <ul class="left-draggable-list">
+            <li class="left-draggable-item fw-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/firewallicon.png"/></div></li>
+            <li class="left-draggable-item lb-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/loadbalance.png"/></div></li>
+            <li class="left-draggable-item ws-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/webservericon.png" style="height:80px"/></div></li>
+            <li class="left-draggable-item as-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:100px"/></div></li>
+            <li class="left-draggable-item be-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/backendserver.png" style="height:100px"/></div></li>
+            <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-master.png" style="height:80px"/></div></li>
+            <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-slave.png" style="height:80px"/></div></li>
+        </ul>
+      </div>
+  	</div>
+    <div class="droppableContainer middle-row-item col-sm-8">
+      <div class="tier-draggable-container">
+        <ul class="tier-list">
+         <li class="tier-clickable-item fw-tier-item"data-val="firewall"><a href="javascript:void(0)">Firewall</a></li>
+         <li class="tier-clickable-item lb-tier-item" data-val="lb_tier"><a href="javascript:void(0)">Load Balancer Tier</a></li>
+         <li class="tier-clickable-item wb-tier-item" data-val="ws_tier"><a href="javascript:void(0)">Web Tier</a></li>
+         <li class="tier-clickable-item ap-tier-item" data-val="app_tier"><a href="javascript:void(0)">App Tier</a></li>
+         <li class="tier-clickable-item be-tier-item" data-val="be_tier"><a href="javascript:void(0)">Backend Tier</a></li>
+         <li class="tier-clickable-item db-tier-item" data-val="db_tier"><a href="javascript:void(0)">Database Tier</a></li>
+        </ul>
+      </div>
+      
+      <div class="enviorment-canvas"></div>
+
+     
+    </div>
+  	<div class="draggableContainer draggableContainer-r middle-row-item col-sm-2">
+  		<div class="runlist-draggable right-draggable-items-container">
+  			 <span class="enviorment-heading"><strong>Cookbooks</strong></span>
+  		</div>
+  		<!--<div class="build-droppable right-draggable-items-container">
+  			 <span class="enviorment-heading"><strong>BUILDS</strong></span>
+  		</div>-->
+    
+  	</div>
+  </div>
+</div>
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')
+</script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="js/bootstrap.js"></script>
+
+<script type="text/javascript">
+ $(function(){
+  $('.left-draggable-item').draggable({ 
+   	cursor: "crosshair",
+    helper: "clone"
+   });
+
+   var $canvas = $('.enviorment-canvas');
+
+   function onDrop(event,ui) {
+    
+     var $container = $('<div class="dropped-item"></div>');
+     $container.append(ui.draggable.find('img').clone(false,false).css({height:'80px'}));
+     $(this).find('.tier-item-area').append($container);
+   } 
+
+   function addDropEvent($div,acceptClass,dropEvent) {
+     $div.droppable({
+      accept:'.'+acceptClass,
+      drop:dropEvent
+     });
+   }
+
+   function createTierHTMLElem(tierType) {
+      var $div = $(document.createElement('div')).addClass('tier-area');
+      var $spanHeading = $(document.createElement('span')).addClass('tier-heading');
+      var $divItemArea = $(document.createElement('div')).addClass('tier-item-area');
+      switch(tierType) {
+        case 'firewall':
+          $spanHeading.append('Firewall');
+          $div.addClass('firewall-tier-area');
+          addDropEvent($div,'fw-draggable-item',onDrop);
+        break;
+        case 'lb_tier':
+          $spanHeading.append('Load Balancer');
+          $div.addClass('lb-tier-area');
+          addDropEvent($div,'lb-draggable-item',onDrop);
+        break;
+        case 'ws_tier':
+          $spanHeading.append('Web Server');
+          $div.addClass('ws-tier-area');
+          addDropEvent($div,'ws-draggable-item',onDrop);
+        break;
+        case 'app_tier':
+          $spanHeading.append('App Server');
+          $div.addClass('app-tier-area');
+           addDropEvent($div,'as-draggable-item',onDrop);
+        break;
+        case 'be_tier':
+          $spanHeading.append('Backend');
+          $div.addClass('be-tier-area');
+           addDropEvent($div,'be-draggable-item',onDrop);
+        break;
+        case 'db_tier':
+          $spanHeading.append('Database');
+          $div.addClass('db-tier-area');
+           addDropEvent($div,'db-draggable-item',onDrop);
+        break; 
+      }
+      $div.attr('data-tier-type',tierType); 
+      $div.append($spanHeading).append($divItemArea); 
+      return $div;
+   }
+
+   function isTierAreaExist(tierType) {
+    var className;
+    switch(tierType) {
+        case 'firewall':
+        className='firewall-tier-area';
+        break;
+        case 'lb_tier':
+        className='lb-tier-area';
+        break;
+        case 'ws_tier':
+        className='ws-tier-area';
+        break;
+        case 'app_tier':
+        className='app-tier-area';
+        break;
+        case 'be_tier':
+        className='be-tier-area';
+        break;
+        case 'db_tier':
+        className='db-tier-area';
+        break;
+    }
+     if($canvas.find('.'+className).length){
+       return true;
+     } else {
+       return false;
+     }
+       
+   }
+
+   var tier_order_classNames = ['firewall','lb_tier','ws_tier','app_tier','be_tier','db_tier'];
+   var lastElementIndex = -1;  
+   
+   function findTierPosition(tierType) {
+     var $posElement;
+     
+     var className;  
+     var indexOfTier = tier_order_classNames.indexOf(tierType);
+     var $children = $canvas.children();
+     for(i=0;i<$children.length;i++) {
+        var $item = $($children[i]);
+        var itemType = $item.attr('data-tier-type');
+        var itemIndex = tier_order_classNames.indexOf(itemType);
+        if(itemIndex>indexOfTier /*&& itemIndex>=lastElementIndex*/) {
+          $posElement = $item;
+          lastElementIndex =itemIndex;
+          break;
+        }
+     }
+     return $posElement;    
+   }
+
+   $('.tier-clickable-item').click(function(e){
+     var $this = $(this);
+     var itemType = $this.attr('data-val');
+     if(!isTierAreaExist(itemType)) {
+       var $div = createTierHTMLElem(itemType); 
+       var $posELement = findTierPosition(itemType);
+       if($posELement) {
+         $div.insertBefore($posELement);
+       } else {
+        $canvas.append($div);
+       }
+       $div.parent().scrollTop($div.offset.top);
+     }
+   });
+   
+
+
+ });
+ 
+</script>
+
+</html>
