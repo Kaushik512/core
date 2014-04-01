@@ -7,7 +7,7 @@
 html,body {
 	height:100%;
 }
-.enviormentContainer {
+.environmentContainer {
 padding-top: 10px;
 }
 .topRow {
@@ -29,10 +29,10 @@ padding-top: 10px;
 .right-draggable-items-container{
 	height: 50%;
 }
-.enviorment-heading{
+.environment-heading{
 	display: block;
     text-align: center;
-    text-decoration: underline;
+   
 }
 .layer-heading {
 	display: block;
@@ -71,12 +71,14 @@ padding-top: 10px;
 .dropped-item {
   float: left;
   margin-left: 2%;
+  position: relative;
+  margin-top: 1%;
 }
 .tier-draggable-container {
     border-bottom: 1px solid #000000;
     height: 5%;
 }
-.enviorment-canvas {
+.environment-canvas {
   height: 93%;
   padding-top: 2%;
   overflow-y: auto;
@@ -88,7 +90,7 @@ padding-top: 10px;
 .tier-clickable-item {
    list-style: none outside none; 
    float: left;
-   padding-left: 6%;
+   padding-left: 4.5%;
 }
 
 .tier-area {
@@ -102,31 +104,61 @@ padding-top: 10px;
 .tier-item-area{
  overflow: auto;
  }
+
+ .deleteIconContainer {
+    height: 15px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 15px;
+    cursor: pointer;
+    display: none;
+  }
+  .deleteInstanceIcon {
+    height:100%;
+    width: 100%;
+  }
+  .show-instance-icon {
+   display: block !important;
+  }
+  .selectIconContainer {
+    height: 15px;
+    position: absolute;
+    left:0;
+    top: 0;
+    width: 15px;
+    cursor: pointer;
+    display: none;
+  }
+  .selectInstanceIcon {
+    height:100%;
+    width: 100%;
+  }
 </style>
 
 </head>
 <body>
-<div class="enviormentContainer">
+<div class="environmentContainer">
   <!--<div class="topRow col-md-12" ></div>-->
   <div class="middleRow col-md-12">
-  	<div class="draggableContainer draggableContainer-l middle-row-item col-md-2">
-      <span class="enviorment-heading"><strong>COMPONENTS</strong></span>
+  	<div class="draggableContainer draggableContainer-l middle-row-item col-sm-2">
+      <span class="environment-heading"><strong>Components</strong></span>
       <div class="left-draggable-items-container">
         <ul class="left-draggable-list">
-            <li class="left-draggable-item fw-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/firewallicon.png"/></div></li>
+            <li class="left-draggable-item fw-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/firewallicon.png"/><span style="display: block;">Firewall</span></div></li>
             <li class="left-draggable-item lb-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/loadbalance.png"/></div></li>
-            <li class="left-draggable-item ws-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/webservericon.png" style="height:80px"/></div></li>
-            <li class="left-draggable-item as-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:100px"/></div></li>
-            <li class="left-draggable-item be-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/backendserver.png" style="height:100px"/></div></li>
-            <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-master.png" style="height:80px"/></div></li>
-            <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-slave.png" style="height:80px"/></div></li>
+            <li class="left-draggable-item ws-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/webservericon.png" style="height:80px"/><span style="display: block;">Web Server</span></div></li>
+            <li class="left-draggable-item as-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:90px"/><span style="display: block;">App Server</span></div></li>
+            <li class="left-draggable-item be-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:90px"/><span style="display: block;">Backend Server</span></div></li>
+            <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-master.png" style="height:80px"/><span style="display: block;">DB Server Master</span></div></li>
+            <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-slave.png" style="height:80px"/><span style="display: block;">DB Server Slave</span></div></li>
         </ul>
       </div>
   	</div>
-    <div class="droppableContainer middle-row-item col-md-8">
+    <div class="droppableContainer middle-row-item col-sm-8">
       <div class="tier-draggable-container">
         <ul class="tier-list">
-         <li class="tier-clickable-item fw-tier-item" data-val="firewall"><a href="javascript:void(0)">Firewall</a></li>
+         <li class="tier-clickable-item fw-tier-item"data-val="firewall"><a href="javascript:void(0)">Firewall</a></li>
          <li class="tier-clickable-item lb-tier-item" data-val="lb_tier"><a href="javascript:void(0)">Load Balancer Tier</a></li>
          <li class="tier-clickable-item wb-tier-item" data-val="ws_tier"><a href="javascript:void(0)">Web Tier</a></li>
          <li class="tier-clickable-item ap-tier-item" data-val="app_tier"><a href="javascript:void(0)">App Tier</a></li>
@@ -135,17 +167,17 @@ padding-top: 10px;
         </ul>
       </div>
       
-      <div class="enviorment-canvas"></div>
+      <div class="environment-canvas"></div>
 
      
     </div>
-  	<div class="draggableContainer draggableContainer-r middle-row-item col-md-2">
+  	<div class="draggableContainer draggableContainer-r middle-row-item col-sm-2">
   		<div class="runlist-draggable right-draggable-items-container">
-  			 <span class="enviorment-heading"><strong>COOKBOOKS</strong></span>
+  			 <span class="environment-heading"><strong>Cookbooks</strong></span>
   		</div>
-  		<div class="build-droppable right-draggable-items-container">
-  			 <span class="enviorment-heading"><strong>BUILDS</strong></span>
-  		</div>
+  		<!--<div class="build-droppable right-draggable-items-container">
+  			 <span class="environment-heading"><strong>BUILDS</strong></span>
+  		</div>-->
     
   	</div>
   </div>
@@ -165,14 +197,31 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
     helper: "clone"
    });
 
-   var $canvas = $('.enviorment-canvas');
+   var $canvas = $('.environment-canvas');
 
    function onDrop(event,ui) {
     
      var $container = $('<div class="dropped-item"></div>');
-     $container.append(ui.draggable.find('img').clone(false,false).css({height:'80px'}));
+     $container.append(ui.draggable.find('img').clone(false,false).css({height:'45px'}));
+     var $deleteIcon = $('<span class="deleteIconContainer icons-container"><img class="deleteInstanceIcon" src="img/delete.png" /></span>').click(function(e){
+      $(this).parent().remove();
+     });
+     
+     var $selectIcon = $('<span class="selectIconContainer icons-container"><img class="selectInstanceIcon" src="img/add.png" /></span>');
+
+
+     $container.append($deleteIcon);
+      $container.hover(function(e){
+        $(this).find('.icons-container').addClass('show-instance-icon');
+      },function(e){
+        $(this).find('.icons-container').removeClass('show-instance-icon');
+      });
      $(this).find('.tier-item-area').append($container);
+     
+    $container.append($selectIcon);
    } 
+
+  
 
    function addDropEvent($div,acceptClass,dropEvent) {
      $div.droppable({
