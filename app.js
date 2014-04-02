@@ -1080,7 +1080,24 @@ app.get('/app_factory',verifySession,function(req,res){
 
 app.get('/environments',verifySession,function(req,res){
    console.log(req.query.envType);
-   res.render('environments',{envType:req.query.envType});
+   
+   settingsController.getChefSettings(function(settings) {
+    cookbooks.getCookbooks({
+      user_name: settings.chefUserName,
+      key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
+      url: settings.hostedChefUrl
+    }, function(err, resp) {
+      console.log('About to Render...!! ');
+      //console.log(err);
+      //console.log(resp);
+      res.render('environments', {
+        error: err,
+        cookbooks: resp,
+        envType:req.query.envType
+      });
+    });
+  });
+
 });
 
 var server = http.createServer(app);

@@ -1,3 +1,4 @@
+<%if(!error) { %>
 <html>
 <head>
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -65,7 +66,7 @@ padding-top: 10px;
   height:50px;
 }
 .left-draggable-items-container {
-  height: 96%;
+  height: 95%;
   overflow-y: auto;
 }
 .dropped-item {
@@ -73,6 +74,10 @@ padding-top: 10px;
   margin-left: 2%;
   position: relative;
   margin-top: 1%;
+  border-radius: 10px;
+  margin-bottom: 1%;
+  border:2px solid #DDDDDD;
+  cursor: pointer;
 }
 .tier-draggable-container {
     border-bottom: 1px solid #000000;
@@ -130,9 +135,52 @@ padding-top: 10px;
     cursor: pointer;
     display: none;
   }
-  .selectInstanceIcon {
+  .selectDeselectIcons {
     height:100%;
     width: 100%;
+  }
+  .selectUnselectIcons {
+    display: block;
+  }
+  .deSelectInstanceIcon {
+    display: none;
+  }
+  .instanceSelected {
+    border:2px solid green;
+  }
+  .cookbooklist {
+    height:60% !important;
+    width: 100%;
+  }
+  .cookbook-button-container{
+    margin-top: 10px;
+    text-align: center;
+  }
+  .cookbook-container {
+    margin-top: 15px;
+  }
+  .none-selected-info {
+
+  }
+  .multi-selected-info {
+    display: none;   
+  }
+  .single-selected-info {
+    display: none;
+  }
+  .selected-instance-info {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .single-selected-info {
+    text-align: left;
+  }
+  .single-instance-runlist {
+    height: 55%;
+    overflow-y: auto;
+  }
+  .single-instance-type {
+    display: block;
   }
 </style>
 
@@ -145,11 +193,11 @@ padding-top: 10px;
       <span class="environment-heading"><strong>Components</strong></span>
       <div class="left-draggable-items-container">
         <ul class="left-draggable-list">
-            <li class="left-draggable-item fw-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/firewallicon.png"/><span style="display: block;">Firewall</span></div></li>
-            <li class="left-draggable-item lb-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/loadbalance.png"/></div></li>
+            <li class="left-draggable-item fw-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/firewallicon.png" style="height:80px"/><span style="display: block;">Firewall</span></div></li>
+            <li class="left-draggable-item lb-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/loadbalance.png"style="width:100%" /></div></li>
             <li class="left-draggable-item ws-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/webservericon.png" style="height:80px"/><span style="display: block;">Web Server</span></div></li>
-            <li class="left-draggable-item as-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:90px"/><span style="display: block;">App Server</span></div></li>
-            <li class="left-draggable-item be-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:90px"/><span style="display: block;">Backend Server</span></div></li>
+            <li class="left-draggable-item as-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:80px"/><span style="display: block;">App Server</span></div></li>
+            <li class="left-draggable-item be-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/appservericon.png" style="height:80px"/><span style="display: block;">Backend Server</span></div></li>
             <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-master.png" style="height:80px"/><span style="display: block;">DB Server Master</span></div></li>
             <li class="left-draggable-item db-draggable-item"><div class="lt-draggable-item-content"><img class="lt-draggable-item-icon" src="img/dndicons/dbservericon-slave.png" style="height:80px"/><span style="display: block;">DB Server Slave</span></div></li>
         </ul>
@@ -174,10 +222,26 @@ padding-top: 10px;
   	<div class="draggableContainer draggableContainer-r middle-row-item col-sm-2">
   		<div class="runlist-draggable right-draggable-items-container">
   			 <span class="environment-heading"><strong>Cookbooks</strong></span>
+         <div class="cookbook-container">
+               <select multiple="multiple" class="cookbooklist" disabled> 
+                  <%for(var i =0; i< cookbooks.length; i++){%>
+                      <option data-id="<%=i%>" value='<%=cookbooks[i]%>'><%=cookbooks[i]%></option>
+                  <%}%>
+                </select>
+                <div class="cookbook-button-container"><button class="btn-success btn addCookbookBtns" disabled>Add Cookbooks</button></div>
+         </div>
   		</div>
-  		<!--<div class="build-droppable right-draggable-items-container">
-  			 <span class="environment-heading"><strong>BUILDS</strong></span>
-  		</div>-->
+  		<div class="build-droppable right-draggable-items-container">
+  			 <span class="environment-heading"><strong>Instance Details</strong></span>
+         <div class="selected-instance-info">
+          <span class="none-selected-info">No Instance Selected</span>
+          <span class="multi-selected-info">Multiple Instances Selected</span>
+          <div class="single-selected-info">
+            <div><span><strong>Intance Type:- </strong></span><span class="single-instance-type"></span></div>
+            <div style="margin-top:10px"><span><strong>Runlist:- </strong></span><div class="single-instance-runlist"></div></div>
+          </div> 
+        </div>
+  		</div>
     
   	</div>
   </div>
@@ -199,6 +263,52 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
 
    var $canvas = $('.environment-canvas');
 
+   $cookbooklist = $('.cookbooklist');
+   $cookbooklistBtn = $('.addCookbookBtns');
+   function enableCookbooksList() {
+     $cookbooklist.prop('disabled',false);
+     $cookbooklistBtn.prop('disabled',false);
+   } 
+   function disableCookbooksList() {
+     $cookbooklist.prop('disabled',true);
+     $cookbooklistBtn.prop('disabled',true);
+   }
+    $cookbooklistBtn.click(function(e){
+     var selectedRunlist =  $cookbooklist.val();
+     if(selectedRunlist && selectedRunlist.length) {
+        var $selecteInstances = $('.instanceSelected');
+        $selecteInstances.data('runlist',selectedRunlist);
+        if($selecteInstances.length === 1) {
+          fillSelectedInstanceInfo($selecteInstances.first());
+        }
+     }
+      $cookbooklist.find('option').removeAttr("selected");
+    });
+
+   
+    var $instanceDetailContainer = $('.single-selected-info');
+    var $multiSelectedInfo = $('.multi-selected-info');
+    var $noneSelectedInfo = $('.none-selected-info');
+   
+    
+    var $selectedInstanceRunlistContainer = $('.single-instance-runlist');
+    var $selectedInstanceTypeContainer = $('.single-instance-type');
+    function fillSelectedInstanceInfo($selectedInstance){
+        var instanceType = $selectedInstance.parent().parent().attr('data-instance-type');
+        var runlist = $selectedInstance.data('runlist');
+        var str='This instance has no runlist attached to it';
+        if(runlist && runlist.length) {
+         str = '<ul style="padding-left=0">';
+         for(var i=0;i<runlist.length;i++) {
+           str = str + '<li style="list-style: none outside none;">'+runlist[i]+'</li>'
+         }
+         str = str + '</ul>';
+        }
+        $selectedInstanceRunlistContainer.empty().append(str);
+        $selectedInstanceTypeContainer.empty().append(instanceType);
+
+    }
+
    function onDrop(event,ui) {
     
      var $container = $('<div class="dropped-item"></div>');
@@ -207,7 +317,74 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
       $(this).parent().remove();
      });
      
-     var $selectIcon = $('<span class="selectIconContainer icons-container"><img class="selectInstanceIcon" src="img/add.png" /></span>');
+     var $selectDeselectIconContainer = $('<span class="selectIconContainer icons-container"><img class="selectInstanceIcon selectDeselectIcons" src="img/add.png" title="Select"/><img class="deSelectInstanceIcon selectDeselectIcons" src="img/deselect.png" title="Deselect" /></span>');
+     var $selectIcon  =  $selectDeselectIconContainer.find('.selectInstanceIcon');
+     var $deselectIcon = $selectDeselectIconContainer.find('.deSelectInstanceIcon');
+     console.log($selectIcon.get(0));
+     console.log($deselectIcon.get(0));
+     
+     $selectIcon.click(function(e){
+       console.log('click select')
+       $selectIcon.hide();
+       $deselectIcon.show();
+       $container.addClass('instanceSelected');
+       enableCookbooksList();
+       var $selecteInstances = $('.instanceSelected');
+       if(!$selecteInstances.length) {
+        $multiSelectedInfo.hide();
+        $noneSelectedInfo.show();
+        $instanceDetailContainer.hide();
+       } else {
+        if($selecteInstances.length === 1) {
+          $multiSelectedInfo.hide();
+          $noneSelectedInfo.hide();
+          fillSelectedInstanceInfo($selecteInstances.first());
+          $instanceDetailContainer.show();
+        } else {
+          $multiSelectedInfo.show();
+          $noneSelectedInfo.hide();
+          $instanceDetailContainer.hide();
+        }
+       }
+       return false;
+     });
+     $deselectIcon.click(function(e){
+       console.log('click');
+       $selectIcon.show();
+       $deselectIcon.hide();
+       $container.removeClass('instanceSelected');
+       var $selecteInstances = $('.instanceSelected');
+       if(!$selecteInstances.length) {
+        $multiSelectedInfo.hide();
+        $noneSelectedInfo.show();
+        $instanceDetailContainer.hide();
+        disableCookbooksList();
+       } else {
+        if($selecteInstances.length === 1) {
+          $multiSelectedInfo.hide();
+          $noneSelectedInfo.hide();
+           fillSelectedInstanceInfo($selecteInstances.first());
+          $instanceDetailContainer.show();
+        } else {
+          $multiSelectedInfo.show();
+          $noneSelectedInfo.hide();
+          $instanceDetailContainer.hide();
+        }
+       }
+       return false;
+     });
+
+     $container.click(function(e){
+       $('.instanceSelected').find('.deSelectInstanceIcon').trigger('click');
+       $selectIcon.hide();
+       $deselectIcon.show();
+       $container.addClass('instanceSelected');
+       enableCookbooksList();
+       $multiSelectedInfo.hide();
+       $noneSelectedInfo.hide();
+       fillSelectedInstanceInfo($container);
+        $instanceDetailContainer.show();
+     });
 
 
      $container.append($deleteIcon);
@@ -218,7 +395,7 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
       });
      $(this).find('.tier-item-area').append($container);
      
-    $container.append($selectIcon);
+    $container.append($selectDeselectIconContainer);
    } 
 
   
@@ -238,31 +415,37 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
         case 'firewall':
           $spanHeading.append('Firewall');
           $div.addClass('firewall-tier-area');
+          $div.attr('data-instance-type','Firewall');
           addDropEvent($div,'fw-draggable-item',onDrop);
         break;
         case 'lb_tier':
           $spanHeading.append('Load Balancer');
           $div.addClass('lb-tier-area');
+          $div.attr('data-instance-type','Load Balancer');
           addDropEvent($div,'lb-draggable-item',onDrop);
         break;
         case 'ws_tier':
           $spanHeading.append('Web Server');
           $div.addClass('ws-tier-area');
+          $div.attr('data-instance-type','Web Server');
           addDropEvent($div,'ws-draggable-item',onDrop);
         break;
         case 'app_tier':
           $spanHeading.append('App Server');
           $div.addClass('app-tier-area');
+          $div.attr('data-instance-type','App Server');
            addDropEvent($div,'as-draggable-item',onDrop);
         break;
         case 'be_tier':
           $spanHeading.append('Backend');
           $div.addClass('be-tier-area');
+          $div.attr('data-instance-type','Backend Server');
            addDropEvent($div,'be-draggable-item',onDrop);
         break;
         case 'db_tier':
           $spanHeading.append('Database');
           $div.addClass('db-tier-area');
+          $div.attr('data-instance-type','Db Server');
            addDropEvent($div,'db-draggable-item',onDrop);
         break; 
       }
@@ -345,3 +528,4 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
 </script>
 
 </html>
+<%}%>
