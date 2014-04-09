@@ -21,6 +21,8 @@ var Domains = mongoose.model('domains', DomainsSchema);
 
 
 module.exports.createDomainDocument = function(domainName,pid,callback){
+  var obj = {domainName:domainName,domainPid:pid};
+  console.log(obj);
    Domains.find({domainName:domainName,domainPid:pid},function(err,data){
       if(err) {
         callback(err,null);
@@ -58,7 +60,11 @@ module.exports.getDomainData = function(domainName,callback) {
 };
 
 module.exports.getAllDomainData = function(pid,callback){
-  Domains.find({domainPid:pid},function(err,data){
+  var queryObj = {};
+  if(pid) {
+   queryObj.domainPid = pid;
+  }
+  Domains.find(queryObj,function(err,data){
     if(err){
       callback(err,null);
       return;
@@ -94,8 +100,16 @@ module.exports.updateInstanceStatus = function(domainName,instanceId,status,call
   });
 }
 
-module.exports.deleteEmptyDomains = function(callback) {
+module.exports.deleteDomains = function(pid,domainName,callback) {
+  Domains.remove({domainName:domainName,domainPid:pid},function(err,data){
 
+    if(err){
+      callback(err,null);
+      return;
+    } 
+    callback(null,data);
+
+  });
 }
 
 

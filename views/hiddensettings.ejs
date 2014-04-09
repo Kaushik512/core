@@ -12,6 +12,28 @@
 <%}%>
 <input type="submit" value="submit">
 </form>
+
+<br/><br/><br/>
+
+<form id="checkList" action="/hiddenSettings" method="POST">
+<% for(var i=0;i<domainsData.length;i++){
+ %>
+ <h3><%=(i+1)%>. <%=domainsData[i].name%></h3>
+ <ul> 
+<%
+ var domains =  domainsData[i].domains;
+ if(domains && domains.length) {
+   for(var j=0;j<domains.length;j++) {
+%>
+ <li style="list-style: none outside none;"><input type="checkbox" name="domainData" value="<%=domainsData[i].pid%>,<%=domains[j].domainName%>" ><%=domains[j].domainName%></input></li>
+<%}
+}%>
+</ul>
+<%}%>
+<input type="submit" value="delete">
+</form>
+
+
 </body>
 </html>
 <%}%>

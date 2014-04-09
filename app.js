@@ -408,7 +408,7 @@ app.get('/domainDetails/:pid', verifySession, function(req, resp) {
 
 
   domainsDao.getAllDomainData(pid, function(err, domainsdata) {
-    if(err) {
+    if (err) {
       resp.render('domainDetails', {
         error: err,
         domains: domainsdata,
@@ -425,40 +425,40 @@ app.get('/domainDetails/:pid', verifySession, function(req, resp) {
               error: err,
               domains: domainsdata,
               pid: pid,
-              unallocatedInstances : null
+              unallocatedInstances: null
             });
           } else {
             var unallocatedInstances = [];
             var allocatedInstances = [];
             for (var i = 0; i < domainsdata.length; i++) {
-               allocatedInstances = allocatedInstances.concat(domainsdata[i].domainInstances);
+              allocatedInstances = allocatedInstances.concat(domainsdata[i].domainInstances);
             }
 
             var reservations = data.Reservations;
             for (var i = 0; i < reservations.length; i++) {
               var instances = reservations[i].Instances;
               for (var j = 0; j < instances.length; j++) {
-                
+
                 var found = false;
-                for(var k=0;k<allocatedInstances.length;k++) {
-                   if(allocatedInstances[k].instanceId ==instances[j].InstanceId) {
+                for (var k = 0; k < allocatedInstances.length; k++) {
+                  if (allocatedInstances[k].instanceId == instances[j].InstanceId) {
                     found = true;
                     break;
-                   } 
+                  }
                 }
-                if(!found) {
+                if (!found) {
                   unallocatedInstances.push(instances[j]);
                 }
               }
             }
-           // console.log(unallocatedInstances);
+            // console.log(unallocatedInstances);
             // console.log(unallocatedInstances.length);
             resp.render('domainDetails', {
-             error: err,
-             domains: domainsdata,
-             pid: pid,
-             unallocatedInstances : unallocatedInstances
-           });
+              error: err,
+              domains: domainsdata,
+              pid: pid,
+              unallocatedInstances: unallocatedInstances
+            });
           }
         });
       });
@@ -469,7 +469,7 @@ app.get('/domainDetails/:pid', verifySession, function(req, resp) {
         error: err,
         domains: domainsdata,
         pid: pid,
-         unallocatedInstances : null
+        unallocatedInstances: null
       });
     }
   });
@@ -832,10 +832,10 @@ app.post('/userRoles/save', verifySession, function(req, resp) {
       }
       console.log(cookbookName);
       console.log(path);
-      if(!cookbookName) {
+      if (!cookbookName) {
         cookbookName = path;
-      } 
-      console.log('cookbookname ==> ' +cookbookName);
+      }
+      console.log('cookbookname ==> ' + cookbookName);
       if (cookbookName) {
         var spawn = childProcess.spawn;
         var knifeProcess;
@@ -881,7 +881,6 @@ app.post('/userRoles/save', verifySession, function(req, resp) {
 
 
 })
-
 
 
 
@@ -979,33 +978,96 @@ app.post('/settings/chef', verifySession, function(req, resp) {
 });
 
 app.get('/hiddenSettings', verifySession, function(req, resp) {
-  products.getProducts(function(err, products) {
-    console.log(products);
-    resp.render('hiddensettings', {
-      error: err,
-      products: products
+
+  var domainsData = []
+  var prod;
+  var prodList;
+
+  function getProdDomainData(pid, prodName) {
+    domainsDao.getAllDomainData(pid, function(err, domains) {
+      var obj = {};
+      obj.pid = pid;
+      obj.name = prodName;
+      obj.domains = domains;
+      domainsData.push(obj);
+      prod.splice(0, 1);
+      if (prod.length) {
+        getProdDomainData(prod[0].pid, prod[0].name);
+      } else {
+        resp.render('hiddensettings', {
+          error: false,
+          products: prodList,
+          domainsData: domainsData
+        });
+      }
+
     });
+  }
+
+  products.getProducts(function(err, data) {
+    if (data) {
+      prodList = [].concat(data);
+      prod = data;
+      if (prod.length) {
+        getProdDomainData(prod[0].pid, prod[0].name);
+      }
+    } else {
+      resp.render('hiddensettings', {
+        error: true,
+        products: null,
+        domainsData: null
+      });
+    }
+
   });
+
+
 });
 
 app.post('/hiddenSettings', verifySession, function(req, resp) {
   console.log(req.body);
-  products.setProductStatus(req.body.prd, function(err, data) {
-    if (err) {
-      resp.send(500);
-      return;
-    } else {
-      resp.send("success");
+  if (req.body.prd) {
+    products.setProductStatus(req.body.prd, function(err, data) {
+      if (err) {
+        resp.send(500);
+        return;
+      } else {
+        resp.send("success");
+      }
+    });
+  } else if (req.body.domainData) {
+    var domainData = [].concat(req.body.domainData);
+
+    function deleteDomain(pid, domainName) {
+      domainsDao.deleteDomains(pid, domainName, function(err, data) {
+        if (err) {
+          resp.send(500);
+          return;
+        } else {
+          domainData.splice(0, 1);
+          if (domainData.length) {
+            var d = domainData[0].split(',');;
+            deleteDomain(d[0], d[1])
+          } else {
+            resp.send("success");
+          }
+        }
+      });
     }
-  });
+    if (domainData.length) {
+      var d = domainData[0].split(',');;
+      deleteDomain(d[0], d[1])
+    }
+  }
+
 });
 
 
-app.get('/monitoring/index',verifySession,function(req,resp) {
+app.get('/monitoring/index', verifySession, function(req, resp) {
   console.log(req.query);
   var pid = req.query.pid;
   domainsDao.getAllDomainData(pid, function(err, domainsdata) {
-    if(err) {
+    if (err) {
       resp.render('domainDetails', {
         error: err,
         domains: domainsdata,
@@ -1022,40 +1084,40 @@ app.get('/monitoring/index',verifySession,function(req,resp) {
               error: err,
               domains: domainsdata,
               pid: pid,
-              unallocatedInstances : null
+              unallocatedInstances: null
             });
           } else {
             var unallocatedInstances = [];
             var allocatedInstances = [];
             for (var i = 0; i < domainsdata.length; i++) {
-               allocatedInstances = allocatedInstances.concat(domainsdata[i].domainInstances);
+              allocatedInstances = allocatedInstances.concat(domainsdata[i].domainInstances);
             }
 
             var reservations = data.Reservations;
             for (var i = 0; i < reservations.length; i++) {
               var instances = reservations[i].Instances;
               for (var j = 0; j < instances.length; j++) {
-                
+
                 var found = false;
-                for(var k=0;k<allocatedInstances.length;k++) {
-                   if(allocatedInstances[k].instanceId ==instances[j].InstanceId) {
+                for (var k = 0; k < allocatedInstances.length; k++) {
+                  if (allocatedInstances[k].instanceId == instances[j].InstanceId) {
                     found = true;
                     break;
-                   } 
+                  }
                 }
-                if(!found) {
+                if (!found) {
                   unallocatedInstances.push(instances[j]);
                 }
               }
             }
-           // console.log(unallocatedInstances);
+            // console.log(unallocatedInstances);
             // console.log(unallocatedInstances.length);
             resp.render('monitoring/monitoring.ejs', {
-             error: err,
-             domains: domainsdata,
-             pid: pid,
-             unallocatedInstances : unallocatedInstances
-           });
+              error: err,
+              domains: domainsdata,
+              pid: pid,
+              unallocatedInstances: unallocatedInstances
+            });
           }
         });
       });
@@ -1066,22 +1128,22 @@ app.get('/monitoring/index',verifySession,function(req,resp) {
         error: err,
         domains: domainsdata,
         pid: pid,
-         unallocatedInstances : null
+        unallocatedInstances: null
       });
     }
   });
-  
+
 });
 
 
-app.get('/app_factory',verifySession,function(req,res){
+app.get('/app_factory', verifySession, function(req, res) {
   res.render('appFactory');
 });
 
-app.get('/environments',verifySession,function(req,res){
-   console.log(req.query.envType);
-   
-   settingsController.getChefSettings(function(settings) {
+app.get('/environments', verifySession, function(req, res) {
+  console.log(req.query.envType);
+
+  settingsController.getChefSettings(function(settings) {
     cookbooks.getCookbooks({
       user_name: settings.chefUserName,
       key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
@@ -1093,7 +1155,7 @@ app.get('/environments',verifySession,function(req,res){
       res.render('environments', {
         error: err,
         cookbooks: resp,
-        envType:req.query.envType
+        envType: req.query.envType
       });
     });
   });
