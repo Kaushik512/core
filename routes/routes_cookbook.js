@@ -1,21 +1,19 @@
-var cookbooks = require('./controller/GetRecipies');
-var settingsController = require('./controller/settings');
-var fileIo = require('./controller/fileio');
+var cookbooks = require('../controller/GetRecipies');
+var settingsController = require('../controller/settings');
+var fileIo = require('../controller/fileio');
+var Chef = require('../controller/chef');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
 
 
-	app.post('/cookbooks', verificationFunc, function(req, res) {
+	app.post('/chef/hostedcookbooks', verificationFunc, function(req, res) {
 		console.log('Returning Available Cookbooks...!!');
 		console.log(req.body);
 		settingsController.getChefSettings(function(settings) {
 			//res.render('cookbooks');
-			cookbooks.getCookbooks({
-				user_name: settings.chefUserName,
-				key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
-				url: settings.hostedChefUrl
-			}, function(err, resp) {
+            var chef = new Chef(settings);
+			chef.getHostedChefCookbooks(function(err, resp) {
 				res.render('cookbook', {
 					error: err,
 					cookbooks: resp,
@@ -29,7 +27,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 
 
-	app.get('/cookbooks/userCookbooks/', verifySession, function(req, resp) {
+	app.get('/chef/userCookbooks/', verificationFunc, function(req, resp) {
 		var path = req.query.path;
 		console.log(path);
 		if (path) {
@@ -118,9 +116,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 						getCookbooksData(chefSettings.chefReposLocation + chefSettings.userChefRepoName + '/cookbooks/', chefSettings);
 					} else {
 						resp.send(500);
-						/*resp.json({
-          msg: "cookbook upload failed"
-        });*/
 					}
 				});
 

@@ -1,7 +1,7 @@
 [{
 	"name" : "AWS-Production",
 	 "pid" : 1,
-	 "components" : [
+	 "roles" : [
 	 {
        "cid" : 1,
        "title" : "Planning",
@@ -90,7 +90,7 @@
 {
     "name" : "AWS-DevOps",
      "pid" : 2,
-     "components" : [
+     "roles" : [
      {
        "cid" : 1,
        "title" : "Planning",
@@ -179,7 +179,7 @@
 {
 	"name" : "Azure-DevOps",
 	 "pid" : 3,
-	"components" : [
+	"roles" : [
      {
        "cid" : 1,
        "title" : "Planning",
@@ -268,17 +268,17 @@
 {
     "name" : "RL-DevOps",
      "pid" : 4,
-     "components" : []
+     "roles" : []
 },
 {
     "name" : "Managed Domains",
      "pid" : 5,
-     "components" : []
+     "roles" : []
 },
 {
     "name" : "Open Stack",
      "pid" : 6,
-    "components" : [
+    "roles" : [
      {
        "cid" : 1,
        "title" : "Planning",
@@ -367,7 +367,7 @@
 {
     "name" : "Cloud Stack",
      "pid" : 7,
-    "components" : [
+    "roles" : [
      {
        "cid" : 1,
        "title" : "Planning",

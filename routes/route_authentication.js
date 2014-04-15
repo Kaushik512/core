@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app) {
 
 
 	app.get('/login', function(req, res) {
-		res.render('login.html');
+		res.render('login');
 	});
 
 	var verifySession = function(req, res, next) {

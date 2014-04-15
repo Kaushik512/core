@@ -34,99 +34,11 @@ var verifySession = function(req, res, next) {
 };
 
 
-app.post('/signin', function(req, res) {
-  console.log(req.body)
-  if (req.body && req.body.username && req.body.pass) {
-    if (req.body.username === 'admin' && req.body.pass === "ReleV@nce") {
-      req.session.tempSession = true;
-      products.getProducts(function(err, products) {
-        res.render('index', {
-          error: err,
-          products: products
-        });
-      });
-
-    } else {
-      res.redirect('/login.html');
-    }
-  } else {
-    res.redirect('/login.html');
-  }
-
-  //req.session.tempSession = true;
-
-});
-
-app.get('/signout', function(req, res) {
-  req.session = null;
-  res.redirect('/login.html');
-});
-
-
-var products = require('./controller/products.js')
-
-app.get('/', verifySession, function(req, res) {
-
-  products.getProducts(function(err, products) {
-    console.log(products);
-    res.render('index', {
-      error: err,
-      products: products
-    });
-  });
-});
-
-var cookbooks = require('./controller/GetRecipies');
-
-app.post('/cookbooks', verifySession, function(req, res) {
-  console.log('Returning Available Cookbooks...!!');
-  console.log(req.body);
-  settingsController.getChefSettings(function(settings) {
-    //res.render('cookbooks');
-    cookbooks.getCookbooks({
-      user_name: settings.chefUserName,
-      key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
-      url: settings.hostedChefUrl
-    }, function(err, resp) {
-      console.log('About to Render...!! ');
-      //console.log(err);
-      //console.log(resp);
-      res.render('cookbook', {
-        error: err,
-        cookbooks: resp,
-        prodSelected: req.body
-      });
-    });
-  });
-
-});
-
-app.get('/products/:pid', verifySession, function(req, res) {
-  console.log("fetching for pid ");
-  console.log(req.params);
-  var pid = req.params.pid;
-  if (pid) {
-    products.getProductComponents(pid, function(err, data) {
-      //console.log(data);  
-      res.render('componentslist.ejs', {
-        error: err,
-        prod: data
-      });
-    });
-  } else {
-    //res.sendStatus(404);
-  }
-});
+var routes = require('./routes/routes.js');
+routes.setRoutes(app);
 
 
 var ec2 = require('./controller/AWS_EC2');
-app.get('/images', function(req, resp) {
-  ec2.getImageNames(function(err, data) {
-    //resp.render('');
-    resp.end(JSON.stringify(data));
-  });
-});
-
 
 function getRolesListArguments(rolesArray) {
 
@@ -977,6 +889,7 @@ app.post('/settings/chef', verifySession, function(req, resp) {
   }
 });
 
+var provider = require('./controller/providers.js');
 app.get('/hiddenSettings', verifySession, function(req, resp) {
 
   var domainsData = []
@@ -1004,7 +917,7 @@ app.get('/hiddenSettings', verifySession, function(req, resp) {
     });
   }
 
-  products.getProducts(function(err, data) {
+  provider.getProviders(function(err, data) {
     if (data) {
       prodList = [].concat(data);
       prod = data;
@@ -1027,7 +940,7 @@ app.get('/hiddenSettings', verifySession, function(req, resp) {
 app.post('/hiddenSettings', verifySession, function(req, resp) {
   console.log(req.body);
   if (req.body.prd) {
-    products.setProductStatus(req.body.prd, function(err, data) {
+    provider.setProviderStatus(req.body.prd, function(err, data) {
       if (err) {
         resp.send(500);
         return;
@@ -1140,18 +1053,16 @@ app.get('/app_factory', verifySession, function(req, res) {
   res.render('appFactory');
 });
 
+
+var Chef = require('./controller/chef');
+
 app.get('/environments', verifySession, function(req, res) {
   console.log(req.query.envType);
 
   settingsController.getChefSettings(function(settings) {
-    cookbooks.getCookbooks({
-      user_name: settings.chefUserName,
-      key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
-      url: settings.hostedChefUrl
-    }, function(err, resp) {
+    var chef = new Chef(settings);
+    chef.getHostedChefCookbooks(function(err, resp) {
       console.log('About to Render...!! ');
-      //console.log(err);
-      //console.log(resp);
       res.render('environments', {
         error: err,
         cookbooks: resp,

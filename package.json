@@ -13,7 +13,8 @@
     "ldapjs": "~0.7.0",
     "mongoose":"*",
     "socket.io":"0.9.16",
-    "net-ping":"1.1.9"
+    "net-ping":"1.1.9",
+    "node.extend":"*"
   },
   "devDependencies": {},
   "scripts": {

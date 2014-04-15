@@ -1,4 +1,4 @@
-<%if(prod && prod.components && prod.components.length) { var list = prod.components; %>
+<%if(prod && prod.roles && prod.roles.length) { var list = prod.roles; %>
 
 <style>
 .role-container{
@@ -194,7 +194,7 @@
 
   $.ajax({
                 type: "POST",
-                url: "/cookbooks",
+                url: "/chef/hostedcookbooks",
                 data: JSON.stringify(product),
                 success: function(data){
             

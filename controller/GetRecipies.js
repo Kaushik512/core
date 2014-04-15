@@ -1,6 +1,6 @@
 
 
-var ChefApi = require("../node_modules/chef-api");
+var ChefApi = require("chef-api");
 
 
 

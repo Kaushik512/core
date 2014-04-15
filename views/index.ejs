@@ -409,7 +409,7 @@ body {
                 <!--<img src="img/settings-icon.png" alt="settings" height="30" width="30">-->
                 <i class="fa fa-gear"></i>&nbsp;Settings
             </a>
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="/signout" title="Logout">
+            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="/auth/signout" title="Logout">
                 <span>Logout</span>
             </a>
           </div>
@@ -919,7 +919,7 @@ body {
        
         $galleryArea.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           var pid  = $providers.filter('.active').attr('data-pid');
-         $.get("/products/"+pid,function(data){
+         $.get("/providers/"+pid+"/roles",function(data){
            $galleryArea.empty().append(data);
           }).fail(function() {
            alert( "error" );

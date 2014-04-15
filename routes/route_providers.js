@@ -1,8 +1,8 @@
-var providers = require('./controller/providers.js')
+var providers = require('../controller/providers.js')
 
-module.exports.setRoutes = function(app, verificationFunc) {
+module.exports.setRoutes = function(app, verifySession) {
 
-	app.get('/', verificationFunc, function(req, res) {
+	app.get('/', verifySession, function(req, res) {
 		providers.getProviders(function(err, products) {
 			console.log(products);
 			res.render('index', {
@@ -19,7 +19,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 		if (pid) {
 			providers.getProviderRoles(pid, function(err, data) {
 				//console.log(data);  
-				res.render('componentslist.ejs', {
+				res.render('providerRoles.ejs', {
 					error: err,
 					prod: data
 				});
@@ -28,8 +28,4 @@ module.exports.setRoutes = function(app, verificationFunc) {
 			res.send(404);
 		}
 	});
-
-	
-
-
 }
