@@ -128,11 +128,11 @@ $(function() {
     $rolesDirArea = $('#rolesDirArea');
     $databagDirArea = $('#databagDirArea');
     //$workingIndicatorContainer.hide();
-    var url = '/userCookbooks/save';
+    var url = '/chef/workstation/cookbooks/';//'/userCookbooks/save';
     var isCookBook = true;
     var rolesSynced = false;
     $('#cookbook_link').on('shown.bs.tab', function (e) {
-     url = '/userCookbooks/save';
+     url = '/chef/workstation/cookbooks/';//'/userCookbooks/save';
      isCookBook = true;
     });
     $('#roles_tab').on('shown.bs.tab', function (e) {
@@ -177,7 +177,7 @@ $(function() {
 
 	$cookbookdir.fileTree({
 		root: '/',
-		script : 'userCookbooks',
+		script : '/chef/workstation/cookbooks/',
 		onFolderLoad : function(path,data) {
            if(path === '/') {
              $dirArea.show();
@@ -188,7 +188,7 @@ $(function() {
 		}
 	}, function(file) {
 		$fileEditorMsgContainer.hide();
-		$.get('userCookbooks/?path='+file,function(data){
+		$.get('/chef/workstation/cookbooks/?path='+file,function(data){
            if(data.resType == 'file') {
            	 $fileEditorDivContianer.show();
            	 $editorBtnContainer.show();

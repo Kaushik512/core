@@ -1,7 +1,10 @@
-var ChefApi = require("../node_modules/chef-api");
+var ChefApi = require("chef-api");
+var Process = require("./utils/process");
+var fileIo = require('./fileio');
 
 var Chef = function(settings) {
-
+    
+    var that = this;
 	var chefApi = new ChefApi();
 	chefApi.config({
 		user_name: settings.chefUserName,
@@ -31,6 +34,127 @@ var Chef = function(settings) {
 		});
 
 	};
+
+	this.downloadCookbooks = function(callback) {
+		var proc = new Process('knife', ['download', 'cookbooks'], {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		});
+		proc.start();
+	};
+
+	this.uploadCookbook = function(cookbookName, callback) {
+		var proc = new Process('knife', ['cookbook', 'upload', cookbookName], {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err, null);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		});
+		proc.start();
+	}
+
+
+	function fixPath(path) {
+		if (path) {
+			if (path[0] == '/') {
+				path = path.slice(1);
+			}
+			if (path.length && path.length >= 2) {
+				if (path[path.length - 1] == '/') {
+					path = path.slice(0, path.length - 1);
+					console.log('after slicing');
+					console.log(path);
+				}
+			} else {
+				if (path[0] == '/') {
+					path = path.slice(1);
+				}
+			}
+		} else {
+			path = '';
+		}
+		return path;
+	}
+
+	this.getCookbookData = function(path, callback) {
+		path = fixPath(path);
+		var rootDir = settings.chefReposLocation + settings.userChefRepoName + '/cookbooks/'
+		fileIo.isDir(rootDir + path, function(err, dir) {
+			if (err) {
+				callback(err);
+				return;
+			}
+			if (dir) {
+				fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+					if (err) {
+						callback(err);
+						return;
+					}
+					var chefUserName;
+					if (settings) {
+						chefUserName = settings.chefUserName
+					}
+					callback(null, {
+						resType: 'dir',
+						files: filesList,
+						dirs: dirList,
+						chefUserName: chefUserName
+					});
+				});
+			} else { // this is a file
+				fileIo.readFile(rootDir + path, function(err, fileData) {
+					if (err) {
+						callback(err);
+						return;
+					}
+					callback(null, {
+						resType: "file",
+						fileData: fileData.toString('utf-8')
+					});
+				})
+			}
+		});
+	};
+
+	this.saveCookbookFile = function(filePath, fileContent, callback) {
+		filePath = fixPath(filePath);
+		if (filePath) {
+			fileIo.writeFile(settings.chefReposLocation + settings.userChefRepoName + '/cookbooks/' + filePath, fileContent, 'utf-8', function(err) {
+				if (err) {
+					callback(err, null);
+					return;
+				}
+				//extracting cookbook name;
+				var cookbookName = '';
+
+				var indexOfSlash = filePath.indexOf('/');
+				if (indexOfSlash != -1) {
+					cookbookName = filePath.substring(0, indexOfSlash);
+				}
+				if (cookbookName) {
+					that.uploadCookbook(cookbookName, function(err) {
+						if (err) {
+							callback(err);
+						} else {
+                           callback(null);
+						}
+					});
+				} else {
+					callback("Invalid cookbook name");
+				}
+			});
+		} else {
+			callback("invalid file", null);
+		}
+	}
 
 }
 
