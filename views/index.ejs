@@ -843,7 +843,7 @@ body {
        DEVOPS.navigation.showFirstTab('');
        DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
            
-       $.get("/domainDetails/"+pid,function(data){
+       $.get("/domains/"+pid,function(data){
           $domainTab.empty().append(data);
 
            DEVOPS.navigation.hideAllBtns();
@@ -958,7 +958,7 @@ body {
                          DEVOPS.navigation.showFirstTab('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;" src="img/loading.gif" />');
                          var pid  = $providers.filter('.active').attr('data-pid');
            
-                        $.get("/domainDetails/"+pid,function(data){
+                        $.get("/domains/"+pid,function(data){
                           DEVOPS.navigation.showFirstTab(data);
                          }).fail(function() {
                             alert( "error" );
