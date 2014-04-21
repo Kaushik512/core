@@ -3,8 +3,8 @@ var Process = require("./utils/process");
 var fileIo = require('./fileio');
 
 var Chef = function(settings) {
-    
-    var that = this;
+
+	var that = this;
 	var chefApi = new ChefApi();
 	chefApi.config({
 		user_name: settings.chefUserName,
@@ -144,12 +144,101 @@ var Chef = function(settings) {
 						if (err) {
 							callback(err);
 						} else {
-                           callback(null);
+							callback(null);
 						}
 					});
 				} else {
 					callback("Invalid cookbook name");
 				}
+			});
+		} else {
+			callback("invalid file", null);
+		}
+	}
+
+
+	this.downloadRoles = function(callback) {
+		var proc = new Process('knife', ['download', 'roles'], {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		});
+		proc.start();
+	};
+
+	this.uploadRoles = function(callback) {
+		var proc = new Process('knife', ['upload', 'roles'], {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err, null);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		});
+		proc.start();
+	}
+
+
+	this.getRoleData = function(path, callback) {
+		path = fixPath(path);
+		var rootDir = settings.chefReposLocation + settings.userChefRepoName + '/roles/'
+		fileIo.isDir(rootDir + path, function(err, dir) {
+			if (err) {
+				callback(err);
+				return;
+			}
+			if (dir) {
+				fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+					if (err) {
+						callback(err);
+						return;
+					}
+					var chefUserName;
+					if (settings) {
+						chefUserName = settings.chefUserName
+					}
+					callback(null, {
+						resType: 'dir',
+						files: filesList,
+						dirs: dirList,
+						chefUserName: chefUserName
+					});
+				});
+			} else { // this is a file
+				fileIo.readFile(rootDir + path, function(err, fileData) {
+					if (err) {
+						callback(err);
+						return;
+					}
+					callback(null, {
+						resType: "file",
+						fileData: fileData.toString('utf-8')
+					});
+				})
+			}
+		});
+	};
+
+	this.saveRoleFile = function(filePath, fileContent, callback) {
+		filePath = fixPath(filePath);
+		if (filePath) {
+			fileIo.writeFile(settings.chefReposLocation + settings.userChefRepoName + '/roles/' + filePath, fileContent, 'utf-8', function(err) {
+				if (err) {
+					callback(err, null);
+					return;
+				}
+				that.uploadRoles(function(err) {
+					if (err) {
+						callback(err);
+					} else {
+						callback(null);
+					}
+				});
 			});
 		} else {
 			callback("invalid file", null);

@@ -136,7 +136,7 @@ $(function() {
      isCookBook = true;
     });
     $('#roles_tab').on('shown.bs.tab', function (e) {
-    	url = '/userRoles/save';
+    	url = '/chef/workstation/roles/';
     	isCookBook = false;
     	$fileEditorDivContianer.hide();
     	$editorBtnContainer.hide();
@@ -146,7 +146,7 @@ $(function() {
       	$workingIndicatorContainer.show();
       	$rolesDirArea.fileTree({
 		root: '/',
-		script : 'userRoles',
+		script : '/chef/workstation/roles/',
 		onFolderLoad : function(path,data) {
            if(path === '/') {
              $dirArea.show();
@@ -156,7 +156,7 @@ $(function() {
 		}
 	}, function(file) {
 		$fileEditorMsgContainer.hide();
-		$.get('userRoles/?path='+file,function(data){
+		$.get('/chef/workstation/roles/?path='+file,function(data){
            if(data.resType == 'file') {
            	 $fileEditorDivContianer.show();
            	 $editorBtnContainer.show();
