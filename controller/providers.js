@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/devops');
 
 var Schema = mongoose.Schema;
 

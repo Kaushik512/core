@@ -9,6 +9,20 @@ var io = require('socket.io');
 var appConfig = require('./app_config');
 var settingsController = require('./controller/settings');
 
+
+var mongoDbConnect = require('./controller/mongodb');
+mongoDbConnect({
+  host:process.env.HOST,
+  port:process.env.DB_PORT_27017_TCP_ADDR,
+  dbName:'devops'
+},function(err){
+  if(err) {
+    throw new Error(err);
+  } else {
+    console.log('connected to mongodb');
+  }
+});
+
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
