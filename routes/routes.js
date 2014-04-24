@@ -4,6 +4,7 @@ var provider = require('./route_providers.js');
 var chef = require('./routes_chef.js');
 var domains = require('./routes_domains.js');
 var hiddenSettings = require('./routes_hiddenSetting.js');
+var settings = require('./routes_settings');
 
 module.exports.setRoutes = function (app) {
    
@@ -12,5 +13,6 @@ module.exports.setRoutes = function (app) {
   chef.setRoutes(app,sessionVerificationFunc);
   domains.setRoutes(app,sessionVerificationFunc);
   hiddenSettings.setRoutes(app,sessionVerificationFunc);
+  settings.setRoutes(app,sessionVerificationFunc);
 
 }
