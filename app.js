@@ -44,7 +44,7 @@ var verifySession = function(req, res, next) {
   if (req.session && req.session.tempSession) {
     next();
   } else {
-    res.redirect('/login.html');
+    res.redirect('/login');
   }
 };
 
