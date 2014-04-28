@@ -7,8 +7,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 
 	app.post('/chef/hosted/cookbooks', verificationFunc, function(req, res) {
-		console.log('Returning Available Cookbooks...!!');
-		console.log(req.body);
+		
 		settingsController.getChefSettings(function(settings) {
 			//res.render('cookbooks');
 			var chef = new Chef(settings);

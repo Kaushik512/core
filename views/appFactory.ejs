@@ -1,4 +1,6 @@
 <style>
+
+
 .app-item-container{
   /*padding: 3px;*/
   background-color: white;
@@ -76,8 +78,24 @@
   margin-top: 17px;
     padding-left: 80%;
 }
+.form-left-div {
+  width : 40%;
+  display: inline-block;
+}
+.form-right-div {
+  width : 60%;
+  display: inline-block;
+}
+.recipes-list {
+              height:150px !important;
+              width:500px;
+              margin-bottom:10px;
+            
+            }
 
 </style>
+<link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
+
  <div class="appStoreArea">
 
 
@@ -251,6 +269,8 @@
 <div class="appStoreLaunchResultArea">
 </div>
 </div>
+<script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
+    <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
  <script type="text/javascript">
  $('.app-item-container').click(function(e){
       var $this = $(this);
@@ -279,8 +299,11 @@
            $clone.click(function(e){
             var $this = $(this);
             if(!$this.data('containerAdded')) {
-              var $form = $('<form role="form" class="appConfig"></form>');
-
+               var $form = $('<form role="form" class="appConfig"></form>');
+               var $leftDiv =$('<div class="form-left-div"></div>');
+               var $rightDiv =$('<div class="form-right-div"></div>');
+                
+               $form.append($leftDiv).append($rightDiv);;
                var $dropdownOS = $('<div class="form-group"><label for="osmenu">Choose Operating System</label><select class="osmenu"><option value="Ubuntu" selected>Ubuntu</option><option value="Cent OS">Cent OS</option><option value="Red Hat">Red Hat</option><option value="windows">Windows</option></select></div>');
              
               var $dropdown = $('<div class="form-group"><label for="numberOfInstance">Choose number of Instances</label><select class="numberOfInstance"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>');
@@ -289,20 +312,36 @@
 
 
              var $dropdown2 = $('<div class="form-group"><label for="sizeData">Choose Instance Size</label><select class="sizeData"><option value="micro" selected>t1.micro</option><option value="m1.small">m1.small</option><option value="m1.medium">m1.medium</option><option value="m1.large">m1.large</option><option value="m1.xlarge">m1.xlarge</option></select></div>'); 
+             var $cookbooks = $('<select id="qwer" class="recipes-list" multiple="multiple"></select>');
+               <% var str ='';
+               var i=0;
+               while(i < cookbooks.length) {
+                str = str + '<option data-id=\"'+i+'\" value=\"'+cookbooks[i]+'\">'+cookbooks[i]+'</option>';
+                i++;
+               }
+               %>
+             $cookbooks.append('<%-str%>'); 
+             $rightDiv.append($cookbooks);
               
-              $form.append($dropdownOS);
-              $form.append($dropdown);
-              $form.append($dropdown1);
-              $form.append($dropdown2);
+              $leftDiv.append($dropdownOS);
+              $leftDiv.append($dropdown);
+              $leftDiv.append($dropdown1);
+              $leftDiv.append($dropdown2);
                $('.selectedInstanceConfigurationContainer').append($form);
 
               $this.data('formEl',$form);
               $this.data('containerAdded',true);
+
             } 
 
             $('.appConfig').hide();
             var $form = $this.data('formEl');
             $form.show();
+            var $recipesList = $form.find('.recipes-list');
+            if(!$recipesList.data('isMultiSelectInitialized')) {
+               $recipesList.multiselect();
+               $recipesList.data('isMultiSelectInitialized',true);
+            }
             $('.app-store-item-selected').removeClass('app-store-item-selected');
             $clone.children().addClass('app-store-item-selected');
            });

@@ -13,11 +13,11 @@ var settingsController = require('./controller/settings');
 
 var mongoDbConnect = require('./controller/mongodb');
 mongoDbConnect({
-  host:process.env.DB_PORT_27017_TCP_ADDR,
-  port:process.env.DB_PORT_27017_TCP_PORT,
-  dbName:'devops'
-},function(err){
-  if(err) {
+  host: process.env.DB_PORT_27017_TCP_ADDR,
+  port: process.env.DB_PORT_27017_TCP_PORT,
+  dbName: 'devops'
+}, function(err) {
+  if (err) {
     throw new Error(err);
   } else {
     console.log('connected to mongodb');
@@ -329,8 +329,6 @@ app.post('/start', verifySession, function(req, resp) {
 
 
 
-
-
 app.get('/instanceStatus/:instanceId', verifySession, function(req, resp) {
   var instId = req.params.instanceId;
   // fetch domain details from mongo 
@@ -340,7 +338,6 @@ app.get('/instanceStatus/:instanceId', verifySession, function(req, resp) {
 });
 
 var fileIo = require('./controller/fileio');
-
 
 
 
@@ -422,7 +419,16 @@ app.get('/monitoring/index', verifySession, function(req, resp) {
 
 
 app.get('/app_factory', verifySession, function(req, res) {
-  res.render('appFactory');
+  settingsController.getChefSettings(function(settings) {
+    //res.render('cookbooks');
+    var chef = new Chef(settings);
+    chef.getHostedChefCookbooks(function(err, resp) {
+      res.render('appFactory', {
+        error: err,
+        cookbooks: resp
+      });
+    });
+  });
 });
 
 
