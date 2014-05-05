@@ -491,6 +491,18 @@ app.get('/environments', verifySession, function(req, res) {
 
 });
 
+app.post('/environments/saveBluePrint', function(req, res) {
+  domainsDao.upsertEnvironmentBlueprint(req.body.pid, req.body.domainName, req.body.bluePrintName, function(err, data) {
+    if (err) {
+      res.send(500);
+      console.log(err);
+      return;
+    } else {
+      res.send(200);
+    }
+  });
+});
+
 var server = http.createServer(app);
 io = io.listen(server, {
   log: false

@@ -17,8 +17,8 @@ var DomainsSchema = new Schema({
   blueprintsAppFactory: [{
     blueprintName: String,
     blueprintInstances: [String]
-  }]
-  //blueprintsEnvironment: [String]
+  }],
+  blueprintsEnvironment: [String]
 });
 
 
@@ -203,6 +203,71 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
         domainName: domainName,
         domainPid: pid,
         blueprintsAppFactory: newBluePrints
+      });
+
+      domain.save(function(err, data) {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        console.log("Domain Document Created");
+        callback(null, data);
+      });
+    }
+
+
+  });
+}
+
+module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintName, callback) {
+  console.log(domainName,pid);
+  Domains.find({
+    domainName: domainName,
+    domainPid: pid
+  }, function(err, domainData) {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    if (domainData && domainData.length) {
+      var domain = domainData[0];
+      var bluePrints = domain.blueprintsEnvironment;
+      var newBluePrints = [];
+      if (bluePrints && bluePrints.length) {
+        for (var i = 0; i < bluePrints.length; i++) {
+          if (bluePrints[i] === blueprintName) {
+            newBluePrints.push(blueprintName);
+          } else {
+            newBluePrints.push(bluePrints[i]);
+          }
+        }
+      } else {
+        newBluePrints.push(blueprintName);
+      }
+
+      Domains.update({
+        domainName: domainName,
+        domainPid: pid
+      }, {
+        $set: {
+          blueprintsEnvironment: newBluePrints
+        }
+      }, {
+        upsert: false
+      }, function(err, data) {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        callback(null, data);
+      });
+    } else {
+      // create new 
+
+      var domain = new Domains({
+        domainName: domainName,
+        domainPid: pid,
+        blueprintsEnvironment: newBluePrints
       });
 
       domain.save(function(err, data) {

@@ -249,10 +249,12 @@ padding-top: 10px;
     
   	</div>
   </div>
-  <div class="btn-container"><button class="btn btn-info" style="margin-top: 1%;">Save Blueprint</button></div>
+  <div class="btn-container"><!--<button class="btn btn-info" style="margin-top: 1%;">Save Blueprint</button>-->
+<a type="button" value="Save As Blueprint" href="#blueprintSaveModalEnv" class="saveAsAppStoreBtn btn btn-info" name="Launch" data-target="#blueprintSaveModalEnv" data-toggle="modal" role="button">Save Blueprint</a>
+  </div>
 
 <!-- Modal -->
-<div class="modal fade" id="blueprintSaveModal" tabindex="-1" role="dialog" aria-labelledby="blueprintTitle" aria-hidden="true">
+<div class="modal fade" id="blueprintSaveModalEnv" tabindex="-1" role="dialog" aria-labelledby="blueprintTitle" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -261,35 +263,35 @@ padding-top: 10px;
       </div>
       <div class="modal-body">
         <%if(domains && domains.length) { %>
-          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="bluePrintName">
+          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="bluePrintNameEnv">
             <option>Choose Blueprint</option>
         <%    for(var i=0;i<domains.length;i++) {
-             if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+             if(domains[i].blueprintsEnvironment && domains[i].blueprintsEnvironment.length) {
 
                 for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
 
             %>
-            <option value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
+            <option value="<%=domains[i].blueprintsEnvironment[j]%>"><%=domains[i].blueprintsEnvironment[j]%></option>
             <%}}}%>
              </select>
             <%}%>
-        <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintType"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameText" type="text" disabled/></span>
+        <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintTypeEnv"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameTextEnv" type="text" disabled/></span>
         <%
             if(domains && domains.length) {
             %>
-            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="bluePrintDomainName">
+            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="bluePrintDomainNameEnv">
             <option>Choose Domains</option>
             <%for(var i=0;i<domains.length;i++){%>
               <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
             <%}%>
             </select></span>
             <%}%>
-             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainType"/><span style="">&nbsp; Create New : <input id="createDomainNameText" type="text" disabled/>.relevancelab.com</span>
+             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainTypeEnv"/><span style="">&nbsp; Create New : <input id="createDomainNameTextEnv" type="text" disabled/>.relevancelab.com</span>
             
       </div>
       <div class="modal-footer">
         <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-        <button type="button" class="btn btn-primary save-blueprint-btn" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary save-blueprint-btn-env" data-dismiss="modal">Save</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -311,6 +313,57 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
 
 <script type="text/javascript">
  $(function(){
+   
+   $('#domainTypeEnv').change(function() {
+        if($(this).is(":checked")) {
+          $('#bluePrintDomainNameEnv').attr('disabled',true);
+          $('#createDomainNameTextEnv').attr('disabled',false);
+          
+        } else {
+          $('#bluePrintDomainNameEnv').attr('disabled',false);
+          $('#createDomainNameTextEnv').attr('disabled',true);
+          
+        }
+  });
+
+  $('#blueprintTypeEnv').change(function() {
+        if($(this).is(":checked")) {
+          $('#bluePrintNameEnv').attr('disabled',true);
+          $('#bluePrintNameTextEnv').attr('disabled',false);
+          
+        } else {
+          $('#bluePrintNameEnv').attr('disabled',false);
+          $('#bluePrintNameTextEnv').attr('disabled',true);          
+        }
+  });
+
+  $('.save-blueprint-btn-env').click(function(e){
+    var data = {};
+    console.log($('.nav-prod').length);
+     data.pid = $('.nav-prod').filter('.active').attr('data-pid');
+     console.log(data.pid);
+    var bluePrintName;
+    if(!$('#blueprintTypeEnv').is(":checked")) {
+      bluePrintName =  $("#bluePrintNameEnv").val();
+    } else {
+      bluePrintName =  $('#bluePrintNameTextEnv').val();
+    }
+
+    data.bluePrintName = bluePrintName;
+    var domainName;
+    if(!$('#domainTypeEnv').is(":checked")) {
+      domainName =  $("#bluePrintDomainNameEnv").val();
+    } else {
+      domainName =  $('#createDomainNameTextEnv').val() + '.relevancelab.com';
+    }
+    data.domainName = domainName;
+    $.post('/environments/saveBluePrint',data,function(data){
+       console.log('posted');
+       $('#blueprintSaveModalEnv').modal('hide')
+    });
+    return false;
+  }); 
+
   $('.left-draggable-item').draggable({ 
    	cursor: "crosshair",
     helper: "clone"
