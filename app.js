@@ -417,17 +417,44 @@ app.get('/monitoring/index', verifySession, function(req, resp) {
 
 });
 
+var domainsDao = require('./controller/domains.js');
 
-app.get('/app_factory', verifySession, function(req, res) {
+app.get('/app_factory/:pid', verifySession, function(req, res) {
   settingsController.getChefSettings(function(settings) {
     //res.render('cookbooks');
     var chef = new Chef(settings);
-    chef.getHostedChefCookbooks(function(err, resp) {
-      res.render('appFactory', {
-        error: err,
-        cookbooks: resp
+    chef.getHostedChefCookbooks(function(err, cookbooks) {
+      if (err) {
+        res.send(500);
+        return;
+      }
+
+      domainsDao.getAllDomainData(req.params.pid, function(err, domainsdata) {
+        if (err) {
+          res.send(500);
+          return;
+        }
+
+        res.render('appFactory', {
+          error: err,
+          cookbooks: cookbooks,
+          pid: req.params.pid,
+          domains: domainsdata
+        });
       });
     });
+  });
+});
+
+app.post('/app_factory/saveBluePrint', function(req, res) {
+  domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.bluePrintName, req.body.selectedHtmlString, function(err, data) {
+    if (err) {
+      res.send(500);
+      console.log(err);
+      return;
+    } else {
+      res.send(200);
+    }
   });
 });
 
@@ -440,12 +467,25 @@ app.get('/environments', verifySession, function(req, res) {
   settingsController.getChefSettings(function(settings) {
     var chef = new Chef(settings);
     chef.getHostedChefCookbooks(function(err, resp) {
-      console.log('About to Render...!! ');
-      res.render('environments', {
-        error: err,
-        cookbooks: resp,
-        envType: req.query.envType
+      if (err) {
+        res.send(500);
+        return;
+      }
+      domainsDao.getAllDomainData(req.params.pid, function(err, domainsdata) {
+        if (err) {
+          res.send(500);
+          return;
+        }
+        res.render('environments', {
+          error: err,
+          cookbooks: resp,
+          envType: req.query.envType,
+          pid: req.params.pid,
+          domains: domainsdata
+        });
+
       });
+
     });
   });
 

@@ -54,29 +54,21 @@
     padding: 10px 5px;
     width: 100px
 }
-.launchInstancesBtn {
-  background: none repeat scroll 0 0 #428BCA;
-    border: 0 none;
-    border-radius: 5px;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 10px 5px;
-    width: 100px 
-} 
-.backappStoreBtn {
+ 
+.action-button {
     background: none repeat scroll 0 0 #428BCA;
     border: 0 none;
     border-radius: 5px;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     cursor: pointer;
     font-weight: bold;
     padding: 10px 5px;
-    width: 100px 
+    width: 100px;
+    text-decoration: none !important; 
 }
 .appStoreBtnContainer {
   margin-top: 17px;
-    padding-left: 80%;
+    padding-left: 63%;
 }
 .form-left-div {
   width : 40%;
@@ -87,11 +79,14 @@
   display: inline-block;
 }
 .recipes-list {
-              height:150px !important;
-              width:500px;
-              margin-bottom:10px;
+  height:150px !important;
+  width:500px;
+  margin-bottom:10px;
             
-            }
+}
+.saveAsAppStoreBtn{
+width:145px;
+}
 
 </style>
 <link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
@@ -246,6 +241,49 @@
   </div>
 </div>
 </li>
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/wordpress-logo.png" alt="WordPress" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>WordPress</strong></span>
+     
+    </div>      
+  </div>
+</div>
+</li>
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/joomla-logo.png" alt="Joomla" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Joomla</strong></span>
+      
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-appItem">
+    <div data-hdd="500GB" data-ram="" data-cpu="2Core" data-runlist="JIRA,JIRA Agile,Crowd,Confluence," data-title="Planning" data-amiid="ami-9f042ff6" data-cid="1" class="app-item-container">
+       <div class="instance-icon-container">
+     <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/droopal.jpg" alt="Drupal" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption app-instance-runlist">
+      <span class="app-item-heading"><strong>Drupal</strong></span>
+     
+    </div>      
+  </div>
+</div>
+</li>
 
 </ul>
 
@@ -262,6 +300,7 @@
  <div class="selectedInstanceConfigurationContainer"></div>
   <div class="appStoreBtnContainer">
   <input type="button" value="Back" class="backappStoreBtn action-button" name="Launch">
+  <a type="button" value="Save As Blueprint" href="#blueprintSaveModal" class="saveAsAppStoreBtn action-button" name="Launch" data-target="#blueprintSaveModal" data-toggle="modal" role="button">Save As Blueprint</a>
   <input type="button" value="Launch" class="launchInstancesBtn action-button" name="Launch">
   <a class="app_store_domain_settings" style="" href="#domainModal" data-target="#domainModal" data-toggle="modal" role="button" title="Domain"></a>
   </div> 
@@ -269,9 +308,107 @@
 <div class="appStoreLaunchResultArea">
 </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="blueprintSaveModal" tabindex="-1" role="dialog" aria-labelledby="blueprintTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+        <h4 class="modal-title" id="blueprintTitle">Blueprint Name</h4>
+      </div>
+      <div class="modal-body">
+        <%if(domains && domains.length) { %>
+          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="bluePrintName">
+            <option>Choose Blueprint</option>
+        <%    for(var i=0;i<domains.length;i++) {
+             if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+
+                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
+
+            %>
+            <option value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
+            <%}}}%>
+             </select>
+            <%}%>
+        <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintType"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameText" type="text" disabled/></span>
+        <%
+            if(domains && domains.length) {
+            %>
+            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="bluePrintDomainName">
+            <option>Choose Domains</option>
+            <%for(var i=0;i<domains.length;i++){%>
+              <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
+            <%}%>
+            </select></span>
+            <%}%>
+             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainType"/><span style="">&nbsp; Create New : <input id="createDomainNameText" type="text" disabled/>.relevancelab.com</span>
+            
+      </div>
+      <div class="modal-footer">
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        <button type="button" class="btn btn-primary save-blueprint-btn" data-dismiss="modal">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
     <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
  <script type="text/javascript">
+ $('#domainType').change(function() {
+        if($(this).is(":checked")) {
+          $('#bluePrintDomainName').attr('disabled',true);
+          $('#createDomainNameText').attr('disabled',false);
+          
+        } else {
+          $('#bluePrintDomainName').attr('disabled',false);
+          $('#createDomainNameText').attr('disabled',true);
+          
+        }
+  });
+
+  $('#blueprintType').change(function() {
+        if($(this).is(":checked")) {
+          $('#bluePrintName').attr('disabled',true);
+          $('#bluePrintNameText').attr('disabled',false);
+          
+        } else {
+          $('#bluePrintName').attr('disabled',false);
+          $('#bluePrintNameText').attr('disabled',true);
+          
+        }
+  });
+
+  var selectedHtmlString = []; 
+
+ $('.save-blueprint-btn').click(function(e){
+    var data = {};
+     data.pid = <%=pid%>;
+    var bluePrintName;
+    if(!$('#blueprintType').is(":checked")) {
+      bluePrintName =  $("#bluePrintName").val();
+    } else {
+      bluePrintName =  $('#bluePrintNameText').val();
+    }
+
+    data.bluePrintName = bluePrintName;
+    var domainName;
+    if(!$('#domainType').is(":checked")) {
+      domainName =  $("#bluePrintDomainName").val();
+    } else {
+      domainName =  $('#createDomainNameText').val() + '.relevancelab.com';
+    }
+    data.domainName = domainName;
+    data.selectedHtmlString = selectedHtmlString;
+    $.post('/app_factory/saveBluePrint',data,function(data){
+       console.log('posted');
+       $('#blueprintSaveModal').modal('hide')
+    });
+    return false;
+ }); 
+
  $('.app-item-container').click(function(e){
       var $this = $(this);
       if($this.parent().hasClass('app-store-item-selected')) {
@@ -279,6 +416,7 @@
       } else {
         $this.parent().addClass('app-store-item-selected');
       }
+
     });
     $('.configureInstancesBtn').click(function(e){
       var $selectedItems = $('.app-store-item-selected');
@@ -289,9 +427,12 @@
       var $ul = $('<ul class="thumbnails list-unstyled"></ul>');
        $('.selectedInstanceConfigurationContainer').empty();
        var firstElement = null;
+       
+     
 
       $selectedItems.each(function(index,item){
            var $clone = $(item).removeClass('app-store-item-selected').parent().clone(false,false)
+           selectedHtmlString.push($clone.html());
            if(!firstElement) {
              firstElement = $clone;
            }

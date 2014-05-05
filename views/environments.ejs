@@ -250,7 +250,57 @@ padding-top: 10px;
   	</div>
   </div>
   <div class="btn-container"><button class="btn btn-info" style="margin-top: 1%;">Save Blueprint</button></div>
+
+<!-- Modal -->
+<div class="modal fade" id="blueprintSaveModal" tabindex="-1" role="dialog" aria-labelledby="blueprintTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+        <h4 class="modal-title" id="blueprintTitle">Blueprint Name</h4>
+      </div>
+      <div class="modal-body">
+        <%if(domains && domains.length) { %>
+          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="bluePrintName">
+            <option>Choose Blueprint</option>
+        <%    for(var i=0;i<domains.length;i++) {
+             if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+
+                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
+
+            %>
+            <option value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
+            <%}}}%>
+             </select>
+            <%}%>
+        <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintType"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameText" type="text" disabled/></span>
+        <%
+            if(domains && domains.length) {
+            %>
+            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="bluePrintDomainName">
+            <option>Choose Domains</option>
+            <%for(var i=0;i<domains.length;i++){%>
+              <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
+            <%}%>
+            </select></span>
+            <%}%>
+             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainType"/><span style="">&nbsp; Create New : <input id="createDomainNameText" type="text" disabled/>.relevancelab.com</span>
+            
+      </div>
+      <div class="modal-footer">
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        <button type="button" class="btn btn-primary save-blueprint-btn" data-dismiss="modal">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </div>
+
+
+
+
+
 </body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>

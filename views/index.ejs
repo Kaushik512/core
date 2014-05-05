@@ -930,7 +930,8 @@ body {
       $app_store_configuration = $('#app_store_configuration'); 
       $app_store_link_tab.on('shown.bs.tab',function (e) {
           $app_store_configuration.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-          $.get('/app_factory',function(data){
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/app_factory/'+pid,function(data){
             $app_store_configuration.empty().append(data);
           });
   
