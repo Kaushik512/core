@@ -329,7 +329,7 @@ width:145px;
             %>
             <option value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
             <%}}}%>
-             </select>
+             </select></span>
             <%}%>
         <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintType"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameText" type="text" disabled/></span>
         <%
@@ -359,10 +359,13 @@ width:145px;
  <script type="text/javascript">
  $('#domainType').change(function() {
         if($(this).is(":checked")) {
+           $('#bluePrintDomainName').parent().hide();
+         
           $('#bluePrintDomainName').attr('disabled',true);
           $('#createDomainNameText').attr('disabled',false);
           
         } else {
+          $('#bluePrintDomainName').parent().show();
           $('#bluePrintDomainName').attr('disabled',false);
           $('#createDomainNameText').attr('disabled',true);
           
@@ -371,10 +374,12 @@ width:145px;
 
   $('#blueprintType').change(function() {
         if($(this).is(":checked")) {
+            $('#bluePrintName').parent().hide();
           $('#bluePrintName').attr('disabled',true);
           $('#bluePrintNameText').attr('disabled',false);
           
         } else {
+           $('#bluePrintName').parent().show();
           $('#bluePrintName').attr('disabled',false);
           $('#bluePrintNameText').attr('disabled',true);
           

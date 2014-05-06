@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/redmond/jquery-ui.min.css">
+    <!--<link rel="stylesheet" href="css/redmond/jquery-ui.min.css">-->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 <style>
 html,body {
@@ -10,6 +10,7 @@ html,body {
 }
 .environmentContainer {
 padding-top: 10px;
+height: 100%;
 }
 .topRow {
 	height: 10%;
@@ -273,7 +274,7 @@ padding-top: 10px;
             %>
             <option value="<%=domains[i].blueprintsEnvironment[j]%>"><%=domains[i].blueprintsEnvironment[j]%></option>
             <%}}}%>
-             </select>
+             </select></span>
             <%}%>
         <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintTypeEnv"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameTextEnv" type="text" disabled/></span>
         <%
@@ -304,22 +305,24 @@ padding-top: 10px;
 
 
 </body>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
 window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')
 </script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-<script src="js/bootstrap.js"></script>
+<script src="js/bootstrap.js"></script> -->
 
 <script type="text/javascript">
  $(function(){
    
    $('#domainTypeEnv').change(function() {
         if($(this).is(":checked")) {
+          $('#bluePrintDomainNameEnv').parent().hide();
           $('#bluePrintDomainNameEnv').attr('disabled',true);
           $('#createDomainNameTextEnv').attr('disabled',false);
           
         } else {
+           $('#bluePrintDomainNameEnv').parent().show();
           $('#bluePrintDomainNameEnv').attr('disabled',false);
           $('#createDomainNameTextEnv').attr('disabled',true);
           
@@ -328,10 +331,12 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
 
   $('#blueprintTypeEnv').change(function() {
         if($(this).is(":checked")) {
+           $('#bluePrintNameEnv').parent().hide();
           $('#bluePrintNameEnv').attr('disabled',true);
           $('#bluePrintNameTextEnv').attr('disabled',false);
           
         } else {
+           $('#bluePrintNameEnv').parent().show();
           $('#bluePrintNameEnv').attr('disabled',false);
           $('#bluePrintNameTextEnv').attr('disabled',true);          
         }

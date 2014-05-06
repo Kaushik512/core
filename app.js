@@ -461,7 +461,7 @@ app.post('/app_factory/saveBluePrint', function(req, res) {
 
 var Chef = require('./controller/chef');
 
-app.get('/environments', verifySession, function(req, res) {
+app.get('/environments/:pid', verifySession, function(req, res) {
   console.log(req.query.envType);
 
   settingsController.getChefSettings(function(settings) {

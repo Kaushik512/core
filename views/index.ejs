@@ -583,23 +583,19 @@ body {
       </div>
       <div id="environment_tab" class="tab-pane" style="height: 96%;">
          <ul class="nav nav-tabs environment-tabs">
-              <li class="active"><a id="env_dev_link" href="#env_dev_tab" data-toggle="tab">Dev</a></li>
-              <li><a id="env_test_link" href="#env_test_tab" data-toggle="tab">Test</a></li> 
-              <li><a id="env_stage_link" href="#env_stage_tab" data-toggle="tab">Stage</a></li> 
-              <li><a id="env_production_link" href="#env_production_tab" data-toggle="tab">Production</a></li> 
+              <li class=""><a id="env_dev_link" class="envTabType" href="#env_dev_tab" data-toggle="tab">Dev</a></li>
+              <li><a id="env_test_link" class="envTabType" href="#env_test_tab" data-toggle="tab">Test</a></li> 
+              <li><a id="env_stage_link" class="envTabType" href="#env_stage_tab" data-toggle="tab">Stage</a></li> 
+              <li><a id="env_production_link" class="envTabType" href="#env_production_tab" data-toggle="tab">Production</a></li> 
           </ul>
           <div class="tab-content" style="height: 100%;">
-             <div id="env_dev_tab" class="tab-pane active" style="height: 100%;">
-              <iframe src="/environments?envType=\"dev\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             <div id="env_dev_tab" class="tab-pane envTab" data-envType="dev" style="height: 100%;">
              </div>
-             <div id="env_test_tab" class="tab-pane" style="height: 100%;">
-              <iframe src="/environments?envType=\"test\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             <div id="env_test_tab" class="tab-pane envTab" style="height: 100%;" data-envType="test">
              </div>
-             <div id="env_stage_tab" class="tab-pane" style="height: 100%;">
-              <iframe src="/environments?envType=\"stage\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             <div id="env_stage_tab" class="tab-pane envTab" style="height: 100%;" data-envType="stage">
              </div>
-             <div id="env_production_tab" class="tab-pane" style="height: 100%;">
-              <iframe src="environments?envType=\"production\"" frameBorder="0" style="height: 100%;width: 100%;"></iframe>
+             <div id="env_production_tab" class="tab-pane envTab" style="height: 100%;" data-envType="production">
              </div>
           </div>
       </div>
@@ -970,11 +966,27 @@ body {
 
         $providers.filter('.active').trigger('click');
       
-   
-
+   $envTabs = $('.envTab');
+   $('.envTabType').on('shown.bs.tab',function (e) {
+    $envTabs.empty();
+      var tab  = $(this).attr('href');
+      var pid = $('.nav-prod').filter('.active').attr('data-pid');
+      var $tab = $(tab);
+      $tab.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom:10%" src="img/loading.gif" />')
+      var envType = $tab.attr('data-envType');
+      /*$tab.empty().append('<iframe src="'+'/environments/'+pid+'?envType='+envType+'" frameBorder=0 height="100%" width="100%"></iframe>');*/ 
+      
+      $.get('/environments/'+pid+'?envType='+envType,function(data){
+        $tab.empty().append(data); 
+      });     
+   });
 
 
     });
+$('#environment_link_tab').on('shown.bs.tab',function (e) {
+  console.log('here');
+  $('#env_dev_link').tab('show');
+});
 
     
      
