@@ -1,4 +1,8 @@
 var providers = require('../controller/providers.js')
+var settingsController = require('../controller/settings');
+var domainsDao = require('./controller/domains.js');
+var EC2 = require('./controller/ec2.js');
+
 
 module.exports.setRoutes = function(app, verifySession) {
 
@@ -27,5 +31,34 @@ module.exports.setRoutes = function(app, verifySession) {
 		} else {
 			res.send(404);
 		}
+	});
+
+	app.post('/providers/:pid/roles/launch', verifySession, function(req, res) {
+		settingsController.getSettings(function(settings) {
+			var domainName = req.body.domainName;
+			var pid = req.body.pid;
+			var selectedInstances = req.body.selectedInstances;
+			console.log(selectedInstances);
+			if (selectedInstances) {
+				domainsDao.createDomainDocument(domainName, pid, function(err, data) {
+					if (err) {
+						res.send(500, "unable to create domain");
+					} else {
+						var keys = Object.keys(selectedInstances);
+						var ec2 = new EC2(settings.aws);
+						var count = keys.length;
+						for (var i = 0; i < keys.length; i++) {
+							(
+							function(inst) {
+                               
+
+							})(selectedInstances[keys[i]);
+						}
+					}
+				});
+			} else {
+				res.send(400, "invalid parameters");
+			}
+		});
 	});
 }
