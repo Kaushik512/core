@@ -33,7 +33,7 @@ module.exports.setRoutes = function(app, verifySession) {
 		}
 	});
 
-	app.post('/providers/:pid/roles/launch', verifySession, function(req, res) {
+	/*app.post('/providers/:pid/roles/launch', verifySession, function(req, res) {
 		settingsController.getSettings(function(settings) {
 			var domainName = req.body.domainName;
 			var pid = req.body.pid;
@@ -60,5 +60,5 @@ module.exports.setRoutes = function(app, verifySession) {
 				res.send(400, "invalid parameters");
 			}
 		});
-	});
+	});*/
 }
