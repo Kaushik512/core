@@ -1,7 +1,7 @@
 var providers = require('../controller/providers.js')
 var settingsController = require('../controller/settings');
-var domainsDao = require('./controller/domains.js');
-var EC2 = require('./controller/ec2.js');
+var domainsDao = require('../controller/domains.js');
+var EC2 = require('../controller/ec2.js');
 
 
 module.exports.setRoutes = function(app, verifySession) {
