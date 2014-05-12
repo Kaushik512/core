@@ -8,7 +8,6 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.get('/', verifySession, function(req, res) {
 		providers.getProviders(function(err, products) {
-			console.log(products);
 			res.render('index', {
 				error: err,
 				products: products
@@ -17,8 +16,6 @@ module.exports.setRoutes = function(app, verifySession) {
 	});
 
 	app.get('/providers/:pid/roles', verifySession, function(req, res) {
-		console.log("fetching for pid ");
-		console.log(req.params);
 		var pid = req.params.pid;
 		if (pid) {
 			providers.getProviderRoles(pid, function(err, data) {

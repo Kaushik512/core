@@ -1,0 +1,67 @@
+<html>
+<head>
+ <link rel="stylesheet" href="../css/bootstrap.css">
+<title>Please Login to continue</title>
+<style type="text/css">
+ .text-center {
+ 	text-align: center;
+ }
+ .no-border-radius {
+  border-radius:0; 
+ }
+ .form-container {
+ 	margin-left: 27%;
+    width: 50%;
+ }
+</style>
+</head>
+
+<body>
+   <header>
+        <nav class="navbar navbar-inverse no-border-radius" role="navigation">
+            <a class="navbar-brand" href="#">
+                <img src="../img/version2.png" alt="logo" height="30" width="70">
+                <span class="logotext">DevOps for DevOps</span>
+            </a>
+        </nav>
+    </header>
+
+<div class="form-container">
+<form role="form" action="/user/create" method="POST">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+  </div>
+  <div class="form-group">
+    <label for="fname"> First Name</label>
+    <input type="text" class="form-control" id="fname" placeholder="Enter first Name" name="fname">
+  </div>
+  <div class="form-group">
+    <label for="lname">Last Name</label>
+    <input type="text" class="form-control" id="lname" placeholder="Enter last name" name="lname">
+  </div>
+  
+  <div class="form-group">
+    <label for="userGroup">Group</label>
+    <select class="form-control" id="userGroup" name="userGroup"><option value="SCLT_Group1">SCLT_Group1</option>
+    <option value="SCLT_Group2">SCLT_Group2</option>
+   <option value="SCLT_Group3">SCLT_Group3</option>
+</select>
+<div class="form-group">
+    <label for="userRole">Role</label>
+    <select class="form-control" id="userRole" name="userRole"><option value="501">Business User</option>
+    <option value="500">Service Consumer</option>
+   <option value="502">Service Designer</option>
+</select>
+  </div>
+  
+  <button type="submit" class="btn btn-default">Create User</button>
+</form>
+
+</div>
+</body>
+</html>

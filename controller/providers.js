@@ -26,7 +26,7 @@ var provider = mongoose.model('providers', providerSchema);
 
 
 module.exports.getProviders = function(callback) {
-  console.log('now i m here');
+  //console.log('now i m here');
   provider.find({}, 'name pid status', function(err, data) {
 
     if (err) {
@@ -66,7 +66,7 @@ module.exports.setProviderStatus = function(pidList, callback) {
   for (var i = 0; i < pidList.length; i++) {
     pidList[i] = parseInt(pidList[i]);
   }
-  console.log(pidList);
+  //console.log(pidList);
   provider.update({
     pid: {
       $in: pidList
