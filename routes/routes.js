@@ -6,6 +6,8 @@ var domains = require('./routes_domains.js');
 var hiddenSettings = require('./routes_hiddenSetting.js');
 var settings = require('./routes_settings');
 var users = require('./route_users');
+var awsCloudFormation = require('./route_awsCloudFormation');
+
 
 module.exports.setRoutes = function (app) {
    
@@ -16,4 +18,6 @@ module.exports.setRoutes = function (app) {
   hiddenSettings.setRoutes(app,sessionVerificationFunc);
   settings.setRoutes(app,sessionVerificationFunc);
   users.setRoutes(app,sessionVerificationFunc);
+  awsCloudFormation.setRoutes(app,sessionVerificationFunc);
+
 }

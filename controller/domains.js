@@ -10,8 +10,10 @@ var DomainsSchema = new Schema({
     instanceId: String,
     instanceIP: String,
     instanceRole: String,
+    instanceState: String,
     instanceActive: Boolean,
     bootStrapStatus: Boolean,
+    bootStrapLog:String,
     runlist: [String],
   }],
   blueprintsAppFactory: [{
@@ -132,6 +134,70 @@ module.exports.updateInstanceStatus = function(domainName, instanceId, status, c
 
   });
 }
+
+module.exports.updateInstanceState = function(domainName, instanceId, instanceState, callback) {
+  Domains.update({
+    domainName: domainName,
+    "domainInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "domainInstances.$.instanceState": instanceState
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+}
+
+module.exports.updateInstanceBootstrapStatus = function(domainName, instanceId, bootStrapStatus, callback) {
+  Domains.update({
+    domainName: domainName,
+    "domainInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "domainInstances.$.bootStrapStatus": bootStrapStatus
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+}
+
+module.exports.updateInstanceBootstrapLog = function(domainName, instanceId, bootStrapLog, callback) {
+  Domains.update({
+    domainName: domainName,
+    "domainInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "domainInstances.$.bootStrapLog": bootStrapLog
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+}
+
 
 module.exports.deleteDomains = function(pid, domainName, callback) {
   Domains.remove({

@@ -243,6 +243,33 @@ var Chef = function(settings) {
 		} else {
 			callback("invalid file", null);
 		}
+	};
+
+
+	this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
+		var options = {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err, null);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		};
+		if (typeof callbackOnStdOut === 'function') {
+			options.onStdOut = function(data) {
+				callbackOnStdOut(data);
+			}
+		}
+
+		if (typeof callbackOnStdErr === 'function') {
+			options.onStdOut = function(data) {
+				callbackOnStdErr(data);
+			}
+		}
+
+		var proc = new Process('knife', 'knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runList.join(), '-x' + params.instanceUserName], options);
+		proc.start();
 	}
 
 }
