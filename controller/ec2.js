@@ -133,10 +133,10 @@ var EC2 = function(awsSettings) {
 				});
 			}, 30000);
 		}
-		timeoutFunc(checkInstanceId);
+		timeoutFunc(instanceId);
 
 	}
 
 }
 
-module.exports.EC2 = EC2;
+module.exports = EC2;

@@ -263,12 +263,16 @@ var Chef = function(settings) {
 		}
 
 		if (typeof callbackOnStdErr === 'function') {
-			options.onStdOut = function(data) {
+			options.onStdErr = function(data) {
 				callbackOnStdErr(data);
 			}
 		}
+		if((!(params.runList) || !params.runList.length)) {
+			params.runList = [' '];
 
-		var proc = new Process('knife', 'knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runList.join(), '-x' + params.instanceUserName], options);
+		}
+
+		var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runList.join(), '-x' + params.instanceUserName], options);
 		proc.start();
 	}
 

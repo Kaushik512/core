@@ -331,9 +331,18 @@ app.post('/start', verifySession, function(req, resp) {
 
 app.get('/instanceStatus/:instanceId', verifySession, function(req, resp) {
   var instId = req.params.instanceId;
-  // fetch domain details from mongo 
-  //console.log(instancesStatus[instId]);
-  resp.json(instancesStatus[instId]);
+  domainsDao.getInstance(instId, function(err, data) {
+    if (err) {
+      res.send(500);
+    } else {
+      if(data) {
+       resp.json([data]);
+      } else {
+       resp.json([]);
+     }
+    }
+
+  });
 
 });
 

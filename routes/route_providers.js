@@ -2,6 +2,7 @@ var providers = require('../controller/providers.js')
 var settingsController = require('../controller/settings');
 var domainsDao = require('../controller/domains.js');
 var EC2 = require('../controller/ec2.js');
+var Chef = require('../controller/chef.js');
 
 
 
@@ -95,27 +96,26 @@ module.exports.setRoutes = function(app, verifySession) {
 											failedIntances.push(inst.title);
 										} else {
 											successInstances.push({
-												key: inst.type,
-												instance: instanceData.InstanceId
+												title: inst.title,
+												instanceId: instanceData.InstanceId
 											});
-											if (count == 0) { //all instance are processed
-												res.json({
-													launchedInstances: successInstances,
-													launchedFailedInstance: failedIntances
-												});
-											}
+
 
 											//processing launched intance 
 
 											//saving in database 
-											var instanceData = {
+											var instance = {
 												instanceId: instanceData.InstanceId,
 												instanceIP: instanceData.PublicIpAddress,
 												instanceRole: inst.title,
 												instanceActive: true,
 												instanceState: instanceData.State.Name,
-												bootStrapLog: 'waiting'
-												bootStrapStatus: false,
+												bootStrapLog: {
+													err: false,
+													log: 'waiting',
+													timestamp: new Date().getTime()
+												},
+												bootStrapStatus: 'waiting',
 												runlist: inst.runlist.split(',')
 											}
 
@@ -128,7 +128,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 													//enabling scheduled termination 
 													setTimeout(function() {
-														ec2.terminateInstances(instanceData.InstanceId, function(err, data) {
+														ec2.terminateInstance(instanceData.InstanceId, function(err, data) {
 															if (err) {
 																return;
 															} else {
@@ -150,8 +150,9 @@ module.exports.setRoutes = function(app, verifySession) {
 															return;
 														} else {
 															//updating instance state
-															domainsDao.updateInstanceState(domainName, instanceData.InstanceId, data.State.Name, function(err, updateData) {
+															domainsDao.updateInstanceState(domainName, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
 																if (err) {
+																	console.log("update instance state err ==>", err);
 																	return;
 																}
 																//bootstrapping instance
@@ -176,19 +177,21 @@ module.exports.setRoutes = function(app, verifySession) {
 
 
 																var chef = new Chef(settings.chef);
-																chef.bootstarpInstance({
+																chef.bootstrapInstance({
 																	instanceIp: instanceData.PublicIpAddress,
 																	pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
 																	runList: combinedRunList,
 																	instanceUserName: settings.aws.instanceUserName
 																}, function(err, code) {
+																	console.log('process stopped ==> ', err, code);
 																	if (err) {
-																		domainsDao.updateInstanceBootstrapStatus(domainName, instanceData.InstanceId, false, function(err, updateData) {
+																		console.log("knife launch err ==>", err);
+																		domainsDao.updateInstanceBootstrapStatus(domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
 
 																		});
 																	} else {
 																		if (code == 0) {
-																			domainsDao.updateInstanceBootstrapStatus(domainName, instanceData.InstanceId, true, function(err, updateData) {
+																			domainsDao.updateInstanceBootstrapStatus(domainName, instanceData.InstanceId, 'success', function(err, updateData) {
 																				if (err) {
 																					console.log("Unable to set instance bootstarp status");
 																				} else {
@@ -197,7 +200,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 																			});
 																		} else {
-																			domainsDao.updateInstanceBootstrapStatus(domainName, instanceData.InstanceId, false, function(err, updateData) {
+																			domainsDao.updateInstanceBootstrapStatus(domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
 																				if (err) {
 																					console.log("Unable to set instance bootstarp status");
 																				} else {
@@ -208,9 +211,30 @@ module.exports.setRoutes = function(app, verifySession) {
 																	}
 
 																}, function(stdOutData) {
+																	domainsDao.updateInstanceBootstrapLog(domainName, instanceData.InstanceId, {
+																		err: false,
+																		log: stdOutData.toString('ascii'),
+																		timestamp: new Date().getTime()
+																	}, function(err, data) {
+																		if (err) {
+																			console.log('unable to update bootStrapLog');
+																			return;
+																		}
+																		console.log('bootStrapLog updated');
+																	});
 
 																}, function(stdErrData) {
-
+																	domainsDao.updateInstanceBootstrapLog(domainName, instanceData.InstanceId, {
+																		err: true,
+																		log: stdErrData.toString('ascii'),
+																		timestamp: new Date().getTime()
+																	}, function(err, data) {
+																		if (err) {
+																			console.log('unable to update bootStrapLog');
+																			return;
+																		}
+																		console.log('bootStrapLog updated');
+																	});
 																});
 
 
@@ -222,7 +246,14 @@ module.exports.setRoutes = function(app, verifySession) {
 												}
 											});
 										}
+										if (count == 0) { //all instance are processed
+											res.json({
+												launchedInstances: successInstances,
+												launchedFailedInstance: failedIntances
+											});
+										}
 									});
+
 								})(keys[i], selectedInstances[keys[i]]);
 						}
 					}

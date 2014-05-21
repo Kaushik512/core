@@ -12,8 +12,12 @@ var DomainsSchema = new Schema({
     instanceRole: String,
     instanceState: String,
     instanceActive: Boolean,
-    bootStrapStatus: Boolean,
-    bootStrapLog:String,
+    bootStrapStatus: String,
+    bootStrapLog: {
+      err: Boolean,
+      log: String,
+      timestamp: Number
+    },
     runlist: [String],
   }],
   blueprintsAppFactory: [{
@@ -215,7 +219,7 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
 }
 
 module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintName, blueprintInstanceString, callback) {
-  console.log(domainName,pid);
+  console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
     domainPid: pid
@@ -286,7 +290,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
 }
 
 module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintName, callback) {
-  console.log(domainName,pid);
+  console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
     domainPid: pid
@@ -348,4 +352,33 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 
 
   });
+}
+
+
+module.exports.getInstance = function(instanceId, callback) {
+  Domains.find({
+    "domainInstances.instanceId": instanceId
+  }, function(err, data) {
+    if (err) {
+      callback(err, null);
+    } else {
+      if(data.length) {
+        var domainInstances = data[0].domainInstances;
+        if(domainInstances && domainInstances.length) {
+          for(var i=0;i<domainInstances.length;i++) {
+            if(domainInstances[i].instanceId == instanceId) {
+              callback(null,domainInstances[i]);
+              return;
+            }
+          }
+          callback(null,null);
+        } else {
+          callback(null,null);
+        }
+      } else {
+        callback(null, null);
+      }
+    }
+  });
+
 }
