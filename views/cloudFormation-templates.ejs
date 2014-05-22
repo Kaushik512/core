@@ -1,0 +1,175 @@
+<style>
+.formation-cards-container{
+  background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    height: 97%;
+    margin-left: 20px;
+    margin-top: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 97%;
+}
+.configureStackContainer {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    height: 97%;
+    margin-left: 20px;
+    margin-top: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 97%;
+   display: none;
+}
+.margin-bt-templateItem {
+  margin-bottom: 10px !important;
+}
+.template-item-container{
+  /*padding: 3px;*/
+  background-color: white;
+  cursor: pointer;
+}
+.template-icon-container{
+    color: #DCDCDC;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.template-instance-runlist {
+  padding-bottom: 5px !important;
+    padding-top: 0 !important;
+    min-height: 90px;
+}
+.template-item-heading {
+  text-align: center;
+  font-size: 11px;
+  text-decoration: underline;
+  display: block;
+   margin-bottom: 5px;
+}
+.template-item-runlist-block {
+  display: block;
+  font-size: 11px;
+  text-align: center;; 
+}
+.action-button {
+    background: none repeat scroll 0 0 #428BCA;
+    border: 0 none;
+    border-radius: 5px;
+    color: #FFFFFF !important;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 5px;
+    width: 100px;
+    text-decoration: none !important; 
+}
+.configureStackBtn {
+   background: none repeat scroll 0 0 #428BCA;
+    border: 0 none;
+    border-radius: 5px;
+    bottom: 43px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    margin: 10px 5px 38px 36%;
+    padding: 10px 5px;
+    position: absolute;
+    width: 100px;
+}
+.template-item-selected {
+   background-color: green !important;
+}
+
+</style>
+
+<div class="formation-cards-container">
+<ul id="dynamiclist" class="thumbnails list-unstyled" style="margin-top: 30px;">
+  <li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div class="template-item-container" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/LAMP_Simple.template" data-template-title="LAMP">
+       <div class="template-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/lamp-icon.png" alt="Lamp Stack" style="height: 50px;"/>
+    </div>
+    <div class="caption template-instance-runlist">
+      <span class="template-item-heading"><strong>LAMP</strong></span>
+      <span class="template-item-runlist-block">Apache</span>
+      <span class="template-item-runlist-block">Mysql</span>
+      <span class="template-item-runlist-block">PHP</span>
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div class="template-item-container" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Joomla!_Simple.template" data-template-title="Joomla">
+       <div class="template-icon-container" >
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/joomla-logo.png" alt="Joomla Stack"  style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption template-instance-runlist">
+      <span class="template-item-heading"><strong>Joomla</strong></span>
+    </div>      
+  </div>
+</div>
+</li>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div class="template-item-container" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/RDS_MySQL_55.template" data-template-title="RDS MySql 55 Stack">
+       <div class="template-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img src="img/app-store-icons/mysql-icon.jpg" alt="RDS MySql 55 Stack" style="height: 50px;width: 100px;"/>
+    </div>
+    <div class="caption template-instance-runlist">
+      <span class="template-item-heading"><strong>RDS MySql 55</strong></span>
+    </div>      
+  </div>
+</div>
+</li>
+
+
+</ul>
+<input type="button" value="Next" class="configureStackBtn action-button" name="Launch">
+</div>
+<div class="configureStackContainer">
+
+</div>
+<script type="text/javascript">
+ ( 
+ function() {
+
+   var selectedStack = null;
+   var $templateItemContainer = $('.template-item-container');
+   $templateItemContainer.click(function(e){
+      var $this = $(this);
+      selectedStack = {};
+      selectedStack.templateUrl = $this.attr('data-template-url');
+      selectedStack.title = $this.attr('data-template-title');
+      
+      $templateItemContainer.parent().removeClass('template-item-selected');
+      $this.parent().addClass('template-item-selected');
+    });
+   
+   var $formationCardsContainer = $('.formation-cards-container');
+   var $configureStackContainer = $('.configureStackContainer');
+   $('.configureStackBtn').click(function(e){
+     if(selectedStack) {
+         $formationCardsContainer.hide();
+          $configureStackContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          $configureStackContainer.show();
+     	$.post('/aws/cloudformation/configureTemplates',selectedStack,function(data){
+           $configureStackContainer.empty().append(data);
+     	}).error(function(){
+     		alert("Error Occured");
+     	});
+     } else {
+     	alert("Please choose a template first");
+     }
+   });
+
+})();
+
+</script>

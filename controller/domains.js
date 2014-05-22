@@ -20,6 +20,10 @@ var DomainsSchema = new Schema({
     },
     runlist: [String],
   }],
+  stacks : [{
+    stackId : String,
+    stackName:String
+  }],
   blueprintsAppFactory: [{
     blueprintName: String,
     blueprintInstances: [String]
@@ -382,3 +386,25 @@ module.exports.getInstance = function(instanceId, callback) {
   });
 
 }
+
+module.exports.saveStackDetails = function(domainName, stackObjArray, callback) {
+
+  Domains.update({
+    domainName: domainName
+  }, {
+    $pushAll: {
+      stacks: stackObjArray
+    }
+  }, {
+    upsert: true
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+
+};

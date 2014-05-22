@@ -527,7 +527,8 @@ body {
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Roles</li> 
-              <li><a id="app_store_link_tab" href="#app_store_configuration" data-toggle="tab">App Factory</a></li> 
+              <li><a id="app_store_link_tab" href="#app_factory_container" data-toggle="tab">App Factory</a></li> 
+              <li><a id="cloudFormation_link_tab" href="#cloudFormation_container" data-toggle="tab">AWS Cloud Formation</a></li> 
               <li><a id="environment_link_tab" href="#environment_tab" data-toggle="tab">Environments</a></li> 
               <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
                <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li>                 
@@ -575,9 +576,15 @@ body {
 
       </div> 
         <!-- for app store -->
-      <div class="tab-pane" id="app_store_configuration" style="height: 100%;">
+      <div class="tab-pane" id="app_factory_container" style="height: 100%;">
         
       </div>
+
+      <div class="tab-pane" id="cloudFormation_container" style="height: 100%;">
+      
+      </div>
+
+
       <div id="usageTab" class="tab-pane" style="height:100%;">
         
       </div>
@@ -615,27 +622,7 @@ body {
 </div>
 <div class="cheflibraryArea content-container">
   </div>
-          <!--<div style="margin-left:2%;height:100%" id="dynamic_content">
-          </div>--> 
-     
-
-
-
-     <!-- <section class='footer'>
-        <div class="page_nav">
-            <ul>
-                <li  class="footer_panel">
-                    <a class="btn btn-info" href="#previous">Previous</a>
-                </li>
-                <li  class="footer_panel">
-                    <a class="btn btn-info" href="#next">Next</a>
-                </li>
-                <li class="footer_panel">
-                    <a class="btn btn-info" href="#finish">Finish</a>
-                </li>
-            </ul>
-        </div>
-    </section>-->
+          
 
 
    <!-- DOMAIN-->
@@ -852,6 +839,7 @@ body {
 
        var $new_link_tab = $('#new_link_tab');
        var $app_store_link_tab = $('#app_store_link_tab');
+       var $cloudFormation_link_tab = $('#cloudFormation_link_tab');
        var $environment_link_tab = $('#environment_link_tab');
        $providers.click(function(e){
          $contentContainer.hide();
@@ -878,6 +866,11 @@ body {
           $consoleTabLink.hide();
          } else {
           $consoleTabLink.show();
+         }
+         if(pid == '2') {
+          $cloudFormation_link_tab.show();
+         } else {
+          $cloudFormation_link_tab.hide();
          }
          
           
@@ -923,15 +916,27 @@ body {
          });
       });
 
-      $app_store_configuration = $('#app_store_configuration'); 
+      $app_factory_container = $('#app_factory_container'); 
+      
       $app_store_link_tab.on('shown.bs.tab',function (e) {
-          $app_store_configuration.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          $app_factory_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           var pid  = $providers.filter('.active').attr('data-pid');
           $.get('/app_factory/'+pid,function(data){
-            $app_store_configuration.empty().append(data);
+            $app_factory_container.empty().append(data);
           });
   
       });
+      $cloudFormation_container = $('#cloudFormation_container');
+      $cloudFormation_link_tab.on('shown.bs.tab',function (e) {
+          $cloudFormation_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/aws/cloudformation/getTemplates',function(data){
+             $cloudFormation_container.empty().append(data);
+          });
+  
+      });
+
+
 
      
  $(".goto-configureRoles").click(function(){
