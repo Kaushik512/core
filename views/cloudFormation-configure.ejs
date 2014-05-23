@@ -1,12 +1,17 @@
 <style type="text/css">
+.configurationContainerArea {
+  height: 100%;
+   padding-top: 23px;
+}
+
 .configureTemplateArea{
 	height: 80%;
     margin-left: 1.5%;
-    margin-top: 2%;
     width: 97%;
     overflow-y: auto;
     overflow-x: hidden;
 }
+
 .stackResultArea {
 	height: 100%;
 	width: 100%;
@@ -112,6 +117,20 @@
 
   <%}%>
   <%}%>
+
+ <%if(cookbooks && cookbooks.length) {%>
+    <div class="form-group">
+      <label for="templateCookbookslist" class="col-sm-2 control-label">RunList</label>
+      <div class="col-sm-10">
+        <select class="form-control" id="templateCookbookList" multiple="multiple">
+         <%for(var j=0;j<cookbooks.length;j++){%>
+         <option data-id="<%=j%>" value='<%=cookbooks[j]%>'><%=cookbooks[j]%></option>
+         <%}%>
+        </select>
+       </div>  
+     </div>
+
+ <%}%>
   </form>
 </div>
 </div>
@@ -183,7 +202,7 @@
        parameterObj.ParameterValue = paramValue;
        parameters.push(parameterObj);
     }
-    console.log('parameters ==> ',parameters);
+   
     if(parameters.length) {
     	reqBody.parameters = parameters;
     }
