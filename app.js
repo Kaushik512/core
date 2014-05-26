@@ -443,6 +443,7 @@ app.get('/app_factory/:pid', verifySession, function(req, res) {
           res.send(500);
           return;
         }
+
         res.render('appFactory', {
           error: err,
           cookbooks: cookbooks,

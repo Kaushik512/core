@@ -139,7 +139,6 @@ module.exports.updateInstanceStatus = function(domainName, instanceId, status, c
       return;
     }
     callback(null, data);
-
   });
 }
 

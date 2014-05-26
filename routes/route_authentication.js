@@ -1,4 +1,5 @@
 var LdapClient = require('../controller/ldap-client');
+var usersDao = require('../controller/users.js');
 
 
 module.exports.setRoutes = function(app) {
@@ -14,13 +15,25 @@ module.exports.setRoutes = function(app) {
 
 				} else {
 					console.log(user);
+
 					user.password = req.body.pass;
 					req.session.user = user;
 					ldapClient.close(function(err) {
 						if (user.cn === 'admin') {
 							res.redirect('/user/admin');
 						} else {
-							res.redirect('/');
+
+                            usersDao.getUser(user.cn,user.ou,function(err,data){
+                            	if(data.length) {
+                                   user.roleId = data[0].roleId;
+                                   console.log(req.session.user);
+                                   res.redirect('/');
+                            	} else {
+                            		res.send(500);
+                            	}
+                            });
+ 
+							
 						}
 					});
 				}

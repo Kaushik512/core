@@ -16,6 +16,7 @@
 	height: 100%;
 	width: 100%;
 	display: none;
+  overflow: auto;
 }
 .configureStackNavBtnCtn {
     margin-top: 25px;
@@ -217,11 +218,15 @@
             $('.configurationContainerArea').hide();
              $('.stackResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
            $.post('/aws/cloudformation/createStack',reqBody,function(data){
-           	  
-               $('.stackResultArea').empty().append('stackId : '+data);
+           	   
+                var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Stack Created Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>'); 
+
+
+               $('.stackResultArea').empty().append($message);
               
            }).error(function(){
-           	alert('error in creating stack');
+            var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  $('.stackResultArea').empty().append($message);
+           	//alert('error in creating stack');
            });
         
 
