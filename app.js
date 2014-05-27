@@ -456,7 +456,7 @@ app.get('/app_factory/:pid', verifySession, function(req, res) {
 });
 
 app.post('/app_factory/saveBluePrint', function(req, res) {
-  domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.bluePrintName, req.body.selectedHtmlString, function(err, data) {
+  domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.bluePrintName,req.body.instanceType,req.body.numberOfInstance,req.body.os,req.body.runlist, req.body.selectedHtmlString, function(err, data) {
     if (err) {
       res.send(500);
       console.log(err);
@@ -466,6 +466,21 @@ app.post('/app_factory/saveBluePrint', function(req, res) {
     }
   });
 });
+
+
+app.get('/app_factory/:pid/bluePrint', function(req, res) {
+  domainsDao.getAllDomainData(req.params.pid,function(err,domainsdata){
+    if(err) {
+      res.send(500);
+    } else {
+      res.render('appFactory_blueprints.ejs',{
+        domains:domainsdata
+      });
+    }
+  });
+  
+});
+
 
 
 var Chef = require('./controller/chef');

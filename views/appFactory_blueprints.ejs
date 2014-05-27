@@ -1,0 +1,53 @@
+<style type="text/css">
+.appFactory_blueprintsContainer {
+	padding-top: 30px;
+}
+.appFactBlueprintLaunchResultArea {
+	display: none;
+}
+
+</style>
+<div class="appFactory_blueprintsContainer"> 
+ 
+
+<form class="form-horizontal appFactBlueprintListContainer" role="form">
+  <div class="form-group">
+    <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
+    <div class="col-sm-10">
+      <select class="form-control" id="bluePrintsList">
+        <option>Choose</option>
+        <% if(domains && domains.length) {
+        for(var i=0;i<domains.length;i++) {
+             if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+
+                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
+
+            %>
+            <option value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
+       <%}}}}%>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default appFactbluePrintLaunchBtn">Launch</button>
+    </div>
+  </div>
+</form>
+<div class="appFactBlueprintLaunchResultArea"></div>
+
+</div>
+
+<script type="text/javascript">
+
+(function(){
+	$('.appFactbluePrintLaunchBtn').click(function(e){
+     var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty();      
+             var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instances Launched Successfully.</div></div>');
+             $appStoreLaunchResultArea.append($message);
+              $('.appFactBlueprintListContainer').hide();
+             $appStoreLaunchResultArea.show();
+ 
+    });
+})();
+</script>

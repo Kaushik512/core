@@ -20,15 +20,31 @@ var DomainsSchema = new Schema({
     },
     runlist: [String],
   }],
-  stacks : [{
-    stackId : String,
-    stackName:String
+  stacks: [{
+    stackId: String,
+    stackName: String
   }],
   blueprintsAppFactory: [{
     blueprintName: String,
-    blueprintInstances: [String]
+    os: String,
+    InstanceType: String,
+    numberOfInstance: Number,
+    runlist: [String],
+    blueprintInstancesString: String
   }],
-  blueprintsEnvironment: [String]
+  blueprintsEnvironment: [String],
+  bluePrintsCloudFormation: [{
+    blueprintName: String,
+    stackName: String,
+    runlist: [String],
+    stackPrameters: [{
+      ParameterKey: String,
+      ParameterValue: String
+    }],
+    templateUrl: String,
+    templateName: String
+
+  }],
 });
 
 
@@ -221,7 +237,7 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintName, blueprintInstanceString, callback) {
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString, callback) {
   console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
@@ -231,16 +247,21 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
       callback(err, null);
       return;
     }
+    var newBluePrints = [];
     if (domainData && domainData.length) {
       var domain = domainData[0];
       var bluePrints = domain.blueprintsAppFactory;
-      var newBluePrints = [];
+
       if (bluePrints && bluePrints.length) {
         for (var i = 0; i < bluePrints.length; i++) {
           if (bluePrints[i].blueprintName === blueprintName) {
             newBluePrints.push({
               blueprintName: blueprintName,
-              blueprintInstances: blueprintInstanceString
+              os: os,
+              InstanceType: intanceType,
+              numberOfInstance: numberOfInstance,
+              runlist: runlist,
+              blueprintInstancesString: blueprintInstanceString
             });
           } else {
             newBluePrints.push(bluePrints[i]);
@@ -249,10 +270,14 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
       } else {
         newBluePrints.push({
           blueprintName: blueprintName,
-          blueprintInstances: blueprintInstanceString
+          os: os,
+          InstanceType: intanceType,
+          numberOfInstance: numberOfInstance,
+          runlist: runlist,
+          blueprintInstancesString: blueprintInstanceString
         });
       }
-
+      console.log(newBluePrints);
       Domains.update({
         domainName: domainName,
         domainPid: pid
@@ -271,6 +296,14 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
       });
     } else {
       // create new 
+      newBluePrints.push({
+        blueprintName: blueprintName,
+        os: os,
+        InstanceType: intanceType,
+        numberOfInstance: numberOfInstance,
+        runlist: runlist,
+        blueprintInstancesString: blueprintInstanceString
+      });
 
       var domain = new Domains({
         domainName: domainName,
@@ -358,6 +391,93 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters, callback) {
+  console.log(domainName, pid);
+  Domains.find({
+    domainName: domainName,
+    domainPid: pid
+  }, function(err, domainData) {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    var newBluePrints = [];
+    if (domainData && domainData.length) {
+      var domain = domainData[0];
+      var bluePrints = domain.bluePrintsCloudFormation;
+
+      if (bluePrints && bluePrints.length) {
+        for (var i = 0; i < bluePrints.length; i++) {
+          if (bluePrints[i].blueprintName === blueprintName) {
+            newBluePrints.push({
+              blueprintName: blueprintName,
+              stackName: stackName,
+              runlist: runlist,
+              stackPrameters: stackPrameters,
+              templateUrl: templateUrl,
+              templateName: templateName
+            });
+          } else {
+            newBluePrints.push(bluePrints[i]);
+          }
+        }
+      } else {
+        newBluePrints.push({
+          blueprintName: blueprintName,
+          stackName: stackName,
+          runlist: runlist,
+          stackPrameters: stackPrameters,
+          templateUrl: templateUrl,
+          templateName: templateName
+        });
+      }
+      console.log(newBluePrints);
+      Domains.update({
+        domainName: domainName,
+        domainPid: pid
+      }, {
+        $set: {
+          bluePrintsCloudFormation: newBluePrints
+        }
+      }, {
+        upsert: false
+      }, function(err, data) {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        callback(null, data);
+      });
+    } else {
+      // create new 
+      newBluePrints.push({
+        blueprintName: blueprintName,
+        stackName: stackName,
+        runlist: runlist,
+        stackPrameters: stackPrameters,
+        templateUrl: templateUrl,
+        templateName: templateName
+      });
+
+      var domain = new Domains({
+        domainName: domainName,
+        domainPid: pid,
+        bluePrintsCloudFormation: newBluePrints
+      });
+
+      domain.save(function(err, data) {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        console.log("Domain Document Created");
+        callback(null, data);
+      });
+    }
+  });
+}
+
+
 module.exports.getInstance = function(instanceId, callback) {
   Domains.find({
     "domainInstances.instanceId": instanceId
@@ -365,18 +485,18 @@ module.exports.getInstance = function(instanceId, callback) {
     if (err) {
       callback(err, null);
     } else {
-      if(data.length) {
+      if (data.length) {
         var domainInstances = data[0].domainInstances;
-        if(domainInstances && domainInstances.length) {
-          for(var i=0;i<domainInstances.length;i++) {
-            if(domainInstances[i].instanceId == instanceId) {
-              callback(null,domainInstances[i]);
+        if (domainInstances && domainInstances.length) {
+          for (var i = 0; i < domainInstances.length; i++) {
+            if (domainInstances[i].instanceId == instanceId) {
+              callback(null, domainInstances[i]);
               return;
             }
           }
-          callback(null,null);
+          callback(null, null);
         } else {
-          callback(null,null);
+          callback(null, null);
         }
       } else {
         callback(null, null);

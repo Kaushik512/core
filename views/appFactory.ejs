@@ -78,7 +78,7 @@
   width : 60%;
   display: inline-block;
 }
-.recipes-list {
+.app-recipes-list {
   height:150px !important;
   width:500px;
   margin-bottom:10px;
@@ -406,22 +406,23 @@ width:145px;
       domainName =  $('#createDomainNameText').val() + '.relevancelab.com';
     }
     data.domainName = domainName;
+    data.os = $('.osmenu').val();
+    data.numberOfInstance = $('.numberOfInstance').val();
+    data.instanceType = $('.sizeData').val();
+    data.runlist = $('.app-recipes-list').val();
     data.selectedHtmlString = selectedHtmlString;
+    console.log(data);
     $.post('/app_factory/saveBluePrint',data,function(data){
        console.log('posted');
        $('#blueprintSaveModal').modal('hide')
     });
     return false;
  }); 
-
- $('.app-item-container').click(function(e){
+ var $appItemContainer = $('.app-item-container');
+  $appItemContainer.click(function(e){
       var $this = $(this);
-      if($this.parent().hasClass('app-store-item-selected')) {
-        $this.parent().removeClass('app-store-item-selected');
-      } else {
+       $appItemContainer.parent().removeClass('app-store-item-selected');
         $this.parent().addClass('app-store-item-selected');
-      }
-
     });
     $('.configureInstancesBtn').click(function(e){
       var $selectedItems = $('.app-store-item-selected');
@@ -457,8 +458,8 @@ width:145px;
              var $dropdown1 = $('<div class="form-group"><label for="securityGroupData">Choose Security Group</label><select class="securityGroupData"><option value="Default-d4d" selected>Default-d4d</option><option value="VPC-1">VPC-1</option><option value="VPC-2">VPC-2</option><option value="Default-VPC">Default-VPC</option><option value="Create New">Create New</option></select></div>');
 
 
-             var $dropdown2 = $('<div class="form-group"><label for="sizeData">Choose Instance Size</label><select class="sizeData"><option value="micro" selected>t1.micro</option><option value="m1.small">m1.small</option><option value="m1.medium">m1.medium</option><option value="m1.large">m1.large</option><option value="m1.xlarge">m1.xlarge</option></select></div>'); 
-             var $cookbooks = $('<select id="qwer" class="recipes-list" multiple="multiple"></select>');
+             var $dropdown2 = $('<div class="form-group"><label for="sizeData">Choose Instance Size</label><select class="sizeData"><option value="t1.micro" selected>t1.micro</option><option value="m1.small">m1.small</option><option value="m1.medium">m1.medium</option><option value="m1.large">m1.large</option><option value="m1.xlarge">m1.xlarge</option></select></div>'); 
+             var $cookbooks = $('<select id="qwer" class="app-recipes-list" multiple="multiple"></select>');
                <% var str ='';
                var i=0;
                while(i < cookbooks.length) {
@@ -483,7 +484,7 @@ width:145px;
             $('.appConfig').hide();
             var $form = $this.data('formEl');
             $form.show();
-            var $recipesList = $form.find('.recipes-list');
+            var $recipesList = $form.find('.app-recipes-list');
             if(!$recipesList.data('isMultiSelectInitialized')) {
                $recipesList.multiselect();
                $recipesList.data('isMultiSelectInitialized',true);

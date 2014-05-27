@@ -154,6 +154,8 @@
    var $configureStackContainer = $('.configureStackContainer');
    $('.configureStackBtn').click(function(e){
      if(selectedStack) {
+         var pid = $('.nav-prod').filter('.active').attr('data-pid'); 
+         selectedStack.pid = pid;
          $formationCardsContainer.hide();
           $configureStackContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           $configureStackContainer.show();

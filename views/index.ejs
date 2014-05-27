@@ -577,10 +577,31 @@ body {
       </div> 
         <!-- for app store -->
       <div class="tab-pane" id="app_factory_container" style="height: 100%;">
+         <ul class="nav nav-tabs">
+              <li class=""><a id="app_factory_templateLink" class="app_factory_tab" href="#app_factory_templatesArea" data-toggle="tab">Templates</a></li>
+              <li><a id="app_factory_blueprintsLink" class="app_factory_tab" href="#app_factory_blueprintsArea" data-toggle="tab">Blueprints</a></li> 
+          </ul>
+          <div class="tab-content" style="height: 100%;">
+             <div id="app_factory_templatesArea" class="tab-pane" style="height: 100%;">
+             </div>
+             <div id="app_factory_blueprintsArea" class="tab-pane" style="height: 100%;" >
+             </div>
+          </div>
         
       </div>
 
       <div class="tab-pane" id="cloudFormation_container" style="height: 100%;">
+
+         <ul class="nav nav-tabs">
+              <li class=""><a id="cloudFormation_templateLink" class="app_factory_tab" href="#cloudFormation_templatesArea" data-toggle="tab">Templates</a></li>
+              <li><a id="cloudFormation_blueprintsLink" class="app_factory_tab" href="#cloudFormation_blueprintsArea" data-toggle="tab">Blueprints</a></li> 
+          </ul>
+          <div class="tab-content" style="height: 100%;">
+             <div id="cloudFormation_templatesArea" class="tab-pane" style="height: 100%;">
+             </div>
+             <div id="cloudFormation_blueprintsArea" class="tab-pane" style="height: 100%;" >
+             </div>
+          </div>
       
       </div>
 
@@ -918,22 +939,67 @@ body {
 
       $app_factory_container = $('#app_factory_container'); 
       
+
       $app_store_link_tab.on('shown.bs.tab',function (e) {
-          $app_factory_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+         /* $app_factory_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           var pid  = $providers.filter('.active').attr('data-pid');
           $.get('/app_factory/'+pid,function(data){
             $app_factory_container.empty().append(data);
           });
+          */
+           $('#app_factory_templateLink').trigger('click');
+      });
+
+      $app_factory_templateArea = $('#app_factory_templatesArea'); 
+      
+      $('#app_factory_templateLink').on('shown.bs.tab',function (e) {
+          $app_factory_templateArea.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/app_factory/'+pid,function(data){
+            $app_factory_templateArea.empty().append(data);
+          });
   
       });
+
+      $app_factory_blueprintsArea = $('#app_factory_blueprintsArea'); 
+      $('#app_factory_blueprintsLink').on('shown.bs.tab',function (e) {
+          $app_factory_blueprintsArea.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/app_factory/'+pid+'/bluePrint',function(data){
+            $app_factory_blueprintsArea.empty().append(data);
+          });
+  
+      });
+
       $cloudFormation_container = $('#cloudFormation_container');
       $cloudFormation_link_tab.on('shown.bs.tab',function (e) {
-          $cloudFormation_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+         $('#cloudFormation_templateLink').trigger('click');
+         /* $cloudFormation_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           var pid  = $providers.filter('.active').attr('data-pid');
           $.get('/aws/cloudformation/getTemplates',function(data){
              $cloudFormation_container.empty().append(data);
+          });*/
+  
+      });
+
+      $cloudFormation_templateArea = $('#cloudFormation_templatesArea'); 
+      
+      $('#cloudFormation_templateLink').on('shown.bs.tab',function (e) {
+         $cloudFormation_templateArea.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/aws/cloudformation/getTemplates',function(data){
+             $cloudFormation_templateArea.empty().append(data);
           });
   
+      });
+
+      $cloudFormation_blueprintsArea = $('#cloudFormation_blueprintsArea'); 
+      $('#cloudFormation_blueprintsLink').on('shown.bs.tab',function (e) {
+          $cloudFormation_blueprintsArea.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/aws/cloudformation/'+pid+'/blueprints',function(data){
+            $cloudFormation_blueprintsArea.empty().append(data);
+          });
       });
 
 
