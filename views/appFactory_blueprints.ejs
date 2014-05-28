@@ -5,6 +5,9 @@
 .appFactBlueprintLaunchResultArea {
 	display: none;
 }
+#bluePrintsList{
+ width: 200px; 
+}
 
 </style>
 <div class="appFactory_blueprintsContainer"> 
@@ -23,7 +26,7 @@
                 for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
 
             %>
-            <option value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
+            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
        <%}}}}%>
       </select>
     </div>
@@ -42,12 +45,33 @@
 
 (function(){
 	$('.appFactbluePrintLaunchBtn').click(function(e){
-     var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty();      
-             var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="message" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instances Launched Successfully.</div></div>');
-             $appStoreLaunchResultArea.append($message);
-              $('.appFactBlueprintListContainer').hide();
-             $appStoreLaunchResultArea.show();
+
+      var $selectedOptionTag = $('#bluePrintsList').find(':selected');  
+      if(!$selectedOptionTag.length) {
+         return;  
+      }
+       console.log($selectedOptionTag.get(0));
+      if($selectedOptionTag.val() === 'Choose') {
+        return;
+      }
+         
+     $('.appFactBlueprintListContainer').hide();
+      var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
  
+      $.post('/app_factory/bluePrint/launch',{
+        pid:$selectedOptionTag.attr('data-pid'),
+        domainName:$selectedOptionTag.attr('data-domainName'),
+        blueprintName:$selectedOptionTag.val()
+      },function(data){
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Stack Created Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>'); 
+        $appStoreLaunchResultArea.empty().append($message);
+
+      }).error(function(){
+         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  
+            $appStoreLaunchResultArea.empty().append($message);
+      });   
+
+     
     });
 })();
 </script>

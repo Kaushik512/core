@@ -426,60 +426,7 @@ app.get('/monitoring/index', verifySession, function(req, resp) {
 
 });
 
-var domainsDao = require('./controller/domains.js');
 
-app.get('/app_factory/:pid', verifySession, function(req, res) {
-  settingsController.getChefSettings(function(settings) {
-    //res.render('cookbooks');
-    var chef = new Chef(settings);
-    chef.getHostedChefCookbooks(function(err, cookbooks) {
-      if (err) {
-        res.send(500);
-        return;
-      }
-
-      domainsDao.getAllDomainData(req.params.pid, function(err, domainsdata) {
-        if (err) {
-          res.send(500);
-          return;
-        }
-
-        res.render('appFactory', {
-          error: err,
-          cookbooks: cookbooks,
-          pid: req.params.pid,
-          domains: domainsdata
-        });
-      });
-    });
-  });
-});
-
-app.post('/app_factory/saveBluePrint', function(req, res) {
-  domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.bluePrintName,req.body.instanceType,req.body.numberOfInstance,req.body.os,req.body.runlist, req.body.selectedHtmlString, function(err, data) {
-    if (err) {
-      res.send(500);
-      console.log(err);
-      return;
-    } else {
-      res.send(200);
-    }
-  });
-});
-
-
-app.get('/app_factory/:pid/bluePrint', function(req, res) {
-  domainsDao.getAllDomainData(req.params.pid,function(err,domainsdata){
-    if(err) {
-      res.send(500);
-    } else {
-      res.render('appFactory_blueprints.ejs',{
-        domains:domainsdata
-      });
-    }
-  });
-  
-});
 
 
 

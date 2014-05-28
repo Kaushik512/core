@@ -18,11 +18,25 @@ var DomainsSchema = new Schema({
       log: String,
       timestamp: Number
     },
-    runlist: [String],
+    runlist: [String]
   }],
   stacks: [{
     stackId: String,
     stackName: String
+  }],
+  appFactoryInstances : [{
+    instanceId: String,
+    instanceIP: String,
+    instanceName: String,
+    instanceState: String,
+    instanceActive: Boolean,
+    bootStrapStatus: String,
+    bootStrapLog: {
+      err: Boolean,
+      log: String,
+      timestamp: Number
+    },
+    runlist: [String]
   }],
   blueprintsAppFactory: [{
     blueprintName: String,
@@ -138,6 +152,29 @@ module.exports.saveDomainInstanceDetails = function(domainName, instanceList, ca
 
 };
 
+module.exports.saveAppFactoryInstanceDetails = function(domainName, instanceList, callback) {
+
+  Domains.update({
+    domainName: domainName
+  }, {
+    $pushAll: {
+      appFactoryInstances: instanceList
+    }
+  }, {
+    upsert: true
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+
+};
+
+
 module.exports.updateInstanceStatus = function(domainName, instanceId, status, callback) {
   Domains.update({
     domainName: domainName,
@@ -157,6 +194,28 @@ module.exports.updateInstanceStatus = function(domainName, instanceId, status, c
     callback(null, data);
   });
 }
+
+module.exports.updateAppFactoryInstanceStatus = function(domainName, instanceId, status, callback) {
+  Domains.update({
+    domainName: domainName,
+    "appFactoryInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "appFactoryInstances.$.instanceActive": status
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+  });
+}
+
+
 
 module.exports.updateInstanceState = function(domainName, instanceId, instanceState, callback) {
   Domains.update({
@@ -179,6 +238,29 @@ module.exports.updateInstanceState = function(domainName, instanceId, instanceSt
   });
 }
 
+module.exports.updateAppFactoryInstanceState = function(domainName, instanceId, instanceState, callback) {
+  Domains.update({
+    domainName: domainName,
+    "appFactoryInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "appFactoryInstances.$.instanceState": instanceState
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+}
+
+
+
 module.exports.updateInstanceBootstrapStatus = function(domainName, instanceId, bootStrapStatus, callback) {
   Domains.update({
     domainName: domainName,
@@ -200,6 +282,29 @@ module.exports.updateInstanceBootstrapStatus = function(domainName, instanceId, 
   });
 }
 
+module.exports.updateAppFactoryInstanceBootstrapStatus = function(domainName, instanceId, bootStrapStatus, callback) {
+  Domains.update({
+    domainName: domainName,
+    "appFactoryInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "appFactoryInstances.$.bootStrapStatus": bootStrapStatus
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+}
+
+
+
 module.exports.updateInstanceBootstrapLog = function(domainName, instanceId, bootStrapLog, callback) {
   Domains.update({
     domainName: domainName,
@@ -207,6 +312,27 @@ module.exports.updateInstanceBootstrapLog = function(domainName, instanceId, boo
   }, {
     $set: {
       "domainInstances.$.bootStrapLog": bootStrapLog
+    }
+  }, {
+    upsert: false
+  }, function(err, data) {
+
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data);
+
+  });
+}
+
+module.exports.updateAppFactoryInstanceBootstrapLog = function(domainName, instanceId, bootStrapLog, callback) {
+  Domains.update({
+    domainName: domainName,
+    "appFactoryInstances.instanceId": instanceId
+  }, {
+    $set: {
+      "appFactoryInstances.$.bootStrapLog": bootStrapLog
     }
   }, {
     upsert: false
@@ -477,6 +603,47 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
   });
 }
 
+module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName, callback) {
+  Domains.find({
+    domainName: domainName,
+    domainPid: pid,
+    "blueprintsAppFactory.blueprintName": blueprintName
+  }, {
+    blueprintsAppFactory: {
+      $elemMatch: {
+        blueprintName: blueprintName
+      }
+    }
+  }, function(err, data) {
+      if(err) {
+        console.log(err);
+        callback(err,null);
+      } else {
+        callback(null,data);
+      }
+  });
+}
+
+module.exports.getCloudFormationBlueprint = function(pid, domainName, blueprintName, callback) {
+  Domains.find({
+    domainName: domainName,
+    domainPid: pid,
+    "bluePrintsCloudFormation.blueprintName": blueprintName
+  }, {
+    bluePrintsCloudFormation: {
+      $elemMatch: {
+        blueprintName: blueprintName
+      }
+    }
+  }, function(err, data) {
+      if(err) {
+        console.log(err);
+        callback(err,null);
+      } else {
+        callback(null,data);
+      }
+  });
+}
 
 module.exports.getInstance = function(instanceId, callback) {
   Domains.find({

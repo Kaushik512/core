@@ -367,7 +367,8 @@ function validateAndGetParametersInput() {
                $('.stackResultArea').empty().append($message);
               
            }).error(function(){
-            var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  $('.stackResultArea').empty().append($message);
+            var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  
+            $('.stackResultArea').empty().append($message);
            	//alert('error in creating stack');
            });
         
