@@ -78,12 +78,12 @@ $(function(){
     $.post('/user/create',data,function(result){
       var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;User Created Successfully.</div></div>');
       $('#userCreateResultContainer').empty().append($message);
-      $('#userForm').reset();
+      $('#userForm').get(0).reset();
 
     }).error(function(){
        var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create user. Please check your LDAP server.</div></div>');  
        $('#userCreateResultContainer').empty().append($message);
-       $('#userForm').reset();
+       $('#userForm').get(0).reset();
 
     });
   });
