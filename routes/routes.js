@@ -8,6 +8,8 @@ var settings = require('./routes_settings');
 var users = require('./routes_users');
 var awsCloudFormation = require('./routes_awsCloudFormation');
 var appFactory = require('./routes_appFactory');
+var monitoring = require('./routes_monitoring');
+var environments = require('./routes_environments');
 
 
 module.exports.setRoutes = function (app) {
@@ -21,5 +23,7 @@ module.exports.setRoutes = function (app) {
   users.setRoutes(app,sessionVerificationFunc);
   awsCloudFormation.setRoutes(app,sessionVerificationFunc);
   appFactory.setRoutes(app,sessionVerificationFunc);
+  monitoring.setRoutes(app,sessionVerificationFunc);
+  environments.setRoutes(app,sessionVerificationFunc);
 
 }

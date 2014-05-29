@@ -24,7 +24,7 @@ var DomainsSchema = new Schema({
     stackId: String,
     stackName: String
   }],
-  appFactoryInstances : [{
+  appFactoryInstances: [{
     instanceId: String,
     instanceIP: String,
     instanceName: String,
@@ -379,6 +379,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
       var bluePrints = domain.blueprintsAppFactory;
 
       if (bluePrints && bluePrints.length) {
+        var found = false;
         for (var i = 0; i < bluePrints.length; i++) {
           if (bluePrints[i].blueprintName === blueprintName) {
             newBluePrints.push({
@@ -389,9 +390,20 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
               runlist: runlist,
               blueprintInstancesString: blueprintInstanceString
             });
+            found = true;
           } else {
             newBluePrints.push(bluePrints[i]);
           }
+        }
+        if (!found) {
+          newBluePrints.push({
+            blueprintName: blueprintName,
+            os: os,
+            InstanceType: intanceType,
+            numberOfInstance: numberOfInstance,
+            runlist: runlist,
+            blueprintInstancesString: blueprintInstanceString
+          });
         }
       } else {
         newBluePrints.push({
@@ -533,6 +545,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
       var bluePrints = domain.bluePrintsCloudFormation;
 
       if (bluePrints && bluePrints.length) {
+        var found = false;
         for (var i = 0; i < bluePrints.length; i++) {
           if (bluePrints[i].blueprintName === blueprintName) {
             newBluePrints.push({
@@ -543,9 +556,20 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
               templateUrl: templateUrl,
               templateName: templateName
             });
+            found = true;
           } else {
             newBluePrints.push(bluePrints[i]);
           }
+        }
+        if (!found) {
+          newBluePrints.push({
+            blueprintName: blueprintName,
+            stackName: stackName,
+            runlist: runlist,
+            stackPrameters: stackPrameters,
+            templateUrl: templateUrl,
+            templateName: templateName
+          });
         }
       } else {
         newBluePrints.push({
@@ -615,12 +639,12 @@ module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName,
       }
     }
   }, function(err, data) {
-      if(err) {
-        console.log(err);
-        callback(err,null);
-      } else {
-        callback(null,data);
-      }
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
   });
 }
 
@@ -636,12 +660,12 @@ module.exports.getCloudFormationBlueprint = function(pid, domainName, blueprintN
       }
     }
   }, function(err, data) {
-      if(err) {
-        console.log(err);
-        callback(err,null);
-      } else {
-        callback(null,data);
-      }
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
   });
 }
 

@@ -24,6 +24,8 @@
     }
     .nav-options {
       float: right;
+      font-size: 16px !important;
+      margin-right: 30px !important;
     }
     .nav-settings {
        
@@ -369,6 +371,12 @@ body {
  background:none !important;
  box-shadow: 0 0 0 0 !important;
 }
+.dropdown-user-nav {
+  min-width: 110px !important;
+}
+.user-role {
+  color: #999999 !important;
+}
 
 </style>
 </head>
@@ -379,40 +387,68 @@ body {
         <nav class="navbar navbar-inverse top-header" role="navigation">
             <a class="navbar-brand hompage_link" href="#">
                 <img src="img/version2.png" alt="logo" height="30" width="70">
-                <span class="logotext">DevOps for DevOps</span>
+                <span class="logotext">Catalyst</span>
             </a>
             <div class="nav-options">
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize monitoringBtn" href="#" role="button" title="Monitoring">
+              <% if(!(userData.roleId === 500)) {%>
+
+             <a class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize monitoringBtn" href="#" role="button" title="Monitoring">
                 <span>Monitoring</span>
-            </a>
-            <div class="btn-group navbar-brand nav-settings nav-logout configManagementDropdown">
+             </a>
+             <div class="btn-group navbar-brand nav-items-padding nav-settings nav-logout configManagementDropdown">
               <a type="button" class="navbar-brand dropdown-toggle navbar-fontsize configManamentLabel" data-toggle="dropdown" href="#">
                Config Management <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#" class='chefBtn'>Chef Factory</a></li>
                 <li><a href="#" class='chefLibraryBtn'>Chef Library</a></li>
-                
-                <!--<li class="divider"></li>
-                <li><a href="#">Separated link</a></li>-->
+           
               </ul>
-          </div>
+             </div>
+              <%}%>
+               <%
+                var roleName ='';
+                switch(userData.roleId) {
+                  case 500 :
+                  roleName = 'Service Consumer';
+                  break;
+                  case 502 :
+                  roleName = 'Service Designer';
+                  break;
+                  case 501 :
+                  roleName = 'Business User';
+                  break;
 
 
-            <!--<a class="navbar-brand nav-settings chefBtn nav-logout navbar-fontsize" href="#" role="button" title="Chef" >
-                <span>Config Management</span>
-            </a>-->   
-            <!--<a class="navbar-brand nav-settings nav-logout navbar-fontsize chefLibraryBtn" href="#" role="button" title="Chef">
-                <img src="img/chef-icon.png" alt="settings" height="30" width="30">
-                <span>Chef Library<span>
-            </a>-->
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
-                <!--<img src="img/settings-icon.png" alt="settings" height="30" width="30">-->
+                }%>
+                <span class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize user-role"> Role : <%=roleName%> </span>
+             <div class="btn-group navbar-brand nav-items-padding nav-settings nav-logout configManagementDropdown">
+
+              <a type="button" class="navbar-brand dropdown-toggle navbar-fontsize configManamentLabel" data-toggle="dropdown" href="#">
+               
+                 <i class="fa fa-user"></i> <%=userData.cn%>  <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-user-nav" role="menu">
+                <%if(userData.cn === 'admin') {%>
+                   <li><a href="/user/admin" class=''><span>Admin UI</span></a></li>
+                <%}%>
+                 <% if(!(userData.roleId === 500)) {%>
+                <li><a href="#" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings"><i class="fa fa-gear">
+                </i>&nbsp;Settings</a></li>
+                <%}%>
+                <li><a href="/auth/signout" class=''><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
+           
+              </ul>
+             </div>
+
+
+              <!-- 
+              <a class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
                 <i class="fa fa-gear"></i>&nbsp;Settings
-            </a>
-            <a class="navbar-brand nav-settings nav-logout navbar-fontsize" href="/auth/signout" title="Logout">
-                <span>Logout</span>
-            </a>
+              </a>
+              <a class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize" href="/auth/signout" title="Logout">
+                <i class="fa fa-sign-out"></i><span>Logout</span>
+              </a> -->
           </div>
         </nav>
     </header>
@@ -526,17 +562,22 @@ body {
            <div class="domainsContainer" style="height:91%;">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Domains</a></li>
+               <% if(!(userData.roleId === 500)) {%>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Roles</li> 
+              <%}%>
               <li><a id="app_store_link_tab" href="#app_factory_container" data-toggle="tab">App Factory</a></li> 
               <li><a id="cloudFormation_link_tab" href="#cloudFormation_container" data-toggle="tab">AWS Cloud Formation</a></li> 
+               <% if(!(userData.roleId === 500)) {%>
               <li><a id="environment_link_tab" href="#environment_tab" data-toggle="tab">Environments</a></li> 
               <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
-               <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li>                 
+               <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li> 
+               <%}%>                
           </ul>
 
   <!-- Tab panes -->
   <div class="tab-content" style="height: 96%;">
       <div class="tab-pane active" id="Domains"></div>
+         <% if(!(userData.roleId === 500)) {%>
       <div class="tab-pane" id="new_configuration">
 
        <!-- multistep form -->
@@ -575,15 +616,20 @@ body {
 
 
       </div> 
+      <%}%>
         <!-- for app store -->
       <div class="tab-pane" id="app_factory_container" style="height: 95%;">
          <ul class="nav nav-tabs">
+             <% if(!(userData.roleId === 500)) {%>
               <li class=""><a id="app_factory_templateLink" class="app_factory_tab" href="#app_factory_templatesArea" data-toggle="tab">Templates</a></li>
+              <%}%>
               <li><a id="app_factory_blueprintsLink" class="app_factory_tab" href="#app_factory_blueprintsArea" data-toggle="tab">Blueprints</a></li> 
           </ul>
           <div class="tab-content" style="height: 100%;">
+               <% if(!(userData.roleId === 500)) {%>
              <div id="app_factory_templatesArea" class="tab-pane" style="height: 100%;">
              </div>
+             <%}%>
              <div id="app_factory_blueprintsArea" class="tab-pane" style="height: 100%;" >
              </div>
           </div>
@@ -593,19 +639,23 @@ body {
       <div class="tab-pane" id="cloudFormation_container" style="height: 95%;">
 
          <ul class="nav nav-tabs">
+             <% if(!(userData.roleId === 500)) {%>
               <li class=""><a id="cloudFormation_templateLink" class="app_factory_tab" href="#cloudFormation_templatesArea" data-toggle="tab">Templates</a></li>
+              <%}%>
               <li><a id="cloudFormation_blueprintsLink" class="app_factory_tab" href="#cloudFormation_blueprintsArea" data-toggle="tab">Blueprints</a></li> 
           </ul>
           <div class="tab-content" style="height: 100%;">
+             <% if(!(userData.roleId === 500)) {%>
              <div id="cloudFormation_templatesArea" class="tab-pane" style="height: 100%;">
              </div>
+             <%}%>
              <div id="cloudFormation_blueprintsArea" class="tab-pane" style="height: 100%;" >
              </div>
           </div>
       
       </div>
 
-
+<% if(!(userData.roleId === 500)) {%>
       <div id="usageTab" class="tab-pane" style="height:100%;">
         
       </div>
@@ -627,27 +677,34 @@ body {
              </div>
           </div>
       </div>
+
+<%}%>
+
     <!-- <div class="tab-pane" id="monitoring_tab">
        <iframe src="zabbix-auto-login.html" style="height: 515px;width: 100%;" frameBorder="0"></iframe>
      </div>
 -->
   </div>
    </div>
+   <% if(!(userData.roleId === 500)) {%>
    <div class="monitoringContainer" style="height:99%">
     <!-- <iframe src="monitoring/mainbackup.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>-->
    </div>
+   <%}%>
 
  </section>
 </div>
+<% if(!(userData.roleId === 500)) {%>
 <div class="usercookbookArea content-container">
 </div>
 <div class="cheflibraryArea content-container">
   </div>
+<%}%>
           
 
 
    <!-- DOMAIN-->
-
+<% if(!(userData.roleId === 500)) {%>
 <!-- Modal -->
 <div class="modal fade" id="domainModal" tabindex="-1" role="dialog" aria-labelledby="domainModalTitle" aria-hidden="true">
   <div class="modal-dialog">
@@ -666,6 +723,7 @@ body {
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<%}%>
 
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -947,7 +1005,8 @@ body {
             $app_factory_container.empty().append(data);
           });
           */
-           $('#app_factory_templateLink').trigger('click');
+          $app_factory_container.find('ul li:first a').trigger('click');
+           //$('#app_factory_templateLink').trigger('click');
       });
 
       $app_factory_templateArea = $('#app_factory_templatesArea'); 
@@ -973,7 +1032,9 @@ body {
 
       $cloudFormation_container = $('#cloudFormation_container');
       $cloudFormation_link_tab.on('shown.bs.tab',function (e) {
-         $('#cloudFormation_templateLink').trigger('click');
+           $cloudFormation_container.find('ul li:first a').trigger('click');      
+  
+        // $('#cloudFormation_templateLink').trigger('click');
          /* $cloudFormation_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           var pid  = $providers.filter('.active').attr('data-pid');
           $.get('/aws/cloudformation/getTemplates',function(data){

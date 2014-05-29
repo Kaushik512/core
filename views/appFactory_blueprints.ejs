@@ -4,9 +4,16 @@
 }
 .appFactBlueprintLaunchResultArea {
 	display: none;
+  text-align: center;
 }
 #bluePrintsList{
  width: 200px; 
+}
+.domainBluePrintsListContainer {
+  display: none;
+}
+.selecttag {
+  width: 300px !important;
 }
 
 </style>
@@ -14,23 +21,42 @@
  
 
 <form class="form-horizontal appFactBlueprintListContainer" role="form">
+  
   <div class="form-group">
-    <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
+    <label for="bluePrintsList" class="col-sm-2 control-label">Domains</label>
     <div class="col-sm-10">
-      <select class="form-control" id="bluePrintsList">
-        <option>Choose</option>
+      <select class="form-control selecttag" id="appFactoryDomainsList">
+        <option value="Choose">Choose</option>
         <% if(domains && domains.length) {
-        for(var i=0;i<domains.length;i++) {
-             if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
-
-                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
-
-            %>
-            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
-       <%}}}}%>
+        for(var i=0;i<domains.length;i++) { %>
+        %>
+        <option data-pid="<%=domains[i].domainPid%>" data-id="<%=i%>" value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
+        <%}}%>
       </select>
     </div>
   </div>
+
+
+  
+      <% if(domains && domains.length) {
+        for(var i=0;i<domains.length;i++) { %>
+      <div class="form-group domainBluePrintsListContainer" id="domainBluePrintsListContainer<%=i%>">
+    <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
+    <div class="col-sm-10">
+       <select class="form-control selecttag" id="bluePrintsList<%=i%>">
+         <option>Choose</option>
+        
+        <%  if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+
+                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
+            %>
+            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
+           <%}}%>
+         </select>
+         </div>
+         </div>
+         <%}}%>
+    
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-default appFactbluePrintLaunchBtn">Launch</button>
@@ -44,13 +70,34 @@
 <script type="text/javascript">
 
 (function(){
-	$('.appFactbluePrintLaunchBtn').click(function(e){
 
-      var $selectedOptionTag = $('#bluePrintsList').find(':selected');  
+  $('#appFactoryDomainsList').change(function(e){
+    //alert('hi');
+     $this = $(this);
+     if($this.val() === 'Choose') {
+      $('.domainBluePrintsListContainer').hide();
+       return;
+     } 
+     var $options = $this.find(':selected');
+     var id = $options.attr('data-id');
+     $('.domainBluePrintsListContainer').hide();
+     $('#domainBluePrintsListContainer'+id).show(); 
+  });
+  
+
+	$('.appFactbluePrintLaunchBtn').click(function(e){
+      
+      var $domainOptionTag = $('#appFactoryDomainsList').find(':selected');
+      if($domainOptionTag.val() ==='Choose') {
+        return;
+      } 
+
+       var id = $domainOptionTag.attr('data-id'); 
+
+      var $selectedOptionTag = $('#bluePrintsList'+id).find(':selected');  
       if(!$selectedOptionTag.length) {
          return;  
       }
-       console.log($selectedOptionTag.get(0));
       if($selectedOptionTag.val() === 'Choose') {
         return;
       }
@@ -63,12 +110,28 @@
         domainName:$selectedOptionTag.attr('data-domainName'),
         blueprintName:$selectedOptionTag.val()
       },function(data){
-        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Stack Created Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>'); 
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>');
+         
+         var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.appFactBlueprintListContainer').show();
+           $('.appFactBlueprintLaunchResultArea').hide();
+         });
+
+
         $appStoreLaunchResultArea.empty().append($message);
+         $appStoreLaunchResultArea.append($btn);
 
       }).error(function(){
-         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  
+         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create Instance. Daily Quota Reached. </div></div>');  
+             
+        var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.appFactBlueprintListContainer').show();
+           $('.appFactBlueprintLaunchResultArea').hide();
+         });
+
             $appStoreLaunchResultArea.empty().append($message);
+            $appStoreLaunchResultArea.append($btn);
+
       });   
 
      

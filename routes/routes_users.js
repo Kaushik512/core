@@ -21,6 +21,7 @@ module.exports.setRoutes = function(app, verifySession) {
 	});
 
 	app.post('/user/create', adminVerificationFunc, function(req, res) {
+		console.log(req.body);
 
 		var ldapClient = new LdapClient();
 		

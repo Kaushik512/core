@@ -51,7 +51,8 @@ module.exports.setRoutes = function(app, verifySession) {
 		providers.getProviders(function(err, products) {
 			res.render('index', {
 				error: err,
-				products: products
+				products: products,
+				userData:req.session.user
 			});
 		});
 	});
