@@ -407,7 +407,7 @@ body {
              </div>
               <%}%>
                <%
-                var roleName ='';
+                var roleName ='Administrator';
                 switch(userData.roleId) {
                   case 500 :
                   roleName = 'Service Consumer';
@@ -421,6 +421,7 @@ body {
 
 
                 }%>
+
                 <span class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize user-role"> Role : <%=roleName%> </span>
              <div class="btn-group navbar-brand nav-items-padding nav-settings nav-logout configManagementDropdown">
 
