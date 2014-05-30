@@ -48,9 +48,10 @@
         <%  if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
 
                 for(var j=0;j<domains[i].bluePrintsCloudFormation.length;j++) {
+                if(domains[i].bluePrintsCloudFormation[j].groupName === userData.ou) {
             %>
-            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].bluePrintsCloudFormation[j].blueprintName%>"><%=domains[i].bluePrintsCloudFormation[j].blueprintName%></option>
-           <%}}%>
+            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].bluePrintsCloudFormation[j].blueprintName%>"  data-bluePrintVersion="<%=domains[i].bluePrintsCloudFormation[j].version%>"><%=domains[i].bluePrintsCloudFormation[j].blueprintName%>-v<%=domains[i].bluePrintsCloudFormation[j].version%></option>
+           <%}}}%>
          </select>
          </div>
          </div>

@@ -40,6 +40,8 @@ var DomainsSchema = new Schema({
   }],
   blueprintsAppFactory: [{
     blueprintName: String,
+    groupName: String,
+    version: String,
     os: String,
     InstanceType: String,
     numberOfInstance: Number,
@@ -50,6 +52,8 @@ var DomainsSchema = new Schema({
   bluePrintsCloudFormation: [{
     blueprintName: String,
     stackName: String,
+    groupName: String,
+    version: String,
     runlist: [String],
     stackPrameters: [{
       ParameterKey: String,
@@ -63,6 +67,31 @@ var DomainsSchema = new Schema({
 
 
 var Domains = mongoose.model('domains', DomainsSchema);
+
+
+function generateBlueprintVersionNumber(prevVersion) {
+  if (!prevVersion) {
+    return "0.1";
+  }
+
+  var parts = prevVersion.split('.');
+  var major = parseInt(parts[0]);
+  var minor = parseInt(parts[1]);
+  minor++;
+  return major + '.' + minor;
+}
+
+function sortBlueprintsArray(bluePrints) {
+  bluePrints.sort(function(a, b) {
+    if (a.version < b.version) {
+      return -1;
+    } else if (a.version > b.version) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+}
 
 
 module.exports.createDomainDocument = function(domainName, pid, callback) {
@@ -363,7 +392,7 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString, callback) {
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString, callback) {
   console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
@@ -379,43 +408,55 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
       var bluePrints = domain.blueprintsAppFactory;
 
       if (bluePrints && bluePrints.length) {
+        sortBlueprintsArray(bluePrints);
         var found = false;
-        for (var i = 0; i < bluePrints.length; i++) {
-          if (bluePrints[i].blueprintName === blueprintName) {
-            newBluePrints.push({
+        for (var i = bluePrints.length - 1; i >= 0; i--) {
+          if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupName === groupName) {
+
+            var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
+            console.log('new version ==>', newVersion);
+
+            bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
+              groupName: groupName,
               os: os,
+              version: newVersion,
               InstanceType: intanceType,
               numberOfInstance: numberOfInstance,
               runlist: runlist,
               blueprintInstancesString: blueprintInstanceString
             });
             found = true;
-          } else {
-            newBluePrints.push(bluePrints[i]);
+            break;
           }
         }
         if (!found) {
-          newBluePrints.push({
+          bluePrints.push({
             blueprintName: blueprintName,
+            groupName: groupName,
             os: os,
+            version: generateBlueprintVersionNumber(null),
             InstanceType: intanceType,
             numberOfInstance: numberOfInstance,
             runlist: runlist,
             blueprintInstancesString: blueprintInstanceString
           });
         }
+        newBluePrints = bluePrints;
+
       } else {
         newBluePrints.push({
           blueprintName: blueprintName,
+          groupName: groupName,
           os: os,
+          version: generateBlueprintVersionNumber(null),
           InstanceType: intanceType,
           numberOfInstance: numberOfInstance,
           runlist: runlist,
           blueprintInstancesString: blueprintInstanceString
         });
       }
-      console.log(newBluePrints);
+      //console.log(newBluePrints);
       Domains.update({
         domainName: domainName,
         domainPid: pid
@@ -436,7 +477,9 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, blueprintNa
       // create new 
       newBluePrints.push({
         blueprintName: blueprintName,
+        groupName: groupName,
         os: os,
+        version: generateBlueprintVersionNumber(null),
         InstanceType: intanceType,
         numberOfInstance: numberOfInstance,
         runlist: runlist,
@@ -529,8 +572,8 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
-module.exports.upsertCloudFormationBlueprint = function(pid, domainName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters, callback) {
-  console.log(domainName, pid);
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters, callback) {
+  console.log(domainName, pid, groupName);
   Domains.find({
     domainName: domainName,
     domainPid: pid
@@ -545,11 +588,17 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
       var bluePrints = domain.bluePrintsCloudFormation;
 
       if (bluePrints && bluePrints.length) {
+        sortBlueprintsArray(bluePrints);
         var found = false;
-        for (var i = 0; i < bluePrints.length; i++) {
-          if (bluePrints[i].blueprintName === blueprintName) {
-            newBluePrints.push({
+        for (var i = bluePrints.length - 1; i >= 0; i--) {
+          if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupName === groupName) {
+            var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
+            console.log('new version ==>', newVersion);
+
+            bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
+              groupName: groupName,
+              version: newVersion,
               stackName: stackName,
               runlist: runlist,
               stackPrameters: stackPrameters,
@@ -557,13 +606,14 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
               templateName: templateName
             });
             found = true;
-          } else {
-            newBluePrints.push(bluePrints[i]);
+            break;
           }
         }
         if (!found) {
-          newBluePrints.push({
+          bluePrints.push({
             blueprintName: blueprintName,
+            groupName: groupName,
+            version: generateBlueprintVersionNumber(null),
             stackName: stackName,
             runlist: runlist,
             stackPrameters: stackPrameters,
@@ -571,9 +621,12 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
             templateName: templateName
           });
         }
+        newBluePrints = bluePrints;
       } else {
         newBluePrints.push({
           blueprintName: blueprintName,
+          groupName: groupName,
+          version: generateBlueprintVersionNumber(null),
           stackName: stackName,
           runlist: runlist,
           stackPrameters: stackPrameters,
@@ -602,6 +655,8 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
       // create new 
       newBluePrints.push({
         blueprintName: blueprintName,
+        groupName: groupName,
+        version: generateBlueprintVersionNumber(null),
         stackName: stackName,
         runlist: runlist,
         stackPrameters: stackPrameters,
@@ -627,12 +682,18 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, bluepri
   });
 }
 
-module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName, callback) {
-  Domains.find({
+module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName, version, callback) {
+  var queryObj = {
     domainName: domainName,
     domainPid: pid,
-    "blueprintsAppFactory.blueprintName": blueprintName
-  }, {
+    "blueprintsAppFactory.blueprintName": blueprintName,
+    "blueprintsAppFactory.version":version
+  };
+ 
+  console.log('query == > ', queryObj );
+
+
+  Domains.find(queryObj, {
     blueprintsAppFactory: {
       $elemMatch: {
         blueprintName: blueprintName

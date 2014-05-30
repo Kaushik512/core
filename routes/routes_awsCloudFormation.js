@@ -62,7 +62,8 @@ module.exports.setRoutes = function(app, verifySession) {
 	app.post('/aws/cloudformation/saveBluePrint', verifySession, function(req, res) {
 
 		console.log(req.body);
-		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, function(err, data) {
+		console.log(req.session.user)
+		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName,req.session.user.ou, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);
@@ -115,7 +116,8 @@ module.exports.setRoutes = function(app, verifySession) {
 				res.send(500);
 			} else {
 				res.render('cloudFormation-blueprints.ejs', {
-					domains: domainsdata
+					domains: domainsdata,
+					userData:req.session.user
 				});
 			}
 		});

@@ -34,7 +34,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/app_factory/saveBluePrint', verifySession, function(req, res) {
 		console.log(req.body);
-		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, function(err, data) {
+		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName,req.session.user.ou, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);
@@ -52,20 +52,48 @@ module.exports.setRoutes = function(app, verifySession) {
 				res.send(500);
 			} else {
 				res.render('appFactory_blueprints.ejs', {
-					domains: domainsdata
+					domains: domainsdata,
+					userData:req.session.user
 				});
 			}
 		});
 
 	});
 
+	app.post('/app_factory/bluePrint/versions',verifySession,function(req,res){
+		
+		domainsDao.getAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName,null, function(err, data) {
+		  if(err) {
+		  	res.send(500);
+		  	return;
+		  }
+		  console.log(data);
+		  res.send(data);
+		});
+       
+	});
+
 	app.post('/app_factory/bluePrint/launch', verifySession, function(req, res) {
         console.log(req.body);
-		domainsDao.getAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName, function(err, data) {
+		domainsDao.getAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName,req.body.ver, function(err, data) {
 			console.log(data);
 			if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
 
-				var blueprint = data[0].blueprintsAppFactory[0];
+				var blueprint;
+
+				for(var k=0;k<data[0].blueprintsAppFactory;k++) {
+					if(data[0].blueprintsAppFactory[k].version == req.body.ver ) {
+						blueprint = data[0].blueprintsAppFactory[k];
+						break;
+					}
+				}
+				if(!blueprint) {
+                  res.send(400);
+                  return;
+				}
+
+                console.log('blueprint == >',blueprint);
+
 				settingsController.getSettings(function(settings) {
 					var ec2 = new EC2(settings.aws);
 					ec2.launchInstance(null, function(err, instanceData) {

@@ -15,6 +15,9 @@
 .selecttag {
   width: 300px !important;
 }
+.domainBluePrintsVersionListContainer {
+  display: none;
+}
 
 </style>
 <div class="appFactory_blueprintsContainer"> 
@@ -43,19 +46,32 @@
       <div class="form-group domainBluePrintsListContainer" id="domainBluePrintsListContainer<%=i%>">
     <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
     <div class="col-sm-10">
-       <select class="form-control selecttag" id="bluePrintsList<%=i%>">
+       <select class="form-control selecttag blueprintSelectTag" id="bluePrintsList<%=i%>">
          <option>Choose</option>
         
         <%  if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
 
                 for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
+                if(domains[i].blueprintsAppFactory[j].groupName === userData.ou) {
             %>
-            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%></option>
-           <%}}%>
+            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>" data-bluePrintVersion="<%=domains[i].blueprintsAppFactory[j].version%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%>-v<%=domains[i].blueprintsAppFactory[j].version%> </option>
+           <%}}}%>
          </select>
          </div>
          </div>
          <%}}%>
+
+<!--
+      <div class="form-group domainBluePrintsVersionListContainer" id="domainBluePrintsVersionListContainer">
+    <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
+    <div class="col-sm-10">
+       <select class="form-control selecttag" id="bluePrintsVersionList">
+         <option>Choose</option>
+         </select>
+         </div>
+         </div>
+   -->
+
     
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
@@ -83,6 +99,23 @@
      $('.domainBluePrintsListContainer').hide();
      $('#domainBluePrintsListContainer'+id).show(); 
   });
+
+ /* $('.blueprintSelectTag').change(function(e){
+     $this = $(this);
+     if($this.val() === 'Choose') {
+     $('.domainBluePrintsVersionListContainer').hide();
+      return;
+     }
+     var $options = $this.find(':selected');
+     $.post('/app_factory/bluePrint/versions',{
+        pid:$options .attr('data-pid'),
+        domainName:$options .attr('data-domainName'),
+        blueprintName:$options.val()
+      },function(data){
+          console.log(data);
+      });
+
+  });*/ 
   
 
 	$('.appFactbluePrintLaunchBtn').click(function(e){
@@ -108,7 +141,8 @@
       $.post('/app_factory/bluePrint/launch',{
         pid:$selectedOptionTag.attr('data-pid'),
         domainName:$selectedOptionTag.attr('data-domainName'),
-        blueprintName:$selectedOptionTag.val()
+        blueprintName:$selectedOptionTag.val(),
+        ver:$selectedOptionTag.attr('data-bluePrintVersion')
       },function(data){
         var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>');
          

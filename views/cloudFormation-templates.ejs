@@ -80,17 +80,33 @@
 .template-item-selected {
    background-color: green !important;
 }
+#accordionCFTemplates {
+  margin-top: 4px;
+}
 
 </style>
 
 <div class="formation-cards-container">
-<ul id="dynamiclist" class="thumbnails list-unstyled" style="margin-top: 30px;">
+  
+
+<div class="panel-group" id="accordionCFTemplates">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionCFTemplates" href="#cfTemplatesType1">
+          Single Instance Samples
+        </a>
+      </h4>
+    </div>
+    <div id="cfTemplatesType1" class="panel-collapse collapse in">
+      <div class="panel-body">
+      <ul style="margin-top: 5px;" class="thumbnails list-unstyled" id="">
   <li class="col-xs-2"> 
   <div class="thumbnail  margin-bt-templateItem">
-    <div class="template-item-container" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/LAMP_Simple.template" data-template-title="LAMP">
+    <div data-template-title="LAMP" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/LAMP_Simple.template" class="template-item-container">
        <div class="template-icon-container">
       <!--<i class="fa fa-laptop instance-icon"></i>-->
-      <img src="img/app-store-icons/lamp-icon.png" alt="Lamp Stack" style="height: 50px;"/>
+      <img style="height: 50px;" alt="Lamp Stack" src="img/app-store-icons/lamp-icon.png">
     </div>
     <div class="caption template-instance-runlist">
       <span class="template-item-heading"><strong>LAMP</strong></span>
@@ -101,10 +117,10 @@
 
 <li class="col-xs-2"> 
   <div class="thumbnail  margin-bt-templateItem">
-    <div class="template-item-container" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Joomla!_Simple.template" data-template-title="Joomla">
-       <div class="template-icon-container" >
+    <div data-template-title="Joomla" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Joomla!_Simple.template" class="template-item-container">
+       <div class="template-icon-container">
       <!--<i class="fa fa-laptop instance-icon"></i>-->
-      <img src="img/app-store-icons/joomla-logo.png" alt="Joomla Stack"  style="height: 50px;width: 100px;"/>
+      <img style="height: 50px;width: 100px;" alt="Joomla Stack" src="img/app-store-icons/joomla-logo.png">
     </div>
     <div class="caption template-instance-runlist">
       <span class="template-item-heading"><strong>Joomla</strong></span>
@@ -112,16 +128,58 @@
   </div>
 </div>
 </li>
-
 <li class="col-xs-2"> 
   <div class="thumbnail  margin-bt-templateItem">
-    <div class="template-item-container" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/RDS_MySQL_55.template" data-template-title="RDS MySql 55 Stack">
+    <div data-template-title="Drupal" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Drupal_Simple.template" class="template-item-container">
        <div class="template-icon-container">
       <!--<i class="fa fa-laptop instance-icon"></i>-->
-      <img src="img/app-store-icons/mysql-icon.jpg" alt="RDS MySql 55 Stack" style="height: 50px;width: 100px;"/>
+      <img style="height: 50px;width: 40px;" alt="Drupal Stack" src="img/cf-icons/drupal.png">
     </div>
     <div class="caption template-instance-runlist">
-      <span class="template-item-heading"><strong>RDS MySql 55</strong></span>
+      <span class="template-item-heading"><strong>Drupal</strong></span>
+    </div>      
+  </div>
+</div>
+</li>
+
+</ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionCFTemplates" href="#cfTemplatesType2">
+         Amazon RDS Samples
+        </a>
+      </h4>
+    </div>
+    <div id="cfTemplatesType2" class="panel-collapse collapse">
+      <div class="panel-body">
+         <ul style="margin-top: 5px;" class="thumbnails list-unstyled" id="">
+       <li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div data-template-title="RDS MySql 55 Stack" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/RDS_MySQL_55.template" class="template-item-container">
+         <div class="template-icon-container">
+        <!--<i class="fa fa-laptop instance-icon"></i>-->
+       <img style="height: 50px;width: 100px;" alt="RDS MySql 55 Stack" src="img/app-store-icons/mysql-icon.jpg">
+     </div>
+      <div class="caption template-instance-runlist">
+        <span class="template-item-heading"><strong>RDS MySql 55</strong></span>
+      </div>      
+    </div>
+  </div>
+</li>
+
+  <li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div data-template-title="Ruby On Rails Stack" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Rails_Single_Instance_With_RDS.template" class="template-item-container">
+       <div class="template-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img style="height: 50px;width: 40px;" alt="Ruby On Rails Stack" src="img/cf-icons/rubyonrails.png">
+    </div>
+    <div class="caption template-instance-runlist">
+      <span class="template-item-heading"><strong>Ruby On Rails</strong></span>
     </div>      
   </div>
 </div>
@@ -129,6 +187,58 @@
 
 
 </ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionCFTemplates" href="#cfTemplatesType3">
+          High Available, Multi-AZ Samples
+        </a>
+      </h4>
+    </div>
+    <div id="cfTemplatesType3" class="panel-collapse collapse">
+      <div class="panel-body">
+         
+
+            <ul style="margin-top: 5px;" class="thumbnails list-unstyled" id="">
+       <li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div data-template-title="Insoshi Stack" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Insoshi_Multi_AZ.template" class="template-item-container">
+         <div class="template-icon-container">
+        <!--<i class="fa fa-laptop instance-icon"></i>-->
+       <img style="height: 50px;width: 100px;" alt="Insoshi Stack" src="img/cf-icons/insoshi.png">
+     </div>
+      <div class="caption template-instance-runlist">
+        <span class="template-item-heading"><strong>Insoshi</strong></span>
+      </div>      
+    </div>
+  </div>
+</li>
+
+  <li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt-templateItem">
+    <div data-template-title="Redmine Stack" data-template-url="https://s3-us-west-2.amazonaws.com/cf-catalyst-templates/Redmine_Multi_AZ.template" class="template-item-container">
+       <div class="template-icon-container">
+      <!--<i class="fa fa-laptop instance-icon"></i>-->
+      <img style="height: 50px;width: 40px;" alt="Redmine Stack" src="img/cf-icons/redmine.png">
+    </div>
+    <div class="caption template-instance-runlist">
+      <span class="template-item-heading"><strong>Redmine</strong></span>
+    </div>      
+  </div>
+</div>
+</li>
+</ul>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
 <input type="button" value="Next" class="configureStackBtn action-button" name="Launch">
 </div>
 <div class="configureStackContainer">
