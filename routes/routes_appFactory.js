@@ -25,7 +25,8 @@ module.exports.setRoutes = function(app, verifySession) {
 						error: err,
 						cookbooks: cookbooks,
 						pid: req.params.pid,
-						domains: domainsdata
+						domains: domainsdata,
+						userData:req.session.user
 					});
 				});
 			});
@@ -79,14 +80,8 @@ module.exports.setRoutes = function(app, verifySession) {
 			console.log(data);
 			if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
 
-				var blueprint;
+				var blueprint = data[0].blueprintsAppFactory[0];
 
-				for(var k=0;k<data[0].blueprintsAppFactory;k++) {
-					if(data[0].blueprintsAppFactory[k].version == req.body.ver ) {
-						blueprint = data[0].blueprintsAppFactory[k];
-						break;
-					}
-				}
 				if(!blueprint) {
                   res.send(400);
                   return;

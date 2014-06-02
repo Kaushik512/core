@@ -168,19 +168,34 @@
         <h4 class="modal-title" id="stackBlueprintTitle">Blueprint Name</h4>
       </div>
       <div class="modal-body">
-        <%if(domains && domains.length) { %>
-          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="stackBluePrintName">
-            <option>Choose Blueprint</option>
-        <%    for(var i=0;i<domains.length;i++) {
+        <% var blueprintsListObj = {};
+        if(domains && domains.length) { 
+             for(var i=0;i<domains.length;i++) {
              if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
 
                 for(var j=0;j<domains[i].bluePrintsCloudFormation.length;j++) {
+                  if(domains[i].bluePrintsCloudFormation[j].groupName === userData.ou) {
+                      if(!(blueprintsListObj[domains[i].bluePrintsCloudFormation[j].blueprintName])) {
+                          blueprintsListObj[domains[i].bluePrintsCloudFormation[j].blueprintName] = {};
+                      }
+                   }
 
+                }
+        }}} 
+          blueprintsLists = Object.keys(blueprintsListObj);
+        %>
+
+
+
+       
+          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="stackBluePrintName">
+            <option>Choose Blueprint</option>
+           <% 
+            for(var i=0;i<blueprintsLists.length;i++) {
             %>
-            <option value="<%=domains[i].bluePrintsCloudFormation[j].blueprintName%>"><%=domains[i].bluePrintsCloudFormation[j].blueprintName%></option>
-            <%}}}%>
-             </select></span>
+            <option value="<%=blueprintsLists[i]%>"><%=blueprintsLists[i]%></option>
             <%}%>
+             </select></span>
         <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="stackBlueprintType" id="stackBlueprintType"/><span style="">&nbsp; Blueprint Name : <input id="stackBluePrintNameText" type="text" disabled/></span>
         <%
             if(domains && domains.length) {

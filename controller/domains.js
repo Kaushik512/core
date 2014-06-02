@@ -696,7 +696,8 @@ module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName,
   Domains.find(queryObj, {
     blueprintsAppFactory: {
       $elemMatch: {
-        blueprintName: blueprintName
+        blueprintName: blueprintName,
+        version:version
       }
     }
   }, function(err, data) {
@@ -709,15 +710,17 @@ module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName,
   });
 }
 
-module.exports.getCloudFormationBlueprint = function(pid, domainName, blueprintName, callback) {
+module.exports.getCloudFormationBlueprint = function(pid, domainName, blueprintName,version, callback) {
   Domains.find({
     domainName: domainName,
     domainPid: pid,
-    "bluePrintsCloudFormation.blueprintName": blueprintName
+    "bluePrintsCloudFormation.blueprintName": blueprintName,
+     "bluePrintsCloudFormation.version":version
   }, {
     bluePrintsCloudFormation: {
       $elemMatch: {
-        blueprintName: blueprintName
+        blueprintName: blueprintName,
+        version:version
       }
     }
   }, function(err, data) {

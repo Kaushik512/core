@@ -39,7 +39,8 @@ module.exports.setRoutes = function(app, verifySession) {
 											templateUrl: req.body.templateUrl,
 											templateTitle: req.body.title,
 											cookbooks: resp,
-											domains: domainsdata
+											domains: domainsdata,
+											userData:req.session.user
 										});
 									}
 								});
@@ -126,13 +127,20 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/aws/cloudformation/blueprints/launch', verifySession, function(req, res) {
 		console.log(req.body);
-		domainsDao.getCloudFormationBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName, function(err, data) {
+		domainsDao.getCloudFormationBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName,req.body.version, function(err, data) {
 			if (err) {
 				res.send(500);
 				return;
 			}
 			if (data.length && data[0].bluePrintsCloudFormation && data[0].bluePrintsCloudFormation.length) {
 				var blueprint = data[0].bluePrintsCloudFormation[0];
+
+				if(!blueprint) {
+                  res.send(400);
+                  return;
+				}
+
+
 				console.log(blueprint);
 				settingsController.getAwsSettings(function(awsSettings) {
 					var cloudFormation = new CloudFormation(awsSettings);

@@ -116,7 +116,9 @@
       $.post('/aws/cloudformation/blueprints/launch',{
         pid:$selectedOptionTag.attr('data-pid'),
         domainName:$selectedOptionTag.attr('data-domainName'),
-        blueprintName:$selectedOptionTag.val()
+        blueprintName:$selectedOptionTag.val(),
+        version:$selectedOptionTag.attr('data-bluePrintVersion'),
+        
       },function(data){
         var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Stack Created Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>'); 
         
