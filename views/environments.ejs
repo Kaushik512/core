@@ -280,14 +280,14 @@ height: 100%;
         <%
             if(domains && domains.length) {
             %>
-            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="bluePrintDomainNameEnv">
-            <option>Choose Domains</option>
+            <br/><br/><span style="">&nbsp; Product Group &nbsp;&nbsp;: <select id="bluePrintDomainNameEnv">
+            <option>Choose Product Group</option>
             <%for(var i=0;i<domains.length;i++){%>
               <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
             <%}%>
             </select></span>
             <%}%>
-             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainTypeEnv"/><span style="">&nbsp; Create New : <input id="createDomainNameTextEnv" type="text" disabled/>.relevancelab.com</span>
+             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainTypeEnv"/><span style="">&nbsp; Create New : <input id="createDomainNameTextEnv" type="text" disabled/></span>
             
       </div>
       <div class="modal-footer">
@@ -359,7 +359,7 @@ window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\
     if(!$('#domainTypeEnv').is(":checked")) {
       domainName =  $("#bluePrintDomainNameEnv").val();
     } else {
-      domainName =  $('#createDomainNameTextEnv').val() + '.relevancelab.com';
+      domainName =  $('#createDomainNameTextEnv').val() + '';
     }
     data.domainName = domainName;
     $.post('/environments/saveBluePrint',data,function(data){
