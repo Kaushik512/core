@@ -350,14 +350,14 @@ width:145px;
         <%
             if(domains && domains.length) {
             %>
-            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="bluePrintDomainName">
-            <option>Choose Domains</option>
+            <br/><br/><span style="">&nbsp; Product Group &nbsp;&nbsp;: <select id="bluePrintDomainName">
+            <option>Choose Product Group</option>
             <%for(var i=0;i<domains.length;i++){%>
               <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
             <%}%>
             </select></span>
             <%}%>
-             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainType"/><span style="">&nbsp; Create New : <input id="createDomainNameText" type="text" disabled/>.relevancelab.com</span>
+             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainType"/><span style="">&nbsp; Create New : <input id="createDomainNameText" type="text" disabled/></span>
             
       </div>
       <div class="modal-footer">
@@ -418,7 +418,7 @@ width:145px;
     if(!$('#domainType').is(":checked")) {
       domainName =  $("#bluePrintDomainName").val();
     } else {
-      domainName =  $('#createDomainNameText').val() + '.relevancelab.com';
+      domainName =  $('#createDomainNameText').val() + '';
     }
     data.domainName = domainName;
     data.os = $('.osmenu').val();

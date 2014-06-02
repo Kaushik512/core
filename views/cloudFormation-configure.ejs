@@ -200,14 +200,14 @@
         <%
             if(domains && domains.length) {
             %>
-            <br/><br/><span style="">&nbsp; Domain Name &nbsp;&nbsp;: <select id="stackBluePrintDomainName">
-            <option>Choose Domains</option>
+            <br/><br/><span style="">&nbsp; Product Group &nbsp;&nbsp;: <select id="stackBluePrintDomainName">
+            <option>Choose Product Group</option>
             <%for(var i=0;i<domains.length;i++){%>
               <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
             <%}%>
             </select></span>
             <%}%>
-             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="stackDomainType"/><span style="">&nbsp; Create New : <input id="stackCreateDomainNameText" type="text" disabled/>.relevancelab.com</span>
+             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="stackDomainType"/><span style="">&nbsp; Create New : <input id="stackCreateDomainNameText" type="text" disabled/></span>
             
       </div>
       <div class="modal-footer">
@@ -325,6 +325,7 @@ function validateAndGetParametersInput() {
 
  $('.saveTotemplateBtn').click(function(e){
     var reqBody = validateAndGetParametersInput();
+
     if(reqBody) {
       $('.saveAsCloudForBpBtn').trigger('click');
     }
@@ -345,7 +346,7 @@ function validateAndGetParametersInput() {
      if(!$('#stackDomainType').is(":checked")) {
        domainName =  $("#stackBluePrintDomainName").val();
      } else {
-       domainName =  $('#stackCreateDomainNameText').val() + '.relevancelab.com';
+       domainName =  $('#stackCreateDomainNameText').val() + '';
      }
      reqBody.domainName = domainName;
      reqBody.pid = $('.nav-prod').filter('.active').attr('data-pid'); 
@@ -363,12 +364,15 @@ function validateAndGetParametersInput() {
  $('.createStackBtn').click(function(e){
  	//validating parameters
   var reqBody = validateAndGetParametersInput();
+  if(!reqBody) {
+     return;
+  }
    
 
 		$('.template_domain_settings').trigger('click');
 
 		$('.save-domain-btn').unbind("click").click(function(evt) {
-			 var domainName = $('#domainNameText').val()+'.relevancelab.com';
+			 var domainName = $('#domainNameText').val()+'';
              var pid = $('.nav-prod').filter('.active').attr('data-pid'); 
              reqBody.domainName = domainName;
              reqBody.pid = pid;
