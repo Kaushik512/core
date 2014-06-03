@@ -87,6 +87,13 @@
 .saveAsAppStoreBtn{
 width:145px;
 }
+.saveBluePrintInputControl {
+  width:300px !important;
+  display: inline-block !important;
+}
+.saveBluePrintInputlable {
+  
+}
 
 </style>
 <link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
@@ -318,7 +325,8 @@ width:145px;
         <h4 class="modal-title" id="blueprintTitle">Blueprint Name</h4>
       </div>
       <div class="modal-body">
-        <% var blueprintsListObj = {};
+         
+          <% var blueprintsListObj = {};
         if(domains && domains.length) { 
              for(var i=0;i<domains.length;i++) {
              if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
@@ -336,29 +344,54 @@ width:145px;
         %>
 
 
-           
-
-          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="bluePrintName">
-            <option>Choose Blueprint</option>
-           <% 
-            for(var i=0;i<blueprintsLists.length;i++) {
-            %>
-            <option value="<%=blueprintsLists[i]%>"><%=blueprintsLists[i]%></option>
-            <%}%>
-             </select></span>
-        <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="blueprintType" id="blueprintType"/><span style="">&nbsp; Blueprint Name : <input id="bluePrintNameText" type="text" disabled/></span>
-        <%
-            if(domains && domains.length) {
-            %>
-            <br/><br/><span style="">&nbsp; Product Group &nbsp;&nbsp;: <select id="bluePrintDomainName">
-            <option>Choose Product Group</option>
-            <%for(var i=0;i<domains.length;i++){%>
-              <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
-            <%}%>
-            </select></span>
-            <%}%>
-             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="domainType"/><span style="">&nbsp; Create New : <input id="createDomainNameText" type="text" disabled/></span>
+        <form class="form-horizontal" role="form">
+          
+          <div class="form-group">
+            <label for="bluePrintName" class="col-sm-4 control-label saveBluePrintInputlable">Blueprints :</label>
+             <div class="col-sm-8">
+              <select class="form-control saveBluePrintInputControl" id="bluePrintName">
+                 <option>Choose Blueprint</option>
+                 <% 
+                    for(var i=0;i<blueprintsLists.length;i++) {
+                  %>
+                  <option value="<%=blueprintsLists[i]%>"><%=blueprintsLists[i]%></option>
+                <%}%>
+              </select>
+             </div>
+           </div>
+           <div class="form-group">
             
+            <label for="bluePrintName" class="col-sm-4 control-label saveBluePrintInputlable">Create New Blueprint :</label>
+             <div class="col-sm-8">
+               <input id="bluePrintNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="blueprintType" id="blueprintType"/>
+             </div>
+           </div>
+
+
+           <div class="form-group">
+            <label for="bluePrintDomainName" class="col-sm-4 control-label saveBluePrintInputlable">Product Groups :</label>
+             <div class="col-sm-8">
+              <select class="form-control saveBluePrintInputControl" id="bluePrintDomainName">
+                 <option>Choose Product Group</option>
+                 <% 
+                    if(domains && domains.length) {
+                     for(var i=0;i<domains.length;i++){
+                  %>
+                   <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
+                <%}}%>
+              </select>
+             </div>
+           </div>
+           <div class="form-group">
+            
+            <label for="createDomainNameText" class="col-sm-4 control-label saveBluePrintInputlable">Create New Product Group :</label>
+             <div class="col-sm-8">   
+               <input id="createDomainNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="domainType" id="domainType"/>
+             </div>
+           </div>
+
+
+        </form>
       </div>
       <div class="modal-footer">
         <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
@@ -374,13 +407,13 @@ width:145px;
  <script type="text/javascript">
  $('#domainType').change(function() {
         if($(this).is(":checked")) {
-           $('#bluePrintDomainName').parent().hide();
+           $('#bluePrintDomainName').parent().parent().hide();
          
           $('#bluePrintDomainName').attr('disabled',true);
           $('#createDomainNameText').attr('disabled',false);
           
         } else {
-          $('#bluePrintDomainName').parent().show();
+          $('#bluePrintDomainName').parent().parent().show();
           $('#bluePrintDomainName').attr('disabled',false);
           $('#createDomainNameText').attr('disabled',true);
           
@@ -389,12 +422,12 @@ width:145px;
 
   $('#blueprintType').change(function() {
         if($(this).is(":checked")) {
-            $('#bluePrintName').parent().hide();
+            $('#bluePrintName').parent().parent().hide();
           $('#bluePrintName').attr('disabled',true);
           $('#bluePrintNameText').attr('disabled',false);
           
         } else {
-           $('#bluePrintName').parent().show();
+           $('#bluePrintName').parent().parent().show();
           $('#bluePrintName').attr('disabled',false);
           $('#bluePrintNameText').attr('disabled',true);
           

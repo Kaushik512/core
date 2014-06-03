@@ -66,6 +66,11 @@
   display: none;
 }
 
+.saveBluePrintInputControl {
+  width:300px !important;
+  display: inline-block !important;
+}
+
 </style>
 <div class="configurationContainerArea">
 <div class="configureTemplateArea">
@@ -168,7 +173,7 @@
         <h4 class="modal-title" id="stackBlueprintTitle">Blueprint Name</h4>
       </div>
       <div class="modal-body">
-        <% var blueprintsListObj = {};
+          <% var blueprintsListObj = {};
         if(domains && domains.length) { 
              for(var i=0;i<domains.length;i++) {
              if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
@@ -185,29 +190,52 @@
           blueprintsLists = Object.keys(blueprintsListObj);
         %>
 
+          <form class="form-horizontal" role="form">
+          
+          <div class="form-group">
+            <label for="stackBluePrintName" class="col-sm-4 control-label saveBluePrintInputlable">Blueprints :</label>
+             <div class="col-sm-8">
+              <select class="form-control saveBluePrintInputControl" id="stackBluePrintName">
+                 <option>Choose Blueprint</option>
+                 <% 
+                    for(var i=0;i<blueprintsLists.length;i++) {
+                  %>
+                  <option value="<%=blueprintsLists[i]%>"><%=blueprintsLists[i]%></option>
+                <%}%>
+              </select>
+             </div>
+           </div>
+           <div class="form-group">
+            
+            <label for="stackBluePrintNameText" class="col-sm-4 control-label saveBluePrintInputlable">Create New Blueprint :</label>
+             <div class="col-sm-8">
+               <input id="stackBluePrintNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="blueprintType" id="stackBlueprintType"/>
+             </div>
+           </div>
 
 
-       
-          <span style="">&nbsp; Blueprint &nbsp;&nbsp;: <select id="stackBluePrintName">
-            <option>Choose Blueprint</option>
-           <% 
-            for(var i=0;i<blueprintsLists.length;i++) {
-            %>
-            <option value="<%=blueprintsLists[i]%>"><%=blueprintsLists[i]%></option>
-            <%}%>
-             </select></span>
-        <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="stackBlueprintType" id="stackBlueprintType"/><span style="">&nbsp; Blueprint Name : <input id="stackBluePrintNameText" type="text" disabled/></span>
-        <%
-            if(domains && domains.length) {
-            %>
-            <br/><br/><span style="">&nbsp; Product Group &nbsp;&nbsp;: <select id="stackBluePrintDomainName">
-            <option>Choose Product Group</option>
-            <%for(var i=0;i<domains.length;i++){%>
-              <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
-            <%}%>
-            </select></span>
-            <%}%>
-             <br/><br/>&nbsp;&nbsp;<input type="checkbox" name="domainType" id="stackDomainType"/><span style="">&nbsp; Create New : <input id="stackCreateDomainNameText" type="text" disabled/></span>
+           <div class="form-group">
+            <label for="stackBluePrintDomainName" class="col-sm-4 control-label saveBluePrintInputlable">Product Groups :</label>
+             <div class="col-sm-8">
+              <select class="form-control saveBluePrintInputControl" id="stackBluePrintDomainName">
+                 <option>Choose Product Group</option>
+                 <% 
+                    if(domains && domains.length) {
+                     for(var i=0;i<domains.length;i++){
+                  %>
+                   <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
+                <%}}%>
+              </select>
+             </div>
+           </div>
+           <div class="form-group">
+            
+            <label for="stackCreateDomainNameText" class="col-sm-4 control-label saveBluePrintInputlable">Create New Product Group :</label>
+             <div class="col-sm-8">   
+               <input id="stackCreateDomainNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="domainType" id="stackDomainType"/>
+             </div>
+           </div>
+        </form>
             
       </div>
       <div class="modal-footer">
@@ -229,13 +257,13 @@
  
 $('#stackDomainType').change(function() {
         if($(this).is(":checked")) {
-           $('#stackBluePrintDomainName').parent().hide();
+           $('#stackBluePrintDomainName').parent().parent().hide();
          
           $('#stackBluePrintDomainName').attr('disabled',true);
           $('#stackCreateDomainNameText').attr('disabled',false);
           
         } else {
-          $('#stackBluePrintDomainName').parent().show();
+          $('#stackBluePrintDomainName').parent().parent().show();
           $('#stackBluePrintDomainName').attr('disabled',false);
           $('#stackCreateDomainNameText').attr('disabled',true);
           
@@ -244,12 +272,12 @@ $('#stackDomainType').change(function() {
 
   $('#stackBlueprintType').change(function() {
         if($(this).is(":checked")) {
-            $('#stackBluePrintName').parent().hide();
+            $('#stackBluePrintName').parent().parent().hide();
           $('#stackBluePrintName').attr('disabled',true);
           $('#stackBluePrintNameText').attr('disabled',false);
           
         } else {
-           $('#stackBluePrintName').parent().show();
+           $('#stackBluePrintName').parent().parent().show();
           $('#stackBluePrintName').attr('disabled',false);
           $('#stackBluePrintNameText').attr('disabled',true);
           
