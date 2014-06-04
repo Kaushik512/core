@@ -32,7 +32,7 @@ var ous = ['SCLT_Group1', 'SCLT_Group2', 'SCLT_Group3'];
 var Ldap = function() {
 
 	var client = ldap.createClient({
-		url: 'ldap://54.187.176.191:389'
+		url: 'ldap://54.187.120.22:389'
 	});
 
 	this.authenticate = function(username, password, callback) {

@@ -390,6 +390,18 @@ width:145px;
              </div>
            </div>
 
+           <div class="form-group">
+            
+            <label for="expirationDays" class="col-sm-4 control-label saveBluePrintInputlable">Instance Validity <br/>(In Days) :</label>
+             <div class="col-sm-8">   
+                <select class="form-control saveBluePrintInputControl" id="expirationDays">
+                   <% for(var i=0;i<365;i++){%>
+                   <option value="<%=i%>"><%=i%></option>
+                   <%}%>
+                </select>
+             </div>
+           </div>
+
 
         </form>
       </div>
@@ -453,6 +465,7 @@ width:145px;
     } else {
       domainName =  $('#createDomainNameText').val() + '';
     }
+    data.expirationDays = $('#expirationDays').val();
     data.domainName = domainName;
     data.os = $('.osmenu').val();
     data.numberOfInstance = $('.numberOfInstance').val();

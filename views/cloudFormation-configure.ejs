@@ -235,6 +235,17 @@
                <input id="stackCreateDomainNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="domainType" id="stackDomainType"/>
              </div>
            </div>
+
+           <div class="form-group">
+            <label for="cfExpirationDays" class="col-sm-4 control-label saveBluePrintInputlable">Stack Validity <br/>(In Days) :</label>
+             <div class="col-sm-8">   
+                <select class="form-control saveBluePrintInputControl" id="cfExpirationDays">
+                   <% for(var i=0;i<365;i++){%>
+                   <option value="<%=i%>"><%=i%></option>
+                   <%}%>
+                </select>
+             </div>
+           </div>
         </form>
             
       </div>
@@ -379,6 +390,7 @@ function validateAndGetParametersInput() {
      reqBody.domainName = domainName;
      reqBody.pid = $('.nav-prod').filter('.active').attr('data-pid'); 
      reqBody.templateTitle = '<%=templateTitle%>';
+     reqBody.expirationDays = $('#cfExpirationDays').val();
      $.post('/aws/cloudformation/saveBluePrint',reqBody,function(data){
        console.log('posted');
        $('#stackBlueprintSaveModal').modal('hide')

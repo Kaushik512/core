@@ -46,6 +46,7 @@ var DomainsSchema = new Schema({
     InstanceType: String,
     numberOfInstance: Number,
     runlist: [String],
+    expirationDays:Number,
     blueprintInstancesString: String
   }],
   blueprintsEnvironment: [String],
@@ -55,6 +56,7 @@ var DomainsSchema = new Schema({
     groupName: String,
     version: String,
     runlist: [String],
+    expirationDays:Number,
     stackPrameters: [{
       ParameterKey: String,
       ParameterValue: String
@@ -392,7 +394,7 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString, callback) {
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays, callback) {
   console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
@@ -420,6 +422,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
               blueprintName: blueprintName,
               groupName: groupName,
               os: os,
+              expirationDays:expirationDays,
               version: newVersion,
               InstanceType: intanceType,
               numberOfInstance: numberOfInstance,
@@ -435,6 +438,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
             blueprintName: blueprintName,
             groupName: groupName,
             os: os,
+            expirationDays:expirationDays,
             version: generateBlueprintVersionNumber(null),
             InstanceType: intanceType,
             numberOfInstance: numberOfInstance,
@@ -449,6 +453,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
           blueprintName: blueprintName,
           groupName: groupName,
           os: os,
+          expirationDays:expirationDays,
           version: generateBlueprintVersionNumber(null),
           InstanceType: intanceType,
           numberOfInstance: numberOfInstance,
@@ -479,6 +484,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
         blueprintName: blueprintName,
         groupName: groupName,
         os: os,
+        expirationDays:expirationDays,
         version: generateBlueprintVersionNumber(null),
         InstanceType: intanceType,
         numberOfInstance: numberOfInstance,
@@ -572,7 +578,7 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
-module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters, callback) {
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays, callback) {
   console.log(domainName, pid, groupName);
   Domains.find({
     domainName: domainName,
@@ -599,6 +605,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
               blueprintName: blueprintName,
               groupName: groupName,
               version: newVersion,
+              expirationDays:expirationDays,
               stackName: stackName,
               runlist: runlist,
               stackPrameters: stackPrameters,
@@ -615,6 +622,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
             groupName: groupName,
             version: generateBlueprintVersionNumber(null),
             stackName: stackName,
+            expirationDays:expirationDays,
             runlist: runlist,
             stackPrameters: stackPrameters,
             templateUrl: templateUrl,
@@ -628,6 +636,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
           groupName: groupName,
           version: generateBlueprintVersionNumber(null),
           stackName: stackName,
+          expirationDays:expirationDays,
           runlist: runlist,
           stackPrameters: stackPrameters,
           templateUrl: templateUrl,
@@ -657,6 +666,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
         blueprintName: blueprintName,
         groupName: groupName,
         version: generateBlueprintVersionNumber(null),
+        expirationDays:expirationDays,
         stackName: stackName,
         runlist: runlist,
         stackPrameters: stackPrameters,
