@@ -61,15 +61,23 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	});
 
-	app.post('/app_factory/bluePrint/versions',verifySession,function(req,res){
-		
-		domainsDao.getAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName,null, function(err, data) {
+	app.get('/app_factory/bluePrint/details/',verifySession,function(req,res){
+		console.log('i m here');
+		console.log('query',req.query);
+		domainsDao.getAppFactoryBlueprint(req.query.pid, req.query.domainName, req.query.blueprintName,req.query.ver, function(err, data) {
 		  if(err) {
 		  	res.send(500);
 		  	return;
 		  }
-		  console.log(data);
-		  res.send(data);
+		  if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
+		  		var blueprint = data[0].blueprintsAppFactory[0];
+		  		res.render("appFactory-blueprintDetails",{
+		  			blueprint:blueprint
+		  		});
+		  } else {
+		  	res.send(404);
+		  	return;
+		  }
 		});
        
 	});
