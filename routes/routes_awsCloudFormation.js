@@ -75,6 +75,29 @@ module.exports.setRoutes = function(app, verifySession) {
 		});
 	});
 
+     
+    app.get('/aws/cloudformation/bluePrint/details/',verifySession,function(req,res){
+		console.log('i m here');
+		console.log('query',req.query);
+		domainsDao.getCloudFormationBlueprint(req.query.pid, req.query.domainName, req.query.blueprintName,req.query.ver, function(err, data) {
+		  if(err) {
+		  	res.send(500);
+		  	return;
+		  }
+		  if (data.length && data[0].bluePrintsCloudFormation && data[0].bluePrintsCloudFormation.length) {
+		  		var blueprint = data[0].bluePrintsCloudFormation[0];
+		  		res.render("cloudFormation-blueprintDetails",{
+		  			blueprint:blueprint
+		  		});
+		  } else {
+		  	res.send(404);
+		  	return;
+		  }
+		});
+       
+	});
+
+
 	app.post('/aws/cloudformation/createStack', verifySession, function(req, res) {
 		console.log(req.body);
 		var domainName = req.body.domainName;

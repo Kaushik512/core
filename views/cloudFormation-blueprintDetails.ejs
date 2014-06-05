@@ -1,0 +1,73 @@
+<style>
+.cfBluePrintDetailsContainer {
+
+}
+.cfDetailsArea {
+  
+}
+.cfDetailValue {
+  border: 0 !important;
+  width:300px !important;
+  box-shadow: none !important;
+}
+</style>
+<div class="cfBluePrintDetailsContainer">
+
+
+<form class="form-horizontal cfDetailsArea" role="form">
+      
+     <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Template Name</label>
+      <div class="col-sm-10">
+        <span type="text" class="form-control cfDetailValue" ><%=blueprint.templateName%></span>
+       </div>  
+     </div> 
+
+     <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Stack Name</label>
+  		<div class="col-sm-10">
+        <span type="text" class="form-control cfDetailValue" ><%=blueprint.stackName%></span>
+       </div>  
+     </div>
+     
+     <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Stack Validity</label>
+  		<div class="col-sm-10">
+        <span type="text" class="form-control cfDetailValue" ><%=blueprint.expirationDays%> Days</span>
+       </div>  
+     </div>
+      <%if(blueprint.stackPrameters && blueprint.stackPrameters.length) {
+        for(i=0;i<blueprint.stackPrameters.length;i++){
+      %>
+       <div class="form-group">
+       <label for="stackNameInput" class="col-sm-2 control-label"><%=blueprint.stackPrameters[i].ParameterKey%></label>
+        <div class="col-sm-10">
+         <span type="text" class="form-control cfDetailValue" ><%=blueprint.stackPrameters[i].ParameterValue%></span>
+       </div>  
+     </div>
+     
+
+      <%}}%>
+
+     <%
+     if(blueprint.runlist && blueprint.runlist.length) {
+     %>
+     <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Catalyst Runlist</label>
+  		<div class="col-sm-10">
+        <ul>
+         <%
+         for(var i=0;i<blueprint.runlist.length;i++) {
+         %>
+         <li style="list-style: none outside none"><%=blueprint.runlist[i]%></li>
+         <%}%>
+       </ul>
+       </div>  
+     </div>
+     <%}%>
+
+
+</form>
+
+
+</div>

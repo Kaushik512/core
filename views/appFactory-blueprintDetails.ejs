@@ -2,36 +2,44 @@
 .bluePrintDetailsContainer {
 
 }
+.detailsArea {
+  
+}
+.appFactoryDetailValue {
+  border: 0 !important;
+  width:300px !important;
+  box-shadow: none !important;
+}
 </style>
 <div class="bluePrintDetailsContainer">
 
 
-<form class="form-horizontal" role="form">
+<form class="form-horizontal detailsArea" role="form">
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">OS</label>
   		<div class="col-sm-10">
-        <span type="text" class="form-control" ><%=blueprint.os%></span>
+        <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.os%></span>
        </div>  
      </div>
 
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Instance Type</label>
   		<div class="col-sm-10">
-        <span type="text" class="form-control" ><%=blueprint.instanceType%></span>
+        <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.instanceType%></span>
        </div>  
      </div>
 
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Number Of Instances</label>
   		<div class="col-sm-10">
-        <span type="text" class="form-control" ><%=blueprint.numberOfInstance%></span>
+        <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.numberOfInstance%></span>
        </div>  
      </div>
      
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Instance Validity</label>
   		<div class="col-sm-10">
-        <span type="text" class="form-control" ><%=blueprint.expirationDays%></span>
+        <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.expirationDays%> Days</span>
        </div>  
      </div>
 

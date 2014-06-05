@@ -18,6 +18,15 @@
 .domainBluePrintsVersionListContainer {
   display: none;
 }
+.appFactBlueprintDetailsArea {
+   
+    display: none
+}
+.appFactBlueprintDetailsbody {
+   max-height: 230px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 </style>
 <div class="appFactory_blueprintsContainer"> 
@@ -71,17 +80,23 @@
          </div>
          </div>
    -->
-         
+
+   <div class="panel panel-default appFactBlueprintDetailsArea">
+  <div class="panel-heading">Blueprint Details</div>
+  <div class="panel-body appFactBlueprintDetailsbody">
+    Nothing to display
+  </div>
+ </div>
+  
+    
     
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default appFactbluePrintLaunchBtn">Launch</button>
+      <button type="submit" class="btn btn-default appFactbluePrintLaunchBtn" disabled>Launch</button>
     </div>
   </div>
 
-  <div class="appFactBlueprintDetailsArea">
-
-  </div>
+ 
 
 
 
@@ -99,6 +114,9 @@
      $this = $(this);
      if($this.val() === 'Choose') {
       $('.domainBluePrintsListContainer').hide();
+      $('.blueprintSelectTag').prop('selectedIndex',0);
+      $('.appFactBlueprintDetailsbody').parent().hide();
+      $('.appFactbluePrintLaunchBtn').attr('disabled',true);
        return;
      } 
      var $options = $this.find(':selected');
@@ -121,9 +139,11 @@
       if($selectedOptionTag.val() === 'Choose') {
         return;
       }
-      var $appFactBlueprintDetailsArea = $('.appFactBlueprintDetailsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+      var $appFactBlueprintDetailsArea = $('.appFactBlueprintDetailsbody').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
        $.get('/app_factory/bluePrint/details/?'+'pid='+$selectedOptionTag.attr('data-pid')+'&domainName='+$selectedOptionTag.attr('data-domainName')+'&blueprintName='+$selectedOptionTag.val()+'&ver='+$selectedOptionTag.attr('data-bluePrintVersion'),function(data) {
         $appFactBlueprintDetailsArea.empty().append(data);
+        $appFactBlueprintDetailsArea.parent().show();
+        $('.appFactbluePrintLaunchBtn').attr('disabled',false);
        });
 
   });

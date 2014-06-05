@@ -395,7 +395,10 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
 }
 
 module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays, callback) {
-  console.log(domainName, pid);
+ if(!runlist) {
+   runlist = [];
+ } 
+ console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
     domainPid: pid
@@ -579,6 +582,9 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 
 
 module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays, callback) {
+  if(!runlist) {
+    runlist =[];
+  }
   console.log(domainName, pid, groupName);
   Domains.find({
     domainName: domainName,

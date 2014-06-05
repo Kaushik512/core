@@ -15,6 +15,15 @@
 .selecttag-CF {
   width: 300px !important;
 }
+.cfBlueprintDetailsArea {
+   
+    display: none
+}
+.cfBlueprintDetailsbody {
+   max-height: 230px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 </style>
 <div class="cloudFormation_blueprintsContainer"> 
@@ -56,10 +65,18 @@
          </div>
          </div>
          <%}}%>
+
+
+          <div class="panel panel-default cfBlueprintDetailsArea">
+            <div class="panel-heading">Blueprint Details</div>
+            <div class="panel-body cfBlueprintDetailsbody">
+               Nothing to display
+           </div>
+         </div>
     
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default cloudFormationBluePrintLaunchBtn">Launch</button>
+      <button type="submit" class="btn btn-default cloudFormationBluePrintLaunchBtn" disabled>Launch</button>
     </div>
   </div>
 </form>
@@ -77,6 +94,9 @@
      $this = $(this);
      if($this.val() === 'Choose') {
       $('.cloudFormationdomainBluePrintsListContainer').hide();
+      $('.selecttag-CF').prop('selectedIndex',0);
+      $('.cfBlueprintDetailsbody').parent().hide();
+      $('.cloudFormationBluePrintLaunchBtn').attr('disabled',true);
        return;
      } 
      var $options = $this.find(':selected');
@@ -84,7 +104,29 @@
      $('.cloudFormationdomainBluePrintsListContainer').hide();
      $('#cfDomainBluePrintsListContainer'+id).show(); 
   });
+ 
 
+ $('.selecttag-CF').change(function(e){
+      var $domainOptionTag = $('#cloudFormationDomainsList').find(':selected');
+      if($domainOptionTag.val() ==='Choose') {
+        return;
+      } 
+      var id = $domainOptionTag.attr('data-id'); 
+
+      var $selectedOptionTag = $('#bluePrintsListCloudFromation'+id).find(':selected');  
+      if(!$selectedOptionTag.length) {
+         return;  
+      }
+      if($selectedOptionTag.val() === 'Choose') {
+        return;
+      }
+      var $appFactBlueprintDetailsArea = $('.cfBlueprintDetailsbody').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+       $.get('/aws/cloudformation/bluePrint/details/?'+'pid='+$selectedOptionTag.attr('data-pid')+'&domainName='+$selectedOptionTag.attr('data-domainName')+'&blueprintName='+$selectedOptionTag.val()+'&ver='+$selectedOptionTag.attr('data-bluePrintVersion'),function(data) {
+        $appFactBlueprintDetailsArea.empty().append(data);
+        $appFactBlueprintDetailsArea.parent().show();
+        $('.cloudFormationBluePrintLaunchBtn').attr('disabled',false);
+       });
+ });
 
 
 	$('.cloudFormationBluePrintLaunchBtn').click(function(e){
