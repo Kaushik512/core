@@ -35,7 +35,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/app_factory/saveBluePrint', verifySession, function(req, res) {
 		console.log(req.body);
-		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName,req.session.user.ou, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString,req.body.expirationDays, function(err, data) {
+		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName,req.session.user.ou, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString,req.body.expirationDays,req.body.templateName, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);

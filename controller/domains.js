@@ -47,6 +47,7 @@ var DomainsSchema = new Schema({
     numberOfInstance: Number,
     runlist: [String],
     expirationDays:Number,
+    templateName:String,
     blueprintInstancesString: String
   }],
   blueprintsEnvironment: [String],
@@ -394,7 +395,7 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays, callback) {
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays,templateName, callback) {
  if(!runlist) {
    runlist = [];
  } 
@@ -429,6 +430,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
               version: newVersion,
               instanceType: intanceType,
               numberOfInstance: numberOfInstance,
+              templateName:templateName,
               runlist: runlist,
               blueprintInstancesString: blueprintInstanceString
             });
@@ -445,6 +447,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
             version: generateBlueprintVersionNumber(null),
             instanceType: intanceType,
             numberOfInstance: numberOfInstance,
+            templateName:templateName,
             runlist: runlist,
             blueprintInstancesString: blueprintInstanceString
           });
@@ -460,6 +463,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
           version: generateBlueprintVersionNumber(null),
           instanceType: intanceType,
           numberOfInstance: numberOfInstance,
+          templateName:templateName,           
           runlist: runlist,
           blueprintInstancesString: blueprintInstanceString
         });
@@ -492,6 +496,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
         instanceType: intanceType,
         numberOfInstance: numberOfInstance,
         runlist: runlist,
+        templateName:templateName, 
         blueprintInstancesString: blueprintInstanceString
       });
 

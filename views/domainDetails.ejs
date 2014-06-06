@@ -125,6 +125,39 @@ function getCardHeadingHtml(role) {
      }
 }
 
+function getAppFactoryCardHeadingHtml(role) {
+  switch(role) {
+      case 'LAMP':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/lamp.png"/></span><span>LAMP</span>'
+      case 'NodeJS':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/nodejs.png"/></span><span>NodeJS</span>';   
+      case 'Tomcat':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/tomcat.png"/></span><span>Tomcat</span>';
+      case 'Apache':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/apache.png"/></span><span>Apache</span>';
+      case 'JBoss':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/jboss.png"/></span><span>JBoss</span>';
+      case 'Hadoop':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/hadoop.png"/></span><span>Hadoop</span>';
+      case 'Mysql':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/mysql.png"/></span><span>Mysql</span>';
+      case 'Oracle':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/oracle.png"/></span><span>Oracle</span>';
+      case 'WSO2':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/wso2.png"/></span><span>WSO2</span>';
+      case 'Joomla':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/joomla.png"/></span><span>Joomla</span>';
+      case 'Drupal':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/drupal.png"/></span><span>Drupal</span>';
+      case 'Custom App':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png"/></span><span>Custom App</span>';
+
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png"/></span><span>'+role+'</span>';
+
+     }
+}
+
 
  console.log('pid==>'+pid);
   if(!domains.length && (pid != '3' && pid != '1' && pid != '4' && pid != '5' && pid != '6' && pid != '2' && pid != '7')) {
@@ -695,27 +728,36 @@ function getCardHeadingHtml(role) {
             </div>
           </div>
             </li>
-            <%
-          }
-            var blueprintsAppFactory =   domain.blueprintsAppFactory;
-            if(blueprintsAppFactory && blueprintsAppFactory.length) {
-              for(var p=0;p<blueprintsAppFactory.length;p++) {
-            %>
-            <li class="domain-role-thumbnail">
-              <div class="domain-roles">
-                 <div class="domain-roles-caption">
-                <div class="domain-roles-heading" title="<%=blueprintsAppFactory[p].blueprintName%>">
-                 <span class="domain-roles-icon"><img height="25px" src="img/galleryIcons/blueprintlogo.jpg"></span>
-                 <span>Blueprint</span>
-                </div>
-                <div class="instance-details-list">
-                <span class="instance-details-item"> Name : <strong><%=blueprintsAppFactory[p].blueprintName%></strong> </span>
-               </div>
+            <%}%>
+            <% var appFactoryInstances = domain.appFactoryInstances;
+            for(var j=0;j<appFactoryInstances.length;j++) {
+          %>
+          <li class="domain-role-thumbnail">
+            <div class="domain-roles">
+            <div class="domain-roles-caption">
+              <div class="domain-roles-heading" title="<%=appFactoryInstances[j].instanceName%>"><%- getAppFactoryCardHeadingHtml(appFactoryInstances[j].instanceName)%></div>
+              <div class="instance-details-list">
+              <span class="instance-details-item"> Id : <strong><%=appFactoryInstances[j].instanceId%></strong> </span>
+             <%
+               var classInstanceStatus = 'instance-inactive' 
+               var instanceStatusText = 'inactive'
+               if(instances[j].instanceActive) {
+                 classInstanceStatus = 'instance-active';
+                 instanceStatusText = 'active';
+               }
+              %>
+              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instanceStatusText%></span> </span>
+              
               </div>
-              </div>    
-              </li>
+              <div class="instance-bootstrap-list">
+              
+              </div>
+            </div>
+          </div>
+            </li>
+            
              
-           <%}}%>
+           <%}%>
  
          </ul> 
 
