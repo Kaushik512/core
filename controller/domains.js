@@ -22,7 +22,8 @@ var DomainsSchema = new Schema({
   }],
   stacks: [{
     stackId: String,
-    stackName: String
+    stackName: String,
+    templateName:String
   }],
   appFactoryInstances: [{
     instanceId: String,

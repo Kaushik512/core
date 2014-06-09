@@ -119,7 +119,8 @@ module.exports.setRoutes = function(app, verifySession) {
 					} else {
 						domainsDao.saveStackDetails(domainName, [{
 							stackId: stackId,
-							stackName: req.body.stackName
+							stackName: req.body.stackName,
+							templateName:req.body.templateTitle
 						}], function(err, data) {
 							if (err) {
 								console.log(err);
@@ -191,7 +192,8 @@ module.exports.setRoutes = function(app, verifySession) {
 						} else {
 							domainsDao.saveStackDetails(req.body.domainName, [{
 								stackId: stackId,
-								stackName: blueprint.stackName
+								stackName: blueprint.stackName,
+								templateName: blueprint.templateName
 							}], function(err, data) {
 								if (err) {
 									console.log(err);

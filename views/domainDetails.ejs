@@ -128,32 +128,57 @@ function getCardHeadingHtml(role) {
 function getAppFactoryCardHeadingHtml(role) {
   switch(role) {
       case 'LAMP':
-      return '<span class="domain-roles-icon"><img src="img/app-store-icons/lamp.png"/></span><span>LAMP</span>'
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/lamp.png" style="height: 30px;"/></span><span>LAMP</span>'
       case 'NodeJS':
-      return '<span class="domain-roles-icon"><img src="img/app-store-icons/nodejs.png"/></span><span>NodeJS</span>';   
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/nodejs.png" style="height: 30px;"/></span><span>NodeJS</span>';   
       case 'Tomcat':
-      return '<span class="domain-roles-icon"><img src="img/app-store-icons/tomcat.png"/></span><span>Tomcat</span>';
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/tomcat.png" style="height: 30px;"/></span><span>Tomcat</span>';
       case 'Apache':
-      return '<span class="domain-roles-icon"><img src="img/app-store-icons/apache.png"/></span><span>Apache</span>';
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/apache.png" style="height: 30px;"/></span><span>Apache</span>';
       case 'JBoss':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/jboss.png"/></span><span>JBoss</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/jboss.png" style="height: 30px;"/></span><span>JBoss</span>';
       case 'Hadoop':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/hadoop.png"/></span><span>Hadoop</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/hadoop.png" style="height: 30px;"/></span><span>Hadoop</span>';
       case 'Mysql':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/mysql.png"/></span><span>Mysql</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/mysql.png" style="height: 30px;"/></span><span>Mysql</span>';
       case 'Oracle':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/oracle.png"/></span><span>Oracle</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/oracle.png" style="height: 30px;"/></span><span>Oracle</span>';
       case 'WSO2':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/wso2.png"/></span><span>WSO2</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/wso2.png" style="height: 30px;"/></span><span>WSO2</span>';
       case 'Joomla':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/joomla.png"/></span><span>Joomla</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/joomla.png" style="height: 30px;"/></span><span>Joomla</span>';
       case 'Drupal':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/drupal.png"/></span><span>Drupal</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/drupal.png" style="height: 30px;"/></span><span>Drupal</span>';
       case 'Custom App':
-       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png"/></span><span>Custom App</span>';
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png" style="height: 25px;"/></span><span>Custom App</span>';
 
       default: 
-       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png"/></span><span>'+role+'</span>';
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png" style="height: 25px;"/></span><span>'+role+'</span>';
+
+     }
+}
+
+function getCFCardHeadingHtml(role) {
+  switch(role) {
+      case 'LAMP':
+      return '<span class="domain-roles-icon"><img src="img/cf-icons/lamp.png" style="height: 30px;"/></span><span>LAMP</span>';
+      case 'MySql':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/mysql.png" style="height: 30px;"/></span><span>Mysql</span>';
+      case 'Joomla':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/joomla.png" style="height: 30px;"/></span><span>Joomla</span>';
+      case 'Drupal':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/drupal.png" style="height: 30px;"/></span><span>Drupal</span>';
+      case 'Ruby On Rails':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/rubyonrails.png" style="height: 30px;"/></span><span>Ruby On Rails</span>';
+      case 'Insoshi':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/insoshi.png" style="height: 30px;"/></span><span>Insoshi</span>';
+      case 'Redmine':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/redmine.png" style="height: 30px;"/></span><span>Redmine</span>';
+      case 'Custom App':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png" style="height: 25px;"/></span><span>Custom App</span>';
+
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png" style="height: 25px;"/></span><span>'+role+'</span>';
 
      }
 }
@@ -665,7 +690,7 @@ function getAppFactoryCardHeadingHtml(role) {
  for(var i=0;i<domains.length;i++) {
    var domain = domains[i];
    
-   if(domain.domainInstances && domain.domainInstances.length) {
+   if((domain.domainInstances && domain.domainInstances.length) || (domain.appFactoryInstances && domain.appFactoryInstances.length)||(domain.stacks && domain.stacks.length)) {
     collapseClassName = ''
     if(!firstPanelOpen) {
      
@@ -749,14 +774,31 @@ function getAppFactoryCardHeadingHtml(role) {
               <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instanceStatusText%></span> </span>
               
               </div>
-              <div class="instance-bootstrap-list">
+             <!-- <div class="instance-bootstrap-list">
               
-              </div>
+              </div>-->
             </div>
           </div>
             </li>
             
              
+           <%}  var cfStacks = domain.stacks; 
+           for(var j=0;j<cfStacks.length;j++) { %>
+                <li class="domain-role-thumbnail">
+            <div class="domain-roles">
+            <div class="domain-roles-caption">
+              <div class="domain-roles-heading" title="<%=cfStacks[j].templateName%>"><%- getCFCardHeadingHtml(cfStacks[j].templateName)%></div>
+              <div class="instance-details-list">
+              <span class="instance-details-item" style="text-overflow:ellipsis; overflow:hidden;height: 30px;" title="<%=cfStacks[j].stackId%>">Stack Id : <strong><%=cfStacks[j].stackId%></strong> </span>
+              <span class="instance-details-item" style="text-overflow:ellipsis;  overflow:hidden;height: 30px;"> Stack Name : <span class=""><strong><%=cfStacks[j].stackName%><strong></span> </span>
+              
+              </div>
+              <!--<div class="instance-bootstrap-list">
+              
+              </div>-->
+              </div>
+             </div>
+            </li>
            <%}%>
  
          </ul> 

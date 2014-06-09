@@ -416,6 +416,7 @@ function validateAndGetParametersInput() {
              var pid = $('.nav-prod').filter('.active').attr('data-pid'); 
              reqBody.domainName = domainName;
              reqBody.pid = pid;
+             reqBody.templateTitle = '<%=templateTitle%>';
             $('.configurationContainerArea').hide();
              $('.stackResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
            $.post('/aws/cloudformation/createStack',reqBody,function(data){
