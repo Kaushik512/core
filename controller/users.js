@@ -62,7 +62,7 @@ module.exports.getUser = function(username,ou, callback) {
 }
 module.exports.getUsersWithRoleIdInOu = function(ou,roleId,callback) {
  Users.find({
-    roleId:roleId,
+    //roleId:roleId,
     ou:ou
   }, function(err, data) {
     if (err) {
