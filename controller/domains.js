@@ -49,7 +49,8 @@ var DomainsSchema = new Schema({
     runlist: [String],
     expirationDays:Number,
     templateName:String,
-    blueprintInstancesString: String
+    blueprintInstancesString: String,
+    serviceConsumers : [String]
   }],
   blueprintsEnvironment: [String],
   bluePrintsCloudFormation: [{
@@ -64,7 +65,8 @@ var DomainsSchema = new Schema({
       ParameterValue: String
     }],
     templateUrl: String,
-    templateName: String
+    templateName: String,
+    serviceConsumers : [String]
 
   }],
 });
@@ -396,9 +398,12 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays,templateName, callback) {
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays,templateName,serviceConsumers, callback) {
  if(!runlist) {
    runlist = [];
+ }
+ if(!serviceConsumers) {
+   serviceConsumers = [];
  } 
  console.log(domainName, pid);
   Domains.find({
@@ -433,7 +438,8 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
               numberOfInstance: numberOfInstance,
               templateName:templateName,
               runlist: runlist,
-              blueprintInstancesString: blueprintInstanceString
+              blueprintInstancesString: blueprintInstanceString,
+              serviceConsumers:serviceConsumers
             });
             found = true;
             break;
@@ -450,6 +456,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
             numberOfInstance: numberOfInstance,
             templateName:templateName,
             runlist: runlist,
+            serviceConsumers:serviceConsumers,
             blueprintInstancesString: blueprintInstanceString
           });
         }
@@ -466,6 +473,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
           numberOfInstance: numberOfInstance,
           templateName:templateName,           
           runlist: runlist,
+           serviceConsumers:serviceConsumers,
           blueprintInstancesString: blueprintInstanceString
         });
       }
@@ -497,7 +505,8 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
         instanceType: intanceType,
         numberOfInstance: numberOfInstance,
         runlist: runlist,
-        templateName:templateName, 
+        templateName:templateName,
+         serviceConsumers:serviceConsumers, 
         blueprintInstancesString: blueprintInstanceString
       });
 
@@ -587,9 +596,12 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
-module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays, callback) {
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays,serviceConsumers, callback) {
   if(!runlist) {
     runlist =[];
+  }
+  if(!serviceConsumers) {
+    serviceConsumers =[];
   }
   console.log(domainName, pid, groupName);
   Domains.find({
@@ -622,6 +634,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
               runlist: runlist,
               stackPrameters: stackPrameters,
               templateUrl: templateUrl,
+              serviceConsumers:serviceConsumers,
               templateName: templateName
             });
             found = true;
@@ -638,6 +651,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
             runlist: runlist,
             stackPrameters: stackPrameters,
             templateUrl: templateUrl,
+            serviceConsumers:serviceConsumers,
             templateName: templateName
           });
         }
@@ -652,6 +666,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
           runlist: runlist,
           stackPrameters: stackPrameters,
           templateUrl: templateUrl,
+          serviceConsumers:serviceConsumers,
           templateName: templateName
         });
       }
@@ -683,6 +698,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
         runlist: runlist,
         stackPrameters: stackPrameters,
         templateUrl: templateUrl,
+        serviceConsumers:serviceConsumers,
         templateName: templateName
       });
 

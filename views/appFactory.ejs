@@ -401,6 +401,19 @@ width:145px;
                 </select>
              </div>
            </div>
+
+
+           <div class="form-group">
+            
+            <label for="serviceConsumersUsers" class="col-sm-4 control-label saveBluePrintInputlable">Users</label>
+             <div class="col-sm-8">   
+                <select class="form-control saveBluePrintInputControl" id="serviceConsumersUsers" multiple>
+                   <% for(var i=0;i<serviceConsumers.length;i++){%>
+                   <option value="<%=serviceConsumers[i].username%>"><%=serviceConsumers[i].username%></option>
+                   <%}%>
+                </select>
+             </div>
+           </div>
         
 
         </form>
@@ -472,6 +485,7 @@ width:145px;
     data.instanceType = $('.sizeData').val();
     data.runlist = $('.app-recipes-list').val();
     data.selectedHtmlString = [].concat(selectedItemElem[0].html());
+    data.serviceConsumers = $('#serviceConsumersUsers').val();
     data.templateName = selectedItemElem[0].find('.app-item-container').attr('data-appFact-title');
     console.log(data);
     $.post('/app_factory/saveBluePrint',data,function(data){

@@ -2,6 +2,7 @@ var settingsController = require('../controller/settings');
 var domainsDao = require('../controller/domains.js');
 var EC2 = require('../controller/ec2.js');
 var Chef = require('../controller/chef.js');
+var users = require('../controller/users.js')
 
 module.exports.setRoutes = function(app, verifySession) {
 
@@ -21,13 +22,22 @@ module.exports.setRoutes = function(app, verifySession) {
 						return;
 					}
 
-					res.render('appFactory', {
-						error: err,
-						cookbooks: cookbooks,
-						pid: req.params.pid,
-						domains: domainsdata,
-						userData:req.session.user
+					users.getUsersWithRoleIdInOu(req.session.user.ou, 500, function(err, data) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+						res.render('appFactory', {
+							error: err,
+							cookbooks: cookbooks,
+							pid: req.params.pid,
+							domains: domainsdata,
+							userData: req.session.user,
+							serviceConsumers: data
+						});
 					});
+
+
 				});
 			});
 		});
@@ -35,7 +45,13 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/app_factory/saveBluePrint', verifySession, function(req, res) {
 		console.log(req.body);
-		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName,req.session.user.ou, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString,req.body.expirationDays,req.body.templateName, function(err, data) {
+		if(req.body.serviceConsumers && req.body.serviceConsumers.length ) {
+			req.body.serviceConsumers.push(req.session.user.cn);
+		} else {
+			req.body.serviceConsumers = [];
+			req.body.serviceConsumers.push(req.session.user.cn);
+		}
+		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.session.user.ou, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, req.body.expirationDays, req.body.templateName, req.body.serviceConsumers, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);
@@ -54,48 +70,48 @@ module.exports.setRoutes = function(app, verifySession) {
 			} else {
 				res.render('appFactory_blueprints.ejs', {
 					domains: domainsdata,
-					userData:req.session.user
+					userData: req.session.user
 				});
 			}
 		});
 
 	});
 
-	app.get('/app_factory/bluePrint/details/',verifySession,function(req,res){
+	app.get('/app_factory/bluePrint/details/', verifySession, function(req, res) {
 		console.log('i m here');
-		console.log('query',req.query);
-		domainsDao.getAppFactoryBlueprint(req.query.pid, req.query.domainName, req.query.blueprintName,req.query.ver, function(err, data) {
-		  if(err) {
-		  	res.send(500);
-		  	return;
-		  }
-		  if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
-		  		var blueprint = data[0].blueprintsAppFactory[0];
-		  		res.render("appFactory-blueprintDetails",{
-		  			blueprint:blueprint
-		  		});
-		  } else {
-		  	res.send(404);
-		  	return;
-		  }
+		console.log('query', req.query);
+		domainsDao.getAppFactoryBlueprint(req.query.pid, req.query.domainName, req.query.blueprintName, req.query.ver, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
+				var blueprint = data[0].blueprintsAppFactory[0];
+				res.render("appFactory-blueprintDetails", {
+					blueprint: blueprint
+				});
+			} else {
+				res.send(404);
+				return;
+			}
 		});
-       
+
 	});
 
 	app.post('/app_factory/bluePrint/launch', verifySession, function(req, res) {
-        console.log(req.body);
-		domainsDao.getAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName,req.body.ver, function(err, data) {
+		console.log(req.body);
+		domainsDao.getAppFactoryBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName, req.body.ver, function(err, data) {
 			console.log(data);
 			if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
 
 				var blueprint = data[0].blueprintsAppFactory[0];
 
-				if(!blueprint) {
-                  res.send(400);
-                  return;
+				if (!blueprint) {
+					res.send(400);
+					return;
 				}
 
-                console.log('blueprint == >',blueprint);
+				console.log('blueprint == >', blueprint);
 
 				settingsController.getSettings(function(settings) {
 					var ec2 = new EC2(settings.aws);

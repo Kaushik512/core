@@ -3,6 +3,7 @@ var settingsController = require('../controller/settings');
 var domainsDao = require('../controller/domains.js');
 var https = require('https');
 var Chef = require('../controller/chef.js');
+var users = require('../controller/users.js');
 
 module.exports.setRoutes = function(app, verifySession) {
 
@@ -33,15 +34,25 @@ module.exports.setRoutes = function(app, verifySession) {
 									if (err) {
 										res.send(500);
 									} else {
-										var templateObj = JSON.parse(templateBody);
-										res.render('cloudFormation-configure.ejs', {
-											templateObj: templateObj,
-											templateUrl: req.body.templateUrl,
-											templateTitle: req.body.title,
-											cookbooks: resp,
-											domains: domainsdata,
-											userData:req.session.user
+										users.getUsersWithRoleIdInOu(req.session.user.ou, 500, function(err, data) {
+											if (err) {
+												res.send(500);
+												return;
+											}
+											var templateObj = JSON.parse(templateBody);
+											res.render('cloudFormation-configure.ejs', {
+												templateObj: templateObj,
+												templateUrl: req.body.templateUrl,
+												templateTitle: req.body.title,
+												cookbooks: resp,
+												domains: domainsdata,
+												userData: req.session.user,
+												serviceConsumers: data
+											});
 										});
+
+
+
 									}
 								});
 
@@ -62,9 +73,15 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/aws/cloudformation/saveBluePrint', verifySession, function(req, res) {
 
-		console.log(req.body);
-		console.log(req.session.user)
-		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName,req.session.user.ou, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters,req.body.expirationDays, function(err, data) {
+        if(req.body.serviceConsumers && req.body.serviceConsumers.length ) {
+			req.body.serviceConsumers.push(req.session.user.cn);
+		} else {
+			req.body.serviceConsumers = [];
+			req.body.serviceConsumers.push(req.session.user.cn);
+		} 		
+ 
+
+		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName, req.session.user.ou, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, req.body.expirationDays,req.body.serviceConsumers, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);
@@ -75,26 +92,26 @@ module.exports.setRoutes = function(app, verifySession) {
 		});
 	});
 
-     
-    app.get('/aws/cloudformation/bluePrint/details/',verifySession,function(req,res){
+
+	app.get('/aws/cloudformation/bluePrint/details/', verifySession, function(req, res) {
 		console.log('i m here');
-		console.log('query',req.query);
-		domainsDao.getCloudFormationBlueprint(req.query.pid, req.query.domainName, req.query.blueprintName,req.query.ver, function(err, data) {
-		  if(err) {
-		  	res.send(500);
-		  	return;
-		  }
-		  if (data.length && data[0].bluePrintsCloudFormation && data[0].bluePrintsCloudFormation.length) {
-		  		var blueprint = data[0].bluePrintsCloudFormation[0];
-		  		res.render("cloudFormation-blueprintDetails",{
-		  			blueprint:blueprint
-		  		});
-		  } else {
-		  	res.send(404);
-		  	return;
-		  }
+		console.log('query', req.query);
+		domainsDao.getCloudFormationBlueprint(req.query.pid, req.query.domainName, req.query.blueprintName, req.query.ver, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].bluePrintsCloudFormation && data[0].bluePrintsCloudFormation.length) {
+				var blueprint = data[0].bluePrintsCloudFormation[0];
+				res.render("cloudFormation-blueprintDetails", {
+					blueprint: blueprint
+				});
+			} else {
+				res.send(404);
+				return;
+			}
 		});
-       
+
 	});
 
 
@@ -120,7 +137,7 @@ module.exports.setRoutes = function(app, verifySession) {
 						domainsDao.saveStackDetails(domainName, [{
 							stackId: stackId,
 							stackName: req.body.stackName,
-							templateName:req.body.templateTitle
+							templateName: req.body.templateTitle
 						}], function(err, data) {
 							if (err) {
 								console.log(err);
@@ -142,7 +159,7 @@ module.exports.setRoutes = function(app, verifySession) {
 			} else {
 				res.render('cloudFormation-blueprints.ejs', {
 					domains: domainsdata,
-					userData:req.session.user
+					userData: req.session.user
 				});
 			}
 		});
@@ -151,7 +168,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/aws/cloudformation/blueprints/launch', verifySession, function(req, res) {
 		console.log(req.body);
-		domainsDao.getCloudFormationBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName,req.body.version, function(err, data) {
+		domainsDao.getCloudFormationBlueprint(req.body.pid, req.body.domainName, req.body.blueprintName, req.body.version, function(err, data) {
 			if (err) {
 				res.send(500);
 				return;
@@ -159,9 +176,9 @@ module.exports.setRoutes = function(app, verifySession) {
 			if (data.length && data[0].bluePrintsCloudFormation && data[0].bluePrintsCloudFormation.length) {
 				var blueprint = data[0].bluePrintsCloudFormation[0];
 
-				if(!blueprint) {
-                  res.send(400);
-                  return;
+				if (!blueprint) {
+					res.send(400);
+					return;
 				}
 
 

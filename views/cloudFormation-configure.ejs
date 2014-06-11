@@ -246,6 +246,20 @@
                 </select>
              </div>
            </div>
+           <div class="form-group">
+            
+          <label for="cfServiceConsumersUsers" class="col-sm-4 control-label saveBluePrintInputlable">Users</label>
+             <div class="col-sm-8">   
+                <select class="form-control saveBluePrintInputControl" id="cfServiceConsumersUsers" multiple>
+                   <% for(var i=0;i<serviceConsumers.length;i++){%>
+                   <option value="<%=serviceConsumers[i].username%>"><%=serviceConsumers[i].username%></option>
+                   <%}%>
+                </select>
+             </div>
+           </div>
+
+
+
         </form>
             
       </div>
@@ -391,6 +405,7 @@ function validateAndGetParametersInput() {
      reqBody.pid = $('.nav-prod').filter('.active').attr('data-pid'); 
      reqBody.templateTitle = '<%=templateTitle%>';
      reqBody.expirationDays = $('#cfExpirationDays').val();
+     reqBody.serviceConsumers = $('#cfServiceConsumersUsers').val();
      $.post('/aws/cloudformation/saveBluePrint',reqBody,function(data){
        console.log('posted');
        $('#stackBlueprintSaveModal').modal('hide')

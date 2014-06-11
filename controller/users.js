@@ -60,3 +60,15 @@ module.exports.getUser = function(username,ou, callback) {
     callback(null, data)
   });
 }
+module.exports.getUsersWithRoleIdInOu = function(ou,roleId,callback) {
+ Users.find({
+    roleId:roleId,
+    ou:ou
+  }, function(err, data) {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    callback(null, data)
+  });
+}
