@@ -125,7 +125,7 @@ module.exports.setRoutes = function(app, verifySession) {
 						var instance = {
 							instanceId: instanceData.InstanceId,
 							instanceIP: instanceData.PublicIpAddress,
-							instanceName: req.body.blueprintName,
+							instanceName: blueprint.templateName,
 							instanceActive: true,
 							instanceState: instanceData.State.Name,
 							bootStrapLog: {
@@ -139,7 +139,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 						//enabling scheduled termination 
 						setTimeout(function() {
-							ec2.terminateInstance(instanceData.InstanceId, function(err, data) {
+							ec2.terminateInstance(instanceData.InstanceId, function(err, terminatedInstance) {
 								if (err) {
 									return;
 								} else {
@@ -167,7 +167,7 @@ module.exports.setRoutes = function(app, verifySession) {
 										return;
 									} else {
 
-										domainsDao.updateAppFactoryInstanceState(domainName, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
+										domainsDao.updateAppFactoryInstanceState(req.body.domainName, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
 											if (err) {
 												console.log("update instance state err ==>", err);
 												return;
@@ -185,12 +185,12 @@ module.exports.setRoutes = function(app, verifySession) {
 											console.log('process stopped ==> ', err, code);
 											if (err) {
 												console.log("knife launch err ==>", err);
-												domainsDao.updateAppFactoryInstanceBootstrapStatus(domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
+												domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
 
 												});
 											} else {
 												if (code == 0) {
-													domainsDao.updateAppFactoryInstanceBootstrapStatus(domainName, instanceData.InstanceId, 'success', function(err, updateData) {
+													domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'success', function(err, updateData) {
 														if (err) {
 															console.log("Unable to set instance bootstarp status");
 														} else {
@@ -199,7 +199,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 													});
 												} else {
-													domainsDao.updateAppFactoryInstanceBootstrapStatus(domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
+													domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
 														if (err) {
 															console.log("Unable to set instance bootstarp status");
 														} else {
@@ -210,7 +210,7 @@ module.exports.setRoutes = function(app, verifySession) {
 											}
 
 										}, function(stdOutData) {
-											domainsDao.updateAppFactoryInstanceBootstrapLog(domainName, instanceData.InstanceId, {
+											domainsDao.updateAppFactoryInstanceBootstrapLog(req.body.domainName, instanceData.InstanceId, {
 												err: false,
 												log: stdOutData.toString('ascii'),
 												timestamp: new Date().getTime()
@@ -223,7 +223,7 @@ module.exports.setRoutes = function(app, verifySession) {
 											});
 
 										}, function(stdErrData) {
-											domainsDao.updateAppFactoryInstanceBootstrapLog(domainName, instanceData.InstanceId, {
+											domainsDao.updateAppFactoryInstanceBootstrapLog(req.body.domainName, instanceData.InstanceId, {
 												err: true,
 												log: stdErrData.toString('ascii'),
 												timestamp: new Date().getTime()

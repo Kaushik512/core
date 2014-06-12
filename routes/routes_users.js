@@ -32,7 +32,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 			} else {
                  
-				ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, req.body.userGroup, req.body.userRole, function(createErr, user) {
+				ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(createErr, user) {
 					console.log(createErr);
 					ldapClient.close(function(err) {
 						if (createErr) {
@@ -47,8 +47,6 @@ module.exports.setRoutes = function(app, verifySession) {
                             		res.send(201);
                             	}
                             });
-
-							res.send(201);
 						}
 					});
 				});

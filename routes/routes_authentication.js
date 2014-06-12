@@ -22,18 +22,16 @@ module.exports.setRoutes = function(app) {
 						if (user.cn === 'admin') {
 							res.redirect('/user/admin');
 						} else {
-
-                            usersDao.getUser(user.cn,user.ou,function(err,data){
+                            usersDao.getUser(user.cn,function(err,data){
                             	if(data.length) {
                                    user.roleId = data[0].roleId;
+                                   user.group = data[0].group;
                                    console.log(req.session.user);
                                    res.redirect('/');
                             	} else {
                             		res.send(500);
                             	}
                             });
- 
-							
 						}
 					});
 				}

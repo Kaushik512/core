@@ -6,52 +6,35 @@ var UserSchema = new Schema({
   username: String,
   fname: String,
   lname: String,
-  ou: String,
+  group: String,
   roleId: Number
 });
 
 var Users = mongoose.model('users', UserSchema);
 
 
-module.exports.createUser = function(username, fname, lname, ou, roleId, callback) {
-
-  Users.find({
+module.exports.createUser = function(username, fname, lname, group, roleId, callback) {
+  var user = new Users({
     username: username,
-  }, function(err, data) {
+    fname: fname,
+    lname: lname,
+    group: group,
+    roleId: roleId
+  });
+  user.save(function(err, data) {
     if (err) {
       callback(err, null);
       return;
     }
-    if (data.length) {
-      console.log("username name already present");
-      callback(null, data);
-      console.log(data);
-    } else {
-      console.log("user does not exist creating a new one");
-      var user = new Users({
-        username: username,
-        fname: fname,
-        lname: lname,
-        ou: ou,
-        roleId: roleId
-      });
-      user.save(function(err, data) {
-        if (err) {
-          callback(err, null);
-          return;
-        }
-        console.log("Domain Document Created");
-        callback(null, data);
-      });
-    }
+    console.log("Domain Document Created");
+    callback(null, data);
   });
 
 };
 
-module.exports.getUser = function(username,ou, callback) {
+module.exports.getUser = function(username, callback) {
   Users.find({
     username: username,
-    ou:ou
   }, function(err, data) {
     if (err) {
       callback(err, null);
@@ -60,10 +43,10 @@ module.exports.getUser = function(username,ou, callback) {
     callback(null, data)
   });
 }
-module.exports.getUsersWithRoleIdInOu = function(ou,roleId,callback) {
- Users.find({
+module.exports.getUsersInGroup = function(group, roleId, callback) {
+  Users.find({
     //roleId:roleId,
-    ou:ou
+    group: group,
   }, function(err, data) {
     if (err) {
       callback(err, null);

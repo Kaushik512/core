@@ -174,7 +174,7 @@
         blueprintName:$selectedOptionTag.val(),
         ver:$selectedOptionTag.attr('data-bluePrintVersion')
       },function(data){
-        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>');
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceId+'</span></div></div>');
          
          var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
            $('.appFactBlueprintListContainer').show();

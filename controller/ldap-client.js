@@ -8,11 +8,11 @@ function createDnObject(dnString) {
 	for (var i = 0; i < parts.length; i++) {
 		var keyValue = parts[i].split('=');
 		console.log(keyValue);
-		if(obj[keyValue[0]]) {
-		  obj[keyValue[0]] = [].concat(obj[keyValue[0]]);
-		  obj[keyValue[0]].push( keyValue[1]);
+		if (obj[keyValue[0]]) {
+			obj[keyValue[0]] = [].concat(obj[keyValue[0]]);
+			obj[keyValue[0]].push(keyValue[1]);
 		} else {
-		  obj[keyValue[0]] = keyValue[1];
+			obj[keyValue[0]] = keyValue[1];
 		}
 	}
 	return obj;
@@ -27,7 +27,6 @@ function createDnString(username, ou) {
 	return str;
 	//'cn='+username+',ou=SCLT_Group3,dc=d4d-ldap,dc=relevancelab,dc=com';
 }
-var ous = ['SCLT_Group1', 'SCLT_Group2', 'SCLT_Group3'];
 
 var Ldap = function() {
 
@@ -37,30 +36,16 @@ var Ldap = function() {
 
 	this.authenticate = function(username, password, callback) {
 
-		var i = 0;
-
-		function bindClient(ou) {
-			var dnString;
-			if (username == 'admin') {
-				dnString = createDnString(username);
+		var dnString = createDnString(username);
+		
+		client.bind(dnString, password, function(err, user) {
+			if (err) {
+				console.log("err ==> ", err);
+				callback(true, null);
 			} else {
-				dnString = createDnString(username, ou);
+				callback(null, createDnObject(dnString));
 			}
-			client.bind(dnString, password, function(err, user) {
-				if (err) {
-					console.log("err ==> ", err);
-					i++;
-					if (i >= ous.length) {
-						callback(true, null);
-					} else {
-						bindClient(ous[i]);
-					}
-				} else {
-					callback(null, createDnObject(dnString));
-				}
-			});
-		}
-		bindClient(ous[i]);
+		});
 
 
 
@@ -71,33 +56,31 @@ var Ldap = function() {
 		});
 	}
 
-	this.createUser = function(username, password, fname, lname, group, role,callback) {
+	this.createUser = function(username, password, fname, lname, callback) {
 		var entry = {
 			cn: username,
-			gn:fname,
+			gn: fname,
 			sn: lname,
-			gidNumber:role,
-			ou:group,
-			userPassword:password,
-			uid:username,
-			objectclass: ['inetOrgPerson','posixAccount'],
-			uidNumber:new Date().getTime(),
-			homeDirectory:'/home/users/'+username
+			userPassword: password,
+			uid: username,
+			objectclass: ['inetOrgPerson'],
+			//uidNumber: new Date().getTime()
+			//homeDirectory: '/home/users/' + username
 			//dc=['d4d-ldap','relevancelab','com']
 		};
-		client.add('cn='+username+', ou='+group+',dc=d4d-ldap,dc=relevancelab,dc=com', entry, function(err,user) {
-			if(err) {
+		client.add('cn=' + username +',dc=d4d-ldap,dc=relevancelab,dc=com', entry, function(err, user) {
+			if (err) {
 				console.log('err in creating client');
-				console.log('dn == >',err.dn);
-				console.log('code == >',err.code);
-				console.log('name == >',err.name);
-				console.log('message == >',err.message);
-				
-				callback(err,null);
-			} else { 
+				console.log('dn == >', err.dn);
+				console.log('code == >', err.code);
+				console.log('name == >', err.name);
+				console.log('message == >', err.message);
+
+				callback(err, null);
+			} else {
 				console.log('created');
-				console.log('user ==> ',user);
-				callback(null,user);
+				console.log('user ==> ', user);
+				callback(null, user);
 			}
 		});
 
