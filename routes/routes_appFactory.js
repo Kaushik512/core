@@ -2,7 +2,7 @@ var settingsController = require('../controller/settings');
 var domainsDao = require('../controller/domains.js');
 var EC2 = require('../controller/ec2.js');
 var Chef = require('../controller/chef.js');
-var users = require('../controller/users.js')
+var users = require('../controller/users.js');
 
 module.exports.setRoutes = function(app, verifySession) {
 
@@ -155,7 +155,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 						}, 3600000);
 
-						domainsDao.saveAppFactoryInstanceDetails(domainName, [instance], function(err, data) {
+						domainsDao.saveAppFactoryInstanceDetails(req.body.domainName, [instance], function(err, data) {
 							if (err) {
 								console.log("Unable to store instance in DB");
 								return;

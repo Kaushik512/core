@@ -15,7 +15,7 @@ module.exports = {
 }
 */
 
-var awsSettings = {
+/*var awsSettings = {
 	access_key : "AKIAJFEXRU3MVMRJEBFA",
 	secret_key : "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",
 	region : "us-west-2",
@@ -24,7 +24,19 @@ var awsSettings = {
 	pemFileLocation : "/home/anshul/",
 	pemFile:"devopstest-us-west-2.pem",
 	instanceUserName:"root"
+}*/
+
+var awsSettings = {
+	access_key : "AKIAI6TVFFD23LMBJUPA",
+	secret_key : "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",
+	region : "us-west-2",
+	keyPairName:"devopstest",
+	securityGroupId : "sg-c00ee1a5",
+	pemFileLocation : "/home/anshul/",
+	pemFile:"devopstest-us-west-2.pem",
+	instanceUserName:"root"
 }
+
 /*
 
 var awsSettings = {
