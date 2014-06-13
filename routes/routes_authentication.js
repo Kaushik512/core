@@ -27,7 +27,23 @@ module.exports.setRoutes = function(app) {
 								if (data.length) {
 									user.roleId = data[0].roleId;
 									user.groupId = data[0].groupId;
-									res.redirect('/');
+
+									usersRoles.getRoleById(user.roleId, function(err, roleData) {
+										if (err) {
+											res.send(500);
+											return;
+										} else {
+											if (roleData.length) {
+												user.permissions = roleData[0].permissions;
+												res.redirect('/');
+											} else {
+												res.send(500);
+											}
+										}
+									});
+
+
+
 								} else {
 									res.send(500);
 								}
