@@ -47,20 +47,92 @@
   
   <div class="form-group">
     <label for="userGroup">Group</label>
-    <select class="form-control" id="userGroup" name="userGroup"><option value="SCHL INTL">SCHL INTL</option>
-    <option value="SCHL ECOMM">SCHL ECOMM</option>
-   <option value="SCHL EDU">SCHL EDU</option>
-</select>
-<div class="form-group">
+    <select class="form-control" id="userGroup" name="userGroup">
+    <%for(var i=0;i<groups.length;i++) {%>
+     <option value="<%=groups[i].id%>"><%=groups[i].name%></option>
+    <%}%>
+    </select>
+     
+    <a class="" data-toggle="modal" data-target="#createGroupModal" href="javascript:void(0)">
+     Create New
+    </a>
+
+  </div>
+  <div class="form-group">
     <label for="userRole">Role</label>
-    <select class="form-control" id="userRole" name="userRole"><option value="501">Business User</option>
-    <option value="500">Service Consumer</option>
-   <option value="502">Service Designer</option>
-</select>
+    <select class="form-control" id="userRole" name="userRole">
+    <%for(var i=0;i<userRoles.length;i++) {%>
+     <option value="<%=userRoles[i].id%>"><%=userRoles[i].name%></option>
+    <%}%>   
+    </select>
+    <a class="" data-toggle="modal" data-target="#createRoleModal" href="javascript:void(0)">
+     Create New
+    </a>
   </div>
   
   <input type="button" class="btn btn-default createBtn" value="Create User"></input> <input type="button" class="btn btn-default importBtn disabled" value="Import Users"></input>
 </form>
+
+
+
+<!-- Create Group Modal -->
+<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="createGroupModalLabel">Create Group</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form" id="createGroupForm">
+          <div class="form-group">
+            <label for="newGroupName">Group Name</label>
+            <input type="text" class="form-control" id="newGroupName" placeholder="Enter Group Name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary createGroupSaveBtn">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Role Modal -->
+<div class="modal fade" id="createRoleModal" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="createRoleModalLabel">Create Group</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form" id="createRoleForm">
+          <div class="form-group">
+            <label for="newRoleName">Role Name</label>
+            <input type="text" class="form-control" id="newRoleName" placeholder="Enter Role Name">
+          </div>
+          <div class="form-group">
+            <label for="permissionsDiv">Permissions</label>
+            <div id="permissionsDiv">
+             Read <input type="checkbox" id="readPermission"/>
+             Write <input type="checkbox" id="writePermission"/>
+             Execute <input type="checkbox" id="executePermission"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary createRoleSaveBtn">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 <div id="userCreateResultContainer"></div>
 
@@ -70,6 +142,7 @@
     <script>
     window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')
     </script>
+    <script src="../js/bootstrap.js"></script>
 <script type="text/javascript">
 $(function(){
 
@@ -87,6 +160,58 @@ $(function(){
 
     });
   });
+
+$('.createRoleSaveBtn').click(function(e){
+  var roleName = $('#newRoleName').val();
+  var permissions = {
+    read:false,
+    write:false,
+    execute:false
+  };
+  if($("#readPermission").is(':checked')) {
+    permissions.read = true;
+  }
+  if($("#writePermission").is(':checked')) {
+    permissions.write = true;
+  }
+  if($("#executePermission").is(':checked')) {
+    permissions.execute = true;
+  }
+
+  $.post('/roles/create',{
+    roleName:roleName,
+    permissions:permissions
+  },function(data){
+
+    $('#createRoleForm').get(0).reset();
+    var $option = $('<option value="'+data.id+'">'+data.name+'</option>');
+    $('#userRole').append($option);
+    $option.attr('selected',true);
+    $('#createRoleModal').modal('hide');
+
+  }).error(function(){
+     alert('Unable to create Role. Please try again later');
+  });
+}) 
+
+$('.createGroupSaveBtn').click(function(e){
+  var groupName = $('#newGroupName').val();
+  $.post('/groups/create',{
+    groupName:groupName,
+  },function(data){
+   
+    $('#createGroupForm').get(0).reset();
+    var $option = $('<option value="'+data.id+'">'+data.name+'</option>');
+    $('#userGroup').append($option);
+    $option.attr('selected',true);
+    $('#createGroupModal').modal('hide');
+
+
+  }).error(function(){
+    alert('Unable to create group. Please try again later');
+  });
+}) 
+
   
 });
 

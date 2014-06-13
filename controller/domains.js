@@ -41,7 +41,7 @@ var DomainsSchema = new Schema({
   }],
   blueprintsAppFactory: [{
     blueprintName: String,
-    groupName: String,
+    groupId: Number,
     version: String,
     os: String,
     instanceType: String,
@@ -56,7 +56,7 @@ var DomainsSchema = new Schema({
   bluePrintsCloudFormation: [{
     blueprintName: String,
     stackName: String,
-    groupName: String,
+    groupId: Number,
     version: String,
     runlist: [String],
     expirationDays:Number,
@@ -398,7 +398,7 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays,templateName,serviceConsumers, callback) {
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays,templateName,serviceConsumers, callback) {
  if(!runlist) {
    runlist = [];
  }
@@ -423,14 +423,14 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
         sortBlueprintsArray(bluePrints);
         var found = false;
         for (var i = bluePrints.length - 1; i >= 0; i--) {
-          if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupName === groupName) {
+          if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupId === groupId) {
 
             var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
             console.log('new version ==>', newVersion);
 
             bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
-              groupName: groupName,
+              groupId: groupId,
               os: os,
               expirationDays:expirationDays,
               version: newVersion,
@@ -448,7 +448,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
         if (!found) {
           bluePrints.push({
             blueprintName: blueprintName,
-            groupName: groupName,
+            groupId: groupId,
             os: os,
             expirationDays:expirationDays,
             version: generateBlueprintVersionNumber(null),
@@ -465,7 +465,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
       } else {
         newBluePrints.push({
           blueprintName: blueprintName,
-          groupName: groupName,
+          groupId: groupId,
           os: os,
           expirationDays:expirationDays,
           version: generateBlueprintVersionNumber(null),
@@ -498,7 +498,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupName, 
       // create new 
       newBluePrints.push({
         blueprintName: blueprintName,
-        groupName: groupName,
+        groupId: groupId,
         os: os,
         expirationDays:expirationDays,
         version: generateBlueprintVersionNumber(null),
@@ -596,14 +596,14 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
-module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupName, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays,serviceConsumers, callback) {
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays,serviceConsumers, callback) {
   if(!runlist) {
     runlist =[];
   }
   if(!serviceConsumers) {
     serviceConsumers =[];
   }
-  console.log(domainName, pid, groupName);
+  console.log(domainName, pid, groupId);
   Domains.find({
     domainName: domainName,
     domainPid: pid
@@ -621,13 +621,13 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
         sortBlueprintsArray(bluePrints);
         var found = false;
         for (var i = bluePrints.length - 1; i >= 0; i--) {
-          if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupName === groupName) {
+          if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupId === groupId) {
             var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
             console.log('new version ==>', newVersion);
 
             bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
-              groupName: groupName,
+              groupId: groupId,
               version: newVersion,
               expirationDays:expirationDays,
               stackName: stackName,
@@ -644,7 +644,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
         if (!found) {
           bluePrints.push({
             blueprintName: blueprintName,
-            groupName: groupName,
+            groupId: groupId,
             version: generateBlueprintVersionNumber(null),
             stackName: stackName,
             expirationDays:expirationDays,
@@ -659,7 +659,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
       } else {
         newBluePrints.push({
           blueprintName: blueprintName,
-          groupName: groupName,
+          groupId: groupId,
           version: generateBlueprintVersionNumber(null),
           stackName: stackName,
           expirationDays:expirationDays,
@@ -691,7 +691,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupNa
       // create new 
       newBluePrints.push({
         blueprintName: blueprintName,
-        groupName: groupName,
+        groupId: groupId,
         version: generateBlueprintVersionNumber(null),
         expirationDays:expirationDays,
         stackName: stackName,

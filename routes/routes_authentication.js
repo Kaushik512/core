@@ -1,6 +1,7 @@
 var LdapClient = require('../controller/ldap-client');
 var usersDao = require('../controller/users.js');
-
+var usersGroups = require('../controller/user-groups.js');
+var usersRoles = require('../controller/user-roles.js');
 
 module.exports.setRoutes = function(app) {
 
@@ -22,16 +23,15 @@ module.exports.setRoutes = function(app) {
 						if (user.cn === 'admin') {
 							res.redirect('/user/admin');
 						} else {
-                            usersDao.getUser(user.cn,function(err,data){
-                            	if(data.length) {
-                                   user.roleId = data[0].roleId;
-                                   user.group = data[0].group;
-                                   console.log(req.session.user);
-                                   res.redirect('/');
-                            	} else {
-                            		res.send(500);
-                            	}
-                            });
+							usersDao.getUser(user.cn, function(err, data) {
+								if (data.length) {
+									user.roleId = data[0].roleId;
+									user.groupId = data[0].groupId;
+									res.redirect('/');
+								} else {
+									res.send(500);
+								}
+							});
 						}
 					});
 				}
@@ -60,6 +60,21 @@ module.exports.setRoutes = function(app) {
 		}
 	};
 
-	return verifySession;
+	var adminVerificationFunc = function(req, res, next) {
+		if (req.session && req.session.user) {
+			if (req.session.user.cn == 'admin') {
+				next();
+			} else {
+				res.send(403);
+			}
+		} else {
+			res.redirect('/login');
+		}
+	}
+
+	return {
+		sessionVerificationFunc: verifySession,
+		adminSessionVerificationFunc: adminVerificationFunc
+	};
 
 }

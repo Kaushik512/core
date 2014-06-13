@@ -6,19 +6,19 @@ var UserSchema = new Schema({
   username: String,
   fname: String,
   lname: String,
-  group: String,
+  groupId: Number,
   roleId: Number
 });
 
 var Users = mongoose.model('users', UserSchema);
 
 
-module.exports.createUser = function(username, fname, lname, group, roleId, callback) {
+module.exports.createUser = function(username, fname, lname, groupId, roleId, callback) {
   var user = new Users({
     username: username,
     fname: fname,
     lname: lname,
-    group: group,
+    groupId: groupId,
     roleId: roleId
   });
   user.save(function(err, data) {
@@ -26,7 +26,7 @@ module.exports.createUser = function(username, fname, lname, group, roleId, call
       callback(err, null);
       return;
     }
-    console.log("Domain Document Created");
+    console.log("User Document Created");
     callback(null, data);
   });
 
@@ -43,10 +43,10 @@ module.exports.getUser = function(username, callback) {
     callback(null, data)
   });
 }
-module.exports.getUsersInGroup = function(group, roleId, callback) {
+module.exports.getUsersInGroup = function(groupId, roleId, callback) {
   Users.find({
     //roleId:roleId,
-    group: group,
+    groupId: groupId,
   }, function(err, data) {
     if (err) {
       callback(err, null);
