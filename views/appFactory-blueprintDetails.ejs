@@ -10,59 +10,307 @@
   width:300px !important;
   box-shadow: none !important;
 }
-</style>
-<div class="bluePrintDetailsContainer">
+.editInput {
+  display: none;
+  width:300px;
+}
+.cancelEditBlueprintBtn {
+  display: none;
+}
+.saveEditedbluePrintBtn {
+  display: none;
+}
+.appFactBlueprintDetailsbody {
+    max-height: 290px;
+    overflow-x: hidden;
+    overflow-y: auto;
+} 
+.appFactEditBtnContainer {
+  
+}
+</style> 
 
 
-<form class="form-horizontal detailsArea" role="form">
+<div class="panel panel-default">
+  <div class="panel-heading">Blueprint Details :  &nbsp; <span class="appFactEditBtnContainer"><input type="button" class="btn btn-default appFactbluePrintLaunchBtn" value="Launch"/>
+      <input type="button" class="btn btn-default editBlueprintBtn" value="Edit"/>
+       <input type="button" class="btn btn-default cancelEditBlueprintBtn" value="Cancel"/>
+      <input type="button" class="btn btn-default saveEditedbluePrintBtn" value="Save"/></span></div>
+  <div class="panel-body appFactBlueprintDetailsbody">
+   <div class="bluePrintDetailsContainer">
+
+
+<form class="form-horizontal detailsArea" role="form" id="afBpDetailsArea">
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">OS</label>
-  		<div class="col-sm-10">
+      <label for="" class="col-sm-2 control-label">OS</label>
+      <div class="col-sm-10">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.os%></span>
+        <select class="form-control editInput" name="os">
+          <%
+           var optionsOsValue = ['Ubuntu','Cent OS','Red Hat','Windows'];
+           for(var i=0;i<optionsOsValue.length;i++) {
+            var selected = '';
+            if(optionsOsValue[i]===blueprint.os) {
+              selected = 'selected'
+            }
+          %>
+          <option value="<%=optionsOsValue[i]%>" <%=selected%>><%=optionsOsValue[i]%></option>
+          <%}%>
+         
+
+        </select>
        </div>  
      </div>
 
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Instance Type</label>
-  		<div class="col-sm-10">
+      <div class="col-sm-10">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.instanceType%></span>
+        <select class="form-control editInput" name="instanceType">
+          <%
+           var optionsValue = ['t1.micro','m1.small','m1.medium','m1.large','m1.xlarge'];
+           for(var i=0;i<optionsValue.length;i++) {
+            var selected = '';
+            if(optionsValue[i]===blueprint.instanceType) {
+              selected = 'selected'
+            }
+          %>
+          <option value="<%=optionsValue[i]%>" <%=selected%>><%=optionsValue[i]%></option>
+          <%}%>
+          
+        </select>
        </div>  
      </div>
 
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Number Of Instances</label>
-  		<div class="col-sm-10">
+      <div class="col-sm-10">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.numberOfInstance%></span>
+        <select class="form-control editInput" name="numberOfInstance">
+         <%
+           var optionsNoOFinstanceValue = ['1','2','3','4','5','6','7','8','9','10'];
+           for(var i=0;i<optionsNoOFinstanceValue.length;i++) {
+            var selected = '';
+            if(optionsNoOFinstanceValue[i]==blueprint.numberOfInstance) {
+              selected = 'selected'
+            }
+          %>
+          <option value="<%=optionsNoOFinstanceValue[i]%>" <%=selected%>><%=optionsNoOFinstanceValue[i]%></option>
+          <%}%>
+
+        </select>
        </div>  
      </div>
      
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Instance Validity</label>
-  		<div class="col-sm-10">
+      <div class="col-sm-10">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.expirationDays%> Days</span>
+        <select class="form-control editInput" id="" name="expirationDays">
+                   <% for(var i=0;i<365;i++){
+                   var selected ='';
+                   if(i==blueprint.expirationDays) {
+                    selected = 'selected'
+                   }%>
+                   <option value="<%=i%>" <%=selected%>><%=i%></option>
+                   <%}%>
+        </select>
        </div>  
      </div>
 
 
-     <%
-     if(blueprint.runlist && blueprint.runlist.length) {
-     %>
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Runlist</label>
-  		<div class="col-sm-10">
-        <ul>
+      <div class="col-sm-10">
+        <ul class="appFactoryDetailValue">
          <%
+          if(blueprint.runlist && blueprint.runlist.length) {
          for(var i=0;i<blueprint.runlist.length;i++) {
          %>
          <li style="list-style: none outside none"><%=blueprint.runlist[i]%></li>
-         <%}%>
+         <%}}%>
        </ul>
+       
+       <select class="form-control editInput" id="" name="runlist" multiple>
+                   <%
+                    if(!(blueprint.runlist && blueprint.runlist.length)) {
+                      blueprint.runlist = []; 
+                    }   
+                   for(var i=1;i<cookbooks.length;i++){ 
+                      var selected = '';
+                      if(blueprint.runlist.indexOf(cookbooks[i]) !== -1) {
+                          selected = 'selected';
+                      }
+                   %>
+                   <option value="<%=cookbooks[i]%>" <%=selected%>><%=cookbooks[i]%></option>
+                   <%}%>
+        </select>  
+
+
        </div>  
      </div>
-     <%}%>
+     
+     <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Service Consumers</label>
+      <div class="col-sm-10">
+        <ul class="appFactoryDetailValue">
+         <%
+          if(blueprint.serviceConsumers && blueprint.serviceConsumers.length) {
+         for(var i=0;i<blueprint.serviceConsumers.length;i++) {
+          if(userData.cn !== blueprint.serviceConsumers[i]) { 
+         %>
+         <li style="list-style: none outside none"><%=blueprint.serviceConsumers[i]%></li>
+         <%}}}%>
+       </ul>
+       
+       <select class="form-control editInput" id="" name="serviceConsumers" multiple>
+                   <%
+                    if(!(blueprint.serviceConsumers && blueprint.serviceConsumers.length)) {
+                      blueprint.serviceConsumers = []; 
+                    }   
+                   for(var i=1;i<serviceConsumers.length;i++){ 
+                      var selected = '';
+                      if(blueprint.serviceConsumers.indexOf(serviceConsumers[i].username) !== -1) {
+                          selected = 'selected';
+                      }
+                       if(userData.cn !== serviceConsumers[i].username) { 
+                   %>
+                   <option value="<%=serviceConsumers[i].username%>" <%=selected%>><%=serviceConsumers[i].username%></option>
+                   <%}}%>
+        </select>  
 
 
+       </div>  
+     </div>
+
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      
+    
+    </div>
+  </div>
 </form>
-
+  
+</div>
+<div class="appFactBlueprintLaunchResultArea"></div>
 
 </div>
+  </div>
+ </div>
+<script type="text/javascript">
+(function(){
+  $('.editBlueprintBtn').click(function(e){
+  $('.appFactoryDetailValue').hide();
+  $('.editInput').show();
+  $('.appFactbluePrintLaunchBtn').hide();
+  $('.cancelEditBlueprintBtn').show();
+  $('.saveEditedbluePrintBtn').show();
+  $(this).hide();
+});
+
+$('.cancelEditBlueprintBtn').click(function(){
+   $('.appFactoryDetailValue').show();
+  $('.editInput').hide();
+  $('.appFactbluePrintLaunchBtn').show();
+  $('.cancelEditBlueprintBtn').hide();
+  $('.saveEditedbluePrintBtn').hide();
+  $('.editBlueprintBtn').show();
+})
+
+$('.appFactbluePrintLaunchBtn').click(function(e){
+      
+         
+     $('.bluePrintDetailsContainer').hide();
+      var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+ 
+      $.post('/app_factory/bluePrint/launch',{
+        pid:'<%=pid%>',
+        domainName:'<%=domainName%>',
+        blueprintName:'<%=blueprintName%>',
+        ver:'<%=blueprintVersion%>'
+      },function(data){
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceId+'</span></div></div>');
+         
+         var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.appFactBlueprintListContainer').show();
+           $('.appFactBlueprintLaunchResultArea').hide();
+         });
+
+
+        $appStoreLaunchResultArea.empty().append($message);
+        // $appStoreLaunchResultArea.append($btn);
+
+      }).error(function(){
+         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create Instance. Daily Quota Reached. </div></div>');  
+             
+        var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.appFactBlueprintListContainer').show();
+           $('.appFactBlueprintLaunchResultArea').hide();
+         });
+
+            $appStoreLaunchResultArea.empty().append($message);
+          //  $appStoreLaunchResultArea.append($btn);
+
+      });     
+    });
+
+  function createReqObj(formData) {
+   
+     var reqBody = {};
+     for(var i=0;i<formData.length;i++) {
+        var obj = formData[i];
+       
+        if(reqBody[obj.name]) {
+          reqBody[obj.name] = [].concat(reqBody[obj.name],obj.value);
+        } else {
+          reqBody[obj.name] = obj.value; 
+        }
+     }
+     return reqBody;
+
+  }
+
+
+  $('.saveEditedbluePrintBtn').click(function(e){
+    var reqBody = createReqObj($('#afBpDetailsArea').serializeArray());
+    if(reqBody.runlist) {
+      reqBody.runlist = [].concat(reqBody.runlist);
+    } else {
+      reqBody.runlist = [];
+    }
+    if(reqBody.serviceConsumers) {
+      reqBody.serviceConsumers = [].concat(reqBody.serviceConsumers);
+    } else {
+      reqBody.serviceConsumers = [];
+    }
+    reqBody.pid = '<%=pid%>';
+    reqBody.domainName = '<%=domainName%>';
+    reqBody.bluePrintName = '<%=blueprintName%>';
+    reqBody.templateName = '<%=blueprint.templateName%>';
+    reqBody.selectedHtmlString = '';
+    console.log(reqBody);
+
+    $.post('/app_factory/saveBluePrint',reqBody,function(data){
+       console.log(data);
+       var $domainOptionTag = $('#appFactoryDomainsList').find(':selected');
+       if($domainOptionTag.val() ==='Choose') {
+         return;
+       } 
+       var id = $domainOptionTag.attr('data-id'); 
+       
+       var $blueprintList = $('#bluePrintsList'+id);
+       var $newblueprintOptionTag = $('<option data-pid="<%=pid%>" data-domainName="<%=domainName%>" value="<%=blueprintName%>" data-bluePrintVersion="'+data+'"><%=blueprintName%>-v'+data+'</option>');
+      $blueprintList.append($newblueprintOptionTag);
+      $newblueprintOptionTag.attr('selected',true);
+      $blueprintList.trigger('change');
+     
+       
+      
+    });
+
+  });
+})();
+
+</script>

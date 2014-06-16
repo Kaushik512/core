@@ -408,9 +408,11 @@ width:145px;
             <label for="serviceConsumersUsers" class="col-sm-4 control-label saveBluePrintInputlable">Users</label>
              <div class="col-sm-8">   
                 <select class="form-control saveBluePrintInputControl" id="serviceConsumersUsers" multiple>
-                   <% for(var i=0;i<serviceConsumers.length;i++){%>
+                   <% for(var i=0;i<serviceConsumers.length;i++){
+                     if(userData.cn !== serviceConsumers[i].username) { 
+                   %>
                    <option value="<%=serviceConsumers[i].username%>"><%=serviceConsumers[i].username%></option>
-                   <%}%>
+                   <%}}%>
                 </select>
              </div>
            </div>

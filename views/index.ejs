@@ -390,7 +390,7 @@ body {
                 <span class="logotext">Catalyst</span>
             </a>
             <div class="nav-options">
-              <% if(!(userData.roleId === 500)) {%>
+              <% if(userData.permissions.write) {%>
 
              <a class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize monitoringBtn" href="#" role="button" title="Monitoring">
                 <span>Monitoring</span>
@@ -406,23 +406,8 @@ body {
               </ul>
              </div>
               <%}%>
-               <%
-                var roleName ='Administrator';
-                switch(userData.roleId) {
-                  case 500 :
-                  roleName = 'Service Consumer';
-                  break;
-                  case 502 :
-                  roleName = 'Service Designer';
-                  break;
-                  case 501 :
-                  roleName = 'Business User';
-                  break;
-
-
-                }%>
-
-                <span class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize user-role"> Role : <%=roleName%> </span>
+               
+                <span class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize user-role"> Role : <%=userData.roleName%> </span>
              <div class="btn-group navbar-brand nav-items-padding nav-settings nav-logout configManagementDropdown">
 
               <a type="button" class="navbar-brand dropdown-toggle navbar-fontsize configManamentLabel" data-toggle="dropdown" href="#">
@@ -433,7 +418,7 @@ body {
                 <%if(userData.cn === 'admin') {%>
                    <li><a href="/user/admin" class=''><span>Admin UI</span></a></li>
                 <%}%>
-                 <% if(!(userData.roleId === 500)) {%>
+                 <% if(userData.permissions.write) {%>
                 <li><a href="#" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings"><i class="fa fa-gear">
                 </i>&nbsp;Settings</a></li>
                 <%}%>
@@ -441,15 +426,6 @@ body {
            
               </ul>
              </div>
-
-
-              <!-- 
-              <a class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize" href="#myModal" data-target="#settingsModal" data-toggle="modal" role="button" title="Settings">
-                <i class="fa fa-gear"></i>&nbsp;Settings
-              </a>
-              <a class="navbar-brand nav-items-padding nav-settings nav-logout navbar-fontsize" href="/auth/signout" title="Logout">
-                <i class="fa fa-sign-out"></i><span>Logout</span>
-              </a> -->
           </div>
         </nav>
     </header>
@@ -563,12 +539,12 @@ body {
            <div class="domainsContainer" style="height:91%;">
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Product Groups</a></li>
-               <% if(!(userData.roleId === 500)) {%>
+               <% if(userData.permissions.write) {%>
               <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Roles</li> 
               <%}%>
               <li><a id="app_store_link_tab" href="#app_factory_container" data-toggle="tab">App Factory</a></li> 
               <li><a id="cloudFormation_link_tab" href="#cloudFormation_container" data-toggle="tab">AWS Cloud Formation</a></li> 
-               <% if(!(userData.roleId === 500)) {%>
+               <% if(userData.permissions.write) {%>
               <li><a id="environment_link_tab" href="#environment_tab" data-toggle="tab">Environments</a></li> 
               <li style="float:right"><a id="console_tab_link" href="#">Console</a></li> 
                <li style="float:right"><a id="usage_tab_link" href="#usageTab" data-toggle="tab">Usage</a></li> 
@@ -578,7 +554,7 @@ body {
   <!-- Tab panes -->
   <div class="tab-content" style="height: 96%;">
       <div class="tab-pane active" id="Domains"></div>
-         <% if(!(userData.roleId === 500)) {%>
+         <% if(userData.permissions.write) {%>
       <div class="tab-pane" id="new_configuration">
 
        <!-- multistep form -->
@@ -621,13 +597,13 @@ body {
         <!-- for app store -->
       <div class="tab-pane" id="app_factory_container" style="height: 95%;">
          <ul class="nav nav-tabs">
-             <% if(!(userData.roleId === 500)) {%>
+             <% if(userData.permissions.write) {%>
               <li class=""><a id="app_factory_templateLink" class="app_factory_tab" href="#app_factory_templatesArea" data-toggle="tab">Templates</a></li>
               <%}%>
               <li><a id="app_factory_blueprintsLink" class="app_factory_tab" href="#app_factory_blueprintsArea" data-toggle="tab">Blueprints</a></li> 
           </ul>
           <div class="tab-content" style="height: 100%;">
-               <% if(!(userData.roleId === 500)) {%>
+               <% if(userData.permissions.write) {%>
              <div id="app_factory_templatesArea" class="tab-pane" style="height: 100%;">
              </div>
              <%}%>
@@ -640,13 +616,13 @@ body {
       <div class="tab-pane" id="cloudFormation_container" style="height: 95%;">
 
          <ul class="nav nav-tabs">
-             <% if(!(userData.roleId === 500)) {%>
+             <% if(userData.permissions.write) {%>
               <li class=""><a id="cloudFormation_templateLink" class="app_factory_tab" href="#cloudFormation_templatesArea" data-toggle="tab">Templates</a></li>
               <%}%>
               <li><a id="cloudFormation_blueprintsLink" class="app_factory_tab" href="#cloudFormation_blueprintsArea" data-toggle="tab">Blueprints</a></li> 
           </ul>
           <div class="tab-content" style="height: 100%;">
-             <% if(!(userData.roleId === 500)) {%>
+             <% if(userData.permissions.write) {%>
              <div id="cloudFormation_templatesArea" class="tab-pane" style="height: 100%;">
              </div>
              <%}%>
@@ -656,7 +632,7 @@ body {
       
       </div>
 
-<% if(!(userData.roleId === 500)) {%>
+<% if(userData.permissions.write) {%>
       <div id="usageTab" class="tab-pane" style="height:100%;">
         
       </div>
@@ -687,7 +663,7 @@ body {
 -->
   </div>
    </div>
-   <% if(!(userData.roleId === 500)) {%>
+   <% if(userData.permissions.write) {%>
    <div class="monitoringContainer" style="height:99%">
     <!-- <iframe src="monitoring/mainbackup.html" style="height: 100%;width: 100%;" frameBorder="0"></iframe>-->
    </div>
@@ -695,7 +671,7 @@ body {
 
  </section>
 </div>
-<% if(!(userData.roleId === 500)) {%>
+<% if(userData.permissions.write) {%>
 <div class="usercookbookArea content-container">
 </div>
 <div class="cheflibraryArea content-container">
@@ -705,7 +681,7 @@ body {
 
 
    <!-- DOMAIN-->
-<% if(!(userData.roleId === 500)) {%>
+<% if(userData.permissions.write) {%>
 <!-- Modal -->
 <div class="modal fade" id="domainModal" tabindex="-1" role="dialog" aria-labelledby="domainModalTitle" aria-hidden="true">
   <div class="modal-dialog">

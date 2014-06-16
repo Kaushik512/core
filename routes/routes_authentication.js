@@ -21,6 +21,13 @@ module.exports.setRoutes = function(app) {
 					req.session.user = user;
 					ldapClient.close(function(err) {
 						if (user.cn === 'admin') {
+							user.permissions = {
+								read:true,
+								write:true,
+								execute:true
+							};
+							user.roleName = 'Admin';
+							console.log(req.session.user);
 							res.redirect('/user/admin');
 						} else {
 							usersDao.getUser(user.cn, function(err, data) {
@@ -34,6 +41,7 @@ module.exports.setRoutes = function(app) {
 											return;
 										} else {
 											if (roleData.length) {
+												user.roleName = roleData[0].name;
 												user.permissions = roleData[0].permissions;
 												res.redirect('/');
 											} else {
@@ -41,9 +49,6 @@ module.exports.setRoutes = function(app) {
 											}
 										}
 									});
-
-
-
 								} else {
 									res.send(500);
 								}

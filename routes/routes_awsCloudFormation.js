@@ -34,7 +34,7 @@ module.exports.setRoutes = function(app, verifySession) {
 									if (err) {
 										res.send(500);
 									} else {
-										users.getUsersWithRoleIdInOu(req.session.user.ou, 500, function(err, data) {
+										users.getUsersInGroup(req.session.user.groupId, 500, function(err, data) {
 											if (err) {
 												res.send(500);
 												return;

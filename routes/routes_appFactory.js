@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app, verifySession) {
 						return;
 					}
 
-					users.getUsersWithRoleIdInOu(req.session.user.ou, 500, function(err, data) {
+					users.getUsersInGroup(req.session.user.groupId, 500, function(err, data) {
 						if (err) {
 							res.send(500);
 							return;
@@ -45,7 +45,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/app_factory/saveBluePrint', verifySession, function(req, res) {
 		console.log(req.body);
-		if(req.body.serviceConsumers && req.body.serviceConsumers.length ) {
+		if (req.body.serviceConsumers && req.body.serviceConsumers.length) {
 			req.body.serviceConsumers.push(req.session.user.cn);
 		} else {
 			req.body.serviceConsumers = [];
@@ -57,7 +57,8 @@ module.exports.setRoutes = function(app, verifySession) {
 				console.log(err);
 				return;
 			} else {
-				res.send(200);
+				console.log(data);
+				res.send(data);
 			}
 		});
 	});
@@ -87,8 +88,26 @@ module.exports.setRoutes = function(app, verifySession) {
 			}
 			if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
 				var blueprint = data[0].blueprintsAppFactory[0];
-				res.render("appFactory-blueprintDetails", {
-					blueprint: blueprint
+				settingsController.getChefSettings(function(settings) {
+					var chef = new Chef(settings);
+					chef.getHostedChefCookbooks(function(err, cookbooks) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+						users.getUsersInGroup(req.session.user.groupId, 500, function(err, data) {
+							res.render("appFactory-blueprintDetails", {
+								blueprint: blueprint,
+								cookbooks: cookbooks,
+								domainName: req.query.domainName,
+								pid: req.query.pid,
+								blueprintName: req.query.blueprintName,
+								blueprintVersion: req.query.ver,
+								serviceConsumers:data,
+								userData : req.session.user
+							});
+						});
+					});
 				});
 			} else {
 				res.send(404);

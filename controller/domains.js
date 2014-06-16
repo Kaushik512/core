@@ -404,7 +404,8 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
  }
  if(!serviceConsumers) {
    serviceConsumers = [];
- } 
+ }
+ var createVersion = generateBlueprintVersionNumber(null); 
  console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
@@ -427,7 +428,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
 
             var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
             console.log('new version ==>', newVersion);
-
+            createVersion = newVersion;
             bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
               groupId: groupId,
@@ -459,6 +460,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
             serviceConsumers:serviceConsumers,
             blueprintInstancesString: blueprintInstanceString
           });
+
         }
         newBluePrints = bluePrints;
 
@@ -492,7 +494,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
           callback(err, null);
           return;
         }
-        callback(null, data);
+        callback(null, createVersion);
       });
     } else {
       // create new 
@@ -522,7 +524,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
           return;
         }
         console.log("Domain Document Created");
-        callback(null, data);
+        callback(null, createVersion);
       });
     }
 

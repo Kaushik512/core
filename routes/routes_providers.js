@@ -48,6 +48,7 @@ function getRolesListArguments(rolesArray) {
 module.exports.setRoutes = function(app, verifySession) {
 
 	app.get('/', verifySession, function(req, res) {
+		console.log(req.session.user);
 		providers.getProviders(function(err, products) {
 			res.render('index', {
 				error: err,
