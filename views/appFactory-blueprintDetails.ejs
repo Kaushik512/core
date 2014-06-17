@@ -28,14 +28,23 @@
 .appFactEditBtnContainer {
   
 }
+.control-height{
+  height: auto !important;
+}
+
 </style> 
 
 
 <div class="panel panel-default">
-  <div class="panel-heading">Blueprint Details :  &nbsp; <span class="appFactEditBtnContainer"><input type="button" class="btn btn-default appFactbluePrintLaunchBtn" value="Launch"/>
+  <div class="panel-heading">Blueprint Details :  &nbsp; <span class="appFactEditBtnContainer">
+    <%if(userData.permissions.execute) {%>
+    <input type="button" class="btn btn-default appFactbluePrintLaunchBtn" value="Launch"/>
+    <%}%>
+    <%if(userData.permissions.write) {%>
       <input type="button" class="btn btn-default editBlueprintBtn" value="Edit"/>
        <input type="button" class="btn btn-default cancelEditBlueprintBtn" value="Cancel"/>
-      <input type="button" class="btn btn-default saveEditedbluePrintBtn" value="Save"/></span></div>
+      <input type="button" class="btn btn-default saveEditedbluePrintBtn" value="Save"/>
+    <%}%></span></div>
   <div class="panel-body appFactBlueprintDetailsbody">
    <div class="bluePrintDetailsContainer">
 
@@ -122,7 +131,7 @@
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Runlist</label>
       <div class="col-sm-10">
-        <ul class="appFactoryDetailValue">
+        <ul class="form-control appFactoryDetailValue control-height">
          <%
           if(blueprint.runlist && blueprint.runlist.length) {
          for(var i=0;i<blueprint.runlist.length;i++) {
@@ -153,7 +162,7 @@
      <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Service Consumers</label>
       <div class="col-sm-10">
-        <ul class="appFactoryDetailValue">
+        <ul class="form-control appFactoryDetailValue control-height">
          <%
           if(blueprint.serviceConsumers && blueprint.serviceConsumers.length) {
          for(var i=0;i<blueprint.serviceConsumers.length;i++) {
@@ -198,10 +207,22 @@
 
 </div>
   </div>
- </div>
+
 <script type="text/javascript">
 (function(){
+   
+   
+
   $('.editBlueprintBtn').click(function(e){
+   var $appFactoryDomainsList =$('#appFactoryDomainsList');
+   var $domainOptionTag = $appFactoryDomainsList.find(':selected');
+   if($domainOptionTag.val() ==='Choose') {
+     return;
+   } 
+   var id = $domainOptionTag.attr('data-id'); 
+   $appFactoryDomainsList.attr('disabled',true);    
+   var $blueprintList = $('#bluePrintsList'+id).attr('disabled',true);
+
   $('.appFactoryDetailValue').hide();
   $('.editInput').show();
   $('.appFactbluePrintLaunchBtn').hide();
@@ -211,6 +232,17 @@
 });
 
 $('.cancelEditBlueprintBtn').click(function(){
+
+  var $appFactoryDomainsList =$('#appFactoryDomainsList');
+   var $domainOptionTag = $appFactoryDomainsList.find(':selected');
+   if($domainOptionTag.val() ==='Choose') {
+     return;
+   } 
+   var id = $domainOptionTag.attr('data-id'); 
+   $appFactoryDomainsList.attr('disabled',false);    
+   var $blueprintList = $('#bluePrintsList'+id).attr('disabled',false);
+
+
    $('.appFactoryDetailValue').show();
   $('.editInput').hide();
   $('.appFactbluePrintLaunchBtn').show();
@@ -223,6 +255,7 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
       
          
      $('.bluePrintDetailsContainer').hide();
+     $('.appFactEditBtnContainer').hide();
       var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
  
       $.post('/app_factory/bluePrint/launch',{
@@ -294,20 +327,20 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
 
     $.post('/app_factory/saveBluePrint',reqBody,function(data){
        console.log(data);
-       var $domainOptionTag = $('#appFactoryDomainsList').find(':selected');
+       var $appFactoryDomainsList =$('#appFactoryDomainsList');
+       var $domainOptionTag = $appFactoryDomainsList.find(':selected');
        if($domainOptionTag.val() ==='Choose') {
          return;
        } 
        var id = $domainOptionTag.attr('data-id'); 
-       
-       var $blueprintList = $('#bluePrintsList'+id);
+       $appFactoryDomainsList.attr('disabled',false);
+       var $blueprintList = $('#bluePrintsList'+id).attr('disabled',false);;
        var $newblueprintOptionTag = $('<option data-pid="<%=pid%>" data-domainName="<%=domainName%>" value="<%=blueprintName%>" data-bluePrintVersion="'+data+'"><%=blueprintName%>-v'+data+'</option>');
       $blueprintList.append($newblueprintOptionTag);
       $newblueprintOptionTag.attr('selected',true);
       $blueprintList.trigger('change');
-     
-       
-      
+    }).error(function(){
+      alert('Unable to update blueprint.')
     });
 
   });

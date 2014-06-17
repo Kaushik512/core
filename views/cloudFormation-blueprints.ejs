@@ -19,11 +19,7 @@
    
     display: none
 }
-.cfBlueprintDetailsbody {
-   max-height: 230px;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
+
 
 </style>
 <div class="cloudFormation_blueprintsContainer"> 
@@ -67,23 +63,18 @@
          <%}}%>
 
 
-          <div class="panel panel-default cfBlueprintDetailsArea">
-            <div class="panel-heading">Blueprint Details</div>
-            <div class="panel-body cfBlueprintDetailsbody">
-               Nothing to display
-           </div>
+          <div class="cfBlueprintDetailsArea">
+            
          </div>
     
-  <div class="form-group">
+ <!--<div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-default cloudFormationBluePrintLaunchBtn" disabled>Launch</button>
     </div>
-  </div>
+  </div>-->
 </form>
 
-<div class="cloudFormationBlueprintLaunchResultArea"></div>
 
-</div>
 
 <script type="text/javascript">
 
@@ -95,7 +86,7 @@
      if($this.val() === 'Choose') {
       $('.cloudFormationdomainBluePrintsListContainer').hide();
       $('.selecttag-CF').prop('selectedIndex',0);
-      $('.cfBlueprintDetailsbody').parent().hide();
+      $('.cfBlueprintDetailsArea').hide();
       $('.cloudFormationBluePrintLaunchBtn').attr('disabled',true);
        return;
      } 
@@ -120,76 +111,16 @@
       if($selectedOptionTag.val() === 'Choose') {
         return;
       }
-      var $appFactBlueprintDetailsArea = $('.cfBlueprintDetailsbody').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+      var $appFactBlueprintDetailsArea = $('.cfBlueprintDetailsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
        $.get('/aws/cloudformation/bluePrint/details/?'+'pid='+$selectedOptionTag.attr('data-pid')+'&domainName='+$selectedOptionTag.attr('data-domainName')+'&blueprintName='+$selectedOptionTag.val()+'&ver='+$selectedOptionTag.attr('data-bluePrintVersion'),function(data) {
         $appFactBlueprintDetailsArea.empty().append(data);
-        $appFactBlueprintDetailsArea.parent().show();
+        $appFactBlueprintDetailsArea.show();
         $('.cloudFormationBluePrintLaunchBtn').attr('disabled',false);
        });
  });
 
 
-	$('.cloudFormationBluePrintLaunchBtn').click(function(e){
-
-
-      var $domainOptionTag = $('#cloudFormationDomainsList').find(':selected');
-      if($domainOptionTag.val() ==='Choose') {
-        return;
-      } 
-
-       var id = $domainOptionTag.attr('data-id'); 
-      
-      var $selectedOptionTag = $('#bluePrintsListCloudFromation'+id).find(':selected');  
-      if(!$selectedOptionTag.length) {
-         return;  
-      }
-  
-      if($selectedOptionTag.val() === 'Choose') {
-        return;
-      }
-
-
-      $('.cloudFormationBlueprintListContainer').hide();
-      var $appStoreLaunchResultArea = $('.cloudFormationBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
-      
-
-     
-     
-      $.post('/aws/cloudformation/blueprints/launch',{
-        pid:$selectedOptionTag.attr('data-pid'),
-        domainName:$selectedOptionTag.attr('data-domainName'),
-        blueprintName:$selectedOptionTag.val(),
-        version:$selectedOptionTag.attr('data-bluePrintVersion'),
-        
-      },function(data){
-        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Stack Created Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>'); 
-        
-        var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
-           $('.cloudFormationBlueprintListContainer').show();
-           $('.cloudFormationBlueprintLaunchResultArea').hide();
-         });
-    
-
-        $appStoreLaunchResultArea.empty().append($message);
-        $appStoreLaunchResultArea.append($btn);
-
-
-      }).error(function(){
-         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  
-        
-        var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
-           $('.cloudFormationBlueprintListContainer').show();
-           $('.cloudFormationBlueprintLaunchResultArea').hide();
-         });
-
-            $appStoreLaunchResultArea.empty().append($message);
-             $appStoreLaunchResultArea.append($btn);
-
-
-      });    
- 
-    });
-   
+	 
 
 })();
 </script>

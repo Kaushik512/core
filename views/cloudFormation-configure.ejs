@@ -179,7 +179,7 @@
              if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
 
                 for(var j=0;j<domains[i].bluePrintsCloudFormation.length;j++) {
-                  if(domains[i].bluePrintsCloudFormation[j].groupName === userData.ou) {
+                  if(domains[i].bluePrintsCloudFormation[j].groupId === userData.groupId) {
                       if(!(blueprintsListObj[domains[i].bluePrintsCloudFormation[j].blueprintName])) {
                           blueprintsListObj[domains[i].bluePrintsCloudFormation[j].blueprintName] = {};
                       }
@@ -251,9 +251,10 @@
           <label for="cfServiceConsumersUsers" class="col-sm-4 control-label saveBluePrintInputlable">Users</label>
              <div class="col-sm-8">   
                 <select class="form-control saveBluePrintInputControl" id="cfServiceConsumersUsers" multiple>
-                   <% for(var i=0;i<serviceConsumers.length;i++){%>
+                   <% for(var i=0;i<serviceConsumers.length;i++){ 
+                        if(userData.cn !== serviceConsumers[i].username) {%>
                    <option value="<%=serviceConsumers[i].username%>"><%=serviceConsumers[i].username%></option>
-                   <%}%>
+                   <%}}%>
                 </select>
              </div>
            </div>

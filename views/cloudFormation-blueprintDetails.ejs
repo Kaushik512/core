@@ -10,64 +10,284 @@
   width:300px !important;
   box-shadow: none !important;
 }
+.cfBlueprintDetailsbody {
+   max-height: 290px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.cfCancelEditBlueprintBtn {
+  display: none;
+}
+.cfSaveEditedbluePrintBtn {
+  display: none;
+}
+.cfEditInput {
+  display: none;
+  width: 300px;
+}
+.control-height{
+  height: auto !important;
+}
+
 </style>
-<div class="cfBluePrintDetailsContainer">
+
+<div class="panel panel-default">
+  <div class="panel-heading">Blueprint Details :  &nbsp; <span class="cfEditBtnContainer">
+    <%if(userData.permissions.execute) {%>
+    <input type="button" class="btn btn-default cfBluePrintLaunchBtn" value="Launch"/>
+    <%}%>
+    <%if(userData.permissions.write) {%>
+      <input type="button" class="btn btn-default cfEditBlueprintBtn" value="Edit"/>
+       <input type="button" class="btn btn-default cfCancelEditBlueprintBtn" value="Cancel"/>
+      <input type="button" class="btn btn-default cfSaveEditedbluePrintBtn" value="Save"/>
+      <%}%></span></div>
+  <div class="panel-body cfBlueprintDetailsbody">
+   
+   <div class="cfBluePrintDetailsContainer">
 
 
 <form class="form-horizontal cfDetailsArea" role="form">
       
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Template Name</label>
-      <div class="col-sm-10">
-        <span type="text" class="form-control cfDetailValue" ><%=blueprint.templateName%></span>
-       </div>  
-     </div> 
-
-     <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Stack Name</label>
+      <label for="" class="col-sm-2 control-label">Stack Name</label>
   		<div class="col-sm-10">
-        <span type="text" class="form-control cfDetailValue" ><%=blueprint.stackName%></span>
+        <span  class="form-control cfDetailValue" ><%=blueprint.stackName%></span>
+        <input type="text" class="form-control cfEditInput" id="cfEditStackNameInput" value="<%=blueprint.stackName%>"/>
        </div>  
      </div>
      
-     <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Stack Validity</label>
-  		<div class="col-sm-10">
-        <span type="text" class="form-control cfDetailValue" ><%=blueprint.expirationDays%> Days</span>
-       </div>  
-     </div>
-      <%if(blueprint.stackPrameters && blueprint.stackPrameters.length) {
-        for(i=0;i<blueprint.stackPrameters.length;i++){
+     
+      <%if(blueprint.stackParameters && blueprint.stackParameters.length) {
+        for(i=0;i<blueprint.stackParameters.length;i++){
       %>
        <div class="form-group">
-       <label for="stackNameInput" class="col-sm-2 control-label"><%=blueprint.stackPrameters[i].ParameterKey%></label>
+       <label for="stackNameInput" class="col-sm-2 control-label"><%=blueprint.stackParameters[i].ParameterKey%></label>
         <div class="col-sm-10">
-         <span type="text" class="form-control cfDetailValue" ><%=blueprint.stackPrameters[i].ParameterValue%></span>
+         <span type="text" class="form-control cfDetailValue" ><%=blueprint.stackParameters[i].ParameterValue%></span>
+         <%  
+           var param = templateObj.Parameters[blueprint.stackParameters[i].ParameterKey];
+           var allowedValues = param.AllowedValues;
+           if(allowedValues) {
+         %> <select class="form-control cfEditInput stackParameters" data-parameterKey="<%=blueprint.stackParameters[i].ParameterKey%>"> 
+           <% for(var j=0;j<allowedValues.length;j++) { 
+              var selected ='';
+              if(blueprint.stackParameters[i].ParameterValue == allowedValues[j]) {
+                 selected = 'selected';
+              }
+           %>
+           <option value="<%=allowedValues[j]%>" <%=selected%>><%=allowedValues[j]%></option>
+           <%}%>
+          </select>
+          <%} else { %>  
+            <input type="text" class="form-control cfEditInput stackParameters" data-parameterKey="<%=blueprint.stackParameters[i].ParameterKey%>" value="<%=blueprint.stackParameters[i].ParameterValue%>"/>   
+          <%}%>
        </div>  
      </div>
      
 
       <%}}%>
 
-     <%
-     if(blueprint.runlist && blueprint.runlist.length) {
-     %>
-     <div class="form-group">
+    <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Stack Validity</label>
+      <div class="col-sm-10">
+        <span type="text" class="form-control cfDetailValue" ><%=blueprint.expirationDays%> Days</span>
+         <select class="form-control cfEditInput" id="cfEditStackExpirationDaysInput" name="">
+                   <% for(var i=0;i<365;i++){
+                   var selected ='';
+                   if(i==blueprint.expirationDays) {
+                    selected = 'selected'
+                   }%>
+                   <option value="<%=i%>" <%=selected%>><%=i%></option>
+                   <%}%>
+        </select>
+       </div>  
+     </div>
+
+    <div class="form-group">
       <label for="stackNameInput" class="col-sm-2 control-label">Catalyst Runlist</label>
-  		<div class="col-sm-10">
-        <ul>
+      <div class="col-sm-10">
+        <ul class="form-control cfDetailValue control-height">
          <%
+          if(blueprint.runlist && blueprint.runlist.length) {
          for(var i=0;i<blueprint.runlist.length;i++) {
          %>
          <li style="list-style: none outside none"><%=blueprint.runlist[i]%></li>
-         <%}%>
+         <%}}%>
        </ul>
+       
+       <select class="form-control cfEditInput" id="cfEditStackRunlistInput" name="runlist" multiple>
+                   <%
+                    if(!(blueprint.runlist && blueprint.runlist.length)) {
+                      blueprint.runlist = []; 
+                    }   
+                   for(var i=1;i<cookbooks.length;i++){ 
+                      var selected = '';
+                      if(blueprint.runlist.indexOf(cookbooks[i]) !== -1) {
+                          selected = 'selected';
+                      }
+                   %>
+                   <option value="<%=cookbooks[i]%>" <%=selected%>><%=cookbooks[i]%></option>
+                   <%}%>
+        </select>  
+
+
        </div>  
      </div>
-     <%}%>
+
+      <div class="form-group">
+      <label for="stackNameInput" class="col-sm-2 control-label">Service Consumers</label>
+      <div class="col-sm-10">
+        <ul class="form-control cfDetailValue control-height">
+         <%
+          if(blueprint.serviceConsumers && blueprint.serviceConsumers.length) {
+         for(var i=0;i<blueprint.serviceConsumers.length;i++) {
+          if(userData.cn !== blueprint.serviceConsumers[i]) { 
+         %>
+         <li style="list-style: none outside none"><%=blueprint.serviceConsumers[i]%></li>
+         <%}}}%>
+       </ul>
+       
+       <select class="form-control cfEditInput" id="cfEditStackConsumersInput" name="serviceConsumers" multiple>
+                   <%
+                    if(!(blueprint.serviceConsumers && blueprint.serviceConsumers.length)) {
+                      blueprint.serviceConsumers = []; 
+                    }   
+                   for(var i=1;i<serviceConsumers.length;i++){ 
+                      var selected = '';
+                      if(blueprint.serviceConsumers.indexOf(serviceConsumers[i].username) !== -1) {
+                          selected = 'selected';
+                      }
+                       if(userData.cn !== serviceConsumers[i].username) { 
+                   %>
+                   <option value="<%=serviceConsumers[i].username%>" <%=selected%>><%=serviceConsumers[i].username%></option>
+                   <%}}%>
+        </select>  
+
+
+       </div>  
+     </div>
 
 
 </form>
+</div>
 
+<div class="cloudFormationBlueprintLaunchResultArea"></div>
 
 </div>
+
+</div>
+</div>
+<script type="text/javascript">
+(function(){
+
+$('.cfEditBlueprintBtn').click(function(e){
+   
+   var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
+   var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
+   if($domainOptionTag.val() ==='Choose') {
+       return;
+   }
+   $cloudFormationDomainsList.attr('disabled',true);  
+   var id = $domainOptionTag.attr('data-id'); 
+   $('#bluePrintsListCloudFromation'+id).attr('disabled',true); 
+
+  $('.cfDetailValue').hide();
+  $('.cfEditInput').show();
+  $('.cfBluePrintLaunchBtn').hide();
+  $('.cfCancelEditBlueprintBtn').show();
+  $('.cfSaveEditedbluePrintBtn').show();
+  $(this).hide();
+});
+
+$('.cfCancelEditBlueprintBtn').click(function(){
+  
+   var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
+   var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
+   if($domainOptionTag.val() ==='Choose') {
+       return;
+   }
+   $cloudFormationDomainsList.attr('disabled',false);  
+   var id = $domainOptionTag.attr('data-id'); 
+   $('#bluePrintsListCloudFromation'+id).attr('disabled',false);
+
+   $('.cfDetailValue').show();
+  $('.cfEditInput').hide();
+  $('.cfBluePrintLaunchBtn').show();
+  $('.cfCancelEditBlueprintBtn').hide();
+  $('.cfSaveEditedbluePrintBtn').hide();
+  $('.cfEditBlueprintBtn').show();
+})
+
+$('.cfBluePrintLaunchBtn').click(function(e){
+
+     $('.cfBluePrintDetailsContainer').hide();
+     $('.cfEditBtnContainer').hide();
+      var $appStoreLaunchResultArea = $('.cloudFormationBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+       $.post('/aws/cloudformation/blueprints/launch',{
+        pid:'<%=pid%>',
+        domainName:'<%=domainName%>',
+        blueprintName:'<%=blueprint.blueprintName%>',
+        version:'<%=blueprint.version%>',
+        
+      },function(data){
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Stack Created Successfully.<br/><strong>Stack Id : </strong><span>'+data+'</span></div></div>'); 
+
+        $appStoreLaunchResultArea.empty().append($message);
+      }).error(function(){
+         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create stack.</div></div>');  
+         $appStoreLaunchResultArea.empty().append($message);
+      });    
+});
+
+$('.cfSaveEditedbluePrintBtn').click(function(e){
+   var reqBody = {};
+   reqBody.stackName = $('#cfEditStackNameInput').val();
+   reqBody.expirationDays = $('#cfEditStackExpirationDaysInput').val();
+   reqBody.runlist = $('#cfEditStackRunlistInput').val();
+   reqBody.serviceConsumers = $('#cfEditStackConsumersInput').val();
+   reqBody.pid = '<%=pid%>';
+   reqBody.domainName = '<%=domainName%>';
+   reqBody.blueprintName = '<%=blueprint.blueprintName%>';
+   reqBody.templateTitle = '<%=blueprint.templateName%>';
+   reqBody.templateUrl = '<%=blueprint.templateUrl%>';
+ 
+   var $stackParameters = $('.stackParameters');
+   var parameters = [];
+   $stackParameters.each(function(i,elem){
+       var param = {};
+       $elem = $(elem);
+       param.ParameterKey = $elem.attr('data-parameterKey'); 
+       param.ParameterValue = $elem.val(); 
+       parameters.push(param); 
+   }); 
+
+   if(parameters.length) {
+    reqBody.parameters = parameters;
+   }
+   console.log(reqBody);
+   $.post('/aws/cloudformation/saveBluePrint',reqBody,function(data){
+       console.log(data);
+       var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
+       var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
+       if($domainOptionTag.val() ==='Choose') {
+         return;
+       }
+       $cloudFormationDomainsList.attr('disabled',false);   
+       var id = $domainOptionTag.attr('data-id');
+       var $blueprintList = $('#bluePrintsListCloudFromation'+id).attr('disabled',false); ;
+      
+       var $newblueprintOptionTag = $('<option data-pid="<%=pid%>" data-domainName="<%=domainName%>" value="<%=blueprint.blueprintName%>" data-bluePrintVersion="'+data+'"><%=blueprint.blueprintName%>-v'+data+'</option>');
+      $blueprintList.append($newblueprintOptionTag);
+      $newblueprintOptionTag.attr('selected',true);
+      $blueprintList.trigger('change');   
+
+   }).error(function(e){
+      alert("Unable to update blueprint");
+   });  
+
+});
+
+
+
+})();
+</script>

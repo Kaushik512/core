@@ -332,7 +332,7 @@ width:145px;
              if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
 
                 for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
-                  if(domains[i].blueprintsAppFactory[j].groupName === userData.ou) {
+                  if(domains[i].blueprintsAppFactory[j].groupId === userData.groupId) {
                       if(!(blueprintsListObj[domains[i].blueprintsAppFactory[j].blueprintName])) {
                           blueprintsListObj[domains[i].blueprintsAppFactory[j].blueprintName] = {};
                       }

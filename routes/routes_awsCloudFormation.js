@@ -73,21 +73,21 @@ module.exports.setRoutes = function(app, verifySession) {
 
 	app.post('/aws/cloudformation/saveBluePrint', verifySession, function(req, res) {
 
-        if(req.body.serviceConsumers && req.body.serviceConsumers.length ) {
+		if (req.body.serviceConsumers && req.body.serviceConsumers.length) {
 			req.body.serviceConsumers.push(req.session.user.cn);
 		} else {
 			req.body.serviceConsumers = [];
 			req.body.serviceConsumers.push(req.session.user.cn);
-		} 		
- 
+		}
 
-		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName, req.session.user.ou, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, req.body.expirationDays,req.body.serviceConsumers, function(err, data) {
+
+		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName, req.session.user.ou, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, req.body.expirationDays, req.body.serviceConsumers, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);
 				return;
 			} else {
-				res.send(200);
+				res.send(data);
 			}
 		});
 	});
@@ -103,9 +103,44 @@ module.exports.setRoutes = function(app, verifySession) {
 			}
 			if (data.length && data[0].bluePrintsCloudFormation && data[0].bluePrintsCloudFormation.length) {
 				var blueprint = data[0].bluePrintsCloudFormation[0];
-				res.render("cloudFormation-blueprintDetails", {
-					blueprint: blueprint
+				var templateBody = "";
+				https.get(blueprint.templateUrl, function(httpRes) {
+					console.log("Got response: " + httpRes.statusCode);
+					httpRes.on('data', function(chunk) {
+						templateBody += chunk.toString('utf-8');
+					});
+					httpRes.on('end', function() {
+						settingsController.getChefSettings(function(settings) {
+							var chef = new Chef(settings);
+							chef.getHostedChefCookbooks(function(err, cookbooks) {
+								if (err) {
+									res.send(500);
+									return;
+								}
+								users.getUsersInGroup(req.session.user.groupId, 500, function(err, data) {
+									if (err) {
+										res.send(500);
+										return;
+									}
+									var templateObj = JSON.parse(templateBody);
+									res.render("cloudFormation-blueprintDetails", {
+										blueprint: blueprint,
+										serviceConsumers:data,
+										cookbooks:cookbooks,
+										templateObj:templateObj,
+										pid:req.query.pid,
+										domainName:req.query.domainName,
+										userData:req.session.user
+									});
+								});
+
+							});
+						});
+					});
 				});
+
+
+
 			} else {
 				res.send(404);
 				return;
@@ -187,11 +222,11 @@ module.exports.setRoutes = function(app, verifySession) {
 					var cloudFormation = new CloudFormation(awsSettings);
 
 					var parameters = [];
-					if (blueprint.stackPrameters && blueprint.stackPrameters.length) {
-						for (var i = 0; i < blueprint.stackPrameters.length; i++) {
+					if (blueprint.stackParameters && blueprint.stackParameters.length) {
+						for (var i = 0; i < blueprint.stackParameters.length; i++) {
 							parameters.push({
-								ParameterKey: blueprint.stackPrameters[i].ParameterKey,
-								ParameterValue: blueprint.stackPrameters[i].ParameterValue
+								ParameterKey: blueprint.stackParameters[i].ParameterKey,
+								ParameterValue: blueprint.stackParameters[i].ParameterValue
 							});
 						}
 					}

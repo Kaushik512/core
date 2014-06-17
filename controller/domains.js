@@ -60,7 +60,7 @@ var DomainsSchema = new Schema({
     version: String,
     runlist: [String],
     expirationDays:Number,
-    stackPrameters: [{
+    stackParameters: [{
       ParameterKey: String,
       ParameterValue: String
     }],
@@ -598,13 +598,14 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
-module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId, blueprintName, templateName, templateUrl, stackName, runlist, stackPrameters,expirationDays,serviceConsumers, callback) {
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId, blueprintName, templateName, templateUrl, stackName, runlist, stackParameters,expirationDays,serviceConsumers, callback) {
   if(!runlist) {
     runlist =[];
   }
   if(!serviceConsumers) {
     serviceConsumers =[];
   }
+  var createVersion = generateBlueprintVersionNumber(null); 
   console.log(domainName, pid, groupId);
   Domains.find({
     domainName: domainName,
@@ -626,7 +627,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
           if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupId === groupId) {
             var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
             console.log('new version ==>', newVersion);
-
+            createVersion = newVersion;
             bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
               groupId: groupId,
@@ -634,7 +635,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
               expirationDays:expirationDays,
               stackName: stackName,
               runlist: runlist,
-              stackPrameters: stackPrameters,
+              stackParameters: stackParameters,
               templateUrl: templateUrl,
               serviceConsumers:serviceConsumers,
               templateName: templateName
@@ -651,7 +652,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
             stackName: stackName,
             expirationDays:expirationDays,
             runlist: runlist,
-            stackPrameters: stackPrameters,
+            stackParameters: stackParameters,
             templateUrl: templateUrl,
             serviceConsumers:serviceConsumers,
             templateName: templateName
@@ -666,7 +667,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
           stackName: stackName,
           expirationDays:expirationDays,
           runlist: runlist,
-          stackPrameters: stackPrameters,
+          stackParameters: stackParameters,
           templateUrl: templateUrl,
           serviceConsumers:serviceConsumers,
           templateName: templateName
@@ -687,7 +688,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
           callback(err, null);
           return;
         }
-        callback(null, data);
+        callback(null, createVersion);
       });
     } else {
       // create new 
@@ -698,7 +699,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
         expirationDays:expirationDays,
         stackName: stackName,
         runlist: runlist,
-        stackPrameters: stackPrameters,
+        stackParameters: stackParameters,
         templateUrl: templateUrl,
         serviceConsumers:serviceConsumers,
         templateName: templateName
@@ -715,8 +716,7 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
           callback(err, null);
           return;
         }
-        console.log("Domain Document Created");
-        callback(null, data);
+        callback(null, createVersion);
       });
     }
   });
