@@ -10,9 +10,9 @@ module.exports = {
 	*/
 	
 	chefReposLocation: "/home/anshul/chef-repos/",
-	userChefRepoName : "adityakaranjkar",
-	chefUserName: "adityakaranjkar",
-	chefUserPemFile: "adityakaranjkar.pem",
-	chefValidationPemFile:"adityacheforg-validator.pem",
-	hostedChefUrl: "https://api.opscode.com/organizations/adityacheforg"
+	userChefRepoName : "admin",
+	chefUserName: "admin",
+	chefUserPemFile: "admin.pem",
+	chefValidationPemFile:"chef-validator.pem",
+	hostedChefUrl: "https://54.200.195.191/"
 }
