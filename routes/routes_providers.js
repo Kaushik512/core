@@ -130,7 +130,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
 													//enabling scheduled termination 
 													setTimeout(function() {
-														ec2.terminateInstance(instanceData.InstanceId, function(err, data) {
+														ec2.terminateInstance(instanceData.InstanceId, function(err, terminatedInstance) {
 															if (err) {
 																return;
 															} else {
