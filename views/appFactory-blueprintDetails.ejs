@@ -7,52 +7,34 @@
 }
 .appFactoryDetailValue {
   border: 0 !important;
-  width:300px !important;
   box-shadow: none !important;
 }
 .editInput {
   display: none;
-  width:300px;
 }
-.cancelEditBlueprintBtn {
-  display: none;
-}
-.saveEditedbluePrintBtn {
-  display: none;
-}
+
 .appFactBlueprintDetailsbody {
     max-height: 290px;
     overflow-x: hidden;
     overflow-y: auto;
 } 
-.appFactEditBtnContainer {
-  
-}
+
 .control-height{
   height: auto !important;
 }
 
 </style> 
 
-
 <div class="panel panel-default">
-  <div class="panel-heading">Blueprint Details :  &nbsp; <span class="appFactEditBtnContainer">
-    <%if(userData.permissions.execute) {%>
-    <input type="button" class="btn btn-default appFactbluePrintLaunchBtn" value="Launch"/>
-    <%}%>
-    <%if(userData.permissions.write) {%>
-      <input type="button" class="btn btn-default editBlueprintBtn" value="Edit"/>
-       <input type="button" class="btn btn-default cancelEditBlueprintBtn" value="Cancel"/>
-      <input type="button" class="btn btn-default saveEditedbluePrintBtn" value="Save"/>
-    <%}%></span></div>
+  <div class="panel-heading">Blueprint Details :  &nbsp; </div>
   <div class="panel-body appFactBlueprintDetailsbody">
    <div class="bluePrintDetailsContainer">
 
 
 <form class="form-horizontal detailsArea" role="form" id="afBpDetailsArea">
      <div class="form-group">
-      <label for="" class="col-sm-2 control-label">OS</label>
-      <div class="col-sm-10">
+      <label for="" class="col-sm-5 control-label">OS</label>
+      <div class="col-sm-7">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.os%></span>
         <select class="form-control editInput" name="os">
           <%
@@ -72,8 +54,8 @@
      </div>
 
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Instance Type</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Instance Type</label>
+      <div class="col-sm-7">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.instanceType%></span>
         <select class="form-control editInput" name="instanceType">
           <%
@@ -92,8 +74,8 @@
      </div>
 
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Number Of Instances</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Number Of Instances</label>
+      <div class="col-sm-7">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.numberOfInstance%></span>
         <select class="form-control editInput" name="numberOfInstance">
          <%
@@ -112,8 +94,8 @@
      </div>
      
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Instance Validity</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Instance Validity</label>
+      <div class="col-sm-7">
         <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.expirationDays%> Days</span>
         <select class="form-control editInput" id="" name="expirationDays">
                    <% for(var i=0;i<365;i++){
@@ -129,8 +111,8 @@
 
 
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Runlist</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Runlist</label>
+      <div class="col-sm-7">
         <ul class="form-control appFactoryDetailValue control-height">
          <%
           if(blueprint.runlist && blueprint.runlist.length) {
@@ -160,8 +142,8 @@
      </div>
      
      <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Service Consumers</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Service Consumers</label>
+      <div class="col-sm-7">
         <ul class="form-control appFactoryDetailValue control-height">
          <%
           if(blueprint.serviceConsumers && blueprint.serviceConsumers.length) {
@@ -195,7 +177,7 @@
 
 
 <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
+    <div class="col-sm-offset-2 col-sm-7">
       
     
     </div>
@@ -213,7 +195,7 @@
    
    
 
-  $('.editBlueprintBtn').click(function(e){
+  $('.editBlueprintBtn').unbind("click").click(function(e){
    var $appFactoryDomainsList =$('#appFactoryDomainsList');
    var $domainOptionTag = $appFactoryDomainsList.find(':selected');
    if($domainOptionTag.val() ==='Choose') {
@@ -223,7 +205,7 @@
    $appFactoryDomainsList.attr('disabled',true);    
    var $blueprintList = $('#bluePrintsList'+id).attr('disabled',true);
 
-  $('.appFactoryDetailValue').hide();
+  $('.appFactoryDetailValue').unbind("click").hide();
   $('.editInput').show();
   $('.appFactbluePrintLaunchBtn').hide();
   $('.cancelEditBlueprintBtn').show();
@@ -231,7 +213,7 @@
   $(this).hide();
 });
 
-$('.cancelEditBlueprintBtn').click(function(){
+$('.cancelEditBlueprintBtn').unbind("click").click(function(){
 
   var $appFactoryDomainsList =$('#appFactoryDomainsList');
    var $domainOptionTag = $appFactoryDomainsList.find(':selected');
@@ -251,7 +233,7 @@ $('.cancelEditBlueprintBtn').click(function(){
   $('.editBlueprintBtn').show();
 })
 
-$('.appFactbluePrintLaunchBtn').click(function(e){
+$('.appFactbluePrintLaunchBtn').unbind("click").click(function(e){
       
          
      $('.bluePrintDetailsContainer').hide();
@@ -274,7 +256,7 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
 
         $appStoreLaunchResultArea.empty().append($message);
         // $appStoreLaunchResultArea.append($btn);
-
+        
       }).error(function(){
          var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create Instance. Daily Quota Reached. </div></div>');  
              
@@ -282,6 +264,7 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
            $('.appFactBlueprintListContainer').show();
            $('.appFactBlueprintLaunchResultArea').hide();
          });
+          
 
             $appStoreLaunchResultArea.empty().append($message);
           //  $appStoreLaunchResultArea.append($btn);
@@ -306,7 +289,7 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
   }
 
 
-  $('.saveEditedbluePrintBtn').click(function(e){
+  $('.saveEditedbluePrintBtn').unbind("click").click(function(e){
     var reqBody = createReqObj($('#afBpDetailsArea').serializeArray());
     if(reqBody.runlist) {
       reqBody.runlist = [].concat(reqBody.runlist);
@@ -339,11 +322,20 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
       $blueprintList.append($newblueprintOptionTag);
       $newblueprintOptionTag.attr('selected',true);
       $blueprintList.trigger('change');
+       $('.appFactbluePrintLaunchBtn').show();
+         $('.cancelEditBlueprintBtn').hide();
+         $('.saveEditedbluePrintBtn').hide();
+         $('.editBlueprintBtn').show(); 
     }).error(function(){
+      $('.appFactbluePrintLaunchBtn').show();
+          $('.cancelEditBlueprintBtn').hide();
+          $('.saveEditedbluePrintBtn').hide();
+          $('.editBlueprintBtn').show();
       alert('Unable to update blueprint.')
     });
 
   });
+$('.appFactEditBtnContainer').show();
 })();
 
 </script>

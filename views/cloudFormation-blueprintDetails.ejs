@@ -7,7 +7,7 @@
 }
 .cfDetailValue {
   border: 0 !important;
-  width:300px !important;
+ 
   box-shadow: none !important;
 }
 .cfBlueprintDetailsbody {
@@ -15,15 +15,10 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
-.cfCancelEditBlueprintBtn {
-  display: none;
-}
-.cfSaveEditedbluePrintBtn {
-  display: none;
-}
+
 .cfEditInput {
   display: none;
-  width: 300px;
+  
 }
 .control-height{
   height: auto !important;
@@ -32,15 +27,7 @@
 </style>
 
 <div class="panel panel-default">
-  <div class="panel-heading">Blueprint Details :  &nbsp; <span class="cfEditBtnContainer">
-    <%if(userData.permissions.execute) {%>
-    <input type="button" class="btn btn-default cfBluePrintLaunchBtn" value="Launch"/>
-    <%}%>
-    <%if(userData.permissions.write) {%>
-      <input type="button" class="btn btn-default cfEditBlueprintBtn" value="Edit"/>
-       <input type="button" class="btn btn-default cfCancelEditBlueprintBtn" value="Cancel"/>
-      <input type="button" class="btn btn-default cfSaveEditedbluePrintBtn" value="Save"/>
-      <%}%></span></div>
+  <div class="panel-heading">Blueprint Details :  &nbsp; </div>
   <div class="panel-body cfBlueprintDetailsbody">
    
    <div class="cfBluePrintDetailsContainer">
@@ -49,8 +36,8 @@
 <form class="form-horizontal cfDetailsArea" role="form">
       
      <div class="form-group">
-      <label for="" class="col-sm-2 control-label">Stack Name</label>
-  		<div class="col-sm-10">
+      <label for="" class="col-sm-5 control-label">Stack Name</label>
+  		<div class="col-sm-7">
         <span  class="form-control cfDetailValue" ><%=blueprint.stackName%></span>
         <input type="text" class="form-control cfEditInput" id="cfEditStackNameInput" value="<%=blueprint.stackName%>"/>
        </div>  
@@ -61,8 +48,8 @@
         for(i=0;i<blueprint.stackParameters.length;i++){
       %>
        <div class="form-group">
-       <label for="stackNameInput" class="col-sm-2 control-label"><%=blueprint.stackParameters[i].ParameterKey%></label>
-        <div class="col-sm-10">
+       <label for="stackNameInput" class="col-sm-5 control-label"><%=blueprint.stackParameters[i].ParameterKey%></label>
+        <div class="col-sm-7">
          <span type="text" class="form-control cfDetailValue" ><%=blueprint.stackParameters[i].ParameterValue%></span>
          <%  
            var param = templateObj.Parameters[blueprint.stackParameters[i].ParameterKey];
@@ -88,8 +75,8 @@
       <%}}%>
 
     <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Stack Validity</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Stack Validity</label>
+      <div class="col-sm-7">
         <span type="text" class="form-control cfDetailValue" ><%=blueprint.expirationDays%> Days</span>
          <select class="form-control cfEditInput" id="cfEditStackExpirationDaysInput" name="">
                    <% for(var i=0;i<365;i++){
@@ -104,8 +91,8 @@
      </div>
 
     <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Catalyst Runlist</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Catalyst Runlist</label>
+      <div class="col-sm-7">
         <ul class="form-control cfDetailValue control-height">
          <%
           if(blueprint.runlist && blueprint.runlist.length) {
@@ -135,8 +122,8 @@
      </div>
 
       <div class="form-group">
-      <label for="stackNameInput" class="col-sm-2 control-label">Service Consumers</label>
-      <div class="col-sm-10">
+      <label for="stackNameInput" class="col-sm-5 control-label">Service Consumers</label>
+      <div class="col-sm-7">
         <ul class="form-control cfDetailValue control-height">
          <%
           if(blueprint.serviceConsumers && blueprint.serviceConsumers.length) {
@@ -180,7 +167,8 @@
 <script type="text/javascript">
 (function(){
 
-$('.cfEditBlueprintBtn').click(function(e){
+
+$('.cfEditBlueprintBtn').unbind("click").click(function(e){
    
    var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
    var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
@@ -199,7 +187,7 @@ $('.cfEditBlueprintBtn').click(function(e){
   $(this).hide();
 });
 
-$('.cfCancelEditBlueprintBtn').click(function(){
+$('.cfCancelEditBlueprintBtn').unbind("click").click(function(){
   
    var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
    var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
@@ -218,7 +206,7 @@ $('.cfCancelEditBlueprintBtn').click(function(){
   $('.cfEditBlueprintBtn').show();
 })
 
-$('.cfBluePrintLaunchBtn').click(function(e){
+$('.cfBluePrintLaunchBtn').unbind("click").click(function(e){
 
      $('.cfBluePrintDetailsContainer').hide();
      $('.cfEditBtnContainer').hide();
@@ -239,7 +227,7 @@ $('.cfBluePrintLaunchBtn').click(function(e){
       });    
 });
 
-$('.cfSaveEditedbluePrintBtn').click(function(e){
+$('.cfSaveEditedbluePrintBtn').unbind("click").click(function(e){
    var reqBody = {};
    reqBody.stackName = $('#cfEditStackNameInput').val();
    reqBody.expirationDays = $('#cfEditStackExpirationDaysInput').val();
@@ -279,15 +267,23 @@ $('.cfSaveEditedbluePrintBtn').click(function(e){
        var $newblueprintOptionTag = $('<option data-pid="<%=pid%>" data-domainName="<%=domainName%>" value="<%=blueprint.blueprintName%>" data-bluePrintVersion="'+data+'"><%=blueprint.blueprintName%>-v'+data+'</option>');
       $blueprintList.append($newblueprintOptionTag);
       $newblueprintOptionTag.attr('selected',true);
-      $blueprintList.trigger('change');   
+      $blueprintList.trigger('change');  
+      $('.cfBluePrintLaunchBtn').show();
+      $('.cfCancelEditBlueprintBtn').hide();
+      $('.cfSaveEditedbluePrintBtn').hide();
+      $('.cfEditBlueprintBtn').show(); 
 
    }).error(function(e){
+     $('.cfBluePrintLaunchBtn').show();
+     $('.cfCancelEditBlueprintBtn').hide();
+     $('.cfSaveEditedbluePrintBtn').hide();
+     $('.cfEditBlueprintBtn').show();
       alert("Unable to update blueprint");
    });  
 
 });
 
-
+$('.cfEditBtnContainer').show();
 
 })();
 </script>

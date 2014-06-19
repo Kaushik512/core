@@ -22,17 +22,28 @@
    
     display: none
 }
-
-
+.cancelEditBlueprintBtn {
+  display: none;
+}
+.saveEditedbluePrintBtn {
+  display: none;
+}
+.appFactEditBtnContainer {
+ display: none;  
+}
+.appFactBlueprintListContainer {
+  padding-left: 30px
+}
 </style>
-<div class="appFactory_blueprintsContainer"> 
+<div>
+<div class="appFactory_blueprintsContainer row"> 
  
 
-<form class="form-horizontal appFactBlueprintListContainer" role="form">
+<form class="form-horizontal appFactBlueprintListContainer col-sm-6" role="form">
   
   <div class="form-group">
-    <label for="bluePrintsList" class="col-sm-2 control-label">Product Group</label>
-    <div class="col-sm-10">
+    <label for="bluePrintsList" class="col-sm-3 control-label">Product Group</label>
+    <div class="col-sm-9">
       <select class="form-control selecttag" id="appFactoryDomainsList">
         <option value="Choose">Choose</option>
         <% if(domains && domains.length) {
@@ -49,8 +60,8 @@
       <% if(domains && domains.length) {
         for(var i=0;i<domains.length;i++) { %>
       <div class="form-group domainBluePrintsListContainer" id="domainBluePrintsListContainer<%=i%>">
-    <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
-    <div class="col-sm-10">
+    <label for="bluePrintsList" class="col-sm-3 control-label">Blueprints</label>
+    <div class="col-sm-9">
        <select class="form-control selecttag blueprintSelectTag" id="bluePrintsList<%=i%>">
          <option>Choose</option>
         
@@ -77,15 +88,29 @@
          </div>
    -->
 
-   <div class="appFactBlueprintDetailsArea">
-   </div>
+   
   
-    
-    
-  
-
-
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label"></label>
+    <div class="col-sm-9">
+     <span class="appFactEditBtnContainer">
+    <%if(userData.permissions.execute) {%>
+    <input type="button" class="btn btn-default appFactbluePrintLaunchBtn" value="Launch"/>
+    <%}%>
+    <%if(userData.permissions.write) {%>
+      <input type="button" class="btn btn-default editBlueprintBtn" value="Edit"/>
+       <input type="button" class="btn btn-default cancelEditBlueprintBtn" value="Cancel"/>
+      <input type="button" class="btn btn-default saveEditedbluePrintBtn" value="Save"/>
+    <%}%></span>
+    </div>
+  </div>
+ 
 </form>
+<div class="appFactBlueprintDetailsArea col-sm-5">
+   </div>
+
+</div>
+</div>
 
 
 <script type="text/javascript">
@@ -100,6 +125,7 @@
       $('.blueprintSelectTag').prop('selectedIndex',0);
       $('.appFactBlueprintDetailsArea').hide();
       $('.appFactbluePrintLaunchBtn').attr('disabled',true);
+      $('.appFactEditBtnContainer').hide();
        return;
      } 
      var $options = $this.find(':selected');
