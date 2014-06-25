@@ -40,14 +40,6 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-var verifySession = function(req, res, next) {
-  if (req.session && req.session.user) {
-    next();
-  } else {
-    res.redirect('/login');
-  }
-};
-
 
 var routes = require('./routes/routes.js');
 routes.setRoutes(app);
