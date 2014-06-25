@@ -8,7 +8,7 @@ var io = require('socket.io');
 
 var appConfig = require('./app_config');
 var settingsController = require('./controller/settings');
-
+var RedisStore = require('connect-redis')(express);
 
 
 var mongoDbConnect = require('./controller/mongodb');
@@ -30,8 +30,15 @@ app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.cookieParser());
-app.use(express.cookieSession({
-  secret: 'sessionSekret'
+/*var store = new RedisStore({
+  host: 'localhost',
+  port: 6379
+});*/
+var store = new express.session.MemoryStore;
+
+app.use(express.session({
+  secret: 'sessionSekret',
+  store: store
 }));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
