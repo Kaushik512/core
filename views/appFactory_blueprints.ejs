@@ -1,3 +1,42 @@
+<%
+
+function getAppFactoryCardHeadingHtml(role) {
+  switch(role) {
+      case 'LAMP':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/lamp.png" style="height: 30px;"/></span><span>LAMP</span>'
+      case 'NodeJS':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/nodejs.png" style="height: 30px;"/></span><span>NodeJS</span>';   
+      case 'Tomcat':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/tomcat.png" style="height: 30px;"/></span><span>Tomcat</span>';
+      case 'Apache':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/apache.png" style="height: 30px;"/></span><span>Apache</span>';
+      case 'JBoss':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/jboss.png" style="height: 30px;"/></span><span>JBoss</span>';
+      case 'Hadoop':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/hadoop.png" style="height: 30px;"/></span><span>Hadoop</span>';
+      case 'Mysql':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/mysql.png" style="height: 30px;"/></span><span>Mysql</span>';
+      case 'Oracle':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/oracle.png" style="height: 30px;"/></span><span>Oracle</span>';
+      case 'WSO2':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/wso2.png" style="height: 30px;"/></span><span>WSO2</span>';
+      case 'Joomla':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/joomla.png" style="height: 30px;"/></span><span>Joomla</span>';
+      case 'Drupal':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/drupal.png" style="height: 30px;"/></span><span>Drupal</span>';
+      case 'Custom App':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png" style="height: 25px;"/></span><span>Custom App</span>';
+
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png" style="height: 25px;"/></span><span>'+role+'</span>';
+
+     }
+}
+
+
+%>
+
+
 <style type="text/css">
 .appFactory_blueprintsContainer {
 	padding-top: 30px;
@@ -34,13 +73,135 @@
 .appFactBlueprintListContainer {
   padding-left: 30px
 }
+
+.afbluprint-thumbnail {
+border-radius: 5px;
+    float: left;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    max-height: 181px;
+    max-width: 125px;
+    width: 41%;
+}
+.af-blueprint{
+  /*background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);*/
+    background: white;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    display: block;
+    line-height: 1.42857;
+    margin-bottom: 20px;
+    margin-left: 4px;
+    margin-top: 3px;
+    max-width: 125px;
+    min-height: 150px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: center;
+    transition: all 0.2s ease-in-out 0s;
+}
+.af-blueprint-caption {
+  text-align: center;
+}
+.af-blueprint-heading {
+  font-size: 12px;
+    overflow: hidden;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.af-blueprint-detail-list {
+  border-top: 1px solid;
+    font-size: 10px;
+    padding-top: 10px;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.af-blueprint-detail-item {
+  display: block;
+}
+
 </style>
 <div>
+
+<div class="panel-group" id="accordionAFBlueprints">
+     <% if(domains && domains.length) {
+        for(var i=0;i<domains.length;i++) { 
+          if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+     %>
+
+   <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionAFBlueprints" href="#<%=domains[i].domainName%>">
+         <%=domains[i].domainName%>
+        </a>
+      </h4>
+    </div>
+     <div id="<%=domains[i].domainName%>" class="panel-collapse collapse in">
+      <div class="panel-body">
+         <ul style="margin-top: 5px;" class="thumbnails list-unstyled" id="<%=domains[i].domainName%>">
+          <%
+            var blueprintList = {}; 
+            for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) { 
+               if((domains[i].blueprintsAppFactory[j].groupName === userData.ou) && (domains[i].blueprintsAppFactory[j].serviceConsumers.indexOf(userData.cn) != -1) ) {
+                  if(!(blueprintList[domains[i].blueprintsAppFactory[j].blueprintName])) {
+                    blueprintList[domains[i].blueprintsAppFactory[j].blueprintName] = [];
+                  }
+                  blueprintList[domains[i].blueprintsAppFactory[j].blueprintName].push(domains[i].blueprintsAppFactory[j]);    
+               }
+             }
+            var blueprintListKeys = Object.keys(blueprintList); 
+             for(var j=0;j<blueprintListKeys.length;j++) { 
+              var blueprints = blueprintList[blueprintListKeys[j]];  
+          %>
+           <li class="afbluprint-thumbnail">
+            <div class="af-blueprint">
+            <div class="af-blueprint-caption">
+              <div class="af-blueprint-heading" title="<%=blueprints[0].templateName%>"><%- getAppFactoryCardHeadingHtml(blueprints[0].templateName)%></div>
+              <div class="af-blueprint-detail-list">
+              <span class="af-blueprint-detail-item"> Name : <strong><%=blueprints[0].blueprintName%></strong> </span>
+             
+              <span class="af-blueprint-detail-item"> ver : <span class="">
+               <select>
+               <%
+               for( var k=0;k<blueprints.length;k++) {
+               %>
+               <option value="<%=blueprints[k].version%>"><%=blueprints[k].version%></option>
+               <%}%>
+               </select>
+              </span> </span>
+              
+              </div>
+              <div style="font-size: 10px;">
+                <a style="margin-right: 25px;" href="javascript:void(0)">Launch</a>  
+                <a href="javascript:void(0)">Details</a>
+              </div>
+          
+            </div>
+          </div>
+         </li>
+
+          <%}%>
+        </ul>
+      </div>
+    </div>
+
+   </div>
+   <%}}}%>
+  </div>
+
+<!--
+
 <div class="appFactory_blueprintsContainer row"> 
  
 
 <form class="form-horizontal appFactBlueprintListContainer col-sm-6" role="form">
+   
   
+
   <div class="form-group">
     <label for="bluePrintsList" class="col-sm-3 control-label">Product Group</label>
     <div class="col-sm-9">
@@ -77,17 +238,7 @@
          </div>
          <%}}%>
 
-   <!--
-      <div class="form-group domainBluePrintsVersionListContainer" id="domainBluePrintsVersionListContainer">
-    <label for="bluePrintsList" class="col-sm-2 control-label">Blueprints</label>
-    <div class="col-sm-10">
-       <select class="form-control selecttag" id="bluePrintsVersionList">
-         <option>Choose</option>
-         </select>
-         </div>
-         </div>
-   -->
-
+   
    
   
   <div class="form-group">
@@ -110,6 +261,7 @@
    </div>
 
 </div>
+-->
 </div>
 
 

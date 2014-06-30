@@ -17,9 +17,10 @@ var Chef = function(settings) {
 			return;
 		}
 		chefApi.getCookbooks(null, function(err, res) {
-			if (err)
+			if (err) {
 				callback(err, null);
-
+                return;
+            }
 			var keys = Object.keys(res);
 			keys.sort(function(a, b) {
 				if (a < b) {
