@@ -84,19 +84,28 @@ function generateBlueprintVersionNumber(prevVersion) {
   var major = parseInt(parts[0]);
   var minor = parseInt(parts[1]);
   minor++;
+  
+  if(minor === 10) {
+    major++;
+    minor = 0;
+  }
+
   return major + '.' + minor;
 }
 
 function sortBlueprintsArray(bluePrints) {
   bluePrints.sort(function(a, b) {
-    if (a.version < b.version) {
+    var x = parseFloat(a.version);
+    var y = parseFloat(b.version);
+    if (x < y) {
       return -1;
-    } else if (a.version > b.version) {
+    } else if (x > y) {
       return 1;
     } else {
       return 0;
     }
   });
+  console.log(bluePrints);
 }
 
 
@@ -427,6 +436,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
           if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupId === groupId) {
 
             var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
+            console.log('old version ==>',bluePrints[i].version);
             console.log('new version ==>', newVersion);
             createVersion = newVersion;
             bluePrints.splice(i, 0, {

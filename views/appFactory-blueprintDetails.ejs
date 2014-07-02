@@ -1,3 +1,42 @@
+<%
+
+function getAppFactoryCardHeadingHtml(role) {
+  switch(role) {
+      case 'LAMP':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/lamp.png" style="height: 30px;"/></span><span>LAMP</span>'
+      case 'NodeJS':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/nodejs.png" style="height: 30px;"/></span><span>NodeJS</span>';   
+      case 'Tomcat':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/tomcat.png" style="height: 30px;"/></span><span>Tomcat</span>';
+      case 'Apache':
+      return '<span class="domain-roles-icon"><img src="img/app-store-icons/apache.png" style="height: 30px;"/></span><span>Apache</span>';
+      case 'JBoss':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/jboss.png" style="height: 30px;"/></span><span>JBoss</span>';
+      case 'Hadoop':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/hadoop.png" style="height: 30px;"/></span><span>Hadoop</span>';
+      case 'Mysql':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/mysql.png" style="height: 30px;"/></span><span>Mysql</span>';
+      case 'Oracle':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/oracle.png" style="height: 30px;"/></span><span>Oracle</span>';
+      case 'WSO2':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/wso2.png" style="height: 30px;"/></span><span>WSO2</span>';
+      case 'Joomla':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/joomla.png" style="height: 30px;"/></span><span>Joomla</span>';
+      case 'Drupal':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/drupal.png" style="height: 30px;"/></span><span>Drupal</span>';
+      case 'Custom App':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png" style="height: 25px;"/></span><span>Custom App</span>';
+
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png" style="height: 25px;"/></span><span>'+role+'</span>';
+
+     }
+}
+
+
+%>
+
+
 <style>
 .bluePrintDetailsContainer {
 
@@ -14,7 +53,7 @@
 }
 
 .appFactBlueprintDetailsbody {
-    max-height: 290px;
+    max-height: 320px;
     overflow-x: hidden;
     overflow-y: auto;
 } 
@@ -22,11 +61,45 @@
 .control-height{
   height: auto !important;
 }
+.cancelEditBlueprintBtn {
+  display: none;
+}
+.saveEditedbluePrintBtn {
+  display: none;
+}
+.appFactModalLaunchResultArea {
+  display: none; 
+}
 
 </style> 
 
-<div class="panel panel-default">
-  <div class="panel-heading">Blueprint Details :  &nbsp; </div>
+<div class="row">
+  <div class="col-sm-3">
+     
+     <div class="af-blueprint">
+            <div class="af-blueprint-caption">
+              <div class="af-blueprint-heading" title="<%=blueprint.templateName%>"><%- getAppFactoryCardHeadingHtml(blueprint.templateName)%></div>
+              <div class="af-blueprint-detail-list">
+              <span class="af-blueprint-detail-item"> Name : <strong><%=blueprint.blueprintName%></strong> </span>
+             
+              <span class="af-blueprint-detail-item"> ver : <span class=""><%=blueprintVersion%></span> </span>
+              
+              </div>
+              <div style="font-size: 10px;">
+                <a data-pid="<%=pid%>" data-domainName="<%=domainName%>" data-blueprintName="<%=blueprint.blueprintName%>" data-blueprintVersion="<%=blueprintVersion%>" class="appFactModalbluePrintLaunchBtn"  style="margin-right: 25px;" href="javascript:void(0)">Launch</a>  
+                <a class="appFactModalbluePrintEditBtn" href="javascript:void(0)">Edit</a>
+                <a class="saveEditedbluePrintBtn" style="margin-right: 25px;" href="javascript:void(0)">Save</a>
+                <a class="cancelEditBlueprintBtn" href="javascript:void(0)">Cancel</a>
+             
+              </div>
+          
+            </div>
+      </div>
+
+  </div>
+  <div class="col-sm-9">
+    <div class="panel panel-default appFactBlueprintDetailsConatiner">
+  <div class="panel-heading">Configurations :  &nbsp; </div>
   <div class="panel-body appFactBlueprintDetailsbody">
    <div class="bluePrintDetailsContainer">
 
@@ -185,60 +258,47 @@
 </form>
   
 </div>
-<div class="appFactBlueprintLaunchResultArea"></div>
-
 </div>
   </div>
+  <div class="appFactModalLaunchResultArea"></div>
+
+  </div>
+</div>
+
+
 
 <script type="text/javascript">
 (function(){
    
    
 
-  $('.editBlueprintBtn').unbind("click").click(function(e){
-   var $appFactoryDomainsList =$('#appFactoryDomainsList');
-   var $domainOptionTag = $appFactoryDomainsList.find(':selected');
-   if($domainOptionTag.val() ==='Choose') {
-     return;
-   } 
-   var id = $domainOptionTag.attr('data-id'); 
-   $appFactoryDomainsList.attr('disabled',true);    
-   var $blueprintList = $('#bluePrintsList'+id).attr('disabled',true);
-
-  $('.appFactoryDetailValue').unbind("click").hide();
+  $('.appFactModalbluePrintEditBtn').unbind("click").click(function(e){
+  
+   $('.appFactBlueprintDetailsConatiner').show();
+   $('.appFactModalLaunchResultArea').hide();
+  $('.appFactoryDetailValue').hide(); 
   $('.editInput').show();
-  $('.appFactbluePrintLaunchBtn').hide();
+  $('.appFactModalbluePrintLaunchBtn').hide();
   $('.cancelEditBlueprintBtn').show();
   $('.saveEditedbluePrintBtn').show();
   $(this).hide();
 });
 
 $('.cancelEditBlueprintBtn').unbind("click").click(function(){
-
-  var $appFactoryDomainsList =$('#appFactoryDomainsList');
-   var $domainOptionTag = $appFactoryDomainsList.find(':selected');
-   if($domainOptionTag.val() ==='Choose') {
-     return;
-   } 
-   var id = $domainOptionTag.attr('data-id'); 
-   $appFactoryDomainsList.attr('disabled',false);    
-   var $blueprintList = $('#bluePrintsList'+id).attr('disabled',false);
-
-
-   $('.appFactoryDetailValue').show();
+ 
   $('.editInput').hide();
-  $('.appFactbluePrintLaunchBtn').show();
+  $('.appFactoryDetailValue').show(); 
+  $('.appFactModalbluePrintLaunchBtn').show();
   $('.cancelEditBlueprintBtn').hide();
   $('.saveEditedbluePrintBtn').hide();
-  $('.editBlueprintBtn').show();
+  $('.appFactModalbluePrintEditBtn').show();
 })
 
-$('.appFactbluePrintLaunchBtn').unbind("click").click(function(e){
+$('.appFactModalbluePrintLaunchBtn').unbind("click").click(function(e){
       
          
-     $('.bluePrintDetailsContainer').hide();
-     $('.appFactEditBtnContainer').hide();
-      var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+     $('.appFactBlueprintDetailsConatiner').hide();
+      var $appStoreLaunchResultArea = $('.appFactModalLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
  
       $.post('/app_factory/bluePrint/launch',{
         pid:'<%=pid%>',
@@ -309,33 +369,22 @@ $('.appFactbluePrintLaunchBtn').unbind("click").click(function(e){
     console.log(reqBody);
 
     $.post('/app_factory/saveBluePrint',reqBody,function(data){
-       console.log(data);
-       var $appFactoryDomainsList =$('#appFactoryDomainsList');
-       var $domainOptionTag = $appFactoryDomainsList.find(':selected');
-       if($domainOptionTag.val() ==='Choose') {
-         return;
-       } 
-       var id = $domainOptionTag.attr('data-id'); 
-       $appFactoryDomainsList.attr('disabled',false);
-       var $blueprintList = $('#bluePrintsList'+id).attr('disabled',false);;
-       var $newblueprintOptionTag = $('<option data-pid="<%=pid%>" data-domainName="<%=domainName%>" value="<%=blueprintName%>" data-bluePrintVersion="'+data+'"><%=blueprintName%>-v'+data+'</option>');
-      $blueprintList.append($newblueprintOptionTag);
+       
+       var $blueprintDiv = $('#'+reqBody.domainName).find('#'+reqBody.bluePrintName);
+       console.log($blueprintDiv.length);
+       var $blueprintVersionList = $blueprintDiv.find('select');
+       console.log($blueprintVersionList.length);  
+       var $newblueprintOptionTag = $('<option value="'+data+'">'+data+'</option>');
+      $blueprintVersionList.append($newblueprintOptionTag);
       $newblueprintOptionTag.attr('selected',true);
-      $blueprintList.trigger('change');
-       $('.appFactbluePrintLaunchBtn').show();
-         $('.cancelEditBlueprintBtn').hide();
-         $('.saveEditedbluePrintBtn').hide();
-         $('.editBlueprintBtn').show(); 
+      $blueprintDiv.find('.appFactbluePrintDetailsBtn').trigger('click'); 
+
     }).error(function(){
-      $('.appFactbluePrintLaunchBtn').show();
-          $('.cancelEditBlueprintBtn').hide();
-          $('.saveEditedbluePrintBtn').hide();
-          $('.editBlueprintBtn').show();
-      alert('Unable to update blueprint.')
+      alert('Unable to update blueprint.');
     });
 
   });
-$('.appFactEditBtnContainer').show();
+  
 })();
 
 </script>

@@ -61,12 +61,7 @@ function getAppFactoryCardHeadingHtml(role) {
    
     display: none
 }
-.cancelEditBlueprintBtn {
-  display: none;
-}
-.saveEditedbluePrintBtn {
-  display: none;
-}
+
 .appFactEditBtnContainer {
  display: none;  
 }
@@ -113,20 +108,25 @@ border-radius: 5px;
     white-space: nowrap;
 }
 .af-blueprint-detail-list {
-  border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
     font-size: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
     padding-top: 10px;
     text-align: center;
-    padding-bottom: 10px;
 }
 .af-blueprint-detail-item {
   display: block;
+}
+.appFactBlueprintLaunchResultArea {
+  display: none;
 }
 
 </style>
 <div>
 
-<div class="panel-group" id="accordionAFBlueprints">
+<div class="panel-group afBlueprintList" id="accordionAFBlueprints">
      <% if(domains && domains.length) {
         for(var i=0;i<domains.length;i++) { 
           if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
@@ -140,7 +140,7 @@ border-radius: 5px;
         </a>
       </h4>
     </div>
-     <div id="<%=domains[i].domainName%>" class="panel-collapse collapse in">
+     <div id="<%=domains[i].domainName%>" class="panel-collapse collapse">
       <div class="panel-body">
          <ul style="margin-top: 5px;" class="thumbnails list-unstyled" id="<%=domains[i].domainName%>">
           <%
@@ -159,8 +159,8 @@ border-radius: 5px;
           %>
            <li class="afbluprint-thumbnail">
             <div class="af-blueprint">
-            <div class="af-blueprint-caption">
-              <div class="af-blueprint-heading" title="<%=blueprints[0].templateName%>"><%- getAppFactoryCardHeadingHtml(blueprints[0].templateName)%></div>
+            <div id="<%=blueprints[0].blueprintName%>" class="af-blueprint-caption">
+              <div  class="af-blueprint-heading" title="<%=blueprints[0].templateName%>"><%- getAppFactoryCardHeadingHtml(blueprints[0].templateName)%></div>
               <div class="af-blueprint-detail-list">
               <span class="af-blueprint-detail-item"> Name : <strong><%=blueprints[0].blueprintName%></strong> </span>
              
@@ -176,8 +176,8 @@ border-radius: 5px;
               
               </div>
               <div style="font-size: 10px;">
-                <a style="margin-right: 25px;" href="javascript:void(0)">Launch</a>  
-                <a href="javascript:void(0)">Details</a>
+                <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=domains[i].blueprintsAppFactory[j].blueprintName%>" class="appFactbluePrintLaunchBtn" style="margin-right: 25px;" href="javascript:void(0)">Launch</a>  
+                <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=domains[i].blueprintsAppFactory[j].blueprintName%>" class="appFactbluePrintDetailsBtn" href="javascript:void(0)">Details</a>
               </div>
           
             </div>
@@ -193,75 +193,28 @@ border-radius: 5px;
    <%}}}%>
   </div>
 
-<!--
 
-<div class="appFactory_blueprintsContainer row"> 
- 
+<div class="appFactBlueprintLaunchResultArea"></div>
 
-<form class="form-horizontal appFactBlueprintListContainer col-sm-6" role="form">
-   
-  
-
-  <div class="form-group">
-    <label for="bluePrintsList" class="col-sm-3 control-label">Product Group</label>
-    <div class="col-sm-9">
-      <select class="form-control selecttag" id="appFactoryDomainsList">
-        <option value="Choose">Choose</option>
-        <% if(domains && domains.length) {
-        for(var i=0;i<domains.length;i++) { %>
-        %>
-        <option data-pid="<%=domains[i].domainPid%>" data-id="<%=i%>" value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
-        <%}}%>
-      </select>
+<div id="afBlueprintDetailModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Blueprint Details</h4>
+      </div>
+      <div class="modal-body">
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
-
-
-  
-      <% if(domains && domains.length) {
-        for(var i=0;i<domains.length;i++) { %>
-      <div class="form-group domainBluePrintsListContainer" id="domainBluePrintsListContainer<%=i%>">
-    <label for="bluePrintsList" class="col-sm-3 control-label">Blueprints</label>
-    <div class="col-sm-9">
-       <select class="form-control selecttag blueprintSelectTag" id="bluePrintsList<%=i%>">
-         <option>Choose</option>
-        
-        <%  if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
-
-                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
-                if((domains[i].blueprintsAppFactory[j].groupName === userData.ou) && (domains[i].blueprintsAppFactory[j].serviceConsumers.indexOf(userData.cn) != -1) ) {
-            %>
-            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].blueprintsAppFactory[j].blueprintName%>" data-bluePrintVersion="<%=domains[i].blueprintsAppFactory[j].version%>"><%=domains[i].blueprintsAppFactory[j].blueprintName%>-v<%=domains[i].blueprintsAppFactory[j].version%> </option>
-           <%}}}%>
-         </select>
-         </div>
-         </div>
-         <%}}%>
-
-   
-   
-  
-  <div class="form-group">
-    <label for="" class="col-sm-3 control-label"></label>
-    <div class="col-sm-9">
-     <span class="appFactEditBtnContainer">
-    <%if(userData.permissions.execute) {%>
-    <input type="button" class="btn btn-default appFactbluePrintLaunchBtn" value="Launch"/>
-    <%}%>
-    <%if(userData.permissions.write) {%>
-      <input type="button" class="btn btn-default editBlueprintBtn" value="Edit"/>
-       <input type="button" class="btn btn-default cancelEditBlueprintBtn" value="Cancel"/>
-      <input type="button" class="btn btn-default saveEditedbluePrintBtn" value="Save"/>
-    <%}%></span>
-    </div>
-  </div>
- 
-</form>
-<div class="appFactBlueprintDetailsArea col-sm-5">
-   </div>
-
 </div>
--->
+
+
+
 </div>
 
 
@@ -269,46 +222,61 @@ border-radius: 5px;
 
 (function(){
 
-  $('#appFactoryDomainsList').change(function(e){
-    //alert('hi');
-     $this = $(this);
-     if($this.val() === 'Choose') {
-      $('.domainBluePrintsListContainer').hide();
-      $('.blueprintSelectTag').prop('selectedIndex',0);
-      $('.appFactBlueprintDetailsArea').hide();
-      $('.appFactbluePrintLaunchBtn').attr('disabled',true);
-      $('.appFactEditBtnContainer').hide();
-       return;
-     } 
-     var $options = $this.find(':selected');
-     var id = $options.attr('data-id');
-     $('.domainBluePrintsListContainer').hide();
-     $('#domainBluePrintsListContainer'+id).show(); 
+
+  $('.appFactbluePrintDetailsBtn').click(function(e){
+      
+      var $this = $(this);
+      var blueprintVersion = $(this).parent().parent().find('select').val();  
+      var $modal = $('#afBlueprintDetailModal');
+      var $modalBody =  $modal.find('.modal-body');
+      $modalBody.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+      $modal.modal('show');
+
+
+      $.get('/app_factory/bluePrint/details/?'+'pid='+$this.attr('data-pid')+'&domainName='+$this.attr('data-domainName')+'&blueprintName='+$this.attr('data-blueprintName')+'&ver='+blueprintVersion,function(data) {
+        $modalBody.empty().append(data);
+      });
   });
 
-  $('.blueprintSelectTag').change(function(e){
-      var $domainOptionTag = $('#appFactoryDomainsList').find(':selected');
-      if($domainOptionTag.val() ==='Choose') {
-        return;
-      } 
-      var id = $domainOptionTag.attr('data-id'); 
+$('.appFactbluePrintLaunchBtn').click(function(e){
+      
+     var $this = $(this);
+     var blueprintVersion = $(this).parent().parent().find('select').val();   
+     $('.afBlueprintList').hide();
+    
+      var $appStoreLaunchResultArea = $('.appFactBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+      
+      $.post('/app_factory/bluePrint/launch',{
+        pid: $this.attr('data-pid'),
+        domainName:$this.attr('data-domainName'),
+        blueprintName:$this.attr('data-blueprintName'),
+        ver: blueprintVersion
+      },function(data){
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceId+'</span></div></div>');
+         
+         var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.afBlueprintList').show();
+           $('.appFactBlueprintLaunchResultArea').hide();
+         });
 
-      var $selectedOptionTag = $('#bluePrintsList'+id).find(':selected');  
-      if(!$selectedOptionTag.length) {
-         return;  
-      }
-      if($selectedOptionTag.val() === 'Choose') {
-        return;
-      }
-      var $appFactBlueprintDetailsArea = $('.appFactBlueprintDetailsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
-       $.get('/app_factory/bluePrint/details/?'+'pid='+$selectedOptionTag.attr('data-pid')+'&domainName='+$selectedOptionTag.attr('data-domainName')+'&blueprintName='+$selectedOptionTag.val()+'&ver='+$selectedOptionTag.attr('data-bluePrintVersion'),function(data) {
-        $appFactBlueprintDetailsArea.empty().append(data);
-        $appFactBlueprintDetailsArea.show();
-        $('.appFactbluePrintLaunchBtn').attr('disabled',false);
-       });
 
-  });
+        $appStoreLaunchResultArea.empty().append($message);
+        $appStoreLaunchResultArea.append($btn);
+        
+      }).error(function(){
+         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create Instance. Daily Quota Reached. </div></div>');  
+             
+        var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.afBlueprintList').show();
+           $('.appFactBlueprintLaunchResultArea').hide();
+         });
+          
 
+            $appStoreLaunchResultArea.empty().append($message);
+            $appStoreLaunchResultArea.append($btn);
+
+      });     
+    });
 	
 })();
 </script>
