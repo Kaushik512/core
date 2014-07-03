@@ -81,7 +81,7 @@ module.exports.setRoutes = function(app, verifySession) {
 		}
 
 
-		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName, req.session.user.ou, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, req.body.expirationDays, req.body.serviceConsumers, function(err, data) {
+		domainsDao.upsertCloudFormationBlueprint(req.body.pid, req.body.domainName, req.session.user.groupId, req.body.blueprintName, req.body.templateTitle, req.body.templateUrl, req.body.stackName, req.body.runlist, req.body.parameters, req.body.expirationDays, req.body.serviceConsumers, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);

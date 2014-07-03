@@ -130,6 +130,17 @@ border-radius: 5px;
      <% if(domains && domains.length) {
         for(var i=0;i<domains.length;i++) { 
           if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+           var blueprintList = {}; 
+            for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) { 
+               if((domains[i].blueprintsAppFactory[j].groupId === userData.groupId) && (domains[i].blueprintsAppFactory[j].serviceConsumers.indexOf(userData.cn) != -1) ) {
+                  if(!(blueprintList[domains[i].blueprintsAppFactory[j].blueprintName])) {
+                    blueprintList[domains[i].blueprintsAppFactory[j].blueprintName] = [];
+                  }
+                  blueprintList[domains[i].blueprintsAppFactory[j].blueprintName].push(domains[i].blueprintsAppFactory[j]);    
+               }
+             }
+            var blueprintListKeys = Object.keys(blueprintList); 
+            if(blueprintListKeys.length) {
      %>
 
    <div class="panel panel-default">
@@ -142,18 +153,9 @@ border-radius: 5px;
     </div>
      <div id="<%=domains[i].domainName%>" class="panel-collapse collapse">
       <div class="panel-body">
-         <ul style="margin-top: 5px;" class="thumbnails list-unstyled" id="<%=domains[i].domainName%>">
+         <ul style="margin-top: 5px;" class="thumbnails list-unstyled">
           <%
-            var blueprintList = {}; 
-            for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) { 
-               if((domains[i].blueprintsAppFactory[j].groupName === userData.ou) && (domains[i].blueprintsAppFactory[j].serviceConsumers.indexOf(userData.cn) != -1) ) {
-                  if(!(blueprintList[domains[i].blueprintsAppFactory[j].blueprintName])) {
-                    blueprintList[domains[i].blueprintsAppFactory[j].blueprintName] = [];
-                  }
-                  blueprintList[domains[i].blueprintsAppFactory[j].blueprintName].push(domains[i].blueprintsAppFactory[j]);    
-               }
-             }
-            var blueprintListKeys = Object.keys(blueprintList); 
+            
              for(var j=0;j<blueprintListKeys.length;j++) { 
               var blueprints = blueprintList[blueprintListKeys[j]];  
           %>
@@ -176,8 +178,12 @@ border-radius: 5px;
               
               </div>
               <div style="font-size: 10px;">
-                <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=domains[i].blueprintsAppFactory[j].blueprintName%>" class="appFactbluePrintLaunchBtn" style="margin-right: 25px;" href="javascript:void(0)">Launch</a>  
-                <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=domains[i].blueprintsAppFactory[j].blueprintName%>" class="appFactbluePrintDetailsBtn" href="javascript:void(0)">Details</a>
+                <%if(userData.permissions.execute) {%>
+                <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=blueprints[0].blueprintName%>" class="appFactbluePrintLaunchBtn" href="javascript:void(0)">Launch</a>
+                <%}%>  
+                <%if(userData.permissions.read) {%>
+                  <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=blueprints[0].blueprintName%>" class="appFactbluePrintDetailsBtn" href="javascript:void(0)">Details</a>
+                <%}%>
               </div>
           
             </div>
@@ -190,7 +196,7 @@ border-radius: 5px;
     </div>
 
    </div>
-   <%}}}%>
+   <%}}}}%>
   </div>
 
 

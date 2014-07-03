@@ -414,6 +414,7 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
  if(!serviceConsumers) {
    serviceConsumers = [];
  }
+ console.log('groupId == >',groupId);
  var createVersion = generateBlueprintVersionNumber(null); 
  console.log(domainName, pid);
   Domains.find({

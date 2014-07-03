@@ -1,3 +1,32 @@
+<%
+
+function getCFCardHeadingHtml(role) {
+  switch(role) {
+      case 'LAMP':
+      return '<span class="domain-roles-icon"><img src="img/cf-icons/lamp.png" style="height: 30px;"/></span><span>LAMP</span>';
+      case 'MySql':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/mysql.png" style="height: 30px;"/></span><span>Mysql</span>';
+      case 'Joomla':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/joomla.png" style="height: 30px;"/></span><span>Joomla</span>';
+      case 'Drupal':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/drupal.png" style="height: 30px;"/></span><span>Drupal</span>';
+      case 'Ruby On Rails':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/rubyonrails.png" style="height: 30px;"/></span><span>Ruby On Rails</span>';
+      case 'Insoshi':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/insoshi.png" style="height: 30px;"/></span><span>Insoshi</span>';
+      case 'Redmine':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/redmine.png" style="height: 30px;"/></span><span>Redmine</span>';
+      case 'Custom App':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png" style="height: 25px;"/></span><span>Custom App</span>';
+
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png" style="height: 25px;"/></span><span>'+role+'</span>';
+
+     }
+}
+
+%>
+
 <style>
 .cfBluePrintDetailsContainer {
 
@@ -11,7 +40,7 @@
   box-shadow: none !important;
 }
 .cfBlueprintDetailsbody {
-   max-height: 290px;
+   max-height: 310px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -23,14 +52,47 @@
 .control-height{
   height: auto !important;
 }
+.cfCancelEditBlueprintBtn,.cfSaveEditedbluePrintBtn {
+  display: none;
+}
+.cloudFormationBlueprintLaunchResultArea {
+  display: none;
+}
 
 </style>
+<div class="row">
+  <div class="col-sm-3">
+     
+     <div class="cf-blueprint">
+            <div class="cf-blueprint-caption">
+              <div class="cf-blueprint-heading" title="<%=blueprint.templateName%>"><%- getCFCardHeadingHtml(blueprint.templateName)%></div>
+              <div class="cf-blueprint-detail-list">
+              <span class="cf-blueprint-detail-item"> Name : <strong><%=blueprint.blueprintName%></strong> </span>
+             
+              <span class="cf-blueprint-detail-item"> ver : <span class=""><%=blueprint.version%></span> </span>
+              
+              </div>
+              <div style="font-size: 10px;">
+                 <%if(userData.permissions.execute) {%>
+                <a data-pid="<%=pid%>" data-domainName="<%=domainName%>" data-blueprintName="<%=blueprint.blueprintName%>" data-blueprintVersion="<%=blueprint.version%>" class="cfModalbluePrintLaunchBtn"  href="javascript:void(0)">Launch</a>  
+                <%}%>
+                 <%if(userData.permissions.write) {%>
+                <a class="cfModalbluePrintEditBtn" href="javascript:void(0)">Edit</a>
+                <a class="cfSaveEditedbluePrintBtn" href="javascript:void(0)">Save</a>
+                <a class="cfCancelEditBlueprintBtn" href="javascript:void(0)">Cancel</a>
+                 <%}%>
+              </div>
+          
+            </div>
+     </div>
 
-<div class="panel panel-default">
-  <div class="panel-heading">Blueprint Details :  &nbsp; </div>
+  </div>
+  <div class="col-sm-9">
+<div class="panel panel-default cfBluePrintDetailsContainer">
+  <div class="panel-heading">Configurations :  &nbsp; </div>
   <div class="panel-body cfBlueprintDetailsbody">
    
-   <div class="cfBluePrintDetailsContainer">
+   <div class="">
 
 
 <form class="form-horizontal cfDetailsArea" role="form">
@@ -158,9 +220,17 @@
 </form>
 </div>
 
+
+
+</div>
+
+</div>
+
 <div class="cloudFormationBlueprintLaunchResultArea"></div>
 
 </div>
+
+
 
 </div>
 </div>
@@ -168,20 +238,13 @@
 (function(){
 
 
-$('.cfEditBlueprintBtn').unbind("click").click(function(e){
-   
-   var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
-   var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
-   if($domainOptionTag.val() ==='Choose') {
-       return;
-   }
-   $cloudFormationDomainsList.attr('disabled',true);  
-   var id = $domainOptionTag.attr('data-id'); 
-   $('#bluePrintsListCloudFromation'+id).attr('disabled',true); 
+$('.cfModalbluePrintEditBtn').unbind("click").click(function(e){
+  $('.cloudFormationBlueprintLaunchResultArea').hide();
+   $('.cfBluePrintDetailsContainer').show();
 
   $('.cfDetailValue').hide();
   $('.cfEditInput').show();
-  $('.cfBluePrintLaunchBtn').hide();
+  $('.cfModalbluePrintLaunchBtn').hide();
   $('.cfCancelEditBlueprintBtn').show();
   $('.cfSaveEditedbluePrintBtn').show();
   $(this).hide();
@@ -189,27 +252,20 @@ $('.cfEditBlueprintBtn').unbind("click").click(function(e){
 
 $('.cfCancelEditBlueprintBtn').unbind("click").click(function(){
   
-   var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
-   var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
-   if($domainOptionTag.val() ==='Choose') {
-       return;
-   }
-   $cloudFormationDomainsList.attr('disabled',false);  
-   var id = $domainOptionTag.attr('data-id'); 
-   $('#bluePrintsListCloudFromation'+id).attr('disabled',false);
+  
 
    $('.cfDetailValue').show();
   $('.cfEditInput').hide();
-  $('.cfBluePrintLaunchBtn').show();
+  $('.cfModalbluePrintLaunchBtn').show();
   $('.cfCancelEditBlueprintBtn').hide();
   $('.cfSaveEditedbluePrintBtn').hide();
-  $('.cfEditBlueprintBtn').show();
+  $('.cfModalbluePrintEditBtn').show();
 })
 
-$('.cfBluePrintLaunchBtn').unbind("click").click(function(e){
+$('.cfModalbluePrintLaunchBtn').unbind("click").click(function(e){
 
      $('.cfBluePrintDetailsContainer').hide();
-     $('.cfEditBtnContainer').hide();
+     
       var $appStoreLaunchResultArea = $('.cloudFormationBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
        $.post('/aws/cloudformation/blueprints/launch',{
         pid:'<%=pid%>',
@@ -255,29 +311,18 @@ $('.cfSaveEditedbluePrintBtn').unbind("click").click(function(e){
    console.log(reqBody);
    $.post('/aws/cloudformation/saveBluePrint',reqBody,function(data){
        console.log(data);
-       var $cloudFormationDomainsList =  $('#cloudFormationDomainsList');
-       var $domainOptionTag = $cloudFormationDomainsList.find(':selected');
-       if($domainOptionTag.val() ==='Choose') {
-         return;
-       }
-       $cloudFormationDomainsList.attr('disabled',false);   
-       var id = $domainOptionTag.attr('data-id');
-       var $blueprintList = $('#bluePrintsListCloudFromation'+id).attr('disabled',false); ;
+        var $blueprintDiv = $('#cf'+reqBody.domainName).find('#'+reqBody.blueprintName);
+        console.log($blueprintDiv.length);
+       var $blueprintVersionList = $blueprintDiv.find('select');
+       console.log($blueprintVersionList.length); 
       
-       var $newblueprintOptionTag = $('<option data-pid="<%=pid%>" data-domainName="<%=domainName%>" value="<%=blueprint.blueprintName%>" data-bluePrintVersion="'+data+'"><%=blueprint.blueprintName%>-v'+data+'</option>');
-      $blueprintList.append($newblueprintOptionTag);
+      var $newblueprintOptionTag = $('<option value="'+data+'">'+data+'</option>');
+      $blueprintVersionList.append($newblueprintOptionTag);
       $newblueprintOptionTag.attr('selected',true);
-      $blueprintList.trigger('change');  
-      $('.cfBluePrintLaunchBtn').show();
-      $('.cfCancelEditBlueprintBtn').hide();
-      $('.cfSaveEditedbluePrintBtn').hide();
-      $('.cfEditBlueprintBtn').show(); 
+      $blueprintDiv.find('.cFbluePrintDetailsBtn').trigger('click'); 
 
    }).error(function(e){
-     $('.cfBluePrintLaunchBtn').show();
-     $('.cfCancelEditBlueprintBtn').hide();
-     $('.cfSaveEditedbluePrintBtn').hide();
-     $('.cfEditBlueprintBtn').show();
+    
       alert("Unable to update blueprint");
    });  
 

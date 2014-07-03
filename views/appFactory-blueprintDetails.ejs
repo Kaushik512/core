@@ -86,15 +86,18 @@ function getAppFactoryCardHeadingHtml(role) {
               
               </div>
               <div style="font-size: 10px;">
-                <a data-pid="<%=pid%>" data-domainName="<%=domainName%>" data-blueprintName="<%=blueprint.blueprintName%>" data-blueprintVersion="<%=blueprintVersion%>" class="appFactModalbluePrintLaunchBtn"  style="margin-right: 25px;" href="javascript:void(0)">Launch</a>  
+                 <%if(userData.permissions.execute) {%>
+                <a data-pid="<%=pid%>" data-domainName="<%=domainName%>" data-blueprintName="<%=blueprint.blueprintName%>" data-blueprintVersion="<%=blueprintVersion%>" class="appFactModalbluePrintLaunchBtn"  href="javascript:void(0)">Launch</a>  
+                <%}%>
+                 <%if(userData.permissions.write) {%>
                 <a class="appFactModalbluePrintEditBtn" href="javascript:void(0)">Edit</a>
-                <a class="saveEditedbluePrintBtn" style="margin-right: 25px;" href="javascript:void(0)">Save</a>
+                <a class="saveEditedbluePrintBtn" href="javascript:void(0)">Save</a>
                 <a class="cancelEditBlueprintBtn" href="javascript:void(0)">Cancel</a>
-             
+                 <%}%>
               </div>
           
             </div>
-      </div>
+     </div>
 
   </div>
   <div class="col-sm-9">
@@ -363,14 +366,14 @@ $('.appFactModalbluePrintLaunchBtn').unbind("click").click(function(e){
     }
     reqBody.pid = '<%=pid%>';
     reqBody.domainName = '<%=domainName%>';
-    reqBody.bluePrintName = '<%=blueprintName%>';
+    reqBody.blueprintName = '<%=blueprintName%>';
     reqBody.templateName = '<%=blueprint.templateName%>';
     reqBody.selectedHtmlString = '';
     console.log(reqBody);
 
     $.post('/app_factory/saveBluePrint',reqBody,function(data){
        
-       var $blueprintDiv = $('#'+reqBody.domainName).find('#'+reqBody.bluePrintName);
+       var $blueprintDiv = $('#'+reqBody.domainName).find('#'+reqBody.blueprintName);
        console.log($blueprintDiv.length);
        var $blueprintVersionList = $blueprintDiv.find('select');
        console.log($blueprintVersionList.length);  

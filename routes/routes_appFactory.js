@@ -51,7 +51,7 @@ module.exports.setRoutes = function(app, verifySession) {
 			req.body.serviceConsumers = [];
 			req.body.serviceConsumers.push(req.session.user.cn);
 		}
-		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.session.user.ou, req.body.bluePrintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, req.body.expirationDays, req.body.templateName, req.body.serviceConsumers, function(err, data) {
+		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.session.user.groupId, req.body.blueprintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, req.body.expirationDays, req.body.templateName, req.body.serviceConsumers, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);

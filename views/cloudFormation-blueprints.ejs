@@ -1,102 +1,185 @@
-<style type="text/css">
-.cloudFormation_blueprintsContainer {
-	padding-top: 30px;
+<%
+
+function getCFCardHeadingHtml(role) {
+  switch(role) {
+      case 'LAMP':
+      return '<span class="domain-roles-icon"><img src="img/cf-icons/lamp.png" style="height: 30px;"/></span><span>LAMP</span>';
+      case 'MySql':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/mysql.png" style="height: 30px;"/></span><span>Mysql</span>';
+      case 'Joomla':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/joomla.png" style="height: 30px;"/></span><span>Joomla</span>';
+      case 'Drupal':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/drupal.png" style="height: 30px;"/></span><span>Drupal</span>';
+      case 'Ruby On Rails':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/rubyonrails.png" style="height: 30px;"/></span><span>Ruby On Rails</span>';
+      case 'Insoshi':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/insoshi.png" style="height: 30px;"/></span><span>Insoshi</span>';
+      case 'Redmine':
+       return '<span class="domain-roles-icon"><img src="img/cf-icons/redmine.png" style="height: 30px;"/></span><span>Redmine</span>';
+      case 'Custom App':
+       return '<span class="domain-roles-icon"><img src="img/app-store-icons/customApp.png" style="height: 25px;"/></span><span>Custom App</span>';
+
+      default: 
+       return '<span class="domain-roles-icon"><img src="img/galleryIcons/2.png" style="height: 25px;"/></span><span>'+role+'</span>';
+
+     }
 }
-.cloudFormationBlueprintLaunchResultArea {
-	display: none;
+
+%>
+
+<style type="text/css">
+.cfbluprint-thumbnail {
+border-radius: 5px;
+    float: left;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    max-height: 181px;
+    max-width: 125px;
+    width: 41%;
+}
+.cf-blueprint{
+  /*background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);*/
+    background: white;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    display: block;
+    line-height: 1.42857;
+    margin-bottom: 20px;
+    margin-left: 4px;
+    margin-top: 3px;
+    max-width: 125px;
+    min-height: 150px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: center;
+    transition: all 0.2s ease-in-out 0s;
+}
+.cf-blueprint-caption {
   text-align: center;
 }
-#bluePrintsListCloudFromation{
-  width: 200px;
+.cf-blueprint-heading {
+  font-size: 12px;
+    overflow: hidden;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-.cloudFormationdomainBluePrintsListContainer {
-  display: none;
+.cf-blueprint-detail-list {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    font-size: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
 }
-.selecttag-CF {
-  width: 300px !important;
+.cf-blueprint-detail-item {
+  display: block;
 }
-.cloudFormationBlueprintListContainer {
-   padding-left: 60px;
-}
-.cfBlueprintDetailsArea {
-   
-    display: none
-}
-.cfCancelEditBlueprintBtn {
-  display: none;
-}
-.cfSaveEditedbluePrintBtn {
-  display: none;
-}
-.cfEditBtnContainer {
+.cFBlueprintLaunchResultArea {
   display: none;
 }
 
 
 </style>
 <div>
-<div class="cloudFormation_blueprintsContainer row"> 
- 
-<form class="form-horizontal cloudFormationBlueprintListContainer col-sm-6" role="form">
-  
-  <div class="form-group">
-    <label for="cloudFormationDomainsList" class="col-sm-3 control-label">Product Group</label>
-    <div class="col-sm-9">
-      <select class="form-control selecttag-CF" id="cloudFormationDomainsList">
-        <option value="Choose">Choose</option>
-        <% if(domains && domains.length) {
-        for(var i=0;i<domains.length;i++) { %>
-        %>
-        <option data-pid="<%=domains[i].domainPid%>" data-id="<%=i%>" value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
-        <%}}%>
-      </select>
+
+  <div class="panel-group cfBlueprintList" id="accordionCFBlueprints">
+     <% if(domains && domains.length) {
+        for(var i=0;i<domains.length;i++) { 
+          if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
+           var blueprintList = {}; 
+            for(var j=0;j<domains[i].bluePrintsCloudFormation.length;j++) { 
+               if((domains[i].bluePrintsCloudFormation[j].groupId === userData.groupId) && (domains[i].bluePrintsCloudFormation[j].serviceConsumers.indexOf(userData.cn) != -1) ) {
+                  if(!(blueprintList[domains[i].bluePrintsCloudFormation[j].blueprintName])) {
+                    blueprintList[domains[i].bluePrintsCloudFormation[j].blueprintName] = [];
+                  }
+                  blueprintList[domains[i].bluePrintsCloudFormation[j].blueprintName].push(domains[i].bluePrintsCloudFormation[j]);    
+               }
+             }
+            var blueprintListKeys = Object.keys(blueprintList); 
+            if(blueprintListKeys.length) {
+     %>
+
+   <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionCFBlueprints" href="#cf<%=domains[i].domainName%>">
+         <%=domains[i].domainName%>
+        </a>
+      </h4>
     </div>
-  </div>
-
-
-  
-      <% if(domains && domains.length) {
-        for(var i=0;i<domains.length;i++) { %>
-      <div class="form-group cloudFormationdomainBluePrintsListContainer" id="cfDomainBluePrintsListContainer<%=i%>">
-    <label for="bluePrintsListCloudFromation<%=i%>" class="col-sm-3 control-label">Blueprints</label>
-    <div class="col-sm-9">
-       <select class="form-control selecttag-CF" id="bluePrintsListCloudFromation<%=i%>">
-         <option>Choose</option>
-        
-        <%  if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
-
-                for(var j=0;j<domains[i].bluePrintsCloudFormation.length;j++) {
-                if((domains[i].bluePrintsCloudFormation[j].groupName === userData.ou) && (domains[i].bluePrintsCloudFormation[j].serviceConsumers.indexOf(userData.cn) != -1) )  {
-            %>
-            <option data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" value="<%=domains[i].bluePrintsCloudFormation[j].blueprintName%>"  data-bluePrintVersion="<%=domains[i].bluePrintsCloudFormation[j].version%>"><%=domains[i].bluePrintsCloudFormation[j].blueprintName%>-v<%=domains[i].bluePrintsCloudFormation[j].version%></option>
-           <%}}}%>
-         </select>
-         </div>
-         </div>
-         <%}}%>
-
-
-         
-    
-  <div class="form-group">
-    <label for="" class="col-sm-3 control-label"></label>
-    <div class="col-sm-9">
-     <span class="cfEditBtnContainer">
-    <%if(userData.permissions.execute) {%>
-    <input type="button" class="btn btn-default cfBluePrintLaunchBtn" value="Launch"/>
-    <%}%>
-    <%if(userData.permissions.write) {%>
-      <input type="button" class="btn btn-default cfEditBlueprintBtn" value="Edit"/>
-       <input type="button" class="btn btn-default cfCancelEditBlueprintBtn" value="Cancel"/>
-      <input type="button" class="btn btn-default cfSaveEditedbluePrintBtn" value="Save"/>
-      <%}%></span>
-    </div>
-  </div>
-</form>
- <div class="cfBlueprintDetailsArea col-sm-5">
+     <div id="cf<%=domains[i].domainName%>" class="panel-collapse collapse">
+      <div class="panel-body">
+         <ul style="margin-top: 5px;" class="thumbnails list-unstyled">
+          <%
             
+             for(var j=0;j<blueprintListKeys.length;j++) { 
+              var blueprints = blueprintList[blueprintListKeys[j]];  
+          %>
+           <li class="cfbluprint-thumbnail">
+            <div class="cf-blueprint">
+            <div id="<%=blueprints[0].blueprintName%>" class="cf-blueprint-caption">
+              <div  class="af-blueprint-heading" title="<%=blueprints[0].templateName%>"><%- getCFCardHeadingHtml(blueprints[0].templateName)%></div>
+              <div class="cf-blueprint-detail-list">
+              <span class="cf-blueprint-detail-item"> Name : <strong><%=blueprints[0].blueprintName%></strong> </span>
+             
+              <span class="cf-blueprint-detail-item"> ver : <span class="">
+               <select>
+               <%
+               for( var k=0;k<blueprints.length;k++) {
+               %>
+               <option value="<%=blueprints[k].version%>"><%=blueprints[k].version%></option>
+               <%}%>
+               </select>
+              </span> </span>
+              
+              </div>
+              <div style="font-size: 10px;">
+                <%if(userData.permissions.execute) {%>
+                <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=blueprints[0].blueprintName%>" class="cFbluePrintLaunchBtn" href="javascript:void(0)">Launch</a>
+                <%}%>  
+                <%if(userData.permissions.read) {%>
+                  <a data-pid="<%=domains[i].domainPid%>" data-domainName="<%=domains[i].domainName%>" data-blueprintName="<%=blueprints[0].blueprintName%>" class="cFbluePrintDetailsBtn" href="javascript:void(0)">Details</a>
+                <%}%>
+              </div>
+          
+            </div>
+          </div>
+         </li>
+
+          <%}%>
+        </ul>
+      </div>
+    </div>
+
+   </div>
+   <%}}}}%>
+  </div>
+
+
+<div class="cFBlueprintLaunchResultArea"></div>
+
+<div id="cfBlueprintDetailModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Blueprint Details</h4>
+      </div>
+      <div class="modal-body">
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
+
+  
 </div>
 
 
@@ -105,48 +188,60 @@
 
 (function(){
 
-  $('#cloudFormationDomainsList').change(function(e){
-    //alert('hi');
-     $this = $(this);
-     if($this.val() === 'Choose') {
-      $('.cloudFormationdomainBluePrintsListContainer').hide();
-      $('.selecttag-CF').prop('selectedIndex',0);
-      $('.cfBlueprintDetailsArea').hide();
-      $('.cloudFormationBluePrintLaunchBtn').attr('disabled',true);
-      $('.cfEditBtnContainer').hide();
-       return;
-     } 
-     var $options = $this.find(':selected');
-     var id = $options.attr('data-id');
-     $('.cloudFormationdomainBluePrintsListContainer').hide();
-     $('#cfDomainBluePrintsListContainer'+id).show(); 
+  $('.cFbluePrintDetailsBtn').click(function(e){
+      
+      var $this = $(this);
+      var blueprintVersion = $(this).parent().parent().find('select').val();  
+      var $modal = $('#cfBlueprintDetailModal');
+      var $modalBody =  $modal.find('.modal-body');
+      $modalBody.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+      $modal.modal('show');
+
+
+      $.get('/aws/cloudformation/bluePrint/details/?'+'pid='+$this.attr('data-pid')+'&domainName='+$this.attr('data-domainName')+'&blueprintName='+$this.attr('data-blueprintName')+'&ver='+blueprintVersion,function(data) {
+        $modalBody.empty().append(data);
+      });
   });
- 
 
- $('.selecttag-CF').change(function(e){
-      var $domainOptionTag = $('#cloudFormationDomainsList').find(':selected');
-      if($domainOptionTag.val() ==='Choose') {
-        return;
-      } 
-      var id = $domainOptionTag.attr('data-id'); 
-
-      var $selectedOptionTag = $('#bluePrintsListCloudFromation'+id).find(':selected');  
-      if(!$selectedOptionTag.length) {
-         return;  
-      }
-      if($selectedOptionTag.val() === 'Choose') {
-        return;
-      }
-      var $appFactBlueprintDetailsArea = $('.cfBlueprintDetailsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
-       $.get('/aws/cloudformation/bluePrint/details/?'+'pid='+$selectedOptionTag.attr('data-pid')+'&domainName='+$selectedOptionTag.attr('data-domainName')+'&blueprintName='+$selectedOptionTag.val()+'&ver='+$selectedOptionTag.attr('data-bluePrintVersion'),function(data) {
-        $appFactBlueprintDetailsArea.empty().append(data);
-        $appFactBlueprintDetailsArea.show();
-        $('.cloudFormationBluePrintLaunchBtn').attr('disabled',false);
-       });
- });
+$('.cFbluePrintLaunchBtn').click(function(e){
+      
+     var $this = $(this);
+     var blueprintVersion = $(this).parent().parent().find('select').val();   
+     $('.cfBlueprintList').hide();
+    
+      var $cfLaunchResultArea = $('.cFBlueprintLaunchResultArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+      
+      $.post('/aws/cloudformation/blueprints/launch',{
+        pid: $this.attr('data-pid'),
+        domainName:$this.attr('data-domainName'),
+        blueprintName:$this.attr('data-blueprintName'),
+        version: blueprintVersion
+      },function(data){
+        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceId+'</span></div></div>');
+         
+         var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.cfBlueprintList').show();
+           $('.cFBlueprintLaunchResultArea').hide();
+         });
 
 
-	 
+        $cfLaunchResultArea.empty().append($message);
+        $cfLaunchResultArea.append($btn);
+        
+      }).error(function(){
+         var $message = $('<div class="instance-result"><div class="alert alert-danger fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px"><strong>Error!</strong>&nbsp;Unable to create Instance. Daily Quota Reached. </div></div>');  
+             
+        var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
+           $('.cfBlueprintList').show();
+           $('.cFBlueprintLaunchResultArea').hide();
+         });
+          
+
+            $cfLaunchResultArea.empty().append($message);
+            $cfLaunchResultArea.append($btn);
+
+      });     
+    });	 
 
 })();
 </script>
