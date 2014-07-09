@@ -61,12 +61,7 @@ function getAppFactoryCardHeadingHtml(role) {
 .control-height{
   height: auto !important;
 }
-.cancelEditBlueprintBtn {
-  display: none;
-}
-.saveEditedbluePrintBtn {
-  display: none;
-}
+
 .appFactModalLaunchResultArea {
   display: none; 
 }
@@ -86,14 +81,7 @@ function getAppFactoryCardHeadingHtml(role) {
               
               </div>
               <div style="font-size: 10px;">
-                 <%if(userData.permissions.execute) {%>
-                <a data-pid="<%=pid%>" data-domainName="<%=domainName%>" data-blueprintName="<%=blueprint.blueprintName%>" data-blueprintVersion="<%=blueprintVersion%>" class="appFactModalbluePrintLaunchBtn"  href="javascript:void(0)">Launch</a>  
-                <%}%>
-                 <%if(userData.permissions.write) {%>
-                <a class="appFactModalbluePrintEditBtn" href="javascript:void(0)">Edit</a>
-                <a class="saveEditedbluePrintBtn" href="javascript:void(0)">Save</a>
-                <a class="cancelEditBlueprintBtn" href="javascript:void(0)">Cancel</a>
-                 <%}%>
+                
               </div>
           
             </div>
@@ -387,7 +375,7 @@ $('.appFactModalbluePrintLaunchBtn').unbind("click").click(function(e){
     });
 
   });
-  
+  $('.afModalBtns').show();  
 })();
 
 </script>

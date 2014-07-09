@@ -466,14 +466,14 @@ width:145px;
  $('.save-blueprint-btn').click(function(e){
     var data = {};
      data.pid = <%=pid%>;
-    var bluePrintName;
+    var blueprintName;
     if(!$('#blueprintType').is(":checked")) {
-      bluePrintName =  $("#bluePrintName").val();
+      blueprintName =  $("#bluePrintName").val();
     } else {
-      bluePrintName =  $('#bluePrintNameText').val();
+      blueprintName =  $('#bluePrintNameText').val();
     }
 
-    data.bluePrintName = bluePrintName;
+    data.blueprintName = blueprintName;
     var domainName;
     if(!$('#domainType').is(":checked")) {
       domainName =  $("#bluePrintDomainName").val();

@@ -87,7 +87,9 @@ border-radius: 5px;
 <div>
 
   <div class="panel-group cfBlueprintList" id="accordionCFBlueprints">
-     <% if(domains && domains.length) {
+     <% var isFirstPanelOpened = false;
+        var expandClass = ''; 
+       if(domains && domains.length) {
         for(var i=0;i<domains.length;i++) { 
           if(domains[i].bluePrintsCloudFormation && domains[i].bluePrintsCloudFormation.length) {
            var blueprintList = {}; 
@@ -111,7 +113,14 @@ border-radius: 5px;
         </a>
       </h4>
     </div>
-     <div id="cf<%=domains[i].domainName%>" class="panel-collapse collapse">
+    <% 
+    if(!isFirstPanelOpened) {
+      expandClass = 'in';
+      isFirstPanelOpened = true;
+    } else {
+       expandClass = '';
+    }%>
+     <div id="cf<%=domains[i].domainName%>" class="panel-collapse collapse <%=expandClass%>">
       <div class="panel-body">
          <ul style="margin-top: 5px;" class="thumbnails list-unstyled">
           <%
