@@ -452,4 +452,94 @@
         "amiid":"ami-1711417e"
       } 
      ]
-}]
+},
+{
+    "name" : "vSphere",
+     "pid" : 8,
+    "roles" : [
+     {
+       "cid" : 1,
+       "title" : "Planning",
+       "amiid":"ami-9f042ff6",
+        "description" : "AWS Large - (Linux, 2 Virtual Core CPU,7.4GB RAM 840 GB HDD) orVM with 1Core CPU/8GB RAM/800GB HDD",
+         "runlist" : ["JIRA","JIRA Agile","Crowd","Confluence"],
+         "sizing" : {
+             "CPU": "2Core",
+             "RAM":"8GB",
+              "HDD":"500GB"
+        }
+     },
+     {
+        "cid" : 2,
+        "title":"Build",
+        "amiid":"ami-db1833b2",
+        "description":"AWS Large - (Linux, 2 Virtual Core CPU,7.4GB RAM 840 GB HDD) and S3 or VM with 1Core CPU/8GB RAM/800GB HDD RAM/800GB HDD",
+        "runlist" : ["Jenkins","Nexus","Rundeck","DevOps Apps"],
+        "sizing" : {
+             "CPU": "2Core",
+             "RAM":"8GB",
+              "HDD":"500GB"
+        }
+     },
+     {
+        "cid":3,
+        "title":"Code Repository",
+        "amiid":"ami-09417460",
+        "description":"VM with 1Core CPU/4GBRAM/1TB HDD",
+        "runlist" : ["GIT","GIT/HUB Hosted"],
+         "sizing" : {
+             "CPU": "2Core",
+             "RAM":"4GB",
+             "HDD":"1TB"
+        }
+     },
+     {
+        "cid":4,
+        "title":"Config Management",
+        "amiid":"ami-db1833b2",
+        "description":"Chef Enterprises on premises or VM with 1Core CPU/4GB RAM/800GB HDD",
+        "runlist" : ["Chef","Chef Hosted"],
+         "sizing" : {
+             "CPU": "2Core",
+             "RAM":"4GB",
+              "HDD":"500GB"
+        }
+     }, 
+     {
+        "cid":5,
+        "title":"Monitoring",
+        "amiid":"ami-09417460",
+        "description":"AWS Dedicated server with Optimized memory ( Splunk) or VM with 1Core CPU/8GB RAM/800GB HDD",
+        "runlist" : ["New Relic","Splunk","Nagios"],  
+        "sizing" : {
+             "CPU": "2Core",
+             "RAM":"4GB",
+              "HDD":"500GB"
+        } 
+     },
+     {
+        "cid":6,
+        "title":"Test Management And Automation Suite",
+        "amiid":"ami-09417460",
+        "description":"AWS Large - (Linux, 2 Virtual Core CPU, 7.4GB RAM 840 GB HDD) and S3 or VM with 1Core CPU/8GB RAM/800GB HDD ( Nagios/New Relic)",
+        "runlist" : ["Test Rail","Selenium"],  
+        "sizing" : {
+             "CPU": "2Core",
+             "RAM":"4GB",
+             "HDD":"500GB"
+        }
+      },
+      {
+        "cid":7,
+        "title":"Security And Service Provisioning",
+        "amiid":"ami-1711417e",
+        "description":"AAWS Large - (Linux, 2 Virtual Core CPU, 3.7 GB RAM 500 GB HDD) and S3 or VM with 1Core CPU/4GB RAM/500GB HDD"
+      },
+      {
+        "cid":8,
+        "title":"Custom Role",
+        "amiid":"ami-1711417e"
+      } 
+     ]
+}
+]

@@ -11,6 +11,8 @@ var monitoring = require('./routes_monitoring');
 var environments = require('./routes_environments');
 var userGroups = require('./routes_usergroups');
 var userRoles = require('./routes_userroles');
+var docker = require('./routes_docker');
+
 
 
 module.exports.setRoutes = function(app) {
@@ -30,5 +32,6 @@ module.exports.setRoutes = function(app) {
   environments.setRoutes(app, sessionVerificationFunc);
   userGroups.setRoutes(app, adminSessionVerificationFunc);
   userRoles.setRoutes(app, adminSessionVerificationFunc);
+  docker.setRoutes(app,sessionVerificationFunc);
 
 }

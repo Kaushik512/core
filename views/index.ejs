@@ -540,9 +540,10 @@ body {
             <ul class="nav nav-tabs main-tabs">
               <li class="active"><a id="domain_link" href="#Domains" data-toggle="tab">Product Groups</a></li>
                <% if(userData.permissions.write) {%>
-              <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Roles</li> 
+              <li><a id="new_link_tab" href="#new_configuration" data-toggle="tab">DevOps Roles</a></li> 
               <%}%>
               <li><a id="app_store_link_tab" href="#app_factory_container" data-toggle="tab">App Factory</a></li> 
+               <li><a id="docker_link_tab" href="#dockertab_container" data-toggle="tab">Docker</a></li> 
               <li><a id="cloudFormation_link_tab" href="#cloudFormation_container" data-toggle="tab">AWS Cloud Formation</a></li> 
                <% if(userData.permissions.write) {%>
               <li><a id="environment_link_tab" href="#environment_tab" data-toggle="tab">Environments</a></li> 
@@ -610,6 +611,10 @@ body {
              <div id="app_factory_blueprintsArea" class="tab-pane" style="height: 100%;" >
              </div>
           </div>
+        
+      </div>
+
+      <div class="tab-pane" id="dockertab_container" style="height: 100%;">
         
       </div>
 
@@ -897,6 +902,7 @@ body {
        var $app_store_link_tab = $('#app_store_link_tab');
        var $cloudFormation_link_tab = $('#cloudFormation_link_tab');
        var $environment_link_tab = $('#environment_link_tab');
+       var $docker_link_tab =$('#docker_link_tab');
        $providers.click(function(e){
          $contentContainer.hide();
          $('.mainarea').show();
@@ -907,10 +913,12 @@ body {
           $new_link_tab.hide();
           $app_store_link_tab.hide();
           $environment_link_tab.hide();
+          $docker_link_tab.hide();
          } else {
            $new_link_tab.show();
            $app_store_link_tab.show();
            $environment_link_tab.show();
+           $docker_link_tab.show();
          }
          if(pid==='2' || pid==='1') {
           $usageTabLink.show();
@@ -972,9 +980,18 @@ body {
          });
       });
 
-      $app_factory_container = $('#app_factory_container'); 
+    
       
+      var $dockertab_container = $('#dockertab_container')
+      $docker_link_tab.on('shown.bs.tab',function (e) {
+        $dockertab_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          var pid  = $providers.filter('.active').attr('data-pid');
+          $.get('/docker/',function(data){
+            $dockertab_container.empty().append(data);
+          });
+      });
 
+      $app_factory_container = $('#app_factory_container'); 
       $app_store_link_tab.on('shown.bs.tab',function (e) {
          /* $app_factory_container.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
           var pid  = $providers.filter('.active').attr('data-pid');
