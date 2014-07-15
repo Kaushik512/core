@@ -1,5 +1,8 @@
 <style>
 .dockerContainer {
+    height: 100%;
+}
+.dockerGalleryContainer {
    background: none repeat scroll 0 0 #ffffff;
     border-radius: 3px;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
@@ -10,10 +13,10 @@
     overflow-y: auto;
     width: 97%;
 }
-.dockerGalleryContainer {
+.dockerGalleryList {
    height: 87%;
 }
-.dockerBtnContainer {
+.dockerGalleryBtnContainer {
    text-align: center;
 }
 .docker-role-container{
@@ -55,17 +58,21 @@
 .margin-bt {
   margin-bottom: 10px !important;
 }
+.dockerConfigureTemplateContainer {
+  display: none;
+}
 
 </style>
 
 
  <div class="dockerContainer">
- <div class="dockerGalleryContainer">     
+  <div class="dockerGalleryContainer">
+ <div class="dockerGalleryList">     
 <ul class="thumbnails list-unstyled" id="">
 
 <li class="col-xs-2"> 
   <div class="thumbnail  margin-bt">
-    <div class="docker-role-container" data-dockerId="abcdef" data-title = "testtitle">
+    <div class="docker-role-container" data-dockerId="abcdef" data-title = "Web" data-productName = "Pulse" data-version = "1.0" data-stack = "Lamp">
   
     <div class="docker-system">
       <!--<i class="fa fa-laptop system-icon"></i>-->
@@ -84,7 +91,7 @@
 
 <li class="col-xs-2"> 
   <div class="thumbnail  margin-bt">
-    <div class="docker-role-container" data-dockerId="abcdef" data-title = "testtitle">
+    <div class="docker-role-container" data-dockerId="zxcv" data-title = "DB" data-productName = "PulseDB" data-version = "1.0" data-stack = "MySql">
   
     <div class="docker-system">
       <!--<i class="fa fa-laptop system-icon"></i>-->
@@ -104,9 +111,11 @@
 
 </ul>
 </div>
- <div class="dockerBtnContainer">    
+ <div class="dockerGalleryBtnContainer">    
    <input type="button" name="next" class="btn btn-primary configureDockerBtn" value="Next"/>
  </div>
+</div>
+<div class="dockerConfigureTemplateContainer"></div>
 </div>
 
 <script type="text/javascript">
@@ -123,11 +132,27 @@ $('.docker-role-container').click(function(e){
 $('.configureDockerBtn').click(function(){
   var $selectedItems = $('.docker-role-selected');
   if($selectedItems.length) {
-     var reqBody = [];
+     var reqBody = {};
+     reqBody.selectedItems = [];
      var $items = $selectedItems.find('.docker-role-container');
      for(var i=0;i<$items.length;i++) {
-      var $item.attr('docker-role-container')
+      var $item = $($items.get(i));
+      var obj = {};
+      obj.dockerId = $item.attr('data-dockerId');
+      obj.title = $item.attr('data-title');
+      obj.version = $item.attr('data-version');
+      obj.productName = $item.attr('data-productName');
+      obj.stack = $item.attr('data-stack');
+      reqBody.selectedItems.push(obj);      
      }
+     $('.dockerGalleryContainer').hide();
+     var $dockerConfigureTemplateContainer =  $('.dockerConfigureTemplateContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+
+     $.post('/docker/configureTemplate',reqBody,function(data){
+      
+       $dockerConfigureTemplateContainer.empty().append(data).show();
+     })
+   
   } else {
     alert('Please choose a docker container first');
   }
