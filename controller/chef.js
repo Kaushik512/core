@@ -11,7 +11,7 @@ var Chef = function(settings) {
 		key_path: settings.chefReposLocation + settings.chefUserName + "/.chef/" + settings.chefUserPemFile,
 		url: settings.hostedChefUrl
 	});
-
+    console.log(settings);
 	this.getHostedChefCookbooks = function(callback) {
 		if (typeof callback !== 'function') {
 			return;

@@ -89,6 +89,8 @@
 	text-align: center;
  margin-top: 20px;
 }
+.launchSequence { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+
 </style>
 <link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
 <div class="dockerSelectedItemsContainer">
@@ -98,7 +100,7 @@
          <li class="docker-selectedTemplate-thumbnail">
          	 <div class="docker-selectedTemplate" data-dockerId = "<%=selectedItems[i].dockerId%>">
               <div class="docker-templateInfo-caption"> 
-              	 <div class="docker-template-heading" title="<%=selectedItems[i].title%>"><%=selectedItems[i].title%></div>
+              	 <div class="docker-template-heading" data-title="<%=selectedItems[i].title%>"><%=selectedItems[i].title%></div>
               	 <div class="docker-info-list">
               	 	<p class="docker-info-item"><%=selectedItems[i].productName%></p>
               	 	<p class="docker-info-item"><%=selectedItems[i].stack%></p>
@@ -118,14 +120,23 @@
 
     	  <form class="appConfig" role="form" style="display: block;">
       		 <div class="form-group">
-    			<label for="">IP Address</label>
-    			<input type="text" class="form-control" placeholder="Enter IP Address">
-  			</div>
+    	   		<label for="">IP Address</label>
+    		  	<input type="text" class="form-control" placeholder="Enter IP Address">
+  			   </div>
       	 	<div class="form-group">
-    			<label for="">Number of Containers</label>
-    			<input type="text" class="form-control" placeholder="Number of Containers">
+    			<label for="">Container Version</label>
+    			<select class="form-control" >
+            <option value="1.0">1.0</option>
+            <option value="1.1">1.1</option>
+            <option value="1.2">1.2</option>
+            <option value="1.3">1.3</option>
+          </select>
   			</div>
-  	 	</form>
+         <div class="form-group">
+          <label for="">Assign Action</label>
+          <input type="text" class="form-control" placeholder="Enter Runlist">
+        </div>
+  	 	 </form>
 
    		</div>
 	
@@ -142,12 +153,40 @@
   </div>
 
   <div class="dockerConfigureBtnConatiner col-md-12">
-    <input type="button" name="next" class="btn btn-primary dockerBackBtn" value="Back"/>
-    <input type="button" name="next" class="btn btn-primary lauchDockerBtn" value="Next"/> 
+    <input type="button" name="next" class="btn btn-primary dockerConfigBackBtn" value="Back"/>
+    <input type="button" name="next" class="btn btn-primary dockerConfigNextBtn" value="Next"/> 
   </div>	
 
-
 </div>
+
+<div class="modal fade" id="dockerLaunchConfigrationModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Configure Launch</h4>
+      </div>
+      <div class="modal-body">
+        <form class="appConfig" role="form" style="display: block;">
+           <div class="form-group">
+            <label for="">Product Group</label>
+            <input type="text" class="form-control" placeholder="Enter Product Group">
+           </div>
+          <div class="form-group">
+          <label for="">Launch Sequence</label>
+          <ui class="launchSequence" >
+          </ui>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Launch</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
 <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
 <script type="text/javascript">
@@ -178,10 +217,25 @@ $('.docker-selectedTemplate').click(function(e){
     }
 }).filter(':first').trigger('click');
 
-$('.dockerBackBtn').click(function(e){
+$('.dockerConfigBackBtn').click(function(e){
    
     $('.dockerConfigureTemplateContainer').hide()
     $('.dockerGalleryContainer').show();
+});
+
+$('.dockerConfigNextBtn').click(function(e){
+  var $selectedItemsDiv = $('.docker-template-heading');
+
+  var $launchSequence = $('.launchSequence').empty();
+  if($launchSequence.data('sortableInit')) {
+    $launchSequence.sortable('destroy');
+  }
+  for(var i=0;i<$selectedItemsDiv.length;i++) {
+   $launchSequence.append($('<li></li>').append($($selectedItemsDiv.get(i)).attr('data-title')));   
+  } 
+  $launchSequence.sortable();
+  $launchSequence.data('sortableInit',true);
+  $('#dockerLaunchConfigrationModal').modal('show')
 });
 
 </script>
