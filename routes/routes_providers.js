@@ -53,7 +53,7 @@ module.exports.setRoutes = function(app, verifySession) {
 			res.render('index', {
 				error: err,
 				products: products,
-				userData:req.session.user
+				userData: req.session.user
 			});
 		});
 	});
@@ -265,4 +265,18 @@ module.exports.setRoutes = function(app, verifySession) {
 			}
 		});
 	});
+
+	app.post('/providers/:pid/roles/stopInstance', verifySession, function(req, res) {
+
+	});
+	app.post('/providers/:pid/roles/startInstance', verifySession, function(req, res) {
+
+	});
+	app.post('/providers/:pid/roles/restartInstance', verifySession, function(req, res) {
+
+	});
+	app.post('/providers/:pid/roles/terminateInstance', verifySession, function(req, res) {
+
+	});
+
 }

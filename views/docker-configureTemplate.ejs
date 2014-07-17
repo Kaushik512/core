@@ -89,7 +89,7 @@
 	text-align: center;
  margin-top: 20px;
 }
-.launchSequence { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+.launchSequence { list-style-type: none; margin: 0; padding: 0; width: 60%;cursor: crosshair; }
 
 </style>
 <link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
@@ -134,7 +134,10 @@
   			</div>
          <div class="form-group">
           <label for="">Assign Action</label>
-          <input type="text" class="form-control" placeholder="Enter Runlist">
+            <select class="form-control" >
+            <option value="Deploy To Production">Deploy To Production</option>
+            <option value="Deploy To QA">Deploy To QA</option>
+          </select>
         </div>
   	 	 </form>
 
@@ -231,7 +234,7 @@ $('.dockerConfigNextBtn').click(function(e){
     $launchSequence.sortable('destroy');
   }
   for(var i=0;i<$selectedItemsDiv.length;i++) {
-   $launchSequence.append($('<li></li>').append($($selectedItemsDiv.get(i)).attr('data-title')));   
+   $launchSequence.append($('<li></li>').append($($selectedItemsDiv.get(i)).attr('data-title')).addClass('ui-state-default'));   
   } 
   $launchSequence.sortable();
   $launchSequence.data('sortableInit',true);

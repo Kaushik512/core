@@ -279,4 +279,19 @@ module.exports.setRoutes = function(app, verifySession) {
 	});
 
 
+    app.post('/app_factory/:pid/stopInstance', verifySession, function(req, res) {
+
+	});
+	app.post('/app_factory/:pid/startInstance', verifySession, function(req, res) {
+
+	});
+	app.post('/app_factory/:pid/restartInstance', verifySession, function(req, res) {
+
+	});
+	app.post('/app_factory/:pid/terminateInstance', verifySession, function(req, res) {
+
+	});
+
+
+
 };
