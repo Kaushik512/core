@@ -91,7 +91,7 @@ var EC2 = function(awsSettings) {
 				}, function(err, data) {
 					if (err) {
 						console.log("error occured while checking instance state. instance Id ==> " + instanceId);
-						callback(err,null);
+						callback(err, null);
 						return;
 					}
 					var instanceState = data.Reservations[0].Instances[0].State.Name
@@ -117,7 +117,7 @@ var EC2 = function(awsSettings) {
 									} else {
 										console.log(instanceIp + ": Alive");
 										setTimeout(function() {
-											callback(null,instanceData);
+											callback(null, instanceData);
 										}, 60000);
 									}
 								});
@@ -128,13 +128,63 @@ var EC2 = function(awsSettings) {
 					} else if (instanceState === 'pending') {
 						timeoutFunc(instanceId);
 					} else if (instanceState === 'terminated') {
-						callback({"err":"Instance Terminated"});
+						callback({
+							"err": "Instance Terminated"
+						});
 					}
 				});
 			}, 30000);
 		}
 		timeoutFunc(instanceId);
 
+	};
+
+	this.stopInstance = function(instanceIds, callback) {
+		ec.stopInstances({
+			InstanceIds: instanceIds
+		}, function(err, data) {
+			if (err) {
+				console.log("unable to stop instance : " + instanceIds);
+				console.log(err);
+				callback(err, null)
+				return;
+			}
+            console.log("number of instances stopped " + data.StoppingInstances.length);
+			callback(null, data.StoppingInstances);
+		
+		});
+	}
+
+	this.startInstance = function(instanceIds, callback) {
+		ec.startInstances({
+			InstanceIds: instanceIds
+		}, function(err, data) {
+			if (err) {
+				console.log("unable to start instances : " + instanceIds);
+				console.log(err);
+				callback(err, null)
+				return;
+			}
+            console.log("number of instances stopped " + data.StartingInstances.length);
+			callback(null, data.StartingInstances);
+		
+		});
+	}
+
+	this.rebootInstance = function(instanceIds, callback) {
+		ec.rebootInstances({
+			InstanceIds: instanceIds
+		}, function(err, data) {
+			if (err) {
+				console.log("unable to reboot instance : " + instanceIds);
+				console.log(err);
+				callback(err, null)
+				return;
+			}
+            console.log("number of instances stopped " + data.length);
+			callback(null, data);
+		
+		});
 	}
 
 }

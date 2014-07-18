@@ -103,8 +103,8 @@ module.exports.setRoutes = function(app, verifySession) {
 								pid: req.query.pid,
 								blueprintName: req.query.blueprintName,
 								blueprintVersion: req.query.ver,
-								serviceConsumers:data,
-								userData : req.session.user
+								serviceConsumers: data,
+								userData: req.session.user
 							});
 						});
 					});
@@ -279,17 +279,81 @@ module.exports.setRoutes = function(app, verifySession) {
 	});
 
 
-    app.post('/app_factory/:pid/stopInstance', verifySession, function(req, res) {
+	app.post('/app_factory/:pid/stopInstance', verifySession, function(req, res) {
+		settingsController.getSettings(function(settings) {
+			var ec2 = new EC2(settings.aws);
+			ec2.stopInstance([req.body.instanceId], function(err, data) {
+				if (err) {
+					res.send(500);
+					return;
+				}
+				domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.instanceId, 'stopped', function(err, updateData) {
+					if (err) {
+						console.log("update instance state err ==>", err);
+						res.send(500);
+						return;
+					}
+					res.send('ok');
+				});
 
+			});
+		});
 	});
 	app.post('/app_factory/:pid/startInstance', verifySession, function(req, res) {
+		settingsController.getSettings(function(settings) {
+			var ec2 = new EC2(settings.aws);
+			ec2.startInstance([req.body.instanceId], function(err, data) {
+				if (err) {
+					res.send(500);
+					return;
+				}
+				domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.instanceId, 'running', function(err, updateData) {
+					if (err) {
+						console.log("update instance state err ==>", err);
+						res.send(500);
+						return;
+					}
+					res.send('ok');
+				});
 
+			});
+		});
 	});
-	app.post('/app_factory/:pid/restartInstance', verifySession, function(req, res) {
+	app.post('/app_factory/:pid/rebootInstance', verifySession, function(req, res) {
+
+		settingsController.getSettings(function(settings) {
+			var ec2 = new EC2(settings.aws);
+			ec2.rebootInstance([req.body.instanceId], function(err, data) {
+				if (err) {
+					res.send(500);
+					return;
+				}
+
+				res.send('ok');
+
+			});
+		});
 
 	});
 	app.post('/app_factory/:pid/terminateInstance', verifySession, function(req, res) {
+		settingsController.getSettings(function(settings) {
+			var ec2 = new EC2(settings.aws);
+			ec2.terminateInstance(req.body.instanceId, function(err, data) {
+				if (err) {
+					res.send(500);
+					return;
+				}
+				domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.instanceId, 'terminated', function(err, updateData) {
+					if (err) {
+						console.log("update instance state err ==>", err);
+						res.send(500);
+						return;
+					}
+					res.send('ok');
+				});
 
+			});
+		});
 	});
 
 
