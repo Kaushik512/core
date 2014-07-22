@@ -5,25 +5,6 @@ var Chef = require('../controller/chef');
 module.exports.setRoutes = function(app, verificationFunc) {
 
 
-
-	app.post('/chef/hosted/cookbooks', verificationFunc, function(req, res) {
-		
-		settingsController.getChefSettings(function(settings) {
-			//res.render('cookbooks');
-			var chef = new Chef(settings);
-			chef.getHostedChefCookbooks(function(err, resp) {
-				res.render('cookbook', {
-					error: err,
-					cookbooks: resp,
-					prodSelected: req.body
-				});
-			});
-		});
-
-	});
-
-
-
 	app.get('/chef/workstation/cookbooks/', verificationFunc, function(req, res) {
 		var path = req.query.path;
 		settingsController.getChefSettings(function(settings) {

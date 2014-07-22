@@ -1,0 +1,211 @@
+<%if(prod && prod.roles && prod.roles.length) { var list = prod.roles; %>
+
+<style>
+.role-container{
+  /*padding: 3px;*/
+  background-color: white;
+  cursor: pointer;
+}
+.role-selected {
+   background-color: green !important;
+}
+
+.system{
+    color: #DCDCDC;
+    text-align: center;
+}
+.system-icon {
+   font-size: 35px;
+}
+.system-runlist {
+  padding-bottom: 5px !important;
+    padding-top: 0 !important;
+    min-height: 90px;
+}
+.runlist-block {
+  display: block;
+  font-size: 11px;
+}
+.center-alignment {
+  display: inline-block;
+    text-align: center;
+}
+.system-prop {
+  position: relative; 
+}
+.system-prop li{
+  display: inline;
+}
+.system-prop-text {
+  display: block;
+ font-size: 9px;
+}
+.role-heading {
+  text-align: center;
+  font-size: 11px;
+  text-decoration: underline;
+}
+.margin-bt {
+  margin-bottom: 10px !important;
+}
+
+</style>
+
+  <div class="galleryContainer">
+      
+<ul class="thumbnails list-unstyled" id="dynamiclist">
+<% for(var i = 0;i<list.length;i++) { %>
+
+<li class="col-xs-2"> 
+  <div class="thumbnail  margin-bt">
+    <div class="role-container" data-cid="<%=list[i].cid%>" data-amiid = "<%=list[i].amiid%>" data-title="<%=list[i].title%>" 
+    <% var runlist = list[i].runlist 
+      var str = ''
+      var A='',B='',C='',D='';
+      if(runlist){
+      for(var j=0;j<runlist.length;j++) {
+        str=str+runlist[j]+',';
+        switch(j) {
+          case 0:
+             A = runlist[j];
+             break;
+            case 1:
+             B = runlist[j];
+             break;
+            case 2:
+             C = runlist[j];
+             break;
+            case 3:
+             D = runlist[j];
+             break;
+        }
+       
+      }
+     }
+      var sizing = list[i].sizing;
+      var cpu='',ram='',hdd='';
+      if(sizing) {
+        if(sizing.CPU) {
+          cpu = sizing.CPU;
+        }
+        if(sizing.RAM) {
+          ram = sizing.RAM;
+        } 
+        if(sizing.HDD) {
+          hdd = sizing.HDD;
+        }
+      }       
+    %> 
+
+
+  data-runlist="<%=str%>" data-cpu="<%=cpu%>" data-ram="<%ram%>" data-hdd="<%=hdd%>">
+  
+    <div class="system">
+      <!--<i class="fa fa-laptop system-icon"></i>-->
+      <img class="system-icon" src="img/galleryIcons/<%=(i+1)%>.png"/>
+    </div>
+    <div class="caption system-runlist">
+      <span class="role-heading"><strong><%=list[i].title%></strong></span>
+      <span class="runlist-block"><%=A%></span>
+      <span class="runlist-block"><%=B%></span>
+      <span class="runlist-block"><%=C%></span>
+      <span class="runlist-block"><%=D%></span>
+    </div>
+    <ul class="row list-unstyled system-prop">
+      <li>
+        <div class="center-alignment">
+          <span class="badge badge-info system-prop-text "><%=cpu%></span>
+        <span class="system-prop-text">CPU</span>
+      </div>
+      </li>
+      <li>
+        <div class="center-alignment"> 
+        <span class="badge badge-info system-prop-text"><%=ram%></span>
+        <span class="system-prop-text">RAM</span>
+        </div>
+      </li>
+      <li>
+        <div class="center-alignment">
+        <span class="badge badge-warning system-prop-text"><%=hdd%></span>
+        <span class="system-prop-text">HDD</span>
+        </div>
+      </li>
+    </ul>
+    
+  </div>
+</div>
+</li>
+
+<%}%>
+
+
+
+</ul>
+</div>
+ <input type="button" name="next" class="next action-button goto-configuration" value="Next"/>
+ <script type="text/javascript">
+(function(){
+
+   var product = {};
+   product.pid = <%=prod.pid%>;
+   product.name = "<%=prod.name%>";
+   product.selectedInstances = {};  
+
+     $('.role-container').click(function (e) {
+                        e.stopImmediatePropagation();
+                        var $this = $(this);
+                        if(!$this.data('isSelected')) {
+                         var selectedItem= {};
+                         selectedItem.cid =  $(this).attr('data-cid');
+                         selectedItem.amiid = $(this).attr('data-amiid');
+                         selectedItem.title = $(this).attr('data-title');
+                         selectedItem.runlist = $(this).attr('data-runlist');
+                         selectedItem.cpu = $(this).attr('data-cpu');
+                         selectedItem.ram = $(this).attr('data-ram');
+                         selectedItem.hdd = $(this).attr('data-hdd');
+                         console.log(selectedItem);
+                         product.selectedInstances[selectedItem.cid] = selectedItem;
+                         $this.data('isSelected',true);
+                         $this.parent().addClass('role-selected');
+                        } else {
+                          delete product.selectedInstances[$(this).attr('data-cid')];
+                           $this.data('isSelected',false);
+                          $this.parent().removeClass('role-selected');
+                        }
+                       }); 
+     
+
+     $(".goto-configuration").click(function(){
+        if(!Object.keys(product.selectedInstances).length) {
+          alert("Please choose some roles");
+          return;
+        }  
+    
+      var current_fs = $(this).parent().parent();
+      var next_fs = $(this).parent().parent().next();
+  
+  //activate next step on progressbar using the index of next_fs
+      $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+  
+  //show the next fieldset
+      current_fs.hide();
+     next_fs.show(); 
+  var $configureRolesContainer = $('.configureRolesArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+
+  $.ajax({
+                type: "POST",
+                url: "/providers/configureRoles",
+                data: JSON.stringify(product),
+                success: function(data){
+            
+                   $configureRolesContainer.empty().append(data);
+            
+                },
+                contentType : 'application/json'
+            });
+
+
+});
+})();
+</script>
+<%}%>

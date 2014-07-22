@@ -136,7 +136,6 @@ var EC2 = function(awsSettings) {
 			}, 30000);
 		}
 		timeoutFunc(instanceId);
-
 	};
 
 	this.stopInstance = function(instanceIds, callback) {
@@ -186,6 +185,19 @@ var EC2 = function(awsSettings) {
 		
 		});
 	}
+
+
+	this.getSecurityGroups = function(callback) {
+		ec.describeSecurityGroups({},function(err,data){
+			if(err){
+				console.log(err);
+				callback(err,null);
+				return;
+			}
+			callback(null,data.SecurityGroups);
+		});
+	}
+
 
 }
 
