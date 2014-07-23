@@ -1,0 +1,396 @@
+<link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
+<style type="text/css">
+.appFactSecurityGroupMenuContainer {
+display: none;
+}
+.appFactSecurityGroupMenu {
+  display: none;
+}
+.appFactStaticConfigContainer {
+  display: none;
+}
+#appFactCookbooksList {
+	margin-top: 5px;
+	height: 170px !important;
+	width:500px !important;
+}
+.appFact-recipies-list-container {
+	margin-top:5px;
+}
+.appStoreBtnContainer {
+    margin-top: 8px;
+    padding-left: 63%;
+} 
+</style>
+ <div class="appStoreSelectedInstanceContainer">
+   <ul class="thumbnails list-unstyled">
+   	<li class="col-xs-2">
+   		 <div class="thumbnail  margin-bt-appItem">
+      		<%-thumbnailHtmlString%>
+  		 </div>
+    </li>
+   </ul>
+ </div>
+ <div class="selectedInstanceConfigurationContainer">
+   
+   <div class="instance-options-container col-md-6">
+
+      <form class="appConfig" role="form" style="display: block;">
+
+        <div class="form-group">
+    <label for="appFactoryRegionMenu">
+      AWS Region
+    </label>
+    <select class="appFactoryRegionMenu">
+      <option selected="" value="Choose">
+        Choose
+      </option>
+      <option value="us-east-1">
+        us-east-1
+      </option>
+      <option value="us-west-2">
+       us-west-2
+      </option>
+      <option value="us-west-1">
+        us-west-1
+      </option>
+      <option value="eu-west-1">
+        eu-west-1
+      </option>
+      <option value="ap-southeast-1">
+        ap-southeast-1
+      </option>
+      <option value="ap-southeast-2">
+        ap-southeast-2
+      </option>
+      <option value="ap-northeast-1">
+        ap-northeast-1
+      </option>
+      <option value="sa-east-1">
+        sa-east-1
+      </option>
+    </select>
+  </div>
+  
+
+  <div class="form-group appFactSecurityGroupMenuContainer">
+    <label for="">
+      Security Group
+    </label>
+    <select class="appFactSecurityGroupMenu">
+      
+    </select>
+    <span class="loadingContainer"></span>
+  </div>
+
+
+  <div class="form-group appFactStaticConfigContainer">
+    <label for="appFactNumberOfInstance">
+      Choose number of Instances
+    </label>
+    <select class="appFactNumberOfInstance">
+      <option selected="" value="1">
+        1
+      </option>
+      <option value="2">
+        2
+      </option>
+      <option value="3">
+        3
+      </option>
+      <option value="4">
+        4
+      </option>
+      <option value="5">
+        5
+      </option>
+      <option value="6">
+        6
+      </option>
+      <option value="7">
+        7
+      </option>
+      <option value="8">
+        8
+      </option>
+      <option value="9">
+        9
+      </option>
+      <option value="10">
+        10
+      </option>
+    </select>
+  </div>
+  
+  <div class="form-group appFactStaticConfigContainer">
+    <label for="">
+      Choose Instance Size
+    </label>
+    <select class="">
+      <option selected="" value="micro">
+        t1.micro
+      </option>
+      <option value="m1.small">
+        m1.small
+      </option>
+      <option value="m1.medium">
+        m1.medium
+      </option>
+      <option value="m1.large">
+        m1.large
+      </option>
+      <option value="m1.xlarge">
+        m1.xlarge
+      </option>
+    </select>
+  </div>
+</form>
+
+    </div>
+<div class="appFact-recipies-list-container col-md-6">
+
+   <select id="appFactCookbooksList" class="" multiple="multiple"> 
+ 	<%for(var i =0; i< cookbooks.length; i++){%>
+    	<option data-id="<%=i%>" value='<%=cookbooks[i]%>'><%=cookbooks[i]%></option>
+	<%}%>
+  </select>
+
+</div>
+
+
+ </div>
+ <div class="appStoreBtnContainer">
+    <input type="button" value="Back" class="backappStoreBtn action-button" name="Launch">
+    <input type="button" value="Save As Blueprint" href="#blueprintSaveModal" class="saveAsAppStoreBtn action-button" name="Launch" data-target="#blueprintSaveModal" data-toggle="modal" role="button" value="Save As Blueprint" />
+  <!--<input type="button" value="Launch" class="launchInstancesBtn action-button" name="Launch">-->
+ 
+  </div> 
+
+
+<!-- Modal -->
+<div class="modal fade" id="blueprintSaveModal" tabindex="-1" role="dialog" aria-labelledby="blueprintTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+        <h4 class="modal-title" id="blueprintTitle">Blueprint Name</h4>
+      </div>
+      <div class="modal-body">
+         
+          <% var blueprintsListObj = {};
+        if(domains && domains.length) { 
+             for(var i=0;i<domains.length;i++) {
+             if(domains[i].blueprintsAppFactory && domains[i].blueprintsAppFactory.length) {
+
+                for(var j=0;j<domains[i].blueprintsAppFactory.length;j++) {
+                  if(domains[i].blueprintsAppFactory[j].groupId === userData.groupId) {
+                      if(!(blueprintsListObj[domains[i].blueprintsAppFactory[j].blueprintName])) {
+                          blueprintsListObj[domains[i].blueprintsAppFactory[j].blueprintName] = {};
+                      }
+                   }
+
+                }
+        }}} 
+          blueprintsLists = Object.keys(blueprintsListObj);
+        %>
+
+
+        <form class="form-horizontal" role="form">
+          
+          <div class="form-group">
+            <label for="bluePrintName" class="col-sm-4 control-label saveBluePrintInputlable">Blueprints :</label>
+             <div class="col-sm-8">
+              <select class="form-control saveBluePrintInputControl" id="bluePrintName">
+                 <option>Choose Blueprint</option>
+                 <% 
+                    for(var i=0;i<blueprintsLists.length;i++) {
+                  %>
+                  <option value="<%=blueprintsLists[i]%>"><%=blueprintsLists[i]%></option>
+                <%}%>
+              </select>
+             </div>
+           </div>
+           <div class="form-group">
+            
+            <label for="bluePrintName" class="col-sm-4 control-label saveBluePrintInputlable">Create New Blueprint :</label>
+             <div class="col-sm-8">
+               <input id="bluePrintNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="blueprintType" id="blueprintType"/>
+             </div>
+           </div>
+
+
+           <div class="form-group">
+            <label for="bluePrintDomainName" class="col-sm-4 control-label saveBluePrintInputlable">Product Groups :</label>
+             <div class="col-sm-8">
+              <select class="form-control saveBluePrintInputControl" id="bluePrintDomainName">
+                 <option>Choose Product Group</option>
+                 <% 
+                    if(domains && domains.length) {
+                     for(var i=0;i<domains.length;i++){
+                  %>
+                   <option value="<%=domains[i].domainName%>"><%=domains[i].domainName%></option>
+                <%}}%>
+              </select>
+             </div>
+           </div>
+           <div class="form-group">
+            
+            <label for="createDomainNameText" class="col-sm-4 control-label saveBluePrintInputlable">Create New Product Group :</label>
+             <div class="col-sm-8">   
+               <input id="createDomainNameText" type="text" disabled class="form-control saveBluePrintInputControl"/>&nbsp; <input type="checkbox" name="domainType" id="domainType"/>
+             </div>
+           </div>
+
+           <div class="form-group">
+            
+            <label for="expirationDays" class="col-sm-4 control-label saveBluePrintInputlable">Instance Validity <br/>(In Days) :</label>
+             <div class="col-sm-8">   
+                <select class="form-control saveBluePrintInputControl" id="expirationDays">
+                   <% for(var i=0;i<365;i++){%>
+                   <option value="<%=i%>"><%=i%></option>
+                   <%}%>
+                </select>
+             </div>
+           </div>
+
+
+           <div class="form-group">
+            
+            <label for="serviceConsumersUsers" class="col-sm-4 control-label saveBluePrintInputlable">Users</label>
+             <div class="col-sm-8">   
+                <select class="form-control saveBluePrintInputControl" id="serviceConsumersUsers" multiple>
+                   <% for(var i=0;i<serviceConsumers.length;i++){
+                     if(userData.cn !== serviceConsumers[i].username) { 
+                   %>
+                   <option value="<%=serviceConsumers[i].username%>"><%=serviceConsumers[i].username%></option>
+                   <%}}%>
+                </select>
+             </div>
+           </div>
+        
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        <button type="button" class="btn btn-primary save-blueprint-btn" data-dismiss="modal">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript" src="js/jq-plugins/jquery.scrollTo-min.js"></script>
+ <script type="text/javascript" src="js/jq-plugins/ui.multiselect.js"></script>
+
+<script type="text/javascript">
+ $('#appFactCookbooksList').multiselect();
+
+
+ $('#domainType').change(function() {
+        if($(this).is(":checked")) {
+           $('#bluePrintDomainName').parent().parent().hide();
+         
+          $('#bluePrintDomainName').attr('disabled',true);
+          $('#createDomainNameText').attr('disabled',false);
+          
+        } else {
+          $('#bluePrintDomainName').parent().parent().show();
+          $('#bluePrintDomainName').attr('disabled',false);
+          $('#createDomainNameText').attr('disabled',true);
+          
+        }
+  });
+
+  $('#blueprintType').change(function() {
+        if($(this).is(":checked")) {
+            $('#bluePrintName').parent().parent().hide();
+          $('#bluePrintName').attr('disabled',true);
+          $('#bluePrintNameText').attr('disabled',false);
+          
+        } else {
+           $('#bluePrintName').parent().parent().show();
+          $('#bluePrintName').attr('disabled',false);
+          $('#bluePrintNameText').attr('disabled',true);
+          
+        }
+  });
+
+  var selectedItemElem = []; 
+
+ $('.save-blueprint-btn').click(function(e){
+    var data = {};
+     data.pid = <%=pid%>;
+    var blueprintName;
+    if(!$('#blueprintType').is(":checked")) {
+      blueprintName =  $("#bluePrintName").val();
+    } else {
+      blueprintName =  $('#bluePrintNameText').val();
+    }
+
+    data.blueprintName = blueprintName;
+    var domainName;
+    if(!$('#domainType').is(":checked")) {
+      domainName =  $("#bluePrintDomainName").val();
+    } else {
+      domainName =  $('#createDomainNameText').val() + '';
+    }
+    data.expirationDays = $('#expirationDays').val();
+    data.domainName = domainName;
+    data.os = $('.osmenu').val();
+    data.numberOfInstance = $('.numberOfInstance').val();
+    data.instanceType = $('.sizeData').val();
+    data.runlist = $('.app-recipes-list').val();
+    data.selectedHtmlString = [].concat(selectedItemElem[0].html());
+    data.serviceConsumers = $('#serviceConsumersUsers').val();
+    data.templateName = '<%=templateName%>' ;
+    console.log(data);
+    $.post('/app_factory/saveBluePrint',data,function(data){
+       console.log('posted');
+       $('#blueprintSaveModal').modal('hide')
+    });
+    return false;
+ }); 
+
+ $('.appFactoryRegionMenu').change(function(){
+      var $this = $(this);
+      var value = $(this).val();
+       var $form =  $this.parents('.appConfig');
+      var $securityGroupMenuContainer = $form.find('.appFactSecurityGroupMenuContainer');
+      if(value === 'Choose') {
+        $securityGroupMenuContainer.hide();
+        return;
+      }
+      var $securityGroupMenu = $securityGroupMenuContainer.find('.appFactSecurityGroupMenu');
+      $securityGroupMenu.hide();
+      $('.appFactStaticConfigContainer').hide();
+     
+      var $securityGroupMenuContainer = $securityGroupMenuContainer.show();
+      var $loadingContainer = $securityGroupMenuContainer.find('.loadingContainer').empty().append('<img class="" style="width:20px;" src="img/loading.gif" />').show();
+      $.post('/aws/ec2/securityGroups',{region:$(this).val()},function(data){
+        $loadingContainer.hide();
+        $securityGroupMenu.empty();    
+        $securityGroupMenu.append('<option value="Choose">Choose</option>');
+        for(var i=0;i<data.length;i++) {
+           $securityGroupMenu.append('<option value="'+data[i].GroupId+'">'+data[i].GroupName+'</option>');
+        }
+         $securityGroupMenu.show();
+      });
+   });
+
+   $('.appFactSecurityGroupMenu').change(function(e){
+     $this = $(this);
+     if($this.val() === 'Choose') {
+       $('.appFactStaticConfigContainer').hide();
+       return;
+     }
+     $('.appFactStaticConfigContainer').show();
+   });
+  
+
+ $('.backappStoreBtn').click(function(e){
+ 	$('.appStoreConfigurationArea').hide()
+   $('.appStoreGalleryArea').show(); 
+ });
+
+      </script>
+

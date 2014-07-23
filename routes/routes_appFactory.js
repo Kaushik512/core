@@ -7,6 +7,13 @@ var users = require('../controller/users.js');
 module.exports.setRoutes = function(app, verifySession) {
 
 	app.get('/app_factory/:pid', verifySession, function(req, res) {
+		res.render('appFactory',{pid:req.params.pid});
+	});
+
+	app.post('/app_factory/configureTemplate', verifySession, function(req, res) {
+
+
+
 		settingsController.getChefSettings(function(settings) {
 			//res.render('cookbooks');
 			var chef = new Chef(settings);
@@ -16,7 +23,7 @@ module.exports.setRoutes = function(app, verifySession) {
 					return;
 				}
 
-				domainsDao.getAllDomainData(req.params.pid, function(err, domainsdata) {
+				domainsDao.getAllDomainData(req.params.pid, function(err, domainsData) {
 					if (err) {
 						res.send(500);
 						return;
@@ -27,11 +34,13 @@ module.exports.setRoutes = function(app, verifySession) {
 							res.send(500);
 							return;
 						}
-						res.render('appFactory', {
+						res.render('appFactory-configure', {
+							templateName: req.body.templateName,
+							thumbnailHtmlString : req.body.thumbnailHtmlString,
+							pid: req.body.pid,
 							error: err,
 							cookbooks: cookbooks,
-							pid: req.params.pid,
-							domains: domainsdata,
+							domains: domainsData,
 							userData: req.session.user,
 							serviceConsumers: data
 						});
@@ -42,6 +51,7 @@ module.exports.setRoutes = function(app, verifySession) {
 			});
 		});
 	});
+
 
 	app.post('/app_factory/saveBluePrint', verifySession, function(req, res) {
 		console.log(req.body);
