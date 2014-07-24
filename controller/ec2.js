@@ -54,16 +54,16 @@ var EC2 = function(awsSettings) {
 		});
 	}
 
-	this.launchInstance = function(image_id, callback) {
+	this.launchInstance = function(image_id,intanceType,securityGroupId, callback) {
 
 		var that = this; //"m1.small"
 		ec.runInstances({
 			"ImageId": "ami-b3bf2f83",
-			"InstanceType": "m1.medium",
+			"InstanceType": intanceType,//"m1.medium",
 			"MinCount": 1,
 			"MaxCount": 1,
 			"KeyName": awsSettings.keyPairName,
-			SecurityGroupIds: [awsSettings.securityGroupId],
+			SecurityGroupIds:[securityGroupId],// [awsSettings.securityGroupId],
 			BlockDeviceMappings: [{
 				DeviceName: "/dev/sda",
 				Ebs: {

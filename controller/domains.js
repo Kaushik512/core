@@ -23,9 +23,10 @@ var DomainsSchema = new Schema({
   stacks: [{
     stackId: String,
     stackName: String,
-    templateName:String
+    templateName: String
   }],
   appFactoryInstances: [{
+    instanceRegion:String,
     instanceId: String,
     instanceIP: String,
     instanceName: String,
@@ -44,13 +45,18 @@ var DomainsSchema = new Schema({
     groupId: Number,
     version: String,
     os: String,
+    awsRegion: String,
+    awsSecurityGroup: {
+      name: String,
+      id: String
+    },
     instanceType: String,
     numberOfInstance: Number,
     runlist: [String],
-    expirationDays:Number,
-    templateName:String,
+    expirationDays: Number,
+    templateName: String,
     blueprintInstancesString: String,
-    serviceConsumers : [String]
+    serviceConsumers: [String]
   }],
   blueprintsEnvironment: [String],
   bluePrintsCloudFormation: [{
@@ -59,14 +65,14 @@ var DomainsSchema = new Schema({
     groupId: Number,
     version: String,
     runlist: [String],
-    expirationDays:Number,
+    expirationDays: Number,
     stackParameters: [{
       ParameterKey: String,
       ParameterValue: String
     }],
     templateUrl: String,
     templateName: String,
-    serviceConsumers : [String]
+    serviceConsumers: [String]
 
   }],
 });
@@ -84,8 +90,8 @@ function generateBlueprintVersionNumber(prevVersion) {
   var major = parseInt(parts[0]);
   var minor = parseInt(parts[1]);
   minor++;
-  
-  if(minor === 10) {
+
+  if (minor === 10) {
     major++;
     minor = 0;
   }
@@ -407,16 +413,16 @@ module.exports.deleteDomains = function(pid, domainName, callback) {
   });
 }
 
-module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, blueprintName, intanceType, numberOfInstance, os, runlist, blueprintInstanceString,expirationDays,templateName,serviceConsumers, callback) {
- if(!runlist) {
-   runlist = [];
- }
- if(!serviceConsumers) {
-   serviceConsumers = [];
- }
- console.log('groupId == >',groupId);
- var createVersion = generateBlueprintVersionNumber(null); 
- console.log(domainName, pid);
+module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, blueprintName, awsRegion, awsSecurityGroup, intanceType, numberOfInstance, os, runlist, blueprintInstanceString, expirationDays, templateName, serviceConsumers, callback) {
+  if (!runlist) {
+    runlist = [];
+  }
+  if (!serviceConsumers) {
+    serviceConsumers = [];
+  }
+  console.log('groupId == >', groupId);
+  var createVersion = generateBlueprintVersionNumber(null);
+  console.log(domainName, pid);
   Domains.find({
     domainName: domainName,
     domainPid: pid
@@ -437,21 +443,26 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
           if (bluePrints[i].blueprintName === blueprintName && bluePrints[i].groupId === groupId) {
 
             var newVersion = generateBlueprintVersionNumber(bluePrints[i].version);
-            console.log('old version ==>',bluePrints[i].version);
+            console.log('old version ==>', bluePrints[i].version);
             console.log('new version ==>', newVersion);
             createVersion = newVersion;
             bluePrints.splice(i, 0, {
               blueprintName: blueprintName,
               groupId: groupId,
               os: os,
-              expirationDays:expirationDays,
+              awsRegion: awsRegion,
+              awsSecurityGroup: {
+                name: awsSecurityGroup.name,
+                id: awsSecurityGroup.id
+              },
+              expirationDays: expirationDays,
               version: newVersion,
               instanceType: intanceType,
               numberOfInstance: numberOfInstance,
-              templateName:templateName,
+              templateName: templateName,
               runlist: runlist,
               blueprintInstancesString: blueprintInstanceString,
-              serviceConsumers:serviceConsumers
+              serviceConsumers: serviceConsumers
             });
             found = true;
             break;
@@ -462,13 +473,18 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
             blueprintName: blueprintName,
             groupId: groupId,
             os: os,
-            expirationDays:expirationDays,
+            awsRegion: awsRegion,
+            awsSecurityGroup: {
+              name: awsSecurityGroup.name,
+              id: awsSecurityGroup.id
+            },
+            expirationDays: expirationDays,
             version: generateBlueprintVersionNumber(null),
             instanceType: intanceType,
             numberOfInstance: numberOfInstance,
-            templateName:templateName,
+            templateName: templateName,
             runlist: runlist,
-            serviceConsumers:serviceConsumers,
+            serviceConsumers: serviceConsumers,
             blueprintInstancesString: blueprintInstanceString
           });
 
@@ -480,13 +496,18 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
           blueprintName: blueprintName,
           groupId: groupId,
           os: os,
-          expirationDays:expirationDays,
+          awsRegion: awsRegion,
+          awsSecurityGroup: {
+            name: awsSecurityGroup.name,
+            id: awsSecurityGroup.id
+          },
+          expirationDays: expirationDays,
           version: generateBlueprintVersionNumber(null),
           instanceType: intanceType,
           numberOfInstance: numberOfInstance,
-          templateName:templateName,           
+          templateName: templateName,
           runlist: runlist,
-           serviceConsumers:serviceConsumers,
+          serviceConsumers: serviceConsumers,
           blueprintInstancesString: blueprintInstanceString
         });
       }
@@ -513,13 +534,18 @@ module.exports.upsertAppFactoryBlueprint = function(pid, domainName, groupId, bl
         blueprintName: blueprintName,
         groupId: groupId,
         os: os,
-        expirationDays:expirationDays,
+        awsRegion: awsRegion,
+        awsSecurityGroup: {
+          name: awsSecurityGroup.name,
+          id: awsSecurityGroup.id
+        },
+        expirationDays: expirationDays,
         version: generateBlueprintVersionNumber(null),
         instanceType: intanceType,
         numberOfInstance: numberOfInstance,
         runlist: runlist,
-        templateName:templateName,
-         serviceConsumers:serviceConsumers, 
+        templateName: templateName,
+        serviceConsumers: serviceConsumers,
         blueprintInstancesString: blueprintInstanceString
       });
 
@@ -609,14 +635,14 @@ module.exports.upsertEnvironmentBlueprint = function(pid, domainName, blueprintN
 }
 
 
-module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId, blueprintName, templateName, templateUrl, stackName, runlist, stackParameters,expirationDays,serviceConsumers, callback) {
-  if(!runlist) {
-    runlist =[];
+module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId, blueprintName, templateName, templateUrl, stackName, runlist, stackParameters, expirationDays, serviceConsumers, callback) {
+  if (!runlist) {
+    runlist = [];
   }
-  if(!serviceConsumers) {
-    serviceConsumers =[];
+  if (!serviceConsumers) {
+    serviceConsumers = [];
   }
-  var createVersion = generateBlueprintVersionNumber(null); 
+  var createVersion = generateBlueprintVersionNumber(null);
   console.log(domainName, pid, groupId);
   Domains.find({
     domainName: domainName,
@@ -643,12 +669,12 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
               blueprintName: blueprintName,
               groupId: groupId,
               version: newVersion,
-              expirationDays:expirationDays,
+              expirationDays: expirationDays,
               stackName: stackName,
               runlist: runlist,
               stackParameters: stackParameters,
               templateUrl: templateUrl,
-              serviceConsumers:serviceConsumers,
+              serviceConsumers: serviceConsumers,
               templateName: templateName
             });
             found = true;
@@ -661,11 +687,11 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
             groupId: groupId,
             version: generateBlueprintVersionNumber(null),
             stackName: stackName,
-            expirationDays:expirationDays,
+            expirationDays: expirationDays,
             runlist: runlist,
             stackParameters: stackParameters,
             templateUrl: templateUrl,
-            serviceConsumers:serviceConsumers,
+            serviceConsumers: serviceConsumers,
             templateName: templateName
           });
         }
@@ -676,11 +702,11 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
           groupId: groupId,
           version: generateBlueprintVersionNumber(null),
           stackName: stackName,
-          expirationDays:expirationDays,
+          expirationDays: expirationDays,
           runlist: runlist,
           stackParameters: stackParameters,
           templateUrl: templateUrl,
-          serviceConsumers:serviceConsumers,
+          serviceConsumers: serviceConsumers,
           templateName: templateName
         });
       }
@@ -707,12 +733,12 @@ module.exports.upsertCloudFormationBlueprint = function(pid, domainName, groupId
         blueprintName: blueprintName,
         groupId: groupId,
         version: generateBlueprintVersionNumber(null),
-        expirationDays:expirationDays,
+        expirationDays: expirationDays,
         stackName: stackName,
         runlist: runlist,
         stackParameters: stackParameters,
         templateUrl: templateUrl,
-        serviceConsumers:serviceConsumers,
+        serviceConsumers: serviceConsumers,
         templateName: templateName
       });
 
@@ -738,17 +764,17 @@ module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName,
     domainName: domainName,
     domainPid: pid,
     "blueprintsAppFactory.blueprintName": blueprintName,
-    "blueprintsAppFactory.version":version
+    "blueprintsAppFactory.version": version
   };
- 
-  console.log('query == > ', queryObj );
+
+  console.log('query == > ', queryObj);
 
 
   Domains.find(queryObj, {
     blueprintsAppFactory: {
       $elemMatch: {
         blueprintName: blueprintName,
-        version:version
+        version: version
       }
     }
   }, function(err, data) {
@@ -761,17 +787,17 @@ module.exports.getAppFactoryBlueprint = function(pid, domainName, blueprintName,
   });
 }
 
-module.exports.getCloudFormationBlueprint = function(pid, domainName, blueprintName,version, callback) {
+module.exports.getCloudFormationBlueprint = function(pid, domainName, blueprintName, version, callback) {
   Domains.find({
     domainName: domainName,
     domainPid: pid,
     "bluePrintsCloudFormation.blueprintName": blueprintName,
-     "bluePrintsCloudFormation.version":version
+    "bluePrintsCloudFormation.version": version
   }, {
     bluePrintsCloudFormation: {
       $elemMatch: {
         blueprintName: blueprintName,
-        version:version
+        version: version
       }
     }
   }, function(err, data) {

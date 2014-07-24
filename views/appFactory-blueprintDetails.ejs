@@ -96,6 +96,7 @@ function getAppFactoryCardHeadingHtml(role) {
 
 
 <form class="form-horizontal detailsArea" role="form" id="afBpDetailsArea">
+     <!--
      <div class="form-group">
       <label for="" class="col-sm-5 control-label">OS</label>
       <div class="col-sm-7">
@@ -110,6 +111,32 @@ function getAppFactoryCardHeadingHtml(role) {
             }
           %>
           <option value="<%=optionsOsValue[i]%>" <%=selected%>><%=optionsOsValue[i]%></option>
+          <%}%>
+         
+
+        </select>
+       </div>  
+     </div>
+    -->
+    <div class="form-group">
+      <label for="" class="col-sm-5 control-label">AWS Region</label>
+      <div class="col-sm-7">
+        <span type="text" class="form-control" style="border: 0 !important;box-shadow: none !important;" ><%=blueprint.awsRegion%></span>
+        <input type="hidden" name="awsRegion" value="<%=blueprint.awsRegion%>">
+       </div>  
+    </div>
+
+    <div class="form-group">
+      <label for="" class="col-sm-5 control-label">Security Group</label>
+      <div class="col-sm-7">
+        <span type="text" class="form-control appFactoryDetailValue" ><%=blueprint.awsSecurityGroup.name%></span>
+        <select class="form-control editInput" name="awsSecurityGroup">
+          <%
+           
+           for(var i=0;i<awsSecurityGroups.length;i++) {
+            
+          %>
+          <option value="<%='{\"id\":\"'+awsSecurityGroups[i].GroupId+'\",\"name\":\"'+awsSecurityGroups[i].GroupName+'\"}'%>" ><%=awsSecurityGroups[i].GroupName%></option>
           <%}%>
          
 
@@ -297,7 +324,11 @@ $('.appFactModalbluePrintLaunchBtn').unbind("click").click(function(e){
         blueprintName:'<%=blueprintName%>',
         ver:'<%=blueprintVersion%>'
       },function(data){
-        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceId+'</span></div></div>');
+        $appStoreLaunchResultArea.empty();
+        for(var i=0;i<data.instanceIds.length;i++) {
+          var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceIds[i]+'</span></div></div>');
+           $appStoreLaunchResultArea.append($message);
+        }
          
          var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
            $('.appFactBlueprintListContainer').show();
@@ -305,7 +336,7 @@ $('.appFactModalbluePrintLaunchBtn').unbind("click").click(function(e){
          });
 
 
-        $appStoreLaunchResultArea.empty().append($message);
+   
         // $appStoreLaunchResultArea.append($btn);
         
       }).error(function(){
@@ -342,6 +373,7 @@ $('.appFactModalbluePrintLaunchBtn').unbind("click").click(function(e){
 
   $('.saveEditedbluePrintBtn').unbind("click").click(function(e){
     var reqBody = createReqObj($('#afBpDetailsArea').serializeArray());
+    reqBody.awsSecurityGroup = JSON.parse(reqBody.awsSecurityGroup);
     if(reqBody.runlist) {
       reqBody.runlist = [].concat(reqBody.runlist);
     } else {

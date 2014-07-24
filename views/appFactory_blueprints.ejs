@@ -287,15 +287,17 @@ $('.appFactbluePrintLaunchBtn').click(function(e){
         blueprintName:$this.attr('data-blueprintName'),
         ver: blueprintVersion
       },function(data){
-        var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceId+'</span></div></div>');
+        $appStoreLaunchResultArea.empty();
+        for(var i=0;i<data.instanceIds.length;i++) {
+          var $message = $('<div class="instance-result"><div class="alert alert-success fade in instanceSuccess" id="stackMessage" style="margin: 10px 25px;"><strong>Congratulations!</strong>&nbsp;Instance Launched Successfully.<br/><strong>Instance Id : </strong><span>'+data.instanceIds[i]+'</span></div></div>');
+           $appStoreLaunchResultArea.append($message);
+        }
          
          var $btn = $('<button class="btn btn-default">Launch More...</button>').click(function(e){
            $('.afBlueprintList').show();
            $('.appFactBlueprintLaunchResultArea').hide();
          });
 
-
-        $appStoreLaunchResultArea.empty().append($message);
         $appStoreLaunchResultArea.append($btn);
         
       }).error(function(){

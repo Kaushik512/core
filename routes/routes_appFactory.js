@@ -7,7 +7,9 @@ var users = require('../controller/users.js');
 module.exports.setRoutes = function(app, verifySession) {
 
 	app.get('/app_factory/:pid', verifySession, function(req, res) {
-		res.render('appFactory',{pid:req.params.pid});
+		res.render('appFactory', {
+			pid: req.params.pid
+		});
 	});
 
 	app.post('/app_factory/configureTemplate', verifySession, function(req, res) {
@@ -36,7 +38,7 @@ module.exports.setRoutes = function(app, verifySession) {
 						}
 						res.render('appFactory-configure', {
 							templateName: req.body.templateName,
-							thumbnailHtmlString : req.body.thumbnailHtmlString,
+							thumbnailHtmlString: req.body.thumbnailHtmlString,
 							pid: req.body.pid,
 							error: err,
 							cookbooks: cookbooks,
@@ -61,7 +63,7 @@ module.exports.setRoutes = function(app, verifySession) {
 			req.body.serviceConsumers = [];
 			req.body.serviceConsumers.push(req.session.user.cn);
 		}
-		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.session.user.groupId, req.body.blueprintName, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, req.body.expirationDays, req.body.templateName, req.body.serviceConsumers, function(err, data) {
+		domainsDao.upsertAppFactoryBlueprint(req.body.pid, req.body.domainName, req.session.user.groupId, req.body.blueprintName, req.body.awsRegion, req.body.awsSecurityGroup, req.body.instanceType, req.body.numberOfInstance, req.body.os, req.body.runlist, req.body.selectedHtmlString, req.body.expirationDays, req.body.templateName, req.body.serviceConsumers, function(err, data) {
 			if (err) {
 				res.send(500);
 				console.log(err);
@@ -98,25 +100,44 @@ module.exports.setRoutes = function(app, verifySession) {
 			}
 			if (data.length && data[0].blueprintsAppFactory && data[0].blueprintsAppFactory.length) {
 				var blueprint = data[0].blueprintsAppFactory[0];
-				settingsController.getChefSettings(function(settings) {
-					var chef = new Chef(settings);
+				settingsController.getSettings(function(settings) {
+					var chef = new Chef(settings.chef);
 					chef.getHostedChefCookbooks(function(err, cookbooks) {
 						if (err) {
 							res.send(500);
 							return;
 						}
-						users.getUsersInGroup(req.session.user.groupId, 500, function(err, data) {
-							res.render("appFactory-blueprintDetails", {
-								blueprint: blueprint,
-								cookbooks: cookbooks,
-								domainName: req.query.domainName,
-								pid: req.query.pid,
-								blueprintName: req.query.blueprintName,
-								blueprintVersion: req.query.ver,
-								serviceConsumers: data,
-								userData: req.session.user
-							});
+						var ec2 = new EC2({
+							access_key: settings.aws.access_key,
+							secret_key: settings.aws.secret_key,
+							region: blueprint.awsRegion
 						});
+
+						ec2.getSecurityGroups(function(err, awsSecurityGroups) {
+							if (err) {
+								res.send(500);
+								return;
+							}
+
+
+							users.getUsersInGroup(req.session.user.groupId, 500, function(err, data) {
+								res.render("appFactory-blueprintDetails", {
+									blueprint: blueprint,
+									cookbooks: cookbooks,
+									domainName: req.query.domainName,
+									pid: req.query.pid,
+									blueprintName: req.query.blueprintName,
+									blueprintVersion: req.query.ver,
+									serviceConsumers: data,
+									userData: req.session.user,
+									awsSecurityGroups: awsSecurityGroups
+								});
+							});
+
+						});
+
+
+
 					});
 				});
 			} else {
@@ -143,141 +164,159 @@ module.exports.setRoutes = function(app, verifySession) {
 				console.log('blueprint == >', blueprint);
 
 				settingsController.getSettings(function(settings) {
+					settings.aws.region =  blueprint.awsRegion;
 					var ec2 = new EC2(settings.aws);
-					ec2.launchInstance(null, function(err, instanceData) {
-						if (err) {
-							console.log(err);
-							res.send(500);
-							return;
-						}
-						//saving in database 
-						var instance = {
-							instanceId: instanceData.InstanceId,
-							instanceIP: instanceData.PublicIpAddress,
-							instanceName: blueprint.templateName,
-							instanceActive: true,
-							instanceState: instanceData.State.Name,
-							bootStrapLog: {
-								err: false,
-								log: 'waiting',
-								timestamp: new Date().getTime()
-							},
-							bootStrapStatus: 'waiting',
-							runlist: blueprint.runlist
-						}
+					
 
-						//enabling scheduled termination 
-						setTimeout(function() {
-							ec2.terminateInstance(instanceData.InstanceId, function(err, terminatedInstance) {
+					var instanceIdsLaunched = [];
+					var count = blueprint.numberOfInstance;
+
+					for (var i = 0; i < blueprint.numberOfInstance; i++) {
+						(function(instanceNo) {
+
+							ec2.launchInstance(null,blueprint.instanceType,blueprint.awsSecurityGroup.id, function(err, instanceData) {
+								count--;
 								if (err) {
+									console.log(err);
+									res.send(500);
 									return;
-								} else {
-									domainsDao.updateAppFactoryInstanceStatus(req.body.domainName, terminatedInstance.InstanceId, false, function(err, data) {
+								}
+								//saving in database 
+								instanceIdsLaunched.push(instanceData.InstanceId)
+								var instance = {
+									instanceRegion:blueprint.awsRegion,
+									instanceId: instanceData.InstanceId,
+									instanceIP: instanceData.PublicIpAddress,
+									instanceName: blueprint.templateName,
+									instanceActive: true,
+									instanceState: instanceData.State.Name,
+									bootStrapLog: {
+										err: false,
+										log: 'waiting',
+										timestamp: new Date().getTime()
+									},
+									bootStrapStatus: 'waiting',
+									runlist: blueprint.runlist
+								}
+
+								//enabling scheduled termination 
+								setTimeout(function() {
+									ec2.terminateInstance(instanceData.InstanceId, function(err, terminatedInstance) {
 										if (err) {
-											console.log("unable to update status of terminated instance");
+											return;
 										} else {
-											console.log("Instance status set to false successfully");
+											domainsDao.updateAppFactoryInstanceStatus(req.body.domainName, terminatedInstance.InstanceId, false, function(err, data) {
+												if (err) {
+													console.log("unable to update status of terminated instance");
+												} else {
+													console.log("Instance status set to false successfully");
+												}
+											});
 										}
 									});
-								}
-							});
 
-						}, 3600000);
+								}, 3600000);
 
-						domainsDao.saveAppFactoryInstanceDetails(req.body.domainName, [instance], function(err, data) {
-							if (err) {
-								console.log("Unable to store instance in DB");
-								return;
-							} else {
-								console.log("instance stored in DB");
-								//waiting for instances
-								ec2.waitForInstanceRunnnigState(instanceData.InstanceId, function(err, instanceData) {
+								domainsDao.saveAppFactoryInstanceDetails(req.body.domainName, [instance], function(err, data) {
 									if (err) {
+										console.log("Unable to store instance in DB");
 										return;
 									} else {
-
-										domainsDao.updateAppFactoryInstanceState(req.body.domainName, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
+										console.log("instance stored in DB");
+										//waiting for instances
+										ec2.waitForInstanceRunnnigState(instanceData.InstanceId, function(err, instanceData) {
 											if (err) {
-												console.log("update instance state err ==>", err);
 												return;
-											}
-										});
-
-										//bootstrapping instance
-										var chef = new Chef(settings.chef);
-										chef.bootstrapInstance({
-											instanceIp: instanceData.PublicIpAddress,
-											pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
-											runList: blueprint.runlist,
-											instanceUserName: settings.aws.instanceUserName
-										}, function(err, code) {
-											console.log('process stopped ==> ', err, code);
-											if (err) {
-												console.log("knife launch err ==>", err);
-												domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
-
-												});
 											} else {
-												if (code == 0) {
-													domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'success', function(err, updateData) {
-														if (err) {
-															console.log("Unable to set instance bootstarp status");
-														} else {
-															console.log("Instance bootstrap status set to true");
-														}
 
-													});
-												} else {
-													domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
-														if (err) {
-															console.log("Unable to set instance bootstarp status");
+												domainsDao.updateAppFactoryInstanceState(req.body.domainName, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
+													if (err) {
+														console.log("update instance state err ==>", err);
+														return;
+													}
+												});
+
+												//bootstrapping instance
+												var chef = new Chef(settings.chef);
+												chef.bootstrapInstance({
+													instanceIp: instanceData.PublicIpAddress,
+													pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
+													runList: blueprint.runlist,
+													instanceUserName: settings.aws.instanceUserName
+												}, function(err, code) {
+													console.log('process stopped ==> ', err, code);
+													if (err) {
+														console.log("knife launch err ==>", err);
+														domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
+
+														});
+													} else {
+														if (code == 0) {
+															domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'success', function(err, updateData) {
+																if (err) {
+																	console.log("Unable to set instance bootstarp status");
+																} else {
+																	console.log("Instance bootstrap status set to true");
+																}
+
+															});
 														} else {
-															console.log("Instance bootstrap status set to false");
+															domainsDao.updateAppFactoryInstanceBootstrapStatus(req.body.domainName, instanceData.InstanceId, 'failed', function(err, updateData) {
+																if (err) {
+																	console.log("Unable to set instance bootstarp status");
+																} else {
+																	console.log("Instance bootstrap status set to false");
+																}
+															});
 														}
+													}
+
+												}, function(stdOutData) {
+													domainsDao.updateAppFactoryInstanceBootstrapLog(req.body.domainName, instanceData.InstanceId, {
+														err: false,
+														log: stdOutData.toString('ascii'),
+														timestamp: new Date().getTime()
+													}, function(err, data) {
+														if (err) {
+															console.log('unable to update bootStrapLog');
+															return;
+														}
+														console.log('bootStrapLog updated');
 													});
-												}
+
+												}, function(stdErrData) {
+													domainsDao.updateAppFactoryInstanceBootstrapLog(req.body.domainName, instanceData.InstanceId, {
+														err: true,
+														log: stdErrData.toString('ascii'),
+														timestamp: new Date().getTime()
+													}, function(err, data) {
+														if (err) {
+															console.log('unable to update bootStrapLog');
+															return;
+														}
+														console.log('bootStrapLog updated');
+													});
+												});
+
+
 											}
 
-										}, function(stdOutData) {
-											domainsDao.updateAppFactoryInstanceBootstrapLog(req.body.domainName, instanceData.InstanceId, {
-												err: false,
-												log: stdOutData.toString('ascii'),
-												timestamp: new Date().getTime()
-											}, function(err, data) {
-												if (err) {
-													console.log('unable to update bootStrapLog');
-													return;
-												}
-												console.log('bootStrapLog updated');
-											});
-
-										}, function(stdErrData) {
-											domainsDao.updateAppFactoryInstanceBootstrapLog(req.body.domainName, instanceData.InstanceId, {
-												err: true,
-												log: stdErrData.toString('ascii'),
-												timestamp: new Date().getTime()
-											}, function(err, data) {
-												if (err) {
-													console.log('unable to update bootStrapLog');
-													return;
-												}
-												console.log('bootStrapLog updated');
-											});
 										});
-
 
 									}
-
 								});
+								if (count == 0) {
+									res.send({
+										instanceIds: instanceIdsLaunched
+									});
+								}
 
-							}
-						});
+							});
 
-						res.send({
-							instanceId: instanceData.InstanceId
-						});
 
-					});
+						})(i);
+					}
+
 
 				});
 			} else {

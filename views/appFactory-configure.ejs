@@ -35,13 +35,13 @@ display: none;
    
    <div class="instance-options-container col-md-6">
 
-      <form class="appConfig" role="form" style="display: block;">
+      <form class="appFactConfigForm" role="form" style="display: block;">
 
         <div class="form-group">
     <label for="appFactoryRegionMenu">
       AWS Region
     </label>
-    <select class="appFactoryRegionMenu">
+    <select class="appFactoryRegionMenu" name="awsRegion">
       <option selected="" value="Choose">
         Choose
       </option>
@@ -77,7 +77,7 @@ display: none;
     <label for="">
       Security Group
     </label>
-    <select class="appFactSecurityGroupMenu">
+    <select class="appFactSecurityGroupMenu" name="awsSecurityGroup">
       
     </select>
     <span class="loadingContainer"></span>
@@ -85,10 +85,10 @@ display: none;
 
 
   <div class="form-group appFactStaticConfigContainer">
-    <label for="appFactNumberOfInstance">
+    <label for="appFactNumberOfInstance" >
       Choose number of Instances
     </label>
-    <select class="appFactNumberOfInstance">
+    <select class="appFactNumberOfInstance" name="awsNumberOfInstance">
       <option selected="" value="1">
         1
       </option>
@@ -126,7 +126,7 @@ display: none;
     <label for="">
       Choose Instance Size
     </label>
-    <select class="">
+    <select class="appFactoryInstanceType">
       <option selected="" value="micro">
         t1.micro
       </option>
@@ -149,10 +149,10 @@ display: none;
     </div>
 <div class="appFact-recipies-list-container col-md-6">
 
-   <select id="appFactCookbooksList" class="" multiple="multiple"> 
- 	<%for(var i =0; i< cookbooks.length; i++){%>
+   <select id="appFactCookbooksList" multiple="multiple"> 
+ 	 <%for(var i =0; i< cookbooks.length; i++){%>
     	<option data-id="<%=i%>" value='<%=cookbooks[i]%>'><%=cookbooks[i]%></option>
-	<%}%>
+	 <%}%>
   </select>
 
 </div>
@@ -200,7 +200,7 @@ display: none;
           <div class="form-group">
             <label for="bluePrintName" class="col-sm-4 control-label saveBluePrintInputlable">Blueprints :</label>
              <div class="col-sm-8">
-              <select class="form-control saveBluePrintInputControl" id="bluePrintName">
+              <select class="form-control saveBluePrintInputControl" id="bluePrintName" >
                  <option>Choose Blueprint</option>
                  <% 
                     for(var i=0;i<blueprintsLists.length;i++) {
@@ -315,9 +315,13 @@ display: none;
         }
   });
 
-  var selectedItemElem = []; 
+  function getConfiguredData() {
+
+  }
+
 
  $('.save-blueprint-btn').click(function(e){
+    $form = $('.appFactConfigForm');
     var data = {};
      data.pid = <%=pid%>;
     var blueprintName;
@@ -337,10 +341,15 @@ display: none;
     data.expirationDays = $('#expirationDays').val();
     data.domainName = domainName;
     data.os = $('.osmenu').val();
-    data.numberOfInstance = $('.numberOfInstance').val();
-    data.instanceType = $('.sizeData').val();
+   
     data.runlist = $('.app-recipes-list').val();
-    data.selectedHtmlString = [].concat(selectedItemElem[0].html());
+    data.awsRegion = $form.find('.appFactoryRegionMenu').val();
+    data.awsSecurityGroup = {
+      id:$form.find('.appFactSecurityGroupMenu').val(),
+      name:$form.find('.appFactSecurityGroupMenu').find(':selected').attr('data-secGroupName')
+    } ;
+    data.instanceType = $form.find('.appFactoryInstanceType').val();
+    data.numberOfInstance = $form.find('.appFactNumberOfInstance').val();
     data.serviceConsumers = $('#serviceConsumersUsers').val();
     data.templateName = '<%=templateName%>' ;
     console.log(data);
@@ -354,7 +363,7 @@ display: none;
  $('.appFactoryRegionMenu').change(function(){
       var $this = $(this);
       var value = $(this).val();
-       var $form =  $this.parents('.appConfig');
+       var $form =  $this.parents('.appFactConfigForm');
       var $securityGroupMenuContainer = $form.find('.appFactSecurityGroupMenuContainer');
       if(value === 'Choose') {
         $securityGroupMenuContainer.hide();
@@ -371,7 +380,7 @@ display: none;
         $securityGroupMenu.empty();    
         $securityGroupMenu.append('<option value="Choose">Choose</option>');
         for(var i=0;i<data.length;i++) {
-           $securityGroupMenu.append('<option value="'+data[i].GroupId+'">'+data[i].GroupName+'</option>');
+           $securityGroupMenu.append('<option value=\"'+data[i].GroupId+'\" data-secGroupName="'+data[i].GroupName+'">'+data[i].GroupName+'</option>');
         }
          $securityGroupMenu.show();
       });
