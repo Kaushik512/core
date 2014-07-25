@@ -70,6 +70,10 @@ border-radius: 5px;
 .domain-roles-icon {
   display: block;
 }
+.instanceActionControl {
+  margin-left: 5px;
+  cursor: pointer;
+}
 </style>
 
 
@@ -766,17 +770,22 @@ function getCFCardHeadingHtml(role) {
              <%
                var classInstanceStatus = 'instance-inactive' 
                var instanceStatusText = 'inactive'
-               if(appFactoryInstances[j].instanceActive) {
+               if(appFactoryInstances[j].instanceState === 'running' ||  appFactoryInstances[j].instanceState === 'pending' ) {
                  classInstanceStatus = 'instance-active';
-                 instanceStatusText = 'active';
                }
               %>
-              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instanceStatusText%></span> </span>
+              <span class="instance-details-item"> Instance Status: <span class="<%=classInstanceStatus%> instanceState"><%=appFactoryInstances[j].instanceState%></span> </span>
               
               </div>
-             <!-- <div class="instance-bootstrap-list">
-              
-              </div>-->
+              <div class="instance-bootstrap-list">
+               <%if(appFactoryInstances[j].instanceState !== 'terminated' || appFactoryInstances[j].instanceState !== 'shutting-down') {%>
+               <div class="instanceActionControlConatiner" data-pid="<%=domain.domainPid%>" data-domainName="<%=domain.domainName%>" data-instanceRegion="<%=appFactoryInstances[j].instanceRegion%>" data-instanceId="<%=appFactoryInstances[j].instanceId%>" >
+               <span title="Start" class="appFactStartInstance instanceActionControl"><i class="fa fa-play"></i></span>
+               <span title="Stop" class="appFactStopInstance instanceActionControl"><i class="fa fa-stop"></i></span>
+               <span title="Terminate" class="appFactTerminateInstance instanceActionControl"><i class="fa fa-power-off"></i></span>
+               </div>
+               <%}%>
+              </div>
             </div>
           </div>
             </li>
@@ -868,5 +877,60 @@ function getCFCardHeadingHtml(role) {
 
 </div>
 <%}}%>
+<script type="text/javascript">
 
+$('.appFactStartInstance').click(function(e){
+  var $this = $(this);
+  var reqBody = {}; 
+  reqBody.instanceId = $this.parent().attr('data-instanceId');
+  reqBody.instanceRegion = $this.parent().attr('data-instanceRegion');
+  reqBody.pid = $this.parent().attr('data-pid');
+  reqBody.domainName = $this.parent().attr('data-domainName');
+  
+  $.post("/app_factory/startInstance",reqBody,function(data){
+    $this.parents('.domain-roles-caption').find('.instanceState').html(data).removeClass('instance-inactive').addClass('instance-active');
+    
+
+  });
+  
+});
+
+$('.appFactStopInstance').click(function(e){
+
+  var $this = $(this);
+  var reqBody = {}; 
+  reqBody.instanceId = $this.parent().attr('data-instanceId');
+  reqBody.instanceRegion = $this.parent().attr('data-instanceRegion');
+  reqBody.pid = $this.parent().attr('data-pid');
+  reqBody.domainName = $this.parent().attr('data-domainName');
+  
+  $.post("/app_factory/stopInstance",reqBody,function(data){
+    $this.parents('.domain-roles-caption').find('.instanceState').html(data).removeClass('instance-active').addClass('instance-inactive');
+    
+
+  });
+
+
+
+
+});
+
+$('.appFactTerminateInstance').click(function(e){
+   var $this = $(this);
+  var reqBody = {}; 
+  reqBody.instanceId = $this.parent().attr('data-instanceId');
+  reqBody.instanceRegion = $this.parent().attr('data-instanceRegion');
+  reqBody.pid = $this.parent().attr('data-pid');
+  reqBody.domainName = $this.parent().attr('data-domainName');
+  
+  $.post("/app_factory/terminateInstance",reqBody,function(data){
+    $this.parents('.domain-roles-caption').find('.instanceState').html(data).removeClass('instance-active').addClass('instance-inactive');
+    
+
+  });
+
+});
+
+
+</script>
 

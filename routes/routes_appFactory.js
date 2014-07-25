@@ -164,9 +164,9 @@ module.exports.setRoutes = function(app, verifySession) {
 				console.log('blueprint == >', blueprint);
 
 				settingsController.getSettings(function(settings) {
-					settings.aws.region =  blueprint.awsRegion;
+					settings.aws.region = blueprint.awsRegion;
 					var ec2 = new EC2(settings.aws);
-					
+
 
 					var instanceIdsLaunched = [];
 					var count = blueprint.numberOfInstance;
@@ -174,7 +174,7 @@ module.exports.setRoutes = function(app, verifySession) {
 					for (var i = 0; i < blueprint.numberOfInstance; i++) {
 						(function(instanceNo) {
 
-							ec2.launchInstance(null,blueprint.instanceType,blueprint.awsSecurityGroup.id, function(err, instanceData) {
+							ec2.launchInstance(null, blueprint.instanceType, blueprint.awsSecurityGroup.id, function(err, instanceData) {
 								count--;
 								if (err) {
 									console.log(err);
@@ -184,11 +184,10 @@ module.exports.setRoutes = function(app, verifySession) {
 								//saving in database 
 								instanceIdsLaunched.push(instanceData.InstanceId)
 								var instance = {
-									instanceRegion:blueprint.awsRegion,
+									instanceRegion: blueprint.awsRegion,
 									instanceId: instanceData.InstanceId,
 									instanceIP: instanceData.PublicIpAddress,
 									instanceName: blueprint.templateName,
-									instanceActive: true,
 									instanceState: instanceData.State.Name,
 									bootStrapLog: {
 										err: false,
@@ -199,13 +198,13 @@ module.exports.setRoutes = function(app, verifySession) {
 									runlist: blueprint.runlist
 								}
 
-								//enabling scheduled termination 
-								setTimeout(function() {
+								//enabling scheduled termination  
+								/*setTimeout(function() {
 									ec2.terminateInstance(instanceData.InstanceId, function(err, terminatedInstance) {
 										if (err) {
 											return;
 										} else {
-											domainsDao.updateAppFactoryInstanceStatus(req.body.domainName, terminatedInstance.InstanceId, false, function(err, data) {
+											domainsDao.updateAppFactoryInstanceState(req.body.domainName,req.body.pid, terminatedInstance.InstanceId,'terminated', function(err, data) {
 												if (err) {
 													console.log("unable to update status of terminated instance");
 												} else {
@@ -215,7 +214,7 @@ module.exports.setRoutes = function(app, verifySession) {
 										}
 									});
 
-								}, 3600000);
+								}, 3600000);*/
 
 								domainsDao.saveAppFactoryInstanceDetails(req.body.domainName, [instance], function(err, data) {
 									if (err) {
@@ -229,11 +228,12 @@ module.exports.setRoutes = function(app, verifySession) {
 												return;
 											} else {
 
-												domainsDao.updateAppFactoryInstanceState(req.body.domainName, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
+												domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instanceData.InstanceId, instanceData.State.Name, function(err, updateData) {
 													if (err) {
 														console.log("update instance state err ==>", err);
 														return;
 													}
+													console.log('instance state upadated');
 												});
 
 												//bootstrapping instance
@@ -328,46 +328,190 @@ module.exports.setRoutes = function(app, verifySession) {
 	});
 
 
-	app.post('/app_factory/:pid/stopInstance', verifySession, function(req, res) {
-		settingsController.getSettings(function(settings) {
-			var ec2 = new EC2(settings.aws);
-			ec2.stopInstance([req.body.instanceId], function(err, data) {
-				if (err) {
-					res.send(500);
-					return;
-				}
-				domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.instanceId, 'stopped', function(err, updateData) {
-					if (err) {
-						console.log("update instance state err ==>", err);
-						res.send(500);
-						return;
-					}
-					res.send('ok');
+	app.post('/app_factory/stopInstance', verifySession, function(req, res) {
+
+		domainsDao.getAppFactoryInstance(req.body.pid, req.body.domainName, req.body.instanceId, function(err, data) {
+			if (err) {
+				console.log(err);
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].appFactoryInstances.length) {
+				var instance = data[0].appFactoryInstances[0];
+				settingsController.getAwsSettings(function(settings) {
+					settings.region = instance.instanceRegion;
+					var ec2 = new EC2(settings);
+					ec2.stopInstance([instance.instanceId], function(err, stoppingInstances) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+
+						domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instance.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateData) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						function checkInstanceStatus(statusToCheck, delay) {
+							var timeout = setTimeout(function() {
+								ec2.getInstanceState(instance.instanceId, function(err, instanceState) {
+									if (err) {
+										console.log('Unable to get instance state', err);
+										return;
+									}
+									if (statusToCheck === instanceState) {
+										domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instance.instanceId, instanceState, function(err, updateData) {
+											if (err) {
+												console.log("update instance state err ==>", err);
+												return;
+											}
+											console.log('instance state upadated to ' + instanceState);
+										});
+									} else {
+										checkInstanceStatus('stopped', 5000);
+									}
+								});
+							}, delay);
+						}
+						checkInstanceStatus('stopped', 1);
+
+
+						res.send(stoppingInstances[0].CurrentState.Name)
+
+					});
 				});
 
-			});
+
+
+			} else {
+				res.send(404);
+			}
+
 		});
 	});
-	app.post('/app_factory/:pid/startInstance', verifySession, function(req, res) {
-		settingsController.getSettings(function(settings) {
-			var ec2 = new EC2(settings.aws);
-			ec2.startInstance([req.body.instanceId], function(err, data) {
-				if (err) {
-					res.send(500);
-					return;
-				}
-				domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.instanceId, 'running', function(err, updateData) {
-					if (err) {
-						console.log("update instance state err ==>", err);
-						res.send(500);
-						return;
-					}
-					res.send('ok');
+
+
+	app.post('/app_factory/startInstance', verifySession, function(req, res) {
+		domainsDao.getAppFactoryInstance(req.body.pid, req.body.domainName, req.body.instanceId, function(err, data) {
+			if (err) {
+				console.log(err);
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].appFactoryInstances.length) {
+				var instance = data[0].appFactoryInstances[0];
+				settingsController.getAwsSettings(function(settings) {
+					settings.region = instance.instanceRegion;
+					var ec2 = new EC2(settings);
+					ec2.startInstance([instance.instanceId], function(err, startingInstances) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+
+						domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instance.instanceId, startingInstances[0].CurrentState.Name, function(err, updateData) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						function checkInstanceStatus(statusToCheck, delay) {
+							var timeout = setTimeout(function() {
+								ec2.getInstanceState(instance.instanceId, function(err, instanceState) {
+									if (err) {
+										console.log('Unable to get instance state', err);
+										return;
+									}
+									if (statusToCheck === instanceState) {
+										domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instance.instanceId, instanceState, function(err, updateData) {
+											if (err) {
+												console.log("update instance state err ==>", err);
+												return;
+											}
+											console.log('instance state upadated to ' + instanceState);
+										});
+									} else {
+										checkInstanceStatus(statusToCheck, 5000);
+									}
+								});
+							}, delay);
+						}
+						checkInstanceStatus('running', 1);
+						res.send(startingInstances[0].CurrentState.Name)
+					});
 				});
 
-			});
+			} else {
+				res.send(404);
+			}
+
 		});
 	});
+
+	app.post('/app_factory/terminateInstance', verifySession, function(req, res) {
+		domainsDao.getAppFactoryInstance(req.body.pid, req.body.domainName, req.body.instanceId, function(err, data) {
+			if (err) {
+				console.log(err);
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].appFactoryInstances.length) {
+				var instance = data[0].appFactoryInstances[0];
+				settingsController.getAwsSettings(function(settings) {
+					settings.region = instance.instanceRegion;
+					var ec2 = new EC2(settings);
+					ec2.terminateInstance(instance.instanceId, function(err, terminatingInstance) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+
+						domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instance.instanceId, terminatingInstance.CurrentState.Name, function(err, updateData) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						function checkInstanceStatus(statusToCheck, delay) {
+							var timeout = setTimeout(function() {
+								ec2.getInstanceState(instance.instanceId, function(err, instanceState) {
+									if (err) {
+										console.log('Unable to get instance state', err);
+										return;
+									}
+									if (statusToCheck === instanceState) {
+										domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.pid, instance.instanceId, instanceState, function(err, updateData) {
+											if (err) {
+												console.log("update instance state err ==>", err);
+												return;
+											}
+											console.log('instance state upadated to ' + instanceState);
+										});
+									} else {
+										checkInstanceStatus(statusToCheck, 5000);
+									}
+								});
+							}, delay);
+						}
+						checkInstanceStatus('terminated', 1);
+						res.send(terminatingInstance.CurrentState.Name)
+					});
+				});
+
+			} else {
+				res.send(404);
+			}
+
+		});
+	});
+
 	app.post('/app_factory/:pid/rebootInstance', verifySession, function(req, res) {
 
 		settingsController.getSettings(function(settings) {
@@ -383,26 +527,6 @@ module.exports.setRoutes = function(app, verifySession) {
 			});
 		});
 
-	});
-	app.post('/app_factory/:pid/terminateInstance', verifySession, function(req, res) {
-		settingsController.getSettings(function(settings) {
-			var ec2 = new EC2(settings.aws);
-			ec2.terminateInstance(req.body.instanceId, function(err, data) {
-				if (err) {
-					res.send(500);
-					return;
-				}
-				domainsDao.updateAppFactoryInstanceState(req.body.domainName, req.body.instanceId, 'terminated', function(err, updateData) {
-					if (err) {
-						console.log("update instance state err ==>", err);
-						res.send(500);
-						return;
-					}
-					res.send('ok');
-				});
-
-			});
-		});
 	});
 
 

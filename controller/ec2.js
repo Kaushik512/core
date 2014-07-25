@@ -13,10 +13,11 @@ var EC2 = function(awsSettings) {
 	this.describeInstances = function(instanceIds, callback) {
 
 		var options = {};
-		if (instanceIds) {
+		if (instanceIds && instanceIds.length) {
 			options.InstanceIds = instanceIds;
+		} else {
+		  options.MaxResults = 1000;
 		}
-		options.MaxResults = 1000;
 		ec.describeInstances(options, function(err, data) {
 			callback(err, data);
 		});

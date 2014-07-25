@@ -31,7 +31,6 @@ var DomainsSchema = new Schema({
     instanceIP: String,
     instanceName: String,
     instanceState: String,
-    instanceActive: Boolean,
     bootStrapStatus: String,
     bootStrapLog: {
       err: Boolean,
@@ -245,6 +244,7 @@ module.exports.updateInstanceStatus = function(domainName, instanceId, status, c
   });
 }
 
+/*
 module.exports.updateAppFactoryInstanceStatus = function(domainName, instanceId, status, callback) {
   Domains.update({
     domainName: domainName,
@@ -264,7 +264,7 @@ module.exports.updateAppFactoryInstanceStatus = function(domainName, instanceId,
     callback(null, data);
   });
 }
-
+*/
 
 
 module.exports.updateInstanceState = function(domainName, instanceId, instanceState, callback) {
@@ -288,8 +288,37 @@ module.exports.updateInstanceState = function(domainName, instanceId, instanceSt
   });
 }
 
-module.exports.updateAppFactoryInstanceState = function(domainName, instanceId, instanceState, callback) {
+
+module.exports.getAppFactoryInstance = function(pid, domainName, instanceId, callback) {
+  var queryObj = {
+    domainName: domainName,
+    domainPid: pid,
+    "appFactoryInstances.instanceId": instanceId,
+  };
+
+  console.log('query == > ', queryObj);
+
+
+  Domains.find(queryObj, {
+    appFactoryInstances: {
+      $elemMatch: {
+        instanceId: instanceId
+      }
+    }
+  }, function(err, data) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+}
+
+module.exports.updateAppFactoryInstanceState = function(domainName, pid, instanceId, instanceState, callback) {
+  console.log(domainName,pid,instanceId,instanceState);
   Domains.update({
+    domainPid:pid,
     domainName: domainName,
     "appFactoryInstances.instanceId": instanceId
   }, {
