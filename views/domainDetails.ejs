@@ -732,14 +732,13 @@ function getCFCardHeadingHtml(role) {
                </script>
                <%}
 
-               var classInstanceStatus = 'instance-inactive' 
+              var classInstanceStatus = 'instance-inactive' 
                var instanceStatusText = 'inactive'
-               if(instances[j].instanceActive) {
+               if(instances[j].instanceState === 'running' ||  instances[j].instanceState === 'pending' ) {
                  classInstanceStatus = 'instance-active';
-                 instanceStatusText = 'active';
                }
               %>
-              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instanceStatusText%></span> </span>
+              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instances[j].instanceState%></span> </span>
               
               </div>
               <div class="instance-bootstrap-list">
@@ -753,6 +752,15 @@ function getCFCardHeadingHtml(role) {
                } else {
                %><span class="instance-inactive">Bootstrapping Failed</span>
              <% } %>
+
+               <%if(instances[j].instanceState !== 'terminated' || instances[j].instanceState !== 'shutting-down') {%>
+               <div class="instanceActionControlConatiner" data-pid="<%=domain.domainPid%>" data-domainName="<%=domain.domainName%>" data-instanceRegion="<%=instances[j].instanceRegion%>" data-instanceId="<%=instances[j].instanceId%>" >
+               <span title="Start" class="instanceActionControl"><i class="fa fa-play"></i></span>
+               <span title="Stop" class="instanceActionControl"><i class="fa fa-stop"></i></span>
+               <span title="Terminate" class="instanceActionControl"><i class="fa fa-power-off"></i></span>
+               </div>
+               <%}%>
+
               </div>
             </div>
           </div>

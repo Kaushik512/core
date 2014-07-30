@@ -7,11 +7,11 @@ var DomainsSchema = new Schema({
   domainName: String,
   domainPid: Number,
   domainInstances: [{
+    instanceRegion:String,
     instanceId: String,
     instanceIP: String,
     instanceRole: String,
     instanceState: String,
-    instanceActive: Boolean,
     bootStrapStatus: String,
     bootStrapLog: {
       err: Boolean,

@@ -161,7 +161,7 @@ display: none;
     <label for="devopsRoleRegionMenu">
       AWS Region
     </label>
-    <select class="devopsRoleRegionMenu">
+    <select id="devopsRolesAwsRegion<%=rolesSelected[keys[j]].cid%>" class="devopsRoleRegionMenu">
       <option selected="" value="Choose">
         Choose
       </option>
@@ -197,7 +197,7 @@ display: none;
     <label for="">
       Security Group
     </label>
-    <select class="securityGroupMenu">
+    <select id="devopsRolesSecurityGroup<%=rolesSelected[keys[j]].cid%>"  class="securityGroupMenu">
       
     </select>
     <span class="loadingContainer"></span>
@@ -208,7 +208,7 @@ display: none;
     <label for="numberOfInstance">
       Choose number of Instances
     </label>
-    <select class="numberOfInstance">
+    <select id="devopsRolesNumberOfInstance<%=rolesSelected[keys[j]].cid%>" class="numberOfInstance">
       <option selected="" value="1">
         1
       </option>
@@ -243,11 +243,11 @@ display: none;
   </div>
   
   <div class="form-group staticConfigContainer">
-    <label for="sizeData">
+    <label for="devopsRolesinstanceType">
       Choose Instance Size
     </label>
-    <select class="sizeData">
-      <option selected="" value="micro">
+    <select id="devopsRolesInstanceType<%=rolesSelected[keys[j]].cid%>" class="devopsRolesinstanceType">
+      <option selected="" value="t1.micro">
         t1.micro
       </option>
       <option value="m1.small">
@@ -393,6 +393,17 @@ display: none;
                $('#'+keys[i]+' :selected').each(function(k, selected){ 
                 selectedInstances[keys[i]].runlistSelected[k] = $(selected).val(); 
                });
+
+               selectedInstances[keys[i]].awsRegion = $('#devopsRolesAwsRegion'+keys[i]).val();
+               selectedInstances[keys[i]].awsSecurityGroupId = $('#devopsRolesSecurityGroup'+keys[i]).val();
+               selectedInstances[keys[i]].numberOfInstances = $('#devopsRolesNumberOfInstance'+keys[i]).val();
+               selectedInstances[keys[i]].instanceType = $('#devopsRolesInstanceType'+keys[i]).val();
+               
+               
+
+                
+
+
             }            
 
             console.log(selectedInstances);
