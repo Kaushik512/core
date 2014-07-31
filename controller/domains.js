@@ -288,6 +288,32 @@ module.exports.updateInstanceState = function(domainName, instanceId, instanceSt
   });
 }
 
+module.exports.getdDomainInstance = function(pid, domainName, instanceId, callback) {
+  var queryObj = {
+    domainName: domainName,
+    domainPid: pid,
+    "domainInstances.instanceId": instanceId,
+  };
+
+  console.log('query == > ', queryObj);
+
+
+  Domains.find(queryObj, {
+    domainInstances: {
+      $elemMatch: {
+        instanceId: instanceId
+      }
+    }
+  }, function(err, data) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+}
+
 
 module.exports.getAppFactoryInstance = function(pid, domainName, instanceId, callback) {
   var queryObj = {

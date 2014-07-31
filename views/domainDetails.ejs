@@ -738,7 +738,7 @@ function getCFCardHeadingHtml(role) {
                  classInstanceStatus = 'instance-active';
                }
               %>
-              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%>"><%=instances[j].instanceState%></span> </span>
+              <span class="instance-details-item"> Instance : <span class="<%=classInstanceStatus%> instanceState"><%=instances[j].instanceState%></span> </span>
               
               </div>
               <div class="instance-bootstrap-list">
@@ -755,9 +755,9 @@ function getCFCardHeadingHtml(role) {
 
                <%if(instances[j].instanceState !== 'terminated' || instances[j].instanceState !== 'shutting-down') {%>
                <div class="instanceActionControlConatiner" data-pid="<%=domain.domainPid%>" data-domainName="<%=domain.domainName%>" data-instanceRegion="<%=instances[j].instanceRegion%>" data-instanceId="<%=instances[j].instanceId%>" >
-               <span title="Start" class="instanceActionControl"><i class="fa fa-play"></i></span>
-               <span title="Stop" class="instanceActionControl"><i class="fa fa-stop"></i></span>
-               <span title="Terminate" class="instanceActionControl"><i class="fa fa-power-off"></i></span>
+               <span title="Start" class="devopsRolesStartInstance instanceActionControl"><i class="fa fa-play"></i></span>
+               <span title="Stop" class="devopsRolesStopInstance instanceActionControl"><i class="fa fa-stop"></i></span>
+               <span title="Terminate" class=" devopsRolesTerminateInstance instanceActionControl"><i class="fa fa-power-off"></i></span>
                </div>
                <%}%>
 
@@ -886,6 +886,53 @@ function getCFCardHeadingHtml(role) {
 </div>
 <%}}%>
 <script type="text/javascript">
+
+$('.devopsRolesStartInstance').click(function(e){
+  var $this = $(this);
+  var reqBody = {}; 
+  reqBody.instanceId = $this.parent().attr('data-instanceId');
+  reqBody.instanceRegion = $this.parent().attr('data-instanceRegion');
+  reqBody.pid = $this.parent().attr('data-pid');
+  reqBody.domainName = $this.parent().attr('data-domainName');
+  
+  $.post("/providers/devopsRoles/startInstance",reqBody,function(data){
+    $this.parents('.domain-roles-caption').find('.instanceState').html(data).removeClass('instance-inactive').addClass('instance-active');
+  });
+  
+});
+
+$('.devopsRolesStopInstance').click(function(e){
+
+  var $this = $(this);
+  var reqBody = {}; 
+  reqBody.instanceId = $this.parent().attr('data-instanceId');
+  reqBody.instanceRegion = $this.parent().attr('data-instanceRegion');
+  reqBody.pid = $this.parent().attr('data-pid');
+  reqBody.domainName = $this.parent().attr('data-domainName');
+  
+  $.post("/providers/devopsRoles/stopInstance",reqBody,function(data){
+    $this.parents('.domain-roles-caption').find('.instanceState').html(data).removeClass('instance-active').addClass('instance-inactive');
+  });
+
+});
+
+$('.devopsRolesTerminateInstance').click(function(e){
+   var $this = $(this);
+  var reqBody = {}; 
+  reqBody.instanceId = $this.parent().attr('data-instanceId');
+  reqBody.instanceRegion = $this.parent().attr('data-instanceRegion');
+  reqBody.pid = $this.parent().attr('data-pid');
+  reqBody.domainName = $this.parent().attr('data-domainName');
+  
+  $.post("/providers/devopsRoles/terminateInstance",reqBody,function(data){
+    $this.parents('.domain-roles-caption').find('.instanceState').html(data).removeClass('instance-active').addClass('instance-inactive');
+    
+
+  });
+
+});
+
+
 
 $('.appFactStartInstance').click(function(e){
   var $this = $(this);

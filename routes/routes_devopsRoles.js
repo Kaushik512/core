@@ -297,13 +297,189 @@ module.exports.setRoutes = function(app, verifySession) {
 		});
 	});
 
-	app.post('/providers/:pid/roles/stopInstance', verifySession, function(req, res) {
+	app.post('/providers/devopsRoles/stopInstance', verifySession, function(req, res) {
+
+		domainsDao.getdDomainInstance(req.body.pid, req.body.domainName, req.body.instanceId, function(err, data) {
+			if (err) {
+				console.log(err);
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].domainInstances.length) {
+				var instance = data[0].domainInstances[0];
+				settingsController.getAwsSettings(function(settings) {
+					settings.region = instance.instanceRegion;
+					var ec2 = new EC2(settings);
+					ec2.stopInstance([instance.instanceId], function(err, stoppingInstances) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+
+						domainsDao.updateInstanceState(req.body.domainName, instance.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateData) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						function checkInstanceStatus(statusToCheck, delay) {
+							var timeout = setTimeout(function() {
+								ec2.getInstanceState(instance.instanceId, function(err, instanceState) {
+									if (err) {
+										console.log('Unable to get instance state', err);
+										return;
+									}
+									if (statusToCheck === instanceState) {
+										domainsDao.updateInstanceState(req.body.domainName, instance.instanceId, instanceState, function(err, updateData) {
+											if (err) {
+												console.log("update instance state err ==>", err);
+												return;
+											}
+											console.log('instance state upadated to ' + instanceState);
+										});
+									} else {
+										checkInstanceStatus('stopped', 5000);
+									}
+								});
+							}, delay);
+						}
+						checkInstanceStatus('stopped', 1);
+
+
+						res.send(stoppingInstances[0].CurrentState.Name)
+
+					});
+				});
+
+
+
+			} else {
+				res.send(404);
+			}
+
+		});
 
 	});
-	app.post('/providers/:pid/roles/startInstance', verifySession, function(req, res) {
+	app.post('/providers/devopsRoles/startInstance', verifySession, function(req, res) {
+
+		domainsDao.getdDomainInstance(req.body.pid, req.body.domainName, req.body.instanceId, function(err, data) {
+			if (err) {
+				console.log(err);
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].domainInstances.length) {
+				var instance = data[0].domainInstances[0];
+				settingsController.getAwsSettings(function(settings) {
+					settings.region = instance.instanceRegion;
+					var ec2 = new EC2(settings);
+					ec2.startInstance([instance.instanceId], function(err, startingInstances) {
+						if (err) {
+							res.send(500);
+							return;domainInstances
+						}
+
+						domainsDao.updateInstanceState(req.body.domainName, instance.instanceId, startingInstances[0].CurrentState.Name, function(err, updateData) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						function checkInstanceStatus(statusToCheck, delay) {
+							var timeout = setTimeout(function() {
+								ec2.getInstanceState(instance.instanceId, function(err, instanceState) {
+									if (err) {
+										console.log('Unable to get instance state', err);
+										return;
+									}
+									if (statusToCheck === instanceState) {
+										domainsDao.updateInstanceState(req.body.domainName, instance.instanceId, instanceState, function(err, updateData) {
+											if (err) {
+												console.log("update instance state err ==>", err);
+												return;
+											}
+											console.log('instance state upadated to ' + instanceState);
+										});
+									} else {
+										checkInstanceStatus(statusToCheck, 5000);
+									}
+								});
+							}, delay);
+						}
+						checkInstanceStatus('running', 1);
+						res.send(startingInstances[0].CurrentState.Name)
+					});
+				});
+
+			} else {
+				res.send(404);
+			}
+
+		});
 
 	});
-	app.post('/providers/:pid/roles/restartInstance', verifySession, function(req, res) {
+	app.post('/providers/devopsRoles/terminateInstance', verifySession, function(req, res) {
+
+		domainsDao.getdDomainInstance(req.body.pid, req.body.domainName, req.body.instanceId, function(err, data) {
+			if (err) {
+				console.log(err);
+				res.send(500);
+				return;
+			}
+			if (data.length && data[0].domainInstances.length) {
+				var instance = data[0].domainInstances[0];
+				settingsController.getAwsSettings(function(settings) {
+					settings.region = instance.instanceRegion;
+					var ec2 = new EC2(settings);
+					ec2.terminateInstance(instance.instanceId, function(err, terminatingInstance) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+
+						domainsDao.updateInstanceState(req.body.domainName, instance.instanceId, terminatingInstance.CurrentState.Name, function(err, updateData) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						function checkInstanceStatus(statusToCheck, delay) {
+							var timeout = setTimeout(function() {
+								ec2.getInstanceState(instance.instanceId, function(err, instanceState) {
+									if (err) {
+										console.log('Unable to get instance state', err);
+										return;
+									}
+									if (statusToCheck === instanceState) {
+										domainsDao.updateInstanceState(req.body.domainName, instance.instanceId, instanceState, function(err, updateData) {
+											if (err) {
+												console.log("update instance state err ==>", err);
+												return;
+											}
+											console.log('instance state upadated to ' + instanceState);
+										});
+									} else {
+										checkInstanceStatus(statusToCheck, 5000);
+									}
+								});
+							}, delay);
+						}
+						checkInstanceStatus('terminated', 1);
+						res.send(terminatingInstance.CurrentState.Name)
+					});
+				});
+
+			} else {
+				res.send(404);
+			}
+
+		});
 
 	});
 	app.post('/providers/:pid/roles/terminateInstance', verifySession, function(req, res) {
