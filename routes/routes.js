@@ -14,6 +14,8 @@ var userRoles = require('./routes_userroles');
 var docker = require('./routes_docker');
 var ec2_routes = require('./routes_aws_ec2');
 
+var blueprints = require('./routes_blueprints')
+
 
 
 module.exports.setRoutes = function(app) {
@@ -21,6 +23,11 @@ module.exports.setRoutes = function(app) {
   var verificationFunctions = auth.setRoutes(app);
   var sessionVerificationFunc = verificationFunctions.sessionVerificationFunc;
   var adminSessionVerificationFunc = verificationFunctions.adminSessionVerificationFunc;
+  
+  blueprints.setRoutes(app,sessionVerificationFunc);
+  
+
+  /* 
   provider.setRoutes(app, sessionVerificationFunc);
   chef.setRoutes(app, sessionVerificationFunc);
   domains.setRoutes(app, sessionVerificationFunc);
@@ -35,5 +42,6 @@ module.exports.setRoutes = function(app) {
   userRoles.setRoutes(app, adminSessionVerificationFunc);
   docker.setRoutes(app,sessionVerificationFunc);
   ec2_routes.setRoutes(app,sessionVerificationFunc);
+  */
 
 }
