@@ -6,7 +6,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 	//app.all('/project', sessionVerificationFunc);
 
 	app.get('/project/:projectId/env/:envId/blueprints', function(req, res) {
-		blueprintsDao.getBlueprintsByProjectAndEnvId(req.params.projectId, req.params.envId, function(err, data) {
+		blueprintsDao.getBlueprintsByProjectAndEnvId(req.params.projectId, req.params.envId,req.query.blueprintType, function(err, data) {
 			if (err) {
 				res.send(500);
 				return;
@@ -38,11 +38,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 				res.send(500);
 				return;
 			}
-			if(!data.length) {
+			
+			if(!data) {
 				res.send(404)
 			} else {
-			  console.log(data);	  
-			  res.send(data);	
+			  res.send({
+			  	documentsUpdated:data
+			  });	
 			}
 			
 		});

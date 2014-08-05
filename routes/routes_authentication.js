@@ -11,8 +11,9 @@ module.exports.setRoutes = function(app) {
 			var ldapClient = new LdapClient();
 			ldapClient.authenticate(req.body.username, req.body.pass, function(err, user) {
 				if (err) {
-
-					res.redirect('/login');
+                     
+                    res.send(403);  
+					//res.redirect('/login');
 
 				} else {
 					console.log(user);
@@ -28,7 +29,8 @@ module.exports.setRoutes = function(app) {
 							};
 							user.roleName = 'Admin';
 							console.log(req.session.user);
-							res.redirect('/user/admin');
+							//res.redirect('/user/admin');
+							res.send(200);
 						} else {
 							usersDao.getUser(user.cn, function(err, data) {
 								if (data.length) {
@@ -43,7 +45,8 @@ module.exports.setRoutes = function(app) {
 											if (roleData.length) {
 												user.roleName = roleData[0].name;
 												user.permissions = roleData[0].permissions;
-												res.redirect('/');
+												//res.redirect('/');
+												res.send(200);
 											} else {
 												res.send(500);
 											}
@@ -65,7 +68,7 @@ module.exports.setRoutes = function(app) {
 
 	app.get('/auth/signout', function(req, res) {
 		req.session = null;
-		res.redirect('/login');
+		res.send(200);
 	});
 
 
@@ -77,7 +80,8 @@ module.exports.setRoutes = function(app) {
 		if (req.session && req.session.user) {
 			next();
 		} else {
-			res.redirect('/login');
+			//res.redirect('/login');
+			res.send(403)
 		}
 	};
 
@@ -89,7 +93,7 @@ module.exports.setRoutes = function(app) {
 				res.send(403);
 			}
 		} else {
-			res.redirect('/login');
+			res.send(403);
 		}
 	}
 

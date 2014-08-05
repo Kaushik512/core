@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var ObjectId = require('mongoose').Types.ObjectId; 
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var Schema = mongoose.Schema;
 
@@ -50,21 +50,27 @@ var BlueprintsDao = function() {
 	this.getBlueprintById = function(blueprintId, callback) {
 		console.log(blueprintId);
 		Blueprint.find({
-			_id: new ObjectId(blueprintId)
+			"_id": new ObjectId(blueprintId)
 		}, function(err, data) {
 			if (err) {
 				callback(err, null);
 				return;
 			}
+			console.log('data ==>', data);
 			callback(null, data);
+
 		});
 	}
 
-	this.getBlueprintsByProjectAndEnvId = function(projectId, envId, callback) {
-		Blueprint.find({
+	this.getBlueprintsByProjectAndEnvId = function(projectId, envId, blueprintType, callback) {
+		var queryObj = {
 			projectId: projectId,
 			envId: envId
-		}, function(err, data) {
+		}
+		if (blueprintType) {
+           queryObj.templateType = blueprintType;
+		}
+		Blueprint.find(queryObj, function(err, data) {
 			if (err) {
 				callback(err, null);
 				return;
@@ -107,10 +113,11 @@ var BlueprintsDao = function() {
 				return;
 			}
 			if (data.length) {
+				console.log('updating');
 				var latestVersion = data[0].latestVersion;
-				var newVersion = generateBlueprintVersionNumber(newVersion);
+				var newVersion = generateBlueprintVersionNumber(latestVersion);
 				Blueprint.update({
-					id: blueprintId,
+					"_id": new ObjectId(blueprintId)
 				}, {
 					$set: {
 						latestVersion: newVersion
@@ -132,7 +139,7 @@ var BlueprintsDao = function() {
 					callback(null, updatedData);
 				});
 			} else {
-				callback(null, []);
+				callback(null, 0);
 			}
 		});
 	}
