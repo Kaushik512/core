@@ -1,0 +1,417 @@
+<script>
+    $(".login-info").hide();
+</script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <div class="widget-box">
+                <div class="widget-header"><h4 style="color:black;">Create Organization</h4></div>
+                <div class="widget-body">
+                    <div class="widget-main" style="min-height:300px">
+                        <div>
+
+                            <section id="widget-grid" class="">
+                                <!-- START ROW -->
+                                <div class="row">
+                                    <!-- NEW COL START -->
+                                    <article class="col-sm-12 col-md-12 col-lg-12">
+                                                                                                    
+                                        <!-- Widget ID (each widget will need unique ID)-->
+                                        <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                                            
+                                            <!-- widget div-->
+                                            <div>
+
+                                                <!-- widget content -->
+                                                <div class="widget-body no-padding">
+                                                    
+                                                    <form action="" class="smart-form" novalidate="novalidate">
+                                                        
+
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></span>
+                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
+                                                                    </label>
+                                                                    <label class="input"> <i class="icon-append fa fa-building"></i>
+                                                                        <input name="ctl00$MainContent$orgname" value="Default Organization" id="orgname" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input id="orgid" type="hidden" />
+                                                                    </label>
+                                                                    
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label for="category">Domain Name</label>
+                                                                    <label class="input"> <i class="icon-append fa fa-eye"></i>
+                                                                        <input name="ctl00$MainContent$domainname" value="Default Domain" id="domainname" class="form-control" type="text"><span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                            
+
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">Logo</label>
+                                                                    <label for="file" class="input input-file">
+                                                                    <div class="imgdiv" value="1"></div>
+                                                                    <div class="button"><input id="organizationLogoFileInput" type="file" onchange="this.parentNode.nextSibling.value = this.value">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                    </label>
+                                                                 </section>
+                                                                <section class="col col-6">
+                                                                    <div class="form-group">
+                                                                        <label for="h-input">Costcode (Type and enter to add Costcode)
+                                                                        </label><div class="input-group">
+	<input name="ctl00$MainContent$costcode" value="" id="costcode" class="form-control" type="text" datavalues="codelistitem" targetelement="codelistitems">
+                                                                        <span class="input-group-addon" style="padding:1px !important;">
+                                                <!--<button class="btn btn-sm pull-left" type="button">
+                                                                    Choose
+                        </button>-->
+
+
+                                                <input type="button" class="btn btn-sm btn-info" title="Check to add to list" style="width:53px" value="Add" onclick="addToCodeList();" />
+                                            </span>
+                                            </div>                        
+											<div id="codelistitems" class="input-group from-control col-md-12" style="height:200px;overflow-y:auto;">
+
+
+                                        </div>
+</div>
+                                                                 </section>
+                                                            </div>  
+                                                                    
+
+                                                        </fieldset>   
+                                                                
+                                                    </form>
+
+                                                </div>
+                                                <!-- end widget content -->
+                                                
+                                            </div>
+                                            <!-- end widget div -->
+                                            
+                                        </div>
+                                        <!-- end widget -->             
+
+                                    </article>
+                                    <!-- END COL -->
+                                </div>
+                                <!-- END ROW -->
+                            </section>
+                            <!-- end widget grid -->
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget-toolbox clearfix">
+                       <div class="btn-group pull-right">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm())saveform('Organization');">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                             Save
+                        </button>
+                        <button class="btn btn-primary btn-mini" onclick="window.history.back();">
+                           <i class="ace-icon fa fa-undo bigger-110"></i>
+                            Cancel 
+                        </button>
+                        </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    //Form Name
+
+
+    function inLineReady() {
+        $("input[type='text']").on("click", function () {
+            $(this).select();
+            $("#msgOrgName").hide()
+        });
+        readform('Organization');
+    }
+    function readform(formName) {
+        var formData = null;
+
+      //  alert("before d4d" + JSON.stringify(d4ddata));
+        readMasterJson(1);
+       // alert("after d4d" + JSON.stringify(d4ddata));
+
+       /* $.each(d4ddata.sections.section, function (i, item) {
+            if (item.name == formName) {
+                formData = item;
+            }
+        });*/
+        // alert(JSON.stringify(formData));
+        //Reading row to get schema
+        alert('here');
+        formData = d4ddata.masterjson;
+
+        var formSchema = null;
+        var orgName = url.substr(url.indexOf("?") + 1);
+        alert( JSON.stringify(formData));
+        var editMode = false;
+        $.each(formData.rows.row, function (i, item) {
+            // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
+            if (item.field[0].values.value.toLowerCase() == orgName.toLowerCase()) {
+                formSchema = item.field;
+                editMode = true;
+                return (false);
+            }
+            formSchema = item.field;
+        });
+        if (editMode == false)
+            return;
+         alert(JSON.stringify(formSchema));
+        //Read current form values with the field names
+        var formSchemaNew = formSchema;
+
+        $.each(formSchemaNew, function (i, item) {
+            var inputC = null;
+            debugger;
+            $.each(item, function (k, v) {
+                if (k == "name") {
+                    inputC = $("#" + v);
+                }
+            });
+            $.each(item, function (k, v) {
+                if (k == "values") {
+                    if (inputC) {
+                        $.each(v, function (k1, v1) {
+                            debugger;
+                            if (inputC.getType().toLowerCase() == "text") {
+                                alert(inputC.attr("datavalues"));
+                                if (inputC.attr("datavalues")) {
+                                    //var array = v[k1].split(",");
+                                    $.each(v[k1], function (i) {
+                                        addToCodeList(v[k1][i]);
+                                    });
+                                }
+                                else
+                                    inputC.val(v[k1]);
+
+                            }
+                            if (inputC.getType().toLowerCase() == "file") {
+                                //  v[k1]
+                            }
+                            if (inputC.getType().toLowerCase() == "hidden") {
+                                inputC.val(getUUID());
+                            }
+                        });
+                    }
+                    inputC = null;
+                }
+            });
+        });
+    }
+    $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+    function readMasterJson(section) {
+
+        $.ajax({
+            type: "get",
+            dataType: "text",
+
+            async: false,
+            url: "http://localhost:5000/readmasterjson/" + section,
+            success: function (data) {
+                // alert(data.toString());   
+                d4ddata = JSON.parse(data);
+            },
+            failure: function (data) {
+                alert(data.toString());
+            }
+        });
+        return (d4ddata);
+    }
+
+    function saveform(formName) {
+       // debugger;
+        $(".savespinner").show();
+     //   $('.widget-box').css('opacity', '0.1');
+        //To Do SAve...
+        // var d4djson = $.parseJSON(d4ddata);
+        // alert(d4ddata.sections.section[0].name);
+        var formData = null;
+        alert("before d4d" + d4ddata);
+        readMasterJson(1);
+        alert("after d4d" + d4ddata);
+      /*  $.each(d4ddata.sections.section, function (i, item) {
+
+            if (item.name == formName) {
+                formData = item;
+            }
+        });*/
+        // alert(JSON.stringify(formData));
+        //Reading row to get schema
+        var formSchema = null;
+        var orgName = url.substr(url.indexOf("?") + 1);
+        alert(orgName);
+        var editMode = false;
+
+        formData = d4ddata.masterjson;
+
+        $.each(formData.rows.row, function (i, item) {
+            // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
+            if (item.field[0].values.value.toLowerCase() == orgName.toLowerCase()) {
+                formSchema = item.field;
+                editMode = true;
+                return (false);
+            }
+            formSchema = item.field;
+        });
+        // alert(JSON.stringify(formSchema));
+        //Read current form values with the field names
+        var formSchemaNew = null;
+        if (editMode == false)
+            formSchemaNew = JSON.parse(JSON.stringify(formSchema));
+        else
+            formSchemaNew = formSchema;
+        $.each(formSchemaNew, function (i, item) {
+            var inputC = null;
+            $.each(item, function (k, v) {
+                if (k == "name") {
+                    inputC = $("#" + v);
+
+                }
+                if (k == "values") {
+                    if (inputC) {
+                        $.each(v, function (k1, v1) {
+                            if (inputC.getType().toLowerCase() == "text") {
+                                //alert(inputC.attr("datavalues"));
+                                if (inputC.attr('datavalues')) {
+
+                                    var itms = '';
+
+                                    v1.splice(0, v1.length);
+                                    $('.' + inputC.attr('datavalues')).each(function () {
+                                        v1.push($(this).text());
+                                    });
+                                    //  alert(v1.length);
+
+                                    // v[k1] = '';
+                                    //   v[k1].push(v1);
+                                }
+                                else
+                                    v[k1] = inputC.val();
+                            }
+                            if (inputC.getType().toLowerCase() == "file") {
+                                v[k1] = inputC.files[0].name;
+                            }
+                        });
+
+                    }
+                    inputC = null;
+                }
+
+            });
+
+        });
+        if (editMode == false)
+            formData.rows.row.push(JSON.parse('{\"field\":' + JSON.stringify(formSchemaNew) + '}'));
+        //alert(JSON.stringify(formData).replace(/\./gi, "$dot$"));
+        //Call the nodejs to save the json
+        $.ajax({
+            type: "post",
+            dataType: "application/json",
+            data: formData,
+            async: false,
+            url: "http://localhost:5000/savemasterjson/1",
+            success: function (data) {
+                alert(data.toString());
+            },
+            failure: function (data) {
+                alert(data.toString());
+            }
+        }); 
+
+        $(".savespinner").hide();
+    }
+    function addToCodeList() {
+
+        var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px\'></i>";
+        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+        if ($('#costcode').val() != '') {
+            $('#codelistitems').append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important\'><p class=\'bg-success\'>' + imgCheck + $('#costcode').val() + imgDed + '</p></div>'); $('#costcode').val('');
+            $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
+            $('#costcode').focus();
+        }
+    }
+    function addToCodeList(txtVal) {
+
+        if (typeof (txtVal) == "undefined" && $('#costcode').val() != '')
+            txtVal = $('#costcode').val();
+
+        var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px\'></i>";
+        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+        if (txtVal != '') {
+            $('#codelistitems').append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;\'><p class=\'bg-success\'>' + imgCheck + txtVal + imgDed + '</p></div>');
+            $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
+            $('#costcode').focus();
+        }
+        $('#costcode').val('');
+    }
+    function removeFromCodeList(btn) {
+        if (confirm('Are you sure you wish to remove this Cost Code?')) {
+            var closestDiv = $(btn).closest('div');
+            closestDiv.detach();
+        }
+    }
+    function validateForm() {
+        //Check for required parameter
+        $('#orgname').each(function () {
+            if ($(this).val() == '') {
+                $("#msgOrgName").show();
+                retun(false);
+            }
+        });
+        return (true);
+    }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imgLogoPreview = "<img src='" + e.target.result + "' style='border:0px;height:25px;width:28px'/>";
+                $('#logoPreview').empty();
+                $('#logoPreview').append(imgLogoPreview);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#id-input-file-2").change(function () {
+        readURL(this);
+        $(".ace-file-name").attr('data-title', '');
+        $(".ace-file-name").html('<i class=" ace-icon fa fa-upload"></i>' + this.files[0].name);
+
+    });
+
+    function getUUID() {
+        var uuid = '';
+        $.ajax({
+            type: "get",
+            dataType: "text",
+
+            async: false,
+            url: "http://localhost:5000/getuuid",
+            success: function (data) {
+                // alert(data.toString());  
+                // debugger;
+                //d4ddata = JSON.parse(data);
+                //alert(JSON.parse(data));
+                uuid = data;
+            },
+            failure: function (data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (uuid);
+    }
+
+    inLineReady();
+</script>

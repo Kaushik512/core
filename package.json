@@ -15,7 +15,8 @@
     "net-ping":"1.1.9",
     "node.extend":"*",
     "ldapjs":"0.7.1",
-    "connect-redis": "1.4.x"
+    "connect-redis": "1.4.x",
+    "node-uuid":"*"
   },
   "devDependencies": {},
   "scripts": {

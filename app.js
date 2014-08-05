@@ -43,7 +43,7 @@ app.use(express.session({
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 

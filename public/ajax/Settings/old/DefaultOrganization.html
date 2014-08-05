@@ -1,0 +1,184 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- START ROW -->
+
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                <!-- widget options:
+                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="true"
+                data-widget-sortable="false"
+
+                -->
+                <header>
+                    
+                </header>
+                <!--<form class="form-horizontal" id="fuelux-wizard" method="post">
+
+                            <div class="step-pane active" id="step1">
+                                <h3><strong>Step 1 </strong> - Create Organization</h3>
+
+                                <!-- wizard form starts here --
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4" style="font-size:15px;">Organization Name</label>
+                                        <div class="col-md-6">                                          
+                                                
+                                            <div class="input-icon-left">
+                                                <i class="fa fa-building"></i>
+                                                <input class="form-control" placeholder="Default Organization" type="text">
+                                            </div>
+                                        </div>
+                                        <!--<label class="control-label col-md-4" style="font-size:15px;"></label>
+                                        <div class="col-md-6" style="padding-top:10px">                         <a class="btn btn-primary">Create Organization</a>
+                                        </div>--
+                                </fieldset>
+
+                            </div>
+                        </form>
+
+                <!-- widget div-->
+                <div>
+
+                    
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+
+                        <form action="" class="smart-form">
+                           
+                            
+
+                            <fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                
+                                <input type="button" value="Add Row" onclick="addRow('dataTable')" />
+
+                                <table id="dataTable" class="table table-bordered smart-form">
+                                    <thead>
+                                        <tr>
+                                            <th>Number of Organization</th>
+                                            <th>Name of Organization</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tr>
+
+                                        <td>
+                                            1
+                                        </td>
+
+                                        <td>
+
+                                            <input type="text" class="form-control"/>
+                                        </td>
+                                        <td>
+                                            <input type="button" value="Edit"/>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+                            
+                            </fieldset>
+
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    Save
+                                </button>
+                                <button type="button" class="btn btn-default" onclick="window.history.back();">
+                                    Cancel
+                                </button>
+                            </footer>
+                        </form>
+
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+</section>
+<!-- end widget grid -->
+
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    pageSetUp();
+
+    // PAGE RELATED SCRIPTS
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+
+        function addRow(tableID) {
+
+            var table = document.getElementById(tableID);
+
+            var rowCount = table.rows.length;
+
+            var row = table.insertRow(rowCount);
+
+            var firstCell = row.insertCell(0);
+
+            firstCell.innerHTML = rowCount ;
+
+            var secondCell = row.insertCell(1);
+
+            var element = document.createElement("input");
+
+            element.type = "text";
+
+            element.name = "txtbox[]";
+
+            secondCell.appendChild(element);
+
+
+
+            var thirdCell = row.insertCell(2);
+
+            var element = document.createElement("input");
+
+            element.type = "button";
+
+            element.value = "Edit";
+
+            thirdCell.appendChild(element);
+
+        }
+
+    </script>

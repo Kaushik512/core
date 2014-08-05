@@ -14,18 +14,28 @@ var userRoles = require('./routes_userroles');
 var docker = require('./routes_docker');
 var ec2_routes = require('./routes_aws_ec2');
 
-var blueprints = require('./routes_blueprints')
+var d4dMasters = require('./routes_d4dMasters');
+var blueprints = require('./routes_blueprints');
 
 
 
 module.exports.setRoutes = function(app) {
 
+
+  app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+  });
+
+
   var verificationFunctions = auth.setRoutes(app);
   var sessionVerificationFunc = verificationFunctions.sessionVerificationFunc;
   var adminSessionVerificationFunc = verificationFunctions.adminSessionVerificationFunc;
-  
-  blueprints.setRoutes(app,sessionVerificationFunc);
-  
+
+  d4dMasters.setRoutes(app, adminSessionVerificationFunc);
+  blueprints.setRoutes(app, sessionVerificationFunc);
+
 
   /* 
   provider.setRoutes(app, sessionVerificationFunc);

@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sections>
+  <section>
+    <name>Organization</name>
+    <rows>
+      <row>
+        <field>
+          <name>orgname</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+        <field>
+          <name>domainname</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+       <field>
+          <name>logo</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+        <field>
+          <name>costcode</name>
+          <values>
+            <value>Dev</value>
+            <value>Test</value>
+            <value>Stage</value>
+          </values>
+        </field>
+      </row>
+      <row>
+        <field>
+          <name>orgname</name>
+          <values>
+            <value>org 2</value>
+          </values>
+        </field>
+        <field>
+          <name>domainname</name>
+          <values>
+            <value>www.scholastic.com</value>
+          </values>
+        </field>
+       <field>
+          <name>logo</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+        <field>
+          <name>costcode</name>
+          <values>
+            <value>Dev 2</value>
+            <value>Test 2</value>
+            <value>Stage 2</value>
+          </values>
+        </field>
+      </row>
+    </rows>
+  </section>
+<section>
+    <name>Groups</name>
+    <rows>
+      <row>
+        <field>
+          <name>Groupname</name>
+          <values>
+            <value>Group 1</value>
+          </values>
+        </field>
+        <field>
+          <name>description</name>
+          <values>
+            <value>this is a test group</value>
+          </values>
+        </field>
+       <field>
+          <name>GroupLogo</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+        <field>
+          <name>Org</name>
+          <values>
+            <value>Dev</value>
+            <value>Test</value>
+            <value>Stage</value>
+          </values>
+        </field>
+      </row>
+      <row>
+        <field>
+          <name>Groupname</name>
+          <values>
+            <value>org 2</value>
+          </values>
+        </field>
+        <field>
+          <name>domain</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+       <field>
+          <name>logo 2</name>
+          <values>
+            <value></value>
+          </values>
+        </field>
+        <field>
+          <name>costcode</name>
+          <values>
+            <value>Dev 2</value>
+            <value>Test 2</value>
+            <value>Stage 2</value>
+          </values>
+        </field>
+      </row>
+    </rows>
+  </section>
+</sections>

@@ -26,7 +26,6 @@ var BlueprintSchema = new Schema({
 
 var Blueprint = mongoose.model('blueprints', BlueprintSchema);
 
-
 function generateBlueprintVersionNumber(prevVersion) {
 	if (!prevVersion) {
 		return "0.1";
