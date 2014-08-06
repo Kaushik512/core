@@ -70,7 +70,7 @@ module.exports.setRoutes = function(app) {
 
 
 	app.get('/auth/signout', function(req, res) {
-		req.session = null;
+		req.session.destroy();
 		//res.send(200);
 		res.redirect('/public/login.html');
 	});

@@ -1,5 +1,6 @@
 <script>
     $(".login-info").hide();
+    $('.breadcrumb').hide();
 </script>
 <div class="row">
     <div class="col-md-12">
@@ -150,12 +151,12 @@
         });*/
         // alert(JSON.stringify(formData));
         //Reading row to get schema
-        alert('here');
+        //alert('here');
         formData = d4ddata.masterjson;
 
         var formSchema = null;
         var orgName = url.substr(url.indexOf("?") + 1);
-        alert( JSON.stringify(formData));
+       // alert( JSON.stringify(formData));
         var editMode = false;
         $.each(formData.rows.row, function (i, item) {
             // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
@@ -168,13 +169,13 @@
         });
         if (editMode == false)
             return;
-         alert(JSON.stringify(formSchema));
+        // alert(JSON.stringify(formSchema));
         //Read current form values with the field names
         var formSchemaNew = formSchema;
 
         $.each(formSchemaNew, function (i, item) {
             var inputC = null;
-            debugger;
+           // debugger;
             $.each(item, function (k, v) {
                 if (k == "name") {
                     inputC = $("#" + v);
@@ -184,9 +185,9 @@
                 if (k == "values") {
                     if (inputC) {
                         $.each(v, function (k1, v1) {
-                            debugger;
+                           // debugger;
                             if (inputC.getType().toLowerCase() == "text") {
-                                alert(inputC.attr("datavalues"));
+                             //   alert(inputC.attr("datavalues"));
                                 if (inputC.attr("datavalues")) {
                                     //var array = v[k1].split(",");
                                     $.each(v[k1], function (i) {
@@ -218,7 +219,7 @@
             dataType: "text",
 
             async: false,
-            url: "http://localhost:5000/readmasterjson/" + section,
+            url: "/d4dMasters/readmasterjson/" + section,
             success: function (data) {
                 // alert(data.toString());   
                 d4ddata = JSON.parse(data);
@@ -238,9 +239,9 @@
         // var d4djson = $.parseJSON(d4ddata);
         // alert(d4ddata.sections.section[0].name);
         var formData = null;
-        alert("before d4d" + d4ddata);
+    //    alert("before d4d" + d4ddata);
         readMasterJson(1);
-        alert("after d4d" + d4ddata);
+    //    alert("after d4d" + d4ddata);
       /*  $.each(d4ddata.sections.section, function (i, item) {
 
             if (item.name == formName) {
@@ -251,7 +252,7 @@
         //Reading row to get schema
         var formSchema = null;
         var orgName = url.substr(url.indexOf("?") + 1);
-        alert(orgName);
+     //   alert(orgName);
         var editMode = false;
 
         formData = d4ddata.masterjson;
@@ -321,9 +322,9 @@
             dataType: "application/json",
             data: formData,
             async: false,
-            url: "http://localhost:5000/savemasterjson/1",
+            url: "/d4dMasters/savemasterjson/1",
             success: function (data) {
-                alert(data.toString());
+              //  alert(data.toString());
             },
             failure: function (data) {
                 alert(data.toString());
@@ -397,7 +398,7 @@
             dataType: "text",
 
             async: false,
-            url: "http://localhost:5000/getuuid",
+            url: "/d4dMasters/getuuid",
             success: function (data) {
                 // alert(data.toString());  
                 // debugger;

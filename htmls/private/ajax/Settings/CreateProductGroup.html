@@ -203,7 +203,7 @@
             type: "Get",
             datatype: "text",
             async: false,
-            url: "http://localhost:5000/readmasterjson/" + section,
+            url: "/d4dMasters/readmasterjson/" + section,
             success: function (data) {
                 d4ddata = JSON.parse(data);
                 //return (retJson);
@@ -222,7 +222,7 @@
             dataType: "text",
 
             async: false,
-            url: "http://localhost:5000/readmasterjson/" + section,
+            url: "/d4dMasters/readmasterjson/" + section,
             success: function (data) {
                 // alert(data.toString());   
                 d4ddata = JSON.parse(data);
@@ -460,7 +460,7 @@
             dataType: "application/json",
             data: formData,
             async: false,
-            url: "http://localhost:5000/savemasterjson/2",
+            url: "/d4dMasters/savemasterjson/2",
             success: function (data) {
                 alert(data.toString());
             },

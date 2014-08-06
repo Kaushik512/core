@@ -105,12 +105,12 @@ $(document).ready(function() {
 	});
 	
 	$('#show-shortcut').click(function(e) {
-		if ($.shortcut_dropdown.is(":visible")) {
+	/*	if ($.shortcut_dropdown.is(":visible")) {
 			shortcut_buttons_hide();
 		} else {
 			shortcut_buttons_show();
 		}
-		e.preventDefault();
+		e.preventDefault();*/
 	});
 
 	// SHOW & HIDE MOBILE SEARCH FIELD
@@ -1202,8 +1202,7 @@ function checkURL() {
 
 function loadURL(url, container) {
 	//console.log(container)
-
-	$.ajax({
+    $.ajax({
 		type : "GET",
 		url : url,
 		dataType : 'html',

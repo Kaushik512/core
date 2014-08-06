@@ -42,13 +42,22 @@ module.exports.setRoutes = function(app) {
   blueprints.setRoutes(app, sessionVerificationFunc);
   ec2_routes.setRoutes(app, sessionVerificationFunc);
 
-  
-  app.get('/',function(req,res){
-      res.redirect('/private/index.html');
+
+  app.get('/', function(req, res) {
+    res.redirect('/private/index.html');
   });
 
   //for public html files
-  app.use('/public',express.static(path.join(path.dirname(__dirname), 'htmls/public')));
+  app.use('/public', express.static(path.join(path.dirname(__dirname), 'htmls/public')));
+
+  app.get('/public/login.html', function(req, res, next) {
+    if (req.session && req.session.user) {
+      res.redirect('/');
+    } else {
+      //res.redirect('/login');
+      next();
+    }
+  })
 
   // for private html files
   app.all('/private/*', function(req, res, next) {

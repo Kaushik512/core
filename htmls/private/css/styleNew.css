@@ -38,7 +38,8 @@ html
   
 }
 .orgSelected {
-    background:linear-gradient(to right, lightgrey 99%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+   /* background:linear-gradient(to right, lightgrey 99%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);*/
+
   }
 /*Arabinda added for Tag input*/
 .smart-form .label{

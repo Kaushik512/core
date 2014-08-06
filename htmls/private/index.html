@@ -34,6 +34,9 @@
 		<!-- GOOGLE FONT -->
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 
+        <!--Icon Picker-->
+        <link href="css/bootstrap-iconpicker.min.css" rel="stylesheet" />
+
 	</head>
 	<body class="desktop-detected smart-style-2">
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
@@ -50,18 +53,18 @@
 
 				</div>
 				<!-- END AJAX-DROPDOWN -->
-			</div>
+			
 			
 			<!-- projects dropdown -->
 			<div id="project-context" style="padding-top:18px;">
 
 				<li class="left-projects-links" data-target="#ajax/dev.html">
-                    <a class="" href="#ajax/dev.html" onclick="setleftnavigation('navWorkspace');">WORKZONE</a>
+                    <a class="" href="#ajax/dev.html" onclick="$('.login-info').css('display', ''); setleftnavigation('navWorkspace');">WORKZONE</a>
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:18px;">
-     			<li class="left-projects-links" data-target="#blueprints">
-                     <a href="design.html#ajax/Aws-Production.html" onclick="">DESIGN</a>
+     			<li class="left-projects-links active" data-target="#blueprints">
+                     <a href="index.html#ajax/Aws-Production.html" onclick="$('.login-info').css('display', ''); setleftnavigation('navDesign'); ">DESIGN</a>
      			</li>
 			</div>
 			<!-- end projects dropdown -->
@@ -77,13 +80,13 @@
 
 				<!-- logout button -->
 				<div id="logout" class="btn-header transparent pull-right">
-					<span> <a href="login1.html" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
+					<span> <a href="/auth/signout" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
 				</div>
 				<!-- end logout button -->
 
 				<div class="header-dropdown-list hidden-xs">
 					<li class="left-projects-links" data-target="#Settings">
-      	  				<a class="dropdown-toggle"  href="index.html#ajax/Settings/OrgList.html" onclick="setleftnavigation('navSettings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+      	  				<a class="dropdown-toggle"  href="index.html#ajax/Settings/OrgList.html" onclick="$('.login-info').css('display', 'none'); setleftnavigation('navSettings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
      				</li>
 				</div>
 			</div>
@@ -97,15 +100,24 @@
 		<aside id="left-panel">
 
 			<div class="login-info">
-				<span> <!-- User image size is adjusted inside CSS, it should stay as is --> 
+				 <!-- User image size is adjusted inside CSS, it should stay as is --> 
 					
-					<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
+					<!--<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
 						<i class="fa fa-lg fa-fw fa-building"></i>
 						Organization						
 						<i class="fa fa-chevron-right"></i>
-					</a> 
-					
-				</span>
+					</a>--> 
+                    <a data-toggle="dropdown" id="show-shortcut" class="dropdown-toggle" href="javascript:void(0);">
+                        <i class="fa fa-lg fa-fw fa-building"></i>
+                        Organization
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                    
+                <ul class="dropdown-menu" id="orgUL" role="menu" style="position:fixed;top:54px;left:171px;z-index:9999">
+                    
+                </ul>
+                
+				
 			</div>
 			<!-- NAVIGATION :fa-angle-down  This navigation is also responsive
 
@@ -320,6 +332,43 @@
 
                     </ul>
                 </div>
+
+                <div id="navDesign" style="display:none">
+                    <ul class="menu-item-parentdemo" id="blueprints">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">Providers</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-DevOps</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure-DevOps</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;RL-DevOps</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/ManagedDomains.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/OpenStack.html" class="devops_providers"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Open Stack</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/cloudstack.html" class="devops_providers"><img src="img/DevOps/7.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Cloud Stack</span></a>
+                                </li>
+                                <li>
+                                    <a href="ajax/Docker.html" class="devops_providers"><img src="img/DevOps/8.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Docker</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
 			</nav>
             
 
@@ -330,7 +379,7 @@
 
 		<!-- MAIN PANEL -->
 		<div id="main" role="main">
-
+            
 			<!-- RIBBON -->
 			<div id="ribbon">
 
@@ -363,17 +412,20 @@
 		<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
 		Note: These tiles are completely responsive,
 		you can add as many as you like
+
+            Drop down goes here.
+
 		-->
-		<div id="shortcut" style="margin-left: 214px;margin-top: 50px;">
-			<ul>
-				<li class="">
-					<a data-target="#org1" data-target-link="ajax/Dev.html" class="orgsOption orgSelected" href="#ajax/Dev.html">  <span>ORG1</span></a>
-				</li>
-				<li>
-					<a data-target="#org2" data-target-link="ajax/yDev.html" class="orgsOption" href="#ajax/yDev.html"> <span>ORG2</span> </a>
-				</li>
-			</ul>
-		</div>
+        <div id="shortcut">
+            <ul>
+                <li class="">
+                    <a data-target="#org1" data-target-link="ajax/Dev.html" class="orgsOption orgSelected" href="#ajax/Dev.html">  <span>ORG1</span></a>
+                </li>
+                <li>
+                    <a data-target="#org2" data-target-link="ajax/yDev.html" class="orgsOption" href="#ajax/yDev.html"> <span>ORG2</span> </a>
+                </li>
+            </ul>
+        </div>
 		<!-- END SHORTCUT AREA -->
 
 		<!--================================================== -->
@@ -428,9 +480,10 @@
 
 			function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
 			    readMasterJson_Top(jsonID);
-
+                 console.log(d4ddata);   
 			    formData = d4ddata.masterjson;
-                console.log(formData);
+                console.log(" ==> ",formData); 
+
 			    // var comparedField = "orgname";
 			    //  var filterByValue = "Scholastic";
 			    //  var outputField = "productgroupname";
@@ -462,10 +515,11 @@
 			        dataType: "text",
 
 			        async: false,
-			        url: "http://localhost:3000/d4dMasters/readmasterjson/" + section,
+			        url: "/d4dMasters/readmasterjson/" + section,
 			        success: function (data) {
-			            // alert(data.toString());   
-			            d4ddata = (JSON.parse(data))[0];
+			            // alert(data.toString());
+
+			            d4ddata = JSON.parse(data);
 			        },
 			        failure: function (data) {
 			            alert(data.toString());
@@ -485,13 +539,27 @@
 			    //    $(this).removeClass('active');
 			    //});
 
-
+			   // alert(selectedLi.closest('li').text());
 			    selectedLi.closest('li').addClass('active');
 			}
+
+			function setOrganization(orgName) {
+			    $("#orgUL a").each(function (i, k) {
+			        $(this).removeClass('btn-success');
+			    });
+			    $("#orgUL a").each(function (i, k) {
+			        
+			        if (k.text.trim() == orgName) {
+			            $(this).addClass('btn-success');
+			            selectedOrg = orgName;
+                    }
+			    });
+			}
+
 			var workspaceNav = null; //used to store the workspace
 
 			function inLineReady_Top() {
-			    alert(window.location.href.indexOf('/Settings/'));
+			    //alert(window.location.href.indexOf('/Settings/'));
 			    //if (window.location.href.indexOf('/Settings/') > 0) { //no action if on settings page and show settings leftnav
 			    //    workspaceNave = $("ul[id='Workspace']").clone();
 			    //    $("ul[id='Workspace']").remove();
@@ -500,7 +568,7 @@
 			    //    return;
 			    //}
 			    var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
-			    var orgUL = $('#shortcut ul');
+			    var orgUL = $('#orgUL');
 			    //Clearing Org popup LI's
 			    orgUL.html('');
 
@@ -511,14 +579,14 @@
 			        // <a href=\"#ajax/Dev.html\" class=\"orgsOption orgSelected\" data-target-link=\"ajax/Dev.html\" data-target=\"#org1\">  <span>ORG1</span></a></li>
 			        var li = '';
 			        var liprefix = '<li><a href=\"#ajax/Dev.html\" ';
-			        var lisuffix = ' data-target-link=\"ajax/Dev.html\" data-target=\"#' + v + '\">  <span>' + v + '</span></a></li>';
+			        var lisuffix = ' data-target-link=\"ajax/Dev.html\" onClick=\"setOrganization(\'' + v + '\');\" data-target=\"#' + v + '\" style=\"margin-left:0px;padding:5px;font-size:12px !important;\"> ' + v + '</a></li>';
 			        if (selectedOrgName == '' && i == 0) {
-			            li = liprefix + 'class=\"orgsOption orgSelected\"' + lisuffix;
+			            li = liprefix + 'class=\"orgsOption btn-success\"' + lisuffix;
 			            selectedOrgName = v;
 			        }
 			        else {
 			            if (v == selectedOrgName)
-			                li = liprefix + 'class=\"orgsOption orgSelected\"' + lisuffix;
+			                li = liprefix + 'class=\"orgsOption btn-success\"' + lisuffix;
 			            else
 			                li = liprefix + 'class=\"orgsOption\"' + lisuffix;
 			        }
@@ -603,6 +671,9 @@
 		<!-- MAIN APP JS FILE -->
 		<script src="js/app.js"></script>
 		<script src="ajax/Data/d4d.js"></script>
+
+        <script src="js/bootstrap-iconpicker.min.js"></script>
+
 		<!-- Your GOOGLE ANALYTICS CODE Below -->
 		<script type="text/javascript">
 		
