@@ -1,3 +1,6 @@
+var express = require("express");
+var path = require("path");
+
 var auth = require('./routes_authentication');
 var provider = require('./routes_devopsRoles.js');
 var chef = require('./routes_chef.js');
@@ -33,8 +36,30 @@ module.exports.setRoutes = function(app) {
   var sessionVerificationFunc = verificationFunctions.sessionVerificationFunc;
   var adminSessionVerificationFunc = verificationFunctions.adminSessionVerificationFunc;
 
+
+
   d4dMasters.setRoutes(app, adminSessionVerificationFunc);
   blueprints.setRoutes(app, sessionVerificationFunc);
+  ec2_routes.setRoutes(app, sessionVerificationFunc);
+
+  
+  app.get('/',function(req,res){
+      res.redirect('/private/index.html');
+  });
+
+  //for public html files
+  app.use('/public',express.static(path.join(path.dirname(__dirname), 'htmls/public')));
+
+  // for private html files
+  app.all('/private/*', function(req, res, next) {
+    if (req.session && req.session.user) {
+      next();
+    } else {
+      //res.redirect('/login');
+      res.redirect('/public/login.html');
+    }
+  });
+  app.use('/private', express.static(path.join(path.dirname(__dirname), 'htmls/private')));
 
 
   /* 
@@ -51,7 +76,7 @@ module.exports.setRoutes = function(app) {
   userGroups.setRoutes(app, adminSessionVerificationFunc);
   userRoles.setRoutes(app, adminSessionVerificationFunc);
   docker.setRoutes(app,sessionVerificationFunc);
-  ec2_routes.setRoutes(app,sessionVerificationFunc);
+ 
   */
 
 }

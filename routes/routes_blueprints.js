@@ -3,7 +3,7 @@ var blueprintsDao = require('../classes/blueprints');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
-	//app.all('/project', sessionVerificationFunc);
+	app.all('/project/*', sessionVerificationFunc);
 
 	app.get('/project/:projectId/env/:envId/blueprints', function(req, res) {
 		blueprintsDao.getBlueprintsByProjectAndEnvId(req.params.projectId, req.params.envId,req.query.blueprintType, function(err, data) {

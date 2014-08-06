@@ -7,13 +7,16 @@ module.exports.setRoutes = function(app) {
 
 
 	app.post('/auth/signin', function(req, res) {
+
+		console.log(req.originalUrl);
+
 		if (req.body && req.body.username && req.body.pass) {
 			var ldapClient = new LdapClient();
 			ldapClient.authenticate(req.body.username, req.body.pass, function(err, user) {
 				if (err) {
-                     
-                    res.send(403);  
-					//res.redirect('/login');
+
+					//res.send(403);  
+					res.redirect('/private/index.html');
 
 				} else {
 					console.log(user);
@@ -23,9 +26,9 @@ module.exports.setRoutes = function(app) {
 					ldapClient.close(function(err) {
 						if (user.cn === 'admin') {
 							user.permissions = {
-								read:true,
-								write:true,
-								execute:true
+								read: true,
+								write: true,
+								execute: true
 							};
 							user.roleName = 'Admin';
 							console.log(req.session.user);
@@ -45,8 +48,8 @@ module.exports.setRoutes = function(app) {
 											if (roleData.length) {
 												user.roleName = roleData[0].name;
 												user.permissions = roleData[0].permissions;
-												//res.redirect('/');
-												res.send(200);
+												res.redirect('/private/index.html');
+												//res.send(200);
 											} else {
 												res.send(500);
 											}
@@ -61,19 +64,22 @@ module.exports.setRoutes = function(app) {
 				}
 			});
 		} else {
-			res.redirect('/login');
+			res.redirect('/public/login.html');
 		}
 	});
 
 
 	app.get('/auth/signout', function(req, res) {
 		req.session = null;
-		res.send(200);
+		//res.send(200);
+		res.redirect('/public/login.html');
 	});
 
 
 	app.get('/login', function(req, res) {
-		res.render('login');
+		//res.render('login');
+		res.redirect('/public/login.html');
+
 	});
 
 	var verifySession = function(req, res, next) {

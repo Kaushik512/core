@@ -91,7 +91,7 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
 						<div class="well no-padding">
-							<form action="index.html" id="login-form" class="smart-form client-form">
+							<form action="/auth/signin" id="login-form" class="smart-form client-form" method="POST">
 								<header>
 									Login
 								</header>
@@ -101,14 +101,14 @@
 									<section>
 										<label class="label">Username</label>
 										<label class="input"> <i class="icon-append fa fa-user"></i>
-											<input type="email" name="email">
+											<input type="text" name="username">
 											<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Please enter username</b></label>
 									</section>
 
 									<section>
 										<label class="label">Password</label>
 										<label class="input"> <i class="icon-append fa fa-lock"></i>
-											<input type="password" name="password">
+											<input type="password" name="pass">
 											<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Enter your password</b> </label>
 										<div class="note">
 											<a href="javascript:void(0)">Forgot password?</a>
