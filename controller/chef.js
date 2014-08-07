@@ -268,12 +268,12 @@ var Chef = function(settings) {
 				callbackOnStdErr(data);
 			}
 		}
-		if((!(params.runList) || !params.runList.length)) {
-			params.runList = [' '];
+		if((!(params.runlist) || !params.runlist.length)) {
+			params.runlist = [' '];
 
 		}
 
-		var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runList.join(), '-x' + params.instanceUserName], options);
+		var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runlist.join(), '-x' + params.instanceUserName], options);
 		proc.start();
 	}
 

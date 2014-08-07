@@ -9,7 +9,7 @@ var BlueprintSchema = new Schema({
 	name: String,
 	templateId: String,
 	templateType: String,
-
+	templateComponents: [String],
 	versionsList: [{
 		ver: String,
 		runlist: [String],
@@ -67,7 +67,7 @@ var BlueprintsDao = function() {
 			envId: envId
 		}
 		if (blueprintType) {
-           queryObj.templateType = blueprintType;
+			queryObj.templateType = blueprintType;
 		}
 		Blueprint.find(queryObj, function(err, data) {
 			if (err) {
@@ -85,6 +85,7 @@ var BlueprintsDao = function() {
 			name: blueprintData.name,
 			templateId: blueprintData.templateId,
 			templateType: blueprintData.templateType,
+			templateComponents: blueprintData.templateComponents,
 			versionsList: [{
 				ver: generateBlueprintVersionNumber(null),
 				runlist: blueprintData.runlist,
