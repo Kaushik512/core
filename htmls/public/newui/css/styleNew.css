@@ -49,6 +49,7 @@ html
     margin-bottom: 15px;
     margin-top: 15px;
     padding: 4px;
+    width:152px;
     transition: all 0.2s ease-in-out 0s;
 }
 
@@ -244,6 +245,7 @@ width:0% !important;
         border-style: solid;
         border-width: 1px;
         height:118px;
+        width:140px;
     }
     .stylee{
       height: 50px; border: 5px none; background: none repeat scroll 0% 0% lightblue;
@@ -287,7 +289,8 @@ width:0% !important;
         position: relative;
     }
     .role-Selected {
-        border: 2px solid green;
+       border: 2px solid #40afb1;
+        border-radius:4px;
     }
     .role-Selected1 {
 

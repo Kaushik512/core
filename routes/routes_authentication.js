@@ -33,6 +33,7 @@ module.exports.setRoutes = function(app) {
 							user.roleName = 'Admin';
 							console.log(req.session.user);
 							//res.redirect('/user/admin');
+							res.redirect('/private/index.html');
 							res.send(200);
 						} else {
 							usersDao.getUser(user.cn, function(err, data) {
@@ -56,7 +57,35 @@ module.exports.setRoutes = function(app) {
 										}
 									});
 								} else {
-									res.send(500);
+									//making an entry of that user in data base
+									usersDao.createUser(user.cn, 'firstname', 'lastname', 0, 3, function(err, data) {
+										if (err) {
+											console.log(err);
+											res.send(500);
+										} else {
+
+											user.roleId = 3;
+											user.groupId = 'tempUsers'
+											usersRoles.getRoleById(user.roleId, function(err, roleData) {
+												if (err) {
+													res.send(500);
+													return;
+												} else {
+													if (roleData.length) {
+														user.roleName = roleData[0].name;
+														user.permissions = roleData[0].permissions;
+														res.redirect('/private/index.html');
+														//res.send(200);
+													} else {
+														res.send(500);
+													}
+												}
+											});
+
+											//res.send(201);
+										}
+									});
+
 								}
 							});
 						}

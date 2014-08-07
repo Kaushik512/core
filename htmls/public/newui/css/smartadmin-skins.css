@@ -584,7 +584,8 @@ body.smart-style-2 {
 }
 
 .smart-style-2 nav ul li a {
-	color: #69737A !important;
+	color:#40baf1;
+	/*color: #69737A !important;*/
 	font-size:12px !important;
 }
 

@@ -86,22 +86,20 @@
 			<div id="project-context" style="padding-top:15px;">
 
 				<li class="left-projects-links" data-target="#Workspace">
-      	  			 <a class="topNav" href="#ajax/dev.html" onclick="$('.login-info').show(); setleftnavigation('navWorkspace',this);"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
+      	  			<a class="active" href="#"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
      			<li class="left-projects-links" data-target="#blueprints">
-     				<a class="topNav" href="index.html#ajax/Aws-Production.html" onclick="$('.login-info').hide(); setleftnavigation('navDesign',this); "><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
+     				<a href="design.html#ajax/Aws-Production.html"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
      			</li>
 			</div>
-
 		
 			
 			<!-- end projects dropdown -->
 
 			<!-- pulled right: nav area -->
 			<div class="pull-right">
-
 
 				<!-- collapse menu button -->
 				<div id="hide-menu" class="btn-header pull-right">
@@ -115,12 +113,11 @@
 				</div>
 				<!-- end logout button -->
 
-
 				<div id="project-context" style="padding-top:15px;">
-     		    	<li class="left-projects-links" data-target="#blueprints">
-     				  <a class="dropdown-toggle topNav"  href="index.html#ajax/Settings/OrgList.html" onclick="$('.login-info').hide(); setleftnavigation('navSettings',this);"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-     			    </li>
-			   </div>
+					<li class="left-projects-links" data-target="#Settings">
+      	  				<a class="dropdown-toggle" href="settings.html#ajax/DefaultOrganization.html"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+     				</li>
+				</div>
 				<!--<div class="header-dropdown-list hidden-xs devops-provider-selected Themescolor" style="padding-top:12px;padding-right:15px;color: white;">
 					
 				</div>-->
@@ -221,243 +218,162 @@
 				Please note that these links work a bit different than
 				traditional href="" links. See documentation for details.
 				-->
-				<!--Workspace left panel -->
-				<div id="navWorkspace" style="display:none">
-                    <ul class="menu-item-parentdemo" id="Workspace"></ul>
-                </div>
-                 <div id="navSettings" style="display:none">
-                 <ul class="menu-item-parentdemo" id="Settings">
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-lg fa-fw fa-building"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Organization Setup</span>
-                            </a>
-                            <ul>
-                                <li class="">
-                                    <a href="ajax/Settings/OrgList.html">
-                                        <i class="fa fa-lg fa-fw fa-building"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Organization</span>
-                                        <span class="badge" style="background-color:#438eb9">3</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="ajax/Settings/EnvironmentList.html">
-                                        <i class="fa fa-lg fa-fw fa-tint"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Environments</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Settings/ProductGroupList.html">
-                                        <i class="fa fa-lg fa-fw fa-th"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Business Groups</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Settings/ProjectList.html">
-                                        <i class="fa fa-lg fa-fw fa-tags"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Projects</span>
-                                    </a>
-                                </li>
+				<!--Workspace left panel -->			
+				<ul class="menu-item-parentdemo" id="Workspace" style="display:none">
+					
+					<li id="org1" class="org">
+						<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i>
+							<span class="menu-item-parent" style="font-weight:bold">PMC_SIERRA
+								<!--<span class="badge">2</span>-->
+							</span>
+							
+						</a>
 
 
-                            </ul>
-                        </li>
+						<ul>
+							<li>
+								<a href="#"><i class="fa fa-lg fa-fw fa-external-link"></i>
+									<span class="menu-item-parent" style="font-weight:bold">Website Project
+										<!--<span class="badge" style="background-color:#438eb9">5</span>-->
+									</span>
+								</a>
+								<ul>
+									<li>
+										<a href="ajax/Dev.html"><i class="fa fa-rss"></i>Dev</a>
+									</li>
+									<li>
+										<a href="ajax/QA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
+									</li>
+									<li>
+										<a href="ajax/UAT.html"><i class="fa fa-fire"></i> UAT</a>
+									</li>
+									<li>
+										<a href="ajax/Stage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
+									</li>
+									<li>
+										<a href="ajax/Production.html"><i class="fa fa-truck"></i> Production</a>
+									</li>
+								</ul>
+							</li>
 
 
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-lg fa-fw fa-qrcode"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">DevOps Setup</span>
-                            </a>
-                            <ul>
-                                <li>
-                                    <a href="ajax/Providers.html">
-                                        <i class="fa fa-lg fa-fw fa-stack-overflow"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Providers
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Configmanagement.html">
-                                        <i class="fa fa-lg fa-fw fa-random"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Config Management
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Buildserver.html">
-                                        <i class="fa fa-lg fa-fw fa-inbox"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Build Server
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Planningserver.html">
-                                        <i class="fa fa-lg fa-fw fa-road"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Planning Server
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Codeserver.html">
-                                        <i class="fa fa-lg fa-fw fa-github"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Code Server
-                                        </span>
-                                    </a>
-                                </li>
+							<li>
+								<a href="#"><i class="fa fa-lg fa-fw fa-align-justify"></i>
+									<span class="menu-item-parent" style="font-weight:bold">Database Project
+										<!--<span class="badge">4</span>-->
+									</span>
+								</a>
+								<ul>
+									<li>
+										<a href="ajax/dbDev.html"><i class="fa fa-rss"></i>Dev</a>
+									</li>
+									<li>
+										<a href="ajax/dbQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
+									</li>
+									<!--<li>
+										<a href="ajax/dbUAT.html"><i class="fa fa-fire"></i> UAT</a>
+									</li>-->
+									<li>
+										<a href="ajax/dbStage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
+									</li>
+									<li>
+										<a href="ajax/dbProduction.html"><i class="fa fa-truck"></i> Production</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
 
-                                <li>
-                                    <a href="ajax/Coderepository.html">
-                                        <i class="fa fa-lg fa-fw fa-archive"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Code Repository
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Testmanagement.html">
-                                        <i class="fa fa-lg fa-fw fa-rss"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Test Management
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Monitoring.html">
-                                        <i class="fa fa-lg fa-fw fa-desktop"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Monitoring
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Planning.html">
-                                        <i class="fa fa-lg fa-fw fa-signal"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">
-                                            Planning
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Tools.html">
-                                        <i class="fa fa-lg fa-fw fa-gavel"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Tools</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--User Setup starts here -->
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-lg fa-fw  fa-tasks"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Users Setup</span>
-                            </a>
-                            <ul>
-                                <li>
-                                    <a href="ajax/Authentication.html">
-                                        <i class="fa fa-lg fa-fw fa-key"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Authentication</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Userroles.html">
-                                        <i class="fa fa-lg fa-fw fa-th-list"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">User Roles</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Users.html">
-                                        <i class="fa fa-lg fa-fw fa-user"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Users</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+					<!--<ul>
+							<li>
+								<a href="ajax/Dev.html"><i class="fa fa-globe"></i>Dev</a>
+							</li>
+							<li>
+								<a href="ajax/QA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
+							</li>
+							<li>
+								<a href="ajax/UAT.html"><i class="fa fa-fire"></i> UAT</a>
+							</li>
+							<li>
+								<a href="ajax/Stage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
+							</li>
+							<li>
+								<a href="ajax/Production.html"><i class="fa fa-truck"></i> Production</a>
+							</li>
+						</ul>-->
+					</li>
+					<li id="org2" class="org" style="display:none">
+						<a href="#"><i class="fa fa-lg fa-fw fa-yen"></i>
+							<span class="menu-item-parent" style="font-weight:bold">Yodlee</span>
+						</a>
+						<ul>
+							<li>
+								<a href="#"><i class="fa fa-lg fa-fw  fa-certificate"></i>
+									<span class="menu-item-parent" style="font-weight:bold">App Project
+									</span>
+								</a>
+								<ul>
+									<li>
+										<a href="ajax/yDev.html"><i class="fa fa-rss"></i>Dev</a>
+									</li>
+									<li>
+										<a href="ajax/yQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
+									</li>
+									<!--<li>
+										<a href="ajax/yUAT.html"><i class="fa fa-fire"></i>UAT</a>
+									</li>
+									<li>
+										<a href="ajax/yStage.html"><i class="fa fa-flag-checkered"></i>Stage</a>
+									</li>-->
+									<li>
+										<a href="ajax/yProduction.html"><i class="fa fa-truck"></i>Production</a>
+									</li>
+								</ul>
+							</li>
 
-                        <!--Gallery Setup starts-->
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-lg fa-fw fa-building"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Gallery Setup</span>
-                            </a>
-                            <ul>
-                                <li>
-                                    <a href="ajax/Blueprintgallery.html">
-                                        <i class="fa fa-lg fa-fw fa-ticket"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Blueprint</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Cookbookgallery.html">
-                                        <i class="fa fa-lg fa-fw fa-book"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Cookbook</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Lifecycle.html">
-                                        <i class="fa fa-lg fa-fw fa-bullseye"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Lifecycle</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Themes.html">
-                                        <i class="fa fa-lg fa-fw fa-puzzle-piece"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Themes</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
 
-                        <li>
-                            <a href="ajax/Audittrail.html">
-                                <i class="fa fa-lg fa-fw fa-bug"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Audit Trail</span>
-                            </a>
-                        </li>
-
-                    </ul>			
-				</div>
-				<div id="navDesign" style="display:none">
-                    <ul class="menu-item-parentdemo" id="blueprints">
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">Providers</span>
-                            </a>
-                            <ul>
-                                <li>
-                                    <a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-DevOps</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure-DevOps</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;RL-DevOps</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/ManagedDomains.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/OpenStack.html" class="devops_providers"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Open Stack</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/cloudstack.html" class="devops_providers"><img src="img/DevOps/7.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Cloud Stack</span></a>
-                                </li>
-                                <li>
-                                    <a href="ajax/Docker.html" class="devops_providers"><img src="img/DevOps/8.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Docker</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+							<li>
+								<a href="#"><i class="fa fa-lg fa-fw  fa-road"></i>
+									<span class="menu-item-parent" style="font-weight:bold">City Project
+									</span>
+								</a>
+								<ul>
+									<li>
+										<a href="ajax/cpDev.html"><i class="fa fa-rss"></i> Dev</a>
+									</li>
+									<li>
+										<a href="ajax/cpQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
+									</li>
+									<li>
+										<a href="ajax/cpUAT.html"><i class="fa fa-fire"></i> UAT</a>
+									</li>
+									<li>
+										<a href="ajax/cpStage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
+									</li>
+									<li>
+										<a href="ajax/cpProduction.html"><i class="fa fa-truck"></i> Production</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<!--<ul>
+							<li>
+								<a href="ajax/yDev.html"><i class="fa fa-globe"></i>Dev</a>
+							</li>
+							<li>
+								<a href="ajax/yQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
+							</li>
+							<li>
+								<a href="ajax/yUAT.html"><i class="fa fa-fire"></i>UAT</a>
+							</li>
+							<li>
+								<a href="ajax/yStage.html"><i class="fa fa-flag-checkered"></i>Stage</a>
+							</li>
+							<li>
+								<a href="ajax/yProduction.html"><i class="fa fa-truck"></i>Production</a>
+							</li>		
+						</ul>-->	
+					</li>	
+				</ul>
 				
 			</nav>
 			<span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
@@ -549,7 +465,7 @@
 		</script>
 		<script>
 
-			/*$('.orgsOption').click(function(e){
+			$('.orgsOption').click(function(e){
 				var $this = $(this);
 				var target = $this.attr('data-target-link');
 			    var $org = $('.org').hide();
@@ -558,7 +474,7 @@
 			    $a.parents('ul,li').addClass('active open').show();
 			    $a.trigger('click');
 
-			});*/
+			});
 
 		</script>
 
@@ -611,192 +527,6 @@
 
 		<!-- MAIN APP JS FILE -->
 		<script src="js/app.js"></script>
-
-		<script type="text/javascript">
-         (function(){
-
-			var $orgsLink = $('.orgsOption').click(function(e){
-                $orgsLink.removeClass("orgSelected");
-                $(this).addClass("orgSelected"); 
-				var $this = $(this);
-				var target = $this.attr('data-target-link');
-			    var $org = $('.org').hide();
-			    var $a = $org.find('a[href="'+target+'"]');
-			    console.log($a.length);
-			    $a.parents('ul,li').addClass('active open').show();
-			    console.log(target,$a);
-			    //$a.trigger('click');
-			    //$('.breadcrumb').find('li:nth-child(2)').empty().html($(this).html());
-
-			});})();
-
-
-         function setleftnavigation(selectedNav,elem) {
-			    $('nav div').css('display', 'none');
-			    $('#' + selectedNav).css('display','');
-                $('.topNav').removeClass('active');
-                $(elem).addClass('active');
-		 }
-
-		 function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
-			    readMasterJson_Top(jsonID);
-                 console.log(d4ddata);   
-			    formData = d4ddata.masterjson;
-                console.log(" ==> ",formData); 
-
-			    // var comparedField = "orgname";
-			    //  var filterByValue = "Scholastic";
-			    //  var outputField = "productgroupname";
-			    var result = [];
-			    //debugger;
-			    $.each(eval(formData.rows.row), function (i, item) {
-			        $.each(item.field, function (k, item1) {
-
-			            if (item1.name == comparedField && (item1.values.value == filterByValue || filterByValue == '')) {
-			                // alert(item1.values.value);
-			                //found the row, now get the next column
-			               // debugger;
-			                $.each(item.field, function (j, item2) {
-			                    if (item2.name == outputField) {
-			                        //  alert(item2.values.value);
-			                        result.push(item2.values.value);
-			                    }
-			                });
-			            }
-			        });
-			    });
-			    return (result);
-			}
-
-			function readMasterJson_Top(section) {
-
-			    $.ajax({
-			        type: "get",
-			        dataType: "text",
-
-			        async: false,
-			        url: "/d4dMasters/readmasterjson/" + section,
-			        success: function (data) {
-			            // alert(data.toString());
-
-			            d4ddata = JSON.parse(data);
-			        },
-			        failure: function (data) {
-			            alert(data.toString());
-			        }
-			    });
-			    return (d4ddata);
-			}
-
-            //storing the selected orgname
-			var selectedOrgName = '';
-			function setActive_Top(selectedLi) {
-			    //clearing all other li selections in ul
-			    // debugger;
-			    $('nav li.active').removeClass('active');
-
-			    //selectedLi.closest('ul').find('li').each(function (i, itm) {
-			    //    $(this).removeClass('active');
-			    //});
-
-			   // alert(selectedLi.closest('li').text());
-			    selectedLi.closest('li').addClass('active');
-			}
-
-			function setOrganization(orgName) {
-			    $("#orgUL a").each(function (i, k) {
-			        $(this).removeClass('btn-success');
-			    });
-			    $("#orgUL a").each(function (i, k) {
-			        
-			        if (k.text.trim() == orgName) {
-			            $(this).addClass('btn-success');
-			            selectedOrg = orgName;
-                    }
-			    });
-			}
-
-			var workspaceNav = null; //used to store the workspace
-
-			function inLineReady_Top() {
-			    //alert(window.location.href.indexOf('/Settings/'));
-			    //if (window.location.href.indexOf('/Settings/') > 0) { //no action if on settings page and show settings leftnav
-			    //    workspaceNave = $("ul[id='Workspace']").clone();
-			    //    $("ul[id='Workspace']").remove();
-			    //    $("ul[id='Settings']").css('display', '');
-			    //    alert('returing');
-			    //    return;
-			    //}
-			    var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
-			    var orgUL = $('#orgUL');
-			    //Clearing Org popup LI's
-			    orgUL.html('');
-
-			    //Loading Organization popup
-			    $.each(getOrgs, function (i, v) {
-
-			        //<li class="">
-			        // <a href=\"#ajax/Dev.html\" class=\"orgsOption orgSelected\" data-target-link=\"ajax/Dev.html\" data-target=\"#org1\">  <span>ORG1</span></a></li>
-			        var li = '';
-			        var liprefix = '<li><a href=\"#ajax/Dev.html\" ';
-			        var lisuffix = ' data-target-link=\"ajax/Dev.html\" onClick=\"setOrganization(\'' + v + '\');\" data-target=\"#' + v + '\" style=\"margin-left:0px;padding:5px;font-size:12px !important;\"> ' + v + '</a></li>';
-			        if (selectedOrgName == '' && i == 0) {
-			            li = liprefix + 'class=\"orgsOption btn-success\"' + lisuffix;
-			            selectedOrgName = v;
-			        }
-			        else {
-			            if (v == selectedOrgName)
-			                li = liprefix + 'class=\"orgsOption btn-success\"' + lisuffix;
-			            else
-			                li = liprefix + 'class=\"orgsOption\"' + lisuffix;
-			        }
-			        orgUL.append(li);
-			    });
-			    // $('#shortcut ul')
-
-			    //run only when tehre is a selected org
-			    // debugger;
-			    if (selectedOrgName != '') {
-			        //  alert(selectedOrgName);
-			        var getBGs = getRelatedValues_Top(2, "orgname", selectedOrgName, "productgroupname");
-			        var wsitm = $('ul[id="Workspace"]');
-			        //clearing html content before population
-			        wsitm.html('');
-			        $.each(getBGs, function (i, v) {
-			            if (wsitm) {
-			                var aBUprefix = '<li id=\"liOrg' + selectedOrgName + '\" class=\"org\"> <a href=\"#ajax/Dev.html\"><i class=\"fa fa-lg fa-fw fa-rub\"></i><span style=\"';  //+ font-weight:bold + 
-			                var aBUsuffix = '\" class=\"menu-item-parent\" style=\"\">' + v + '</span></a>';
-			                var ulBUprefix = '<ul style=\"display: block;\" id=\"ulOrg_' + selectedOrgName + 'BU_' + i + '">';
-			                var BUinnerconent = '';
-			                var ulBUsuffix = '</ul></li>';
-			                //Load all the content related to Businessgroup
-			                var getProjs = getRelatedValues_Top(4, "productgroupname", v, "projectname");
-			                $.each(getProjs, function (j, p) {
-			                    var aProjSuffix = '<li> <a href=\"#\"><i class=\"fa fa-lg fa-fw fa-external-link\"></i> <span class=\"menu-item-parent\">' + p + '</span></a>';
-			                    var ulProj = '<ul>';
-			                    var ulProjEnd = '</ul>';
-			                    //Get Env for each of the project
-			                    var getEnvs = getRelatedValues_Top(3, "orgname", selectedOrgName, "environmentname");
-			                    BUinnerconent = aProjSuffix + ulProj;
-			                    $.each(getEnvs, function (k, e) {
-			                        //var lienvSuffix = '<li><a href=\"ajax/page_' + selectedOrgName + '_' + v + '_' + p + '.html\"><i class=\"fa fa-rss\"></i>' + e + '</a></li>';
-			                        var lienvSuffix = '<li><a href=\"ajax/Dev.html\" onClick=\"setActive_Top($(this));drawBreadCrumb1();\"><i class=\"fa fa-rss\"></i>' + e + '</a></li>';
-			                        BUinnerconent += lienvSuffix;
-			                    });
-			                    BUinnerconent += ulProjEnd;
-			                });
-			                wsitm.append(aBUprefix + aBUsuffix + ulBUprefix + BUinnerconent + ulBUsuffix);
-			            }
-			        });
-			        //Load project group for org.
-
-			    }
-			}
-			   
-			inLineReady_Top();
-
-
-		</script>
 
 		<!-- Your GOOGLE ANALYTICS CODE Below -->
 		<script type="text/javascript">
