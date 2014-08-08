@@ -1258,7 +1258,7 @@ function drawBreadCrumb() {
 
 	//console.log("breadcrumb")
 	$("#ribbon ol.breadcrumb").empty();
-	$("#ribbon ol.breadcrumb").append($("<li>Home</li>"));
+	$("#ribbon ol.breadcrumb").append($("<li>Home</li><li>"+window.selectedOrgName+"</li>"));
 	$('nav li.active > a').each(function() {
 		$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
 	});

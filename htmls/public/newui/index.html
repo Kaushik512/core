@@ -356,6 +356,8 @@
 			console.log('orgs',getOrgs);
 			var $ulOrgList = $('.orgsList').empty();
             var $workspace = $('#Workspace').empty();
+            
+             window.selectedOrgName; 
 
 			for(var i=0;i<getOrgs.length;i++) {
 			  var $li = $('<li data-id="org'+i+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+getOrgs[i]+'</span></a>');
@@ -397,10 +399,16 @@
                     liProject.append($envUl); 
 
                     for(var l=0;l<getEnvs.length;l++) {
-                    	var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'"><i class="fa fa-truck"></i>'+getEnvs[l]+'</a>');
+                    	var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'"><i class="fa fa-truck"></i>'+getEnvs[l]+'</a>').attr('data-OrgName',getOrgs[i]);
                     	$envUl.append($liEnv);
+                        $liEnv.click(function(e){
+                        	window.selectedOrgName = $(this).attr('data-OrgName');
+
+                        });
+
                     	if(i==0 && j == 0 && k==0 && l==0 ) {
                     		$('#firstA').attr('href','#ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'');
+                    		window.selectedOrgName = getOrgs[i];
                     	}
 
                     }
