@@ -157,158 +157,7 @@
 				<!--Workspace left panel -->			
 				<ul class="menu-item-parentdemo" id="Workspace">
 					
-					<li id="org1" class="org">
-						<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i>
-							<span class="menu-item-parent" style="font-weight:bold">PMC_SIERRA
-								<!--<span class="badge">2</span>-->
-							</span>
-							
-						</a>
-
-
-						<ul>
-							<li>
-								<a href="#"><i class="fa fa-lg fa-fw fa-external-link"></i>
-									<span class="menu-item-parent" style="font-weight:bold">Website Project
-										<!--<span class="badge" style="background-color:#438eb9">5</span>-->
-									</span>
-								</a>
-								<ul>
-									<li>
-										<a href="ajax/Dev.html"><i class="fa fa-rss"></i>Dev</a>
-									</li>
-									<li>
-										<a href="ajax/QA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
-									</li>
-									<li>
-										<a href="ajax/UAT.html"><i class="fa fa-fire"></i> UAT</a>
-									</li>
-									<li>
-										<a href="ajax/Stage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
-									</li>
-									<li>
-										<a href="ajax/Production.html"><i class="fa fa-truck"></i> Production</a>
-									</li>
-								</ul>
-							</li>
-
-
-							<li>
-								<a href="#"><i class="fa fa-lg fa-fw fa-align-justify"></i>
-									<span class="menu-item-parent" style="font-weight:bold">Database Project
-										<!--<span class="badge">4</span>-->
-									</span>
-								</a>
-								<ul>
-									<li>
-										<a href="ajax/dbDev.html"><i class="fa fa-rss"></i>Dev</a>
-									</li>
-									<li>
-										<a href="ajax/dbQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
-									</li>
-									<!--<li>
-										<a href="ajax/dbUAT.html"><i class="fa fa-fire"></i> UAT</a>
-									</li>-->
-									<li>
-										<a href="ajax/dbStage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
-									</li>
-									<li>
-										<a href="ajax/dbProduction.html"><i class="fa fa-truck"></i> Production</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-
-					<!--<ul>
-							<li>
-								<a href="ajax/Dev.html"><i class="fa fa-globe"></i>Dev</a>
-							</li>
-							<li>
-								<a href="ajax/QA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
-							</li>
-							<li>
-								<a href="ajax/UAT.html"><i class="fa fa-fire"></i> UAT</a>
-							</li>
-							<li>
-								<a href="ajax/Stage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
-							</li>
-							<li>
-								<a href="ajax/Production.html"><i class="fa fa-truck"></i> Production</a>
-							</li>
-						</ul>-->
-					</li>
-					<li id="org2" class="org" style="display:none">
-						<a href="#"><i class="fa fa-lg fa-fw fa-yen"></i>
-							<span class="menu-item-parent" style="font-weight:bold">Yodlee</span>
-						</a>
-						<ul>
-							<li>
-								<a href="#"><i class="fa fa-lg fa-fw  fa-certificate"></i>
-									<span class="menu-item-parent" style="font-weight:bold">App Project
-									</span>
-								</a>
-								<ul>
-									<li>
-										<a href="ajax/yDev.html"><i class="fa fa-rss"></i>Dev</a>
-									</li>
-									<li>
-										<a href="ajax/yQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
-									</li>
-									<!--<li>
-										<a href="ajax/yUAT.html"><i class="fa fa-fire"></i>UAT</a>
-									</li>
-									<li>
-										<a href="ajax/yStage.html"><i class="fa fa-flag-checkered"></i>Stage</a>
-									</li>-->
-									<li>
-										<a href="ajax/yProduction.html"><i class="fa fa-truck"></i>Production</a>
-									</li>
-								</ul>
-							</li>
-
-
-							<li>
-								<a href="#"><i class="fa fa-lg fa-fw  fa-road"></i>
-									<span class="menu-item-parent" style="font-weight:bold">City Project
-									</span>
-								</a>
-								<ul>
-									<li>
-										<a href="ajax/cpDev.html"><i class="fa fa-rss"></i> Dev</a>
-									</li>
-									<li>
-										<a href="ajax/cpQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
-									</li>
-									<li>
-										<a href="ajax/cpUAT.html"><i class="fa fa-fire"></i> UAT</a>
-									</li>
-									<li>
-										<a href="ajax/cpStage.html"><i class="fa fa-flag-checkered"></i> Stage</a>
-									</li>
-									<li>
-										<a href="ajax/cpProduction.html"><i class="fa fa-truck"></i> Production</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-						<!--<ul>
-							<li>
-								<a href="ajax/yDev.html"><i class="fa fa-globe"></i>Dev</a>
-							</li>
-							<li>
-								<a href="ajax/yQA.html"><i class="fa fa-lg fa-flask"></i>QA</a>
-							</li>
-							<li>
-								<a href="ajax/yUAT.html"><i class="fa fa-fire"></i>UAT</a>
-							</li>
-							<li>
-								<a href="ajax/yStage.html"><i class="fa fa-flag-checkered"></i>Stage</a>
-							</li>
-							<li>
-								<a href="ajax/yProduction.html"><i class="fa fa-truck"></i>Production</a>
-							</li>		
-						</ul>-->	
-					</li>	
+					
 				</ul>
 				
 			</nav>
@@ -506,13 +355,11 @@
 			var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
 			console.log('orgs',getOrgs);
 			var $ulOrgList = $('.orgsList').empty();
-            var $workspace = $('#Workspace');//.empty();
+            var $workspace = $('#Workspace').empty();
 
 			for(var i=0;i<getOrgs.length;i++) {
 			  var $li = $('<li data-id="org'+i+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+getOrgs[i]+'</span></a>');
-			  if(i==0) {
-			  	$li.find('a').attr('id','firstA'); 
-			  }
+			 
               $li.click(function(e){
 
                  var id = $(this).attr('data-id');
@@ -525,8 +372,12 @@
                var getBGs = getRelatedValues_Top(2, "orgname", getOrgs[i], "productgroupname"); 
                console.log(getBGs);
                for(var j=0;j<getBGs.length;j++) {
+               	 
 
 			     var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent" style="font-weight:bold">'+getBGs[j]+'</span></a>').addClass('org').addClass('org'+i); 
+			     if(i==0 && j==0) {
+			  	   $liSideBar.find('a').attr('id','firstA'); 
+			     }
 			     $workspace.append($liSideBar);
 
                   var getProjs = getRelatedValues_Top(4, "productgroupname", getBGs[j], "projectname");
@@ -562,6 +413,7 @@
                }
 
 			}
+			$ulOrgList.find('li:first').trigger('click');
 			
 
 
