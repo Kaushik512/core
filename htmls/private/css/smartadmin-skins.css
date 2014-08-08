@@ -24,14 +24,14 @@
 	background-color:#22262e;
 }
 
-.smart-style-1 .project-context > :first-child {
+.smart-style-1 #project-context > :first-child {
 	color: #697B92;
 	text-shadow: 0 0 1px #111318;
 }
-.smart-style-1 .project-context a{
+.smart-style-1 #project-context a{
 	color: white;
 }
-/*Arabinda created this above .smart-style-1 .project-context a{
+/*Arabinda created this above .smart-style-1 #project-context a{
 	color: white;
 }
 */
@@ -433,7 +433,7 @@ body.smart-style-2 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-2 .project-context>:first-child {
+.smart-style-2 #project-context>:first-child {
 	text-shadow:none;
 }
 
@@ -452,7 +452,7 @@ body.smart-style-2 {
     padding:6px;
     /*padding-top: 4px;*/
     /*box-shadow: 0 0 15px rgba(255, 255, 255, 0.2) inset;*/
-    color: #fff;
+    color: #000;
     text-decoration: none;
 
 }
@@ -533,10 +533,10 @@ body.smart-style-2 {
 	background: -webkit-gradient(linear,top left,top right,from(#2c3638),to(#2c3638));
 	background: linear-gradient(to right,#2c3638 99%,#2c3638 100%);
 	min-height: 100%;
-}.smart-style-2 .project-context a{
+}.smart-style-2 #project-context a{
 	color:white;
 }
-/*.smart-style-2 .project-context a{
+/*.smart-style-2 #project-context a{
 	color:#697B92
 }*/
 .smart-style-2 #left-panel {
@@ -546,6 +546,7 @@ body.smart-style-2 {
 .smart-style-2 .txt-color-blue {
     color: #40baf1 !important;
 }
+
 .smart-style-2 #logo-group>span .badge {
 	background: #008DC4;
 }
@@ -903,7 +904,7 @@ body.smart-style-3 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-3 .project-context>:first-child {
+.smart-style-3 #project-context>:first-child {
 	text-shadow:none;
 }
 .smart-style-3 #project-selector {
@@ -973,10 +974,10 @@ body.smart-style-3 {
 	background: linear-gradient(to right,#F7F7F7 99%,#CACACA 100%);
 	min-height: 100%;
 }
-.smart-style-3 .project-context a{
+.smart-style-3 #project-context a{
 	color:#fff;
 }
-/*Arabinda .smart-style-3 .project-context a{
+/*Arabinda .smart-style-3 #project-context a{
 	color:#c5c6ca
 }	*/
 .smart-style-3 #left-panel {
@@ -1289,7 +1290,7 @@ body.smart-style-4 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-4 .project-context>:first-child {
+.smart-style-4 #project-context>:first-child {
 	text-shadow:none;
 }
 .smart-style-4 #project-selector {
@@ -1359,10 +1360,10 @@ body.smart-style-4 {
 	background: linear-gradient(to right,#F7F7F7 99%,#CACACA 100%);
 	min-height: 100%;
 }
-.smart-style-4 .project-context a{
+.smart-style-4 #project-context a{
 	color:#fff;
 }
-/*Arabinda .smart-style-3 .project-context a{
+/*Arabinda .smart-style-3 #project-context a{
 	color:#c5c6ca
 }	*/
 .smart-style-4 #left-panel {

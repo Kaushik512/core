@@ -105,12 +105,12 @@ $(document).ready(function() {
 	});
 	
 	$('#show-shortcut').click(function(e) {
-	/*	if ($.shortcut_dropdown.is(":visible")) {
+		if ($.shortcut_dropdown.is(":visible")) {
 			shortcut_buttons_hide();
 		} else {
 			shortcut_buttons_show();
 		}
-		e.preventDefault();*/
+		e.preventDefault();
 	});
 
 	// SHOW & HIDE MOBILE SEARCH FIELD
@@ -439,7 +439,7 @@ $.fn.extend({
 
 	//pass the options variable to the function
 	jarvismenu : function(options) {
-	   
+
 		var defaults = {
 			accordion : 'true',
 			speed : 200,
@@ -451,7 +451,7 @@ $.fn.extend({
 		var opts = $.extend(defaults, options);
 		//Assign current element to variable, in this case is UL element
 		var $this = $(this);
-		
+
 		//add a mark [+] to a multilevel menu
 		$this.find("li").each(function() {
 			if ($(this).find("ul").size() != 0) {
@@ -475,7 +475,6 @@ $.fn.extend({
 		});
 
 		$this.find("li a").click(function() {
-		    
 
 			if ($(this).parent().find("ul").size() != 0) {
 
@@ -1172,7 +1171,7 @@ function checkURL() {
 		// change page title from global var
 		document.title = (title || document.title);
 		//console.log("page title: " + document.title);
-        //Changed by Ansul
+        //Changed by Anshul
         /*var $a = $('ul li a[href="#' + url + '"]');
         console.log($a.length , url);
       
@@ -1256,67 +1255,14 @@ function loadURL(url, container) {
 
 // UPDATE BREADCRUMB
 function drawBreadCrumb() {
-   
-	//console.log("breadcrumb")
-    $("#ribbon ol.breadcrumb").empty();
-    if(window.location.href.indexOf("index.html") > 0)
-	    $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>"));
 
-	//$(".org.active").each(function () {
-	//    $(this).removeClass('open');
-	//    $(this).removeClass('active');
-	//});
-	//alert('1');
-	//$("#Workspace .open.active").each(function () {
-	//    $(this).removeClass('open');
-	//    $(this).removeClass('active');
-    //});
-	$('nav li.active').removeClass('active');
-	if (window.location.href.indexOf("index.html") > 0) {
-	    $("#Workspace li ul li ul li a").first().click();
-	    $("#Workspace li ul li").first().addClass('active');
-	    $("#Workspace li ul li ul li").first().addClass('active');
-	}
+	//console.log("breadcrumb")
+	$("#ribbon ol.breadcrumb").empty();
+	$("#ribbon ol.breadcrumb").append($("<li>Home</li><li>"+window.selectedOrgName+"</li>"));
 	$('nav li.active > a').each(function() {
 		$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
 	});
 
-}
-
-function drawBreadCrumb1() {
-    
-    //console.log("breadcrumb")
-    $("#ribbon ol.breadcrumb").empty();
-    if (window.location.href.indexOf("Settings") > 0) {
-        $("#ribbon ol.breadcrumb").append($("<li>Settings</li>"));
-    }
-    else
-    $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>"));
-
-    /*$('nav li.active > a, nav li.open > a').each(function () {
-        $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
-    }); */
-    if ($('#navWorkspace').is(":visible") == true){
-        $('#navWorkspace li.active > a, #navWorkspace li.open > a').each(function () {
-            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
-        });
-        $(".breadcrumb").show();
-    }
-    //force setting the visibility
-    if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
-        $('#navWorkspace').css("display", '');
-    }
-    if (window.location.href.indexOf("Settings") > 0) {
-        $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
-            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
-        });
-
-    }
-    //force setting the breadcrumb visibility
-    //if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
-    //    alert('in');
-    //    $('#navWorkspace').css("display", '');
-    //}
 }
 
 /* ~ END: APP AJAX REQUEST SETUP */
