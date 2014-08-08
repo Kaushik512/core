@@ -100,7 +100,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 								blueprintId: blueprint._id,
 								blueprintName: blueprint.name,
 								templateId: blueprint.templateId,
-								templateType: blueprint.templateType
+								templateType: blueprint.templateType,
+								templateComponents: blueprint.templateComponents
 							}
 						}
 						instancesDao.createInstance(instance, function(err, data) {

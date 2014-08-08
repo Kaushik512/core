@@ -20,7 +20,8 @@ var InstanceSchema = new Schema({
 		blueprintId: String,
 		blueprintName: String,
 		templateId: String,
-		templateType: String
+		templateType: String,
+		templateComponents: [String]
 	}
 });
 

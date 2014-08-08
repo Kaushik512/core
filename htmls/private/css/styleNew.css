@@ -969,7 +969,7 @@ hr.layout {
     margin-top: 3px;
     /*max-width: 100px;*/
     /*min-height: 145px;*//*arabinda*/
-    min-height: 202px;
+    min-height: 220px;
     padding-bottom: 4px;
     padding-left: 4px;
     padding-right: 4px;
@@ -1449,4 +1449,41 @@ hr.layout {
 }
 .cardLogo {
     height:70px;width:100px;padding-top:11px;
+
 }
+
+.moreInfo{
+    height:30%;width:30%;
+    background-image:url('../img/galleryIcons/moreinfo.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    width: 30px;
+    margin-top:0px;
+}
+.componentlistContainer{
+height:30%;
+background-image:url('../img/aws_logo.png');
+background-repeat:no-repeat;
+ height: 99px;margin-left: 25px;
+}
+.actionbuttonStart{
+height:30%;width:30%;
+background-image:url('../img/galleryIcons/start_icon.png');
+background-repeat:no-repeat;
+float: left;
+height: 27px;
+width: 35%;
+margin-top:0px;
+}
+.actionbuttonRestart{
+    height:30%;width:30%;background-image:url('../img/galleryIcons/restart.png');
+    background-repeat:no-repeat;float: left;
+    height: 27px;margin-left: 4px;width: 32%;
+}
+.actionbuttonShutdown{
+    height:30%;width:30%;
+    background-image:url('../img/galleryIcons/shut_down.png');
+    background-repeat:no-repeat;float: left;height: 27px;width: 22%;
+}
+

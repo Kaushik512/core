@@ -433,7 +433,7 @@
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
 
-                                                    <ul class="thumbnails list-unstyled">
+                                                    <ul class="thumbnails list-unstyled instancesList">
 
 
                                                         <!--Card for Planning starts here-->
@@ -716,8 +716,7 @@
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -779,7 +778,7 @@ $.get('/project/'+projectId+'/env/'+envId+'/blueprints',function(data){
 
         $itemBody.append($ul);
         $itemContainer.append($itemBody);
-        if(data[0].templateType=='appFactory') {
+        if(data[i].templateType=='appFactory') {
             $AppFactpanelBody.append($itemContainer);
         }  else {
            $devopsRolepanelBody.append($itemContainer);
@@ -793,7 +792,74 @@ $.get('/project/'+projectId+'/env/'+envId+'/blueprints',function(data){
         $(this).addClass('role-Selected1');
     });
 
-})
+});
+
+
+
+
+$.get('/project/'+projectId+'/env/'+envId+'/instances',function(data){
+    
+    var $instancesList = $('.instancesList').empty();
+    
+    for(var i=0;i<data.length;i++) {
+        var $li = $('<li></li>').addClass('domain-role-thumbnail');
+        var $div = $('<div></div>').addClass('domain-roles');
+        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption');
+        var $divHeading = $('<div></div>').addClass('domain-roles-heading');
+         
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html(data[i].blueprintData.blueprintName); 
+        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a></a>').addClass('moreInfo').attr('title','More Info'));  
+
+        $divHeading.append($spanheadingLeft); 
+        $divHeading.append($spanheadingRight);
+        $divDomainRolesCaption.append($divHeading);
+        $divDomainRolesCaption.append($('<hr>'));
+
+        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer');
+        $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
+        
+        for(var j=0;j<data[i].blueprintData.templateComponents.length;j++) { 
+
+          var $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].blueprintData.templateComponents[j]));
+           $divComponentList.append($divComponentItem);
+
+        }
+        $divComponentListContainer.append($divComponentList);
+        $divDomainRolesCaption.append($divComponentListContainer);
+        var $divInstanceDetails = $('<div></div>')
+        var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
+        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-item').html('Id : <strong>'+data[i]._id+'</strong>');
+        $instanceDetailsList.append($instanceDetailItemId);
+       
+        var $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class=instance-active>'+data[i].instanceState+'</strong>');
+         $instanceDetailsList.append($instanceDetailItemStatus);
+
+         $divInstanceDetails.append($instanceDetailsList);
+
+         $divDomainRolesCaption.append($divInstanceDetails);
+
+         $divDomainRolesCaption.append($('<hr>'));
+
+          var $divActionBtnContainer = $('<div></div>');
+
+          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a></a>').addClass('actionbuttonStart'));
+          $divActionBtnContainer.append($divActionStartContainer);
+
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a></a>').addClass('actionbuttonRestart'));
+          $divActionBtnContainer.append($divActionReStartContainer);
+          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a></a>').addClass('actionbuttonShutdown'));
+          $divActionBtnContainer.append($divActionShutdownContainer);
+  
+        $divDomainRolesCaption.append($divActionBtnContainer);
+        $li.append($div);
+        $div.append($divDomainRolesCaption);
+
+        $instancesList.append($li);
+
+    }
+   
+});
+
 
 
 $('#bootstrap-wizard-1').bootstrapWizard({
