@@ -118,71 +118,7 @@
       	  				<a class="dropdown-toggle" href="settings.html#ajax/DefaultOrganization.html"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
      				</li>
 				</div>
-				<!--<div class="header-dropdown-list hidden-xs devops-provider-selected Themescolor" style="padding-top:12px;padding-right:15px;color: white;">
-					
-				</div>-->
-
-				<!--<ul class="header-dropdown-list">
-					<li>
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-lg fa-fw fa-sitemap"></i><span>Providers</span></a>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<a href="#ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a> 
-					</li>
-					<li>
-						<a href="#ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-DevOps</span></a>
-					</li>
-					<li>
-						<a href="#ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure-DevOps</span></a> 
-					</li>
-					<li>
-						<a href="#ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;RL-DevOps</span></a>
-					</li>
-					<li>
-						<a href="#ajax/ManagedDomains.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
-					</li>
-					<li>
-						<a href="#ajax/OpenStack.html" class="devops_providers"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Open Stack</span></a>
-					</li>
-					<li>
-						<a href="#ajax/cloudstack.html" class="devops_providers"><img src="img/DevOps/7.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Cloud Stack</span></a>
-					</li>
-					<li>
-						<a href="#ajax/Docker.html" class="devops_providers"><img src="img/DevOps/8.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Docker</span></a>
-					</li>
-				</ul>
-				</li>
-				</ul>-->
-				
-				
-				<!--<ul class="header-dropdown-list">
-			<li>
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-lg fa-fw fa-sitemap"></i><span></span></a>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<a href="ajax/AWS_Production.html"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a> 
-					</li>
-					<li>
-						<a href="ajax/AWS-DevOps.html"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-DevOps</span></a>
-					</li>
-					<li>
-						<a href="ajax/Azure-DevOps.html"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure-DevOps</span></a> 
-					</li>
-					<li>
-						<a href="ajax/RL-DevOps.html"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;RL-DevOps</span></a>
-					</li>
-					<li>
-						<a href="ajax/ManagedDomains.html"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
-					</li>
-					<li>
-						<a href="ajax/OpenStack.html"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Open Stack</span></a>
-					</li>
-					<li>
-						<a href="ajax/cloudstack.html"><img src="img/DevOps/7.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Cloud Stack</span></a>
-					</li>
-				</ul>
-			</li>
-		</ul>-->
+			
 
 				
 
@@ -219,7 +155,7 @@
 				traditional href="" links. See documentation for details.
 				-->
 				<!--Workspace left panel -->			
-				<ul class="menu-item-parentdemo" id="Workspace" style="display:none">
+				<ul class="menu-item-parentdemo" id="Workspace">
 					
 					<li id="org1" class="org">
 						<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i>
@@ -418,7 +354,7 @@
 		you can add as many as you like
 		-->
 		<div id="shortcut" style="margin-left: 102px;margin-top: 90px;">
-			<ul>
+			<ul class="orgsList">
 				<li>
 					<a data-target="#org1" data-target-link="ajax/Dev.html" class="orgsOption" href="#">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;ORG1</span></a>
 				</li>
@@ -465,16 +401,7 @@
 		</script>
 		<script>
 
-			$('.orgsOption').click(function(e){
-				var $this = $(this);
-				var target = $this.attr('data-target-link');
-			    var $org = $('.org').hide();
-			    var $a = $org.find('a[href="'+target+'"]');
-			    console.log($a.length);
-			    $a.parents('ul,li').addClass('active open').show();
-			    $a.trigger('click');
-
-			});
+			
 
 		</script>
 
@@ -526,6 +453,137 @@
 		<script src="js/demo.js"></script>
 
 		<!-- MAIN APP JS FILE -->
+
+         <script type="text/javascript">
+         var serviceURL = "/d4dMasters/";
+
+          function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
+			    readMasterJson_Top(jsonID);
+			    formData = d4ddata.masterjson;
+			    // var comparedField = "orgname";
+			    //  var filterByValue = "Scholastic";
+			    //  var outputField = "productgroupname";
+			    var result = [];
+			    //debugger;
+			    $.each(eval(formData.rows.row), function (i, item) {
+			        $.each(item.field, function (k, item1) {
+
+			            if (item1.name == comparedField && (item1.values.value == filterByValue || filterByValue == '')) {
+			                // alert(item1.values.value);
+			                //found the row, now get the next column
+			               // debugger;
+			                $.each(item.field, function (j, item2) {
+			                    if (item2.name == outputField) {
+			                        //  alert(item2.values.value);
+			                        result.push(item2.values.value);
+			                    }
+			                });
+			            }
+			        });
+			    });
+			    return (result);
+			}
+
+			function readMasterJson_Top(section) {
+
+			    $.ajax({
+			        type: "get",
+			        dataType: "text",
+
+			        async: false,
+			        url: serviceURL + "readmasterjson/" + section,
+			        success: function (data) {
+			            // alert(data.toString());   
+			            d4ddata = JSON.parse(data);
+			        },
+			        failure: function (data) {
+			            alert(data.toString());
+			        }
+			    });
+			    return (d4ddata);
+			}
+
+			var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
+			console.log('orgs',getOrgs);
+			var $ulOrgList = $('.orgsList').empty();
+            var $workspace = $('#Workspace');//.empty();
+
+			for(var i=0;i<getOrgs.length;i++) {
+			  var $li = $('<li data-id="org'+i+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+getOrgs[i]+'</span></a>');
+			  if(i==0) {
+			  	$li.find('a').attr('id','firstA'); 
+			  }
+              $li.click(function(e){
+
+                 var id = $(this).attr('data-id');
+                 $('.org').hide();
+                 $('.'+id).show();
+              });
+
+			  $ulOrgList.append($li); 
+
+               var getBGs = getRelatedValues_Top(2, "orgname", getOrgs[i], "productgroupname"); 
+               console.log(getBGs);
+               for(var j=0;j<getBGs.length;j++) {
+
+			     var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent" style="font-weight:bold">'+getBGs[j]+'</span></a>').addClass('org').addClass('org'+i); 
+			     $workspace.append($liSideBar);
+
+                  var getProjs = getRelatedValues_Top(4, "productgroupname", getBGs[j], "projectname");
+                  console.log('proj',getBGs[j],getProjs);
+                  
+                  var $projectUl = $('<ul></ul>'); 
+                  $liSideBar.append($projectUl); 
+                  for(var k=0;k<getProjs.length;k++) {
+                  	var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-lg fa-fw fa-external-link"></i><span class="menu-item-parent" style="font-weight:bold">'+getProjs[k]+'</span></a>');
+                  	$projectUl.append(liProject);
+
+                    /// getting environments 
+                    var getEnvs = getRelatedValues_Top(3, "orgname", getOrgs[i], "environmentname");
+                    console.log(getEnvs);
+
+                    var $envUl = $('<ul></ul>');
+                    liProject.append($envUl); 
+
+                    for(var l=0;l<getEnvs.length;l++) {
+                    	var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'"><i class="fa fa-truck"></i>'+getEnvs[l]+'</a>');
+                    	$envUl.append($liEnv);
+                    	if(i==0 && j == 0 && k==0 && l==0 ) {
+                    		$('#firstA').attr('href','#ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'');
+                    	}
+
+                    }
+
+
+                  }
+
+
+
+               }
+
+			}
+			
+
+
+ 
+
+
+
+         </script>
+         <script type="text/javascript">
+
+          $('.orgsOption').click(function(e){
+				var $this = $(this);
+				var target = $this.attr('data-target-link');
+			    var $org = $('.org').hide();
+			    var $a = $org.find('a[href="'+target+'"]');
+			    console.log($a.length);
+			    $a.parents('ul,li').addClass('active open').show();
+			    $a.trigger('click');
+
+			});
+         </script>
+
 		<script src="js/app.js"></script>
 
 		<!-- Your GOOGLE ANALYTICS CODE Below -->
