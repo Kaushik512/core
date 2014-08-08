@@ -24,14 +24,14 @@
 	background-color:#22262e;
 }
 
-.smart-style-1 #project-context > :first-child {
+.smart-style-1 .project-context > :first-child {
 	color: #697B92;
 	text-shadow: 0 0 1px #111318;
 }
-.smart-style-1 #project-context a{
+.smart-style-1 .project-context a{
 	color: white;
 }
-/*Arabinda created this above .smart-style-1 #project-context a{
+/*Arabinda created this above .smart-style-1 .project-context a{
 	color: white;
 }
 */
@@ -410,8 +410,11 @@ border-top: 1px solid #303031;
 /********************************************************************* STYLE 2 *************************************************************/
 
 .smart-style-2 #shortcut {
-	background-color: white;
-	width:194px;
+	background-color: #40baf1;
+	width:auto;
+}
+.smart-style-2 .login-info span a{
+	color:white;
 }
 
 body.smart-style-2 {
@@ -430,7 +433,7 @@ body.smart-style-2 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-2 #project-context>:first-child {
+.smart-style-2 .project-context>:first-child {
 	text-shadow:none;
 }
 
@@ -445,11 +448,11 @@ body.smart-style-2 {
 	border-color: #3a87ad rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.3);
     border-image: none;
     border-style: solid;
-    border-width: 2px 0px 0px;
-    padding:10px;
+    border-width: 3px 0px 0px;
+    padding:6px;
     /*padding-top: 4px;*/
     /*box-shadow: 0 0 15px rgba(255, 255, 255, 0.2) inset;*/
-    color: #000;
+    color: #fff;
     text-decoration: none;
 
 }
@@ -508,7 +511,7 @@ body.smart-style-2 {
 
 .smart-style-2 #ribbon {
 	/*Arabinda background:#fff;*/
-	background:linear-gradient(to right, lightgrey 99%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+	background:linear-gradient(to right, #40baf1 99%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
 .smart-style-2 .btn.btn-ribbon {
@@ -520,27 +523,29 @@ body.smart-style-2 {
 .smart-style-2 #ribbon .breadcrumb, 
 .smart-style-2 #ribbon .breadcrumb a {
 	/*color: #7C7C7C !important;*/
-	color: black !important;
+	color: white !important;
 }
 
 .smart-style-2 aside {
-	background: #F7F7F7;
-	background: -webkit-gradient(linear,left top,right top,color-stop(99%,#F7F7F7),color-stop(100%,#CACACA));
-	background: -webkit-linear-gradient(left,#F7F7F7 99%,#CACACA 100%);
-	background: -webkit-gradient(linear,top left,top right,from(#F7F7F7),to(#CACACA));
-	background: linear-gradient(to right,#F7F7F7 99%,#CACACA 100%);
+	background: #2c3638;
+	background: -webkit-gradient(linear,left top,right top,color-stop(99%,#2c3638),color-stop(100%,#2c3638));
+	background: -webkit-linear-gradient(left,#2c3638 99%,#2c3638 100%);
+	background: -webkit-gradient(linear,top left,top right,from(#2c3638),to(#2c3638));
+	background: linear-gradient(to right,#2c3638 99%,#2c3638 100%);
 	min-height: 100%;
-}.smart-style-2 #project-context a{
-	color:#c5c6ca
+}.smart-style-2 .project-context a{
+	color:white;
 }
-/*.smart-style-2 #project-context a{
+/*.smart-style-2 .project-context a{
 	color:#697B92
 }*/
 .smart-style-2 #left-panel {
 	/*Arabinda padding:15px;*/
-	padding:5px;
+	padding:0px;
 }
-
+.smart-style-2 .txt-color-blue {
+    color: #40baf1 !important;
+}
 .smart-style-2 #logo-group>span .badge {
 	background: #008DC4;
 }
@@ -556,8 +561,9 @@ body.smart-style-2 {
 	padding: 5px 10px 7px;*/
 
 	/*background: #FFF;*/
-	background:none repeat scroll 0 0 lightgrey;
-	border-radius: 4px;
+	background:none repeat scroll 0 0 #40baf1;
+	margin-right: 1px;
+	/*border-radius: 4px;*/
 }
 
 .smart-style-2 .login-info { 
@@ -567,7 +573,7 @@ body.smart-style-2 {
 .smart-style-2 .login-info a, 
 .smart-style-2 .login-info strong {
 	font-size: 16px;
-	color: #33455A;
+	color: white;
 	/*Arabinda added below*/
 	margin-left:10px;
 }
@@ -577,13 +583,14 @@ body.smart-style-2 {
 }
 
 .smart-style-2 nav ul li a {
-	color: #69737A !important;
+	color:#40baf1;
+	/*color: #69737A !important;*/
 	font-size:12px !important;
 }
 
 .smart-style-2 nav > ul > li > a {
-	padding-top:16px;
-	padding-bottom:16px;
+	/*padding-top:16px;*/
+	padding-bottom:13px;
 }
 
 .smart-style-2 nav ul ul>li:hover b {
@@ -604,23 +611,23 @@ body.smart-style-2 {
 .smart-style-2 nav ul li.open>a, 
 .smart-style-2 nav ul li.open>a b, 
 .smart-style-2 nav ul .active>a {
-	color: #202427 !important;
+	color: white !important;
 	font-weight: bold;
 	
 }
 
-.smart-style-2 nav ul ul li>a:hover, 
+/*.smart-style-2 nav ul ul li>a:hover, 
 .smart-style-2 nav ul li a:hover {
 	color: #202427 !important;
 	background:white !important;
-}
+}*/
 
 /*Arabinda .smart-style-2 nav ul ul li>a {
 	padding-left:23px;
 }*/
  .smart-style-2 nav ul ul li>a {
 	padding-left:34px;
-	background:white !important;
+	background:#2c3638 !important;
 }
 
 
@@ -690,8 +697,8 @@ body.smart-style-2 {
 	border-color: #3292E2;
 }*/
 .smart-style-2 .btn-primary, .smart-style-2 .smart-form .button{
-	background-color: #2C3742;
-	border: 1px solid #2c3742;
+	background-color: #40BCE6;
+	border: 1px solid #40BCE6;
 	/*margin-right:11px;*/
 }
 
@@ -714,8 +721,8 @@ body.smart-style-2 {
 .smart-style-2 .btn-primary:active, 
 .smart-style-2 .btn-primary.active, 
 .smart-style-2 .open .dropdown-toggle.btn-primary {
-	background-color: #2C3742;
-	border-color: #2C3742;
+	background-color: #40BCE6;
+	border-color: #40BCE6;
 }
 
 
@@ -896,7 +903,7 @@ body.smart-style-3 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-3 #project-context>:first-child {
+.smart-style-3 .project-context>:first-child {
 	text-shadow:none;
 }
 .smart-style-3 #project-selector {
@@ -966,10 +973,10 @@ body.smart-style-3 {
 	background: linear-gradient(to right,#F7F7F7 99%,#CACACA 100%);
 	min-height: 100%;
 }
-.smart-style-3 #project-context a{
+.smart-style-3 .project-context a{
 	color:#fff;
 }
-/*Arabinda .smart-style-3 #project-context a{
+/*Arabinda .smart-style-3 .project-context a{
 	color:#c5c6ca
 }	*/
 .smart-style-3 #left-panel {
@@ -1282,7 +1289,7 @@ body.smart-style-4 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-4 #project-context>:first-child {
+.smart-style-4 .project-context>:first-child {
 	text-shadow:none;
 }
 .smart-style-4 #project-selector {
@@ -1352,10 +1359,10 @@ body.smart-style-4 {
 	background: linear-gradient(to right,#F7F7F7 99%,#CACACA 100%);
 	min-height: 100%;
 }
-.smart-style-4 #project-context a{
+.smart-style-4 .project-context a{
 	color:#fff;
 }
-/*Arabinda .smart-style-3 #project-context a{
+/*Arabinda .smart-style-3 .project-context a{
 	color:#c5c6ca
 }	*/
 .smart-style-4 #left-panel {

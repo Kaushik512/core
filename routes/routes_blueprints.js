@@ -188,7 +188,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 							});
 
-							res.send(200);
+							res.send(200,{
+								"id":instance.id,
+								"message":"instance launch success"
+							});
 						});
 
 

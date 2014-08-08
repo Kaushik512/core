@@ -24,7 +24,17 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
 
-		<!-- styleNew.js, you can delete this css when designing your own WebApp -->
+
+		<!-- SmartAdmin RTL Support is under construction
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
+
+		<!-- We recommend you use "your_style.css" to override SmartAdmin
+		specific styles this will also ensure you retrain your customization
+		with each SmartAdmin update.
+		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css"> -->
+
+		<!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/styleNew.css">
 
 		<!-- FAVICONS -->
@@ -47,7 +57,7 @@
 
 				<!-- PLACE YOUR LOGO HERE -->
 				<span id="logo"> 
-					<img src="img/version2_22.png" style="height:70%;width:90%;" alt="DevOps">
+					<img src="img/version2_22.png" style="" alt="DevOps">
 
 				</span>
 
@@ -56,17 +66,16 @@
 			
 			
 			<!-- projects dropdown -->
-			<div id="project-context" style="padding-top:18px;">
-
-				<li class="left-projects-links" data-target="#ajax/dev.html">
-                    <a class="" href="#ajax/dev.html" onclick="$('.login-info').css('display', ''); setleftnavigation('navWorkspace');">WORKZONE</a>
-     			</li>
-			</div>
-			<div id="project-context" style="padding-top:18px;">
-     			<li class="left-projects-links active" data-target="#blueprints">
-                     <a href="index.html#ajax/Aws-Production.html" onclick="$('.login-info').css('display', ''); setleftnavigation('navDesign'); ">DESIGN</a>
-     			</li>
-			</div>
+            <div id="tab-navWorkspace" class="project-context" style="padding-top:15px;">
+                <li class="left-projects-links" data-target="#ajax/dev.html">
+                    <a class="" href="#ajax/dev.html" onclick="$('.login-info').css('display', 'block'); setleftnavigation('navWorkspace');">WORKZONE</a>
+                </li>
+            </div>
+            <div id="tab-navDesign" style="padding-top:15px;" class="project-context">
+                <li class="left-projects-links active" data-target="#blueprints">
+                    <a href="index.html#ajax/Aws-Production.html" onclick="$('.login-info').css('display', 'none'); setleftnavigation('navDesign'); ">DESIGN</a>
+                </li>
+            </div>
 			<!-- end projects dropdown -->
 
 			<!-- pulled right: nav area -->
@@ -80,15 +89,15 @@
 
 				<!-- logout button -->
 				<div id="logout" class="btn-header transparent pull-right">
-					<span> <a href="/auth/signout" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
+					<span> <a href="login1.html" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
 				</div>
 				<!-- end logout button -->
 
-				<div class="header-dropdown-list hidden-xs">
-					<li class="left-projects-links" data-target="#Settings">
-      	  				<a class="dropdown-toggle"  href="index.html#ajax/Settings/OrgList.html" onclick="$('.login-info').css('display', 'none'); setleftnavigation('navSettings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-     				</li>
-				</div>
+                <div id="tab-navSettings" class="project-context" style="padding-top:15px;">
+                    <li class="" data-target="#Settings">
+                        <a class="active"  href="index.html#ajax/Settings/OrgList.html" onclick="$('.login-info').css('display', 'none'); setleftnavigation('navSettings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+                    </li>
+                </div>
 			</div>
 			<!-- end pulled right: nav area -->
 		</header>
@@ -100,7 +109,7 @@
 		<aside id="left-panel">
 
 			<div class="login-info">
-				 <!-- User image size is adjusted inside CSS, it should stay as is --> 
+				<span> <!-- User image size is adjusted inside CSS, it should stay as is --> 
 					
 					<!--<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
 						<i class="fa fa-lg fa-fw fa-building"></i>
@@ -113,7 +122,7 @@
                         <i class="fa fa-chevron-right"></i>
                     </a>
                     
-                <ul class="dropdown-menu" id="orgUL" role="menu" style="position:fixed;top:54px;left:171px;z-index:9999">
+                <ul class="dropdown-menu" id="orgUL" role="menu" style="position:fixed;top:54px;left:171px;z-index:9999;background:#000">
                     
                 </ul>
                 
@@ -141,12 +150,12 @@
                                 <i class="fa fa-lg fa-fw fa-building"></i>
                                 <span class="menu-item-parent" style="font-weight:bold">Organization Setup</span>
                             </a>
-                            <ul>
-                                <li class="">
+                            <ul id="ulsettingstree">
+                                <li class="" >
                                     <a href="ajax/Settings/OrgList.html">
                                         <i class="fa fa-lg fa-fw fa-building"></i>
-                                        <span class="menu-item-parent" style="font-weight:bold">Organization</span>
-                                        <span class="badge" style="background-color:#438eb9">3</span>
+                                        <span class="menu-item-parent" style="font-weight:bold">Organizations</span>
+                                        
                                     </a>
                                 </li>
 
@@ -449,7 +458,8 @@
 		</script>
 		<script>
 
-            
+            //Setting the ajax node service url
+            var serviceURL = "/d4dMasters/";
            
             
 
@@ -457,14 +467,12 @@
 
 			(function(){
 
-			var $orgsLink = $('.orgsOption').click(function(e){
-                $orgsLink.removeClass("orgSelected");
-                $(this).addClass("orgSelected"); 
+			$('.orgsOption').click(function(e){
 				var $this = $(this);
 				var target = $this.attr('data-target-link');
 			    var $org = $('.org').hide();
 			    var $a = $org.find('a[href="'+target+'"]');
-			    console.log($a.length);
+			    //console.log($a.length);
 			    $a.parents('ul,li').addClass('active open').show();
 			    console.log(target,$a);
 			    //$a.trigger('click');
@@ -474,16 +482,16 @@
 
 			function setleftnavigation(selectedNav) {
 			    $('nav div').css('display', 'none');
-			    $('#' + selectedNav).css('display','');
+			    $('#' + selectedNav).css('display', '');
+			    $('div[id^="tab-"] > li > a').removeClass('active');
+			    $('#tab-' + selectedNav + ' > li > a').addClass('active');
+
 			}
 
 
 			function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
 			    readMasterJson_Top(jsonID);
-                 console.log(d4ddata);   
 			    formData = d4ddata.masterjson;
-                console.log(" ==> ",formData); 
-
 			    // var comparedField = "orgname";
 			    //  var filterByValue = "Scholastic";
 			    //  var outputField = "productgroupname";
@@ -515,10 +523,9 @@
 			        dataType: "text",
 
 			        async: false,
-			        url: "/d4dMasters/readmasterjson/" + section,
+			        url: serviceURL + "readmasterjson/" + section,
 			        success: function (data) {
-			            // alert(data.toString());
-
+			            // alert(data.toString());   
 			            d4ddata = JSON.parse(data);
 			        },
 			        failure: function (data) {
@@ -551,7 +558,7 @@
 			        
 			        if (k.text.trim() == orgName) {
 			            $(this).addClass('btn-success');
-			            selectedOrg = orgName;
+			            selectedOrgName = orgName;
                     }
 			    });
 			}
@@ -567,6 +574,7 @@
 			    //    alert('returing');
 			    //    return;
 			    //}
+			  //  debugger;
 			    var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
 			    var orgUL = $('#orgUL');
 			    //Clearing Org popup LI's
@@ -579,7 +587,7 @@
 			        // <a href=\"#ajax/Dev.html\" class=\"orgsOption orgSelected\" data-target-link=\"ajax/Dev.html\" data-target=\"#org1\">  <span>ORG1</span></a></li>
 			        var li = '';
 			        var liprefix = '<li><a href=\"#ajax/Dev.html\" ';
-			        var lisuffix = ' data-target-link=\"ajax/Dev.html\" onClick=\"setOrganization(\'' + v + '\');\" data-target=\"#' + v + '\" style=\"margin-left:0px;padding:5px;font-size:12px !important;\"> ' + v + '</a></li>';
+			        var lisuffix = ' data-target-link=\"ajax/Dev.html\" onClick=\"setOrganization(\'' + v + '\');inLineReady_Top();\" data-target=\"#' + v + '\" style=\"margin-left:0px;padding:5px;font-size:12px !important;\"> ' + v + '</a></li>';
 			        if (selectedOrgName == '' && i == 0) {
 			            li = liprefix + 'class=\"orgsOption btn-success\"' + lisuffix;
 			            selectedOrgName = v;
@@ -617,10 +625,11 @@
 			                    var ulProjEnd = '</ul>';
 			                    //Get Env for each of the project
 			                    var getEnvs = getRelatedValues_Top(3, "orgname", selectedOrgName, "environmentname");
+			                 //   alert(getEnvs);
 			                    BUinnerconent = aProjSuffix + ulProj;
 			                    $.each(getEnvs, function (k, e) {
 			                        //var lienvSuffix = '<li><a href=\"ajax/page_' + selectedOrgName + '_' + v + '_' + p + '.html\"><i class=\"fa fa-rss\"></i>' + e + '</a></li>';
-			                        var lienvSuffix = '<li><a href=\"ajax/Dev.html\" onClick=\"setActive_Top($(this));drawBreadCrumb1();\"><i class=\"fa fa-rss\"></i>' + e + '</a></li>';
+			                        var lienvSuffix = '<li><a href=\"#ajax/Dev.html?projid=' + p + '&envid=' + e + '\" onClick=\"setActive_Top($(this));drawBreadCrumb1();\"><i class=\"fa fa-rss\"></i>' + e + '</a></li>';
 			                        BUinnerconent += lienvSuffix;
 			                    });
 			                    BUinnerconent += ulProjEnd;
@@ -631,6 +640,14 @@
 			        //Load project group for org.
 
 			    }
+
+			    //initialize the left nav
+			    $('nav ul').jarvismenu({
+			        accordion: true,
+			        speed: $.menu_speed,
+			        closedSign: '<em class="fa fa-expand-o"></em>',
+			        openedSign: '<em class="fa fa-collapse-o"></em>'
+			    });
 			}
 			   
 			inLineReady_Top();
@@ -650,9 +667,25 @@
 		<!-- JARVIS WIDGETS -->
 		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
 
+<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
 		<!-- JQUERY VALIDATE -->
 		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
 
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
 		<!-- SmartClick: For mobile devices -->
 		<script src="js/plugin/smartclick/smartclick.js"></script>
 		<!--For Wizard Loading -->

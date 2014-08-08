@@ -1441,3 +1441,18 @@ hr.layout {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1;
 }
+
+.cardimage{
+    height:30%;
+    background-repeat:no-repeat; 
+    height: 158px;
+    margin-left: 16px;
+    background-image: url("../img/app-store-icons/box_ops.png");
+}
+/*To fix table overlap*/
+.widget-main{
+    overflow:hidden;
+}
+.cardLogo {
+    height:70px;width:100px;padding-top:11px;
+}

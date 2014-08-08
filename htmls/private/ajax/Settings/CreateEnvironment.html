@@ -1,5 +1,6 @@
 <script>
     $(".login-info").hide();
+    
 </script>
 
 <div class="row">
@@ -96,7 +97,7 @@
                             <i class="ace-icon fa fa-check bigger-110"></i>
                             Save
                         </button>
-                        <button class="btn btn-primary btn-mini" onclick="window.history.back();">
+                        <button class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
                             <i class="ace-icon fa fa-undo bigger-110"></i>
                             Cancel
                         </button>
@@ -126,8 +127,23 @@
             icon: 'fa-key',
             rows: 5,
             cols: 5,
-            placement: 'top',
+            placement: 'bottom',
         });
+
+        //Force opening the left navigation menu
+        if ($('#navSettings').is(":visible") == false) {
+            $('#navSettings').css("display", '');
+            $('#navSettings > ul > li').first().addClass('open');
+            $('#navSettings > ul > li > ul').css("display", "none");
+            $('#navSettings > ul > li > ul').first().css("display", "block");
+        }
+        //redrawing the breadcrumb and selecting the tree
+        $('#ulsettingstree > li').removeClass('active');
+        $('#ulsettingstree > li').each(function () {
+            if ($(this).text().trim() == "Environments")
+                $(this).addClass('active');
+        });
+        drawBreadCrumb1();
     }
 
     function readMasterJson(section) {
@@ -137,7 +153,7 @@
             dataType: "text",
 
             async: false,
-            url: "/d4dMasters/readmasterjson/" + section,
+            url: serviceURL + "readmasterjson/" + section,
             success: function (data) {
                 // alert(data.toString());   
                 d4ddata = JSON.parse(data);
@@ -155,7 +171,7 @@
 
         //Prefilling dropdowns
         $('select').each(function () {
-            debugger;
+           // debugger;
             if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                 var tempJSON = JSON.parse( JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                 var curSelect = $(this);
@@ -312,7 +328,7 @@
 
         formData = d4ddata.masterjson;
 
-        debugger;
+       // debugger;
         $.each(formData.rows.row, function (i, item) {
             // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
             if (item.field[0].values.value.toLowerCase() == orgName.toLowerCase()) {
@@ -336,6 +352,8 @@
                 if (k == "name") {
                     inputC = $("#" + v);
                 }
+            });
+            $.each(item, function (k, v) {
                 if (k == "values") {
                     if (inputC) {
                         $.each(v, function (k1, v1) {
@@ -376,16 +394,17 @@
             formData.rows.row.push(JSON.parse('{\"field\":' + JSON.stringify(formSchemaNew) + '}'));
 
 
-          alert(JSON.stringify(formData));
-          debugger;
+         // alert(JSON.stringify(formData));
+        //  debugger;
         $.ajax({
             type: "post",
-            dataType: "application/json",
+            dataType: "text",
             data: formData,
             async: false,
-            url: "/d4dMasters/savemasterjson/3",
+            url: serviceURL + "savemasterjson/3",
             success: function (data) {
-                alert(data.toString());
+                // alert(data.toString());
+                alert('Successfully Saved');
             },
             failure: function (data) {
                 alert(data.toString());
@@ -396,6 +415,7 @@
 
 
         $("#savespinner").hide();
+        $('#btncancel').click();
     }
 
     function addToCodeList() {

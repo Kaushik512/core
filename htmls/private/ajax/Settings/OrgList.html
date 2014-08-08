@@ -1,8 +1,9 @@
-<script src="js/plugin/multiselect/bootstrap-multiselect.min.js"></script>
+<script src="../js/plugin/multiselect/bootstrap-multiselect.min.js"></script>
 <script src="js/jquery.dataTables.js"></script>
-<script src="ajax/Data/d4d.js"></script>
+<script src="/ajax/Data/d4d.js"></script>
 <script>
     $(".login-info").hide();
+ //   $(".breadcrumb").hide();
 </script>
 <style>
     .rowCustomStyle {
@@ -52,7 +53,8 @@
                                             <td>
                                                 <div class="input-icon-left" style="height:30px" title="Preview">
                                                     <p class="logoPreview" style="padding:2px; text-align:center;">
-                                                        <img src="" height="28px" width="28px" datafield="logo" />
+                                                        <!--<img src="" height="28px" width="28px" datafield="logo" />-->
+                                                        <i class="fa fa-lg fa-fw fa-building"></i>
                                                     </p>
                                                 </div>
 
@@ -92,8 +94,48 @@
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+
+                                        //Force opening the left navigation menu
+                                        if ($('#navSettings').is(":visible") == false)
+                                        {
+                                            $('#navSettings').css("display", '');
+                                            $('#navSettings > ul > li').first().addClass('open');
+                                            $('#navSettings > ul > li > ul').css("display", "none");
+                                            $('#navSettings > ul > li > ul').first().css("display", "block");
+                                        }
+                                        //redrawing the breadcrumb and selecting the tree
+                                        $('#ulsettingstree > li').removeClass('active');
+                                        $('#ulsettingstree > li').each(function () {
+                                            if ($(this).text().trim() == "Organizations")
+                                                $(this).addClass('active');
+                                        });
+                                        drawBreadCrumb1();
                                        
                                     }
+
+                                    function deleteItem(docid, key, value) {
+
+                                        if (confirm('You are about to remove this list ' + docid + ':' + key + ':' + value)) {
+                                            $.ajax({
+                                                type: "get",
+                                                dataType: "text",
+                                                async: false,
+                                                url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
+                                                success: function (data) {
+                                                    // alert(data.toString());  
+                                                    // debugger;
+                                                    //d4ddata = JSON.parse(data);
+                                                    $('#refreshpage').click();
+                                                },
+                                                failure: function (data) {
+                                                    // debugger;
+                                                    //  alert(data.toString());
+                                                }
+                                            });
+                                        }
+
+                                    }
+
                                     function readMasterJson(id) {
                                        // debugger;
                                         $.ajax({
@@ -101,7 +143,7 @@
                                             dataType: "text",
 
                                             async: false,
-                                            url: "/d4dMasters/readmasterjson/" + id,
+                                            url: serviceURL + "readmasterjson/" + id,
                                             success: function (data) {
                                                 // alert(data.toString());  
                                                // debugger;
@@ -127,7 +169,7 @@
                                        // alert("Before: " + JSON.stringify(d4ddata));
                                         readMasterJson(1);
                                     //    alert("After: " + JSON.stringify(d4ddata));
-                                      //  debugger;
+                                   //     debugger;
                                        /* $.each(d4ddata.sections.section, function (i, item) {
                                             if (item.name == formName) {
                                                 formData = item;
@@ -137,24 +179,27 @@
                                     //    alert(JSON.stringify(formData));
                                         //Reading row to get schema
                                         var formSchema = null;
-                                        $.each(formData.rows.row, function (i, item) {
+                                        $.each(eval(formData.rows.row), function (i, item) {
                                          //   debugger;
-                                   //         alert(JSON.stringify(item));
+                                            
                                            // var templateRow = $(".rowtemplate").clone();
-                                            $.each(item.field, function (i, item) {
+                                            $.each(item.field, function (i, itm) {
+                                               // alert(JSON.stringify(itm));
+                                             //   debugger;
                                                 var inputC = null;
                                                 var editButton = null;
                                                 var setOrgname = false;
-                                                $.each(item, function (k, v) {
+                                                $.each(itm, function (k, v) {
                                                     if (k == "name") {
-                                                        // alert(v);
+                                                      //  alert(v);
+                                                    //    debugger;
                                                         inputC = $('.rowtemplate').find("[datafield='" + v + "']");
-                                                        if (v == "productgroupname") {
+                                                        if (v == "orgname") {
                                                             setOrgname = true;
                                                         }
                                                     }
                                                 });
-                                                $.each(item, function (k, v) {
+                                                $.each(itm, function (k, v) {
                                                     if (k == "values") {
                                                         if (inputC) {
                                                             //  alert(inputC.text());
@@ -169,6 +214,8 @@
                                                             inputC.html(tv);
                                                         }
                                                         if (setOrgname == true) {
+                                                            //alert('setting');
+                                                      //      debugger;
                                                             editButton = $('.rowtemplate').find("[title='Update']");
                                                             if (editButton) {
                                                                 var tv = '';
@@ -182,6 +229,7 @@
                                                                 editButton.attr("href", "#ajax/Settings/CreateProductGroup.html?" + tv);
 
                                                                 editButton.attr("href", "#ajax/Settings/CreateOrg.html?" + tv);
+                                                                
                                                                 var deletebutton = $('.rowtemplate').find("[title='Remove']");
                                                                 if (deletebutton) {
                                                                     deletebutton.attr('onClick', 'deleteItem(\"1\", \"orgname\",\"' + tv + '\");');

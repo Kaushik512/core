@@ -2,6 +2,7 @@
 <script src="js/jquery.dataTables.js"></script>
 <script>
     $(".login-info").hide();
+    
 </script>
 <style>
     .rowCustomStyle {
@@ -83,6 +84,21 @@
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
                                         
+
+                                        //Force opening the left navigation menu
+                                        if ($('#navSettings').is(":visible") == false) {
+                                            $('#navSettings').css("display", '');
+                                            $('#navSettings > ul > li').first().addClass('open');
+                                            $('#navSettings > ul > li > ul').css("display", "none");
+                                            $('#navSettings > ul > li > ul').first().css("display", "block");
+                                        }
+                                        //redrawing the breadcrumb and selecting the tree
+                                        $('#ulsettingstree > li').removeClass('active');
+                                        $('#ulsettingstree > li').each(function () {
+                                            if ($(this).text().trim() == "Business Groups")
+                                                $(this).addClass('active');
+                                        });
+                                        drawBreadCrumb1();
                                     }
 
 
@@ -93,7 +109,7 @@
                                             dataType: "text",
 
                                             async: false,
-                                            url: "/d4dMasters/readmasterjson/" + id,
+                                            url: serviceURL + "readmasterjson/" + id,
                                             success: function (data) {
                                                 // alert(data.toString());  
                                                 // debugger;
@@ -104,6 +120,29 @@
                                                // alert(data.toString());
                                             }
                                         });
+
+                                    }
+
+                                    function deleteItem(docid, key, value) {
+
+                                        if (confirm('You are about to remove this list ' + docid + ':' + key + ':' + value)) {
+                                            $.ajax({
+                                                type: "get",
+                                                dataType: "text",
+                                                async: false,
+                                                url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
+                                                success: function (data) {
+                                                    // alert(data.toString());  
+                                                    // debugger;
+                                                    //d4ddata = JSON.parse(data);
+                                                    $('#refreshpage').click();
+                                                },
+                                                failure: function (data) {
+                                                    // debugger;
+                                                    //  alert(data.toString());
+                                                }
+                                            });
+                                        }
 
                                     }
                                     $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }

@@ -1,8 +1,9 @@
-<script src="js/plugin/multiselect/bootstrap-multiselect.min.js"></script>
+<script src="../js/plugin/multiselect/bootstrap-multiselect.min.js"></script>
 <script src="js/jquery.dataTables.js"></script>
-<script src="ajax/Data/d4d.js"></script>
+<script src="/ajax/Data/d4d.js"></script>
 <script>
     $(".login-info").hide();
+    
 </script>
 <style>
     .rowCustomStyle {
@@ -97,6 +98,21 @@
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
 
+                                        //Force opening the left navigation menu
+                                        if ($('#navSettings').is(":visible") == false) {
+                                            $('#navSettings').css("display", '');
+                                            $('#navSettings > ul > li').first().addClass('open');
+                                            $('#navSettings > ul > li > ul').css("display", "none");
+                                            $('#navSettings > ul > li > ul').first().css("display", "block");
+                                        }
+                                        //redrawing the breadcrumb and selecting the tree
+                                        $('#ulsettingstree > li').removeClass('active');
+                                        $('#ulsettingstree > li').each(function () {
+                                            if ($(this).text().trim() == "Projects")
+                                                $(this).addClass('active');
+                                        });
+                                        drawBreadCrumb1();
+
                                     }
 
                                     function deleteItem(docid, key, value) {
@@ -107,7 +123,7 @@
                                                 dataType: "text",
 
                                                 async: false,
-                                                url: "/d4dMasters/removeitem/" + docid + "/" + key + "/" + value,
+                                                url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
                                                 success: function (data) {
                                                     // alert(data.toString());  
                                                     // debugger;
@@ -130,7 +146,7 @@
                                             dataType: "text",
 
                                             async: false,
-                                            url: "/d4dMasters/readmasterjson/" + id,
+                                            url: serviceURL + "readmasterjson/" + id,
                                             success: function (data) {
                                                 // alert(data.toString());  
                                                 // debugger;

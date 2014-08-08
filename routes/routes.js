@@ -18,6 +18,7 @@ var docker = require('./routes_docker');
 var ec2_routes = require('./routes_aws_ec2');
 
 var d4dMasters = require('./routes_d4dMasters');
+
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
 

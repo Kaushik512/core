@@ -1184,7 +1184,7 @@ function checkURL() {
         //End the change by Ansul
          */
 		// parse url to jquery
-        console.log(url);
+        //console.log(url);
 		loadURL(url, container);
 	} else {
 
@@ -1202,7 +1202,8 @@ function checkURL() {
 
 function loadURL(url, container) {
 	//console.log(container)
-    $.ajax({
+
+	$.ajax({
 		type : "GET",
 		url : url,
 		dataType : 'html',
@@ -1286,12 +1287,36 @@ function drawBreadCrumb1() {
     
     //console.log("breadcrumb")
     $("#ribbon ol.breadcrumb").empty();
-    
+    if (window.location.href.indexOf("Settings") > 0) {
+        $("#ribbon ol.breadcrumb").append($("<li>Settings</li>"));
+    }
+    else
     $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>"));
-    $('nav li.active > a').each(function () {
-        $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
-    });
 
+    /*$('nav li.active > a, nav li.open > a').each(function () {
+        $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+    }); */
+    if ($('#navWorkspace').is(":visible") == true){
+        $('#navWorkspace li.active > a, #navWorkspace li.open > a').each(function () {
+            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+        });
+        $(".breadcrumb").show();
+    }
+    //force setting the visibility
+    if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
+        $('#navWorkspace').css("display", '');
+    }
+    if (window.location.href.indexOf("Settings") > 0) {
+        $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
+            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+        });
+
+    }
+    //force setting the breadcrumb visibility
+    //if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
+    //    alert('in');
+    //    $('#navWorkspace').css("display", '');
+    //}
 }
 
 /* ~ END: APP AJAX REQUEST SETUP */

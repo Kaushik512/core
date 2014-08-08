@@ -1,5 +1,6 @@
 <script>
     $(".login-info").hide();
+   
 </script>
 <div class="row">
     <div class="col-md-12">
@@ -160,10 +161,10 @@
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
-                        <button class="btn btn-primary btn-mini" onclick="window.history.back();">
-                           <i class="ace-icon fa fa-undo bigger-110"></i>
-                            Cancel 
-                        </button>
+                           <button class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
+                               <i class="ace-icon fa fa-undo bigger-110"></i>
+                               Cancel
+                           </button>
                         </div>
                 </div>
 
@@ -182,9 +183,26 @@
     function inLineReady() {
         $("input[type='text']").on("click", function () {
             $(this).select();
-            $("#msgOrgName").hide()
+            $("#msgOrgName").hide();
         });
         readform('Projects');
+
+       
+        //Force opening the left navigation menu
+        if ($('#navSettings').is(":visible") == false) {
+            $('#navSettings').css("display", '');
+            $('#navSettings > ul > li').first().addClass('open');
+            $('#navSettings > ul > li > ul').css("display", "none");
+            $('#navSettings > ul > li > ul').first().css("display", "block");
+        }
+        //redrawing the breadcrumb and selecting the tree
+        $('#ulsettingstree > li').removeClass('active');
+        $('#ulsettingstree > li').each(function () {
+            if ($(this).text().trim() == "Projects")
+                $(this).addClass('active');
+        });
+        drawBreadCrumb1();
+
     }
 
     function readform(formName) {
@@ -323,11 +341,13 @@
                 if (k == "name") {
                     inputC = $("#" + v);
                 }
+            });
+            $.each(item, function (k, v) {
                 if (k == "values") {
                     if (inputC) {
                         $.each(v, function (k1, v1) {
                             if (inputC.getType().toLowerCase() == "text") {
-                                alert(inputC.attr("datavalues"));
+                              //  alert(inputC.attr("datavalues"));
                                 if (inputC.attr("datavalues")) {
                                     //var array = v[k1].split(",");
                                     $.each(v[k1], function (i) {
@@ -356,7 +376,7 @@
             dataType: "text",
 
             async: false,
-            url: "/d4dMasters/readmasterjson/" + section,
+            url: serviceURL + "readmasterjson/" + section,
             success: function (data) {
                 // alert(data.toString());   
                 d4ddata = JSON.parse(data);
@@ -417,9 +437,11 @@
             $.each(item, function (k, v) {
                 if (k == "name") {
                     inputC = $("#" + v);
-                 //   alert(v);
-                 //   alert(inputC == null);
+                    //   alert(v);
+                    //   alert(inputC == null);
                 }
+            });
+            $.each(item, function (k, v) {
                 if (k == "values") {
                     if (inputC) {
                         $.each(v, function (k1, v1) {
@@ -427,7 +449,7 @@
                             if (inputC.attr("datatype")) {
                                 if (inputC.attr("datatype") == "select") {
                                     // v.value.length = 0;
-                                    alert(v.value);
+                                   // alert(v.value);
                                     v.value = '';
                                     v.value = [];
                                     inputC.find("input").each(function () {
@@ -477,16 +499,17 @@
         if (editMode == false)
             formData.rows.row.push(JSON.parse('{\"field\":' + JSON.stringify(formSchemaNew) + '}'));
 
-        //alert(JSON.stringify(formData));
+       // alert(JSON.stringify(formData));
         //Call the nodejs to save the json
         $.ajax({
             type: "post",
-            dataType: "application/json",
+            dataType: "text",
             data: formData,
             async: false,
-            url: "/d4dMasters/savemasterjson/4",
+            url: serviceURL + "savemasterjson/4",
             success: function (data) {
-                alert(data.toString());
+                //alert(data.toString());
+                alert('Successfully Saved');
             },
             failure: function (data) {
                 alert(data.toString());
@@ -494,6 +517,7 @@
         }); 
 
         $(".savespinner").hide();
+        $('#btncancel').click();
     }
     function addToCodeList() {
 
