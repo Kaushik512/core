@@ -42,8 +42,9 @@ module.exports.setRoutes = function(app) {
 
   d4dMasters.setRoutes(app, adminSessionVerificationFunc);
   blueprints.setRoutes(app, sessionVerificationFunc);
-  instances.setRoutes(app,sessionVerificationFunc);
-
+  instances.setRoutes(app, sessionVerificationFunc);
+  
+  chef.setRoutes(app, sessionVerificationFunc);
   ec2_routes.setRoutes(app, sessionVerificationFunc);
 
 
