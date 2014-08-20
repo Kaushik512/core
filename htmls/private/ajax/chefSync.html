@@ -55,10 +55,101 @@
 
 		</tbody>
 	</table>
+   
+  <div style="text-align:center"> <input type="button" class="btn btn-info showChefImportNodesModalBtn" value="Import Nodes"/> </div>
+
 </div>
 
 </div>	
+
+<div class="modal fade" id="chefImportNodesModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Import Nodes</h4>
+      </div>
+      <div class="modal-body">
+         <form role="form">
+         	
+         	<div class="form-group">
+    			<label for="exampleInputEmail1">Project</label>
+    			<select id="chefImportProjectSelect">
+                
+    			</select>
+    		</div>
+
+         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary importNodesBtn">Import</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <script type="text/javascript">
+
+  function readMasterJson(section) {
+
+        $.ajax({
+            type: "get",
+            dataType: "text",
+
+            async: false,
+            url: '/d4dMasters/' + "readmasterjson/" + section,
+            success: function (data) {
+                // alert(data.toString());   
+                d4ddata = JSON.parse(data);
+            },
+            failure: function (data) {
+                alert(data.toString());
+            }
+        });
+        return (d4ddata);
+    }
+
+
+ function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
+        readMasterJson(jsonID);
+        formData = d4ddata.masterjson;
+       // var comparedField = "orgname";
+      //  var filterByValue = "Scholastic";
+      //  var outputField = "productgroupname";
+        var result = [];
+        //debugger;
+        $.each(eval(formData.rows.row), function (i, item) {
+            $.each(item.field, function (k, item1) {
+
+                if (item1.name == comparedField && item1.values.value == filterByValue) {
+                    // alert(item1.values.value);
+                    //found the row, now get the next column
+                    $.each(item.field, function (j, item2) {
+                        if (item2.name == outputField) {
+                            //  alert(item2.values.value);
+                            result.push(item2.values.value);
+                        }
+                    });
+                }
+            });
+        });
+        return (result);
+    }
+
+
+   var getProj = getRelatedValues(4, "orgname", 'Scholastic', "projectname");
+
+   var $projectSelect = $('#chefImportProjectSelect');
+   for(var i=0;i<getProj.length;i++) {
+     var $option = $('<option></option>').append(getProj[i]).val(getProj[i]);
+     $projectSelect.append($option);
+   }
+
+
+
+
   $.get('/chef/nodes',function(data){
     var $tableBody = $('.table-hover tbody');
   	var environments = Object.keys(data);
@@ -99,15 +190,57 @@
             $tr.append($('<td></td>').append('<span>'+lastCheckIn+'</span>'));
             
             $tr.append($('<td></td>').append('<span>'+environments[i]+'</span>'));
-            $tr.append($('<td><div class="dropdown settings" ><button class="btn btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"><i class="fa fa-cog txt-color-blueDark"></i><span class="caret"></span></button><ul class="dropdown-menu dropdown-content"  role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Bootstrap</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Delete</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Edit</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Manage</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">No Action</a></li></ul></div></td>')); 
 
+            var runlist = [];
+            if(node.run_list && node.run_list.length) {
+            	runlist = node.run_list;
+            }
+            runlist = runlist.join();
+            $tr.append($('<td></td>').append('<span><input class="nodeCheckBox" data-nodeName="'+node.name+'" data-nodeIp="'+ip+'" data-nodeFqdn="'+fqdn+'" data-nodePlatform="'+platform+'" data-nodeEnv="'+environments[i]+'" data-nodeRunlist="'+runlist+'" type="checkbox" name="nodesChecked"/></span>'));
+           /* 
+           $tr.append($('<td><div class="dropdown settings" ><button class="btn btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"><i class="fa fa-cog txt-color-blueDark"></i><span class="caret"></span></button><ul class="dropdown-menu dropdown-content"  role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Bootstrap</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Delete</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Edit</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Manage</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">No Action</a></li></ul></div></td>')); 
+            */
+            
             $tableBody.append($tr);
-             console.log('added');
+            console.log('added');
 
   		}
   	}
 
   });
+
+
+$('.showChefImportNodesModalBtn').click(function(e){
+	 var $checkBoxes = $('.nodeCheckBox:checked');
+	 if(!$checkBoxes.length) {
+        alert('Please Choose nodes first');
+        return; 
+	 }
+	$('#chefImportNodesModal').modal('show');
+});
+
+ $('.importNodesBtn').click(function(e){
+   var $checkBoxes = $('.nodeCheckBox:checked');
+   var reqBody = {};
+   reqBody.projectId = $projectSelect.val();
+   reqBody.selectedNodes = [];
+   for(var i=0;i<$checkBoxes.length;i++) {
+      var nodeInfo = {};
+      var $ckb = $($checkBoxes.get(i));
+      nodeInfo.nodeName = $ckb.attr('data-nodeName');
+      nodeInfo.env = $ckb.attr('data-nodeEnv');
+      nodeInfo.runlist = $ckb.attr('data-nodeRunlist');
+      nodeInfo.platform = $ckb.attr('data-nodePlatform');
+      nodeInfo.ip = $ckb.attr('data-nodeIp');
+      reqBody.selectedNodes.push(nodeInfo);
+   };
+
+   $.post('/chef/sync/nodes',reqBody,function(data){
+   	$('#chefImportNodesModal').modal('hide');
+
+   })
+
+ });
 
 </script>
 <script>

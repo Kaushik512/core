@@ -818,11 +818,14 @@ $.get('/project/'+projectId+'/env/'+envId+'/instances',function(data){
         $divComponentListContainer = $('<div></div>').addClass('componentlistContainer');
         $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
         
-        for(var j=0;j<data[i].blueprintData.templateComponents.length;j++) { 
+        for(var j=0;j<data[i].runlist.length;j++) { 
 
-          var $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].blueprintData.templateComponents[j]));
+
+          var $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            $divComponentList.append($divComponentItem);
-
+            if(j==3) {
+                break;
+            }
         }
         $divComponentListContainer.append($divComponentList);
         $divDomainRolesCaption.append($divComponentListContainer);
