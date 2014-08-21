@@ -35,6 +35,7 @@ var Chef = function(settings) {
 					callback(err, null);
 					return console.log(err);
 				}
+
 				var environmentList = {};
 				var nodeNames = Object.keys(chefResBody);
 				var count = 0;
@@ -52,7 +53,7 @@ var Chef = function(settings) {
 							}
 							environmentList[chefResBody.chef_environment].nodes.push(chefResBody);
 
-							if (count === nodeNames.length - 1) {
+							if (count === nodeNames.length) {
 								callback(null, environmentList);
 							}
 
