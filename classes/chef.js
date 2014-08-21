@@ -66,7 +66,38 @@ var Chef = function(settings) {
 			});
 		});
 
+	};
+
+	this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
+		var options = {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err, null);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		};
+		if (typeof callbackOnStdOut === 'function') {
+			options.onStdOut = function(data) {
+				callbackOnStdOut(data);
+			}
+		}
+
+		if (typeof callbackOnStdErr === 'function') {
+			options.onStdErr = function(data) {
+				callbackOnStdErr(data);
+			}
+		}
+		if((!(params.runlist) || !params.runlist.length)) {
+			params.runlist = [' '];
+
+		}
+
+		var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runlist.join(), '-x' + params.instanceUserName,'-N'+params.nodeName], options);
+		proc.start();
 	}
+
 
 
 }

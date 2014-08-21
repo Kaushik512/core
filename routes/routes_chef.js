@@ -28,10 +28,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
 			var instance = {
 				projectId: projectId,
 				envId: node.env,
+				chefNodeName: node.nodeName,
 				runlist: node.runlist,
-				platformId: node.nodeName,
+				platformId: '',
 				instanceIP: node.ip,
-				instanceState: 'running',
+				instanceState: 'unknown',
 				bootStrapStatus: 'success',
 				bootStrapLog: {
 					err: false,

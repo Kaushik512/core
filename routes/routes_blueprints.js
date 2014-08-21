@@ -1,8 +1,8 @@
 var blueprintsDao = require('../classes/blueprints');
 var settingsController = require('../controller/settings');
 var instancesDao = require('../classes/instances');
-var EC2 = require('../controller/ec2.js');
-var Chef = require('../controller/chef.js');
+var EC2 = require('../classes/ec2.js');
+var Chef = require('../classes/chef.js');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -86,6 +86,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 						var instance = {
 							projectId: blueprint.projectId,
 							envId: blueprint.envId,
+							chefNodeName:instanceData.InstanceId,
 							runlist: version.runlist,
 							platformId: instanceData.InstanceId,
 							instanceIP: instanceData.PublicIpAddress,
@@ -128,7 +129,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 									instanceIp: instanceData.PublicIpAddress,
 									pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
 									runlist: instance.runlist,
-									instanceUserName: settings.aws.instanceUserName
+									instanceUserName: settings.aws.instanceUserName,
+									nodeName:instanceData.InstanceId,
+									environment:blueprint.envId
 								}, function(err, code) {
 
 									console.log('process stopped ==> ', err, code);

@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var InstanceSchema = new Schema({
 	projectId: String,
 	envId: String,
+	chefNodeName: String,
 	runlist: [String],
 	platformId: String,
 	instanceIP: String,
