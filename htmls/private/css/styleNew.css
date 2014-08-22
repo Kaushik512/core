@@ -1473,6 +1473,16 @@ background-image:url('../img/aws_logo.png');
 background-repeat:no-repeat;
  height: 99px;margin-left: 25px;
 }
+.componentlistContainer.started{
+background-image:url('../img/aws_logo_started.png');
+}
+.componentlistContainer.stopped{
+background-image:url('../img/aws_logo_stopped.png');
+}
+.componentlistContainer.paused{
+background-image:url('../img/aws_logo_paused.png');
+}
+
 .actionbuttonStart{
 height:30%;width:30%;
 background-image:url('../img/galleryIcons/start_icon.png');
