@@ -59,7 +59,7 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
         }
     });*/
 
-    // alert(JSON.stringify(formData));
+    alert(JSON.stringify(formData));
     //Reading row to get schema
     formData = d4ddata.masterjson;
 
@@ -622,3 +622,28 @@ function getSettingsNavFor(orgName) {
 
 }
 
+function getProjectsForOrg(orgname){
+var orgname = 'Scholastic';
+var tempJSON = JSON.parse(JSON.stringify(readMasterJson(1)));
+var getProj = null;
+//masterjson.rows.row
+$.each(eval('tempJSON.masterjson.rows.row'), function (m, n) {
+    for (var o = 0; o < n.field.length; o++) {
+        if (n.field[o].values) {
+            if (n.field[o].values.value == orgname) {
+                var getBG = getRelatedValues(2, "orgname", n.field[o].values.value, "productgroupname");
+                $.each(getBG, function (i, k) {
+                    //alert(k);
+                    getProj = getRelatedValues(4, "productgroupname", k, "projectname");
+                    //$.each(getProj, function (j, l) {
+                    //    alert(n.field[o].values.value + ': ' + k + ":" + l);
+                    //});
+
+                });
+            }
+        }
+    }
+
+});
+return (getProj);
+}
