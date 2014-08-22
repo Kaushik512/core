@@ -97,8 +97,8 @@
 
                                                                     </div>
                                                                 </section>
-                                                            </div>
-                                                        </fieldset>
+                                                                </div>
+</fieldset>
 
                                                     </form>
                                                 </div>
@@ -369,24 +369,21 @@
             }
             formSchema = item.field;
         });
-
+        // alert(JSON.stringify(formSchema));
         //Read current form values with the field names
         var formSchemaNew = null;
         if (editMode == false)
             formSchemaNew = JSON.parse(JSON.stringify(formSchema));
         else
             formSchemaNew = formSchema;
-        alert(JSON.stringify(formSchemaNew));
-        debugger;
+
         $.each(formSchemaNew, function (i, item) {
-            // alert('in');
             var inputC = null;
             $.each(item, function (k, v) {
                 if (k == "name") {
                     inputC = $("#" + v);
                 }
             });
-            // debugger;
             $.each(item, function (k, v) {
                 if (k == "values") {
                     if (inputC) {
@@ -424,13 +421,11 @@
             });
 
         });
-
         if (editMode == false)
             formData.rows.row.push(JSON.parse('{\"field\":' + JSON.stringify(formSchemaNew) + '}'));
 
-        //alert(JSON.stringify(formSchemaNew));
 
-        alert(JSON.stringify(formData));
+        // alert(JSON.stringify(formData));
         //  debugger;
         $.ajax({
             type: "post",

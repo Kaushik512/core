@@ -1,6 +1,4 @@
-<script src="../js/plugin/multiselect/bootstrap-multiselect.min.js"></script>
-<script src="js/jquery.dataTables.js"></script>
-<script src="ajax/Data/d4d.js"></script>
+<script src="/ajax/Data/d4d.js"></script>
 <script>
     $(".login-info").hide();
     
@@ -38,7 +36,40 @@
                 <div class="widget-body">
                     <div class="widget-main" style="min-height:300px">
                         <div class="col-md-12" style="padding-left:0px; padding-right:0px;">
-                            
+                            <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
+                                <thead>
+                                    <tr class="rowCustomStyle">
+                                        <td>Name</td>
+                                        <td>Description</td>
+                                        <td>Organization</td>
+                                        <td>Business Group</td>
+                                        <td>Environments</td>
+                                        <td>Cost Codes</td>
+                                        <td class="">Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden rowtemplate">
+                                        <td datafield="projectname"></td>
+                                        <td datafield="description"></td>
+                                        <td datafield="orgname"></td>
+                                        <td datafield="productgroupname"></td>
+                                        <td datafield="environmentname"></td>
+                                        <td datafield="costcode"></td>
+                                        <td>
+                                            <div class=" hidden-sm hidden-xs btn-group">
+                                                <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+                                                <a class="btn btn-xs btn-info pull-left" title="Update">
+                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
                                 <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%">
                                     <thead>
                                         <tr class="rowCustomStyle">
@@ -52,23 +83,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="hidden rowtemplate">
-                                            <td datafield="projectname"></td>
-                                            <td datafield="description"></td>
-                                            <td datafield="orgname"></td>
-                                            <td datafield="productgroupname"></td>
-                                            <td datafield="environmentname"></td>
-                                            <td datafield="costcode"></td>
-                                            <td>
-                                                <div class=" hidden-sm hidden-xs btn-group">
-                                                    <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
-                                                    <a class="btn btn-xs btn-info pull-left" title="Update">
-                                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-
-                                        </tr>
+                                        
                                        
                                     </tbody>
                                     
