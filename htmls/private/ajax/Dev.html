@@ -815,7 +815,17 @@ $.get('/project/'+projectId+'/env/'+envId+'/instances',function(data){
         $divDomainRolesCaption.append($divHeading);
         $divDomainRolesCaption.append($('<hr>'));
 
-        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer');
+        var className = ''; 
+        if(data[i].instanceState === 'running') {
+            className = 'started';
+        } else if(data[i].instanceState === 'stopped') {
+            className = 'paused';
+        } else {
+            className = 'stopped'; 
+        }
+
+
+        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer '+className);
         $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
         
         for(var j=0;j<data[i].runlist.length;j++) { 

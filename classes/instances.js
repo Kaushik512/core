@@ -129,6 +129,26 @@ var InstancesDao = function() {
 			}
 			callback(null, data);
 		});
+	};
+
+	this.updateInstancesRunlist = function(instanceId, runlist, callback) {
+
+		Instances.update({
+			"_id": new ObjectId(instanceId),
+		}, {
+			$set: {
+				"runlist": runlist
+			}
+		}, {
+			upsert: false
+		}, function(err, data) {
+			if (err) {
+				callback(err, null);
+				return;
+			}
+			callback(null, data);
+		});
+
 	}
 }
 

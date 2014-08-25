@@ -9,31 +9,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 	app.all('/project/*', sessionVerificationFunc);
 
-	app.get('/project/:projectId/env/:envId/blueprints', function(req, res) {
-		blueprintsDao.getBlueprintsByProjectAndEnvId(req.params.projectId, req.params.envId, req.query.blueprintType, function(err, data) {
-			if (err) {
-				res.send(500);
-				return;
-			}
-			res.send(data);
-		});
-	});
+	
 
-	app.post('/project/:projectId/env/:envId/blueprint', function(req, res) {
-		var blueprintData = req.body.blueprintData;
-		blueprintData.projectId = req.params.projectId;
-		blueprintData.envId = req.params.envId;
-
-		blueprintsDao.createBlueprint(blueprintData, function(err, data) {
-			if (err) {
-				res.send(500);
-				return;
-			}
-			res.send(data);
-		});
-	});
-
-	app.post('/project/:projectId/env/:envId/blueprint/:blueprintId/update', function(req, res) {
+	app.post('/blueprints/:blueprintId/update', function(req, res) {
 
 		var blueprintUpdateData = req.body.blueprintUpdateData;
 
@@ -55,9 +33,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 	});
 
 
-	app.get('/project/:projectId/env/:envId/blueprint/:blueprintId/launch', function(req, res) {
-
-		var blueprintUpdateData = req.body.blueprintUpdateData;
+	app.get('/blueprints/:blueprintId/launch', function(req, res) {
 
 		blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
 			if (err) {
@@ -74,133 +50,164 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 					}
 				}
 				settingsController.getSettings(function(settings) {
-					var ec2 = new EC2(settings.aws);
-					ec2.launchInstance(null, "m1.medium", settings.aws.securityGroupId, function(err, instanceData) {
-						if (err) {
-							console.log(err);
-							res.send(500);
-							return;
-						}
-						console.log(version.runlist);
+					var chef = new Chef(settings.chef);
 
-						var instance = {
-							projectId: blueprint.projectId,
-							envId: blueprint.envId,
-							chefNodeName:instanceData.InstanceId,
-							runlist: version.runlist,
-							platformId: instanceData.InstanceId,
-							instanceIP: instanceData.PublicIpAddress,
-							instanceState: instanceData.State.Name,
-							bootStrapStatus: 'waiting',
-							bootStrapLog: {
-								err: false,
-								log: 'waiting',
-								timestamp: new Date().getTime()
-							},
-							blueprintData: {
-								blueprintId: blueprint._id,
-								blueprintName: blueprint.name,
-								templateId: blueprint.templateId,
-								templateType: blueprint.templateType,
-								templateComponents: blueprint.templateComponents
-							}
-						}
-						instancesDao.createInstance(instance, function(err, data) {
+					function launchInstance() {
+
+
+						var ec2 = new EC2(settings.aws);
+						ec2.launchInstance(null, "m1.medium", settings.aws.securityGroupId, function(err, instanceData) {
 							if (err) {
 								console.log(err);
 								res.send(500);
 								return;
 							}
-							instance.id = data._id;
+							console.log(version.runlist);
 
-							ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
+							var instance = {
+								projectId: blueprint.projectId,
+								envId: blueprint.envId,
+								chefNodeName: instanceData.InstanceId,
+								runlist: version.runlist,
+								platformId: instanceData.InstanceId,
+								instanceIP: instanceData.PublicIpAddress,
+								instanceState: instanceData.State.Name,
+								bootStrapStatus: 'waiting',
+								bootStrapLog: {
+									err: false,
+									log: 'waiting',
+									timestamp: new Date().getTime()
+								},
+								blueprintData: {
+									blueprintId: blueprint._id,
+									blueprintName: blueprint.name,
+									templateId: blueprint.templateId,
+									templateType: blueprint.templateType,
+									templateComponents: blueprint.templateComponents
+								}
+							}
+							instancesDao.createInstance(instance, function(err, data) {
 								if (err) {
+									console.log(err);
+									res.send(500);
 									return;
 								}
-								instancesDao.updateInstanceState(instance.id, instanceData.State.Name, function(err, updateCount) {
+								instance.id = data._id;
+
+								ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
 									if (err) {
-										console.log("update instance state err ==>", err);
 										return;
 									}
-									console.log('instance state upadated');
-								});
-								var chef = new Chef(settings.chef);
-								chef.bootstrapInstance({
-									instanceIp: instanceData.PublicIpAddress,
-									pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
-									runlist: instance.runlist,
-									instanceUserName: settings.aws.instanceUserName,
-									nodeName:instanceData.InstanceId,
-									environment:blueprint.envId
-								}, function(err, code) {
+									instancesDao.updateInstanceState(instance.id, instanceData.State.Name, function(err, updateCount) {
+										if (err) {
+											console.log("update instance state err ==>", err);
+											return;
+										}
+										console.log('instance state upadated');
+									});
 
-									console.log('process stopped ==> ', err, code);
-									if (err) {
-										console.log("knife launch err ==>", err);
-										instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+									chef.bootstrapInstance({
+										instanceIp: instanceData.PublicIpAddress,
+										pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
+										runlist: instance.runlist,
+										instanceUserName: settings.aws.instanceUserName,
+										nodeName: instanceData.InstanceId,
+										environment: blueprint.envId
+									}, function(err, code) {
 
-										});
-									} else {
-										if (code == 0) {
-											instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-												if (err) {
-													console.log("Unable to set instance bootstarp status");
-												} else {
-													console.log("Instance bootstrap status set to true");
-												}
-											});
-
-										} else {
+										console.log('process stopped ==> ', err, code);
+										if (err) {
+											console.log("knife launch err ==>", err);
 											instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-												if (err) {
-													console.log("Unable to set instance bootstarp status");
-												} else {
-													console.log("Instance bootstrap status set to true");
-												}
+
 											});
+										} else {
+											if (code == 0) {
+												instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+													if (err) {
+														console.log("Unable to set instance bootstarp status");
+													} else {
+														console.log("Instance bootstrap status set to success");
+													}
+												});
 
-										}
-									}
+											} else {
+												instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+													if (err) {
+														console.log("Unable to set instance bootstarp status");
+													} else {
+														console.log("Instance bootstrap status set to failed");
+													}
+												});
 
-								}, function(stdOutData) {
-									instancesDao.updateInstanceBootstrapLog(instance.id, {
-										err: false,
-										log: stdOutData.toString('ascii'),
-										timestamp: new Date().getTime()
-									}, function(err, data) {
-										if (err) {
-											console.log('unable to update bootStrapLog');
-											return;
+											}
 										}
-										console.log('bootStrapLog updated');
+
+									}, function(stdOutData) {
+										instancesDao.updateInstanceBootstrapLog(instance.id, {
+											err: false,
+											log: stdOutData.toString('ascii'),
+											timestamp: new Date().getTime()
+										}, function(err, data) {
+											if (err) {
+												console.log('unable to update bootStrapLog');
+												return;
+											}
+											console.log('bootStrapLog updated');
+										});
+
+									}, function(stdErrData) {
+
+										instancesDao.updateInstanceBootstrapLog(instance.id, {
+											err: true,
+											log: stdErrData.toString('ascii'),
+											timestamp: new Date().getTime()
+										}, function(err, data) {
+											if (err) {
+												console.log('unable to update bootStrapLog');
+												return;
+											}
+											console.log('bootStrapLog updated');
+										});
 									});
 
-								}, function(stdErrData) {
-
-									instancesDao.updateInstanceBootstrapLog(instance.id, {
-										err: true,
-										log: stdErrData.toString('ascii'),
-										timestamp: new Date().getTime()
-									}, function(err, data) {
-										if (err) {
-											console.log('unable to update bootStrapLog');
-											return;
-										}
-										console.log('bootStrapLog updated');
-									});
 								});
 
+								res.send(200, {
+									"id": instance.id,
+									"message": "instance launch success"
+								});
 							});
 
-							res.send(200,{
-								"id":instance.id,
-								"message":"instance launch success"
-							});
+
 						});
 
 
+					}
+					chef.getEnvironment(blueprint.envId, function(err, env) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+
+						if (!env) {
+							console.log(blueprint.envId);
+							chef.createEnvironment(blueprint.envId, function(err, envName) {
+								if (err) {
+									res.send(500);
+									return;
+								}
+								launchInstance();
+
+							});
+						} else {
+							launchInstance();
+						}
+
 					});
 				});
+
+
 
 			} else {
 				res.send(404, {

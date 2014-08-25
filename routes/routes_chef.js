@@ -58,6 +58,21 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 	});
 
+	app.post('/chef/environments/create', verificationFunc, function(req, res) {
+
+		settingsController.getChefSettings(function(settings) {
+			var chef = new Chef(settings);
+			chef.createEnvironment(req.body.envName,function(err,envName) {
+				if (err) {
+					res.send(500);
+					return;
+				} else {
+					res.send(envName);
+				}
+			});
+		});
+	});
+
 
 
 };
