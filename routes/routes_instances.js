@@ -41,96 +41,95 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 	});
 
 	app.get('/instances/:instanceId/stopInstance', function(req, res) {
-			instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-				if (err) {
-					res.send(500);
-					return;
-				}
-				if (data.length) {
+		instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			if (data.length) {
 
-					settingsController.getAwsSettings(function(settings) {
-						var ec2 = new EC2(settings);
-						ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
+				settingsController.getAwsSettings(function(settings) {
+					var ec2 = new EC2(settings);
+					ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+						res.send(200);
+
+						instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
 							if (err) {
-								res.send(500);
+								console.log("update instance state err ==>", err);
 								return;
 							}
-							res.send(200);
-
-							instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
-								if (err) {
-									console.log("update instance state err ==>", err);
-									return;
-								}
-								console.log('instance state upadated');
-							});
-						}, function(err, state) {
-							if (err) {
-								return;
-							}
-							instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-								if (err) {
-									console.log("update instance state err ==>", err);
-									return;
-								}
-								console.log('instance state upadated');
-							});
+							console.log('instance state upadated');
 						});
-
+					}, function(err, state) {
+						if (err) {
+							return;
+						}
+						instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
 					});
-				} else {
-					res.send(404);
-					return;
-				}
-			});
 
-			app.get('/instances/:instanceId/startInstance', function(req, res) {
-				instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-					if (err) {
-						res.send(500);
-						return;
-					}
-					if (data.length) {
+				});
+			} else {
+				res.send(404);
+				return;
+			}
+		});
+	});
 
-						settingsController.getAwsSettings(function(settings) {
-							var ec2 = new EC2(settings);
-							ec2.startInstance([data[0].platformId], function(err, startingInstances) {
-								if (err) {
-									res.send(500);
-									return;
-								}
-								res.send(200);
+	app.get('/instances/:instanceId/startInstance', function(req, res) {
+		instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			if (data.length) {
 
-								instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
-									if (err) {
-										console.log("update instance state err ==>", err);
-										return;
-									}
-									console.log('instance state upadated');
-								});
-							});
+				settingsController.getAwsSettings(function(settings) {
+					var ec2 = new EC2(settings);
+					ec2.startInstance([data[0].platformId], function(err, startingInstances) {
+						if (err) {
+							res.send(500);
+							return;
+						}
+						res.send(200);
 
-						}, function(err, state) {
+						instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
 							if (err) {
+								console.log("update instance state err ==>", err);
 								return;
 							}
-							instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-								if (err) {
-									console.log("update instance state err ==>", err);
-									return;
-								}
-								console.log('instance state upadated');
-							});
+							console.log('instance state upadated');
 						});
+					});
 
-					} else {
-						res.send(404);
+				}, function(err, state) {
+					if (err) {
 						return;
 					}
+					instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+						if (err) {
+							console.log("update instance state err ==>", err);
+							return;
+						}
+						console.log('instance state upadated');
+					});
 				});
 
-			});
+			} else {
+				res.send(404);
+				return;
+			}
+		});
 
+	});
 
-
-		};
+};

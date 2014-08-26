@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var TaskStatusSchema = new Schema({
 	timeStarted: Number,
 	timeEnded: Number,
-	completed: boolean,
+	completed: Boolean,
 	status: Object
 });
 

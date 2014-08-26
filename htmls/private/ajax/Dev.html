@@ -746,7 +746,7 @@ var envId = urlParams['envid'];
 
 
 
-$.get('/project/'+projectId+'/env/'+envId+'/blueprints',function(data){
+$.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data){
     
     var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
     $AppFactpanelBody.empty();
@@ -797,7 +797,7 @@ $.get('/project/'+projectId+'/env/'+envId+'/blueprints',function(data){
 
 
 
-$.get('/project/'+projectId+'/env/'+envId+'/instances',function(data){
+$.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     
     var $instancesList = $('.instancesList').empty();
     

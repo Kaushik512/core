@@ -88,7 +88,7 @@ var Chef = function(settings) {
 				if (chefRes.statusCode === 201) {
 					callback(null, envName);
 				} else {
-					callback(true, null),
+					callback(true, null);
 				}
 
 			});
