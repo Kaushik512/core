@@ -769,30 +769,30 @@ hr.layout {
 /*Real Time Updates*/
 
 .demo-container {
-	box-sizing: border-box;
-	width: 650px;
-	height: 350px;
-	padding: 20px 15px 15px 15px;
-/*	margin: 10px auto 20px auto;*/
-	border: 1px solid #ddd;
-	background: #fff; 
-	background: linear-gradient(#f6f6f6 0, #fff 50px);
-	background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
-	background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
-	background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
-	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
-	box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    width: 650px;
+    height: 350px;
+    padding: 20px 15px 15px 15px;
+/*  margin: 10px auto 20px auto;*/
+    border: 1px solid #ddd;
+    background: #fff; 
+    background: linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 .demo-placeholder {
-	width: 100%;
-	height: 100%;
-	font-size: 14px;
-	
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    
 }
 
 /* -- box-Tabs */
@@ -962,7 +962,7 @@ hr.layout {
     margin-right: 18px;
     /*max-height: 145px;*//*arabinda*/
     max-width: 162px;
-    width: 41%;
+    min-width: 162px;
 }
 
 .domain-roles {
@@ -976,7 +976,7 @@ hr.layout {
     margin-top: 3px;
     /*max-width: 100px;*/
     /*min-height: 145px;*//*arabinda*/
-    min-height: 220px;
+    min-height: 270px;
     padding-bottom: 4px;
     padding-left: 4px;
     padding-right: 4px;
@@ -999,6 +999,7 @@ hr.layout {
 
 .instance-details-item {
     display: block;
+    margin-left:20px;
 }
 .instance-bootstrap-ActionStart {
     /*border-top: 1px ridge;*/
@@ -1471,7 +1472,8 @@ hr.layout {
 height:30%;
 background-image:url('../img/aws_logo.png');
 background-repeat:no-repeat;
- height: 99px;margin-left: 25px;
+ height: 150px;
+ /*margin-left: 25px;*/
 }
 .componentlistContainer.started{
 background-image:url('../img/aws_logo_started.png');
@@ -1482,6 +1484,30 @@ background-image:url('../img/aws_logo_stopped.png');
 .componentlistContainer.paused{
 background-image:url('../img/aws_logo_paused.png');
 }
+.componentlistContainer.pending{
+background-image:url('../img/aws_logo_pending.png');
+}
+
+.instancestatusindicator{
+background-repeat:no-repeat;
+background-position: center;
+}
+.instancestatusindicator.started{ 
+background-image:url('../img/indicator_started.png');
+}
+.instancestatusindicator.stopped{
+background-image:url('../img/indicator_stopped.png');
+}
+.instancestatusindicator.paused{
+background-image:url('../img/indicator_paused.png');
+}
+.instancestatusindicator.pending{
+background-image:url('../img/indicator_pending.png');
+}
+.rowcustomselected{
+    font-weight: bold;
+}
+
 
 .actionbuttonStart{
 height:30%;width:30%;
@@ -1501,4 +1527,10 @@ margin-top:0px;
     height:30%;width:30%;
     background-image:url('../img/galleryIcons/shut_down.png');
     background-repeat:no-repeat;float: left;height: 27px;width: 22%;
+}
+.panel-title{
+    display:inline-block;
+}
+.swap-view{
+    margin:10px;
 }

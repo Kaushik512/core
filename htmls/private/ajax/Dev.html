@@ -429,11 +429,42 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
+                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x" title="Table View"/></button></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
-
-                                                    <ul class="thumbnails list-unstyled instancesList">
+                                                    <div class="widget-box" id="divinstancestableview">
+                                                        <div class="widget-body">
+                                                            <div class="widget-main" style="min-height:300px"> 
+                                                                <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
+                                                                    <div class="" >
+                                                                            <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                                                <thead>
+                                                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                                                        <td>Name</td>
+                                                                                        <td>Role</td>
+                                                                                        <td>ID</td>
+                                                                                        <td width='20px'>Status</td>
+                                                                                        <td class="">Action</td>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    
+                                                                                   
+                                                                                </tbody>
+                                                                                
+                                                                            </table>
+                                                                    </div>
+                                                               </div>
+                                                            </div> 
+                                                            
+                                                        </div>
+                                                        <div class="widget-toolbox padding-8 clearfix">
+                                                               <div id="tableFooterLeft" class="pull-left"></div>
+                                                               <div id="tableFooterRight" class="pull-right"></div>
+                                                            </div>
+                                                    </div>
+                                                    <ul class="thumbnails list-unstyled instancesList" id="divinstancescardview">
 
 
                                                         <!--Card for Planning starts here-->
@@ -744,6 +775,8 @@ console.log(urlParams);
 var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 
+//for Table view
+$('#defaultViewButton').click(); //setting the detault view
 
 
 $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data){
@@ -757,6 +790,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 
     
     for(var i=0;i<data.length;i++) {
+        
         var $itemContainer = $('<div></div>').addClass("col-sm-2 col-lg-2 col-md-2");
 
         var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId); 
@@ -766,6 +800,12 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         $ul.append($liImage);
         
         var $liCardName = $('<li></li>').css({"font-size":'12px'}).html('<u><b>'+data[i].name+'</b></u>');
+
+        //For Table View
+        $rowContainter.append('<td>' +data[i].name + '</td>');
+        
+
+
         $ul.append($liCardName);
    
         if(data[i].templateComponents) { 
@@ -777,12 +817,21 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         }
 
         $itemBody.append($ul);
+        
+
+
+
         $itemContainer.append($itemBody);
         if(data[i].templateType=='appFactory') {
             $AppFactpanelBody.append($itemContainer);
         }  else {
            $devopsRolepanelBody.append($itemContainer);
         }
+        //For Table View
+        $rowContainter.append('<td>' +$itemContainer+ '</td>');
+
+        //For Table View
+        $rowContainter.append('<td>' +$itemContainer+ '</td>');
 
     }
     var $productdiv1 = $('.productdiv1');
@@ -798,10 +847,16 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 
 
 $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
+
     
     var $instancesList = $('.instancesList').empty();
     
     for(var i=0;i<data.length;i++) {
+
+        //For Table view
+        var $rowContainter = $('<tr></tr>');
+
+
         var $li = $('<li></li>').addClass('domain-role-thumbnail');
         var $div = $('<div></div>').addClass('domain-roles');
         var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption');
@@ -814,34 +869,52 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $divHeading.append($spanheadingRight);
         $divDomainRolesCaption.append($divHeading);
         $divDomainRolesCaption.append($('<hr>'));
+        var $divComponentListContainer ;
+        var $tdInstanceStatusIndicator ;
 
-        var className = ''; 
-        if(data[i].instanceState === 'running') {
-            className = 'started';
-        } else if(data[i].instanceState === 'stopped') {
-            className = 'paused';
-        } else {
-            className = 'stopped'; 
+        if(data[i].instanceState == 'running'){
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
+        }
+        else if(data[i].instanceState == 'pending'){
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+        }
+        else  if(data[i].instanceState == 'stopped'){
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer paused');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator paused');
+        }  
+        else{
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
         }
 
 
-        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer '+className);
         $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
         
         for(var j=0;j<data[i].runlist.length;j++) { 
-
-
-          var $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+          var $divComponentItem;
+           if(j == 0)
+            $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+           else
+            $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            $divComponentList.append($divComponentItem);
             if(j==3) {
                 break;
             }
         }
         $divComponentListContainer.append($divComponentList);
+
+        //For Table View
+        $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
+        $rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
+        $rowContainter.append('<td>' +data[i]._id+ '</td>');
+        $rowContainter.append($tableInstanceStatusIndicator);
+
         $divDomainRolesCaption.append($divComponentListContainer);
         var $divInstanceDetails = $('<div></div>')
         var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-item').html('Id : <strong>'+data[i]._id+'</strong>');
+        var $instanceDetailItemId = $('<span style="margin-left:-2px;"></span>').addClass('instance-details-item').html('Id : <strong>'+data[i]._id+'</strong>');
         $instanceDetailsList.append($instanceDetailItemId);
        
         var $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class=instance-active>'+data[i].instanceState+'</strong>');
@@ -852,6 +925,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
          $divDomainRolesCaption.append($divInstanceDetails);
 
          $divDomainRolesCaption.append($('<hr>'));
+
+
 
           var $divActionBtnContainer = $('<div></div>');
 
@@ -869,8 +944,30 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         $instancesList.append($li);
 
+        //For Table View
+        $rowContainter.append('<td>' +$divActionBtnContainer.html()+ '</td>');
+        $("#tableinstanceview").append($rowContainter);
     }
    
+   //for table view
+   var tableinstanceview = $('#tableinstanceview').dataTable({
+     "pagingType": "full_numbers"
+    });
+    $('#tableinstanceview tbody').on('click','tr',function(){
+        if($(this).hasClass('rowcustomselected')){
+            $(this).removeClass('rowcustomselected');
+        }
+        else{
+            tableinstanceview.$('tr').removeClass('rowcustomselected');
+            $(this).addClass('rowcustomselected');
+        }
+
+    });
+    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
+    $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
+    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
+    //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
+   // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
 });
 
 
