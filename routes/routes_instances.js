@@ -7,6 +7,24 @@ var taskstatusDao = require('../classes/taskstatus');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
+	app.all('/instances/*', sessionVerificationFunc);
+
+	app.get('/instances/:instanceId', function(req, res) {
+		instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			
+			if (data.length) {
+				res.send(data[0]);
+			} else {
+				res.send(404);
+			}
+		});
+	})
+
+
 	app.post('/instances/:instanceId/updateRunlist', function(req, res) {
 		if (!req.body.runlist) {
 			res.send(400);
@@ -55,7 +73,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							res.send(500);
 							return;
 						}
-						res.send(200);
+						res.send(200, {
+							instanceCurrentState: stoppingInstances[0].CurrentState.Name,
+						});
 
 						instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
 							if (err) {
@@ -100,7 +120,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							res.send(500);
 							return;
 						}
-						res.send(200);
+						res.send(200, {
+							instanceCurrentState: startingInstances[0].CurrentState.Name,
+						});
 
 						instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
 							if (err) {
@@ -109,19 +131,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
-					});
-
-				}, function(err, state) {
-					if (err) {
-						return;
-					}
-					instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+					}, function(err, state) {
 						if (err) {
-							console.log("update instance state err ==>", err);
 							return;
 						}
-						console.log('instance state upadated');
+						instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
 					});
+
 				});
 
 			} else {

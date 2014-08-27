@@ -1038,9 +1038,24 @@ hr.layout {
     padding-top: 10px;
     text-align: center;*/
 }
+.instance-state {
 
-.instance-active {
+}
+
+.instance-state-text-started {
     color: #008000;
+}
+
+.instance-state-text-stopped {
+    color: red;
+}
+
+.instance-state-text-pending {
+    color: grey;
+}
+
+.instance-state-text-paused {
+    color: orange;
 }
 
 .content-container {

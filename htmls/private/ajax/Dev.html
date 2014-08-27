@@ -802,7 +802,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         var $liCardName = $('<li></li>').css({"font-size":'12px'}).html('<u><b>'+data[i].name+'</b></u>');
 
         //For Table View
-        $rowContainter.append('<td>' +data[i].name + '</td>');
+        //$rowContainter.append('<td>' +data[i].name + '</td>');
         
 
 
@@ -828,10 +828,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            $devopsRolepanelBody.append($itemContainer);
         }
         //For Table View
-        $rowContainter.append('<td>' +$itemContainer+ '</td>');
+        //$rowContainter.append('<td>' +$itemContainer+ '</td>');
 
         //For Table View
-        $rowContainter.append('<td>' +$itemContainer+ '</td>');
+        //$rowContainter.append('<td>' +$itemContainer+ '</td>');
 
     }
     var $productdiv1 = $('.productdiv1');
@@ -854,15 +854,15 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     for(var i=0;i<data.length;i++) {
 
         //For Table view
-        var $rowContainter = $('<tr></tr>');
+        var $rowContainter = $('<tr data-instanceId="'+data[i]._id+'""></tr>');
 
 
         var $li = $('<li></li>').addClass('domain-role-thumbnail');
         var $div = $('<div></div>').addClass('domain-roles');
-        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption');
+        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html(data[i].blueprintData.blueprintName); 
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName); 
         var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a></a>').addClass('moreInfo').attr('title','More Info'));  
 
         $divHeading.append($spanheadingLeft); 
@@ -876,7 +876,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
         }
-        else if(data[i].instanceState == 'pending'){
+        else if(data[i].instanceState == 'terminated'){
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
         }
@@ -884,10 +884,11 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer paused');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator paused');
         }  
-        else{
+        else {
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
         }
+        $tableInstanceStatusIndicator.attr('data-instanceId',data[i]._id);
 
 
         $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
@@ -916,8 +917,17 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
         var $instanceDetailItemId = $('<span style="margin-left:-2px;"></span>').addClass('instance-details-item').html('Id : <strong>'+data[i]._id+'</strong>');
         $instanceDetailsList.append($instanceDetailItemId);
+          var $instanceDetailItemStatus;
+        if(data[i].instanceState == 'running'){
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-started">'+data[i].instanceState+'</strong>');     
+        } else if(data[i].instanceState == 'terminated'){
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
+        } else  if(data[i].instanceState == 'stopped'){
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-paused">'+data[i].instanceState+'</strong>');
+        } else {
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-pending">'+data[i].instanceState+'</strong>');
+        }
        
-        var $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class=instance-active>'+data[i].instanceState+'</strong>');
          $instanceDetailsList.append($instanceDetailItemStatus);
 
          $divInstanceDetails.append($instanceDetailsList);
@@ -928,14 +938,14 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
 
-          var $divActionBtnContainer = $('<div></div>');
+          var $divActionBtnContainer = $('<div></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data[i]._id);
 
-          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a></a>').addClass('actionbuttonStart'));
+          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','start'));
           $divActionBtnContainer.append($divActionStartContainer);
 
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a></a>').addClass('actionbuttonRestart'));
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart'));
           $divActionBtnContainer.append($divActionReStartContainer);
-          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a></a>').addClass('actionbuttonShutdown'));
+          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
           $divActionBtnContainer.append($divActionShutdownContainer);
   
         $divDomainRolesCaption.append($divActionBtnContainer);
@@ -945,9 +955,14 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $instancesList.append($li);
 
         //For Table View
-        $rowContainter.append('<td>' +$divActionBtnContainer.html()+ '</td>');
+        $rowContainter.append('<td>' +$('<div></div>').append($divActionBtnContainer.clone()).html()+ '</td>');
         $("#tableinstanceview").append($rowContainter);
     }
+
+     
+
+
+
    
    //for table view
    var tableinstanceview = $('#tableinstanceview').dataTable({
@@ -968,6 +983,87 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
     //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
    // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
+
+    //handling instance action btn
+  
+     function getCssClassFromStatus(status) {
+        var cssClasses = {
+
+        };
+        switch(status) {
+            
+            case 'running':
+            cssClasses.ringClass = 'started';
+             cssClasses.textClass = 'instance-state-text-started';
+             cssClasses.tableViewStatusClass ="started";
+            break;
+
+            case 'stopped':
+             cssClasses.ringClass = 'paused';
+             cssClasses.textClass = 'instance-state-text-paused';
+             cssClasses.tableViewStatusClass ="paused";
+            break;
+
+            case 'terminated':
+             cssClasses.ringClass = 'stopped';
+             cssClasses.textClass = 'instance-state-text-stopped';
+             cssClasses.tableViewStatusClass ="stopped";
+            break;
+
+            default :
+             cssClasses.ringClass = 'pending';
+             cssClasses.textClass = 'instance-state-text-pending';
+             cssClasses.tableViewStatusClass ="pending";
+
+        }
+
+        return cssClasses;
+     } 
+
+    $('.instanceActionBtn').click(function(e){
+        var $this = $(this);
+        var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
+        var type = $this.attr('data-actionType');
+        url = '/instances/'+instanceId+'/startInstance';
+        if(type==='stop') {
+            url = '/instances/'+instanceId+'/stopInstance'
+        }
+        $.get(url,function(data){
+            var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+            console.log($parent.length,$parent);
+           
+            var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
+            
+            var oldState = data.instanceCurrentState;
+
+            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+
+            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
+
+            $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+            
+            function pollInstanceState(state,delay) {
+                var timeout = setTimeout(function() {
+                    $.get('/instances/'+instanceId,function(data){
+                        if(data) {
+                            if(data.instanceState === state) {
+                                pollInstanceState(state,5000);
+                            } else {
+                                console.log('polling complete');
+                                 var cssClassed = getCssClassFromStatus(data.instanceState); 
+                                 $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                 $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                  $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                            } 
+                        }   
+                    })
+                }, delay);                
+            }
+            pollInstanceState(oldState,2000);                        
+        }); 
+    });
+
+
 });
 
 
@@ -1018,7 +1114,7 @@ $('.launchBtn').click(function(e){
        var envId = $($selectedItems.get(i)).attr('data-envId');
        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
        
-       $.get('/project/'+projectId+'/env/'+envId+'/blueprint/'+blueprintId+'/launch',function(data){
+       $.get('/blueprints/'+blueprintId+'/launch',function(data){
          
          var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : '+data.id);  
 
