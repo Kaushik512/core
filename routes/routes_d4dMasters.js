@@ -1,4 +1,4 @@
-var d4dModel = require('../classes/d4dmasters.js');
+var d4dModel = require('../classes/d4dmasters/d4dmastersmodel.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {

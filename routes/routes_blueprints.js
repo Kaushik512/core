@@ -184,7 +184,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
 					}
-					blueprint.envId = 'testenv1234'
+					
 					chef.getEnvironment(blueprint.envId, function(err, env) {
 						if (err) {
 							res.send(500);
