@@ -4,7 +4,9 @@ var instancesDao = require('../classes/instances');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
-	app.get('/chef/nodes', verificationFunc, function(req, res) {
+	app.all('/chef/*', verificationFunc);
+
+	app.get('/chef/nodes', function(req, res) {
 		settingsController.getChefSettings(function(settings) {
 			var chef = new Chef(settings);
 			chef.getNodesDetailsForEachEnvironment(function(err, environmentList) {
@@ -19,7 +21,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	});
 
 
-	app.post('/chef/sync/nodes', verificationFunc, function(req, res) {
+	app.post('/chef/sync/nodes', function(req, res) {
 		var reqBody = req.body;
 		var projectId = reqBody.projectId;
 		var count = 0;
@@ -58,11 +60,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 	});
 
-	app.post('/chef/environments/create', verificationFunc, function(req, res) {
+	app.post('/chef/environments/create', function(req, res) {
 
 		settingsController.getChefSettings(function(settings) {
 			var chef = new Chef(settings);
-			chef.createEnvironment(req.body.envName,function(err,envName) {
+			chef.createEnvironment(req.body.envName, function(err, envName) {
 				if (err) {
 					res.send(500);
 					return;
@@ -71,6 +73,21 @@ module.exports.setRoutes = function(app, verificationFunc) {
 				}
 			});
 		});
+	});
+
+	app.get('/chef/cookbooks', function(req, res) {
+		settingsController.getChefSettings(function(settings) {
+			var chef = new Chef(settings);
+			chef.getCookbooksList(function(err, cookbooks) {
+				if (err) {
+					res.send(500);
+					return;
+				} else {
+					res.send(cookbooks);
+				}
+			});
+		});
+
 	});
 
 

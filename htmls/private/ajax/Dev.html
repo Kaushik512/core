@@ -754,6 +754,26 @@
 </div>
 
 
+<div class="modal fade" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Runlist</h4>
+      </div>
+      <div class="modal-body">
+         <select class="chefCookbookList" multiple>
+         </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary btnUpdateRunlist">Update</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script type="text/javascript">
 
 var urlParams ={};
@@ -777,6 +797,16 @@ var envId = urlParams['envid'];
 
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
+
+$.get('/chef/cookbooks',function(data){
+    var keys = Object.keys(data);
+    var $cookbooksList = $('.chefCookbookList'); 
+    for(var i=0;i<keys.length;i++) {
+      var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+      $cookbooksList.append($option);
+    }
+
+});
 
 
 $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data){
@@ -943,7 +973,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
           var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','start'));
           $divActionBtnContainer.append($divActionStartContainer);
 
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart'));
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist'));
           $divActionBtnContainer.append($divActionReStartContainer);
           var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
           $divActionBtnContainer.append($divActionShutdownContainer);
@@ -1063,6 +1093,13 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         }); 
     });
 
+    $('.instanceActionBtnUpdateRunlist').click(function(e){
+         var $this = $(this);
+         var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
+         $('.chefCookbookList').attr('data-instanceId',instanceId);
+         $('#chefRunModalContainer').modal('show');
+    });
+
 
 });
 
@@ -1123,6 +1160,17 @@ $('.launchBtn').click(function(e){
         
        })
    } 
+});
+
+$('.btnUpdateRunlist').click(function(e){
+  var instanceId  = $('.chefCookbookList').attr('data-instanceId');
+  var runlist = $('.chefCookbookList').val();
+  console.log(runlist); 
+  $.post('/instances/'+instanceId+'/updateRunlist',{
+    runlist:runlist
+  },function(data){
+      console.log(data);
+  });
 });
 
 

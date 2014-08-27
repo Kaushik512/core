@@ -1404,7 +1404,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.envId = $('#envList').val();
             reqBody.name =$('#blueprintNameInput').val();
             console.log('pushing');
-            $.post('/project/'+reqBody.projectId+'/env/'+reqBody.envId+'/blueprint',{
+            $.post('/projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
                 blueprintData:reqBody
             },function(data){
              console.log(data);

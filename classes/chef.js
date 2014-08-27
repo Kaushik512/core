@@ -68,6 +68,30 @@ var Chef = function(settings) {
 
 	};
 
+	this.getCookbooksList = function(callback) {
+		
+		initializeChefClient(function(err, chefClient) {
+			if (err) {
+				callback(err, null);
+				return;
+			}
+			chefClient.get('/cookbooks', function(err, chefRes, chefResBody) {
+				if (err) {
+					callback(err, null);
+					return;
+				}
+				console.log("chef status ", chefRes.statusCode);
+				if (chefRes.statusCode === 200) {
+					callback(null, chefResBody);
+				} else {
+					callback(true, null);
+				}
+
+			});
+
+		});
+	}
+
 	this.createEnvironment = function(envName, callback) {
 		initializeChefClient(function(err, chefClient) {
 			if (err) {
@@ -130,6 +154,7 @@ var Chef = function(settings) {
 				callback(err, null);
 				return;
 			}
+			console.log('nodeName == >',nodeName);
 			chefClient.put('/nodes/' + nodeName, updateData, function(err, chefRes, chefResBody) {
 				if (err) {
 					callback(err, null);

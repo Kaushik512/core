@@ -30,6 +30,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			res.send(400);
 			return;
 		}
+		console.log(req.body.runlist);
 		instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
 			if (err) {
 				res.send(500);
@@ -38,7 +39,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			if (data.length) {
 				settingsController.getSettings(function(settings) {
 					var chef = new Chef(settings.chef);
-					chef.updateNode(data[0].chefNodeName, req.body.runlist, function(err, nodeData) {
+					chef.updateNode(data[0].chefNodeName, {
+						run_list: req.body.runlist
+					}, function(err, nodeData) {
 						if (err) {
 							res.send(500);
 							return;
