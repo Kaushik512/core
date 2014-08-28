@@ -24,7 +24,7 @@
                             <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                       
-                            <a class="btn btn-minier btn-primary" href="index.html#ajax/Settings/CreateOrg.html?new">
+                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -117,13 +117,15 @@
                                             $('#navSettings > ul > li > ul').first().css("display", "block");
                                         }
                                         //redrawing the breadcrumb and selecting the tree
-                                        $('#ulsettingstree > li').removeClass('active');
-                                        $('#ulsettingstree > li').each(function () {
+                                        $('#Settings > ul > li').removeClass('active');
+                                        $('#Settings > ul > li').each(function () {
                                             if ($(this).text().trim() == "Organizations")
                                                 $(this).addClass('active');
                                         });
                                         drawBreadCrumb1();
-                                       
+                                        
+                                        $("#content").css("opacity","1 !important");
+                                        
                                     }
 
                                     function deleteItem(docid, key, value) {
