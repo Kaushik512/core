@@ -6,6 +6,8 @@ function Env() {
 
 	this.createEnv = function(name, orgname, callback) {
 		var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}}]}";
+         var tempObj = JSON.parse(envField);
+        console.log('tempObj ==>',envField);
 
 		d4dModel.findOne({
 			id: '3'

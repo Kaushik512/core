@@ -110,7 +110,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 				}
 			});
 		});
-
 	});
 
 

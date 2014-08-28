@@ -15,7 +15,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 				res.send(500);
 				return;
 			}
-			
+
 			if (data.length) {
 				res.send(data[0]);
 			} else {
@@ -39,21 +39,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			if (data.length) {
 				settingsController.getSettings(function(settings) {
 					var chef = new Chef(settings.chef);
-					chef.updateNode(data[0].chefNodeName, {
-						run_list: req.body.runlist
-					}, function(err, nodeData) {
+
+					chef.updateAndRunNodeRunlist(data[0].chefNodeName, {
+						runlist: req.body.runlist,
+						pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
+						instanceUserName: settings.aws.instanceUserName
+					}, function(err, retCode) {
 						if (err) {
-							res.send(500);
+							
 							return;
 						}
-						instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
-							if (err) {
-								res.send(500);
-								return;
-							}
-							res.send(200);
-						});
+						console.log("knife ret code",retCode);
+						if (retCode) {
+							console.log('updateing node runlist in db');
+							instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+								if (err) {
+									res.send(500);
+									return;
+								}
+								res.send(200);
+							});
+						} else {
+							return;
+						}
+					},function(stdOutData){
+						stdOutData.toString('ascii');
+					},function(stdOutErr){
+						stdOutErr.toString('ascii');
 					});
+					res.send(200);
 				});
 			} else {
 				res.send(404);

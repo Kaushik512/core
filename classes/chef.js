@@ -69,7 +69,7 @@ var Chef = function(settings) {
 	};
 
 	this.getCookbooksList = function(callback) {
-		
+
 		initializeChefClient(function(err, chefClient) {
 			if (err) {
 				callback(err, null);
@@ -154,7 +154,7 @@ var Chef = function(settings) {
 				callback(err, null);
 				return;
 			}
-			console.log('nodeName == >',nodeName);
+			console.log('nodeName == >', nodeName);
 			chefClient.put('/nodes/' + nodeName, updateData, function(err, chefRes, chefResBody) {
 				if (err) {
 					callback(err, null);
@@ -198,7 +198,38 @@ var Chef = function(settings) {
 
 		var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + params.runlist.join(), '-x' + params.instanceUserName, '-N' + params.nodeName, '-E' + params.environment], options);
 		proc.start();
-	}
+	};
+
+	this.updateAndRunNodeRunlist = function(nodeName,params, callback, callbackOnStdOut, callbackOnStdErr) {
+		var options = {
+			cwd: settings.chefReposLocation + settings.userChefRepoName,
+			onError: function(err) {
+				callback(err, null);
+			},
+			onClose: function(code) {
+				callback(null, code);
+			}
+		};
+		if (typeof callbackOnStdOut === 'function') {
+			options.onStdOut = function(data) {
+				callbackOnStdOut(data);
+			}
+		}
+
+		if (typeof callbackOnStdErr === 'function') {
+			options.onStdErr = function(data) {
+				callbackOnStdErr(data);
+			}
+		}
+		if ((!(params.runlist) || !params.runlist.length)) {
+			params.runlist = [' '];
+
+		}
+//      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
+
+		var proc = new Process('knife', ['ssh', 'name:'+nodeName,'chef-client -r "'+params.runlist.join()+'"', '-i' + params.pemFilePath, '-x' + params.instanceUserName], options);
+		proc.start();
+	};
 
 
 
