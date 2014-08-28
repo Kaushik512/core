@@ -1553,3 +1553,6 @@ margin-top:0px;
 .chefCookbookList {
     
 }
+.disabled{
+    display:none;
+}
