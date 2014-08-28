@@ -2,7 +2,7 @@
     $(".login-info").hide();
    
 </script>
-<script src="../../js/settingscommon.js"></script>
+<script src="/private/js/settingscommon.js"></script>
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -168,7 +168,10 @@
         //
         //forcing to read the top record
         forceEdit = true;
+        alert('in');
+        debugger;
         readform(5);
+        alert('out');
         //set the title of the page to the selected autentication provider
         $('#spnauthenticationtype').text($('#authenticationprocess option:selected').text());
         $('#authenticationprocess').change(function () {
@@ -186,7 +189,8 @@
             $('.ldaponly').css('display', 'none');
        
 
-                                        $('#content').css("opacity", "1 !important");
+        
+        $('#content').css("opacity", "1 !important");
                                         
         //Force opening the left navigation menu
         if ($('#navSettings').is(":visible") == false) {
