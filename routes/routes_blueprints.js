@@ -9,7 +9,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 	app.all('/blueprints/*', sessionVerificationFunc);
 
-	
+
 
 	app.post('/blueprints/:blueprintId/update', function(req, res) {
 
@@ -25,9 +25,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 				res.send(404)
 			} else {
 				res.send({
-					documentsUpdated: data
+					version: data.version
 				});
 			}
+
+		});
+	});
+
+	app.get('/blueprints/:blueprintId/versions/:version', function(req, res) {
+
+		blueprintsDao.getBlueprintVersionData(req.params.blueprintId, req.params.version, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+
+			if (!data.length) {
+				res.send(404);
+				return;
+			}
+			res.send(data[0]);
+
 
 		});
 	});
@@ -35,6 +53,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 	app.get('/blueprints/:blueprintId/launch', function(req, res) {
 
+		
 		blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
 			if (err) {
 				res.send(500);
@@ -42,12 +61,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			}
 			if (data.length) {
 				var blueprint = data[0];
+				var launchVersionNumber = blueprint.latestVersion;
+				if (req.query.version) {
+					launchVersionNumber = req.query.version;
+				}
 				var version;
 				for (var i = 0; i < blueprint.versionsList.length; i++) {
 					if (blueprint.versionsList[i].ver === blueprint.latestVersion) {
 						version = blueprint.versionsList[i];
 						break;
 					}
+				}
+				if(!version) {
+                  res.send(404);
+                  return;
 				}
 				settingsController.getSettings(function(settings) {
 					var chef = new Chef(settings.chef);
@@ -184,7 +211,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
 					}
-					
+
 					chef.getEnvironment(blueprint.envId, function(err, env) {
 						if (err) {
 							res.send(500);

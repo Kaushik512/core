@@ -396,8 +396,11 @@
                             <div class="col-md-12">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
-                                        
-                                        <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
+                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                            <i class="ace-icon fa fa-plane bigger-110"></i>
+                                            Edit
+                                        </button>                                       
+                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-plane bigger-110"></i>
                                             Launch
                                         </button>
@@ -753,6 +756,23 @@
   </div>
 </div>
 
+<div class="modal fade" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="modal fade" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -844,6 +864,15 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
            $ul.append($li);
          }
+        }
+        if(data[i].versionsList) {
+           var $selectVer =  $('<select></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
+         var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer);;
+         for(var j=0;j<data[i].versionsList.length;j++) {
+           var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+           $selectVer.append($options);
+         }
+         $ul.append($li);    
         }
 
         $itemBody.append($ul);
@@ -1150,8 +1179,9 @@ $('.launchBtn').click(function(e){
        var projectId = $($selectedItems.get(i)).attr('data-projectId');
        var envId = $($selectedItems.get(i)).attr('data-envId');
        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
        
-       $.get('/blueprints/'+blueprintId+'/launch',function(data){
+       $.get('/blueprints/'+blueprintId+'/launch?version='+version,function(data){
          
          var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : '+data.id);  
 
@@ -1160,6 +1190,49 @@ $('.launchBtn').click(function(e){
         
        })
    } 
+});
+
+$('.editBtn').click(function(e){
+     var $selectedItems = $('.role-Selected1');
+      var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+     $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+      $blueprintEditResultContainer.modal('show');
+      for(var i=0;i<$selectedItems.length;i++) {
+       var projectId = $($selectedItems.get(i)).attr('data-projectId');
+       var envId = $($selectedItems.get(i)).attr('data-envId');
+       var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
+      
+       $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
+          var $chefRunlist = $('.chefCookbookList').clone();
+           $blueprintEditResultContainer.find('.modal-body').empty();  
+           $blueprintEditResultContainer.find('.modal-body').append($chefRunlist);
+           $blueprintEditResultContainer.data('blueprintId',blueprintId);
+           console.log(data);
+       })
+   } 
+});
+
+$('.blueprintUpdateBtn').click(function(e){
+  
+  var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+  var $chefRunlist = $blueprintEditResultContainer.find('.chefCookbookList'); 
+  var blueprintId = $blueprintEditResultContainer.data('blueprintId');
+  if(blueprintId) {
+    console.log($chefRunlist.val());
+    var blueprintData = {
+            runlist: $chefRunlist.val(),
+            expirationDays: 0,
+    };
+
+    $.post('/blueprints/'+blueprintId+'/update',{
+        blueprintUpdateData :blueprintData
+    },function(data){
+       $('.blueprintVersionDropDown[data-blueprintId="'+blueprintId+'"]').append($('<option value="'+data.version+'">'+data.version+'</option>').attr('selected',true));
+      console.log(data);
+    });
+
+  }
 });
 
 $('.btnUpdateRunlist').click(function(e){

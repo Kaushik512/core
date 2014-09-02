@@ -43,14 +43,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 					chef.updateAndRunNodeRunlist(data[0].chefNodeName, {
 						runlist: req.body.runlist,
 						pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
-						instanceUserName: settings.aws.instanceUserName
+						instanceUserName: settings.aws.instanceUserName,
+						instancePublicIp: data[0].instanceIP
 					}, function(err, retCode) {
 						if (err) {
-							
+
 							return;
 						}
-						console.log("knife ret code",retCode);
-						if (retCode) {
+						console.log("knife ret code", retCode);
+						if (retCode == 0) {
 							console.log('updateing node runlist in db');
 							instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
 								if (err) {
@@ -62,9 +63,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 						} else {
 							return;
 						}
-					},function(stdOutData){
+					}, function(stdOutData) {
 						stdOutData.toString('ascii');
-					},function(stdOutErr){
+					}, function(stdOutErr) {
 						stdOutErr.toString('ascii');
 					});
 					res.send(200);

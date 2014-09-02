@@ -29,7 +29,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 		var count = 0;
 
 		var insertNodeInMongo = function(node) {
-			
+
 			var instance = {
 				projectId: projectId,
 				envId: node.env,
@@ -46,37 +46,40 @@ module.exports.setRoutes = function(app, verificationFunc) {
 				},
 				blueprintData: {
 					blueprintName: "chef import",
-					templateId:"chef_import"
+					templateId: "chef_import"
 				}
 
 			}
 
 			instancesDao.createInstance(instance, function(err, data) {
 				if (err) {
-					console.log(err,'occured in inserting node in mongo');
+					console.log(err, 'occured in inserting node in mongo');
 					return;
 				}
 			});
 		}
 
-		for (var i = 0; i < reqBody.selectedNodes.length; i++) {
-			(function(node) {
+		function createEnv(node) {
+			console.log('creating env ==>', node.env);
+			console.log('orgId ==>', orgId);
+			environmentsDao.createEnv(node.env, orgId, function(err, data) {
 				count++;
-				console.log('creating env ==>', node.env );
-				console.log('orgId ==>',orgId);
-				environmentsDao.createEnv(node.env,orgId,function(err,data){
-					if(err){
-						console.log(err,'occured in creating environment in mongo');
-						return;
-					} 
+				if (err) {
+					console.log(err, 'occured in creating environment in mongo');
+					return;
+				}
 
-					insertNodeInMongo(node);
-				})
-
+				insertNodeInMongo(node);
 				if (count === reqBody.selectedNodes.length - 1) {
 					res.send(200);
+				} else {
+					createEnv(reqBody.selectedNodes[count]);
 				}
-			})(reqBody.selectedNodes[i]);
+			})
+		}
+
+		if (reqBody.selectedNodes.length) {
+			createEnv(reqBody.selectedNodes[count]);
 		}
 
 

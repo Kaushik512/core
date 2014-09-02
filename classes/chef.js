@@ -227,7 +227,7 @@ var Chef = function(settings) {
 		}
 //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
 
-		var proc = new Process('knife', ['ssh', 'name:'+nodeName,'chef-client -r "'+params.runlist.join()+'"', '-i' + params.pemFilePath, '-x' + params.instanceUserName], options);
+		var proc = new Process('knife', ['ssh', 'name:'+nodeName,'chef-client -r "'+params.runlist.join()+'"', '-i' + params.pemFilePath, '-x' + params.instanceUserName,'-a'+params.instancePublicIp], options);
 		proc.start();
 	};
 
