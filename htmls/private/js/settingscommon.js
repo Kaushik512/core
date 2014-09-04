@@ -1,6 +1,6 @@
-﻿function deleteItem(docid, key, value) {
+function deleteItem(docid, key, value) {
 
-    if (confirm('You are about to remove this item ' + docid + ':' + key + ':' + value)) {
+    if (confirm('You are about to remove this item 1 ' + docid + ':' + key + ':' + value)) {
         $.ajax({
             type: "get",
             dataType: "text",
@@ -59,7 +59,7 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
         }
     });*/
 
-    alert(JSON.stringify(formData));
+   // alert(JSON.stringify(formData));
     //Reading row to get schema
     formData = d4ddata.masterjson;
 
@@ -114,7 +114,7 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
 
                             var deletebutton = $('.rowtemplate').find("[title='Remove']");
                             if (deletebutton) {
-                                deletebutton.attr('onClick', 'deleteItem(\"4\", \"' + idFieldName + '\",\"' + tv + '\");');
+                                deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\");');
                             }
                         }
                         setOrgname = false;
@@ -321,7 +321,71 @@ function readform(formID) {
 
 var forceEdit = false; //variable used to force save one record ex. Authentication
 
-function saveform(formID) {
+function saveform(formID){
+
+    var data1 = new FormData();
+    var fileNames = '';
+    orgName = $('#orgname').val();
+
+    //Iterate over each input control and get the items
+    $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function(){
+         alert($(this).prop("type"));
+          if($(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0)
+          {
+            data1.append($(this).prop("id"),$(this).val());
+          }
+          if($(this).prop("type") == "file" && orgName != '')
+          {
+            if($(this).get(0).files[0]){
+                data1.append($(this).prop("id"),$(this).get(0).files[0]);
+                if(fileNames == '')
+                    fileNames = $(this).prop("id");
+                else
+                    fileNames += ',' + $(this).prop("id");
+            }
+          }
+    });
+    // reading  multiselect values
+    var v = [];
+    var k = '';
+    $('div[cdata="catalyst"]').each(function (){
+       k =  $(this).attr("id");
+      $(this).find("input").each(function (){
+          if ($(this).is(":checked")) {
+            v.push("\"" + $(this).val() + "\"");
+          }
+      });
+    });
+
+    if(k != ''){
+        data1.append(k,"[" + v.toString() + "]");
+    }
+    
+
+    //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
+    //setting filenames to null if empty
+    if(fileNames == '')
+        fileNames = 'null';
+
+    alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
+    $.ajax({
+            url:serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName,
+            data:data1,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success:function(data,success){
+              alert('Successfully Saved'); 
+            },
+           error:function(jqxhr){
+            alert(jqxhr.status);
+           }
+    });
+
+}
+
+
+function saveform_old(formID) {
     $(".savespinner").show();
     $('.widget-box').css('opacity', '1');
   
@@ -646,4 +710,30 @@ $.each(eval('tempJSON.masterjson.rows.row'), function (m, n) {
 
 });
 return (getProj);
+}
+
+function enableUniqueCheckingForInputs(){
+    $('input[unique="true"]').blur(function(){
+  var uni = $('#unique_' + $(this).attr("id"));
+  //alert(typeof uni);
+  if(uni.length > 0)
+    uni.html('');
+  else{
+     //alert("in");
+      $(this).closest('section').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
+      uni = $('#unique_' + $(this).attr("id"));
+  }
+  var getBG = getRelatedValues(1, $(this).attr("id"), $(this).val(), $(this).attr("id"));
+  alert(getBG != "" && uni.attr("id"));
+  if(getBG != ""){ //this ensures that its present
+    uni.css("color","red");
+    uni.html('selected is already taken');
+    $(this).focus();
+  }
+  else{
+    uni.css("color","green");
+    uni.html('available');
+  }
+});
+
 }
