@@ -800,12 +800,76 @@
 
                                                                 </div>
                                                                 <div class="tab-pane" id="tab3">
-                                                                     <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
+                                                                    <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
                                                                      </div>
 
-                                                                <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
+                <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
 
-                                                                        <div class="row glowBox" style="margin:0px;">
+                        <div class="row glowBox" style="margin:0px;">
+                            <section class="col col-6" style="float:right;padding-top:17px;">
+
+                                <div id="divtable" style="clear: both; float: left;">
+                                <div class="col-lg-5" style=" ">
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <select id="jsonFiles" class="form-control" style="width: 180px" size="10" multiple="multiple">
+                                            <option>apache <span></option>
+                                            <option>apache2</option>
+                                            <option>apt</option>
+                                            <option>aptgetupdate</option>
+                                            <option>art</option>
+                                            <option>art_active_windows</option>
+                                            <option>art_add_admin_grp</option>
+                                            <option>art_append_hosts</option>
+                                            <option>art_application_hosts</option>
+                                            <option>art_application_code</option>
+                                            <option>art_base</option>
+                                            <option>art_check_ms</option>
+                                            </select>
+                                        </div>
+                                        <!-- /btn-group -->
+                                    </div>
+                                    <!-- /input-group -->
+                                </div>
+                                <div class="col-lg-1" style="margin-top: 52px; margin-left: 5px">
+                                    <div class="input-group">
+                                        <div class="btn-group" style="padding-bottom: 10px;">
+                                            <button type="button" style="width:30px;height:34px;" class="btn btn-default btn-primary" id="btnaddToSuite"><i class="fa fa-angle-double-right"style="font-size:20px;"></i></button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="btn-group">
+                                            <button type="button" style="width:30px;height:34px;" class="btn btn-default btn-primary" id="btnremoveFromSuite"><i class="fa fa-angle-double-left"style="font-size:20px;"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <table>
+                                                <tr>
+                                                    <td>   <select id="suiteFiles" class="form-control" style="width: 180px" size="10" multiple="multiple"></select>
+                                                    </td>
+                                                    <td style="padding-left:10px;">
+                                                        <button type="button"  style="width:30px;height:34px;" class="btn btn-default btn-primary" id="btnSuiteItemUp"><i class="fa fa-angle-double-up"style="font-size:20px;"></i></button>
+                                                        <div class="clearfix"></div>
+                                                        <div class="clearfix"></div>
+                                                        <div class="btn-group" style="padding-top: 10px">
+                                                            <button type="button" style="width:30px;height:34px;" class="btn btn-default btn-primary" id="btnSuiteItemDown"><i class="fa fa-angle-double-down"style="font-size:20px;"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <div class="btn-group" style="padding-bottom: 10px; margin-top: 40px;">
+                                            </div>
+                                            <!-- /.btn-group -->
+                                        </div>
+                                        <!-- /.input-group -->
+                                    </div>
+                                </div>
+                                                                            </div>
+
+                                                                                
+                                                                            </section>
                                                                             
                                                                             <section class="col col-6">
                                                                                 <label for="">Choose Operating System  
@@ -820,6 +884,7 @@
                                                                                     </select>
                                                                                 </label>                                          
                                                                             </section>
+
                                                                             <section class="col col-6">
                                                                                 <label for="category">Choose number of Instances
                                                                                 </label>
@@ -871,7 +936,83 @@
                                                                                 </label>
                                                                             </section>
 
-                                                                            <!--To add the Swipe Functionality-->
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <!--Commented 
+                                                                     <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
+                                                                     </div>
+
+                                                                <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+
+                                                                        <div class="row glowBox" style="margin:0px;">
+                                                                            
+                                                                            <section class="col col-6">
+                                                                                <label for="">Choose Operating System  
+                                                                                </label>
+                                                                                <label class="select"> 
+                                                                                    <select>
+                                                                                        <option value="0">Ubuntu</option>
+                                                                                        <option value="1">Windows</option>
+                                                                                        <option value="2">Linux</option>
+                                                                                        <option value="3">Unix</option>
+                                                                                        <!--<option value="4">Ubuntu</option>--
+                                                                                    </select>
+                                                                                </label>                                          
+                                                                            </section>
+                                                                            <section class="col col-6">
+                                                                                <label for="category">Choose number of Instances
+                                                                                </label>
+                                                                                <label class="select"> 
+                                                                                    <select>
+                                                                                        <option value="0">1</option>
+                                                                                            <!--<option value="1">1</option>--
+                                                                                            <option value="2">2</option>
+                                                                                            <option value="3">3</option>
+                                                                                            <option value="4">4</option>
+                                                                                            <option value="5">5</option>
+                                                                                            <option value="6">6</option>
+                                                                                            <option value="7">7</option>
+                                                                                            <option value="8">8</option>
+                                                                                            <option value="9">9</option>
+                                                                                            <option value="10">10</option>
+                                                                                    </select>
+                                                                                </label>   
+                                                                                </label>
+                                                                            </section>
+                                                                            <section class="col col-6">
+                                                                                <label for="category">Choose Security Group
+                                                                                </label>
+                                                                                <label class="select"> 
+                                                                                    <select>
+                                                                                        <!--<option value="0">default-d4d</option>
+                                                                                           
+                                                                                            <option value="2">Vpc-1</option>
+                                                                                            <option value="3">Vpc-2</option>
+                                                                                            <option value="4">Default VPC</option>
+                                                                                            <option value="5">Create New</option>--
+                                                                                    </select>
+                                                                                </label>
+                                                                                </label>
+                                                                            </section>
+                                                                            <section class="col col-6">
+                                                                                <label for="category">Choose Instance Size
+                                                                                </label>
+                                                                                <label class="select"> 
+                                                                                    <select>
+                                                                                        <option value="0">t1.micro</option>
+                                                                                            <!--<option value="1">t1.micro</option>--
+                                                                                            <option value="2">m1.small</option>
+                                                                                            <option value="3">m1.medium</option>
+                                                                                            <option value="4">m1.large</option>
+                                                                                            <option value="5">m1.xlarge</option>
+                                                                                    </select>
+                                                                                </label> 
+                                                                                </label>
+                                                                            </section>
+
+                                                                            <!--To add the Swipe Functionality--
                                                                             <div id="divtable" style="clear: both; float: left;">
                                                                                 <div class="col-lg-5" style="margin-left: 14px">
                                                                                     <div class="input-group">
@@ -884,9 +1025,9 @@
   
                                                                                             </select>
                                                                                         </div>
-                                                                                        <!-- /btn-group -->
+                                                                                        <!-- /btn-group --
                                                                                     </div>
-                                                                                    <!-- /input-group -->
+                                                                                    <!-- /input-group --
                                                                                 </div>
                                                                                 <div class="col-lg-2" style="margin-top: 52px; margin-left: -15px">
                                                                                     <div class="input-group">
@@ -904,30 +1045,30 @@
                                                                                         <div class="btn-group">
                                                                                             <table>
                                                                                                 <tr>
-                                                                                                    <td>
-                                                                                                        <select id="suiteFiles" class="form-control" style="width: 200px" size="10" multiple="multiple"></select>
-                                                                                                    </td>
-                                                                                                    <td style="padding-left:10px;">
-                                                                                                        <button type="button"  style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnSuiteItemUp">Up</button>
-                                                                                                        <div class="clearfix"></div>
-                                                                                                        <div class="clearfix"></div>
-                                                                                                        <div class="btn-group" style="padding-top: 10px">
-                                                                                                            <button type="button" style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnSuiteItemDown">Down</button>
-                                                                                                        </div>
-                                                                                                    </td>
+                                                                                        <td>
+                                                                                            <select id="suiteFiles" class="form-control" style="width: 200px" size="10" multiple="multiple"></select>
+                                                                                        </td>
+                                                                                        <td style="padding-left:10px;">
+                                                                                            <button type="button"  style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnSuiteItemUp">Up</button>
+                                                                                            <div class="clearfix"></div>
+                                                                                            <div class="clearfix"></div>
+                                                                                            <div class="btn-group" style="padding-top: 10px">
+                                                                                                <button type="button" style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnSuiteItemDown">Down</button>
+                                                                                            </div>
+                                                                                        </td>
                                                                                                 </tr>
                                                                                             </table>
                                                                                             <div class="btn-group" style="padding-bottom: 10px; margin-top: 40px;">
                                                                                             </div>
-                                                                                            <!-- /.btn-group -->
+                                                                                            <!-- /.btn-group --
                                                                                         </div>
-                                                                                        <!-- /.input-group -->
+                                                                                        <!-- /.input-group --
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
 
-                                                                    </div>
+                                                                    </div>-->
 
 
 
@@ -936,6 +1077,7 @@
                                                                 </div>
                                                                 
                                                                 <div class="tab-pane" id="tab4">
+                                                                    
                                                                     
                                                                     <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
 
@@ -950,7 +1092,7 @@
                                                                                 </label>                                          
                                                                             </section>
                                                                             <section class="col col-6">
-                                                                                <label for="category">Orgs
+                                                                                <label for="category">Organization
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select id="orgListInput">
@@ -984,16 +1126,31 @@
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select  id="envList">
-                                                                                        <option value="0">default-d4d</option>
-                                                                                            <!--<option value="1">default-d4d</option>-->
+                                                                                        <!--<option value="0">default-d4d</option>
+                                                                                            
                                                                                             <option value="2">Vpc-1</option>
                                                                                             <option value="3">Vpc-2</option>
                                                                                             <option value="4">Default VPC</option>
-                                                                                            <option value="5">Create New</option>
+                                                                                            <option value="5">Create New</option>-->
                                                                                     </select>
                                                                                 </label>
                                                                                 </label>
                                                                             </section>
+                                                        <section class="col col-6">
+                                                            <label class="label">Assign Users</label>
+                                                            <label class="select select-multiple">
+                                                                <select class="custom-scroll" multiple="">
+                                                                    <option value="1">Alexandra</option>
+                                                                    <option value="2">Alice</option>
+                                                                    <option value="3">Anastasia</option>
+                                                                    <option value="4">Avelina</option>
+                                                                    <option value="5">Basilia</option>
+                                                                    <option value="6">Beatrice</option>
+                                                                    <option value="7">Cassandra</option>
+                                                                    <option value="8">Clemencia</option>
+                                                                    <option value="9">Desiderata</option>
+                                                                </select> </label>
+                                                        </section>
                                                                             
                                                                             </div>
                                                                         </div>

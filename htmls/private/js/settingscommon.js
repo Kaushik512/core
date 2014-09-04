@@ -1,6 +1,6 @@
 ﻿function deleteItem(docid, key, value) {
 
-    if (confirm('You are about to remove this item ' + docid + ':' + key + ':' + value)) {
+    if (confirm('You are about to remove this itemstgdsfh ' + docid + ':' + key + ':' + value)) {
         $.ajax({
             type: "get",
             dataType: "text",

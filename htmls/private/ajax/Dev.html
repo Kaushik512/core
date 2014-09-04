@@ -828,8 +828,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         var $img = $('<img/>').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
         var $liImage = $('<li></li>').append($img);
         $ul.append($liImage);
-        
-        var $liCardName = $('<li></li>').css({"font-size":'12px'}).html('<u><b>'+data[i].name+'</b></u>');
+        //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
+        var $liCardName = $('<li title="'+data[i].name+'"></li>').addClass('Cardtextoverflow').html('<u><b>'+data[i].name+'</b></u>');
 
         //For Table View
         //$rowContainter.append('<td>' +data[i].name + '</td>');
@@ -926,7 +926,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         for(var j=0;j<data[i].runlist.length;j++) { 
           var $divComponentItem;
            if(j == 0)
-            $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+            //Arabinda added below css $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:10px;overflow:hidden;text-overflow:ellipsis;width:68px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            else
             $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            $divComponentList.append($divComponentItem);
