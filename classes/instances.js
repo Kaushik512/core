@@ -12,11 +12,11 @@ var InstanceSchema = new Schema({
 	instanceIP: String,
 	instanceState: String,
 	bootStrapStatus: String,
-	bootStrapLog: {
+	logs: [{
 		err: Boolean,
 		log: String,
 		timestamp: Number
-	},
+	}],
 	blueprintData: {
 		blueprintId: String,
 		blueprintName: String,
@@ -75,6 +75,25 @@ var InstancesDao = function() {
 		});
 	};
 
+	this.updateInstanceIp = function(instanceId, ipaddress, callback) {
+		Instances.update({
+			"_id": new ObjectId(instanceId),
+		}, {
+			$set: {
+				"instanceIP": ipaddress
+			}
+		}, {
+			upsert: false
+		}, function(err, data) {
+			if (err) {
+				callback(err, null);
+				return;
+			}
+			callback(null, data);
+		});
+
+	};
+
 	this.updateInstanceState = function(instanceId, state, callback) {
 		Instances.update({
 			"_id": new ObjectId(instanceId),
@@ -113,12 +132,12 @@ var InstancesDao = function() {
 
 
 
-	this.updateInstanceBootstrapLog = function(instanceId, bootStrapLog, callback) {
+	this.updateInstanceLog = function(instanceId, log, callback) {
 		Instances.update({
 			"_id": new ObjectId(instanceId),
 		}, {
-			$set: {
-				"bootStrapLog": bootStrapLog
+			$push: {
+				"logs": log
 			}
 		}, {
 			upsert: false

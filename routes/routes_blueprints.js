@@ -3,7 +3,7 @@ var settingsController = require('../controller/settings');
 var instancesDao = require('../classes/instances');
 var EC2 = require('../classes/ec2.js');
 var Chef = require('../classes/chef.js');
-
+var logsDao = require('../classes/dao/logsdao.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -14,6 +14,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 	app.post('/blueprints/:blueprintId/update', function(req, res) {
 
 		var blueprintUpdateData = req.body.blueprintUpdateData;
+		if (!blueprintUpdateData.runlist) {
+			blueprintUpdateData.runlist = [];
+		}
+		//blueprintUpdateData.runlist.splice(0, 0, 'recipe[ohai]');
+
 
 		blueprintsDao.updateBlueprint(req.params.blueprintId, blueprintUpdateData, function(err, data) {
 			if (err) {
@@ -53,7 +58,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 	app.get('/blueprints/:blueprintId/launch', function(req, res) {
 
-		
+
 		blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
 			if (err) {
 				res.send(500);
@@ -72,9 +77,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 						break;
 					}
 				}
-				if(!version) {
-                  res.send(404);
-                  return;
+				if (!version) {
+					res.send(404);
+					return;
 				}
 				settingsController.getSettings(function(settings) {
 					var chef = new Chef(settings.chef);
@@ -90,7 +95,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 								return;
 							}
 							console.log(version.runlist);
-
+							console.log(instanceData);
 							var instance = {
 								projectId: blueprint.projectId,
 								envId: blueprint.envId,
@@ -100,11 +105,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 								instanceIP: instanceData.PublicIpAddress,
 								instanceState: instanceData.State.Name,
 								bootStrapStatus: 'waiting',
-								bootStrapLog: {
-									err: false,
-									log: 'waiting',
-									timestamp: new Date().getTime()
-								},
 								blueprintData: {
 									blueprintId: blueprint._id,
 									blueprintName: blueprint.name,
@@ -121,10 +121,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 								}
 								instance.id = data._id;
 
+								logsDao.insertLog({
+									referenceId: instance.id,
+									err: false,
+									log: "Starting instance",
+									timestamp: new Date().getTime()
+								}, function(err, data) {
+									if (err) {
+										console.log('unable to update log');
+										return;
+									}
+									console.log('log updated');
+								});
+
 								ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
 									if (err) {
 										return;
 									}
+									console.log(instanceData);
+
+									instancesDao.updateInstanceIp(instance.id, instanceData.PublicIpAddress, function(err, updateCount) {
+										if (err) {
+											console.log("update instance ip err ==>", err);
+											return;
+										}
+										console.log('instance ip upadated');
+									});
+
 									instancesDao.updateInstanceState(instance.id, instanceData.State.Name, function(err, updateCount) {
 										if (err) {
 											console.log("update instance state err ==>", err);
@@ -132,6 +155,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 										}
 										console.log('instance state upadated');
 									});
+
+
 
 									chef.bootstrapInstance({
 										instanceIp: instanceData.PublicIpAddress,
@@ -171,7 +196,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 										}
 
 									}, function(stdOutData) {
-										instancesDao.updateInstanceBootstrapLog(instance.id, {
+
+										logsDao.insertLog({
+											referenceId: instance.id,
 											err: false,
 											log: stdOutData.toString('ascii'),
 											timestamp: new Date().getTime()
@@ -185,7 +212,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 									}, function(stdErrData) {
 
-										instancesDao.updateInstanceBootstrapLog(instance.id, {
+										logsDao.insertLog({
+											referenceId: instance.id,
 											err: true,
 											log: stdErrData.toString('ascii'),
 											timestamp: new Date().getTime()
@@ -196,6 +224,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 											}
 											console.log('bootStrapLog updated');
 										});
+
+
 									});
 
 								});
