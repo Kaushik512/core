@@ -1,5 +1,7 @@
 var d4dModel = require('../classes/d4dmasters/d4dmastersmodel.js');
-
+var settingsController = require('../controller/settings');
+var fileIo = require('../controller/fileio');
+var uuid = require('node-uuid');
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -135,6 +137,199 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		res.end(JSON.stringify(uuid1));
 		console.log("sent response" + JSON.stringify('{"uuid":"' + uuid1 + '"}'));
 	});
+	var fs = require('fs');
+	var path = require('path');
+	 
+	fs.mkdirParent = function(dirPath, mode, callback) {
+	  //Call the standard fs.mkdir
+	  fs.mkdir(dirPath, mode, function(error) {
+	    //When it fail in this way, do the custom steps
+	    if (error && error.errno === 34) {
+	      //Create all the parents recursively
+	      fs.mkdirParent(path.dirname(dirPath), mode, callback);
+	      //And then the directory
+	      fs.mkdirParent(dirPath, mode, callback);
+	    }
+	    //Manually run the callback since we used our own callback to do all these
+	    callback && callback(error);
+	  });
+	};
+	
+	function saveuploadedfile(suffix,req){
+		console.log(req.body);
+		var fi;
+		if(req.params.fileinputs.indexOf(',') > 0)
+			fi = fileinputs.split(',');
+		else{
+			fi = new Array();
+			fi.push(req.params.fileinputs);
+		}
+
+
+		var filesNames = Object.keys(req.files);
+		var count = filesNames.length;
+		console.log	('in' + count);
+		filesNames.forEach(function(item) {
+			console.log(item);
+		});
+		
+
+		settingsController.getChefSettings(function(settings) {
+			var chefRepoPath = settings.chefReposLocation;
+			fs.mkdirParent(chefRepoPath + req.params.orgname); //if path is not present create it.
+			for(var i = 0; i <  fi.length; i++){
+				var controlName = fi[i];
+				var fil = eval('req.files.' + fi[i]);
+				if(typeof fil != 'undefined'){
+					console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+					fileIo.readFile(fil.path, function(err, data) {	
+						//var getDirName = require("path").dirname;
+						fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data, null, function(err) {
+									console.log(err);
+									count--;
+									if (count === 0) { // all files uploaded
+										return("200");
+									}
+								});
+						
+					});
+
+				}
+			}
+		});
+		return("200");
+	}
+
+	app.post('/d4dMasters/savemasterjsonrow/:id/:fileinputs/:orgname', function(req, res) {
+    console.log('received request ' + req.params.id);
+	d4dModel.findOne({ id: req.params.id }, function (err, d4dMasterJson) {
+		if (err) {
+            console.log("Hit and error:" + err);
+        }
+			if (d4dMasterJson) {
+
+					//{"orgname":"testingorg","domainname":"testingdomain","costcode":"[\"code1\",\"code2\",\"code3\"]"}
+					//var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
+					
+					var bodyJson = JSON.parse(JSON.stringify(req.body));
+
+					//pushing the rowid field
+					var uuid1 = uuid.v4();
+					bodyJson["rowid"] = uuid1;
+					//console.log(bodyJson['orgname']);
+					var frmkeys = Object.keys(bodyJson);
+
+					//var frmvals = Object.keys(bodyJson);
+					var rowFLD = [];
+				//	var filesNames = Object.keys(req.files);
+					frmkeys.forEach(function(itm){
+						
+						var thisVal = bodyJson[itm];
+						console.log(thisVal.replace(/\"/g,'\\"'));
+						console.log(thisVal);
+						var item;
+
+						if(thisVal.indexOf('[') >= 0) //used to check if its an array
+							item = "{\"values\" : {\"value\" : "  + thisVal + "},\"name\" : \"" + itm + "\"}";
+						else
+							item = "{\"values\" : {\"value\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"},\"name\" : \"" + itm + "\"}";
+						
+
+						rowFLD.push(JSON.parse(item));
+
+					});
+					console.log('Changed');
+					var FLD = "{\"field\":" + JSON.stringify(rowFLD) + "}";
+					//frmvals.push(rowFLD);
+					console.log(FLD);
+					d4dMasterJson.masterjson.rows.row.push(JSON.parse(FLD));
+					console.log(d4dMasterJson.masterjson);
+									d4dModel.update(
+										{"id": req.params.id},{$set:{"masterjson":d4dMasterJson.masterjson}},{
+										   upsert: false
+										  }, function(err, data) {
+										   if (err) {
+											callback(err, null);
+											res.send(500);
+											return;
+										   }
+									   	   // To do save uploaded files.
+								   	   	   //saveuploadedfile(suffix,fileinputs,orgname,req,res,callback)
+								   	   	   console.log(req.params.fileinputs == 'null');
+								   	   	   if(req.params.fileinputs != 'null')
+								   	   	   		res.send(saveuploadedfile(uuid1+ '__',req));
+								   	   	   else
+								   	   	   		res.send(200);
+
+
+										   //res.send(200);
+										   //callback(null, data);
+										  });
+			}
+		});								
+	});
+
+	app.post('/d4dMasters/testingupload/:suffix/:fileinputs',function(req,res){
+		console.log(req.body);
+		var fi;
+		if(req.params.fileinputs.indexOf(',') > 0)
+			fi = req.params.fileinputs.split(',');
+		else{
+			fi = new Array();
+			fi.push(req.params.fileinputs);
+		}
+
+
+		var filesNames = Object.keys(req.files);
+		var count = filesNames.length;
+		console.log	('in' + count);
+		filesNames.forEach(function(item) {
+			console.log(item);
+		});
+		
+
+		settingsController.getChefSettings(function(settings) {
+			var chefRepoPath = settings.chefReposLocation;
+			fs.mkdirParent(chefRepoPath + req.params.orgname); //if path is not present create it.
+			for(var i = 0; i <  fi.length; i++){
+				var controlName = fi[i];
+				var fil = eval('req.files.' + fi[i]);
+				if(typeof fil != 'undefined'){
+					console.log('this is where file gets saved  : ' + chefRepoPath + fil.name);
+					fileIo.readFile(fil.path, function(err, data) {	
+						//var getDirName = require("path").dirname;
+						fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + controlName + '__' + fil.name, data, null, function(err) {
+									console.log(err);
+									count--;
+									if (count === 0) { // all files uploaded
+										res.send("ok");
+									}
+								});
+						/*mkdirp(getDirName(chefRepoPath + 'logo' ),function(err){
+							if(err) console.log(err);
+							else{
+
+								fileIo.writeFile(chefRepoPath + 'logo/' + fil.name, data, null, function(err) {
+									console.log(err);
+									count--;
+									if (count === 0) { // all files uploaded
+										res.send("ok");
+									}
+								});
+							}
+						}); */
+					});
+
+				}
+			}
+		});
+		res.send(200);
+	});
+	
+	
+	
+	
+	
 	app.post('/d4dMasters/savemasterjson/:id', function(req, res) {
 		//Finding the Master Json if present
 
