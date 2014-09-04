@@ -2,7 +2,7 @@
     $(".login-info").hide();
     
 </script>
-
+<script src="/private/js/settingscommon.js"></script>
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -36,7 +36,7 @@
                                                                     </label>
                                                                     <label class="input">
                                                                         <i class="icon-append" id="iconpicker" title="Select an icon for the environment" datatype="image"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Environment" id="environmentname" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input name="ctl00$MainContent$orgname" value="Default Environment" id="environmentname" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     </label>
                                                                     
                                                                 </section>
@@ -45,11 +45,10 @@
                                                         </fieldset>
                                                         <fieldset>
                                                             <div class="row">
-
                                                                 <section class="col col-6">
                                                                     <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                     <label class="input">
-                                                                        <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central">
+                                                                        <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
                                                                             <option value="">Select an Organization</option>
                                                                         </select>
 
@@ -93,7 +92,7 @@
                 <div class="widget-toolbox clearfix">
                     <div class="btn-group pull-right">
                         <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()) saveform('ProductGroups');">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()) saveform(3);">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                             Save
                         </button>
@@ -120,7 +119,7 @@
             $(this).select();
             $("#msgOrgName").hide()
         });
-        readform('Environments');
+        readform(3);
         $('#content').css("opacity", "1 !important");
        /* $('#iconpicker').iconpicker({
             iconset: 'fontawesome',
@@ -147,7 +146,7 @@
         $("#content").css("opacity","1 !important");
     }
 
-    function readMasterJson(section) {
+    function readMasterJson_todelete(section) {
 
         $.ajax({
             type: "get",
@@ -167,7 +166,7 @@
     }
 
 
-    function readform(formName) {
+    function readform_todelete(formName) {
         var formData = null;
 
         //Prefilling dropdowns
@@ -306,7 +305,7 @@
 
     $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
 
-    function saveform(formName) {
+    function saveform_todelete(formName) {
         $("#savespinner").show();
       //  $('.widget-box').css('opacity', '1');
         //To Do SAve...
@@ -419,7 +418,7 @@
         $('#btncancel').click();
     }
 
-    function addToCodeList() {
+    function addToCodeList_todelete() {
 
         var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px\'></i>";
         var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
@@ -430,7 +429,7 @@
         }
     }
 
-    function addToCodeList(txtVal, control) {
+    function addToCodeList_todelete(txtVal, control) {
         // alert('Control val' + $(control).val());
         //debugger;
         if (typeof (txtVal) == "undefined" && $(control).val() != '')
@@ -448,14 +447,14 @@
         $(control).val('');
     }
 
-    function removeFromCodeList(btn) {
+    function removeFromCodeList_todelete(btn) {
         if (confirm('Are you sure you wish to remove this Cost Code?')) {
             var closestDiv = $(btn).closest('div');
             closestDiv.detach();
         }
     }
 
-    function validateForm() {
+    function validateForm_todelete() {
         //Check for required parameter
         $('#orgname').each(function () {
             if ($(this).val() == '') {
@@ -465,7 +464,7 @@
         });
         return (true);
     }
-    function readURL(input) {
+    function readURL__todelete(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
