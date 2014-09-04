@@ -10,6 +10,7 @@
     }
 
 </style>
+<script src="/private/js/settingscommon.js"></script>
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -44,7 +45,7 @@
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
                                                                     <label class="input"> <i class="icon-append fa fa-building"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Organization" id="orgname" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input name="ctl00$MainContent$orgname" value="Default Organization" id="orgname" unique="true" class="form-control" cdata="catalyst" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                         <input id="orgid" type="hidden" />
                                                                     </label>
                                                                     
@@ -52,7 +53,7 @@
                                                                 <section class="col col-6">
                                                                     <label for="category">Domain Name</label>
                                                                     <label class="input"> <i class="icon-append fa fa-eye"></i>
-                                                                        <input name="ctl00$MainContent$domainname" value="Default Domain" id="domainname" class="form-control" type="text"><span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input name="ctl00$MainContent$domainname" value="Default Domain" id="domainname" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -63,7 +64,7 @@
                                                                     <label for="">Logo</label>
                                                                     <label for="file" class="input input-file">
                                                                     <div class="imgdiv" value="1"></div>
-                                                                    <div class="button"><input id="organizationLogoFileInput" type="file" onchange="this.parentNode.nextSibling.value = this.value">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                    <div class="button"><input id="organizationLogoFileInput" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst">Browse</div><input type="text" readonly="" style="padding-left:40px;">
                                                                     </label>
                                                                  </section>
                                                                 <section class="col col-6">
@@ -80,7 +81,7 @@
                                                 <input type="button" class="btn btn-sm btn-info" title="Check to add to list" style="width:53px" value="Add" onclick="addToCodeList();" />
                                             </span>
                                             </div>                        
-											<div id="codelistitems" class="input-group from-control col-md-12" style="height:200px;overflow-y:auto;">
+											<div id="codelistitems" class="input-group from-control col-md-12" style="height:200px;overflow-y:auto;"  cdata="catalyst" >
 
 
                                         </div>
@@ -115,7 +116,7 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm())saveform('Organization');">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm())saveform('1');">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
@@ -165,9 +166,9 @@
             function inLineReady() {
                 $("input[type='text']").on("click", function () {
                     $(this).select();
-                    $("#msgOrgName").hide()
+                    $("#msgOrgName").hide();
                 });
-                readform('Organization');
+                readform(1);
 
 
                 //Force opening the left navigation menu
@@ -184,9 +185,10 @@
                         $(this).addClass('active');
                 });
                 drawBreadCrumb1();
+                enableUniqueCheckingForInputs();
 
             }
-            function readform(formName) {
+            function readform_todelete(formName) {
                 var formData = null;
 
                 //  alert("before d4d" + JSON.stringify(d4ddata));
@@ -261,7 +263,7 @@
                 });
             }
             $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
-            function readMasterJson(section) {
+          /*  function readMasterJson_todelete(section) {
 
                 $.ajax({
                     type: "get",
@@ -278,9 +280,52 @@
                     }
                 });
                 return (d4ddata);
-            }
+            } */
 
-            function saveform(formName) {
+         /*   function saveform_todelete(formName){
+
+                var data1 = new FormData();
+                var fileNames = '';
+                orgName = $('#orgname').val();
+
+                //Iterate over each input control and get the items
+                $('input[cdata="catalyst"]').each(function(){
+                      if($(this).prop("type") == "text")
+                      {
+                        data1.append($(this).prop("id"),$(this).val());
+                      }
+                      if($(this).prop("type") == "file" && orgName != '')
+                      {
+                        if($(this).get(0).files[0]){
+                            data1.append($(this).prop("id"),$(this).get(0).files[0]);
+                            if(fileNames == '')
+                                fileNames = $(this).prop("id");
+                            else
+                                fileNames += ',' + $(this).prop("id");
+                        }
+                      }
+                });
+                
+
+                //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
+                alert(serviceURL + "savemasterjsonrow/1/" + fileNames + "/" + orgName );
+                $.ajax({
+                        url:serviceURL + "savemasterjsonrow/1/" + fileNames + "/" + orgName,
+                        data:data1,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        success:function(data,success){
+                          alert('Successfully Saved'); 
+                        },
+                       error:function(jqxhr){
+                        alert(jqxhr.status);
+                       }
+                });
+
+            } */
+
+            function saveform_old(formName) {
                 // debugger;
                 $(".savespinner").show();
                 //   $('.widget-box').css('opacity', '0.1');
@@ -392,7 +437,7 @@
                 $('#btncancel').click();
                 
             }
-            function addToCodeList() {
+            /*function addToCodeList_todelete() {
 
                 var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px\'></i>";
                 var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
@@ -401,8 +446,8 @@
                     $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
                     $('#costcode').focus();
                 }
-            }
-            function addToCodeList(txtVal) {
+            } */
+          /*  function addToCodeList_todelete(txtVal) {
 
                 if (typeof (txtVal) == "undefined" && $('#costcode').val() != '')
                     txtVal = $('#costcode').val();
@@ -415,13 +460,13 @@
                     $('#costcode').focus();
                 }
                 $('#costcode').val('');
-            }
-            function removeFromCodeList(btn) {
+            } */
+           /* function removeFromCodeList_todelete(btn) {
                 if (confirm('Are you sure you wish to remove this Cost Code?')) {
                     var closestDiv = $(btn).closest('div');
                     closestDiv.detach();
                 }
-            }
+            }*/
             function validateForm() {
                 //Check for required parameter
                 $('#orgname').each(function () {
@@ -432,7 +477,7 @@
                 });
                 return (true);
             }
-            function readURL(input) {
+         /*   function readURL_todelete(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -442,15 +487,15 @@
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
-            }
-            $("#id-input-file-2").change(function () {
+            }*/
+          /*  $("#id-input-file-2").change(function () {
                 readURL(this);
                 $(".ace-file-name").attr('data-title', '');
                 $(".ace-file-name").html('<i class=" ace-icon fa fa-upload"></i>' + this.files[0].name);
 
-            });
+            }); */
 
-            function getUUID() {
+            /*function getUUID_todelete() {
                 var uuid = '';
                 $.ajax({
                     type: "get",
@@ -471,9 +516,7 @@
                     }
                 });
                 return (uuid);
-            }
+            } */
 
             inLineReady();
-
-
         </script>
