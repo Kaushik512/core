@@ -9,7 +9,7 @@
         font-weight: bold;
     }
 </style>
-
+<script src="/private/js/settingscommon.js"></script>
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -86,7 +86,8 @@
                                        // debugger;
                                       //  alert('in');
                                         var tab = 'envtable';
-                                        CreateTableFromJson("Environments");
+                                        //CreateTableFromJson(3); //3 is for environment
+                                        CreateTableFromJson(3,'environmentname' , 'CreateEnvironment.html'); //3 is for 
                                         $('#' + tab).dataTable({
                                             "pagingType": "full_numbers"
                                         });
@@ -113,7 +114,7 @@
                                         drawBreadCrumb1();
                                     }
 
-                                    function deleteItem(docid, key, value) {
+                                    function deleteItem_todelete(docid, key, value) {
 
                                         if (confirm('You are about to remove this list ' + docid + ':' + key + ':' + value)) {
                                             $.ajax({
@@ -137,7 +138,7 @@
                                     }
 
 
-                                    function readMasterJson(id) {
+                                    function readMasterJson_todelete(id) {
                                         // debugger;
                                         $.ajax({
                                             type: "get",
@@ -159,7 +160,7 @@
                                     }
 
                                     $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
-                                    function CreateTableFromJson(formName) {
+                                    function CreateTableFromJson_todelete(formName) {
 
                                         //To Do SAve...
                                         // var d4djson = $.parseJSON(d4ddata);
