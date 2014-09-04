@@ -724,7 +724,7 @@ function enableUniqueCheckingForInputs(){
       uni = $('#unique_' + $(this).attr("id"));
   }
   var getBG = getRelatedValues(1, $(this).attr("id"), $(this).val(), $(this).attr("id"));
-  alert(getBG != "" && uni.attr("id"));
+  //alert(getBG != "" && uni.attr("id"));
   if(getBG != ""){ //this ensures that its present
     uni.css("color","red");
     uni.html('selected is already taken');
