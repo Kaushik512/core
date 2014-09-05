@@ -432,7 +432,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x" title="Table View"/></button></span>
+                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></button></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -859,15 +859,15 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
     
     for(var i=0;i<data.length;i++) {
         
-        var $itemContainer = $('<div></div>').addClass("col-sm-2 col-lg-2 col-md-2");
+        var $itemContainer = $('<div></div>').addClass("productdiv4");
 
         var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId); 
         var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({'text-align':'center'});
         var $img = $('<img/>').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
         var $liImage = $('<li></li>').append($img);
         $ul.append($liImage);
-        
-        var $liCardName = $('<li></li>').css({"font-size":'12px'}).html('<u><b>'+data[i].name+'</b></u>');
+        //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
+        var $liCardName = $('<li title="'+data[i].name+'"></li>').addClass('Cardtextoverflow').html('<u><b>'+data[i].name+'</b></u>');
 
         //For Table View
         //$rowContainter.append('<td>' +data[i].name + '</td>');
@@ -935,7 +935,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
         var $li = $('<li></li>').addClass('domain-role-thumbnail');
-        var $div = $('<div></div>').addClass('domain-roles');
+        var $div = $('<div></div>').addClass('domain-roles ');
         var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
@@ -973,7 +973,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         for(var j=0;j<data[i].runlist.length;j++) { 
           var $divComponentItem;
            if(j == 0)
-            $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+            //Arabinda added below css $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:10px;overflow:hidden;text-overflow:ellipsis;width:68px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            else
             $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            $divComponentList.append($divComponentItem);
@@ -992,17 +993,17 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $divDomainRolesCaption.append($divComponentListContainer);
         var $divInstanceDetails = $('<div></div>')
         var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-        var $instanceDetailItemId = $('<span style="margin-left:-2px;"></span>').addClass('instance-details-item').html('Id : <strong>'+data[i]._id+'</strong>');
+        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('Id : <strong>'+data[i]._id+'</strong>');
         $instanceDetailsList.append($instanceDetailItemId);
           var $instanceDetailItemStatus;
         if(data[i].instanceState == 'running'){
-            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-started">'+data[i].instanceState+'</strong>');     
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">'+data[i].instanceState+'</strong>');     
         } else if(data[i].instanceState == 'terminated'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
         } else  if(data[i].instanceState == 'stopped'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-paused">'+data[i].instanceState+'</strong>');
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-paused">'+data[i].instanceState+'</strong>');
         } else {
-            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class="instance-state instance-state-text-pending">'+data[i].instanceState+'</strong>');
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">'+data[i].instanceState+'</strong>');
         }
        
          $instanceDetailsList.append($instanceDetailItemStatus);

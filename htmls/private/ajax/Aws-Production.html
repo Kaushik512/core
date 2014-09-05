@@ -800,12 +800,17 @@
 
                                                                 </div>
                                                                 <div class="tab-pane" id="tab3">
-                                                                     <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
+                                                                    <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
                                                                      </div>
 
-                                                                <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
+                <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
 
-                                                                        <div class="row glowBox" style="margin:0px;">
+                        <div class="row glowBox" style="margin:0px;">
+                            <section class="col col-6" style="float:right;padding-top:17px;">
+                                    <select id="cookbookSelect" class="form-control" style="width: 200px;margin-top:5px;" size="10" multiple="multiple"></select>
+                                
+                                                                                
+                                                                            </section>
                                                                             
                                                                             <section class="col col-6">
                                                                                 <label for="">Choose Operating System  
@@ -816,7 +821,6 @@
                                                                                     </select>
                                                                                 </label>                                          
                                                                             </section>
-                                                                           
                                                                             <section class="col col-6">
                                                                                 <label for="category">Choose Security Group
                                                                                 </label>
@@ -849,16 +853,8 @@
                                                                             </section>
 
                                                                             <!--To add the Swipe Functionality-->
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Choose Runlist
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                <select id="cookbookSelect" class="form-control" style="width: 200px;margin-top:5px;" size="10" multiple="multiple">
-                                                                                     
-                                                                                </select>
-                                                                               </label>
-                                                                                     
-                                                                             </section>
+                                                                            
+
                                                                         </div>
 
                                                                     </div>
@@ -870,6 +866,7 @@
                                                                 </div>
                                                                 
                                                                 <div class="tab-pane" id="tab4">
+                                                                    
                                                                     
                                                                     <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
 
@@ -884,7 +881,7 @@
                                                                                 </label>                                          
                                                                             </section>
                                                                             <section class="col col-6">
-                                                                                <label for="category">Orgs
+                                                                                <label for="category">Organization
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select id="orgListInput">
@@ -918,10 +915,26 @@
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select  id="envList">
+
                                                                                     </select>
                                                                                 </label>
                                                                                 </label>
                                                                             </section>
+                                                        <section class="col col-6">
+                                                            <label class="label">Assign Users</label>
+                                                            <label class="select select-multiple">
+                                                                <select class="custom-scroll" multiple="">
+                                                                    <option value="1">Alexandra</option>
+                                                                    <option value="2">Alice</option>
+                                                                    <option value="3">Anastasia</option>
+                                                                    <option value="4">Avelina</option>
+                                                                    <option value="5">Basilia</option>
+                                                                    <option value="6">Beatrice</option>
+                                                                    <option value="7">Cassandra</option>
+                                                                    <option value="8">Clemencia</option>
+                                                                    <option value="9">Desiderata</option>
+                                                                </select> </label>
+                                                        </section>
                                                                             
                                                                             </div>
                                                                         </div>
