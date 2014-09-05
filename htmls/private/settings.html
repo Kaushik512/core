@@ -49,12 +49,12 @@
 			<!-- projects dropdown -->
 			<div id="project-context" style="padding-top:15px;">
 				<li class="left-projects-links" data-target="#Workspace">
-      	  			<a  href="index.html">WORKZONE</a>
+      	  			<a  href="index.html"><i class="fa fa-credit-card"></i> &nbsp;WORKZONE</a>
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
      			<li class="left-projects-links" data-target="#blueprints">
-     				<a href="design.html#ajax/Aws-Production.html">DESIGN</a>
+     				<a href="design.html#ajax/Aws-Production.html"><i class="fa fa-puzzle-piece"></i> &nbsp;DESIGN</a>
      			</li>
 			</div>
 			<!-- end projects dropdown -->
@@ -101,8 +101,9 @@
 				<!--Workspace left panel -->			
 				
 				<!--Settings left panel -->
+				<div id="navSettings">
 				<ul class="menu-item-parentdemo" id="Settings">	
-			         <li>
+			         <li class="open active">
 						<a href="#" style="background-color:#40baf1;margin-right:1px;color: white !important;"><i class="fa fa-lg fa-fw fa-building"></i>
 							<span class="menu-item-parent" style="font-weight:bold">Organization Setup</span>
 						</a>
@@ -280,6 +281,7 @@
 					</li>
 					
 		        </ul>
+		        	</div>
 			</nav>
 			<span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
 
@@ -366,6 +368,8 @@
 		<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 		<!--For tag input in the textbox -->
 		<script type="text/javascript" src="js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
+		<!-- Used for displaying a table view -->
+		<script type="text/javascript" src="js/jquery.dataTables.js"></script>
 		<!--[if IE 7]>
 
 		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
@@ -574,7 +578,7 @@
 		<script src="js/demo.js"></script>
 
 		<!-- MAIN APP JS FILE -->
-		<script src="js/app_old.js"></script>
+		<script src="js/app.js"></script>
 
 		<!-- Your GOOGLE ANALYTICS CODE Below -->
 		<script type="text/javascript">

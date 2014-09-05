@@ -10,7 +10,7 @@
                         <a href="#l1" data-toggle="tab">Domains</a>
                     </li>-->
                     <li class="pull-left active">
-                        <a href="#l2" data-toggle="tab">Create Template</a>
+                        <a href="#l2" data-toggle="tab">Create Blueprint</a>
                     </li>
                     <!--<li class="pull-left">
                         <a href="#l3" data-toggle="tab">App Factory</a>
@@ -800,45 +800,26 @@
 
                                                                 </div>
                                                                 <div class="tab-pane" id="tab3">
-                                                                     <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
+                                                                    <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
                                                                      </div>
 
-                                                                <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
+                <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
 
-                                                                        <div class="row glowBox" style="margin:0px;">
+                        <div class="row glowBox" style="margin:0px;">
+                            <section class="col col-6" style="float:right;padding-top:17px;">
+                                    <select id="cookbookSelect" class="form-control" style="width: 200px;margin-top:5px;" size="10" multiple="multiple"></select>
+                                
+                                                                                
+                                                                            </section>
                                                                             
                                                                             <section class="col col-6">
                                                                                 <label for="">Choose Operating System  
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select>
-                                                                                        <option value="0">Ubuntu</option>
-                                                                                        <option value="1">Windows</option>
-                                                                                        <option value="2">Linux</option>
-                                                                                        <option value="3">Unix</option>
-                                                                                        <!--<option value="4">Ubuntu</option>-->
+                                                                                        <option value="0">Cent OS</option>
                                                                                     </select>
                                                                                 </label>                                          
-                                                                            </section>
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Choose number of Instances
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select>
-                                                                                        <option value="0">1</option>
-                                                                                            <!--<option value="1">1</option>-->
-                                                                                            <option value="2">2</option>
-                                                                                            <option value="3">3</option>
-                                                                                            <option value="4">4</option>
-                                                                                            <option value="5">5</option>
-                                                                                            <option value="6">6</option>
-                                                                                            <option value="7">7</option>
-                                                                                            <option value="8">8</option>
-                                                                                            <option value="9">9</option>
-                                                                                            <option value="10">10</option>
-                                                                                    </select>
-                                                                                </label>   
-                                                                                </label>
                                                                             </section>
                                                                             <section class="col col-6">
                                                                                 <label for="category">Choose Security Group
@@ -859,284 +840,21 @@
                                                                                 <label for="category">Choose Instance Size
                                                                                 </label>
                                                                                 <label class="select"> 
-                                                                                    <select>
-                                                                                        <option value="0">t1.micro</option>
+                                                                                    <select class="instanceType">
+                                                                                        <option value="t1.micro">t1.micro</option>
                                                                                             <!--<option value="1">t1.micro</option>-->
-                                                                                            <option value="2">m1.small</option>
-                                                                                            <option value="3">m1.medium</option>
-                                                                                            <option value="4">m1.large</option>
-                                                                                            <option value="5">m1.xlarge</option>
+                                                                                            <option value="m1.small">m1.small</option>
+                                                                                            <option value="m1.medium">m1.medium</option>
+                                                                                            <option value="m1.large">m1.large</option>
+                                                                                            <option value="m1.xlarge">m1.xlarge</option>
                                                                                     </select>
                                                                                 </label> 
-                                                                                </label>
+                                                                                
                                                                             </section>
 
                                                                             <!--To add the Swipe Functionality-->
-                                                                            <div id="divtable" style="clear: both; float: left;">
-                                                                                <div class="col-lg-5" style="margin-left: 14px">
-                                                                                    <div class="input-group">
-                                                                                        <div class="btn-group">
-                                                                                            <select id="jsonFiles" class="form-control" style="width: 200px" size="10" multiple="multiple">
-                                                                                            
- 
-    <option data-id="0" value="aliases">aliases</option>
+                                                                            
 
-    <option data-id="1" value="apache">apache</option>
-
-    <option data-id="2" value="apache2">apache2</option>
-
-    <option data-id="3" value="apt">apt</option>
-
-    <option data-id="4" value="aptgetupdate">aptgetupdate</option>
-
-    <option data-id="5" value="ark">ark</option>
-
-    <option data-id="6" value="art_activate_windows">art_activate_windows</option>
-
-    <option data-id="7" value="art_add_admin_grp">art_add_admin_grp</option>
-
-    <option data-id="8" value="art_append_hosts">art_append_hosts</option>
-
-    <option data-id="9" value="art_application_code">art_application_code</option>
-
-    <option data-id="10" value="art_base">art_base</option>
-
-    <option data-id="11" value="art_check_mk">art_check_mk</option>
-
-    <option data-id="12" value="art_client_ip_filter">art_client_ip_filter</option>
-
-    <option data-id="13" value="art_culture_builder">art_culture_builder</option>
-
-    <option data-id="14" value="art_helicon">art_helicon</option>
-
-    <option data-id="15" value="art_iap_iis">art_iap_iis</option>
-
-    <option data-id="16" value="art_iap_wrapper">art_iap_wrapper</option>
-
-    <option data-id="17" value="art_iis_adv_log">art_iis_adv_log</option>
-
-    <option data-id="18" value="art_iis_base">art_iis_base</option>
-
-    <option data-id="19" value="art_iis_console_hack">art_iis_console_hack</option>
-
-    <option data-id="20" value="art_image_magick">art_image_magick</option>
-
-    <option data-id="21" value="art_msdotnet4">art_msdotnet4</option>
-
-    <option data-id="22" value="art_paypal_cert">art_paypal_cert</option>
-
-    <option data-id="23" value="art_reg_fcn">art_reg_fcn</option>
-
-    <option data-id="24" value="art_reg_lanman">art_reg_lanman</option>
-
-    <option data-id="25" value="art_reg_quickedit">art_reg_quickedit</option>
-
-    <option data-id="26" value="art_sccm_client">art_sccm_client</option>
-
-    <option data-id="27" value="art_scep_client">art_scep_client</option>
-
-    <option data-id="28" value="art_scom_agent">art_scom_agent</option>
-
-    <option data-id="29" value="art_splunk_forwarder">art_splunk_forwarder</option>
-
-    <option data-id="30" value="art_task_iis_logs">art_task_iis_logs</option>
-
-    <option data-id="31" value="art_wcf_reg">art_wcf_reg</option>
-
-    <option data-id="32" value="art_website_code">art_website_code</option>
-
-    <option data-id="33" value="art_website_com_objects">art_website_com_objects</option>
-
-    <option data-id="34" value="art_win_updates">art_win_updates</option>
-
-    <option data-id="35" value="aufs">aufs</option>
-
-    <option data-id="36" value="aws">aws</option>
-
-    <option data-id="37" value="build-essential">build-essential</option>
-
-    <option data-id="38" value="chef-client">chef-client</option>
-
-    <option data-id="39" value="chef_handler">chef_handler</option>
-
-    <option data-id="40" value="chefserver-d4d">chefserver-d4d</option>
-
-    <option data-id="41" value="chocolatey">chocolatey</option>
-
-    <option data-id="42" value="confluence-d4d">confluence-d4d</option>
-
-    <option data-id="43" value="cron">cron</option>
-
-    <option data-id="44" value="crowd-d4d">crowd-d4d</option>
-
-    <option data-id="45" value="databag_test">databag_test</option>
-
-    <option data-id="46" value="device-mapper">device-mapper</option>
-
-    <option data-id="47" value="dmg">dmg</option>
-
-    <option data-id="48" value="docker">docker</option>
-
-    <option data-id="49" value="dpkg_autostart">dpkg_autostart</option>
-
-    <option data-id="50" value="firefox">firefox</option>
-
-    <option data-id="51" value="git">git</option>
-
-    <option data-id="52" value="gitserver_d4d">gitserver_d4d</option>
-
-    <option data-id="53" value="golang">golang</option>
-
-    <option data-id="54" value="homebrew">homebrew</option>
-
-    <option data-id="55" value="iis">iis</option>
-
-    <option data-id="56" value="iptables">iptables</option>
-
-    <option data-id="57" value="java-d4d">java-d4d</option>
-
-    <option data-id="58" value="jenkins-d4d">jenkins-d4d</option>
-
-    <option data-id="59" value="jira-d4d">jira-d4d</option>
-
-    <option data-id="60" value="logrotate">logrotate</option>
-
-    <option data-id="61" value="lwrp_test">lwrp_test</option>
-
-    <option data-id="62" value="lxc">lxc</option>
-
-    <option data-id="63" value="magic_shell">magic_shell</option>
-
-    <option data-id="64" value="magic_shell_test">magic_shell_test</option>
-
-    <option data-id="65" value="module3-apache">module3-apache</option>
-
-    <option data-id="66" value="modules">modules</option>
-
-    <option data-id="67" value="ms_dotnet2">ms_dotnet2</option>
-
-    <option data-id="68" value="ms_dotnet4">ms_dotnet4</option>
-
-    <option data-id="69" value="ms_dotnet45">ms_dotnet45</option>
-
-    <option data-id="70" value="my_cookbook">my_cookbook</option>
-
-    <option data-id="71" value="mysql">mysql</option>
-
-    <option data-id="72" value="mysql-test">mysql-test</option>
-
-    <option data-id="73" value="mysql_image">mysql_image</option>
-
-    <option data-id="74" value="nagios-d4d">nagios-d4d</option>
-
-    <option data-id="75" value="nexus-d4d">nexus-d4d</option>
-
-    <option data-id="76" value="ntp">ntp</option>
-
-    <option data-id="77" value="ohai">ohai</option>
-
-    <option data-id="78" value="openssl">openssl</option>
-
-    <option data-id="79" value="oracle">oracle</option>
-
-    <option data-id="80" value="php">php</option>
-
-    <option data-id="81" value="php-fpm">php-fpm</option>
-
-    <option data-id="82" value="postgresql">postgresql</option>
-
-    <option data-id="83" value="powershell">powershell</option>
-
-    <option data-id="84" value="prepd4d">prepd4d</option>
-
-    <option data-id="85" value="rundeck-d4d">rundeck-d4d</option>
-
-    <option data-id="86" value="runit">runit</option>
-
-    <option data-id="87" value="selenium-d4d">selenium-d4d</option>
-
-    <option data-id="88" value="selinux">selinux</option>
-
-    <option data-id="89" value="sharepoint">sharepoint</option>
-
-    <option data-id="90" value="sysctl">sysctl</option>
-
-    <option data-id="91" value="tar">tar</option>
-
-    <option data-id="92" value="template_test">template_test</option>
-
-    <option data-id="93" value="testrail_d4d">testrail_d4d</option>
-
-    <option data-id="94" value="tomcat-d4d">tomcat-d4d</option>
-
-    <option data-id="95" value="tomcat-demo">tomcat-demo</option>
-
-    <option data-id="96" value="webportal_docker">webportal_docker</option>
-
-    <option data-id="97" value="wget">wget</option>
-
-    <option data-id="98" value="win_regtest">win_regtest</option>
-
-    <option data-id="99" value="windows">windows</option>
-
-    <option data-id="100" value="windows_crap">windows_crap</option>
-
-    <option data-id="101" value="wordpress">wordpress</option>
-
-    <option data-id="102" value="wrapper_test">wrapper_test</option>
-
-    <option data-id="103" value="xml">xml</option>
-
-    <option data-id="104" value="yum">yum</option>
-
-    <option data-id="105" value="yum-epel">yum-epel</option>
-
-    <option data-id="106" value="zabbixagent">zabbixagent</option>
-
-  
-                                                                                            </select>
-                                                                                        </div>
-                                                                                        <!-- /btn-group -->
-                                                                                    </div>
-                                                                                    <!-- /input-group -->
-                                                                                </div>
-                                                                                <div class="col-lg-2" style="margin-top: 52px; margin-left: -15px">
-                                                                                    <div class="input-group">
-                                                                                        <div class="btn-group" style="padding-bottom: 10px;">
-                                                                                            <button type="button" style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnaddToSuite">Add</button>
-                                                                                        </div>
-                                                                                        <div class="clearfix"></div>
-                                                                                        <div class="btn-group">
-                                                                                            <button type="button" style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnremoveFromSuite">Remove</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-3">
-                                                                                    <div class="input-group">
-                                                                                        <div class="btn-group">
-                                                                                            <table>
-                                                                                                <tr>
-                                                                                                    <td>
-                                                                                                        <select id="suiteFiles" class="form-control" style="width: 200px" size="10" multiple="multiple"></select>
-                                                                                                    </td>
-                                                                                                    <td style="padding-left:10px;">
-                                                                                                        <button type="button"  style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnSuiteItemUp">Up</button>
-                                                                                                        <div class="clearfix"></div>
-                                                                                                        <div class="clearfix"></div>
-                                                                                                        <div class="btn-group" style="padding-top: 10px">
-                                                                                                            <button type="button" style="width:78px;height:27px;" class="btn btn-default btn-primary" id="btnSuiteItemDown">Down</button>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </table>
-                                                                                            <div class="btn-group" style="padding-bottom: 10px; margin-top: 40px;">
-                                                                                            </div>
-                                                                                            <!-- /.btn-group -->
-                                                                                        </div>
-                                                                                        <!-- /.input-group -->
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
                                                                         </div>
 
                                                                     </div>
@@ -1148,6 +866,7 @@
                                                                 </div>
                                                                 
                                                                 <div class="tab-pane" id="tab4">
+                                                                    
                                                                     
                                                                     <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
 
@@ -1162,20 +881,31 @@
                                                                                 </label>                                          
                                                                             </section>
                                                                             <section class="col col-6">
+                                                                                <label for="category">Organization
+                                                                                </label>
+                                                                                <label class="select"> 
+                                                                                    <select id="orgListInput">
+                                                                                        
+                                                                                    </select>
+                                                                                </label>   
+                                                                                </label>
+                                                                            </section>
+                                                                            <section class="col col-6">
+                                                                                <label for="category">Business Group
+                                                                                </label>
+                                                                                <label class="select"> 
+                                                                                    <select id="bgListInput">
+                                                                                        
+                                                                                    </select>
+                                                                                </label>   
+                                                                                </label>
+                                                                            </section>
+                                                                            <section class="col col-6">
                                                                                 <label for="category">Project
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select id="projectListInput">
-                                                                                        <option value="0">1</option>
-                                                                                            <option value="2">2</option>
-                                                                                            <option value="3">3</option>
-                                                                                            <option value="4">4</option>
-                                                                                            <option value="5">5</option>
-                                                                                            <option value="6">6</option>
-                                                                                            <option value="7">7</option>
-                                                                                            <option value="8">8</option>
-                                                                                            <option value="9">9</option>
-                                                                                            <option value="10">10</option>
+                                                                                        
                                                                                     </select>
                                                                                 </label>   
                                                                                 </label>
@@ -1185,16 +915,26 @@
                                                                                 </label>
                                                                                 <label class="select"> 
                                                                                     <select  id="envList">
-                                                                                        <option value="0">default-d4d</option>
-                                                                                            <!--<option value="1">default-d4d</option>-->
-                                                                                            <option value="2">Vpc-1</option>
-                                                                                            <option value="3">Vpc-2</option>
-                                                                                            <option value="4">Default VPC</option>
-                                                                                            <option value="5">Create New</option>
+
                                                                                     </select>
                                                                                 </label>
                                                                                 </label>
                                                                             </section>
+                                                        <section class="col col-6">
+                                                            <label class="label">Assign Users</label>
+                                                            <label class="select select-multiple">
+                                                                <select class="custom-scroll" multiple="">
+                                                                    <option value="1">Alexandra</option>
+                                                                    <option value="2">Alice</option>
+                                                                    <option value="3">Anastasia</option>
+                                                                    <option value="4">Avelina</option>
+                                                                    <option value="5">Basilia</option>
+                                                                    <option value="6">Beatrice</option>
+                                                                    <option value="7">Cassandra</option>
+                                                                    <option value="8">Clemencia</option>
+                                                                    <option value="9">Desiderata</option>
+                                                                </select> </label>
+                                                        </section>
                                                                             
                                                                             </div>
                                                                         </div>
@@ -1302,52 +1042,6 @@
 <script type="text/javascript">
     
 </script>
-<script type="text/javascript">
-//To add the wizard
-    $("#btnaddToSuite").on('click', function () {
-        var x = document.getElementById("jsonFiles");
-        for (var i = 0; i < x.options.length; i++) {
-            if (x.options[i].selected == true) {
-                var y = document.createElement("option");
-                y.value = x.options[i].value;
-                y.innerHTML = x.options[i].text;
-                $("#suiteFiles").append(y);
-
-            }
-        }
-    });
-
-    $("#btnremoveFromSuite").on('click', function () {
-        $("#suiteFiles option:selected").remove();
-    });
-
-    $("#btnSuiteItemUp").on('click', function () {
-        $("#suiteFiles option:selected").each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
-
-            if (listItemPosition == 1) return false;
-
-            listItem.insertBefore(listItem.prev());
-        });
-
-    });
-
-    $("#btnSuiteItemDown").on('click', function () {
-        var itemsCount = $("#suiteFiles option").length;
-
-        $($("#suiteFiles option:selected").get().reverse()).each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
-
-            if (listItemPosition == itemsCount) return false;
-
-            listItem.insertAfter(listItem.next());
-
-        });
-    });
-    </script>
-
 
 
 <script type="text/javascript">
@@ -1389,13 +1083,8 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.templateId = $selectedItem.attr('data-templateId');
             reqBody.templateType = $selectedItem.attr('data-templateType');
             reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
-            var runlist = [];
-            var $options = $('#suiteFiles').find('option');
-            for(var i=0;i<$options.length;i++) {
-                runlist.push($($options.get(i)).attr('value'));
-            }
-            reqBody.runlist = runlist;
-            
+            reqBody.runlist = $('#suiteFiles').val();
+            reqBody.instanceType = $('.instanceType').val();
             console.log(reqBody);
 
 
@@ -1403,8 +1092,24 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.projectId = $('#projectListInput').val();
             reqBody.envId = $('#envList').val();
             reqBody.name =$('#blueprintNameInput').val();
+            if(!reqBody.name) {
+                alert("Please enter a blueprint name");
+                return false;
+            }
+            if(!reqBody.projectId || reqBody.projectId  === 'choose') {
+                alert("Please choose a project");
+                return false;
+            }
+
+            if(!reqBody.envId || reqBody.envId  === 'choose') {
+                alert("Please choose an environment");
+                return false;
+            }
+
+
+
             console.log('pushing');
-            $.post('/project/'+reqBody.projectId+'/env/'+reqBody.envId+'/blueprint',{
+            $.post('/projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
                 blueprintData:reqBody
             },function(data){
              console.log(data);
@@ -1458,68 +1163,128 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 
 
 
+  var serviceURL = "/d4dMasters/";
 
+          function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
+                readMasterJson_Top(jsonID);
+                formData = d4ddata.masterjson;
+                // var comparedField = "orgname";
+                //  var filterByValue = "Scholastic";
+                //  var outputField = "productgroupname";
+                var result = [];
+                //debugger;
+                $.each(eval(formData.rows.row), function (i, item) {
+                    $.each(item.field, function (k, item1) {
 
-  function readMasterJson(section) {
-
-        $.ajax({
-            type: "get",
-            dataType: "text",
-
-            async: false,
-            url: '/d4dMasters/' + "readmasterjson/" + section,
-            success: function (data) {
-                // alert(data.toString());   
-                d4ddata = JSON.parse(data);
-            },
-            failure: function (data) {
-                alert(data.toString());
-            }
-        });
-        return (d4ddata);
-    }
-
-
- function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
-        readMasterJson(jsonID);
-        formData = d4ddata.masterjson;
-       // var comparedField = "orgname";
-      //  var filterByValue = "Scholastic";
-      //  var outputField = "productgroupname";
-        var result = [];
-        //debugger;
-        $.each(eval(formData.rows.row), function (i, item) {
-            $.each(item.field, function (k, item1) {
-
-                if (item1.name == comparedField && item1.values.value == filterByValue) {
-                    // alert(item1.values.value);
-                    //found the row, now get the next column
-                    $.each(item.field, function (j, item2) {
-                        if (item2.name == outputField) {
-                            //  alert(item2.values.value);
-                            result.push(item2.values.value);
+                        if (item1.name == comparedField && (item1.values.value == filterByValue || filterByValue == '')) {
+                            // alert(item1.values.value);
+                            //found the row, now get the next column
+                           // debugger;
+                            $.each(item.field, function (j, item2) {
+                                if (item2.name == outputField) {
+                                    //  alert(item2.values.value);
+                                    result.push(item2.values.value);
+                                }
+                            });
                         }
                     });
-                }
-            });
-        });
-        return (result);
+                });
+                return (result);
+            }
+
+            function readMasterJson_Top(section) {
+
+                $.ajax({
+                    type: "get",
+                    dataType: "text",
+
+                    async: false,
+                    url: serviceURL + "readmasterjson/" + section,
+                    success: function (data) {
+                        // alert(data.toString());   
+                        d4ddata = JSON.parse(data);
+                    },
+                    failure: function (data) {
+                        alert(data.toString());
+                    }
+                });
+                return (d4ddata);
+            }
+
+var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
+console.log(getOrgs);
+
+
+var $orgListInput = $('#orgListInput');
+$orgListInput.append($('<option></option>').val('choose').html('choose'));
+for(var i=0;i<getOrgs.length;i++) {
+    $orgListInput.append($('<option></option>').val(getOrgs[i]).html(getOrgs[i]));
+}
+$bgList = $('#bgListInput');
+var $envList = $('#envList');
+
+
+
+$orgListInput.change(function(e){
+    var orgName = $(this).val();
+    if(orgName == 'choose') {
+        return;
+    }
+    $bgList.empty();
+    $bgList.append($('<option></option>').val('choose').html('choose'));
+    var getBGs = getRelatedValues_Top(2, "orgname",orgName, "productgroupname"); 
+    for(var i=0;i<getBGs.length;i++) {
+       $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
+    }
+    
+    $envList.empty();
+    var getEnv = getRelatedValues_Top(3, "orgname", orgName, "environmentname");
+    for(var i=0;i<getEnv.length;i++) {
+       $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
     }
 
+});
 
- var getProj = getRelatedValues(4, "orgname", 'Scholastic', "projectname");
- var getEnv = getRelatedValues(3, "orgname", 'Scholastic', "environmentname");
+var $projectList = $('#projectListInput');
+$bgList.change(function(e){
+    var bgName = $(this).val();
+    if(bgName == 'choose') {
+        return;
+    }
+    $projectList.empty();
+    $projectList.append($('<option></option>').val('choose').html('choose'));
 
-var $projectList = $('#projectListInput').empty(); 
-for(var i=0;i<getProj.length;i++) {
-  $projectList.append($('<option></option>').val(getProj[i]).html(getProj[i]));
-}
+   var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
+    for(var i=0;i<getProjs.length;i++) {
+       $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+    }
+});
 
-var $envList = $('#envList').empty(); 
-for(var i=0;i<getEnv.length;i++) {
-  $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
-}
+ $.ajax({
+    url:'/chef/cookbooks',
+    method:'GET',
+    async:false,
+    success :function(data) {
+        var keys = Object.keys(data);
+        var $cookbooksList = $('#cookbookSelect'); 
+          for(var i=0;i<keys.length;i++) {
+            var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+            $cookbooksList.append($option);
+          }
+        $cookbooksList.multiSelect({});
+    },
+ })
+ /*$.get('/chef/cookbooks',function(data){
+    var keys = Object.keys(data);
+    var $cookbooksList = $('#cookbookSelect'); 
+        for(var i=0;i<keys.length;i++) {
+         var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+         $cookbooksList.append($option);
+    }
+    $cookbooksList.multiSelect({});
 
+
+});*/
 
 
 

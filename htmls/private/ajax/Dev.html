@@ -396,8 +396,11 @@
                             <div class="col-md-12">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
-                                        
-                                        <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
+                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                            <i class="ace-icon fa fa-plane bigger-110"></i>
+                                            Edit
+                                        </button>                                       
+                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-plane bigger-110"></i>
                                             Launch
                                         </button>
@@ -429,7 +432,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x" title="Table View"/></button></span>
+                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></button></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -753,6 +756,61 @@
   </div>
 </div>
 
+<div class="modal fade" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Runlist</h4>
+      </div>
+      <div class="modal-body">
+         <select class="chefCookbookList" multiple>
+         </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary btnUpdateRunlist">Update</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Runlist</h4>
+      </div>
+      <div class="modal-body">
+         <select class="chefCookbookList" multiple>
+         </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script type="text/javascript">
 
@@ -778,6 +836,16 @@ var envId = urlParams['envid'];
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
 
+$.get('/chef/cookbooks',function(data){
+    var keys = Object.keys(data);
+    var $cookbooksList = $('.chefCookbookList'); 
+    for(var i=0;i<keys.length;i++) {
+      var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+      $cookbooksList.append($option);
+    }
+
+});
+
 
 $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data){
     
@@ -791,18 +859,18 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
     
     for(var i=0;i<data.length;i++) {
         
-        var $itemContainer = $('<div></div>').addClass("col-sm-2 col-lg-2 col-md-2");
+        var $itemContainer = $('<div></div>').addClass("productdiv4");
 
         var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId); 
         var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({'text-align':'center'});
         var $img = $('<img/>').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
         var $liImage = $('<li></li>').append($img);
         $ul.append($liImage);
-        
-        var $liCardName = $('<li></li>').css({"font-size":'12px'}).html('<u><b>'+data[i].name+'</b></u>');
+        //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
+        var $liCardName = $('<li title="'+data[i].name+'"></li>').addClass('Cardtextoverflow').html('<u><b>'+data[i].name+'</b></u>');
 
         //For Table View
-        $rowContainter.append('<td>' +data[i].name + '</td>');
+        //$rowContainter.append('<td>' +data[i].name + '</td>');
         
 
 
@@ -814,6 +882,15 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
            $ul.append($li);
          }
+        }
+        if(data[i].versionsList) {
+           var $selectVer =  $('<select></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
+         var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer);;
+         for(var j=0;j<data[i].versionsList.length;j++) {
+           var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+           $selectVer.append($options);
+         }
+         $ul.append($li);    
         }
 
         $itemBody.append($ul);
@@ -828,10 +905,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            $devopsRolepanelBody.append($itemContainer);
         }
         //For Table View
-        $rowContainter.append('<td>' +$itemContainer+ '</td>');
+        //$rowContainter.append('<td>' +$itemContainer+ '</td>');
 
         //For Table View
-        $rowContainter.append('<td>' +$itemContainer+ '</td>');
+        //$rowContainter.append('<td>' +$itemContainer+ '</td>');
 
     }
     var $productdiv1 = $('.productdiv1');
@@ -854,16 +931,16 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     for(var i=0;i<data.length;i++) {
 
         //For Table view
-        var $rowContainter = $('<tr></tr>');
+        var $rowContainter = $('<tr data-instanceId="'+data[i]._id+'"></tr>');
 
 
         var $li = $('<li></li>').addClass('domain-role-thumbnail');
-        var $div = $('<div></div>').addClass('domain-roles');
-        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption');
+        var $div = $('<div></div>').addClass('domain-roles ');
+        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html(data[i].blueprintData.blueprintName); 
-        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a></a>').addClass('moreInfo').attr('title','More Info'));  
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName); 
+        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('title','More Info'));  
 
         $divHeading.append($spanheadingLeft); 
         $divHeading.append($spanheadingRight);
@@ -876,7 +953,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
         }
-        else if(data[i].instanceState == 'pending'){
+        else if(data[i].instanceState == 'terminated'){
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
         }
@@ -884,10 +961,11 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer paused');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator paused');
         }  
-        else{
+        else {
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
         }
+        $tableInstanceStatusIndicator.attr('data-instanceId',data[i]._id);
 
 
         $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
@@ -895,7 +973,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         for(var j=0;j<data[i].runlist.length;j++) { 
           var $divComponentItem;
            if(j == 0)
-            $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+            //Arabinda added below css $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:10px;overflow:hidden;text-overflow:ellipsis;width:68px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            else
             $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
            $divComponentList.append($divComponentItem);
@@ -914,10 +993,19 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $divDomainRolesCaption.append($divComponentListContainer);
         var $divInstanceDetails = $('<div></div>')
         var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-        var $instanceDetailItemId = $('<span style="margin-left:-2px;"></span>').addClass('instance-details-item').html('Id : <strong>'+data[i]._id+'</strong>');
+        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('Id : <strong>'+data[i]._id+'</strong>');
         $instanceDetailsList.append($instanceDetailItemId);
+          var $instanceDetailItemStatus;
+        if(data[i].instanceState == 'running'){
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">'+data[i].instanceState+'</strong>');     
+        } else if(data[i].instanceState == 'terminated'){
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
+        } else  if(data[i].instanceState == 'stopped'){
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-paused">'+data[i].instanceState+'</strong>');
+        } else {
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">'+data[i].instanceState+'</strong>');
+        }
        
-        var $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-item').html('status : <span class=instance-active>'+data[i].instanceState+'</strong>');
          $instanceDetailsList.append($instanceDetailItemStatus);
 
          $divInstanceDetails.append($instanceDetailsList);
@@ -928,14 +1016,14 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
 
-          var $divActionBtnContainer = $('<div></div>');
+          var $divActionBtnContainer = $('<div></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data[i]._id);
 
-          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a></a>').addClass('actionbuttonStart'));
+          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','start'));
           $divActionBtnContainer.append($divActionStartContainer);
 
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a></a>').addClass('actionbuttonRestart'));
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist'));
           $divActionBtnContainer.append($divActionReStartContainer);
-          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a></a>').addClass('actionbuttonShutdown'));
+          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
           $divActionBtnContainer.append($divActionShutdownContainer);
   
         $divDomainRolesCaption.append($divActionBtnContainer);
@@ -945,9 +1033,14 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $instancesList.append($li);
 
         //For Table View
-        $rowContainter.append('<td>' +$divActionBtnContainer.html()+ '</td>');
+        $rowContainter.append('<td>' +$('<div></div>').append($divActionBtnContainer.clone()).html()+ '</td>');
         $("#tableinstanceview").append($rowContainter);
     }
+
+     
+
+
+
    
    //for table view
    var tableinstanceview = $('#tableinstanceview').dataTable({
@@ -968,6 +1061,117 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
     //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
    // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
+
+    //handling instance action btn
+  
+     function getCssClassFromStatus(status) {
+        var cssClasses = {
+
+        };
+        switch(status) {
+            
+            case 'running':
+            cssClasses.ringClass = 'started';
+             cssClasses.textClass = 'instance-state-text-started';
+             cssClasses.tableViewStatusClass ="started";
+            break;
+
+            case 'stopped':
+             cssClasses.ringClass = 'paused';
+             cssClasses.textClass = 'instance-state-text-paused';
+             cssClasses.tableViewStatusClass ="paused";
+            break;
+
+            case 'terminated':
+             cssClasses.ringClass = 'stopped';
+             cssClasses.textClass = 'instance-state-text-stopped';
+             cssClasses.tableViewStatusClass ="stopped";
+            break;
+
+            default :
+             cssClasses.ringClass = 'pending';
+             cssClasses.textClass = 'instance-state-text-pending';
+             cssClasses.tableViewStatusClass ="pending";
+
+        }
+
+        return cssClasses;
+     } 
+
+    $('.instanceActionBtn').click(function(e){
+        var $this = $(this);
+        var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
+        var type = $this.attr('data-actionType');
+        url = '/instances/'+instanceId+'/startInstance';
+        if(type==='stop') {
+            url = '/instances/'+instanceId+'/stopInstance'
+        }
+        $.get(url,function(data){
+            var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+            console.log($parent.length,$parent);
+           
+            var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
+            
+            var oldState = data.instanceCurrentState;
+
+            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+
+            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
+
+            $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+            
+            function pollInstanceState(state,delay) {
+                var timeout = setTimeout(function() {
+                    $.get('/instances/'+instanceId,function(data){
+                        if(data) {
+                            if(data.instanceState === state) {
+                                pollInstanceState(state,5000);
+                            } else {
+                                console.log('polling complete');
+                                 var cssClassed = getCssClassFromStatus(data.instanceState); 
+                                 $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                 $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                  $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                            } 
+                        }   
+                    })
+                }, delay);                
+            }
+            pollInstanceState(oldState,2000);                        
+        }); 
+    });
+
+    $('.instanceActionBtnUpdateRunlist').click(function(e){
+         var $this = $(this);
+         var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
+         $('.chefCookbookList').attr('data-instanceId',instanceId);
+         $('#chefRunModalContainer').modal('show');
+    });
+
+    $('.moreInfo').click(function(e){
+         var instanceId =  $(this).attr('data-instanceId');
+         var $instanceLogModalContainer =  $('#instanceLogModalContainer');
+         $instanceLogModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+         $instanceLogModalContainer.modal('show');
+         $.get('/instances/'+instanceId+'/logs',function(data){
+            var $modalBody = $instanceLogModalContainer.find('.modal-body').empty();
+            for(var i=0;i<data.length;i++) {
+                var timeString = new Date().setTime(data[i].timestamp);
+
+                console.log(timeString);
+
+                var $rowDiv  = $('<div></div>');
+                $rowDiv.append($('<span style="padding-right:5px;"></span>').append(timeString));
+                $rowDiv.append($('<span></span>').append(data[i].log));
+                $modalBody.append($rowDiv);
+            }
+            
+         });
+
+
+    });
+
+
 });
 
 
@@ -1017,8 +1221,9 @@ $('.launchBtn').click(function(e){
        var projectId = $($selectedItems.get(i)).attr('data-projectId');
        var envId = $($selectedItems.get(i)).attr('data-envId');
        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
        
-       $.get('/project/'+projectId+'/env/'+envId+'/blueprint/'+blueprintId+'/launch',function(data){
+       $.get('/blueprints/'+blueprintId+'/launch?version='+version,function(data){
          
          var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : '+data.id);  
 
@@ -1027,6 +1232,60 @@ $('.launchBtn').click(function(e){
         
        })
    } 
+});
+
+$('.editBtn').click(function(e){
+     var $selectedItems = $('.role-Selected1');
+      var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+     $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+      $blueprintEditResultContainer.modal('show');
+      for(var i=0;i<$selectedItems.length;i++) {
+       var projectId = $($selectedItems.get(i)).attr('data-projectId');
+       var envId = $($selectedItems.get(i)).attr('data-envId');
+       var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
+      
+       $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
+          var $chefRunlist = $('.chefCookbookList').clone();
+           $blueprintEditResultContainer.find('.modal-body').empty();  
+           $blueprintEditResultContainer.find('.modal-body').append($chefRunlist);
+           $blueprintEditResultContainer.data('blueprintId',blueprintId);
+           console.log(data);
+       })
+   } 
+});
+
+$('.blueprintUpdateBtn').click(function(e){
+  
+  var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+  var $chefRunlist = $blueprintEditResultContainer.find('.chefCookbookList'); 
+  var blueprintId = $blueprintEditResultContainer.data('blueprintId');
+  if(blueprintId) {
+    console.log($chefRunlist.val());
+    var blueprintData = {
+            runlist: $chefRunlist.val(),
+            expirationDays: 0,
+    };
+
+    $.post('/blueprints/'+blueprintId+'/update',{
+        blueprintUpdateData :blueprintData
+    },function(data){
+       $('.blueprintVersionDropDown[data-blueprintId="'+blueprintId+'"]').append($('<option value="'+data.version+'">'+data.version+'</option>').attr('selected',true));
+      console.log(data);
+    });
+
+  }
+});
+
+$('.btnUpdateRunlist').click(function(e){
+  var instanceId  = $('.chefCookbookList').attr('data-instanceId');
+  var runlist = $('.chefCookbookList').val();
+  console.log(runlist); 
+  $.post('/instances/'+instanceId+'/updateRunlist',{
+    runlist:runlist
+  },function(data){
+      console.log(data);
+  });
 });
 
 

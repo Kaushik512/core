@@ -15,6 +15,8 @@ var EC2 = function(awsSettings) {
 		"region": awsSettings.region
 	});
 
+	var that  = this;
+
 	this.describeInstances = function(instanceIds, callback) {
 
 		var options = {};
@@ -128,10 +130,10 @@ var EC2 = function(awsSettings) {
 		timeoutFunc(instanceId);
 	};
 
-	function pollInstanceState(state, callback) {
+	function pollInstanceState(instanceId,state, callback) {
 		function checkInstanceStatus(statusToCheck, delay) {
 			var timeout = setTimeout(function() {
-				ec2.getInstanceState(data[0].platformId, function(err, instanceState) {
+				that.getInstanceState(instanceId, function(err, instanceState) {
 					if (err) {
 						console.log('Unable to get instance state', err);
 						callback(err, null);
@@ -148,7 +150,7 @@ var EC2 = function(awsSettings) {
 		checkInstanceStatus(state, 1);
 	}
 
-	this.stopInstance = function(instanceIds, callback, onStateChangedCallback) {
+	this.stopInstance = function(instanceIds, callback, onStateChangedCompleteCallback) {
 		ec.stopInstances({
 			InstanceIds: instanceIds
 		}, function(err, data) {
@@ -160,7 +162,7 @@ var EC2 = function(awsSettings) {
 			}
 			console.log("number of instances stopped " + data.StoppingInstances.length);
 			callback(null, data.StoppingInstances);
-			pollInstanceState(instanceStateList.STOPPED, function(err, state) {
+			pollInstanceState(instanceIds[0],instanceStateList.STOPPED, function(err, state) {
 				onStateChangedCompleteCallback(err, state);
 			});
 
@@ -179,7 +181,7 @@ var EC2 = function(awsSettings) {
 			}
 			console.log("number of instances stopped " + data.StartingInstances.length);
 			callback(null, data.StartingInstances);
-			pollInstanceState(instanceStateList.RUNNING, function(err, state) {
+			pollInstanceState(instanceIds[0],instanceStateList.RUNNING, function(err, state) {
 				onStateChangedCompleteCallback(err, state);
 			});
 
@@ -198,7 +200,7 @@ var EC2 = function(awsSettings) {
 			}
 			console.log("number of instances stopped " + data.length);
 			callback(null, data);
-			pollInstanceState(instanceStateList.RUNNING, function(err, state) {
+			pollInstanceState(instanceIds[0],instanceStateList.RUNNING, function(err, state) {
 				onStateChangedCompleteCallback(err, state);
 			});
 
@@ -217,7 +219,7 @@ var EC2 = function(awsSettings) {
 			}
 			callback(null, data);
 
-			pollInstanceState(instanceStateList.TERMINATED, function(err, state) {
+			pollInstanceState(instanceIds[0],instanceStateList.TERMINATED, function(err, state) {
 				onStateChangedCompleteCallback(err, state);
 			});
 		});

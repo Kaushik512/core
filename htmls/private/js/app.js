@@ -1265,6 +1265,41 @@ function drawBreadCrumb() {
 
 }
 
+function drawBreadCrumb1() {
+    
+    //console.log("breadcrumb")
+    $("#ribbon ol.breadcrumb").empty();
+    if (window.location.href.indexOf("Settings") > 0) {
+        $("#ribbon ol.breadcrumb").append($("<li>Settings</li>"));
+    }
+    else
+    $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>"));
+
+    /*$('nav li.active > a, nav li.open > a').each(function () {
+        $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+    }); */
+    if ($('#navWorkspace').is(":visible") == true){
+        $('#navWorkspace li.active > a, #navWorkspace li.open > a').each(function () {
+            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+        });
+        $(".breadcrumb").show();
+    }
+    //force setting the visibility
+    if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
+        $('#navWorkspace').css("display", '');
+    }
+    if (window.location.href.indexOf("Settings") > 0) {
+        $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
+            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+        });
+
+    }
+    //force setting the breadcrumb visibility
+    //if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
+        
+    //    $('#navWorkspace').css("display", '');
+    //}
+}
 /* ~ END: APP AJAX REQUEST SETUP */
 
 /*

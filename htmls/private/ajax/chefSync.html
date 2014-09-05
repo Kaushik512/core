@@ -71,6 +71,18 @@
       </div>
       <div class="modal-body">
          <form role="form">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Orgs</label>
+              <select id="chefImportOrgSelect">
+                
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Business Groups</label>
+              <select id="chefImportBgSelect">
+                
+              </select>
+            </div>
          	
          	<div class="form-group">
     			<label for="exampleInputEmail1">Project</label>
@@ -92,60 +104,97 @@
 
 <script type="text/javascript">
 
-  function readMasterJson(section) {
 
-        $.ajax({
-            type: "get",
-            dataType: "text",
+  var serviceURL = "/d4dMasters/";
 
-            async: false,
-            url: '/d4dMasters/' + "readmasterjson/" + section,
-            success: function (data) {
-                // alert(data.toString());   
-                d4ddata = JSON.parse(data);
-            },
-            failure: function (data) {
-                alert(data.toString());
-            }
-        });
-        return (d4ddata);
-    }
+          function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
+                readMasterJson_Top(jsonID);
+                formData = d4ddata.masterjson;
+                // var comparedField = "orgname";
+                //  var filterByValue = "Scholastic";
+                //  var outputField = "productgroupname";
+                var result = [];
+                //debugger;
+                $.each(eval(formData.rows.row), function (i, item) {
+                    $.each(item.field, function (k, item1) {
 
-
- function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
-        readMasterJson(jsonID);
-        formData = d4ddata.masterjson;
-       // var comparedField = "orgname";
-      //  var filterByValue = "Scholastic";
-      //  var outputField = "productgroupname";
-        var result = [];
-        //debugger;
-        $.each(eval(formData.rows.row), function (i, item) {
-            $.each(item.field, function (k, item1) {
-
-                if (item1.name == comparedField && item1.values.value == filterByValue) {
-                    // alert(item1.values.value);
-                    //found the row, now get the next column
-                    $.each(item.field, function (j, item2) {
-                        if (item2.name == outputField) {
-                            //  alert(item2.values.value);
-                            result.push(item2.values.value);
+                        if (item1.name == comparedField && (item1.values.value == filterByValue || filterByValue == '')) {
+                            // alert(item1.values.value);
+                            //found the row, now get the next column
+                           // debugger;
+                            $.each(item.field, function (j, item2) {
+                                if (item2.name == outputField) {
+                                    //  alert(item2.values.value);
+                                    result.push(item2.values.value);
+                                }
+                            });
                         }
                     });
-                }
-            });
-        });
-        return (result);
+                });
+                return (result);
+            }
+
+            function readMasterJson_Top(section) {
+
+                $.ajax({
+                    type: "get",
+                    dataType: "text",
+
+                    async: false,
+                    url: serviceURL + "readmasterjson/" + section,
+                    success: function (data) {
+                        // alert(data.toString());   
+                        d4ddata = JSON.parse(data);
+                    },
+                    failure: function (data) {
+                        alert(data.toString());
+                    }
+                });
+                return (d4ddata);
+            }
+
+var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
+console.log(getOrgs);
+
+
+var $orgListInput = $('#chefImportOrgSelect');
+$orgListInput.append($('<option></option>').val('choose').html('choose'));
+for(var i=0;i<getOrgs.length;i++) {
+    $orgListInput.append($('<option></option>').val(getOrgs[i]).html(getOrgs[i]));
+}
+$bgList = $('#chefImportBgSelect');
+
+
+$orgListInput.change(function(e){
+    var orgName = $(this).val();
+    if(orgName == 'choose') {
+        return;
     }
+    $bgList.empty();
+    $bgList.append($('<option></option>').val('choose').html('choose'));
+    var getBGs = getRelatedValues_Top(2, "orgname",orgName, "productgroupname"); 
+    for(var i=0;i<getBGs.length;i++) {
+       $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
+    }
+    
+    
 
+});
 
-   var getProj = getRelatedValues(4, "orgname", 'Scholastic', "projectname");
+var $projectList = $('#chefImportProjectSelect');
+$bgList.change(function(e){
+    var bgName = $(this).val();
+    if(bgName == 'choose') {
+        return;
+    }
+    $projectList.empty();
+    $projectList.append($('<option></option>').val('choose').html('choose'));
 
-   var $projectSelect = $('#chefImportProjectSelect');
-   for(var i=0;i<getProj.length;i++) {
-     var $option = $('<option></option>').append(getProj[i]).val(getProj[i]);
-     $projectSelect.append($option);
-   }
+   var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
+    for(var i=0;i<getProjs.length;i++) {
+       $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+    }
+});
 
 
 
@@ -222,7 +271,8 @@ $('.showChefImportNodesModalBtn').click(function(e){
  $('.importNodesBtn').click(function(e){
    var $checkBoxes = $('.nodeCheckBox:checked');
    var reqBody = {};
-   reqBody.projectId = $projectSelect.val();
+   reqBody.orgId = $orgListInput.val();
+   reqBody.projectId = $projectList.val();
    reqBody.selectedNodes = [];
    for(var i=0;i<$checkBoxes.length;i++) {
       var nodeInfo = {};

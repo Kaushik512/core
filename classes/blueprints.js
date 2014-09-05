@@ -10,6 +10,7 @@ var BlueprintSchema = new Schema({
 	templateId: String,
 	templateType: String,
 	templateComponents: [String],
+	instanceType: String,
 	versionsList: [{
 		ver: String,
 		runlist: [String],
@@ -86,6 +87,7 @@ var BlueprintsDao = function() {
 			templateId: blueprintData.templateId,
 			templateType: blueprintData.templateType,
 			templateComponents: blueprintData.templateComponents,
+			instanceType: blueprintData.instanceType,
 			versionsList: [{
 				ver: generateBlueprintVersionNumber(null),
 				runlist: blueprintData.runlist,
@@ -136,11 +138,48 @@ var BlueprintsDao = function() {
 						callback(err, null);
 						return;
 					}
-					callback(null, updatedData);
+					callback(null, {
+						version: newVersion,
+						cout: updatedData
+					});
 				});
 			} else {
 				callback(null, 0);
 			}
+		});
+	};
+
+	this.getBlueprintVersionData = function(blueprintId, version, callback) {
+		var queryObj = {
+			"_id": new ObjectId(blueprintId)
+		};
+
+		var projectionObj = {};
+		if (version) {
+			projectionObj = {
+				versionsList: {
+					$elemMatch: {
+						ver: version
+					}
+				}
+			}
+
+			queryObj["versionsList.ver"] = version;
+		}
+
+		Blueprint.find(queryObj, projectionObj, function(err, data) {
+			if (err) {
+				callback(err, null);
+				return;
+			}
+			console.log('data ==>', data);
+			if (data.length) {
+				callback(null, data[0].versionsList);
+			} else {
+				callback(null, []);
+			}
+
+
 		});
 	}
 }

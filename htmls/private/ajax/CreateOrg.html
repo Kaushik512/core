@@ -141,6 +141,7 @@
         $('.widget-box').css('opacity', '0.1');
         //To Do SAve...
        // var d4djson = $.parseJSON(d4ddata);
+        alert('here');
         alert(d4ddata.sections.section.name);
 
 
@@ -202,6 +203,11 @@
             var imgLogoPreview = "<img src='" +  e.target.result + "' style='border:0px;height:25px;width:28px'/>";
             $('.imgdiv').empty().append(imgLogoPreview);
         });
+    });
+
+
+    $('#orgname').onBlur(function(){
+        alert('unfocus');
     });
 
 

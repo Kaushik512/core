@@ -20,6 +20,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 		var blueprintData = req.body.blueprintData;
 		blueprintData.projectId = req.params.projectId;
 		blueprintData.envId = req.params.envId;
+		if(!blueprintData.runlist) {
+			blueprintData.runlist = [];
+		}
+		//blueprintData.runlist.splice(0, 0, 'recipe[ohai]');
 
 		blueprintsDao.createBlueprint(blueprintData, function(err, data) {
 			if (err) {

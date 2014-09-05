@@ -9,7 +9,7 @@
         font-weight: bold;
     }
 </style>
-
+<script src="/private/js/settingscommon.js"></script>
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -103,7 +103,9 @@
                                        "search": false
                                        });*/
                                         //   alert('in');
-                                        CreateTableFromJson("Projects");
+                                       // CreateTableFromJson(4);
+
+                                        CreateTableFromJson(4,'projectname' , 'CreateProject.html'); //1 is for Org
                                         var tab = 'envtable';
                                         $('#' + tab).dataTable({
                                             "pagingType": "full_numbers"
@@ -130,7 +132,7 @@
 
                                     }
 
-                                    function deleteItem(docid, key, value) {
+                                    function deleteItem_todelete(docid, key, value) {
 
                                         if (confirm('You are about to remove this list ' + docid + ':' + key + ':' + value)) {
                                             $.ajax({
@@ -154,7 +156,7 @@
 
                                     }
 
-                                    function readMasterJson(id) {
+                                    function readMasterJson_todelete(id) {
                                         // debugger;
                                         $.ajax({
                                             type: "get",

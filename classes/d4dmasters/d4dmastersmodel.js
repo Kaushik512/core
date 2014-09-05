@@ -8,16 +8,5 @@ var d4dMastersSchema = new mongoose.Schema({
 
 var d4dModel = mongoose.model('d4dMaster', d4dMastersSchema);
 
-/*
-mongoose.connection.db.collectionNames(function(error, names) {
-	if (error) {
-		throw new Error(error);
-	} else {
-		names.map(function(cname) {
-			console.log(cname.name);
-		});
-	}
-});
-*/
 
 module.exports = d4dModel;

@@ -4,14 +4,34 @@ var instancesDao = require('../classes/instances');
 var EC2 = require('../classes/ec2.js');
 var Chef = require('../classes/chef.js');
 var taskstatusDao = require('../classes/taskstatus');
+var logsDao = require('../classes/dao/logsdao.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
+
+	app.all('/instances/*', sessionVerificationFunc);
+
+	app.get('/instances/:instanceId', function(req, res) {
+		instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+
+			if (data.length) {
+				res.send(data[0]);
+			} else {
+				res.send(404);
+			}
+		});
+	})
+
 
 	app.post('/instances/:instanceId/updateRunlist', function(req, res) {
 		if (!req.body.runlist) {
 			res.send(400);
 			return;
 		}
+		console.log(req.body.runlist);
 		instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
 			if (err) {
 				res.send(500);
@@ -20,19 +40,36 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			if (data.length) {
 				settingsController.getSettings(function(settings) {
 					var chef = new Chef(settings.chef);
-					chef.updateNode(data[0].chefNodeName, req.body.runlist, function(err, nodeData) {
+
+					chef.updateAndRunNodeRunlist(data[0].chefNodeName, {
+						runlist: req.body.runlist,
+						pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
+						instanceUserName: settings.aws.instanceUserName,
+						instancePublicIp: data[0].instanceIP
+					}, function(err, retCode) {
 						if (err) {
-							res.send(500);
+
 							return;
 						}
-						instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
-							if (err) {
-								res.send(500);
-								return;
-							}
-							res.send(200);
-						});
+						console.log("knife ret code", retCode);
+						if (retCode == 0) {
+							console.log('updateing node runlist in db');
+							instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+								if (err) {
+									res.send(500);
+									return;
+								}
+								res.send(200);
+							});
+						} else {
+							return;
+						}
+					}, function(stdOutData) {
+						stdOutData.toString('ascii');
+					}, function(stdOutErr) {
+						stdOutErr.toString('ascii');
 					});
+					res.send(200);
 				});
 			} else {
 				res.send(404);
@@ -55,7 +92,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							res.send(500);
 							return;
 						}
-						res.send(200);
+						res.send(200, {
+							instanceCurrentState: stoppingInstances[0].CurrentState.Name,
+						});
 
 						instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
 							if (err) {
@@ -64,6 +103,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Stopping",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update bootStrapLog');
+								return;
+							}
+							console.log('bootStrapLog updated');
+						});
+
+
 					}, function(err, state) {
 						if (err) {
 							return;
@@ -75,7 +129,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
+
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Stopped",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update log');
+								return;
+							}
+							console.log('log updated');
+						});
+
+
 					});
+
 
 				});
 			} else {
@@ -100,7 +171,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							res.send(500);
 							return;
 						}
-						res.send(200);
+						res.send(200, {
+							instanceCurrentState: startingInstances[0].CurrentState.Name,
+						});
 
 						instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
 							if (err) {
@@ -109,19 +182,50 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
-					});
 
-				}, function(err, state) {
-					if (err) {
-						return;
-					}
-					instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Starting",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update log');
+								return;
+							}
+							console.log('log updated');
+						});
+
+					}, function(err, state) {
 						if (err) {
-							console.log("update instance state err ==>", err);
 							return;
 						}
-						console.log('instance state upadated');
+						instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+							if (err) {
+								console.log("update instance state err ==>", err);
+								return;
+							}
+							console.log('instance state upadated');
+						});
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Started",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update log');
+								return;
+							}
+							console.log('log updated');
+						});
+
+
+
 					});
+
 				});
 
 			} else {
@@ -131,5 +235,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 		});
 
 	});
+
+
+	app.get('/instances/:instanceId/logs', function(req, res) {
+		var timestamp = req.query.timestamp;
+		logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			res.send(data);
+			
+		});
+
+	});
+
+
 
 };
