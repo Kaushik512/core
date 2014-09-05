@@ -39,6 +39,12 @@ html
   -ms-text-size-adjust: 100%; 
   
 }
+.productdiv4{
+    width:156px;
+    float:left;
+    padding-top:7px;
+    margin-left: 10px;
+}
 .BGtextoverflow{
     font-weight: bold; 
     overflow: hidden; 
@@ -1019,6 +1025,9 @@ hr.layout {
 .instance-details-item {
     display: block;
     margin-left:20px;
+}
+.instance-details-id {
+    display: block;
 }
 .instance-bootstrap-ActionStart {
     /*border-top: 1px ridge;*/
