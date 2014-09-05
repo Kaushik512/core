@@ -836,7 +836,7 @@
                                                                                 <label for="category">Choose Instance Size
                                                                                 </label>
                                                                                 <label class="select"> 
-                                                                                    <select>
+                                                                                    <select class="instanceType">
                                                                                         <option value="t1.micro">t1.micro</option>
                                                                                             <!--<option value="1">t1.micro</option>-->
                                                                                             <option value="m1.small">m1.small</option>
@@ -1070,13 +1070,8 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.templateId = $selectedItem.attr('data-templateId');
             reqBody.templateType = $selectedItem.attr('data-templateType');
             reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
-            var runlist = [];
-            var $options = $('#suiteFiles').find('option');
-            for(var i=0;i<$options.length;i++) {
-                runlist.push($($options.get(i)).attr('value'));
-            }
-            reqBody.runlist = runlist;
-            
+            reqBody.runlist = $('#suiteFiles').val();
+            reqBody.instanceType = $('.instanceType').val();
             console.log(reqBody);
 
 

@@ -88,7 +88,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
 						var ec2 = new EC2(settings.aws);
-						ec2.launchInstance(null, "m1.medium", settings.aws.securityGroupId, function(err, instanceData) {
+						ec2.launchInstance(null, blueprint.instanceType, settings.aws.securityGroupId, function(err, instanceData) {
 							if (err) {
 								console.log(err);
 								res.send(500);
