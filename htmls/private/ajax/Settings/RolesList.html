@@ -3,7 +3,6 @@
     $(".login-info").hide();
     
 </script>
-<script src="/ajax/Data/masterjsontemplate.js" type="text/javascript"></script>
 <script src="/private/js/settingscommon.js"></script>
 <style>
     .rowCustomStyle {
@@ -51,7 +50,7 @@
                                     <tr class="hidden rowtemplate">
                                         <td datafield="userrolename"></td>
                                         <td datafield="description"></td>
-                                        <td datafield="globalaccess"></td>
+                                        <td datafield="globalaccessname"></td>
                                         <td>
                                             <div class=" hidden-sm hidden-xs btn-group">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -114,7 +113,7 @@
                                         //redrawing the breadcrumb and selecting the tree
                                         $('#Settings  li').removeClass('active');
                                         $('#Settings  li').each(function () {
-                                            if ($(this).text().trim() == "Providers"){
+                                            if ($(this).text().trim() == "User Roles"){
                                                 $(this).addClass('active');
                                             }
                                         });

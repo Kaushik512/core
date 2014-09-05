@@ -34,7 +34,7 @@
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
                                                                     <label class="input"> <i class="icon-append fa fa-building"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Designer" id="userrolename" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input name="ctl00$MainContent$orgname" value="Designer" id="userrolename" class="form-control" type="text" cdata="catalyst" unique="true"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-6">
@@ -42,7 +42,7 @@
                                                                         
                                                                     </label>
                                                                     <label class="input"> <i class="icon-append fa fa-building"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Description" id="description" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="Span2" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input name="ctl00$MainContent$orgname" value="Default Description" id="description" class="form-control" type="text" cdata="catalyst"><span data-val-controltovalidate="orgname" id="Span2" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -51,7 +51,7 @@
                                                                     <label for="">
                                                                         Global Access
                                                                     </label>
-                                                                    <div id="globalaccessname" multiselect="multiselect" datatype="select" sourcepath="8" datapath="masterjson.rows.row" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%">
+                                                                    <div id="globalaccessname" multiselect="multiselect" datatype="select" sourcepath="8" datapath="masterjson.rows.row" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"  cdata="catalyst">
 
 
                                                                     </div>
@@ -138,6 +138,7 @@
                 $(this).addClass('active');
         });
         drawBreadCrumb1();
+        enableUniqueCheckingForInputs(6);
 
     }
 

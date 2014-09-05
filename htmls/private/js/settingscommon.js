@@ -215,7 +215,7 @@ function readform(formID) {
             if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                 var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                 var curInput = $(this);
-                alert('div select ' + curInput.attr("id"));
+              //  alert('div select ' + curInput.attr("id"));
                 $.each(eval('tempJSON.' + curInput.attr('datapath')), function (i, item) {
                     //     alert(item.field[0].values.value);
                     // debugger;
@@ -235,7 +235,7 @@ function readform(formID) {
 
 
 
-    //  alert("before d4d" + JSON.stringify(d4ddata));
+    // alert("before d4d" + JSON.stringify(d4ddata));
     readMasterJson(formID);
     //   alert("after d4d" + JSON.stringify(d4ddata));
 
@@ -329,15 +329,17 @@ function saveform(formID){
 
     //Iterate over each input control and get the items
     $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function(){
-         alert($(this).prop("type"));
+        // alert($(this).prop("type"));
           if($(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0)
           {
             data1.append($(this).prop("id"),$(this).val());
+
           }
           if($(this).prop("type") == "file" && orgName != '')
           {
             if($(this).get(0).files[0]){
                 data1.append($(this).prop("id"),$(this).get(0).files[0]);
+                data1.append($(this).prop("id") + "_filename",$(this).get(0).files[0].name);
                 if(fileNames == '')
                     fileNames = $(this).prop("id");
                 else
@@ -356,18 +358,18 @@ function saveform(formID){
           }
       });
     });
-
+  //  alert(k + ":" + v.toString());
     if(k != ''){
         data1.append(k,"[" + v.toString() + "]");
     }
     
-
+ //   alert(data1.toString());
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
     if(fileNames == '')
         fileNames = 'null';
 
-    alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
+  //  alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
             url:serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName,
             data:data1,
@@ -376,9 +378,12 @@ function saveform(formID){
             type: 'POST',
             success:function(data,success){
               alert('Successfully Saved'); 
-            },
-           error:function(jqxhr){
-            alert(jqxhr.status);
+                $(".savespinner").hide();
+                if($('#btncancel'))
+                        $('#btncancel').click();
+                },
+            error:function(jqxhr){
+                alert(jqxhr.status);
            }
     });
 
@@ -712,7 +717,7 @@ $.each(eval('tempJSON.masterjson.rows.row'), function (m, n) {
 return (getProj);
 }
 
-function enableUniqueCheckingForInputs(){
+function enableUniqueCheckingForInputs(id){
     $('input[unique="true"]').blur(function(){
   var uni = $('#unique_' + $(this).attr("id"));
   //alert(typeof uni);
@@ -723,7 +728,7 @@ function enableUniqueCheckingForInputs(){
       $(this).closest('section').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
       uni = $('#unique_' + $(this).attr("id"));
   }
-  var getBG = getRelatedValues(1, $(this).attr("id"), $(this).val(), $(this).attr("id"));
+  var getBG = getRelatedValues(id, $(this).attr("id"), $(this).val(), $(this).attr("id"));
   //alert(getBG != "" && uni.attr("id"));
   if(getBG != ""){ //this ensures that its present
     uni.css("color","red");

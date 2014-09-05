@@ -2,6 +2,7 @@ var d4dModel = require('../classes/d4dmasters/d4dmastersmodel.js');
 var settingsController = require('../controller/settings');
 var fileIo = require('../controller/fileio');
 var uuid = require('node-uuid');
+var mkdirp = require('mkdirp');
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -138,11 +139,51 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		console.log("sent response" + JSON.stringify('{"uuid":"' + uuid1 + '"}'));
 	});
 	
-	function saveuploadedfile(suffix,req){
+
+	var fs = require('fs');
+	var path = require('path');
+	 
+	fs.mkdirParent = function(dirPath, mode, callback) {
+	  //Call the standard fs.mkdir
+	  fs.mkdir(dirPath, mode, function(error) {
+	    //When it fail in this way, do the custom steps
+	    if (error && error.errno === 34) {
+	      //Create all the parents recursively
+	      fs.mkdirParent(path.dirname(dirPath), mode, callback);
+	      //And then the directory
+	      fs.mkdirParent(dirPath, mode, callback);
+	    }
+	    //Manually run the callback since we used our own callback to do all these
+	    callback && callback(error);
+	  });
+	};
+	function mkdir_p(path, mode, callback, position) {
+		mode = mode || 0777;
+		position = position || 0;
+		console.log('entered');
+		parts = require('path').normalize(path).split('/');
+		var directory = parts.slice(0, position + 1).join('/');
+		console.log('stage 2 ' + directory);
+		fs.mkdirSync(directory, mode);
+		if (position >= parts.length) {
+			return(true);
+		}
+		else
+			mkdir_p(path,mode,null,position + 1);
+	}
+	var mkdirSync1 = function (path) {
+					  try {
+					    fs.mkdirSync(path,0777);
+					  } catch(e) {
+					    //if ( e.code != 'EEXIST' ) throw e;
+					  }
+					}
+
+	function saveuploadedfile(suffix,folderpath,req){
 		console.log(req.body);
 		var fi;
 		if(req.params.fileinputs.indexOf(',') > 0)
-			fi = fileinputs.split(',');
+			fi = req.params.fileinputs.split(',');
 		else{
 			fi = new Array();
 			fi.push(req.params.fileinputs);
@@ -159,23 +200,52 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 		settingsController.getChefSettings(function(settings) {
 			var chefRepoPath = settings.chefReposLocation;
-			fs.mkdirParent(chefRepoPath + req.params.orgname); //if path is not present create it.
+			console.log(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1));
+			var path = chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1);
+			
+			
+			
+			//fs.mkdirParent(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1),0777); //if path is not present create it.
+			parts = require('path').normalize(path).split('/');
+			console.log('Length of parts:' + parts.length);
+			for(var i = 1; i <= parts.length; i++){
+				var directory = parts.slice(0,i).join('/');
+				console.log(directory);
+				mkdirSync1(directory);
+				// fs.mkdirSync(directory,0777);
+				//mkdir_p1(directory,'0777');
+			}
+
+
+
+
+			//mkdir_p(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1)); ///if path is not present create it.
+			console.log("files:" + fi.length);
 			for(var i = 0; i <  fi.length; i++){
 				var controlName = fi[i];
 				var fil = eval('req.files.' + fi[i]);
 				if(typeof fil != 'undefined'){
-					console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
-					fileIo.readFile(fil.path, function(err, data) {	
+					
+					var data = fs.readFileSync(fil.path); //, function(err, data) {	
 						//var getDirName = require("path").dirname;
-						fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data, null, function(err) {
+						/*fileIo.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data, null, function(err) {
 									console.log(err);
 									count--;
 									if (count === 0) { // all files uploaded
 										return("200");
 									}
-								});
+								});*/
+						if(folderpath == ''){
+							console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+							fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+						}
+						else{
+							console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
+							fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+						}
+
 						
-					});
+				//	});
 
 				}
 			}
@@ -205,10 +275,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 					//var frmvals = Object.keys(bodyJson);
 					var rowFLD = [];
 				//	var filesNames = Object.keys(req.files);
+					var folderpath = ''; //will hold the folderpath field to create the path in the system
+
+					console.log(JSON.stringify(bodyJson));
+
 					frmkeys.forEach(function(itm){
 						
 						var thisVal = bodyJson[itm];
-						console.log(thisVal.replace(/\"/g,'\\"'));
+						//console.log(thisVal.replace(/\"/g,'\\"'));
 						console.log(thisVal);
 						var item;
 
@@ -219,6 +293,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 						
 
 						rowFLD.push(JSON.parse(item));
+						if(itm == 'folderpath'){ //special variable to hold the folder to which the files will be copied.
+							folderpath = thisVal;
+						}
 
 					});
 					console.log('Changed');
@@ -239,8 +316,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 									   	   // To do save uploaded files.
 								   	   	   //saveuploadedfile(suffix,fileinputs,orgname,req,res,callback)
 								   	   	   console.log(req.params.fileinputs == 'null');
+								   	   	   console.log('folderpath:' + folderpath);
 								   	   	   if(req.params.fileinputs != 'null')
-								   	   	   		res.send(saveuploadedfile(uuid1+ '__',req));
+								   	   	   		res.send(saveuploadedfile(uuid1+ '__',folderpath,req));
 								   	   	   else
 								   	   	   		res.send(200);
 
