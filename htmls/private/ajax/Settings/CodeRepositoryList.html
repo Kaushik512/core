@@ -1,4 +1,4 @@
-
+<script src="/ajax/Data/d4d.js"></script>
 <script>
     $(".login-info").hide();
     
@@ -19,15 +19,15 @@
             <div class="widget-box">
                 <div class="widget-header">
                     <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Config Management</strong>
+                    <strong>Code Repository</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
                              
-                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/RolesList.html" style="display:none">
+                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/CodeRepositoryList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
-                            <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateConfigManagement.html?new">
+                            <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateCodeRepository.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -41,19 +41,20 @@
                             <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>Config Name</td>
+                                        <td>Code Repository Name</td>
                                         <td>User Name</td>
                                         <td>URL</td>
-                                        <td>Organization</td>
+                                        <td>Port</td>
                                         <td class="">Action</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="hidden rowtemplate">
-                                        <td datafield="configname"></td>
-                                        <td datafield="loginname"></td>
-                                        <td datafield="url"></td>
-                                        <td datafield="orgname"></td>
+                                        <td datafield="coderepositoryname"></td>
+                                        <td datafield="coderepositoryusername"></td>
+                                        <td datafield="coderepositoryurl"></td>
+                                        <!--<td datafield="orgname"></td>-->
+                                        <td datafield="coderepositoryport"></td>
                                         <td>
                                             <div class=" hidden-sm hidden-xs btn-group">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -68,22 +69,22 @@
                                 </tbody>
 
                             </table>
-                            <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%">
-                                <thead>
-                                    <tr class="rowCustomStyle">
-                                        <td>Config Name</td>
-                                        <td>User Name</td>
-                                        <td>URL</td>
-                                        <td>Organization</td>
-                                        <td class="">Action</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%">
+                                    <thead>
+                                        <tr class="rowCustomStyle">
+                                            <td>Code Repository Name</td>
+                                            <td>User Name</td>
+                                            <td>URL</td>
+                                            <td>Port</td>
+                                            <td class="">Action</td>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
                                         
                                        
-                                </tbody>
+                                    </tbody>
                                     
-                            </table>
+                                </table>
 
 
                                 <script>
@@ -96,19 +97,17 @@
                                        
                                         //setting the addnew button to launch popup
                                         $("#addnewitem").attr('data-toggle', 'modal');
-                                        CreateTableFromJson(10,'loginname' , 'CreateConfigManagement.html'); //10 is for config management
+
+                                        CreateTableFromJson(13,'coderepositoryname' , 'CreateCodeRepository.html'); //7 is for users
                                         var tab = 'envtable';
                                         $('#' + tab).dataTable({
                                             "pagingType": "full_numbers"
                                         });
-
                                         $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
-                                        
-                                        $('#content').css("opacity", "1 !important");
-                                        
+
                                         //Force opening the left navigation menu
                                         if ($('#navSettings').is(":visible") == false) {
                                             $('#navSettings').css("display", '');
@@ -119,11 +118,10 @@
                                         //redrawing the breadcrumb and selecting the tree
                                         $('#Settings  li').removeClass('active');
                                         $('#Settings  li').each(function () {
-                                            if ($(this).text().trim() == "Config Management"){
+                                            if ($(this).text().trim() == "Code Repository"){
                                                 $(this).addClass('active');
                                             }
                                         });
-
                                         drawBreadCrumb1();
 
                                     }
