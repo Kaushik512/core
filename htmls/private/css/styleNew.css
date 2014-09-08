@@ -39,6 +39,12 @@ html
   -ms-text-size-adjust: 100%; 
   
 }
+.light-blue{
+    background-color: #40baf1;
+}
+.light-black{
+    background-color: #2c3638;
+}
 .productdiv4{
     width:156px;
     float:left;
