@@ -44,27 +44,6 @@
 
 		<!-- GOOGLE FONT -->
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
-
-
-		<!--From Vinod Sir -->
-		<!--<link href="css/ace/ace.min.css" rel="stylesheet" />
-   		<link href="css/ace/ace-skins.min.css" rel="stylesheet" />
-    	<link href="css/ace/ace-rtl.min.css" rel="stylesheet" />
-
-    	<link href="css/ace/chosen.css" rel="stylesheet" />
-    	<script src="js/angular.min.js"></script>
-    	<script src="js/devopsang.js"></script>
-    	<style>
-        	.btn {
-            	border:0px solid #fff !important;
-        	}
-        	.ace-file-input{
-            	height:32px;
-            	width:103%;
-        	}
-    	</style>-->
-
-
 	</head>
 	<body class="desktop-detected smart-style-2">
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
@@ -113,9 +92,14 @@
 					<span> <a href="/auth/signout" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
 				</div>
 				<!-- end logout button -->
-
 				<div id="project-context" style="padding-top:15px;">
 					<li class="left-projects-links" data-target="#Settings">
+      	  				<a class="dropdown-toggle" href="Tracker.html#ajax/Dashboard.html"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+     				</li>
+				</div>
+
+				<div id="project-context" style="padding-top:15px;">
+					<li class="left-projects-links active" data-target="#Settings">
       	  				<a class="dropdown-toggle" href="settings.html#ajax/Settings/OrgList.html"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
      				</li>
 				</div>
@@ -371,8 +355,8 @@
                console.log(getBGs);
                for(var j=0;j<getBGs.length;j++) {
                	 
-
-			     var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent" style="font-weight:bold">'+getBGs[j]+'</span></a>').addClass('org').addClass('org'+i); 
+               	//Arabinda changed the span class //style="font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 130px;"
+			     var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent BGtextoverflow" title="'+getBGs[j]+'">'+getBGs[j]+'</span></a>').addClass('org').addClass('org'+i); 
 			     if(i==0 && j==0) {
 			  	   $liSideBar.find('a').attr('id','firstA'); 
 			     }

@@ -4,6 +4,7 @@ var instancesDao = require('../classes/instances');
 var EC2 = require('../classes/ec2.js');
 var Chef = require('../classes/chef.js');
 var taskstatusDao = require('../classes/taskstatus');
+var logsDao = require('../classes/dao/logsdao.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -102,6 +103,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Stopping",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update bootStrapLog');
+								return;
+							}
+							console.log('bootStrapLog updated');
+						});
+
+
 					}, function(err, state) {
 						if (err) {
 							return;
@@ -113,7 +129,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
+
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Stopped",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update log');
+								return;
+							}
+							console.log('log updated');
+						});
+
+
 					});
+
 
 				});
 			} else {
@@ -149,6 +182,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
+
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Starting",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update log');
+								return;
+							}
+							console.log('log updated');
+						});
+
 					}, function(err, state) {
 						if (err) {
 							return;
@@ -160,6 +208,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 							console.log('instance state upadated');
 						});
+
+						logsDao.insertLog({
+							referenceId: req.params.instanceId,
+							err: false,
+							log: "Instance Started",
+							timestamp: new Date().getTime()
+						}, function(err, data) {
+							if (err) {
+								console.log('unable to update log');
+								return;
+							}
+							console.log('log updated');
+						});
+
+
+
 					});
 
 				});
@@ -171,5 +235,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 		});
 
 	});
+
+
+	app.get('/instances/:instanceId/logs', function(req, res) {
+		var timestamp = req.query.timestamp;
+		logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
+			if (err) {
+				res.send(500);
+				return;
+			}
+			res.send(data);
+			
+		});
+
+	});
+
+
 
 };

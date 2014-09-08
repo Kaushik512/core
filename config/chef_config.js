@@ -17,7 +17,7 @@ module.exports = {
 	hostedChefUrl: "https://api.opscode.com/organizations/adityacheforg"
     */
 
-    chefReposLocation: "/media/disk3/chef-repos/",
+    chefReposLocation: "/home/anshul/chef-repos/",
 	userChefRepoName : "pcjoshi9",
 	chefUserName: "pcjoshi9",
 	chefUserPemFile: "pcjoshi9.pem",

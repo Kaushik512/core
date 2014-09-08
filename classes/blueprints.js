@@ -10,6 +10,7 @@ var BlueprintSchema = new Schema({
 	templateId: String,
 	templateType: String,
 	templateComponents: [String],
+	instanceType: String,
 	versionsList: [{
 		ver: String,
 		runlist: [String],
@@ -86,6 +87,7 @@ var BlueprintsDao = function() {
 			templateId: blueprintData.templateId,
 			templateType: blueprintData.templateType,
 			templateComponents: blueprintData.templateComponents,
+			instanceType: blueprintData.instanceType,
 			versionsList: [{
 				ver: generateBlueprintVersionNumber(null),
 				runlist: blueprintData.runlist,
@@ -137,8 +139,8 @@ var BlueprintsDao = function() {
 						return;
 					}
 					callback(null, {
-						version:newVersion,
-						cout:updatedData
+						version: newVersion,
+						cout: updatedData
 					});
 				});
 			} else {
