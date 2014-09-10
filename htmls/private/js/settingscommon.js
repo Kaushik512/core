@@ -60,6 +60,9 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
         }
     });*/
 
+    //force setting the idFieldName to "rowid"
+    idFieldName = "rowid";
+
    // alert(JSON.stringify(formData));
     //Reading row to get schema
     formData = d4ddata.masterjson;
@@ -110,7 +113,7 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                                     tv += ",&nbsp;" + v1;
                             });
 
-                            editButton.attr("href", "index.html#ajax/Settings/" + createFileName + "?" + tv);
+                            editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
                             //setting the delete button
 
                             var deletebutton = $('.rowtemplate').find("[title='Remove']");
@@ -135,7 +138,7 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
     $(".savespinner").hide();
 }
 
-
+var forceEdit = false; //variable used to force save one record ex. Authentication
 //Create & Edit form functions
 
 function readform(formID) {
@@ -255,18 +258,24 @@ function readform(formID) {
 
     formData = d4ddata.masterjson;
 
-   // alert(JSON.stringify(formData));
+    //alert("here " + JSON.stringify(formData) + ":" + orgName);
 
     $.each(formData.rows.row, function (i, item) {
-        // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
-        if (item.field[0].values.value.toLowerCase() == orgName.toLowerCase()) {
-            formSchema = item.field;
-            editMode = true;
-            return (false);
+      //  alert(item.field.length);
+        for(i = 0; i < item.field.length; i++){
+          //  alert(typeof item.field[i].values.value);
+        //    alert('Expanded field ' + JSON.stringify(item.field.length) + ":" + orgName.toLowerCase());
+            if(typeof item.field[i].values.value == "string"){
+                if (item.field[i].values.value.toLowerCase() == orgName.toLowerCase()) {
+                    formSchema = item.field;
+                    editMode = true;
+                    return (false);
+                }
+            }
         }
         formSchema = item.field;
     });
-
+  //  alert('Edit Mode:' + editMode);
     if (forceEdit == true){
         editMode = true;
         formSchema = formData.rows.row[0].field;
@@ -279,16 +288,28 @@ function readform(formID) {
     //Read current form values with the field names
     var formSchemaNew = formSchema;
 
+
+
+    //Since this section is executed only in edit mode. The rowid field is injected with the rowid
+    $('button[onclick*="saveform"]').attr("rowid",orgName);
+
+
  //   alert(JSON.stringify(formData.rows.row[0].field));
 
     $.each(formSchemaNew, function (i, item) {
         var inputC = null;
         $.each(item, function (k, v) {
-            if (k == "name") {
-                inputC = $("#" + v);
-            }
+               // alert("k & v:" + k + ":" + v);
+                if (k == "name" && v != "rowid") {
+                    if(v.indexOf("_filename") > 0)
+                    {
+                        v = v.replace('_filename','');
+                    }
+                    inputC = $("#" + v);
+                }
+           
         });
-      //  alert($(inputC).attr("id"));
+       // alert($(inputC).attr("id"));
         $.each(item, function (k, v) {
             if (k == "values") {
                 if (inputC) {
@@ -306,6 +327,7 @@ function readform(formID) {
                         }
                         if (inputC.getType().toLowerCase() == "file") {
                             //  v[k1]
+                            $(inputC).closest('div').next().val(v[k1]);
                         }
                         if (inputC.getType().toLowerCase() == "select") {
                             $(inputC).val(v[k1]);
@@ -316,11 +338,16 @@ function readform(formID) {
             }
         });
     });
-
+  //  alert('almost exiting');
+    //Setting the unique field with current value
+    $('input[unique="true"]').each(function(){
+        alert($(this).val());
+        $(this).attr('initialvalue',$(this).val());
+        alert($(this).attr('initialvalue'));
+    });
     return (true);
 }
 
-var forceEdit = false; //variable used to force save one record ex. Authentication
 
 function saveform(formID){
 
@@ -331,10 +358,10 @@ function saveform(formID){
     //Iterate over each input control and get the items
     $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function(){
         // alert($(this).prop("type"));
-          if($(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0)
+          if(($(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '')
           {
             data1.append($(this).prop("id"),$(this).val());
-
+            alert("this alert "+ $(this).prop("id") + ":" + $(this).val())
           }
           if($(this).prop("type") == "file" && orgName != '')
           {
@@ -364,12 +391,17 @@ function saveform(formID){
         data1.append(k,"[" + v.toString() + "]");
     }
     
- //   alert(data1.toString());
+    //Verifying if the form is in edit mode by checking the rowid provided in the save button.
+    if($('button[onclick*="saveform"]').attr("rowid") != null){
+        alert("in edit");
+        data1.append("rowid",$('button[onclick*="saveform"]').attr("rowid"));
+    }
+    //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
     if(fileNames == '')
         fileNames = 'null';
-
+    //console.log(data1);
   //  alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
             url:serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName,
@@ -386,7 +418,7 @@ function saveform(formID){
             error:function(jqxhr){
                 alert(jqxhr.status);
            }
-    });
+    }); 
 
 }
 
@@ -719,27 +751,35 @@ return (getProj);
 }
 
 function enableUniqueCheckingForInputs(id){
+  if($('input[unique="true"]').length > 0) {
     $('input[unique="true"]').blur(function(){
-  var uni = $('#unique_' + $(this).attr("id"));
-  //alert(typeof uni);
-  if(uni.length > 0)
-    uni.html('');
-  else{
-     //alert("in");
-      $(this).closest('section').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
-      uni = $('#unique_' + $(this).attr("id"));
-  }
-  var getBG = getRelatedValues(id, $(this).attr("id"), $(this).val(), $(this).attr("id"));
-  //alert(getBG != "" && uni.attr("id"));
-  if(getBG != ""){ //this ensures that its present
-    uni.css("color","red");
-    uni.html('selected is already taken');
-    $(this).focus();
-  }
-  else{
-    uni.css("color","green");
-    uni.html('available');
-  }
-});
-
+          var uni = $('#unique_' + $(this).attr("id"));
+          if($(this).attr("initialvalue") != null){
+            if($(this).attr("initialvalue") == $(this).val()){
+                if(uni.length > 0)
+                     uni.html('');
+                return(true);
+            }
+          }
+          //alert(typeof uni);
+          if(uni.length > 0)
+            uni.html('');
+          else{
+             //alert("in");
+              $(this).closest('section').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
+              uni = $('#unique_' + $(this).attr("id"));
+          }
+          var getBG = getRelatedValues(id, $(this).attr("id"), $(this).val(), $(this).attr("id"));
+          //alert(getBG != "" && uni.attr("id"));
+          if(getBG != ""){ //this ensures that its present
+            uni.css("color","red");
+            uni.html('selected is already taken');
+            $(this).focus();
+          }
+          else{
+            uni.css("color","green");
+            uni.html('available');
+          }
+        });
+    }
 }

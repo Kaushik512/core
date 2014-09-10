@@ -388,8 +388,43 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 					//pushing the rowid field
 					var uuid1 = uuid.v4();
-					bodyJson["rowid"] = uuid1;
+					var editMode = false; //to identify if in edit mode.
+					var rowtoedit = null;
+					if(bodyJson["rowid"] != null){
+						editMode = true;
+						for(var u = 0; u < d4dMasterJson.masterjson.rows.row.length; u++){
+							for(var i = 0; i < d4dMasterJson.masterjson.rows.row[u].field.length; i++){
+								console.log("Value:" + bodyJson[d4dMasterJson.masterjson.rows.row[u].field[i].name]);
+								if(d4dMasterJson.masterjson.rows.row[u].field[i].values.value == bodyJson["rowid"])
+								{
+									
+									rowtoedit = d4dMasterJson.masterjson.rows.row[u];
+									
+								}
+							}
+						}
+
+
+						/*d4dMasterJson.masterjson.rows.row.forEach(function(row){
+							for(var i = 0; i < row.field.length; i++){
+								console.log("Value:" + bodyJson[row.field[i].name]);
+								if(row.field[i].values.value == bodyJson["rowid"])
+								{
+									
+									rowtoedit = this;
+									return(true);
+								}
+							}
+						}); */
+					}
+					else
+						bodyJson["rowid"] = uuid1;
 					//console.log(bodyJson['orgname']);
+					
+					if(rowtoedit) //testing if the rowtoedit has a value
+						console.log("Edited Row:" + JSON.stringify(rowtoedit));
+
+
 					var frmkeys = Object.keys(bodyJson);
 
 					//var frmvals = Object.keys(bodyJson);
@@ -400,21 +435,32 @@ module.exports.setRoutes = function(app, sessionVerification) {
 					console.log(JSON.stringify(bodyJson));
 
 					frmkeys.forEach(function(itm){
-						
-						var thisVal = bodyJson[itm];
-						//console.log(thisVal.replace(/\"/g,'\\"'));
-						console.log(thisVal);
-						var item;
+						if(!editMode){
+							var thisVal = bodyJson[itm];
+							//console.log(thisVal.replace(/\"/g,'\\"'));
+							console.log(thisVal);
+							var item;
 
-						if(thisVal.indexOf('[') >= 0) //used to check if its an array
-							item = "{\"values\" : {\"value\" : "  + thisVal + "},\"name\" : \"" + itm + "\"}";
-						else
-							item = "{\"values\" : {\"value\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"},\"name\" : \"" + itm + "\"}";
-						
+							if(thisVal.indexOf('[') >= 0) //used to check if its an array
+								item = "{\"values\" : {\"value\" : "  + thisVal + "},\"name\" : \"" + itm + "\"}";
+							else
+								item = "{\"values\" : {\"value\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"},\"name\" : \"" + itm + "\"}";
+							
 
-						rowFLD.push(JSON.parse(item));
-						if(itm == 'folderpath'){ //special variable to hold the folder to which the files will be copied.
-							folderpath = thisVal;
+							rowFLD.push(JSON.parse(item));
+							if(itm == 'folderpath'){ //special variable to hold the folder to which the files will be copied.
+								folderpath = thisVal;
+							}
+						}
+						else{ //in edit mode
+							if(rowtoedit){
+								for(var j = 0; j < rowtoedit.field.length; j++){
+									if(bodyJson[rowtoedit.field[j].name] != null){
+										rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
+										console.log('Entered Edit' + rowtoedit.field[j].values.value);
+									}
+								}
+							}
 						}
 
 					});
@@ -422,8 +468,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
 					var FLD = "{\"field\":" + JSON.stringify(rowFLD) + "}";
 					//frmvals.push(rowFLD);
 					console.log(FLD);
-					d4dMasterJson.masterjson.rows.row.push(JSON.parse(FLD));
-					console.log(d4dMasterJson.masterjson);
+					if(!rowtoedit){ //push new values only when not in edit mode
+						d4dMasterJson.masterjson.rows.row.push(JSON.parse(FLD));
+					}
+
+					console.log(JSON.stringify(d4dMasterJson.masterjson));
 									d4dModel.update(
 										{"id": req.params.id},{$set:{"masterjson":d4dMasterJson.masterjson}},{
 										   upsert: false
