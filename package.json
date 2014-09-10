@@ -17,7 +17,8 @@
     "ldapjs":"0.7.1",
     "connect-redis": "1.4.x",
     "node-uuid":"*",
-    "chef":"0.2.1"
+    "chef":"0.2.1",
+    "ssh2":"*"
   },
   "devDependencies": {},
   "scripts": {
