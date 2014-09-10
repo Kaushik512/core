@@ -462,7 +462,7 @@ function saveform_old(formID) {
     else
         formSchemaNew = formSchema;
 
-    alert(JSON.stringify(formSchemaNew));
+    //alert(JSON.stringify(formSchemaNew));
 
     $.each(formSchemaNew, function (i, item) {
         var inputC = null;
@@ -589,7 +589,7 @@ function saveform_old(formID) {
     //});
 
 
-     alert("Final Json" + JSON.stringify(formData));
+    // alert("Final Json" + JSON.stringify(formData));
     //Call the nodejs to save the json
     $.ajax({
         type: "post",
