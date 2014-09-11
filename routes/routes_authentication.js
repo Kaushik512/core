@@ -40,7 +40,7 @@ module.exports.setRoutes = function(app) {
 								if (data.length) {
 									user.roleId = data[0].roleId;
 									user.groupId = data[0].groupId;
-
+									
 									usersRoles.getRoleById(user.roleId, function(err, roleData) {
 										if (err) {
 											res.send(500);

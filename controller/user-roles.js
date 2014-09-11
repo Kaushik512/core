@@ -31,6 +31,7 @@ module.exports.createRole = function(roleName, permissionsObj, callback) {
 };
 
 module.exports.getRoleById = function(roleId, callback) {
+	console.log('RoleID' + roleId);
 	Role.find({
 		id: roleId
 	}, function(err, data) {

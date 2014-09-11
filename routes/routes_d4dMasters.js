@@ -24,6 +24,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		}]);
 	});
 
+	app.get('/d4dMasters/getuser', function(req, res) {
+		res.send({"user":[{
+			username: req.session.user
+		}, {
+			role: '[ ADMIN ]'
+		}]});
+	});
+
 	app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
 		
 		console.log('received request ' + req.params.id);
