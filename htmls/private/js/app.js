@@ -111,7 +111,7 @@ $(document).ready(function() {
            url: "/d4dMasters/getuser",
            success: function (data) {
                var usrdata = JSON.parse(JSON.stringify(data));
-               $("#liuserinfo").html(usrdata.user[0].username.cn.toUpperCase() + "&nbsp;" + usrdata.user[1].role)
+               $("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata.user[0].username.cn.toUpperCase() + "</b>&nbsp;" + usrdata.user[1].role)
            }
        });
 
