@@ -1,7 +1,7 @@
 var Process = require("./utils/process");
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
-var SSH = require('./utils/ssh');
+var SSH = require('./utils/sshexec');
 
 var Chef = function(settings) {
 
@@ -221,7 +221,7 @@ var Chef = function(settings) {
             runlist = [];
         }
         sshConnection.exec('chef-client -r' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
-
+        
 
     };
 

@@ -23,7 +23,7 @@ module.exports = function(options) {
             callback(err);
         });
 
-        con.on('close', function(hadError) {
+        /*con.on('close', function(hadError) {
             isConnected = false;
             con = null;
             console.log('ssh close ', hadError);
@@ -34,7 +34,7 @@ module.exports = function(options) {
             isConnected = false;
             con = null;
             console.log('ssh end');
-        });
+        });*/
     }
 
     function initialize(callback) {
@@ -68,6 +68,8 @@ module.exports = function(options) {
 
 
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
+        var execRetCode = null;
+        var execSignal = null;
         initialize(function(err) {
             if (err) {
                 onComplete(err, -1);
@@ -80,9 +82,27 @@ module.exports = function(options) {
                         return;
                     }
                     stream.on('exit', function(code, signal) {
-                        console.log('SSH STREAM EXIT: ' + code + '  ==== ',signal);
-                        onComplete(null, code);
+                        console.log('SSH STREAM EXIT: ' + code + '  ==== ', signal);
+                        execRetCode = code;
+                        execSignal = signal;
+
                     });
+
+                    stream.on('close', function() {
+                        console.log('SSH STREAM CLOSE');
+                        if (con) {
+                            con.end();
+                        }
+                        if (execRetCode !== null) {
+                            onComplete(null, execRetCode);
+                        } else {
+                            onComplete({
+                                err: "cmd exit error"
+                            }, -1);
+                        }
+                    });
+
+
                     if (typeof onStdOut === 'function') {
                         stream.on('data', function(data) {
                             console.log('SSH STDOUT: ' + data);
