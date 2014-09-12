@@ -440,15 +440,15 @@
                                                         <div class="widget-body">
                                                             <div class="widget-main" style="min-height:300px"> 
                                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
-                                                                    <div class="" >
+                                                                    <div class="table-responsive" >
                                                                             <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
                                                                                 <thead>
                                                                                     <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                                        <td>Name</td>
+                                                                                        <td style="">Name</td>
                                                                                         <td>Role</td>
                                                                                         <td>ID</td>
-                                                                                        <td width='20px'>Status</td>
-                                                                                        <td class="">Action</td>
+                                                                                        <td>Status</td>
+                                                                                        <td class="widthAdjustment">Action</td>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
@@ -1015,7 +1015,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
 
-          var $divActionBtnContainer = $('<div></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data[i]._id);
+          var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data[i]._id);
 
           var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','start'));
           $divActionBtnContainer.append($divActionStartContainer);
