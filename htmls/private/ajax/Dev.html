@@ -992,7 +992,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $divDomainRolesCaption.append($divComponentListContainer);
         var $divInstanceDetails = $('<div></div>')
         var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('Id : <strong>'+data[i]._id+'</strong>');
+        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('Id : <strong>'+data[i].instanceIP+'</strong>');
         $instanceDetailsList.append($instanceDetailItemId);
           var $instanceDetailItemStatus;
         if(data[i].instanceState == 'running'){
