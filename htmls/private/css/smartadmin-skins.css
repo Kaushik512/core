@@ -423,6 +423,29 @@ border-top: 1px solid #303031;
 body.smart-style-2 {
 	background:#fff;
 }
+@media screen and (min-width:767px){.demo1{display:none;}
+} 
+
+@media (max-width:1225px) {
+ .table-responsive{
+ 	border: 1px solid #ddd;
+    margin-bottom: 13.5px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 100%;
+ 	
+ 	} }
+ 	@media (max-width:767px) {
+ 		#ribbon .breadcrumb{
+ 			background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+		    display: inline-block;
+		    margin: 0;
+		    padding: 11px 34px 11px 0 !important;
+		    vertical-align: top;
+ 			margin-left: 36px;
+ 			}
+ 		}
+
 
 .smart-style-2 #header, .smart-style-2 .inbox-footer, .smart-style-2 .superbox-show {
 	background-image:none;
