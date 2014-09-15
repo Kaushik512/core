@@ -133,4 +133,45 @@ function configmgmt(){
 		});
 	});
 
+	this.getListFiltered = function(masterid,fieldname,comparedfieldname,comparedfieldvalue,callback){
+		d4dModel.findOne({ id: masterid }, function (err, d4dMasterJson) {
+			if (err) {
+	            console.log("Hit and error:" + err);
+	        }
+			if (d4dMasterJson) {
+				var jsonlist = '';
+				d4dMasterJson.masterjson.rows.row.forEach(function (itm, i) {
+	                console.log("found" + itm.field.length);
+	                   var rowid = '';
+	                   var fieldvalue = '';
+	                   var isFilteredRow = false;
+	                   //filtering for the correct rows
+	                   for (var j = 0; j < itm.field.length; j++) {
+								if (itm.field[j][comparedfieldname] == comparedfieldvalue) {
+			               				isFilteredRow = true;
+			               		}
+	                   }
+	                   if(isFilteredRow){
+			               for (var j = 0; j < itm.field.length; j++) {
+			               		if (itm.field[j]["name"] == fieldname) {
+			               				fieldvalue = itm.field[j]["values"].value;
+			               		}
+			               		if (itm.field[j]["name"] == "rowid") {
+			               				rowid = itm.field[j]["values"].value;
+			               		}
+			               } 
+			               if(jsonlist == '')
+		    					jsonlist += "\"" + fieldvalue + "\":\"" +  rowid + "\"";
+						   else
+		    					jsonlist += ",\"" + fieldvalue + "\":\"" +  rowid + "\"";
+	    				}
+
+		        });
+		       configmgmt = "{" + jsonlist + "}";
+		       console.log(JSON.stringify(jsonlist));
+		       callback(null, jsonlist);
+			}
+		});
+	});
+
 }
