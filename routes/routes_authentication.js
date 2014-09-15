@@ -2,6 +2,7 @@ var LdapClient = require('../controller/ldap-client');
 var usersDao = require('../controller/users.js');
 var usersGroups = require('../controller/user-groups.js');
 var usersRoles = require('../controller/user-roles.js');
+var cusers = require('../classes/d4dmasters/users.js');
 
 module.exports.setRoutes = function(app) {
 
@@ -40,7 +41,9 @@ module.exports.setRoutes = function(app) {
 								if (data.length) {
 									user.roleId = data[0].roleId;
 									user.groupId = data[0].groupId;
-									
+									console.log('Just before role');
+									cusers.getUserRole(null,user.cn,req);
+
 									usersRoles.getRoleById(user.roleId, function(err, roleData) {
 										if (err) {
 											res.send(500);
@@ -109,6 +112,10 @@ module.exports.setRoutes = function(app) {
 		//res.render('login');
 		res.redirect('/public/login.html');
 
+	});
+
+	app.get('/auth/userrole',function(req,res){
+		res.send(req.session.cuserrole);
 	});
 
 	var verifySession = function(req, res, next) {

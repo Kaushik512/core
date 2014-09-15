@@ -421,7 +421,7 @@
             if($(this).find('input').length > 0){ //contains input field
               listrow += '\"' + $(this).attr('datafield') + "\":\"" +  $(this).find('input').val() + '\"';
             }
-            else{l
+            else{
               listrow +=  '\"' + $(this).attr('datafield') + "\":\"" +  $(this).text() + '\"';
             }
                 });
@@ -432,9 +432,11 @@
 
 
         var cookbooks = [];
+
         $('#suiteFiles option').each(function(){
             cookbooks.push($(this).val());
         });
+
         alert(serviceURL + "savemasterjsonfull/" + formID);
      /*   $.ajax({
                 url:serviceURL + "savemasterjsonfull/" + formID,
