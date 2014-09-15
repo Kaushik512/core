@@ -24,6 +24,28 @@ var Chef = function(settings) {
         }
     }
 
+    this.getNode = function(nodeName, callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chefClient.get('/nodes/' + nodeName, function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefResBody);
+                } else {
+                    callback({
+                        err: "not found",
+                        chefStatusCode: chefRes.statusCode
+                    }, null);
+                }
+            });
+        });
+    };
 
     this.getNodesDetailsForEachEnvironment = function(callback) {
         initializeChefClient(function(err, chefClient) {
@@ -221,7 +243,7 @@ var Chef = function(settings) {
             runlist = [];
         }
         sshConnection.exec('chef-client -r' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
-        
+
 
     };
 
