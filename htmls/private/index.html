@@ -33,6 +33,12 @@
 		specific styles this will also ensure you retrain your customization
 		with each SmartAdmin update.
 		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css"> -->
+		<!--Custom CSS-->
+  		<link rel="stylesheet" href="css/style.css">
+    	<!--Bootstrap CSS-->
+      	<!--<link rel="stylesheet" href="css/bootstrap.css">-->
+    
+    	<link rel="stylesheet" href="css/daterangepicker.css">
 
 		<!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
@@ -82,7 +88,7 @@
 			<div class="pull-right">
 
 				<!-- collapse menu button -->
-				<div id="hide-menu" class="btn-header pull-right">
+				<div id="hide-menu1" class="btn-header pull-right">
 					<span> <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
 				</div>
 				<!-- end collapse menu -->
@@ -162,6 +168,12 @@
 
 			<!-- RIBBON -->
 			<div id="ribbon">
+				<div class="demo1">
+					<div id="hide-menu" style="margin-top:-3px;">
+						<span> <a href="javascript:void(0);" title="Collapse Menu">
+						<i class="fa fa-sitemap txt-color-lightwhite"></i></a> </span>
+					</div>
+				</div>
 
 				<!-- breadcrumb -->
 				<ol class="breadcrumb">
@@ -243,6 +255,26 @@
 
 		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events
 		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+		<script src="js/libs/modernizr-2.5.3.min.js"></script>
+		<script src="js/plugins.js"></script>
+		<script src="js/dateRange.js"></script>
+
+		<!-- Page-Level Plugin Scripts - Dashboard -->
+	    <script src="js/morris/morris.min.js"></script>
+	    <script src="js/morris/morris.js"></script>
+
+	    <!--daterange-->
+	    <script src="js/daterange/moment.js"></script>
+	    <script src="js/daterange/daterangepicker.js"></script>
+
+	        <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
+		<script src="js/flot/jquery.flot.cust.js"></script>
+		<script src="js/flot/jquery.flot.resize.js"></script>
+		<script src="js/flot/jquery.flot.fillbetween.min.js"></script>
+		<script src="js/flot/jquery.flot.orderBar.js"></script>
+		<script src="js/flot/jquery.flot.pie.js"></script>
+		<script src="js/flot/jquery.flot.tooltip.js"></script>
+
 
 		<!-- BOOTSTRAP JS -->
 		<script src="js/bootstrap/bootstrap.min.js"></script>
@@ -433,7 +465,7 @@
 		<script src="js/app.js"></script>
 
 		<!-- Your GOOGLE ANALYTICS CODE Below -->
-		<script type="text/javascript">
+		<!--<script type="text/javascript">
 		
 		  var _gaq = _gaq || [];
 		  _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
@@ -445,7 +477,7 @@
 		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		  })();
 		
-		</script>
+		</script>-->
 		
 
 	</body>

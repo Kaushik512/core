@@ -22,6 +22,7 @@ module.exports = {
 	chefUserName: "pcjoshi9",
 	chefUserPemFile: "pcjoshi9.pem",
 	chefValidationPemFile:"pjlab-validator.pem",
-	hostedChefUrl: "https://api.opscode.com/organizations/pjlab"
+	hostedChefUrl: "https://api.opscode.com/organizations/pjlab",
+	defaultChefCookbooks:['recipe[a]']
     
 }
