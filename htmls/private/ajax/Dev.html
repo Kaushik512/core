@@ -938,7 +938,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
         var $li = $('<li></li>').addClass('domain-role-thumbnail');
-        var $container = $('<div id="flip-toggle"></div>').addClass('container');//<div class="container" id="flip-toggle">
+        var $container = $('<div class="flip-toggle"></div>').addClass('container');//<div class="container" id="flip-toggle">
         var $card = $('<div></div>').addClass('card');//<div class="card">
         var $front = $('<div></div>').addClass('front');//<div class="front">
         var $div = $('<div></div>').addClass('domain-roles ');
@@ -978,16 +978,27 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         
         for(var j=0;j<data[i].runlist.length;j++) { 
           var $divComponentItem;
-           if(j == 0)
-            //Arabinda added below css $divComponentItem = $('<span style="margin-top:10px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:10px;overflow:hidden;text-overflow:ellipsis;width:68px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
-           else
-            $divComponentItem = $('<span></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append(data[i].runlist[j]));
+           if(j == 0) {
+          
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+
+           } else {
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+           }
            $divComponentList.append($divComponentItem);
-            if(j==3) {
+            if(j==2) {
                 break;
             }
         }
+        $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append("View All"));
+
+        $divComponentItem.click(function(e){
+            $(this).parents('.flip-toggle').toggleClass('flip');
+        });
+        
+       
+        $divComponentList.append($divComponentItem);
+
         $divComponentListContainer.append($divComponentList);
 
         //For Table View
@@ -1032,16 +1043,40 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
           var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
           $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
-    var $backdiv = $('<div></div>').addClass('card-backflip-margin');
+    var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
+
+    var $backdiv = $('<span></span>').addClass('card-backflip-margin');
     var $backdiva = $('<a></a>');
     var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book');
     var $backdivaspan = $('<span style="font-weight:bold"></span>').addClass('menu-item-parent').html('Cookbooks')
-    
 
     $backdivai.append($backdivaspan);
     $backdiva.append($backdivai);
     $backdiv.append($backdiva);
     $back.append($backdiv);
+    $back.append($backRunlistContainer);
+
+    for(var j=0;j<data[i].runlist.length;j++) { 
+          var $divComponentItem;
+           if(j == 0) {
+          
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+
+           } else {
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+           }
+           $backRunlistContainer.append($divComponentItem);
+            
+     }
+     var $flipbackdivaspan = $('<span style="font-weight:bold;width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a></a>').attr('href','javascript:void').append("Go Back"));
+     $flipbackdivaspan.click(function(e){
+            $(this).parents('.flip-toggle').toggleClass('flip');
+     });
+     $back.append($flipbackdivaspan);
+
+    
+
+    
    // <div class="back" style="background-repeat:no-repeat;background-image:url('img/app-store-icons/Resized-5K7AL.png');">
    //     <div style="margin-left:20px;margin-top:15px;">
    //         <a>

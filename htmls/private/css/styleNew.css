@@ -1,6 +1,8 @@
 .card-backflip{
     background-repeat:no-repeat;
-    background-image:url('img/app-store-icons/Resized-5K7AL.png');
+    background-image:url('../img/app-store-icons/Resized-5K7AL.png');
+    padding-top: 10px;
+    background-size: 100% 204px;
 }
 .card-backflip-margin{
 margin-left:20px;
@@ -17,7 +19,7 @@ margin-top:15px;
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
-#flip-toggle.flip .card {
+.flip-toggle.flip .card {
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
     transform: rotateY(180deg);
@@ -51,11 +53,18 @@ margin-top:15px;
     background: white;
 }
 .back {
-    background: white;
+    
     border-radius: 11px;
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
     transform: rotateY(180deg);
+}
+.cardBackRunlistContaner {
+    height: 142px;
+    margin-top: 3px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 155px;
 }
 /*
  * HTML5 Boilerplate
@@ -1176,6 +1185,7 @@ hr.layout {
 .instance-details-item {
     display: block;
     margin-left:20px;
+
 }
 .instance-details-id {
     display: block;
@@ -1210,8 +1220,8 @@ hr.layout {
     font-size: 10px;
     padding-right: 21px;
     padding-top: 14px;
-    /*After depolyed changes
-    text-align: center;*/
+
+    text-align: center;
 
     /*Arabinda commented
     border-top: 1px solid;
