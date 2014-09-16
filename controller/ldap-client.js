@@ -43,6 +43,7 @@ var Ldap = function() {
 				console.log("err ==> ", err);
 				callback(true, null);
 			} else {
+				console.log("User String:" + dnString);
 				callback(null, createDnObject(dnString));
 			}
 		});

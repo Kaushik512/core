@@ -105,6 +105,19 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 	
+	//Setting the Username and role
+	$.ajax({
+           
+           type: "GET",
+           url: "/d4dMasters/getuser",
+           success: function (data) {
+               var usrdata = JSON.parse(JSON.stringify(data));
+               $("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata.user[0].username.cn.toUpperCase() + "</b>&nbsp;" + usrdata.user[1].role)
+           }
+       });
+
+
+
 	$('#show-shortcut').click(function(e) {
 		if ($.shortcut_dropdown.is(":visible")) {
 			shortcut_buttons_hide();
@@ -307,6 +320,7 @@ $(document).ready(function() {
 	});
 
 	
+
 
 });
 
