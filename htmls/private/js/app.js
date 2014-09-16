@@ -18,6 +18,7 @@
 	$.root_ = $('body');
 	$.left_panel = $('#left-panel');
 	$.shortcut_dropdown = $('#shortcut');
+	$.shortcut_dropdown1 = $('#main-collapse');
 
 /*
  * APP CONFIGURATION
@@ -112,6 +113,57 @@ $(document).ready(function() {
 		}
 		e.preventDefault();
 	});
+
+	//Arabinda added below
+	$('#show-main-collapse').click(function(e) {
+		if ($.shortcut_dropdown1.is(":visible")) {
+			shortcut_buttons1_hide();
+		} else {
+			shortcut_buttons1_show();
+		}
+		e.preventDefault();
+	});
+
+	
+	// SHORTCUT buttons goes away if mouse is clicked outside of the area
+	$(document).mouseup(function(e) {
+		if (!$.shortcut_dropdown1.is(e.target)// if the target of the click isn't the container...
+		&& $.shortcut_dropdown1.has(e.target).length === 0) {
+			shortcut_buttons1_hide()
+		}
+	});
+
+	// SHORTCUT ANIMATE HIDE
+	function shortcut_buttons_hide() {
+		$.shortcut_dropdown.animate({
+			height : "hide"
+		}, 300, "easeOutCirc");
+		$.root_.removeClass('shortcut-on');
+
+	}
+	// SHORTCUT ANIMATE HIDE
+	function shortcut_buttons1_hide() {
+		$.shortcut_dropdown1.animate({
+			height : "hide"
+		}, 300, "easeOutCirc");
+		$.root_.removeClass('shortcut-on');
+
+	}
+
+	// SHORTCUT ANIMATE SHOW
+	function shortcut_buttons_show() {
+		$.shortcut_dropdown.animate({
+			height : "show"
+		}, 200, "easeOutCirc")
+		$.root_.addClass('shortcut-on');
+	}
+	// SHORTCUT ANIMATE SHOW
+	function shortcut_buttons1_show() {
+		$.shortcut_dropdown1.animate({
+			height : "show"
+		}, 200, "easeOutCirc")
+		$.root_.addClass('shortcut-on');
+	}
 
 	// SHOW & HIDE MOBILE SEARCH FIELD
 	$('#search-mobile').click(function() {
@@ -209,8 +261,9 @@ $(document).ready(function() {
 
 		// ask verification
 		$.SmartMessageBox({
-			title : "<i class='fa fa-sign-out txt-color-orangeDark'></i> Logout <span class='txt-color-orangeDark'><strong>" + $('#show-shortcut').text() + "</strong></span> ?",
-			content : "You can improve your security further after logging out by closing this opened browser",
+			title : "<i class='fa fa-sign-out txt-color-blue'></i> Logout <span class='txt-color-orangeDark'></span> ?",
+			//title : "<i class='fa fa-sign-out txt-color-orangeDark'></i> Logout <span class='txt-color-orangeDark'><strong>" + $('#show-shortcut').text() + "</strong></span> ?",
+			//content : "You can improve your security further after logging out by closing this opened browser",
 			buttons : '[No][Yes]'
 
 		}, function(ButtonPressed) {
@@ -253,22 +306,7 @@ $(document).ready(function() {
 		}
 	});
 
-	// SHORTCUT ANIMATE HIDE
-	function shortcut_buttons_hide() {
-		$.shortcut_dropdown.animate({
-			height : "hide"
-		}, 300, "easeOutCirc");
-		$.root_.removeClass('shortcut-on');
-
-	}
-
-	// SHORTCUT ANIMATE SHOW
-	function shortcut_buttons_show() {
-		$.shortcut_dropdown.animate({
-			height : "show"
-		}, 200, "easeOutCirc")
-		$.root_.addClass('shortcut-on');
-	}
+	
 
 });
 

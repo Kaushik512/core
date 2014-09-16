@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="widget-body no-padding">
 
-                                    <div class="panel-group smart-accordion-default" id="accordion-2">
+                                    <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
                                         <div class="devopsRolePanel panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
@@ -428,7 +428,7 @@
                                 </div>
                                 <div class="widget-body no-padding">
 
-                                    <div class="panel-group smart-accordion-default" id="accordion-1">
+                                    <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
@@ -812,6 +812,10 @@
 
 
 <script type="text/javascript">
+// $(document.body).on('click', '.card', function () {
+      
+//       document.querySelector('#flip-toggle').classList.toggle('flip');
+//   });
 
 var urlParams ={};
 (window.onpopstate = function () {
@@ -934,6 +938,9 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
         var $li = $('<li></li>').addClass('domain-role-thumbnail');
+        var $container = $('<div id="flip-toggle"></div>').addClass('container');//<div class="container" id="flip-toggle">
+        var $card = $('<div></div>').addClass('card');//<div class="card">
+        var $front = $('<div></div>').addClass('front');//<div class="front">
         var $div = $('<div></div>').addClass('domain-roles ');
         var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
@@ -1024,9 +1031,32 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
           $divActionBtnContainer.append($divActionReStartContainer);
           var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
           $divActionBtnContainer.append($divActionShutdownContainer);
-  
+    var $back = $('<div></div>').addClass('back card-backflip');
+    var $backdiv = $('<div></div>').addClass('card-backflip-margin');
+    var $backdiva = $('<a></a>');
+    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book');
+    var $backdivaspan = $('<span style="font-weight:bold"></span>').addClass('menu-item-parent').html('Cookbooks')
+    
+
+    $backdivai.append($backdivaspan);
+    $backdiva.append($backdivai);
+    $backdiv.append($backdiva);
+    $back.append($backdiv);
+   // <div class="back" style="background-repeat:no-repeat;background-image:url('img/app-store-icons/Resized-5K7AL.png');">
+   //     <div style="margin-left:20px;margin-top:15px;">
+   //         <a>
+   //             <i class="fa fa-lg fa-fw fa-book"></i>
+   //             <span style="font-weight:bold" class="menu-item-parent">Cookbooks</span>
+   //         </a>
+   //     </div>
+   // </div>
         $divDomainRolesCaption.append($divActionBtnContainer);
-        $li.append($div);
+        $front.append($div);
+        $card.append($front);
+        $card.append($back);
+        $container.append($card);
+        $li.append($container);
+        //$li.append($div);
         $div.append($divDomainRolesCaption);
 
         $instancesList.append($li);
@@ -1287,6 +1317,11 @@ $('.btnUpdateRunlist').click(function(e){
   });
 });
 
+/*$('#hide-menu1').click(function(e){
+    alert('Alert success');
+    $('.Navigation').append('<li>sdhgfj</li>');
+
+});*/
 
 /*
 var $rolesCards = $('.productdiv')
