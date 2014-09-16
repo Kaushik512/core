@@ -282,7 +282,8 @@ $('.showChefImportNodesModalBtn').click(function(e){
       var $ckb = $($checkBoxes.get(i));
       nodeInfo.nodeName = $ckb.attr('data-nodeName');
       nodeInfo.env = $ckb.attr('data-nodeEnv');
-      nodeInfo.runlist = $ckb.attr('data-nodeRunlist');
+      console.log($ckb.attr('data-nodeRunlist'));
+      nodeInfo.runlist = $ckb.attr('data-nodeRunlist').split(',');
       nodeInfo.platform = $ckb.attr('data-nodePlatform');
       nodeInfo.ip = $ckb.attr('data-nodeIp');
       nodeInfo.nodeData = $ckb.data('nodeData');

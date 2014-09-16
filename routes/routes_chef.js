@@ -70,7 +70,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
 
-
+            console.log("runlist ==>", node.runlist); 
             var instance = {
                 projectId: projectId,
                 envId: node.env,
