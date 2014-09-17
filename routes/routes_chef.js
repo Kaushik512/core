@@ -70,7 +70,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
 
-            console.log("runlist ==>", node.runlist); 
+            console.log("runlist ==>", node.runlist);
             var instance = {
                 projectId: projectId,
                 envId: node.env,
@@ -92,6 +92,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     console.log(err, 'occured in inserting node in mongo');
                     return;
                 }
+                logsDao.insertLog({
+                    referenceId: data_id,
+                    err: false,
+                    log: "Node Imported",
+                    timestamp: new Date().getTime()
+                });
                 settingsController.getAwsSettings(function(settings) {
                     var ec2 = new EC2(settings);
                     if (platformId) {
@@ -108,7 +114,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                     return;
                                 }
                                 console.log('instance state updated');
+                                logsDao.insertLog({
+                                    referenceId: data_id,
+                                    err: false,
+                                    log: "Instance State set to "+instanceState,
+                                    timestamp: new Date().getTime()
+                                });
                             });
+
+
+
                         });
                     }
 

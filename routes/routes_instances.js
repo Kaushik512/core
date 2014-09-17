@@ -203,12 +203,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             err: false,
                             log: "Instance Starting",
                             timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update log');
-                                return;
-                            }
-                            console.log('log updated');
                         });
 
                     }, function(err, state) {
@@ -228,16 +222,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             err: false,
                             log: "Instance Started",
                             timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update log');
-                                return;
-                            }
-                            console.log('log updated');
                         });
 
-
-
+                        ec2.describeInstances([data[0].platformId], function(err, data) {
+                            if (err) {
+                                console.error(err);
+                                return;
+                            }
+                            if (data.Reservations.length && data.Reservations[0].Instances.length) {
+                                console.info("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
+                                instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
+                                    if (err) {
+                                        console.log("update instance ip err ==>", err);
+                                        return;
+                                    }
+                                    console.log('instance ip upadated');
+                                });
+                            }
+                        });
                     });
 
                 });
