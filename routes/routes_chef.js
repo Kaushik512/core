@@ -3,6 +3,7 @@ var Chef = require('../classes/chef');
 var EC2 = require('../classes/ec2');
 var instancesDao = require('../classes/instances');
 var environmentsDao = require('../classes/d4dmasters/environments.js');
+var logsDao = require('../classes/dao/logsdao.js');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -70,7 +71,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
 
-            console.log("runlist ==>", node.runlist); 
+            console.log("runlist ==>", node.runlist);
             var instance = {
                 projectId: projectId,
                 envId: node.env,
@@ -92,6 +93,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     console.log(err, 'occured in inserting node in mongo');
                     return;
                 }
+                logsDao.insertLog({
+                    referenceId: data._id,
+                    err: false,
+                    log: "Node Imported",
+                    timestamp: new Date().getTime()
+                });
                 settingsController.getAwsSettings(function(settings) {
                     var ec2 = new EC2(settings);
                     if (platformId) {
@@ -108,7 +115,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                     return;
                                 }
                                 console.log('instance state updated');
+                                logsDao.insertLog({
+                                    referenceId: data._id,
+                                    err: false,
+                                    log: "Instance State set to "+instanceState,
+                                    timestamp: new Date().getTime()
+                                });
                             });
+
+
+
                         });
                     }
 
