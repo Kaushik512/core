@@ -114,7 +114,7 @@
             				
 
      <!-- NEW WIDGET START -->
-            <div class="row">
+            <div class="row hidden">
 						<article class="col-lg-7">
 				
 							<!-- Widget ID (each widget will need unique ID)-->
@@ -271,8 +271,8 @@
                 </div> <!--row ends-->
             <br>
             
-         <div class="row">
-            <article class="col-lg-7">
+         <div class="row hidden">
+            <article class="col-lg-7 hidden">
 				
 							<!-- Widget ID (each widget will need unique ID)-->
 							<div class="jarviswidget jarviswidget-color-darken" id="wid-id-3" data-widget-editbutton="false">
@@ -781,7 +781,8 @@
 			var $chrt_mono = "#000";
 
         $(document).ready(function() {
-
+        		alert('hitting ready');
+        		$("#content").css("opacity","1 !important");
 				// DO NOT REMOVE : GLOBAL FUNCTIONS!
 				pageSetUp();
 
