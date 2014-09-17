@@ -59,7 +59,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                                 logsDao.insertLog({
                                     referenceId: req.params.instanceId,
-                                    err: true,
+                                    err: false,
                                     log: 'instance runlist updated',
                                     timestamp: new Date().getTime()
                                 });

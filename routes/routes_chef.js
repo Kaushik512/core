@@ -3,6 +3,7 @@ var Chef = require('../classes/chef');
 var EC2 = require('../classes/ec2');
 var instancesDao = require('../classes/instances');
 var environmentsDao = require('../classes/d4dmasters/environments.js');
+var logsDao = require('../classes/dao/logsdao.js');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -93,7 +94,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 logsDao.insertLog({
-                    referenceId: data_id,
+                    referenceId: data._id,
                     err: false,
                     log: "Node Imported",
                     timestamp: new Date().getTime()
@@ -115,7 +116,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 }
                                 console.log('instance state updated');
                                 logsDao.insertLog({
-                                    referenceId: data_id,
+                                    referenceId: data._id,
                                     err: false,
                                     log: "Instance State set to "+instanceState,
                                     timestamp: new Date().getTime()
