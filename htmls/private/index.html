@@ -89,9 +89,10 @@
 
 				<!-- collapse menu button -->
 				<div id="hide-menu1" class="btn-header pull-right">
-					<span> <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+					<span> <a id="show-main-collapse" href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
 				</div>
 				<!-- end collapse menu -->
+
 
 				<!-- logout button -->
 				<div id="logout" class="btn-header transparent pull-right">
@@ -226,6 +227,24 @@
 			</ul>
 		</div>
 		<!-- END SHORTCUT AREA -->
+		<div id="main-collapse" style="margin-top: 50px;">
+
+			<ul class="" style="width:100%">
+				
+				<li>
+					<a href="index.html#ajax/Dev.html">Workzone</a>
+				</li>
+				<li>
+					<a href="design.html#ajax/Aws-Production.html">Design</a>
+				</li>
+				<li>
+					<a href="Tracker.html#ajax/Dashboard.html"><span>TRACK</span></a>
+				</li>
+				<li>
+					<a href="#ajax/gallery.html"><span>SETTINGS</span></a>
+				</li>
+			</ul>
+		</div>
 
 		<!--================================================== -->
 
@@ -323,123 +342,68 @@
 
          <script type="text/javascript">
          var serviceURL = "/d4dMasters/";
+         window.selectedOrgName; 
 
-          function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
-			    readMasterJson_Top(jsonID);
-			    formData = d4ddata.masterjson;
-			    // var comparedField = "orgname";
-			    //  var filterByValue = "Scholastic";
-			    //  var outputField = "productgroupname";
-			    var result = [];
-			    //debugger;
-			    $.each(eval(formData.rows.row), function (i, item) {
-			        $.each(item.field, function (k, item1) {
-
-			            if (item1.name == comparedField && (item1.values.value == filterByValue || filterByValue == '')) {
-			                // alert(item1.values.value);
-			                //found the row, now get the next column
-			               // debugger;
-			                $.each(item.field, function (j, item2) {
-			                    if (item2.name == outputField) {
-			                        //  alert(item2.values.value);
-			                        result.push(item2.values.value);
-			                    }
-			                });
-			            }
-			        });
-			    });
-			    return (result);
-			}
-
-			function readMasterJson_Top(section) {
-
-			    $.ajax({
+         $.ajax({
 			        type: "get",
-			        dataType: "text",
+			        dataType: "json",
 
 			        async: false,
-			        url: serviceURL + "readmasterjson/" + section,
+			        url: "/organizations/getTree",
 			        success: function (data) {
 			            // alert(data.toString());   
-			            d4ddata = JSON.parse(data);
+			            console.log(data);
+			            var $ulOrgList = $('.orgsList').empty();
+            			var $workspace = $('#Workspace').empty();
+			            for(var i=0;i<data.length;i++) {
+			            	 var $li = $('<li data-id="org'+i+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+data[i].name+'</span></a>');
+				 
+              				$li.click(function(e){
+
+                			 var id = $(this).attr('data-id');
+                 			$('.org').hide();
+                 			$('.'+id).show();
+              			  });
+              			  $ulOrgList.append($li);
+              			  for(var j=0;j<data[i].businessGroups.length;j++) {
+              			  	var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
+			     				if(i==0 && j==0) {
+			  	   					$liSideBar.find('a').attr('id','firstA'); 
+			     				}
+			     				$workspace.append($liSideBar);
+			     				var $projectUl = $('<ul></ul>'); 
+                  				$liSideBar.append($projectUl); 
+                  				for(var k=0;k<data[i].businessGroups[j].projects.length;k++) {  
+                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-lg fa-fw fa-external-link"></i><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
+                  					$projectUl.append(liProject);
+                  					  var $envUl = $('<ul></ul>');
+                    				 liProject.append($envUl); 
+                  					  for(var l=0;l<data[i].environments.length;l++) {
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'"><i class="fa fa-truck"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i]);
+                    						$envUl.append($liEnv);
+                        					$liEnv.click(function(e){
+	                        					window.selectedOrgName = $(this).attr('data-OrgName');
+
+                        					});
+
+    					                	if(i==0 && j == 0 && k==0 && l==0 ) {
+                    							$('#firstA').attr('href','#ajax/Dev.html?projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'');
+                    							 window.selectedOrgName = data[i];
+                    						}
+
+                  					  
+                  					  }
+              			  		} 
+			            }
+			          }
+			          $ulOrgList.find('li:first').trigger('click'); 
 			        },
 			        failure: function (data) {
 			            alert(data.toString());
 			        }
-			    });
-			    return (d4ddata);
-			}
+		});
 
-			var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
-			console.log('orgs',getOrgs);
-			var $ulOrgList = $('.orgsList').empty();
-            var $workspace = $('#Workspace').empty();
-            
-             window.selectedOrgName; 
-
-			for(var i=0;i<getOrgs.length;i++) {
-			  var $li = $('<li data-id="org'+i+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+getOrgs[i]+'</span></a>');
-			 
-              $li.click(function(e){
-
-                 var id = $(this).attr('data-id');
-                 $('.org').hide();
-                 $('.'+id).show();
-              });
-
-			  $ulOrgList.append($li); 
-
-               var getBGs = getRelatedValues_Top(2, "orgname", getOrgs[i], "productgroupname"); 
-               console.log(getBGs);
-               for(var j=0;j<getBGs.length;j++) {
-               	 
-               	//Arabinda changed the span class //style="font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 130px;"
-			     var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent BGtextoverflow" title="'+getBGs[j]+'">'+getBGs[j]+'</span></a>').addClass('org').addClass('org'+i); 
-			     if(i==0 && j==0) {
-			  	   $liSideBar.find('a').attr('id','firstA'); 
-			     }
-			     $workspace.append($liSideBar);
-
-                  var getProjs = getRelatedValues_Top(4, "productgroupname", getBGs[j], "projectname");
-                  console.log('proj',getBGs[j],getProjs);
-                  
-                  var $projectUl = $('<ul></ul>'); 
-                  $liSideBar.append($projectUl); 
-                  for(var k=0;k<getProjs.length;k++) {
-                  	var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-lg fa-fw fa-external-link"></i><span class="menu-item-parent" style="font-weight:bold">'+getProjs[k]+'</span></a>');
-                  	$projectUl.append(liProject);
-
-                    /// getting environments 
-                    var getEnvs = getRelatedValues_Top(3, "orgname", getOrgs[i], "environmentname");
-                    console.log(getEnvs,"<==>",getOrgs[i]);
-              
-                    var $envUl = $('<ul></ul>');
-                    liProject.append($envUl); 
-
-                    for(var l=0;l<getEnvs.length;l++) {
-                    	var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'"><i class="fa fa-truck"></i>'+getEnvs[l]+'</a>').attr('data-OrgName',getOrgs[i]);
-                    	$envUl.append($liEnv);
-                        $liEnv.click(function(e){
-                        	window.selectedOrgName = $(this).attr('data-OrgName');
-
-                        });
-
-                    	if(i==0 && j == 0 && k==0 && l==0 ) {
-                    		$('#firstA').attr('href','#ajax/Dev.html?projid='+getProjs[k]+'&envid='+getEnvs[l]+'');
-                    		window.selectedOrgName = getOrgs[i];
-                    	}
-
-                    }
-
-
-                  }
-
-
-
-               }
-
-			}
-			$ulOrgList.find('li:first').trigger('click');
+   
 			
 
 

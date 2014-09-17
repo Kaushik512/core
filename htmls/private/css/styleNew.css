@@ -1,3 +1,71 @@
+.card-backflip{
+    background-repeat:no-repeat;
+    background-image:url('../img/app-store-icons/Resized-5K7AL.png');
+    padding-top: 10px;
+    background-size: 100% 204px;
+}
+.card-backflip-margin{
+margin-left:20px;
+margin-top:15px;
+}
+.jarviswidget{
+    margin:0px !important;
+}
+.container {
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    perspective: 1000;
+    /*border: 1px solid #ccc;*/
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.flip-toggle.flip .card {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    filter: FlipH;
+    -ms-filter:"FlipH";
+}
+.container, .front, .back {
+     width: 160px;
+    height: 202px;
+}
+.card {
+    -webkit-transition: 0.6s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transition: 0.6s;
+    -moz-transform-style: preserve-3d;
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.front, .back {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.front {
+    background: white;
+}
+.back {
+    
+    border-radius: 11px;
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+.cardBackRunlistContaner {
+    height: 142px;
+    margin-top: 3px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 155px;
+}
 /*
  * HTML5 Boilerplate
  *
@@ -38,6 +106,55 @@ html
   -webkit-text-size-adjust: 100%; 
   -ms-text-size-adjust: 100%; 
   
+}
+.smart-style-2 #main-collapse{
+    background-color: #40baf1;
+}
+#main-collapse{
+     background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    display: none;
+    height: auto;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1009;
+}
+#main-collapse ul {
+    padding: 3px 20px 10px;
+    list-style: none;
+    margin: 0;
+    /*-webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
+    */border-bottom: 1px solid #423F3F;
+}
+#main-collapse ul li {
+    /*Arabinda display: inline-block;
+    */width: auto;
+    padding:8px;
+}
+#main-collapse ul li:hover{
+    background-color: white !important;
+}
+#main-collapse ul li .jarvismetro-tile {
+    margin: 0 3px 3px;
+    border: 0;
+    border-radius: 0;
+}
+#main-collapse ul li .jarvismetro-tile:hover {
+    color: #fff;
+    text-decoration: none;
+}
+#main-collapse ul li .jarvismetro-tile:active, #main-collapse ul li .jarvismetro-tile:focus {
+    left: 0;
+    top: 0;
+}
+.main-collapse-on #response-btn {
+    display: none!important;
+}
+.main-collapse-on #left-bar .navbar, .main-collapse-on #main .navbar {
+    border: 0!important;
 }
 .demo1 {
     background: none repeat scroll 0 0 #2c3742;
@@ -1068,6 +1185,7 @@ hr.layout {
 .instance-details-item {
     display: block;
     margin-left:20px;
+
 }
 .instance-details-id {
     display: block;
@@ -1102,8 +1220,8 @@ hr.layout {
     font-size: 10px;
     padding-right: 21px;
     padding-top: 14px;
-    /*After depolyed changes
-    text-align: center;*/
+
+    text-align: center;
 
     /*Arabinda commented
     border-top: 1px solid;

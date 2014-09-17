@@ -1,4 +1,4 @@
-var d4dModel = require('d4dmastersmodel.js');
+var d4dModel = require('./d4dmastersmodel.js');
 
 
 
@@ -7,7 +7,7 @@ function Orgs() {
 	this.getOrgList = function(callback) {
 
 		d4dModel.findOne({
-			id: req.params.id
+			id: "1"
 		}, function(err, d4dMasterJson) {
 			if (err) {
 				callback(err,null);
