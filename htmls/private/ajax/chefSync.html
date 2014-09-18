@@ -71,26 +71,48 @@
       </div>
       <div class="modal-body">
          <form role="form">
+          <fieldset>
+          <div class="">
+          <section class="col col-12">
             <div class="form-group">
               <label for="exampleInputEmail1">Orgs</label>
-              <select id="chefImportOrgSelect">
-                
-              </select>
+              <div class="">
+                <select id="chefImportOrgSelect"  class="form-control" >
+                  
+                </select>
+              </div>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Business Groups</label>
-              <select id="chefImportBgSelect">
+              <div class="">
+              <select id="chefImportBgSelect"  class="form-control" >
                 
               </select>
+            </div>
             </div>
          	
          	<div class="form-group">
     			<label for="exampleInputEmail1">Project</label>
-    			<select id="chefImportProjectSelect">
+          <div class="">
+    			<select id="chefImportProjectSelect"  class="form-control" >
                 
     			</select>
+        </div>
     		</div>
-
+      </section>
+      <hr/>
+      <section>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Provider</label>
+          <div class="">
+          <select id="chefImportProviderSelect"  class="form-control" >
+                
+          </select>
+        </div>
+        </div>
+      </section>
+    </div>
+    </fieldset>
          </form>
       </div>
       <div class="modal-footer">
@@ -162,6 +184,19 @@ $orgListInput.append($('<option></option>').val('choose').html('choose'));
 for(var i=0;i<getOrgs.length;i++) {
     $orgListInput.append($('<option></option>').val(getOrgs[i]).html(getOrgs[i]));
 }
+
+
+var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
+console.log(getOrgs);
+
+
+var $providerlist = $('#chefImportProviderSelect');
+$providerlist.append($('<option></option>').val('choose').html('choose'));
+for(var i=0;i<getProviders.length;i++) {
+    $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
+}
+
+
 $bgList = $('#chefImportBgSelect');
 
 
@@ -298,6 +333,18 @@ $('.showChefImportNodesModalBtn').click(function(e){
 
  });
 
+
+function setOrgBasedOnUrl(){
+  //$('#chefImportNodesModal').modal('show');
+  var orgName = url.substr(url.indexOf("?") + 1);
+  //alert(orgName);
+  var orgSelect = $('#chefImportOrgSelect');
+  orgSelect.val(orgName);
+  orgSelect.change();
+  orgSelect.attr("disabled","disabled");
+  
+}
+setOrgBasedOnUrl();
 </script>
 <script>
 var b = $('#tabContent tr td').width();
