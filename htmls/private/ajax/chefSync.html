@@ -336,8 +336,10 @@ $('.showChefImportNodesModalBtn').click(function(e){
 
 function setOrgBasedOnUrl(){
   //$('#chefImportNodesModal').modal('show');
-  var orgName = url.substr(url.indexOf("?") + 1);
+  var chefServerRowID = url.substr(url.indexOf("?") + 1);
+  var orgName = getRelatedValues_Top(10, "rowid",chefServerRowID, "orgname"); 
   //alert(orgName);
+  //Get Orgname from rowID in url
   var orgSelect = $('#chefImportOrgSelect');
   orgSelect.val(orgName);
   orgSelect.change();

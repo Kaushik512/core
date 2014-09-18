@@ -117,10 +117,10 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
 
                             //importbutton will be present for config management screen.
                             var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
-                            var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
-                            
-                            if(importbutton.length > 0 && tdorgname.length > 0){
-                                importbutton.attr("href", "#ajax/chefSync.html?" + tdorgname.html());
+                           // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                            //&& tdorgname.length > 0
+                            if(importbutton.length > 0 ){
+                                importbutton.attr("href", "#ajax/chefSync.html?" + tv);
                             }
 
 
