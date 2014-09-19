@@ -125,40 +125,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <!--<div class="col-sm-3 col-lg-2 col-md-3">
-
-                                                        <div class="productdiv">
-                                                            <ul style="text-align:center;" class="list-unstyled system-prop">
-                                                                <li>
-                                                                    <img src="img/galleryIcons/14.jpg">
-                                                                </li>
-                                                                <li style="font-size:11px;"><u><b>Config Management</b></u>
-                                                                </li>
-                                                                <li style="font-size:10px;">Chef</li>
-                                                                <li style="font-size:10px;">Chef Hosted</li>
-
-                                                            </ul>
-
-                                                        </div>
-                                                    </div>-->
-
-                                                    
-                                                    
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
-
-
-
-
-                                                        
-
-
 
 
 
@@ -397,7 +366,7 @@
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
                                         <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
-                                            <i class="ace-icon fa fa-plane bigger-110"></i>
+                                            <i class="ace-icon fa fa-pencil  bigger-110"></i>
                                             Edit
                                         </button>                                       
                                          <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
@@ -440,14 +409,17 @@
                                                         <div class="widget-body">
                                                             <div class="widget-main" style="min-height:300px"> 
                                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
-                                                                    <div class="table-responsive" >
+                                                                    <div class="table-responsive table-div" >
                                                                             <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
                                                                                 <thead>
                                                                                     <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                                        <td style="">Name</td>
-                                                                                        <td>Role</td>
-                                                                                        <td>ID</td>
+                                                                                        <td>S.No.</td>
+                                                                                        <td>Logo</td>
+                                                                                        <td>Name</td>
+                                                                                        <td>IPAddress</td>
+                                                                                        <td>Recipes</td>
                                                                                         <td>Status</td>
+                                                                                        <td>Log Info</td>
                                                                                         <td class="widthAdjustment">Action</td>
                                                                                     </tr>
                                                                                 </thead>
@@ -705,10 +677,15 @@
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
                                         
-                                        <button class="btn pull-left btn-primary" style="margin-left:5px">
+                                        <button class="btn pull-left btn-primary actionControlPanel" style="margin-left:5px">
                                             <i class="fa fa-share"></i>
-                                            Actions
+                                            Control Panel
                                         </button>
+                                        <a data-toggle="modal" href="#myModal" class="btn pull-left btn-primary ChefconfigPanel" style="margin-left:5px"><i class="fa fa-home"></i>Chef config Panel</a>
+                                         <!--<button class="btn pull-left btn-primary ChefconfigPanel" style="margin-left:5px">
+                                            <i class="fa fa-home"></i>
+                                            Chef config Panel
+                                        </button>-->
                                     </div>
                                 </div>
                             </div>
@@ -767,7 +744,7 @@
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Update</button>
+        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
       </div>
     </div>
   </div>
@@ -811,11 +788,83 @@
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    Chef-client
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form action="" id="" class="">
+                    <div action="" id="" class="smart-form" novalidate="novalidate">
+
+                        <div class="row" style="margin:0px;">
+                            <section class="col col-4">
+                                <label for="category">Choose Chef Server
+                                </label> 
+                            </section>
+                            <section class="col col-8">
+                                <label class="select"> 
+                                    <select>
+                                        <option value="0">Chef-Server-1</option>
+                                        <option value="1">Chef-Server-2</option>
+                                        <option value="1">Chef-Server-3</option>
+                                        <option value="1">Chef-Server-4</option>
+                                    </select>
+                                </label>                                          
+                            </section>
+                        </div>
+                        <div class="row" style="margin:0px;">
+                            <section class="col col-4">
+                                <label for="category">Choose User</label>
+                            </section>
+                            <section class="col col-8">
+                                <label class="select"> 
+                                    <select>
+                                        <option value="0">User-1</option>
+                                        <option value="1">User-2</option>
+                                    </select>
+                                </label>                                          
+                            </section>
+                        </div>
+                        
+                        <footer>
+                                <button type="submit" class="btn btn-primary chefconfigpanel">
+                                    Confirm
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Cancel
+                                </button>
+
+                        </footer>
+                    </div>
+
+                </form>  
+                        
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <script type="text/javascript">
 // $(document.body).on('click', '.card', function () {
       
 //       document.querySelector('#flip-toggle').classList.toggle('flip');
 //   });
+$('.chefconfigpanel').click(function(e){
+   window.location.assign("index.html#ajax/chefconfigpanel.html");
+});
 
 var urlParams ={};
 (window.onpopstate = function () {
@@ -945,7 +994,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName); 
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
+        var $spanheadingMiddle = $('<span></span>');
         var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('title','More Info'));  
 
         $divHeading.append($spanheadingLeft); 
@@ -969,7 +1019,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         }  
         else {
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
+            $tableInstanceStatusIndicator = $('<td style="background-size:36px auto;"></td>').addClass('instancestatusindicator pending');
         }
         $tableInstanceStatusIndicator.attr('data-instanceId',data[i]._id);
 
@@ -1002,11 +1052,44 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $divComponentListContainer.append($divComponentList);
 
         //For Table View
+        $rowContainter.append('<td>'+(i+1)+'</td>');
+        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/></td>');
+        
+
         $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
-        $rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
-        $rowContainter.append('<td>' +data[i]._id+ '</td>');
+        //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
+        $rowContainter.append('<td>' +data[i].instanceIP+ '</td>');
+        var $tableRunlistDiv = $('<div></div>').append('<span>'+data[i].runlist.join()+'</span>');
+        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append("View All"));
+         $tableRunlistDiv.append($divComponentItem);
+        var $tableViewAllRecipes = $('<div class="tableViewAllRecipes"></div>').hide();
+        $tableRunlistDiv.append($tableViewAllRecipes);  
+        
+        $divComponentItem.click(function(){
+            $(this).parent().find('.tableViewAllRecipes').show();
+        });  
+
+        for(var j=0;j<data[i].runlist.length;j++) { 
+          var $divComponentItem;
+           if(j == 0) {
+          
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+
+           } else {
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+           }
+           $tableViewAllRecipes.append($divComponentItem);          
+     }
+        
+
+
+
+        $rowContainter.append($('<td></td>').append($tableRunlistDiv));
+        //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
         $rowContainter.append($tableInstanceStatusIndicator);
 
+        $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="'+data[i]._id+'" href="javascript:void(0)" ><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
+        
         $divDomainRolesCaption.append($divComponentListContainer);
         var $divInstanceDetails = $('<div></div>')
         var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
@@ -1046,15 +1129,21 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
     var $backdiv = $('<span></span>').addClass('card-backflip-margin');
-    var $backdiva = $('<a></a>');
-    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book');
-    var $backdivaspan = $('<span style="font-weight:bold"></span>').addClass('menu-item-parent').html('Cookbooks')
+    var $backdiva = $('<a style="color:#333;"></a>');
+    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+    var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Cookbooks');
+    var $backhr = $('<hr>');
 
+    
     $backdivai.append($backdivaspan);
     $backdiva.append($backdivai);
+    //$backdiva.append($backhr);
     $backdiv.append($backdiva);
+    
     $back.append($backdiv);
+
     $back.append($backRunlistContainer);
+    $backdiv.append($backhr);
 
     for(var j=0;j<data[i].runlist.length;j++) { 
           var $divComponentItem;
@@ -1068,7 +1157,9 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
            $backRunlistContainer.append($divComponentItem);
             
      }
-     var $flipbackdivaspan = $('<span style="font-weight:bold;width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a></a>').attr('href','javascript:void').append("Go Back"));
+     var $flipbackdivaspanhr = $('<hr>');
+     $back.append($flipbackdivaspanhr);
+     var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href','javascript:void').append("Go Back"));
      $flipbackdivaspan.click(function(e){
             $(this).parents('.flip-toggle').toggleClass('flip');
      });
@@ -1212,7 +1303,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
          $('#chefRunModalContainer').modal('show');
     });
 
-    $('.moreInfo').click(function(e){
+    $('.moreInfo,.tableMoreInfo').click(function(e){
          var instanceId =  $(this).attr('data-instanceId');
          var $instanceLogModalContainer =  $('#instanceLogModalContainer');
          $instanceLogModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -1234,6 +1325,12 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 
     });
+
+   var $cardContainer =  $('.container').click(function (e) {
+    $cardContainer.removeClass('role-Selectedcard');
+    $(this).addClass('role-Selectedcard');
+
+  });
 
 
 });
@@ -1370,6 +1467,14 @@ $('.productdiv').click(function (e) {
 });
 var $rolesCards1 = $('.productdiv1')
 */
+
+
+$('.actionControlPanel').click(function (e) {
+    if ($('.container').hasClass('role-Selectedcard')) {
+        window.location.assign("index.html#ajax/Controlpanel.html");
+
+    }
+});
 </script>
 
 

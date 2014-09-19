@@ -93,10 +93,9 @@ font-size: 14px;
 }
 .row .date-range {
 display: none;
-    }
+}
 
-
-.row .btn {
+.btn-reportrange {
     height: 36px;
     padding-top: 8px;
     border: none;

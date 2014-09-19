@@ -1,7 +1,14 @@
+.role-Selectedcard{
+    border: 2px solid #40afb1;
+    border-radius:4px;
+}
 .card-backflip{
     background-repeat:no-repeat;
-    background-image:url('../img/app-store-icons/Resized-5K7AL.png');
-    padding-top: 10px;
+    /*background-image:url('../img/app-store-icons/box_ops.png');*/
+    background-color: white !important;
+    border: 1px solid #dddddd;
+    border-radius: 11px;
+    padding-top: 4px;
     background-size: 100% 204px;
 }
 .card-backflip-margin{
@@ -26,9 +33,13 @@ margin-top:15px;
     filter: FlipH;
     -ms-filter:"FlipH";
 }
-.container, .front, .back {
-     width: 160px;
-    height: 202px;
+ .front, .back {
+    width: 160px;
+    height: 204px;
+}
+.container{
+    width: 164px;
+    height: 208px;
 }
 .card {
     -webkit-transition: 0.6s;
@@ -54,7 +65,8 @@ margin-top:15px;
 }
 .back {
     
-    border-radius: 11px;
+    /*border-radius: 11px;*/
+    
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
     transform: rotateY(180deg);
@@ -102,11 +114,21 @@ hr{
 }
 html 
 { 
-    font-size: 100%; 
+    font-size: 100%; -
   -webkit-text-size-adjust: 100%; 
   -ms-text-size-adjust: 100%; 
   
 }
+/*@media only screen and (min-width: 768px) {
+  .table-div{
+    border: 1px solid #ddd;
+   
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 100%;
+}
+}*/
+
 .smart-style-2 #main-collapse{
     background-color: #40baf1;
 }
@@ -1154,8 +1176,8 @@ hr.layout {
     line-height: 1.42857;
     margin-bottom: 20px;
     margin-left: 4px;
-    margin-top: 3px;
-    /*max-width: 100px;*/
+    /*margin-top: 3px;
+    max-width: 100px;*/
     /*min-height: 145px;*//*arabinda*/
     /*After depolyed changes
     min-height: 270px;*/
@@ -1185,6 +1207,10 @@ hr.layout {
 .instance-details-item {
     display: block;
     margin-left:20px;
+
+}
+.instance-details-itemCP {
+    display: block;
 
 }
 .instance-details-id {
@@ -1228,6 +1254,12 @@ hr.layout {
     font-size: 10px;
     padding-top: 10px;
     text-align: center;*/
+}
+.instance-bootstrap-listControlpanel {
+    font-size: 10px;
+    padding-right: 40px;
+    padding-top: 14px;
+    text-align: center;
 }
 .instance-state {
 
@@ -1694,7 +1726,7 @@ background-image:url('../img/aws_logo_stopped.png');
 background-image:url('../img/aws_logo_paused.png');
 }
 .componentlistContainer.pending{
-background-image:url('../img/aws_logo_pending.png');
+background-image:url('../img/rsz_inactive.png');
 }
 
 .instancestatusindicator{
@@ -1711,7 +1743,7 @@ background-image:url('../img/indicator_stopped.png');
 background-image:url('../img/indicator_paused.png');
 }
 .instancestatusindicator.pending{
-background-image:url('../img/indicator_pending.png');
+background-image:url('../img/rsz_inactive.png');
 }
 .rowcustomselected{
     font-weight: bold;
