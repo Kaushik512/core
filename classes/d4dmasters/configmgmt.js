@@ -1,4 +1,5 @@
 var d4dModel = require('./d4dmastersmodel.js');
+var settingsController = require('../../controller/settings');
 
 function Configmgmt() {
 
@@ -44,6 +45,12 @@ function Configmgmt() {
                                             else
                                                 configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
 
+                                        }
+                                        else{
+                                            if (configmgmt == '')
+                                                configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+                                            else
+                                                configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
                                         }
                                     }
                                     configmgmt = "{" + configmgmt + "}";
