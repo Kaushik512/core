@@ -1,10 +1,9 @@
 var d4dModel = require('./d4dmastersmodel.js');
 var settingsController = require('../../controller/settings');
 
-
 function Configmgmt() {
 
-    this.getChefFiles = function(rowid, callback) {
+    this.getChefServerDetails = function(rowid, callback) {
 
         d4dModel.findOne({
             id: '10'
@@ -46,18 +45,27 @@ function Configmgmt() {
                                             else
                                                 configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
 
+                                        } else {
+                                            if (configmgmt == '')
+                                                configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+                                            else
+                                                configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
                                         }
                                     }
+                                    configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname+"\"";
+
                                     configmgmt = "{" + configmgmt + "}";
-                                    console.log(JSON.stringify(configmgmt));
+                                    configmgmt = JSON.parse(configmgmt); 
+                                    //console.log(JSON.stringify(configmgmt));
                                 }
                             }
 
                             // console.log();
                         }
                     }); // rows loop
+                    callback(null, configmgmt);
                 }); //setting closure
-                callback(null, configmgmt);
+
             } else {
                 callback(true, null);
             }

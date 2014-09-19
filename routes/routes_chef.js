@@ -4,15 +4,29 @@ var EC2 = require('../classes/ec2');
 var instancesDao = require('../classes/instances');
 var environmentsDao = require('../classes/d4dmasters/environments.js');
 var logsDao = require('../classes/dao/logsdao.js');
-var masterjsonDao = require('../classes/d4dmasters/masterjson');
+var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
     app.all('/chef/*', verificationFunc);
 
-    app.get('/chef/nodes', function(req, res) {
-        settingsController.getChefSettings(function(settings) {
-            var chef = new Chef(settings);
+    app.get('/chef/servers/:serverId/nodes', function(req, res) {
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
             chef.getNodesDetailsForEachEnvironment(function(err, environmentList) {
                 if (err) {
                     res.send(500);
@@ -21,11 +35,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(environmentList);
                 }
             });
+
         });
     });
 
 
-    app.post('/chef/sync/nodes', function(req, res) {
+    app.post('/chef/servers/:serverId/sync/nodes', function(req, res) {
         var reqBody = req.body;
         var projectId = reqBody.projectId;
         var orgId = reqBody.orgId;
@@ -83,6 +98,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 instanceState: 'unknown',
                 bootStrapStatus: 'success',
                 hardware: hardwareData,
+                chef: {
+                    serverId: req.params.serverId,
+                    chefNodeName: node.nodeName
+                },
                 blueprintData: {
                     blueprintName: "chef import",
                     templateId: "chef_import"
@@ -135,8 +154,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
             });
 
-
-
         }
 
         function createEnv(node) {
@@ -158,9 +175,19 @@ module.exports.setRoutes = function(app, verificationFunc) {
             })
         }
 
-        if (reqBody.selectedNodes.length) {
-            createEnv(reqBody.selectedNodes[count]);
-        }
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            if (reqBody.selectedNodes.length) {
+                createEnv(reqBody.selectedNodes[count]);
+            }
+        });
 
 
 
@@ -197,22 +224,20 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.get('/chef/servers/:serverId', function(req, res) {
         console.log(req.params.serverId);
-        masterjsonDao.getMasterJson("10", function(err, chefJson) {
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            if (chefJson.masterjson && chefJson.masterjson.rows && chefJson.masterjson.rows.row) {
-                
-                for (var i = 0; i < chefJson.masterjson.rows.row.length; i++) {
-                    for (var j = 0; j < chefJson.masterjson.rows.row[i].field.length; j++) {
-                        //console.log(orgsJson.masterjson.rows.row[i].field[j]);
-                        if (chefJson.masterjson.rows.row[i].field[j].name = "orgname") {
-                           
-                            break;
-                        }
-                    }
-                }
+            console.log("chefLog -->", chefDetails);
+            if (chefDetails) {
+                //var chefDetails = JSON.parse(chefJson);
+                res.send({
+                    serverId: chefDetails.rowid,
+                    orgname: chefDetails.orgname
+                });
+            } else {
+                res.send(404);
             }
 
         });

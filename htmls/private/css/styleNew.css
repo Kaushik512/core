@@ -1750,3 +1750,6 @@ margin-top:0px;
 .disabled{
     display:none;
 }
+.blueprintContainer {
+    display : none;
+}

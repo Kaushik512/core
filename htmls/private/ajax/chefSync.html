@@ -77,7 +77,7 @@
             <div class="form-group">
               <label for="exampleInputEmail1">Orgs</label>
               <div class="">
-                <select id="chefImportOrgSelect"  class="form-control" >
+                <select id="chefImportOrgSelect"  class="form-control" disabled>
                   
                 </select>
               </div>
@@ -138,9 +138,106 @@ var urlParams ={};
  }
      
 })();
-
+$(function(){
+var $orgListInput = $('#chefImportOrgSelect');
+ $bgList = $('#chefImportBgSelect');
+var $projectList = $('#chefImportProjectSelect');
 $.get('/chef/servers/'+urlParams.chefId,function(data){
    console.log('chefServer ==>',data);
+   $orgListInput.append($('<option></option>').val(data.orgname).html(data.orgname));
+    var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
+    var $providerlist = $('#chefImportProviderSelect');
+    $providerlist.append($('<option></option>').val('choose').html('choose'));
+    for(var i=0;i<getProviders.length;i++) {
+      $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
+    }
+
+
+   
+    $bgList.empty();
+    $bgList.append($('<option></option>').val('choose').html('choose'));
+    var getBGs = getRelatedValues_Top(2, "orgname",data.orgname, "productgroupname"); 
+    for(var i=0;i<getBGs.length;i++) {
+        $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
+    }
+
+
+    
+    $bgList.change(function(e){
+      var bgName = $(this).val();
+      if(bgName == 'choose') {
+          return;
+      }
+      $projectList.empty();
+      $projectList.append($('<option></option>').val('choose').html('choose'));
+
+      var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
+      for(var i=0;i<getProjs.length;i++) {
+         $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+      }
+    });
+
+  $.get('/chef/servers/'+urlParams.chefId+'/nodes',function(data){
+    var $tableBody = $('.table-hover tbody');
+    var environments = Object.keys(data);
+    for(var i=0;i<environments.length;i++) {
+        var nodes = data[environments[i]].nodes;
+      for(var j=0;j<nodes.length;j++) {
+        var node = nodes[j];
+        var $tr = $('<tr></tr>').addClass('show-settings');
+            $tr.append($('<td></td>').append('<span>'+node.name+'</span>'));
+            var ip = 'unknown';
+            if(node.automatic.ipaddress) {
+                ip = node.automatic.ipaddress;
+            }
+            $tr.append($('<td></td>').append('<span>'+ip+'</span>'));
+
+            var fqdn = 'unknown';
+            if(node.automatic.fqdn) {
+                fqdn = node.automatic.fqdn;
+            }
+            $tr.append($('<td></td>').append('<span>'+fqdn+'</span>'));
+
+            var platform = 'unknown';
+            if(node.automatic.platform) {
+                platform = node.automatic.platform;
+            }
+            $tr.append($('<td></td>').append('<span>'+platform+'</span>'));
+
+            var uptime = 'unknown';
+            if(node.automatic.uptime) {
+                uptime = node.automatic.uptime;
+            }
+            $tr.append($('<td></td>').append('<span>'+uptime+'</span>'));
+
+            var lastCheckIn = 'unknown';
+            if(node.automatic.lastCheckIn) {
+                lastCheckIn = node.automatic.lastCheckIn;
+            }
+            $tr.append($('<td></td>').append('<span>'+lastCheckIn+'</span>'));
+            
+            $tr.append($('<td></td>').append('<span>'+environments[i]+'</span>'));
+
+            var runlist = [];
+            if(node.run_list && node.run_list.length) {
+              runlist = node.run_list;
+            }
+            runlist = runlist.join();
+            var $checkbox = $('<input class="nodeCheckBox" data-nodeName="'+node.name+'" data-nodeIp="'+ip+'" data-nodeFqdn="'+fqdn+'" data-nodePlatform="'+platform+'" data-nodeEnv="'+environments[i]+'" data-nodeRunlist="'+runlist+'" type="checkbox" name="nodesChecked"/>'); 
+            $checkbox.data('nodeData',node);
+            $tr.append($('<td></td>').append($('<span></span>').append($checkbox)));
+
+            
+            $tableBody.append($tr);
+            console.log('added');
+
+      }
+    }
+
+  });
+
+
+
 });
 
   var serviceURL = "/d4dMasters/";
@@ -191,127 +288,6 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
                 return (d4ddata);
             }
 
-var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
-console.log(getOrgs);
-
-
-var $orgListInput = $('#chefImportOrgSelect');
-$orgListInput.append($('<option></option>').val('choose').html('choose'));
-for(var i=0;i<getOrgs.length;i++) {
-    $orgListInput.append($('<option></option>').val(getOrgs[i]).html(getOrgs[i]));
-}
-
-
-var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
-console.log(getOrgs);
-
-
-var $providerlist = $('#chefImportProviderSelect');
-$providerlist.append($('<option></option>').val('choose').html('choose'));
-for(var i=0;i<getProviders.length;i++) {
-    $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
-}
-
-
-$bgList = $('#chefImportBgSelect');
-
-
-$orgListInput.change(function(e){
-    var orgName = $(this).val();
-    if(orgName == 'choose') {
-        return;
-    }
-    $bgList.empty();
-    $bgList.append($('<option></option>').val('choose').html('choose'));
-    var getBGs = getRelatedValues_Top(2, "orgname",orgName, "productgroupname"); 
-    for(var i=0;i<getBGs.length;i++) {
-       $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
-    }
-    
-    
-
-});
-
-var $projectList = $('#chefImportProjectSelect');
-$bgList.change(function(e){
-    var bgName = $(this).val();
-    if(bgName == 'choose') {
-        return;
-    }
-    $projectList.empty();
-    $projectList.append($('<option></option>').val('choose').html('choose'));
-
-   var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
-    for(var i=0;i<getProjs.length;i++) {
-       $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
-    }
-});
-
-
-
-
-  $.get('/chef/nodes',function(data){
-    var $tableBody = $('.table-hover tbody');
-  	var environments = Object.keys(data);
-  	for(var i=0;i<environments.length;i++) {
-        var nodes = data[environments[i]].nodes;
-  		for(var j=0;j<nodes.length;j++) {
-  			var node = nodes[j];
-  			var $tr = $('<tr></tr>').addClass('show-settings');
-            $tr.append($('<td></td>').append('<span>'+node.name+'</span>'));
-            var ip = 'unknown';
-            if(node.automatic.ipaddress) {
-                ip = node.automatic.ipaddress;
-            }
-            $tr.append($('<td></td>').append('<span>'+ip+'</span>'));
-
-            var fqdn = 'unknown';
-            if(node.automatic.fqdn) {
-                fqdn = node.automatic.fqdn;
-            }
-            $tr.append($('<td></td>').append('<span>'+fqdn+'</span>'));
-
-            var platform = 'unknown';
-            if(node.automatic.platform) {
-                platform = node.automatic.platform;
-            }
-            $tr.append($('<td></td>').append('<span>'+platform+'</span>'));
-
-            var uptime = 'unknown';
-            if(node.automatic.uptime) {
-                uptime = node.automatic.uptime;
-            }
-            $tr.append($('<td></td>').append('<span>'+uptime+'</span>'));
-
-            var lastCheckIn = 'unknown';
-            if(node.automatic.lastCheckIn) {
-                lastCheckIn = node.automatic.lastCheckIn;
-            }
-            $tr.append($('<td></td>').append('<span>'+lastCheckIn+'</span>'));
-            
-            $tr.append($('<td></td>').append('<span>'+environments[i]+'</span>'));
-
-            var runlist = [];
-            if(node.run_list && node.run_list.length) {
-            	runlist = node.run_list;
-            }
-            runlist = runlist.join();
-            var $checkbox = $('<input class="nodeCheckBox" data-nodeName="'+node.name+'" data-nodeIp="'+ip+'" data-nodeFqdn="'+fqdn+'" data-nodePlatform="'+platform+'" data-nodeEnv="'+environments[i]+'" data-nodeRunlist="'+runlist+'" type="checkbox" name="nodesChecked"/>'); 
-            $checkbox.data('nodeData',node);
-            $tr.append($('<td></td>').append($('<span></span>').append($checkbox)));
-
-           /* 
-           $tr.append($('<td><div class="dropdown settings" ><button class="btn btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"><i class="fa fa-cog txt-color-blueDark"></i><span class="caret"></span></button><ul class="dropdown-menu dropdown-content"  role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Bootstrap</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Delete</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Edit</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">Manage</a></li><li role="presentation"><a role="menuitem" tabindex="-1" href="#">No Action</a></li></ul></div></td>')); 
-            */
-            
-            $tableBody.append($tr);
-            console.log('added');
-
-  		}
-  	}
-
-  });
-
 
 $('.showChefImportNodesModalBtn').click(function(e){
 	 var $checkBoxes = $('.nodeCheckBox:checked');
@@ -342,27 +318,16 @@ $('.showChefImportNodesModalBtn').click(function(e){
    };
    console.log(reqBody);
 
-   $.post('/chef/sync/nodes',reqBody,function(data){
+   $.post('/chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){
    	$('#chefImportNodesModal').modal('hide');
 
    })
 
  });
 
+ });
 
-function setOrgBasedOnUrl(){
-  //$('#chefImportNodesModal').modal('show');
-  var chefServerRowID = url.substr(url.indexOf("?") + 1);
-  var orgName = getRelatedValues_Top(10, "rowid",chefServerRowID, "orgname"); 
-  //alert(orgName);
-  //Get Orgname from rowID in url
-  var orgSelect = $('#chefImportOrgSelect');
-  orgSelect.val(orgName);
-  orgSelect.change();
-  orgSelect.attr("disabled","disabled");
-  
-}
-setOrgBasedOnUrl();
+
 </script>
 <script>
 var b = $('#tabContent tr td').width();
