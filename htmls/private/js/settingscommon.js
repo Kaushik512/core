@@ -114,6 +114,17 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             });
 
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
+
+                            //importbutton will be present for config management screen.
+                            var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
+                           // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                            //&& tdorgname.length > 0
+                            if(importbutton.length > 0 ){
+                                importbutton.attr("href", "#ajax/chefSync.html?" + tv);
+                            }
+
+
+
                             //setting the delete button
 
                             var deletebutton = $('.rowtemplate').find("[title='Remove']");
@@ -725,29 +736,29 @@ function getSettingsNavFor(orgName) {
 }
 
 function getProjectsForOrg(orgname){
-var orgname = 'Scholastic';
-var tempJSON = JSON.parse(JSON.stringify(readMasterJson(1)));
-var getProj = null;
-//masterjson.rows.row
-$.each(eval('tempJSON.masterjson.rows.row'), function (m, n) {
-    for (var o = 0; o < n.field.length; o++) {
-        if (n.field[o].values) {
-            if (n.field[o].values.value == orgname) {
-                var getBG = getRelatedValues(2, "orgname", n.field[o].values.value, "productgroupname");
-                $.each(getBG, function (i, k) {
-                    //alert(k);
-                    getProj = getRelatedValues(4, "productgroupname", k, "projectname");
-                    //$.each(getProj, function (j, l) {
-                    //    alert(n.field[o].values.value + ': ' + k + ":" + l);
-                    //});
+    var orgname = 'Scholastic';
+    var tempJSON = JSON.parse(JSON.stringify(readMasterJson(1)));
+    var getProj = null;
+    //masterjson.rows.row
+    $.each(eval('tempJSON.masterjson.rows.row'), function (m, n) {
+        for (var o = 0; o < n.field.length; o++) {
+            if (n.field[o].values) {
+                if (n.field[o].values.value == orgname) {
+                    var getBG = getRelatedValues(2, "orgname", n.field[o].values.value, "productgroupname");
+                    $.each(getBG, function (i, k) {
+                        //alert(k);
+                        getProj = getRelatedValues(4, "productgroupname", k, "projectname");
+                        //$.each(getProj, function (j, l) {
+                        //    alert(n.field[o].values.value + ': ' + k + ":" + l);
+                        //});
 
-                });
+                    });
+                }
             }
         }
-    }
 
-});
-return (getProj);
+    });
+    return (getProj);
 }
 
 function enableUniqueCheckingForInputs(id){
@@ -783,3 +794,48 @@ function enableUniqueCheckingForInputs(id){
         });
     }
 }
+
+
+//STandby code to receive docker images. To be updated to receive the url from settings
+function getDockerTags(){
+    var returnValue = '';
+    debugger;
+    $.ajax({
+        type: "get",
+        dataType: "text/json",
+        async: false,
+        url: "https://index.docker.io/v1/repositories/srinivasiyer/liferay_tomcat/tags",
+        success: function (data) {
+            //alert(data.toString());
+            alert(data);
+            returnValue = data;
+        },
+        failure: function (data) {
+            alert(data.toString());
+        }
+    });
+    return(returnValue);
+}
+
+function getDockerImages(){
+    var returnValue = '';
+    debugger;
+    $.ajax({
+        type: "get",
+        dataType: "text/json",
+        async: false,
+        url: "https://index.docker.io/v1/search?q=rldevops/mysql",
+        success: function (data) {
+            //alert(data.toString());
+            alert(data);
+            returnValue = data;
+        },
+        failure: function (data) {
+            alert(data.toString());
+        }
+    });
+    return(returnValue);
+}
+
+
+//Cookbook popup to add to suite list

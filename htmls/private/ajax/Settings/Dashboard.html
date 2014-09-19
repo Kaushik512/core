@@ -2,8 +2,9 @@
 
         <div class="row">
           <div class="col-lg-12">
-            <h1>Usage's <small>Statistics Overviewjdfagj</small></h1>
-            <ol class="breadcrumb1">
+
+            <h1>Usage's <small>Statistics Overview</small></h1>
+            <ol class="breadcrumb1 hidden">
               <li class="active"><i class="fa fa-dashboard"></i>  Dashboard</li>
                 <li class="pull-right">
                     <div id="reportrange" class="btn btn-green btn-square date-picker">
@@ -28,9 +29,9 @@
     <i class="fa fa-group fa-fw fa-3x"></i>
     </div></a>
         <div class="circle-tile-content light-blue">
-        <div class="circle-tile-description text-faded"> Users </div>
-        <div class="circle-tile-number text-faded">
-            10
+        <div class="circle-tile-description text-faded"> ORGANIZATIONS </div>
+        <div class="circle-tile-number text-faded organizationcount">
+            0
         </div>
         
     <div class="circle-tile-footer"> Last Updated at </div> 
@@ -52,9 +53,9 @@
        </div></a>
         <div class="circle-tile-content light-black">
 
-        <div class="circle-tile-description text-faded">Budget</div>
-        <div class="circle-tile-number text-faded">
-		    $10,000
+        <div class="circle-tile-description text-faded">BUSINESS GROUPS</div>
+        <div class="circle-tile-number text-faded productgroupcount">
+		    0
 		</div>
         
         <div class="circle-tile-footer"> Last Updated at </div> 
@@ -72,9 +73,9 @@
        <i class="fa fa-inbox fa-fw fa-3x"></i>
        </div></a>
         <div class="circle-tile-content light-blue">
-        <div class="circle-tile-description text-faded"> Instances</div>
+        <div class="circle-tile-description text-faded">ENVIRONMENTS</div>
         <div class="circle-tile-number text-faded">
-            40
+            0
         </div>
         
         <div class="circle-tile-footer"> Last Updated at 
@@ -95,7 +96,7 @@
             <div class="circle-tile-description text-faded">Projects
             </div>
         <div class="circle-tile-number text-faded">
-            10
+            0
         </div>
         
         <div class="circle-tile-footer"> Last Updated at </div> 
@@ -114,7 +115,7 @@
             				
 
      <!-- NEW WIDGET START -->
-            <div class="row">
+            <div class="row hidden">
 						<article class="col-lg-7">
 				
 							<!-- Widget ID (each widget will need unique ID)-->
@@ -271,8 +272,8 @@
                 </div> <!--row ends-->
             <br>
             
-         <div class="row">
-            <article class="col-lg-7">
+         <div class="row hidden">
+            <article class="col-lg-7 hidden">
 				
 							<!-- Widget ID (each widget will need unique ID)-->
 							<div class="jarviswidget jarviswidget-color-darken" id="wid-id-3" data-widget-editbutton="false">
@@ -714,6 +715,8 @@
 	</div>
 
  <script>
+ alert('in');
+			$("#content").css("opacity","1 !important");
 				if ($('#pie-chart').length) {
 
 					var data_pie = [];
@@ -780,8 +783,11 @@
 			/* dark red  */
 			var $chrt_mono = "#000";
 
-        $(document).ready(function() {
+			
 
+        $(document).ready(function() {
+        		alert('hitting ready');
+        		$("#content").css("opacity","1 !important");
 				// DO NOT REMOVE : GLOBAL FUNCTIONS!
 				pageSetUp();
 

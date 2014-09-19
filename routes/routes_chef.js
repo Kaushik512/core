@@ -3,14 +3,30 @@ var Chef = require('../classes/chef');
 var EC2 = require('../classes/ec2');
 var instancesDao = require('../classes/instances');
 var environmentsDao = require('../classes/d4dmasters/environments.js');
+var logsDao = require('../classes/dao/logsdao.js');
+var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
     app.all('/chef/*', verificationFunc);
 
-    app.get('/chef/nodes', function(req, res) {
-        settingsController.getChefSettings(function(settings) {
-            var chef = new Chef(settings);
+    app.get('/chef/servers/:serverId/nodes', function(req, res) {
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
             chef.getNodesDetailsForEachEnvironment(function(err, environmentList) {
                 if (err) {
                     res.send(500);
@@ -19,11 +35,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(environmentList);
                 }
             });
+
         });
     });
 
 
-    app.post('/chef/sync/nodes', function(req, res) {
+    app.post('/chef/servers/:serverId/sync/nodes', function(req, res) {
         var reqBody = req.body;
         var projectId = reqBody.projectId;
         var orgId = reqBody.orgId;
@@ -70,7 +87,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
 
-
+            console.log("runlist ==>", node.runlist);
             var instance = {
                 projectId: projectId,
                 envId: node.env,
@@ -81,6 +98,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 instanceState: 'unknown',
                 bootStrapStatus: 'success',
                 hardware: hardwareData,
+                chef: {
+                    serverId: req.params.serverId,
+                    chefNodeName: node.nodeName
+                },
                 blueprintData: {
                     blueprintName: "chef import",
                     templateId: "chef_import"
@@ -92,6 +113,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     console.log(err, 'occured in inserting node in mongo');
                     return;
                 }
+                logsDao.insertLog({
+                    referenceId: data._id,
+                    err: false,
+                    log: "Node Imported",
+                    timestamp: new Date().getTime()
+                });
                 settingsController.getAwsSettings(function(settings) {
                     var ec2 = new EC2(settings);
                     if (platformId) {
@@ -108,7 +135,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                     return;
                                 }
                                 console.log('instance state updated');
+                                logsDao.insertLog({
+                                    referenceId: data._id,
+                                    err: false,
+                                    log: "Instance State set to " + instanceState,
+                                    timestamp: new Date().getTime()
+                                });
                             });
+
+
+
                         });
                     }
 
@@ -117,8 +153,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 
             });
-
-
 
         }
 
@@ -141,9 +175,19 @@ module.exports.setRoutes = function(app, verificationFunc) {
             })
         }
 
-        if (reqBody.selectedNodes.length) {
-            createEnv(reqBody.selectedNodes[count]);
-        }
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            if (reqBody.selectedNodes.length) {
+                createEnv(reqBody.selectedNodes[count]);
+            }
+        });
 
 
 
@@ -176,6 +220,28 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 }
             });
         });
+    });
+
+    app.get('/chef/servers/:serverId', function(req, res) {
+        console.log(req.params.serverId);
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            console.log("chefLog -->", chefDetails);
+            if (chefDetails) {
+                //var chefDetails = JSON.parse(chefJson);
+                res.send({
+                    serverId: chefDetails.rowid,
+                    orgname: chefDetails.orgname
+                });
+            } else {
+                res.send(404);
+            }
+
+        });
+
     });
 
 

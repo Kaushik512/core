@@ -19,6 +19,7 @@ var ec2_routes = require('./routes_aws_ec2');
 
 var d4dMasters = require('./routes_d4dMasters');
 
+var organizations = require('./routes_organizations');
 var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
@@ -40,8 +41,9 @@ module.exports.setRoutes = function(app) {
   var adminSessionVerificationFunc = verificationFunctions.adminSessionVerificationFunc;
 
 
-
   d4dMasters.setRoutes(app, adminSessionVerificationFunc);
+  
+  organizations.setRoutes(app,sessionVerificationFunc);
   projects.setRoutes(app,sessionVerificationFunc);
 
   blueprints.setRoutes(app, sessionVerificationFunc);

@@ -43,7 +43,7 @@ module.exports.setRoutes = function(app) {
 									user.groupId = data[0].groupId;
 									console.log('Just before role');
 									cusers.getUserRole(null,user.cn,req);
-
+									
 									usersRoles.getRoleById(user.roleId, function(err, roleData) {
 										if (err) {
 											res.send(500);

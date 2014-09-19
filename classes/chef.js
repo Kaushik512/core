@@ -11,7 +11,7 @@ var Chef = function(settings) {
 
     function initializeChefClient(callback) {
         if (!chefClient) {
-            fileIo.readFile(settings.chefReposLocation + settings.userChefRepoName + '/.chef/' + settings.chefUserPemFile, function(err, key) {
+            fileIo.readFile(settings.chefUserPemFile, function(err, key) {
                 if (err) {
                     callback(err, null);
                     return;
