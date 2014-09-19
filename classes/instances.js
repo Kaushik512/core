@@ -21,6 +21,10 @@ var InstanceSchema = new Schema({
             free: String,
         }
     },
+    chef: {
+        chefId: String,
+        chefNodeName: String
+    },
     blueprintData: {
         blueprintId: String,
         blueprintName: String,

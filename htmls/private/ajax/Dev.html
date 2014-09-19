@@ -1173,6 +1173,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $.get(url,function(data){
             var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
             console.log($parent.length,$parent);
+
+            $parent.find('.moreInfo').trigger('click');
            
             var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
             
@@ -1219,21 +1221,23 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
          $instanceLogModalContainer.modal('show');
          $.get('/instances/'+instanceId+'/logs',function(data){
             var $modalBody = $instanceLogModalContainer.find('.modal-body').empty();
-            var $table  = $('<table></table>');
+            var $table  = $('<div></div>');
             for(var i=0;i<data.length;i++)
              {  
-                var $rowDiv = $('<tr></tr>');
+                var $rowDiv = $('<div class="row"></div>');
                 var timeString = new Date().setTime(data[i].timestamp);
                 var date = new Date(timeString).toUTCString();//converts to human readable strings
-                $rowDiv.append($('<td style="padding-right:5px;width:220px; color:#071910;"></td>').append('<div>'+date+'</div>'));
+                $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>'+date+'</div>'));
 
                 if (data[i].err){
-                    $rowDiv.append($('<td style= "color:red; text-align-right;"></td>').append(data[i].log));
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>'+data[i].log+'</span>'));
                 }
                 else {
-                $rowDiv.append($('<td style="color:DarkBlue; text-align-right;  margin-left:40px;"></td>').append(data[i].log));
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>'+data[i].log+'</span>'));
                 }
+
                 $table.append($rowDiv);
+                $table.append('<hr/>');
                 
             }
             $modalBody.append($table);

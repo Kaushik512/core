@@ -4,6 +4,7 @@ var EC2 = require('../classes/ec2');
 var instancesDao = require('../classes/instances');
 var environmentsDao = require('../classes/d4dmasters/environments.js');
 var logsDao = require('../classes/dao/logsdao.js');
+var masterjsonDao = require('../classes/d4dmasters/masterjson');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -118,7 +119,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 logsDao.insertLog({
                                     referenceId: data._id,
                                     err: false,
-                                    log: "Instance State set to "+instanceState,
+                                    log: "Instance State set to " + instanceState,
                                     timestamp: new Date().getTime()
                                 });
                             });
@@ -192,6 +193,30 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 }
             });
         });
+    });
+
+    app.get('/chef/servers/:serverId', function(req, res) {
+        console.log(req.params.serverId);
+        masterjsonDao.getMasterJson("10", function(err, chefJson) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (chefJson.masterjson && chefJson.masterjson.rows && chefJson.masterjson.rows.row) {
+                
+                for (var i = 0; i < chefJson.masterjson.rows.row.length; i++) {
+                    for (var j = 0; j < chefJson.masterjson.rows.row[i].field.length; j++) {
+                        //console.log(orgsJson.masterjson.rows.row[i].field[j]);
+                        if (chefJson.masterjson.rows.row[i].field[j].name = "orgname") {
+                           
+                            break;
+                        }
+                    }
+                }
+            }
+
+        });
+
     });
 
 

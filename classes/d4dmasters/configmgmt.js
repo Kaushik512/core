@@ -1,4 +1,6 @@
 var d4dModel = require('./d4dmastersmodel.js');
+var settingsController = require('../../controller/settings');
+
 
 function Configmgmt() {
 
