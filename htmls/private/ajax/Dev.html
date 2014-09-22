@@ -504,6 +504,7 @@
         <h4 class="modal-title" id="myModalLabel">Instance Logs</h4>
       </div>
       <div class="modal-body">
+        <div class="logsArea" style="height:400px;overflow-y:auto;"></div>
          
       </div>
       <div class="modal-footer">
@@ -614,15 +615,6 @@ var envId = urlParams['envid'];
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
 
-$.get('/chef/cookbooks',function(data){
-    var keys = Object.keys(data);
-    var $cookbooksList = $('.chefCookbookList'); 
-    for(var i=0;i<keys.length;i++) {
-      var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-      $cookbooksList.append($option);
-    }
-
-});
 
 
 $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data){
@@ -853,8 +845,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
           var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','start'));
           $divActionBtnContainer.append($divActionStartContainer);
-
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist'));
+          if(!data[i].chef) {
+            data[i].chef = {};
+          }  
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId',data[i].chef.serverId));
           $divActionBtnContainer.append($divActionReStartContainer);
           var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
           $divActionBtnContainer.append($divActionShutdownContainer);
@@ -994,11 +988,13 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         if(type==='stop') {
             url = '/instances/'+instanceId+'/stopInstance'
         }
+        var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+        $parent.find('.moreInfo').trigger('click');
         $.get(url,function(data){
-            var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+            
             console.log($parent.length,$parent);
 
-            $parent.find('.moreInfo').trigger('click');
+            
            
             var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
             
@@ -1033,21 +1029,55 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
     $('.instanceActionBtnUpdateRunlist').click(function(e){
          var $this = $(this);
-         var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
-         $('.chefCookbookList').attr('data-instanceId',instanceId);
-         $('#chefRunModalContainer').modal('show');
+         var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');
+         var chefServerId = $this.attr('data-chefServerId');
+
+         $chefRunModalContainer = $('#chefRunModalContainer');
+         $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
+         $chefRunModalContainer.modal('show');
+         $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
+            var keys = Object.keys(data);
+            var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId',instanceId).attr('multiple',true); 
+            for(var i=0;i<keys.length;i++) {
+             var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+             $cookbooksList.append($option);
+            }
+             $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
+
+        });
+
+
+
     });
 
     $('.moreInfo,.tableMoreInfo').click(function(e){
          var instanceId =  $(this).attr('data-instanceId');
+         var timeout;
          var $instanceLogModalContainer =  $('#instanceLogModalContainer');
-         $instanceLogModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+         $instanceLogModalContainer.on('hidden.bs.modal', function (e) {
+            $instanceLogModalContainer.off('hidden.bs.modal');
+            if(timeout) {
+                clearTimeout(timeout);
+            }
+         });
+         $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
          $instanceLogModalContainer.modal('show');
-         $.get('/instances/'+instanceId+'/logs',function(data){
-            var $modalBody = $instanceLogModalContainer.find('.modal-body').empty();
+         var lastTimestamp;
+         function pollLogs(timestamp,delay,clearData) {
+         var url = '/instances/'+instanceId+'/logs';
+         if(timestamp) {
+            url = url + '?timestamp='+timestamp;
+         }
+         
+         timeout = setTimeout(function(){
+         $.get(url,function(data){
+            var $modalBody = $instanceLogModalContainer.find('.logsArea')
+            if(clearData) {
+               $modalBody.empty();
+            }
             var $table  = $('<div></div>');
-            for(var i=0;i<data.length;i++)
-             {  
+            
+            for(var i=0;i<data.length;i++) {  
                 var $rowDiv = $('<div class="row"></div>');
                 var timeString = new Date().setTime(data[i].timestamp);
                 var date = new Date(timeString).toUTCString();//converts to human readable strings
@@ -1064,10 +1094,25 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
                 $table.append('<hr/>');
                 
             }
-            $modalBody.append($table);
+           
 
-            
-         });
+            if(data.length) {
+                lastTimestamp = data[data.length -1].timestamp;
+                console.log(lastTimestamp);
+                $modalBody.scrollTop($modalBody[0].scrollHeight+100);
+            }
+
+            $modalBody.append($table);
+            console.log('polling again');
+            if($instanceLogModalContainer.data()['bs.modal'].isShown) {
+                   pollLogs(lastTimestamp,1000,false);
+            } else {
+                 console.log('not polling again');
+            }            
+          });
+         },delay);
+        }
+        pollLogs(lastTimestamp,0,true);
 
 
     });
@@ -1191,6 +1236,9 @@ $('.btnUpdateRunlist').click(function(e){
   $.post('/instances/'+instanceId+'/updateRunlist',{
     runlist:runlist
   },function(data){
+      $chefRunModalContainer = $('#chefRunModalContainer').modal('hide');
+      var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+      $parent.find('.moreInfo').trigger('click');
       console.log(data);
   });
 });

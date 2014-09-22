@@ -108,50 +108,36 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 }
 
             }
-            instancesDao.createInstance(instance, function(err, data) {
-                if (err) {
-                    console.log(err, 'occured in inserting node in mongo');
-                    return;
-                }
-                logsDao.insertLog({
-                    referenceId: data._id,
-                    err: false,
-                    log: "Node Imported",
-                    timestamp: new Date().getTime()
-                });
-                settingsController.getAwsSettings(function(settings) {
-                    var ec2 = new EC2(settings);
-                    if (platformId) {
-                        ec2.getInstanceState(platformId, function(err, state) {
-                            var instanceState;
-                            if (err) {
-                                instanceState = 'unknown';
-                            } else {
-                                instanceState = state
-                            }
-                            instancesDao.updateInstanceState(data._id, instanceState, function(err, data) {
+
+            settingsController.getAwsSettings(function(settings) {
+                var ec2 = new EC2(settings);
+                if (platformId) {
+                    ec2.getInstanceState(platformId, function(err, state) {
+                        var instanceState;
+                        if (err) {
+                            return;
+                        }
+                        instance.instanceState = state
+
+                        if (instance.instanceState) {
+
+                            instancesDao.createInstance(instance, function(err, data) {
                                 if (err) {
                                     console.log(err, 'occured in inserting node in mongo');
                                     return;
                                 }
-                                console.log('instance state updated');
                                 logsDao.insertLog({
                                     referenceId: data._id,
                                     err: false,
-                                    log: "Instance State set to " + instanceState,
+                                    log: "Node Imported",
                                     timestamp: new Date().getTime()
                                 });
+
                             });
+                        }
 
-
-
-                        });
-                    }
-
-                });
-
-
-
+                    });
+                }
             });
 
         }
@@ -208,10 +194,27 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
     });
 
-    app.get('/chef/cookbooks', function(req, res) {
-        settingsController.getChefSettings(function(settings) {
-            var chef = new Chef(settings);
+    app.get('/chef/servers/:serverId/cookbooks', function(req, res) {
+
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
             chef.getCookbooksList(function(err, cookbooks) {
+                console.log(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -219,7 +222,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(cookbooks);
                 }
             });
+
+
         });
+
     });
 
     app.get('/chef/servers/:serverId', function(req, res) {

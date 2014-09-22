@@ -20,7 +20,7 @@ module.exports = {
     chefReposLocation: "/home/anshul/chef-repos/",
 	userChefRepoName : "pcjoshi9",
 	chefUserName: "pcjoshi9",
-	chefUserPemFile: "pcjoshi9.pem",
+	chefUserPemFile: "/home/anshul/chef-repos/pcjoshi9/.chef/pcjoshi9.pem",
 	chefValidationPemFile:"pjlab-validator.pem",
 	hostedChefUrl: "https://api.opscode.com/organizations/pjlab",
 	defaultChefCookbooks:['recipe[a]']

@@ -36,6 +36,7 @@ var LogsDao = function() {
         };
 
         if (timestamp) {
+            
             queryObj.timestamp = {
                 "$gt": timestamp
             };

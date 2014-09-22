@@ -99,10 +99,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             if (data.length) {
 
+                logsDao.insertLog({
+                    referenceId: req.params.instanceId,
+                    err: false,
+                    log: "Instance Stopping",
+                    timestamp: new Date().getTime()
+                });
+
                 settingsController.getAwsSettings(function(settings) {
                     var ec2 = new EC2(settings);
                     ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
                         if (err) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: "Unable to stop instance",
+                                timestamp: new Date().getTime()
+                            });
                             res.send(500);
                             return;
                         }
@@ -118,18 +131,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             console.log('instance state upadated');
                         });
 
-                        logsDao.insertLog({
-                            referenceId: req.params.instanceId,
-                            err: false,
-                            log: "Instance Stopping",
-                            timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update bootStrapLog');
-                                return;
-                            }
-                            console.log('bootStrapLog updated');
-                        });
+
 
 
                     }, function(err, state) {
@@ -178,10 +180,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             if (data.length) {
 
+                logsDao.insertLog({
+                    referenceId: req.params.instanceId,
+                    err: false,
+                    log: "Instance Starting",
+                    timestamp: new Date().getTime()
+                });
+
                 settingsController.getAwsSettings(function(settings) {
                     var ec2 = new EC2(settings);
                     ec2.startInstance([data[0].platformId], function(err, startingInstances) {
                         if (err) {
+
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: "Unable to start instance",
+                                timestamp: new Date().getTime()
+                            });
                             res.send(500);
                             return;
                         }
@@ -195,14 +211,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             console.log('instance state upadated');
-                        });
-
-
-                        logsDao.insertLog({
-                            referenceId: req.params.instanceId,
-                            err: false,
-                            log: "Instance Starting",
-                            timestamp: new Date().getTime()
                         });
 
                     }, function(err, state) {
@@ -255,6 +263,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/instances/:instanceId/logs', function(req, res) {
         var timestamp = req.query.timestamp;
+        if (timestamp) {
+            timestamp = parseInt(timestamp);
+        }
         logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
             if (err) {
                 res.send(500);

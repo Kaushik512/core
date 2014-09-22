@@ -22,7 +22,7 @@ var InstanceSchema = new Schema({
         }
     },
     chef: {
-        chefServerId: String,
+        serverId: String,
         chefNodeName: String
     },
     blueprintData: {

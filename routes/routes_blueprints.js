@@ -61,6 +61,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
             if (err) {
+                console.log(err);
                 res.send(500);
                 return;
             }
@@ -274,6 +275,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     chef.getEnvironment(blueprint.envId, function(err, env) {
                         if (err) {
+                            console.log(err);
                             res.send(500);
                             return;
                         }
