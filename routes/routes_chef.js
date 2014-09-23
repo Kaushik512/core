@@ -103,7 +103,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     chefNodeName: node.nodeName
                 },
                 blueprintData: {
-                    blueprintName: "chef import",
+                    blueprintName: node.nodeName,
                     templateId: "chef_import"
                 }
 
