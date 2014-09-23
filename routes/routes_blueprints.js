@@ -4,6 +4,8 @@ var instancesDao = require('../classes/instances');
 var EC2 = require('../classes/ec2.js');
 var Chef = require('../classes/chef.js');
 var logsDao = require('../classes/dao/logsdao.js');
+var configmgmtDao = require('../classes/d4dmasters/configmgmt');
+
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -82,195 +84,214 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(404);
                     return;
                 }
-                settingsController.getSettings(function(settings) {
-                    var chef = new Chef(settings.chef);
+                configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(500);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
+                    });
 
                     function launchInstance() {
 
+                        settingsController.getSettings(function(settings) {
 
-                        var ec2 = new EC2(settings.aws);
-                        ec2.launchInstance(null, blueprint.instanceType, settings.aws.securityGroupId, function(err, instanceData) {
-                            if (err) {
-                                console.log(err);
-                                res.send(500);
-                                return;
-                            }
-                            console.log(version.runlist);
-                            console.log(instanceData);
-                            var instance = {
-                                projectId: blueprint.projectId,
-                                envId: blueprint.envId,
-                                chefNodeName: instanceData.InstanceId,
-                                runlist: version.runlist,
-                                platformId: instanceData.InstanceId,
-                                instanceIP: instanceData.PublicIpAddress,
-                                instanceState: instanceData.State.Name,
-                                bootStrapStatus: 'waiting',
-                                hardware: {
-                                    platform: 'unknown',
-                                    platformVersion: 'unknown',
-                                    architecture: 'unknown',
-                                    memory: {
-                                        total: 'unknown',
-                                        free: 'unknown',
-                                    }
-                                },
-                                blueprintData: {
-                                    blueprintId: blueprint._id,
-                                    blueprintName: blueprint.name,
-                                    templateId: blueprint.templateId,
-                                    templateType: blueprint.templateType,
-                                    templateComponents: blueprint.templateComponents
-                                }
-                            }
-                            instancesDao.createInstance(instance, function(err, data) {
+                            var ec2 = new EC2(settings.aws);
+                            ec2.launchInstance(null, blueprint.instanceType, settings.aws.securityGroupId, function(err, instanceData) {
                                 if (err) {
                                     console.log(err);
                                     res.send(500);
                                     return;
                                 }
-                                instance.id = data._id;
-
-                                logsDao.insertLog({
-                                    referenceId: instance.id,
-                                    err: false,
-                                    log: "Starting instance",
-                                    timestamp: new Date().getTime()
-                                }, function(err, data) {
+                                console.log(version.runlist);
+                                console.log(instanceData);
+                                var instance = {
+                                    projectId: blueprint.projectId,
+                                    envId: blueprint.envId,
+                                    chefNodeName: instanceData.InstanceId,
+                                    runlist: version.runlist,
+                                    platformId: instanceData.InstanceId,
+                                    instanceIP: instanceData.PublicIpAddress,
+                                    instanceState: instanceData.State.Name,
+                                    bootStrapStatus: 'waiting',
+                                    hardware: {
+                                        platform: 'unknown',
+                                        platformVersion: 'unknown',
+                                        architecture: 'unknown',
+                                        memory: {
+                                            total: 'unknown',
+                                            free: 'unknown',
+                                        }
+                                    },
+                                    chef: {
+                                        serverId: blueprint.chefServerId,
+                                        chefNodeName: instanceData.InstanceId
+                                    },
+                                    blueprintData: {
+                                        blueprintId: blueprint._id,
+                                        blueprintName: blueprint.name,
+                                        templateId: blueprint.templateId,
+                                        templateType: blueprint.templateType,
+                                        templateComponents: blueprint.templateComponents
+                                    }
+                                }
+                                instancesDao.createInstance(instance, function(err, data) {
                                     if (err) {
-                                        console.log('unable to update log');
+                                        console.log(err);
+                                        res.send(500);
                                         return;
                                     }
-                                    console.log('log updated');
-                                });
+                                    instance.id = data._id;
 
-                                ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
-                                    if (err) {
-                                        return;
-                                    }
-                                    console.log(instanceData);
-
-                                    instancesDao.updateInstanceIp(instance.id, instanceData.PublicIpAddress, function(err, updateCount) {
+                                    logsDao.insertLog({
+                                        referenceId: instance.id,
+                                        err: false,
+                                        log: "Starting instance",
+                                        timestamp: new Date().getTime()
+                                    }, function(err, data) {
                                         if (err) {
-                                            console.log("update instance ip err ==>", err);
+                                            console.log('unable to update log');
                                             return;
                                         }
-                                        console.log('instance ip upadated');
+                                        console.log('log updated');
                                     });
 
-                                    instancesDao.updateInstanceState(instance.id, instanceData.State.Name, function(err, updateCount) {
+                                    ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
                                         if (err) {
-                                            console.log("update instance state err ==>", err);
                                             return;
                                         }
-                                        console.log('instance state upadated');
-                                    });
+                                        console.log(instanceData);
+
+                                        instancesDao.updateInstanceIp(instance.id, instanceData.PublicIpAddress, function(err, updateCount) {
+                                            if (err) {
+                                                console.log("update instance ip err ==>", err);
+                                                return;
+                                            }
+                                            console.log('instance ip upadated');
+                                        });
+
+                                        instancesDao.updateInstanceState(instance.id, instanceData.State.Name, function(err, updateCount) {
+                                            if (err) {
+                                                console.log("update instance state err ==>", err);
+                                                return;
+                                            }
+                                            console.log('instance state upadated');
+                                        });
 
 
 
-                                    chef.bootstrapInstance({
-                                        instanceIp: instanceData.PublicIpAddress,
-                                        pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
-                                        runlist: instance.runlist,
-                                        instanceUserName: settings.aws.instanceUserName,
-                                        nodeName: instanceData.InstanceId,
-                                        environment: blueprint.envId
-                                    }, function(err, code) {
+                                        chef.bootstrapInstance({
+                                            instanceIp: instanceData.PublicIpAddress,
+                                            pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
+                                            runlist: instance.runlist,
+                                            instanceUserName: settings.aws.instanceUserName,
+                                            nodeName: instanceData.InstanceId,
+                                            environment: blueprint.envId
+                                        }, function(err, code) {
 
-                                        console.log('process stopped ==> ', err, code);
-                                        if (err) {
-                                            console.log("knife launch err ==>", err);
-                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                            console.log('process stopped ==> ', err, code);
+                                            if (err) {
+                                                console.log("knife launch err ==>", err);
+                                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
 
-                                            });
-                                        } else {
-                                            if (code == 0) {
-                                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                    if (err) {
-                                                        console.log("Unable to set instance bootstarp status");
-                                                    } else {
-                                                        console.log("Instance bootstrap status set to success");
-                                                    }
                                                 });
-
-                                                chef.getNode(instance.chefNodeName, function(err, nodeData) {
-                                                    if (err) {
-                                                        console.log(err);
-                                                        return;
-                                                    }
-                                                    var hardwareData = {};
-                                                    hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                    hardwareData.platform = nodeData.automatic.platform;
-                                                    hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                    hardwareData.memory = {};
-                                                    hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                    hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                            } else {
+                                                if (code == 0) {
+                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                         if (err) {
-                                                            console.log("Unable to set instance hardware details");
+                                                            console.log("Unable to set instance bootstarp status");
                                                         } else {
-                                                            console.log("Instance hardware details set successessfully");
+                                                            console.log("Instance bootstrap status set to success");
                                                         }
                                                     });
-                                                });
 
-                                            } else {
-                                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                                    if (err) {
-                                                        console.log("Unable to set instance bootstarp status");
-                                                    } else {
-                                                        console.log("Instance bootstrap status set to failed");
-                                                    }
-                                                });
+                                                    chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                                        if (err) {
+                                                            console.log(err);
+                                                            return;
+                                                        }
+                                                        var hardwareData = {};
+                                                        hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                        hardwareData.platform = nodeData.automatic.platform;
+                                                        hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                        hardwareData.memory = {};
+                                                        hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                        hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                        instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                            if (err) {
+                                                                console.log("Unable to set instance hardware details");
+                                                            } else {
+                                                                console.log("Instance hardware details set successessfully");
+                                                            }
+                                                        });
+                                                    });
 
+                                                } else {
+                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                        if (err) {
+                                                            console.log("Unable to set instance bootstarp status");
+                                                        } else {
+                                                            console.log("Instance bootstrap status set to failed");
+                                                        }
+                                                    });
+
+                                                }
                                             }
-                                        }
 
-                                    }, function(stdOutData) {
+                                        }, function(stdOutData) {
 
-                                        logsDao.insertLog({
-                                            referenceId: instance.id,
-                                            err: false,
-                                            log: stdOutData.toString('ascii'),
-                                            timestamp: new Date().getTime()
-                                        }, function(err, data) {
-                                            if (err) {
-                                                console.log('unable to update bootStrapLog');
-                                                return;
-                                            }
-                                            console.log('bootStrapLog updated');
+                                            logsDao.insertLog({
+                                                referenceId: instance.id,
+                                                err: false,
+                                                log: stdOutData.toString('ascii'),
+                                                timestamp: new Date().getTime()
+                                            }, function(err, data) {
+                                                if (err) {
+                                                    console.log('unable to update bootStrapLog');
+                                                    return;
+                                                }
+                                                console.log('bootStrapLog updated');
+                                            });
+
+                                        }, function(stdErrData) {
+
+                                            logsDao.insertLog({
+                                                referenceId: instance.id,
+                                                err: true,
+                                                log: stdErrData.toString('ascii'),
+                                                timestamp: new Date().getTime()
+                                            }, function(err, data) {
+                                                if (err) {
+                                                    console.log('unable to update bootStrapLog');
+                                                    return;
+                                                }
+                                                console.log('bootStrapLog updated');
+                                            });
+
+
                                         });
-
-                                    }, function(stdErrData) {
-
-                                        logsDao.insertLog({
-                                            referenceId: instance.id,
-                                            err: true,
-                                            log: stdErrData.toString('ascii'),
-                                            timestamp: new Date().getTime()
-                                        }, function(err, data) {
-                                            if (err) {
-                                                console.log('unable to update bootStrapLog');
-                                                return;
-                                            }
-                                            console.log('bootStrapLog updated');
-                                        });
-
 
                                     });
 
+                                    res.send(200, {
+                                        "id": instance.id,
+                                        "message": "instance launch success"
+                                    });
                                 });
 
-                                res.send(200, {
-                                    "id": instance.id,
-                                    "message": "instance launch success"
-                                });
+
                             });
 
-
                         });
-
-
                     }
 
                     chef.getEnvironment(blueprint.envId, function(err, env) {

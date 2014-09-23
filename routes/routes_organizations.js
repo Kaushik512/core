@@ -1,4 +1,8 @@
 var masterjsonDao = require('../classes/d4dmasters/masterjson.js');
+var configmgmtDao = require('../classes/d4dmasters/configmgmt.js');
+var Chef = require('../classes/chef');
+
+
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
@@ -149,6 +153,39 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
 
 
+        });
+
+    });
+
+    app.get('/organizations/:orgname/cookbooks', function(req, res) {
+        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname,function(err,chefDetails){
+            if(err){
+                res.send(500);
+                return;
+            }
+            console.log("chefdata",chefDetails);
+
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
+            chef.getCookbooksList(function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send({
+                        serverId:chefDetails.rowid,
+                        cookbooks:cookbooks
+                    });
+                }
+            });
+            
         });
 
     });

@@ -807,6 +807,16 @@
 
                         <div class="row glowBox" style="margin:0px;">
                             <section class="col col-6" style="float:right;padding-top:17px;">
+                                <label for="">Choose Org 
+                                </label>
+                                <label class="select"> 
+                                 <select id="orgnameSelect" class="form-control" style="width: 200px;margin-top:5px;">
+                                  </select>
+                                 </label>  
+                            </section>
+                            <section class="col col-6" style="float:right;padding-top:17px;">
+
+                                   
                                     <select id="cookbookSelect" class="form-control" style="width: 200px;margin-top:5px;" size="10" multiple="multiple"></select>
                                 
                                                                                 
@@ -880,16 +890,7 @@
                                                                                 <input type="text" id="blueprintNameInput"/>
                                                                                 </label>                                          
                                                                             </section>
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Organization
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select id="orgListInput">
-                                                                                        
-                                                                                    </select>
-                                                                                </label>   
-                                                                                </label>
-                                                                            </section>
+                                                                            
                                                                             <section class="col col-6">
                                                                                 <label for="category">Business Group
                                                                                 </label>
@@ -1083,7 +1084,8 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.templateId = $selectedItem.attr('data-templateId');
             reqBody.templateType = $selectedItem.attr('data-templateType');
             reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
-            reqBody.runlist = $('#suiteFiles').val();
+            reqBody.runlist = $('#cookbookSelect').val();
+            reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
             reqBody.instanceType = $('.instanceType').val();
             console.log(reqBody);
 
@@ -1159,107 +1161,81 @@ $('#bootstrap-wizard-1').bootstrapWizard({
               $('.selectedTemplateArea').empty().append($this.clone(false));
 
               $this.addClass('role-Selected');
-    })
+    });
 
-
-
-  var serviceURL = "/d4dMasters/";
-
-          function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
-                readMasterJson_Top(jsonID);
-                formData = d4ddata.masterjson;
-                // var comparedField = "orgname";
-                //  var filterByValue = "Scholastic";
-                //  var outputField = "productgroupname";
-                var result = [];
-                //debugger;
-                $.each(eval(formData.rows.row), function (i, item) {
-                    $.each(item.field, function (k, item1) {
-
-                        if (item1.name == comparedField && (item1.values.value == filterByValue || filterByValue == '')) {
-                            // alert(item1.values.value);
-                            //found the row, now get the next column
-                           // debugger;
-                            $.each(item.field, function (j, item2) {
-                                if (item2.name == outputField) {
-                                    //  alert(item2.values.value);
-                                    result.push(item2.values.value);
-                                }
-                            });
-                        }
-                    });
-                });
-                return (result);
-            }
-
-            function readMasterJson_Top(section) {
-
-                $.ajax({
+     $.ajax({
                     type: "get",
-                    dataType: "text",
+                    dataType: "json",
 
                     async: false,
-                    url: serviceURL + "readmasterjson/" + section,
-                    success: function (data) {
-                        // alert(data.toString());   
-                        d4ddata = JSON.parse(data);
-                    },
-                    failure: function (data) {
-                        alert(data.toString());
+                    url: "/organizations/getTree",
+                    success:function(data){
+                        var $orgListInput = $('#orgnameSelect');
+                        $orgListInput.append($('<option></option>').val('choose').html('choose'));
+                        $bgList = $('#bgListInput');
+                        var $envList = $('#envList');
+                        for(var i=0;i<data.length;i++) {
+                            $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist',data[i].businessGroups).data('envList',data[i].environments));
+                        }
+                        $orgListInput.change(function(e){
+                             var orgName = $(this).val();
+                             if(orgName == 'choose') {
+                                return;
+                             }
+                             var $selectedOrgOption =  $(this).find(":selected");
+                            $bgList.empty();
+                            $bgList.append($('<option></option>').val('choose').html('choose'));
+                            var getBGs =  $selectedOrgOption.data('bglist');
+                            for(var i=0;i<getBGs.length;i++) {
+                                $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList',getBGs[i].projects));
+                            }
+    
+                             $envList.empty();
+                            var getEnv = $selectedOrgOption.data('envList');
+                            for(var i=0;i<getEnv.length;i++) {
+                                 $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
+                            }
+                            $.ajax({
+                            url:'/organizations/'+orgName+'/cookbooks',
+                            method:'GET',
+                            async:false,
+                            success :function(data) {
+                             var keys = Object.keys(data.cookbooks);
+                             var $cookbooksList = $('#cookbookSelect').data('chefServerId',data.serverId); 
+                             for(var i=0;i<keys.length;i++) {
+                                var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+                                $cookbooksList.append($option);
+                             }
+                                $cookbooksList.multiSelect({});
+                            },
+                          });    
+
+                        });
+
+                        var $projectList = $('#projectListInput');
+                            $bgList.change(function(e){
+                            var bgName = $(this).val();
+                            if(bgName == 'choose') {
+                                return;
+                            }
+                            var $selectedOrgOption =  $(this).find(":selected");
+                            $projectList.empty();
+                            $projectList.append($('<option></option>').val('choose').html('choose'));
+                            var getProjs = $selectedOrgOption.data('projList');
+                            for(var i=0;i<getProjs.length;i++) {
+                                $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+                            }
+                        });
+
+                        
+
+
+
                     }
                 });
-                return (d4ddata);
-            }
-
-var getOrgs = getRelatedValues_Top(1, "orgname", '', "orgname");
-console.log(getOrgs);
 
 
-var $orgListInput = $('#orgListInput');
-$orgListInput.append($('<option></option>').val('choose').html('choose'));
-for(var i=0;i<getOrgs.length;i++) {
-    $orgListInput.append($('<option></option>').val(getOrgs[i]).html(getOrgs[i]));
-}
-$bgList = $('#bgListInput');
-var $envList = $('#envList');
-
-
-
-$orgListInput.change(function(e){
-    var orgName = $(this).val();
-    if(orgName == 'choose') {
-        return;
-    }
-    $bgList.empty();
-    $bgList.append($('<option></option>').val('choose').html('choose'));
-    var getBGs = getRelatedValues_Top(2, "orgname",orgName, "productgroupname"); 
-    for(var i=0;i<getBGs.length;i++) {
-       $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
-    }
-    
-    $envList.empty();
-    var getEnv = getRelatedValues_Top(3, "orgname", orgName, "environmentname");
-    for(var i=0;i<getEnv.length;i++) {
-       $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
-    }
-
-});
-
-var $projectList = $('#projectListInput');
-$bgList.change(function(e){
-    var bgName = $(this).val();
-    if(bgName == 'choose') {
-        return;
-    }
-    $projectList.empty();
-    $projectList.append($('<option></option>').val('choose').html('choose'));
-
-   var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
-    for(var i=0;i<getProjs.length;i++) {
-       $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
-    }
-});
-
+/*
  $.ajax({
     url:'/chef/cookbooks',
     method:'GET',
@@ -1273,7 +1249,7 @@ $bgList.change(function(e){
           }
         $cookbooksList.multiSelect({});
     },
- })
+ })*/
  /*$.get('/chef/cookbooks',function(data){
     var keys = Object.keys(data);
     var $cookbooksList = $('#cookbookSelect'); 

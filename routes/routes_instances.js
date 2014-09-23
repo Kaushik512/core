@@ -5,6 +5,8 @@ var EC2 = require('../classes/ec2.js');
 var Chef = require('../classes/chef.js');
 var taskstatusDao = require('../classes/taskstatus');
 var logsDao = require('../classes/dao/logsdao.js');
+var configmgmtDao = require('../classes/d4dmasters/configmgmt');
+
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -38,52 +40,70 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
-                settingsController.getSettings(function(settings) {
-                    var chef = new Chef(settings.chef);
-
-                    chef.runChefClient(req.body.runlist, {
-                        privateKey: settings.aws.pemFileLocation + settings.aws.pemFile,
-                        username: settings.aws.instanceUserName,
-                        host: data[0].instanceIP,
-                        port: 22
-                    }, function(err, retCode) {
-                        if (err) {
-                            return;
-                        }
-                        console.log("knife ret code", retCode);
-                        if (retCode == 0) {
-                            console.log('updating node runlist in db');
-                            instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
-                                if (err) {
-                                    return;
-                                }
-                                logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
-                                    err: false,
-                                    log: 'instance runlist updated',
-                                    timestamp: new Date().getTime()
-                                });
-                            });
-                        } else {
-                            return;
-                        }
-                    }, function(stdOutData) {
-                        logsDao.insertLog({
-                            referenceId: req.params.instanceId,
-                            err: false,
-                            log: stdOutData.toString('ascii'),
-                            timestamp: new Date().getTime()
-                        });
-
-                    }, function(stdOutErr) {
-                        logsDao.insertLog({
-                            referenceId: req.params.instanceId,
-                            err: true,
-                            log: stdOutErr.toString('ascii'),
-                            timestamp: new Date().getTime()
-                        });
+                configmgmtDao.getChefServerDetails(data[0].chef.serverId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(500);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
                     });
-                    res.send(200);
+
+                    settingsController.getSettings(function(settings) {
+
+                        chef.runChefClient(req.body.runlist, {
+                            privateKey: settings.aws.pemFileLocation + settings.aws.pemFile,
+                            username: settings.aws.instanceUserName,
+                            host: data[0].instanceIP,
+                            port: 22
+                        }, function(err, retCode) {
+                            if (err) {
+                                return;
+                            }
+                            console.log("knife ret code", retCode);
+                            if (retCode == 0) {
+                                console.log('updating node runlist in db');
+                                instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+                                    if (err) {
+                                        return;
+                                    }
+                                    logsDao.insertLog({
+                                        referenceId: req.params.instanceId,
+                                        err: false,
+                                        log: 'instance runlist updated',
+                                        timestamp: new Date().getTime()
+                                    });
+                                });
+                            } else {
+                                return;
+                            }
+                        }, function(stdOutData) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: false,
+                                log: stdOutData.toString('ascii'),
+                                timestamp: new Date().getTime()
+                            });
+
+                        }, function(stdOutErr) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: stdOutErr.toString('ascii'),
+                                timestamp: new Date().getTime()
+                            });
+                        });
+                        res.send(200);
+                    });
+
                 });
             } else {
                 res.send(404);

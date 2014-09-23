@@ -2,6 +2,7 @@ var Process = require("./utils/process");
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var SSH = require('./utils/sshexec');
+var chefDefaults = require('../config/chef_config');
 
 var Chef = function(settings) {
 
@@ -195,7 +196,7 @@ var Chef = function(settings) {
 
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
         var options = {
-            cwd: settings.chefReposLocation + settings.userChefRepoName,
+            cwd: settings.userChefRepoLocation,
             onError: function(err) {
                 callback(err, null);
             },
@@ -218,7 +219,7 @@ var Chef = function(settings) {
             params.runlist = [];
 
         }
-        var runlist = settings.defaultChefCookbooks.concat(params.runlist);
+        var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
 
         var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + runlist.join(), '-x' + params.instanceUserName, '-N' + params.nodeName, '-E' + params.environment], options);
         proc.start();
