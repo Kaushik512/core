@@ -116,10 +116,6 @@
      				</li>
 				</div>
 
-			
-
-				
-
 			</div>
 			<!-- end pulled right: nav area -->
 		</header>
@@ -366,7 +362,7 @@
               			  });
               			  $ulOrgList.append($li);
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
-              			  	var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><i class="fa fa-lg fa-fw fa-rub"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
+              			  	var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;"><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
 			     				if(i==0 && j==0) {
 			  	   					$liSideBar.find('a').attr('id','firstA'); 
 			     				}
@@ -374,12 +370,12 @@
 			     				var $projectUl = $('<ul></ul>'); 
                   				$liSideBar.append($projectUl); 
                   				for(var k=0;k<data[i].businessGroups[j].projects.length;k++) {  
-                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-lg fa-fw fa-external-link"></i><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
+                  					var liProject = $('<li></li>').append('<a href="#"><img src="img/demo/Project.png" alt="Project" style="padding-right:5px;"><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
                   					$projectUl.append(liProject);
                   					  var $envUl = $('<ul></ul>');
                     				 liProject.append($envUl); 
                   					  for(var l=0;l<data[i].environments.length;l++) {
-                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'"><i class="fa fa-truck"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'"><img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
                     						$envUl.append($liEnv);
                         					$liEnv.click(function(e){
 	                        					window.selectedOrgName = $(this).attr('data-OrgName');

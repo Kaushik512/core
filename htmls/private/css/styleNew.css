@@ -1,6 +1,17 @@
+.instance-bootstrap-list-image{
+    margin-left:22px;
+    margin-top:-2px;
+    border-radius:0px !important;
+    box-shadow:none !important;
+}
+.instance-bootstrap-list-faimage{
+    border-radius:0px !important;
+    box-shadow:none !important; 
+}
 .role-Selectedcard{
     border: 2px solid #40afb1;
-    border-radius:4px;
+    border-radius:12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
 }
 .card-backflip{
     background-repeat:no-repeat;
@@ -60,9 +71,7 @@ margin-top:15px;
     top: 0;
     left: 0;
 }
-.front {
-    background: white;
-}
+
 .back {
     
     /*border-radius: 11px;*/
@@ -382,14 +391,14 @@ html
 
 .blueprintdiv{
     background-color: #ffffff;
-    border-color: #e5e5e5 #eee #eee;
+    border:1px solid #dddddd;
     border-style: solid;
     border-width: 1px;
     height: 172px;
     margin: 15px 15px 15px;
     padding: 0 !important;
     position: relative;
-     width: 64%;
+    width: 64%;
 }
 
 
@@ -1175,14 +1184,14 @@ hr.layout {
     display: block;
     line-height: 1.42857;
     margin-bottom: 20px;
-    margin-left: 4px;
-    /*margin-top: 3px;
+    /*margin-left: 4px;
+    margin-top: 3px;
     max-width: 100px;*/
     /*min-height: 145px;*//*arabinda*/
     /*After depolyed changes
     min-height: 270px;*/
     max-width: 170px;
-    min-height: 202px;
+    min-height: 204px;
 
     padding-bottom: 4px;
     padding-left: 4px;
@@ -1734,13 +1743,13 @@ background-repeat:no-repeat;
 background-position: center;
 }
 .instancestatusindicator.started{ 
-background-image:url('../img/indicator_started.png');
+background-image:url('../img/aws_logo_started.png');
 }
 .instancestatusindicator.stopped{
-background-image:url('../img/indicator_stopped.png');
+background-image:url('../img/aws_logo_stopped.png');
 }
 .instancestatusindicator.paused{
-background-image:url('../img/indicator_paused.png');
+background-image:url('../img/aws_logo_paused.png');
 }
 .instancestatusindicator.pending{
 background-image:url('../img/rsz_inactive.png');
