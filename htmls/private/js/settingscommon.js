@@ -1,6 +1,6 @@
-function deleteItem(docid, key, value) {
+function deleteItem(docid, key, value,button) {
 
-    if (confirm('You are about to remove this item 1 ' + docid + ':' + key + ':' + value)) {
+    if (confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"')) {
 
         $.ajax({
             type: "get",
@@ -12,7 +12,11 @@ function deleteItem(docid, key, value) {
                 // alert(data.toString());  
                 // debugger;
                 //d4ddata = JSON.parse(data);
-                $('#refreshpage').click();
+               // $('#refreshpage').click();
+                $(button).closest('tr').detach();
+
+                var tab = 'envtable';
+                $('#' + tab).dataTable();
             },
             failure: function (data) {
                 // debugger;
@@ -129,7 +133,7 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
 
                             var deletebutton = $('.rowtemplate').find("[title='Remove']");
                             if (deletebutton) {
-                                deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\");');
+                                deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\",this);');
                             }
                         }
                         setOrgname = false;
@@ -342,6 +346,10 @@ function readform(formID) {
                         }
                         if (inputC.getType().toLowerCase() == "select") {
                             $(inputC).val(v[k1]);
+                            $(inputC).attr('savedvalue',v[k1])
+                        }
+                        if (inputC.getType().toLowerCase() == "div") {
+                            $(inputC).attr('savedvalue',v[k1])
                         }
                     });
                 }
@@ -349,12 +357,32 @@ function readform(formID) {
             }
         });
     });
+    //Force clicking on selects that has dependent controls
+    $('[linkedfields]').each(function(){
+      $(this).trigger('change');
+      var ctrls = $(this).attr('linkedfields').replace(/'/g,"").replace(/]/g,"").replace(/\[/g,"").split(',');
+      for(var i = 0; i < ctrls.length; i++){
+        var ctrl = $("#" + ctrls[i]);
+        if(ctrl.getType() == "select"){
+          ctrl.val(ctrl.attr('savedvalue'));
+        }
+        if(ctrl.getType() == "div"){
+          var divselect = ctrl.attr('savedvalue').split(',');
+         // alert(divselect.length);
+          for(var j = 0; j < divselect.length; j++){
+            ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
+          }
+        }
+      }
+    });
+
+
   //  alert('almost exiting');
     //Setting the unique field with current value
     $('input[unique="true"]').each(function(){
-        alert($(this).val());
+       // alert($(this).val());
         $(this).attr('initialvalue',$(this).val());
-        alert($(this).attr('initialvalue'));
+       // alert($(this).attr('initialvalue'));
     });
     return (true);
 }
@@ -372,7 +400,7 @@ function saveform(formID){
           if(($(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '')
           {
             data1.append($(this).prop("id"),$(this).val());
-            alert("this alert "+ $(this).prop("id") + ":" + $(this).val())
+         //   alert("this alert "+ $(this).prop("id") + ":" + $(this).val())
           }
           if($(this).prop("type") == "file" && orgName != '')
           {
@@ -404,7 +432,7 @@ function saveform(formID){
     
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
     if($('button[onclick*="saveform"]').attr("rowid") != null){
-        alert("in edit");
+       // alert("in edit");
         data1.append("rowid",$('button[onclick*="saveform"]').attr("rowid"));
     }
     //alert("Length : " + data1.length);
@@ -762,8 +790,8 @@ function getProjectsForOrg(orgname){
 }
 
 function enableUniqueCheckingForInputs(id){
-  if($('input[unique="true"]').length > 0) {
-    $('input[unique="true"]').blur(function(){
+  if($('input[unique="true"], select[unique="true"]').length > 0) {
+    $('input[unique="true"], select[unique="true"]').blur(function(){
           var uni = $('#unique_' + $(this).attr("id"));
           if($(this).attr("initialvalue") != null){
             if($(this).attr("initialvalue") == $(this).val()){
@@ -784,7 +812,7 @@ function enableUniqueCheckingForInputs(id){
           //alert(getBG != "" && uni.attr("id"));
           if(getBG != ""){ //this ensures that its present
             uni.css("color","red");
-            uni.html('selected is already taken');
+            uni.html('selected is already registered');
             $(this).focus();
           }
           else{

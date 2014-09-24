@@ -73,7 +73,7 @@
                                                                 <section class="col col-6">
                                                                     <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                     <label class="input">
-                                                                        <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
+                                                                        <select id="orgname" unique="true" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
                                                                             <option value="">Select an Organization</option>
                                                                         </select>
 
@@ -201,6 +201,7 @@
        
         $('#content').css('opacity','1 !important');
         drawBreadCrumb1();
+        enableUniqueCheckingForInputs(10);
     }
 
     inLineReady();
