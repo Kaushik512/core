@@ -258,7 +258,7 @@
         <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
       </div>
       <div class="modal-body">
-        ...
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
@@ -280,7 +280,7 @@
          </select>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary btnUpdateRunlist">Update</button>
+        <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -422,7 +422,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         
         var $itemContainer = $('<div></div>').addClass("productdiv4");
 
-        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId); 
+        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId).attr('data-chefServerId',data[i].chefServerId); 
         var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({'text-align':'center'});
         var $img = $('<img/>').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
         var $liImage = $('<li></li>').append($img);
@@ -986,23 +986,32 @@ $('.editBtn').click(function(e){
        var projectId = $($selectedItems.get(i)).attr('data-projectId');
        var envId = $($selectedItems.get(i)).attr('data-envId');
        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+       var chefServerId =  $($selectedItems.get(i)).attr('data-chefServerId');
        var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
       
        $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
-          var $chefRunlist = $('.chefCookbookList').clone();
-           $blueprintEditResultContainer.find('.modal-body').empty();  
-           $blueprintEditResultContainer.find('.modal-body').append($chefRunlist);
-           $blueprintEditResultContainer.data('blueprintId',blueprintId);
-           console.log(data);
-       })
+          
+        $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
+            var keys = Object.keys(data);
+            var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
+            for(var i=0;i<keys.length;i++) {
+               var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+               $cookbooksList.append($option);
+            }
+            $blueprintEditResultContainer.find('.modal-body').empty(); 
+           $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+           
+       
+         }); 
+       });
    } 
 });
 
 $('.blueprintUpdateBtn').click(function(e){
   
   var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
-  var $chefRunlist = $blueprintEditResultContainer.find('.chefCookbookList'); 
-  var blueprintId = $blueprintEditResultContainer.data('blueprintId');
+  var $chefRunlist = $blueprintEditResultContainer.find('.blueprintChefCookbookList'); 
+  var blueprintId = $chefRunlist.attr('data-blueprintId');
   if(blueprintId) {
     console.log($chefRunlist.val());
     var blueprintData = {
@@ -1020,7 +1029,7 @@ $('.blueprintUpdateBtn').click(function(e){
   }
 });
 
-$('.btnUpdateRunlist').click(function(e){
+$('.btnUpdateInstanceRunlist').click(function(e){
   var instanceId  = $('.chefCookbookList').attr('data-instanceId');
   var runlist = $('.chefCookbookList').val();
   console.log(runlist); 
@@ -1055,9 +1064,12 @@ var $rolesCards1 = $('.productdiv1')
 
 
 $('.actionControlPanel').click(function (e) {
-    if ($('.container').hasClass('role-Selectedcard')) {
-        window.location.assign("index.html#ajax/Controlpanel.html");
-
+    var $selectedCard = $('.role-Selectedcard');
+    if ($selectedCard.length) {
+        var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
+        if(instanceId) {
+            window.location.href = 'index.html#ajax/Controlpanel.html?id='+instanceId;
+        }
     }
 });
 </script>
