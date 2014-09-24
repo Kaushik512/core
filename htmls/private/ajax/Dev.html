@@ -158,7 +158,7 @@
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
                                             </div>
-                                            <div id="collapse2" class="panel-collapse collapse">
+                                            <div id="collapse2" class="panel-collapse collapse in">
                                                 <div class="panel-body">
 
                                                 </div>
@@ -170,7 +170,7 @@
                                             <div class="panel-heading ">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse3" class="collapsed"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cloud Formation</a></h4>
                                             </div>
-                                            <div id="collapse3" class="panel-collapse collapse">
+                                            <div id="collapse3" class="panel-collapse collapse in">
                                                 <div class="panel-body">
                                                     
                                                 </div>
@@ -190,10 +190,10 @@
                             <div class="col-md-12">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
-                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                        <!--<button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-pencil  bigger-110"></i>
                                             Edit
-                                        </button>                                       
+                                        </button>-->                                       
                                          <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-plane bigger-110"></i>
                                             Launch
@@ -636,20 +636,51 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            $ul.append($li);
          }
         }
-        var $selecteditVer = $('<div style="position:absolute;padding-left:20px;bottom:4px;"></div>');
+        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:20px;bottom:4px;"></div>');
         if(data[i].versionsList) {
            var $selectVer =  $('<select style="padding:2px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
-           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;">Edit</a>').addClass('btn btn-primary');
+           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;" class="bpEditBtn">Edit</a>').addClass('btn btn-primary');
+
+           $selectVerEdit.click(function(e){
+                var $parent = $(this).parents('.cardimage');
+                var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+                $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                $blueprintEditResultContainer.modal('show');
+                
+                    var projectId = $parent.attr('data-projectId');
+                    var envId = $parent.attr('data-envId');
+                    var blueprintId = $parent.attr('data-blueprintId');
+                    var chefServerId =  $parent.attr('data-chefServerId');
+                    var version = $parent.find('.blueprintVersionDropDown').val();
+      
+                  $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
+          
+                    $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
+                    var keys = Object.keys(data);
+                    var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
+                    for(var i=0;i<keys.length;i++) {
+                        var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+                        $cookbooksList.append($option);
+                    }
+                    $blueprintEditResultContainer.find('.modal-body').empty(); 
+                    $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+           
+            }); 
+          });
+      
+        });
+           
+
          var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer,$selectVerEdit);
          for(var j=0;j<data[i].versionsList.length;j++) {
            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
            $selectVer.append($options);
          }
-         $selecteditVer.append($li);    
+         $selecteditBtnContainer.append($li);    
         }
 
         $itemBody.append($ul);
-        $itemBody.append($selecteditVer);
+        $itemBody.append($selecteditBtnContainer);
         
 
 
@@ -680,6 +711,37 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
     if($devopsRolepanelBody.children().length) {
         $devopsRolepanelBody.parents('.devopsRolePanel').show();
     }
+
+
+    $('.bpEditBtn').click(function(e){
+     var $selectedItems = $('.role-Selected1');
+      var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+     $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+      $blueprintEditResultContainer.modal('show');
+      for(var i=0;i<$selectedItems.length;i++) {
+       var projectId = $($selectedItems.get(i)).attr('data-projectId');
+       var envId = $($selectedItems.get(i)).attr('data-envId');
+       var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+       var chefServerId =  $($selectedItems.get(i)).attr('data-chefServerId');
+       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
+      
+       $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
+          
+        $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
+            var keys = Object.keys(data);
+            var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
+            for(var i=0;i<keys.length;i++) {
+               var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+               $cookbooksList.append($option);
+            }
+            $blueprintEditResultContainer.find('.modal-body').empty(); 
+           $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+           
+       
+            }); 
+          });
+       } 
+    });
 
 });
 
@@ -1176,35 +1238,7 @@ $('.launchBtn').click(function(e){
    } 
 });
 
-$('.editBtn').click(function(e){
-     var $selectedItems = $('.role-Selected1');
-      var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
-     $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-      $blueprintEditResultContainer.modal('show');
-      for(var i=0;i<$selectedItems.length;i++) {
-       var projectId = $($selectedItems.get(i)).attr('data-projectId');
-       var envId = $($selectedItems.get(i)).attr('data-envId');
-       var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
-       var chefServerId =  $($selectedItems.get(i)).attr('data-chefServerId');
-       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-      
-       $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
-          
-        $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
-            var keys = Object.keys(data);
-            var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
-            for(var i=0;i<keys.length;i++) {
-               var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-               $cookbooksList.append($option);
-            }
-            $blueprintEditResultContainer.find('.modal-body').empty(); 
-           $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
-           
-       
-         }); 
-       });
-   } 
-});
+
 
 $('.blueprintUpdateBtn').click(function(e){
   
