@@ -95,7 +95,7 @@
                                                                         <!--App Factory -->
                                                                         <div class="" style="width:222px;float:left">
 
-                                                                            <div class="blueprintdiv appfactory" data-templateType="templatesAppfactory">
+                                                                            <div class="blueprintdiv appfactory role-Selected" data-templateType="templatesAppfactory">
                                                                                <div style="">
                                                                                   <img  style="" alt="JBoss Stack" src="img/app-store-icons/Logoheader.png">
                                                                                   <span style="padding-top:4px;position:absolute;padding-left: 4px;"><b>App factory</b></span> 
@@ -396,7 +396,7 @@
 
 
 
-                                                                    <div class="templatesdevopsrole templates">
+                                                                    <div class="templatesdevopsrole templates" style="display:none">
                                                                         <div class="col-sm-2 col-lg-2 col-md-2">
 
                                                                             <div class="productdiv2" data-templateId="devopsRole1" data-templateComponent="JIRA,JIRA Agile,Crowd,Confluence" data-templateName="Planning" data-templateType="devopsRole">
@@ -550,7 +550,7 @@
 
 
 
-                                                                    <div class="templatesCloudformation templates">
+                                                                    <div class="templatesCloudformation templates" style="display:none">
                                                                        <div class="panel-group smart-accordion-default" id="accordion-21">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -783,124 +783,98 @@
                                                                     <div class="row glowBox selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
                                                                      </div>
 
-                <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                   <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
 
                         <div class="row glowBox" style="margin:0px;">
-                            <section class="col col-6" style="float:right;padding-top:17px;">
-                                <label for="">Choose Org 
+                            <section class="col col-6" style="float:right;">
+                                <label for="">Choose Organization 
                                 </label>
                                 <label class="select"> 
-                                 <select id="orgnameSelect" class="form-control" style="width: 200px;margin-top:5px;">
-                                  </select>
-                                 </label>  
+                                     <select id="orgnameSelect" class="form-control">
+                                      </select>
+                                 </label> 
+                                 <div class="cookbookShow">
+                                    <select id="cookbookSelect" class="form-control" style="width: 200px;float:left" size="10" multiple="multiple">
+                                    </select> 
+                                 </div>
                             </section>
-                            <section class="col col-6" style="float:right;padding-top:17px;">
 
-                                   
-                                    <select id="cookbookSelect" class="form-control" style="width: 200px;margin-top:5px;" size="10" multiple="multiple"></select>
+
+                                                                            
+                            <section class="col col-6">
+                                <label for="">Choose Operating System  
+                                </label>
+                                <label class="select"> 
+                                    <select>
+                                        <option value="0">Cent OS</option>
+                                    </select>
+                                </label>                                          
+                            </section>
+                            <section class="col col-6">
+                                <label for="category">Choose Security Group
+                                </label>
+                                <label class="select"> 
+                                    <select>
+                                        <option value="0">default-d4d</option>
+                                            <!--<option value="1">default-d4d</option>-->
+                                            <option value="2">Vpc-1</option>
+                                            <option value="3">Vpc-2</option>
+                                            <option value="4">Default VPC</option>
+                                            <option value="5">Create New</option>
+                                    </select>
+                                </label>
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <label for="category">Choose Instance Size
+                                </label>
+                                <label class="select"> 
+                                    <select class="instanceType">
+                                        <option value="t1.micro">t1.micro</option>
+                                            <!--<option value="1">t1.micro</option>-->
+                                            <option value="m1.small">m1.small</option>
+                                            <option value="m1.medium">m1.medium</option>
+                                            <option value="m1.large">m1.large</option>
+                                            <option value="m1.xlarge">m1.xlarge</option>
+                                    </select>
+                                </label> 
                                 
-                                                                                
-                                                                            </section>
-                                                                            
-                                                                            <section class="col col-6">
-                                                                                <label for="">Choose Operating System  
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select>
-                                                                                        <option value="0">Cent OS</option>
-                                                                                    </select>
-                                                                                </label>                                          
-                                                                            </section>
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Choose Security Group
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select>
-                                                                                        <option value="0">default-d4d</option>
-                                                                                            <!--<option value="1">default-d4d</option>-->
-                                                                                            <option value="2">Vpc-1</option>
-                                                                                            <option value="3">Vpc-2</option>
-                                                                                            <option value="4">Default VPC</option>
-                                                                                            <option value="5">Create New</option>
-                                                                                    </select>
-                                                                                </label>
-                                                                                </label>
-                                                                            </section>
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Choose Instance Size
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select class="instanceType">
-                                                                                        <option value="t1.micro">t1.micro</option>
-                                                                                            <!--<option value="1">t1.micro</option>-->
-                                                                                            <option value="m1.small">m1.small</option>
-                                                                                            <option value="m1.medium">m1.medium</option>
-                                                                                            <option value="m1.large">m1.large</option>
-                                                                                            <option value="m1.xlarge">m1.xlarge</option>
-                                                                                    </select>
-                                                                                </label> 
-                                                                                
-                                                                            </section>
-
-                                                                            <!--To add the Swipe Functionality-->
-                                                                            
-
-                                                                        </div>
-
-                                                                    </div>
+                            </section>
+                            <!--To add the Swipe Functionality-->                            
+                        </div>
+                    </div>
 
 
-
-
-
-                                                                </div>
+                </div>
                                                                 
-                                                                <div class="tab-pane" id="tab4" style="height:450px;overflow-y: auto;">
-                                                                    
-                                                                    
-                                                                    <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                            <div class="tab-pane" id="tab4" style="height:450px;overflow-y: auto;">
+                                                
+                                                
+                                                <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
 
-                                                                        <div class="row glowBox" style="margin:0px;">
-                                                                            
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Blueprint Name 
-                                                                                </label>
-                                                                                <label class="input">
-                                                                                <i class="icon-append fa fa-building"></i> 
-                                                                                <input type="text" id="blueprintNameInput"/>
-                                                                                </label>                                          
-                                                                            </section>
-                                                                            
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Business Group
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select id="bgListInput">
-                                                                                        
-                                                                                    </select>
-                                                                                </label>   
-                                                                                </label>
-                                                                            </section>
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Project
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select id="projectListInput">
-                                                                                        
-                                                                                    </select>
-                                                                                </label>   
-                                                                                </label>
-                                                                            </section>
-                                                                            <section class="col col-6">
-                                                                                <label for="category">Environment
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                    <select  id="envList">
+                                                    <div class="row glowBox" style="margin:0px;">
+                                                        
+                                                        <section class="col col-6">
+                                                            <label for="category">Blueprint Name 
+                                                            </label>
+                                                            <label class="input">
+                                                            <!-- <i class="icon-append fa fa-building"></i>  -->
+                                                            <input type="text" id="blueprintNameInput"/>
+                                                            </label>                                          
+                                                        </section>
 
-                                                                                    </select>
-                                                                                </label>
-                                                                                </label>
-                                                                            </section>
+
+                                                        
+                                                        <section class="col col-6">
+                                                            <label for="category">Business Group
+                                                            </label>
+                                                            <label class="select"> 
+                                                                <select id="bgListInput">
+                                                                    
+                                                                </select>
+                                                            </label>   
+                                                            </label>
+                                                        </section>
                                                         <section class="col col-6">
                                                             <label class="label">Assign Users</label>
                                                             <label class="select select-multiple">
@@ -916,12 +890,33 @@
                                                                     <option value="9">Desiderata</option>
                                                                 </select> </label>
                                                         </section>
-                                                                            
-                                                                            </div>
-                                                                        </div>
-                                                                   
+                                                        <section class="col col-6">
+                                                            <label for="category">Project
+                                                            </label>
+                                                            <label class="select"> 
+                                                              <select id="projectListInput">
+                                                                    
+                                                              </select>
+                                                            </label>   
+                                                            </label>
+                                                        </section>
+                                                       
+                                                        <section class="col col-6" style="float:right;">
+                                                            <label for="category">Environment
+                                                            </label>
+                                                            <label class="select"> 
+                                                                <select  id="envList">
 
-                                                                </div>
+                                                                </select>
+                                                            </label>
+                                                            </label>
+                                                        </section>
+                                                        
+                                                                            
+                                                    </div>
+                                                </div>                   
+
+                                            </div>
 
 
                                                                 <div class="tab-pane" id="tab5" style="height:450px;overflow-y: auto;">
@@ -951,7 +946,7 @@
                                                                                 </li>
 
                                                                                 <li class="next">
-                                                                                    <a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;"> Next </a>
+                                                                                    <a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;" > Next </a>
                                                                                 </li>
                                                                             </ul>
                                                                             
@@ -1133,6 +1128,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
         $('.templates').hide();
         console.log($(this).attr('data-templateType'));
         $('.'+$(this).attr('data-templateType')).show();
+        //$('.next a').attr('disabled',false);
     })
 
     var $selectedTemplate = $('.productdiv2').click(function(e){
@@ -1151,7 +1147,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                     url: "/organizations/getTree",
                     success:function(data){
                         var $orgListInput = $('#orgnameSelect');
-                        $orgListInput.append($('<option></option>').val('choose').html('choose'));
+                        $orgListInput.append($('<option></option>').val('choose').html('Choose'));
                         $bgList = $('#bgListInput');
                         var $envList = $('#envList');
                         for(var i=0;i<data.length;i++) {
@@ -1164,7 +1160,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                              }
                              var $selectedOrgOption =  $(this).find(":selected");
                             $bgList.empty();
-                            $bgList.append($('<option></option>').val('choose').html('choose'));
+                            $bgList.append($('<option></option>').val('choose').html('Choose'));
                             var getBGs =  $selectedOrgOption.data('bglist');
                             for(var i=0;i<getBGs.length;i++) {
                                 $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList',getBGs[i].projects));
@@ -1200,7 +1196,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                             }
                             var $selectedOrgOption =  $(this).find(":selected");
                             $projectList.empty();
-                            $projectList.append($('<option></option>').val('choose').html('choose'));
+                            $projectList.append($('<option></option>').val('choose').html('Choose'));
                             var getProjs = $selectedOrgOption.data('projList');
                             for(var i=0;i<getProjs.length;i++) {
                                 $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
