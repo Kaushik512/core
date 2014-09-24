@@ -15,6 +15,9 @@
                     <li class="pull-left">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
+                    <li class="pull-left">
+                        <a href="#l3" data-toggle="tab"><i class="fa fa-upload"></i>&nbsp;Deployments</a>
+                    </li>
                     <!--<li class="pull-left">
                         <a href="#l4" data-toggle="tab">Enviornments</a>
                     </li>
@@ -24,92 +27,6 @@
                 </ul>
 
                 <div id="myTabContent3" class="nav tab-content">
-
-                    <!--App Factory tab starts here-->
-
-
-                    <div class="tab-pane" id="l2">
-                        <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-
-                            <div>
-
-
-                                <div class="jarviswidget-editbox">
-
-
-                                </div>
-                                <div class="widget-body no-padding">
-
-                                    <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
-                                        <div class="devopsRolePanel panel panel-default blueprintContainer">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
-                                            </div>
-                                            <div id="collapseOne-2" class="panel-collapse collapse in">
-                                                <div class="panel-body">
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <!--App Factory Starts here-->
-                                        <div class="appFactoryPanel panel panel-default blueprintContainer">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
-                                            </div>
-                                            <div id="collapse2" class="panel-collapse collapse">
-                                                <div class="panel-body">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--App Factory ends here-->
-
-                                        <div class="panel panel-default blueprintContainer">
-                                            <div class="panel-heading ">
-                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse3" class="collapsed"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cloud Formation</a></h4>
-                                            </div>
-                                            <div id="collapse3" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-                        <div class="row" style="margin-top:20px;position:static">
-                            <div class="col-md-12">
-                                <div class="clearfix form-actions" style="text-align:center">
-                                    <div class="btn-group">
-                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
-                                            <i class="ace-icon fa fa-pencil  bigger-110"></i>
-                                            Edit
-                                        </button>                                       
-                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
-                                            <i class="ace-icon fa fa-plane bigger-110"></i>
-                                            Launch
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--Launch div ends here-->
-                    </div>
-
-
-
-
-
-
 
                     <div class="tab-pane fade in active" id="l1">
                         <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
@@ -195,7 +112,7 @@
                                     <div class="btn-group">
                                         
                                         <button class="btn pull-left btn-primary actionControlPanel" style="margin-left:5px">
-                                            <i class="fa fa-share"></i>
+                                            <i class="fa fa-gears"></i>
                                             Control Panel
                                         </button>
                                         <a data-toggle="modal" href="#myModal" class="btn pull-left btn-primary ChefconfigPanel" style="margin-left:5px"><i class="fa fa-home"></i>Chef config Panel</a>
@@ -210,27 +127,370 @@
 
                     </div>
 
+                    <div class="tab-pane" id="l2">
+                        <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                            <div>
+
+
+                                <div class="jarviswidget-editbox">
+
+
+                                </div>
+                                <div class="widget-body no-padding">
+
+                                    <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
+                                        <div class="devopsRolePanel panel panel-default blueprintContainer">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
+                                            </div>
+                                            <div id="collapseOne-2" class="panel-collapse collapse in">
+                                                <div class="panel-body">
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <!--App Factory Starts here-->
+                                        <div class="appFactoryPanel panel panel-default blueprintContainer">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
+                                            </div>
+                                            <div id="collapse2" class="panel-collapse collapse">
+                                                <div class="panel-body">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--App Factory ends here-->
+
+                                        <div class="panel panel-default blueprintContainer">
+                                            <div class="panel-heading ">
+                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse3" class="collapsed"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cloud Formation</a></h4>
+                                            </div>
+                                            <div id="collapse3" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <div class="row" style="margin-top:20px;position:static">
+                            <div class="col-md-12">
+                                <div class="clearfix form-actions" style="text-align:center">
+                                    <div class="btn-group">
+                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                            <i class="ace-icon fa fa-pencil  bigger-110"></i>
+                                            Edit
+                                        </button>                                       
+                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
+                                            <i class="ace-icon fa fa-plane bigger-110"></i>
+                                            Launch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--Launch div ends here-->
+                    </div>
+
+                    <div class="tab-pane" id="l3">
+                        
+
+                        <form class="smart-form" action="">
+ 
+
+                            <fieldset>
+                               
+                                <section class="col col-4">
+                                    <label class="label"><strong>Select Nodes</strong></label>
+                                    <div class="row">
+                                        <div class="col col-10">
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;">
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox" name="checkbox">
+                                                       <i></i>Node1
+                                                    </label>
+                                                </li>
+                                                <!--<li>
+                                                   <label class="toggle">
+                                                        <input type="checkbox" checked="checked" name="checkbox-toggle">
+                                                        <i data-swchoff-text="OFF" data-swchon-text="ON"></i>Node1
+                                                    </label>
+                                                </li>-->
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox" name="checkbox">
+                                                       <i></i>Node2
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node3
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node4
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node5
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node6
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node7
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node8
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node9
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node10
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Node11
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div style="margin-top: 122px;" class="col col-2">
+                                            <div class="input-group">
+                                                <div style="padding-bottom: 10px;" class="btn-group">
+                                                    <button id="btnaddToSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="btn-group">
+                                                    <button id="btnremoveFromSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </section>
+                                <section class="col col-4">
+                                    <label class="label"><strong>Create Runlist</strong></label>
+                                    <div class="row">
+                                        <div class="col col-10">
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
+                                                <label class="label" style="text-align:center;">Select Cookbooks</label>
+                                                <hr>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Cookbook1
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox" name="checkbox">
+                                                       <i></i>Cookbook2
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Cookbook3
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Cookbook4
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Cookbook5
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
+                                                
+                                                <label class="label" style="text-align:center;">Select Roles</label>
+                                                <hr>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Role1
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox" name="checkbox">
+                                                       <i></i>Role2
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Role3
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Role4
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox" style="margin: 5px;">
+                                                       <input type="checkbox"  name="checkbox">
+                                                       <i></i>Role5
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div style="margin-top: 122px;" class="col col-2">
+                                            <div class="input-group">
+                                                <div style="padding-bottom: 10px;" class="btn-group">
+                                                    <button id="btnaddToSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="btn-group">
+                                                    <button id="btnremoveFromSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </section>
+                                <section class="col col-4">
+                                    <label class="label"><strong>Order RunList</strong></label>
+                                    <div class="row">
+                                        <div class="col col-10">
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;">
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Role1
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Role2
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Cookbook1
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Cookbook2
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Role3
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Role4
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Cookbook3
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Cookbook4
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Cookbook5
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label style="margin: 5px;">
+                                                       Role5
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div style="margin-top: 122px;" class="col col-2">
+                                            <div class="input-group">
+                                                <div style="padding-bottom: 10px;" class="btn-group">
+                                                    <button id="btnItemUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-up"></i></button>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="btn-group">
+                                                    <button id="btnItemDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-down"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </section>
+
+                            
+                            </fieldset>
+
+                        </form>
+                        <div class="row" style="margin-top:20px;position:static">
+                            <div class="col-md-12">
+                                <div class="clearfix form-actions" style="text-align:center">
+                                    <div class="btn-group">
+                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                            <i class="ace-icon fa fa-pencil  bigger-110"></i>
+                                            Execute Chef Run
+                                        </button>                                       
+                                         
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--Launch div ends here-->
+                    
+                    </div>
+
                 </div>
 
             </div>
 
     </article>
 </div>
-
-    <!--<div class="row" style="margin-top:20px;position:static">
-        <div class="col-md-12">
-            <div class="clearfix form-actions" style="text-align:center">
-                <div class="btn-group">
-                    
-                    <button class="btn pull-left btn-primary" style="margin-left:5px">
-                        <i class="ace-icon fa fa-plane bigger-110"></i>
-                        Launch
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
 
 <!-- Modal -->
 <div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -305,8 +565,6 @@
   </div>
 </div>
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -376,6 +634,7 @@
 
 
 <script type="text/javascript">
+
 // $(document.body).on('click', '.card', function () {
       
 //       document.querySelector('#flip-toggle').classList.toggle('flip');
@@ -446,7 +705,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         }
         if(data[i].versionsList) {
            var $selectVer =  $('<select></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
-         var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer);;
+           var $selectVerEdit =  $('<a>Edit</a>').addClass('btn btn-primary');
+         var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer,$selectVerEdit);
          for(var j=0;j<data[i].versionsList.length;j++) {
            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
            $selectVer.append($options);
@@ -542,7 +802,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
         
-        for(var j=0;j<data[i].runlist.length;j++) { 
+        /*for(var j=0;j<data[i].runlist.length;j++) { 
           var $divComponentItem;
            if(j == 0) {
           
@@ -555,8 +815,9 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             if(j==2) {
                 break;
             }
-        }
-        $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append("View All"));
+        }*/
+        //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+        $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').addClass('fa fa-lg fa-fw fa-2x fa-list  txt-color-blue instance-bootstrap-list-faimage'));
 
         $divComponentItem.click(function(e){
             $(this).parents('.flip-toggle').toggleClass('flip');
@@ -565,7 +826,12 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
        
         $divComponentList.append($divComponentItem);
 
+
         $divComponentListContainer.append($divComponentList);
+
+        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').addClass('instance-bootstrap-list-image');
+
+        $divComponentListContainer.append($divComponentListImage);
 
         //For Table View
         $rowContainter.append('<td>'+(i+1)+'</td>');
@@ -1034,26 +1300,6 @@ $('.btnUpdateRunlist').click(function(e){
   });
 });
 
-/*$('#hide-menu1').click(function(e){
-    alert('Alert success');
-    $('.Navigation').append('<li>sdhgfj</li>');
-
-});*/
-
-/*
-var $rolesCards = $('.productdiv')
-
-$('.productdiv').click(function (e) {
-    if ($(this).hasClass('role-Selected')) {
-        $(this).removeClass('role-Selected');
-    } else {
-        $(this).addClass('role-Selected');
-    }
-});
-var $rolesCards1 = $('.productdiv1')
-*/
-
-
 $('.actionControlPanel').click(function (e) {
     if ($('.container').hasClass('role-Selectedcard')) {
         window.location.assign("index.html#ajax/Controlpanel.html");
@@ -1061,5 +1307,50 @@ $('.actionControlPanel').click(function (e) {
     }
 });
 </script>
+<script type="text/javascript">
+//To add the wizard
+    $("#btnaddToSuite").on('click', function () {
+        var x = document.getElementById("jsonFiles");
+        for (var i = 0; i < x.options.length; i++) {
+            if (x.options[i].selected == true) {
+                var y = document.createElement("option");
+                y.value = x.options[i].value;
+                y.innerHTML = x.options[i].text;
+                $("#suiteFiles").append(y);
 
+            }
+        }
+    });
+
+    $("#btnremoveFromSuite").on('click', function () {
+        $("#suiteFiles option:selected").remove();
+    });
+
+    $("#btnSuiteItemUp").on('click', function () {
+        $("#suiteFiles option:selected").each(function () {
+            var listItem = $(this);
+            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
+
+            if (listItemPosition == 1) return false;
+
+            listItem.insertBefore(listItem.prev());
+        });
+
+    });
+
+    $("#btnSuiteItemDown").on('click', function () {
+        var itemsCount = $("#suiteFiles option").length;
+
+        $($("#suiteFiles option:selected").get().reverse()).each(function () {
+            var listItem = $(this);
+            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
+
+            if (listItemPosition == itemsCount) return false;
+
+            listItem.insertAfter(listItem.next());
+
+        });
+    });
+
+    </script>
 
