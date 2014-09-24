@@ -421,13 +421,15 @@ function saveform(formID){
        k =  $(this).attr("id");
       $(this).find("input").each(function (){
           if ($(this).is(":checked")) {
-            v.push("\"" + $(this).val() + "\"");
+        //    v.push("\"" + $(this).val() + "\"");
+            v.push($(this).val());
           }
       });
     });
   //  alert(k + ":" + v.toString());
     if(k != ''){
-        data1.append(k,"[" + v.toString() + "]");
+        //data1.append(k,"[" + v.toString() + "]");
+        data1.append(k,v);
     }
     
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
