@@ -703,18 +703,20 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            $ul.append($li);
          }
         }
+        var $selecteditVer = $('<div style="position:absolute;padding-left:20px;bottom:4px;"></div>');
         if(data[i].versionsList) {
-           var $selectVer =  $('<select></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
-           var $selectVerEdit =  $('<a>Edit</a>').addClass('btn btn-primary');
+           var $selectVer =  $('<select style="padding:2px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
+           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;">Edit</a>').addClass('btn btn-primary');
          var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer,$selectVerEdit);
          for(var j=0;j<data[i].versionsList.length;j++) {
            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
            $selectVer.append($options);
          }
-         $ul.append($li);    
+         $selecteditVer.append($li);    
         }
 
         $itemBody.append($ul);
+        $itemBody.append($selecteditVer);
         
 
 
@@ -897,10 +899,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
          $divDomainRolesCaption.append($('<hr>'));
 
 
-
+         //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
           var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data[i]._id);
 
-          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','start'));
+          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','Start').attr('data-original-title','Start').attr('data-placement','top').attr('rel','tooltip'));
           $divActionBtnContainer.append($divActionStartContainer);
           if(!data[i].chef) {
             data[i].chef = {};
