@@ -11,7 +11,7 @@
                         <!--Card for Planning starts here-->
                         <li class="domain-role-thumbnail" style="padding-top:58px;">
                             <div class="domain-roles">
-                              <div class="domain-roles-caption" data-instanceid="53fed8535d3753774753ecb1">
+                              <div class="domain-roles-caption">
                                 <div class="domain-roles-heading">
                                   <span contenteditable="true" class="domain-roles-icon">
                                     <img style="height:20px;width:20px;margin-right:5px;" src="img/templateicons/chef_import.png">chef import
@@ -29,13 +29,13 @@
                                       </a>
                                     </span>
                                   </div>
-                                  <a class="btn instance-bootstrap-list-image">
+                                  <a class="btn instance-bootstrap-list-image instanceActionBtnUpdateRunlist">
                                     <img alt="Chefimport" src="img/galleryIcons/Chefimport.png">
                                   </a>
                                 </div>
                                 <div>
                                   <div class="instance-details-list">
-                                    <span class="instance-details-id">Id : <strong>172.31.25.91</strong></span>
+                                    <span class="instance-details-id instance-details-ip">IP : <strong>172.31.25.91</strong></span>
                                     <span class="instance-details-id">status : 
                                       <span class="instance-state instance-state-text-pending">Running</span>
                                     </span>
@@ -48,7 +48,7 @@
                                     </a>
                                   </div>
                                   <div class="instance-bootstrap-ActionRestart">
-                                    <a href="javascript:void(0)" class="actionbuttonRestart instanceActionBtnUpdateRunlist">
+                                    <a href="javascript:void(0)" class="actionbuttonRestart">
                                     </a>
                                   </div>
                                   <div class="instance-bootstrap-ActionShutdown">
@@ -79,7 +79,7 @@
               <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-sun-o"></i>Configuration</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
-              <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
+              <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
     </ul>
     <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
@@ -106,34 +106,11 @@
                               <div class="panel-body">
                                 <table align="left">
                                        <thead>
-                                         <tr style="line-height:2.3">
-                                           <td scope="col" style="font-size:12px;">Machine</td>
-                                           <td scope="col">:</td>
-                                           <td scope="col" style="font-size:12px;">HP DL 980</td>
-                                         </tr>   
+                                           
                                        </thead>
 
-                                       <tbody > 
-                                          <tr style="line-height:2.3">
-                                           <td scope="col" style="font-size:12px;">Hypervisor</td>
-                                           <td scope="col">:</td>
-                                           <td scope="col" style="font-size:12px;">ESXi VMWare</td>
-                                         </tr>  
-                                         <tr style="line-height:2.3">
-                                           <td scope="col" style="font-size:12px;">RAM</td>
-                                           <td scope="col">:</td>
-                                           <td scope="col" style="font-size:12px;">8GB</td>
-                                         </tr>  
-                                         <tr style="line-height:2.3">
-                                           <td scope="col" style="font-size:12px;">Memory</td>
-                                           <td scope="col">:</td>
-                                           <td scope="col" style="font-size:12px;">500GB</td>
-                                         </tr>  
-                                         <tr style="line-height:2.3">
-                                           <td scope="col" style="font-size:12px;">Subnet</td>
-                                           <td scope="col">:</td>
-                                           <td scope="col" style="font-size:12px;">RLRIND-LAB9</td>
-                                         </tr>                                         
+                                       <tbody>
+               
 
                                           </tbody>
 
@@ -152,25 +129,10 @@
                           <div id="collapseSoftware" class="panel-collapse collapse in">
                             <div class="panel-body">
                               <table align="left">
-                               <thead>
-                                 <tr style="line-height:2.3">
-                                   <td scope="col" style="font-size:12px;">Operating System</td>
-                                   <td scope="col">:</td>
-                                   <td scope="col" style="font-size:12px;">CentOS 6.4</td>
-                                 </tr>   
-                               </thead>
+                              
 
                                <tbody > 
-                                  <tr style="line-height:2.3">
-                                   <td scope="col" style="font-size:12px;">Application</td>
-                                   <td scope="col">:</td>
-                                   <td scope="col" style="font-size:12px;">www.ShoppingCart.com</td>
-                                 </tr>  
-                                 <tr style="line-height:2.3">
-                                   <td scope="col" style="font-size:12px;">Build</td>
-                                   <td scope="col">:</td>
-                                   <td scope="col" style="font-size:12px;">S4y-Web-Build.L 14.07.tar</td>
-                                 </tr>  
+                                 
                                 </tbody>
                               </table>
 
@@ -188,35 +150,9 @@
                           <div id="collapseConfigmgmt" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <table align="left">
-                                 <thead>
-                                   <tr style="line-height:2.3">
-                                     <td scope="col" style="font-size:12px;">Environment</td>
-                                     <td scope="col">:</td>
-                                     <td scope="col" style="font-size:12px;">Development</td>
-                                   </tr>   
-                                 </thead>
-
+                                 
                                  <tbody > 
-                                    <tr style="line-height:2.3">
-                                     <td scope="col" style="font-size:12px;">Chef Bootstrap</td>
-                                     <td scope="col">:</td>
-                                     <td scope="col" style="font-size:12px;">Yes</td>
-                                   </tr>  
-                                   <tr style="line-height:2.3">
-                                     <td scope="col" style="font-size:12px;">Chef Server URL</td>
-                                     <td scope="col">:</td>
-                                     <td scope="col" style="font-size:12px;">https://manage.opscode/organization/RLABS</td>
-                                   </tr>  
-                                   <tr style="line-height:2.3">
-                                     <td scope="col" style="font-size:12px;">Run List</td>
-                                     <td scope="col">:</td>
-                                     <td scope="col" style="font-size:12px;">Apache2, PHP,MySQL</td>
-                                   </tr>  
-                                   <tr style="line-height:2.3">
-                                     <td scope="col" style="font-size:12px;">Roles</td>
-                                     <td scope="col">:</td>
-                                     <td scope="col" style="font-size:12px;">App Stack</td>
-                                   </tr>  
+                                    
                                 </tbody>
                               </table>
                             </div>
@@ -526,8 +462,8 @@
                 </div>
 
             </div> <!--Configure tab contents ends here -->
-            <div class="tab-pane" id="l4" style="height:444px;overflow-y: auto;">
-              Logs under devlopment....
+            <div class="tab-pane" id="l4" style="height:444px;overflow-y: auto;overflow-x:hidden;">
+              <div class="logsArea"></div>
             </div>
             <!-- History tab contents starts here -->
         
@@ -551,6 +487,26 @@
 
 </div>
 </article>
+</div>
+
+
+<div class="modal fade" id="controlPanelChefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Runlist</h4>
+      </div>
+      <div class="modal-body">
+         <select class="chefCookbookList" multiple>
+         </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
   
 
@@ -584,7 +540,259 @@ var urlParams ={};
 
 $.get('/instances/'+urlParams.id,function(data){
    console.log(data);
+   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId);
+   $domainRolesCaption.find('.domain-roles-icon').empty().append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
+  $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
+  $domainRolesCaption.find('.instance-state').html(data.instanceState);
+  if(data.instanceState == 'running'){
+           $domainRolesCaption.find('.componentlistContainer').addClass('started');
+           $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
+  } else if(data.instanceState == 'terminated'){
+            $domainRolesCaption.find('.componentlistContainer').addClass('stopped');          
+            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
+  } else if(data.instanceState == 'stopped'){
+            $domainRolesCaption.find('.componentlistContainer').addClass('paused');
+            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-paused');          
+  } else {
+            $domainRolesCaption.find('.componentlistContainer').addClass('pending');
+            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
+  }
+
+  var timeout;
+  
+  var displayLog = function(e){
+         var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
+         var timeout;
+         
+         if(timeout) {
+                clearTimeout(timeout);
+          }
+         var $logTabBtn = $('#controlPanelLogTab');
+         $('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+         $logTabBtn.trigger('click');
+         var lastTimestamp;
+         function pollLogs(timestamp,delay,clearData) {
+         var url = '/instances/'+instanceId+'/logs';
+         if(timestamp) {
+            url = url + '?timestamp='+timestamp;
+         }
+         
+         timeout = setTimeout(function(){
+         $.get(url,function(data){
+            var $modalBody = $('.logsArea');
+            if(clearData) {
+               $modalBody.empty();
+            }
+            var $table  = $('<div></div>');
+            
+            for(var i=0;i<data.length;i++) {  
+                var $rowDiv = $('<div class="row"></div>');
+                var timeString = new Date().setTime(data[i].timestamp);
+                var date = new Date(timeString).toUTCString();//converts to human readable strings
+                $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>'+date+'</div>'));
+
+                if (data[i].err){
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>'+data[i].log+'</span>'));
+                }
+                else {
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>'+data[i].log+'</span>'));
+                }
+
+                $table.append($rowDiv);
+                $table.append('<hr/>');
+                
+            }
+           
+           
+            if(data.length) {
+                lastTimestamp = data[data.length -1].timestamp;
+                console.log(lastTimestamp);
+                 $modalBody.append($table);
+            }
+           
+            $modalBody.scrollTop($modalBody[0].scrollHeight+100);
+            console.log('polling again');
+            if($logTabBtn.parent('li').hasClass('active')) {
+                   pollLogs(lastTimestamp,1000,false);
+            } else {
+                 console.log('not polling again');
+            }            
+          });
+         },delay);
+        }
+        pollLogs(lastTimestamp,0,true);
+    };
+
+  $('.moreInfo').click(displayLog);
+  $('#controlPanelLogTab').on('shown.bs.tab',displayLog);
+   
+   
+  function getCssClassFromStatus(status) {
+        var cssClasses = {
+
+        };
+        switch(status) {
+            
+            case 'running':
+            cssClasses.ringClass = 'started';
+             cssClasses.textClass = 'instance-state-text-started';
+             cssClasses.tableViewStatusClass ="started";
+            break;
+
+            case 'stopped':
+             cssClasses.ringClass = 'paused';
+             cssClasses.textClass = 'instance-state-text-paused';
+             cssClasses.tableViewStatusClass ="paused";
+            break;
+
+            case 'terminated':
+             cssClasses.ringClass = 'stopped';
+             cssClasses.textClass = 'instance-state-text-stopped';
+             cssClasses.tableViewStatusClass ="stopped";
+            break;
+
+            default :
+             cssClasses.ringClass = 'pending';
+             cssClasses.textClass = 'instance-state-text-pending';
+             cssClasses.tableViewStatusClass ="pending";
+
+        }
+
+        return cssClasses;
+     } 
+ 
+
+
+  $('.instanceActionBtn').click(function(e){
+        var $this = $(this);
+        var $parent = $('.domain-roles-caption');
+        var instanceId = $parent.attr('data-instanceId');
+        var type = $this.attr('data-actionType');
+        url = '/instances/'+instanceId+'/startInstance';
+        if(type==='stop') {
+            url = '/instances/'+instanceId+'/stopInstance'
+        }
+        
+        $parent.find('.moreInfo').trigger('click');
+        $.get(url,function(data){
+            
+            console.log($parent.length,$parent);
+
+            
+           
+            var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
+            
+            var oldState = data.instanceCurrentState;
+
+            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+
+            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
+            
+            function pollInstanceState(state,delay) {
+                var timeout = setTimeout(function() {
+                    $.get('/instances/'+instanceId,function(data){
+                        if(data) {
+                            if(data.instanceState === state) {
+                                pollInstanceState(state,5000);
+                            } else {
+                                console.log('polling complete');
+                                 var cssClassed = getCssClassFromStatus(data.instanceState); 
+                                 $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                 $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                            } 
+                        }   
+                    })
+                }, delay);                
+            }
+            pollInstanceState(oldState,2000);                        
+        }); 
+    });
+
+    $('.instanceActionBtnUpdateRunlist').click(function(e){
+         var $this = $(this);
+         var $parent = $('.domain-roles-caption');
+         var instanceId = $parent.attr('data-instanceId');
+         var chefServerId = $parent.attr('data-chefServerId');
+
+         $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+         $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
+         $chefRunModalContainer.modal('show');
+         $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
+            var keys = Object.keys(data);
+            var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId',instanceId).attr('multiple',true); 
+            for(var i=0;i<keys.length;i++) {
+             var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+             $cookbooksList.append($option);
+            }
+             $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
+
+        });
+
+    });
+
+   $('.btnUpdateInstanceRunlist').click(function(e){
+      var instanceId  = $('.chefCookbookList').attr('data-instanceId');
+      var runlist = $('.chefCookbookList').val();
+      console.log(runlist); 
+      $.post('/instances/'+instanceId+'/updateRunlist',{
+        runlist:runlist
+      },function(data){
+          $chefRunModalContainer = $('#controlPanelChefRunModalContainer').modal('hide');
+          var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+          $parent.find('.moreInfo').trigger('click');
+          console.log(data);
+      });
+  });
+  
+  //hardware
+  var $hrdwareTbody =  $('#collapseHardware').find('tbody');
+  $hrdwareTbody.empty();
+  var $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Machine</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.architecture+'</td>');
+  $hrdwareTbody.append($tr);
+  
+  $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.memory.total+'</td>');
+  $hrdwareTbody.append($tr);
+
+  $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.memory.free+'</td>');
+  $hrdwareTbody.append($tr);
+  
+
+  //software
+  var $sfwareTbody =  $('#collapseSoftware').find('tbody');
+  $sfwareTbody.empty();
+  var $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">OS</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.platform+'</td>');
+  $sfwareTbody.append($tr);
+  
+  $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.platformVersion+'</td>');
+  $sfwareTbody.append($tr);
+
+  //consfigManagement
+   var $cfmwareTbody =  $('#collapseConfigmgmt').find('tbody');
+  $cfmwareTbody.empty();
+  var $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Environment</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.envId+'</td>');
+  $cfmwareTbody.append($tr);
+  
+  $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.bootStrapStatus+'</td>');
+  $cfmwareTbody.append($tr);
+
+  $tr = $('<tr style="line-height:2.3"></tr>');
+  $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
+  $cfmwareTbody.append($tr);
+
+
+  
+
+
 });
+
+
 
 </script>
 <!--<script>

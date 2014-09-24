@@ -555,7 +555,7 @@
         <h4 class="modal-title" id="myModalLabel">Instance Logs</h4>
       </div>
       <div class="modal-body">
-        <div class="logsArea" style="height:400px;overflow-y:auto;"></div>
+        <div class="logsArea" style="height:400px;overflow-y:auto;overflow-x:hidden;"></div>
          
       </div>
       <div class="modal-footer">
@@ -1103,8 +1103,6 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         });
 
-
-
     });
 
     $('.moreInfo,.tableMoreInfo').click(function(e){
@@ -1152,14 +1150,14 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
                 
             }
            
-
+           
             if(data.length) {
                 lastTimestamp = data[data.length -1].timestamp;
                 console.log(lastTimestamp);
-                $modalBody.scrollTop($modalBody[0].scrollHeight+100);
+                $modalBody.append($table);
             }
 
-            $modalBody.append($table);
+             $modalBody.scrollTop($modalBody[0].scrollHeight+100);
             console.log('polling again');
             if($instanceLogModalContainer.data()['bs.modal'].isShown) {
                    pollLogs(lastTimestamp,1000,false);
