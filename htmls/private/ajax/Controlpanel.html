@@ -1,6 +1,6 @@
 <div class="row">
 
-    <article class="col-sm-12 col-md-12 col-lg-12">
+    <article class="col-sm-12 col-md-12 col-lg-12" id="controlPanelContainer" style="display:none">
 
             <div class="widget-body" style="font-size:14px;">
                 <div class="">
@@ -473,11 +473,9 @@
               <div class="col-md-12">
                 <div class="clearfix form-actions" style="text-align:center">
                   <div class="btn-group">
-                    <a href="index.html#ajax/Dev.html">
-                      <button class="btn pull-left btn-primary" style="margin-left:5px">
+                      <button class="btn pull-left btn-primary" style="margin-left:5px" onclick="history.back()">
                         Back to Instances
                       </button>
-                    </a>
                   </div>
                 </div>
               </div>
@@ -487,6 +485,11 @@
 
 </div>
 </article>
+
+<div class="loadingControlPanelIndicator">
+<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
+</div>
+
 </div>
 
 
@@ -787,7 +790,8 @@ $.get('/instances/'+urlParams.id,function(data){
   $cfmwareTbody.append($tr);
 
 
-  
+  $('.loadingControlPanelIndicator').hide();
+  $('#controlPanelContainer').show();
 
 
 });
