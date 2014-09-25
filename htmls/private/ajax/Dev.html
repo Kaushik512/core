@@ -223,11 +223,11 @@
                                         <div style="margin-top: 122px;" class="col col-2">
                                             <div class="input-group">
                                                 <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button id="btnaddToSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                    <button class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <div class="btn-group">
-                                                    <button id="btnremoveFromSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                    <button class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +253,7 @@
                                         <div style="margin-top: 122px;" class="col col-2">
                                             <div class="input-group">
                                                 <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button id="btnaddToSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                    <button id="btnAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <div class="btn-group">
@@ -268,57 +268,8 @@
                                     <label class="label"><strong>Order RunList</strong></label>
                                     <div class="row">
                                         <div class="col col-10">
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;">
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Role1
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Role2
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Cookbook1
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Cookbook2
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Role3
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Role4
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Cookbook3
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Cookbook4
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Cookbook5
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;">
-                                                       Role5
-                                                    </label>
-                                                </li>
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedList">
+                                                
                                             </ul>
                                         </div>
                                         <div style="margin-top: 122px;" class="col col-2">
@@ -475,7 +426,7 @@ $.get('/organizations/'+urlParams.org+'/cookbooks',function(data) {
   var keys = Object.keys(cookbooks);
   var $deploymentCookbookList = $('.deploymentCookbookList');
   for(i=0;i<keys.length;i++) {
-     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkbox" value="role['+keys[i]+']"><i></i>'+keys[i]+'</label></li>'));
+     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="role['+keys[i]+']" data-cookbookName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
   }
 
 });
@@ -486,9 +437,29 @@ $.get('/organizations/'+urlParams.org+'/roles',function(data) {
   var keys = Object.keys(roles);
   var $deploymentRolesList = $('.deploymentRolesList');
   for(i=0;i<keys.length;i++) {
-     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkbox" value="recipe['+keys[i]+']"><i></i>'+keys[i]+'</label></li>'));
+     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="recipe['+keys[i]+']" data-roleName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
   }
 
+});
+
+$('#btnAddSelectedCookbook').click(function(e){
+   var $deploymentSelectedList = $('.deploymentSelectedList');
+   var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
+   $selectedCookbooks.each(function(idx){
+      var $this = $(this);
+      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-cookbookName')+'</label></li>'));
+
+   });
+
+   var $selectedRoles = $("input[name=checkboxRoles]:checked");
+   $selectedRoles.each(function(idx){
+      var $this = $(this);
+      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-roleName')+'</label></li>'));
+          
+   });
+
+   $deploymentSelectedList.sortable();
+      
 });
 
 
