@@ -371,7 +371,7 @@
                   					  var $envUl = $('<ul></ul>');
                     				 liProject.append($envUl); 
                   					  for(var l=0;l<data[i].environments.length;l++) {
-                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'"><img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'"><img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
                     						$envUl.append($liEnv);
                         					$liEnv.click(function(e){
 	                        					window.selectedOrgName = $(this).attr('data-OrgName');
@@ -379,7 +379,7 @@
                         					});
 
     					                	if(i==0 && j == 0 && k==0 && l==0 ) {
-                    							$('#firstA').attr('href','#ajax/Dev.html?projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'');
+                    							$('#firstA').attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'');
                     							 window.selectedOrgName = data[i].name;
                     						}
 

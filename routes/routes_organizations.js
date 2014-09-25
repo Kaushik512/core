@@ -190,5 +190,38 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
+    app.get('/organizations/:orgname/roles', function(req, res) {
+        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname,function(err,chefDetails){
+            if(err){
+                res.send(500);
+                return;
+            }
+            console.log("chefdata",chefDetails);
+
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
+            chef.getRolesList(function(err, roles) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send({
+                        serverId:chefDetails.rowid,
+                        roles:roles
+                    });
+                }
+            });
+            
+        });
+
+    });
+
 
 }
