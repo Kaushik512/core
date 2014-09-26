@@ -413,6 +413,9 @@ border-top: 1px solid #303031;
 	background-color: #40baf1;
 	width:auto;
 }
+.smart-style-2 .form-control{
+	height:36px;
+}
 .smart-style-2 #Navigation {
 	background-color: #40baf1;
 	width:auto;

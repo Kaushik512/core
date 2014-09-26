@@ -114,7 +114,32 @@ var Chef = function(settings) {
             });
 
         });
-    }
+    };
+
+    this.getRolesList = function(callback){
+
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chefClient.get('/roles', function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                console.log("chef status ", chefRes.statusCode);
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefResBody);
+                } else {
+                    callback(true, null);
+                }
+
+            });
+
+        });
+
+    };
 
     this.createEnvironment = function(envName, callback) {
         initializeChefClient(function(err, chefClient) {

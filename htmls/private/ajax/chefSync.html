@@ -33,8 +33,8 @@
 </ul>
 
 <!-- Tab panes -->
-<div  class="tab-content">
-	<div  class="tab-pane active tabContent" id="organiz">
+<div  class="tab-content nodeListContainer">
+	<div  class="tab-pane active tabContent" id="organiz" style="display:none">
 		<table class="table table-hover">
 		
 		<thead>
@@ -56,7 +56,7 @@
 		</tbody>
 	</table>
    
-  <div style="text-align:center"> <input type="button" class="btn btn-info showChefImportNodesModalBtn" value="Import Nodes"/> </div>
+  <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div>
 
 </div>
 
@@ -70,7 +70,7 @@
         <h4 class="modal-title">Import Nodes</h4>
       </div>
       <div class="modal-body">
-         <form role="form">
+         <form role="form" class="smart-form1">
           <fieldset>
           <div class="">
           <section class="col col-12">
@@ -100,8 +100,8 @@
         </div>
     		</div>
       </section>
-      <hr/>
-      <section>
+      
+      <section class="col col-12">
         <div class="form-group">
           <label for="exampleInputEmail1">Provider</label>
           <div class="">
@@ -111,6 +111,18 @@
         </div>
         </div>
       </section>
+      <section class="col col-12">
+                                                            <label class="label">Assign Users</label>
+                                                            <label class="select select-multiple">
+                                                                <select class="custom-scroll" multiple="">
+                                                                    <option value="1">User1</option>
+                                                                    <option value="2">User2</option>
+                                                                    <option value="3">User3</option>
+                                                                    <option value="4">User4</option>
+                                                                    <option value="5">User5</option>
+                                                                  
+                                                                </select> </label>
+                                                        </section>
     </div>
     </fieldset>
          </form>
@@ -142,12 +154,15 @@ $(function(){
 var $orgListInput = $('#chefImportOrgSelect');
  $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
+
+$('.nodeListContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+
 $.get('/chef/servers/'+urlParams.chefId,function(data){
    console.log('chefServer ==>',data);
    $orgListInput.append($('<option></option>').val(data.orgname).html(data.orgname));
     var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
     var $providerlist = $('#chefImportProviderSelect');
-    $providerlist.append($('<option></option>').val('choose').html('choose'));
+    $providerlist.append($('<option></option>').val('choose').html('Choose'));
     for(var i=0;i<getProviders.length;i++) {
       $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
     }
@@ -155,7 +170,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
 
    
     $bgList.empty();
-    $bgList.append($('<option></option>').val('choose').html('choose'));
+    $bgList.append($('<option></option>').val('choose').html('Choose'));
     var getBGs = getRelatedValues_Top(2, "orgname",data.orgname, "productgroupname"); 
     for(var i=0;i<getBGs.length;i++) {
         $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
@@ -169,7 +184,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
           return;
       }
       $projectList.empty();
-      $projectList.append($('<option></option>').val('choose').html('choose'));
+      $projectList.append($('<option></option>').val('choose').html('Choose'));
 
       var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
       for(var i=0;i<getProjs.length;i++) {
@@ -178,6 +193,8 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
     });
 
   $.get('/chef/servers/'+urlParams.chefId+'/nodes',function(data){
+    $('.nodeListContainer img').remove();
+
     var $tableBody = $('.table-hover tbody');
     var environments = Object.keys(data);
     for(var i=0;i<environments.length;i++) {
@@ -232,7 +249,9 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
             console.log('added');
 
       }
+
     }
+    $('#organiz').show();
 
   });
 

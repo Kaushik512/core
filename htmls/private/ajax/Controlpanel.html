@@ -1,6 +1,6 @@
 <div class="row">
 
-    <article class="col-sm-12 col-md-12 col-lg-12">
+    <article class="col-sm-12 col-md-12 col-lg-12" id="controlPanelContainer" style="display:none">
 
             <div class="widget-body" style="font-size:14px;">
                 <div class="">
@@ -403,8 +403,8 @@
 
                                     </div>
 
-                                </div><!--collapseRoleAttr ends here-->
-                              </div>
+                                  </div><!--collapseRoleAttr ends here-->
+                                </div>
                               <!--Role Attributes ends here-->
 
                               <div class="panel panel-default">
@@ -457,6 +457,49 @@
                                     </div>
                                   
                               </div>
+                                                    <!-- Data Bags Accordian starts here -->
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseDataBag" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss"></i><b style="color:#3a87ad;font-size:13px;"><u>Data Bags</u></b></a></h4>
+                        </div>
+                        <div id="collapseDataBag" class="panel-collapse collapse in">
+                          <div class="panel-body">
+                            <div id="servicebox">
+                              <div id="data_bag_div" class="serviceBox1" >
+                              <div style="width:100px;padding-left:30px;"><span style="font-size:13px;"><b><u>Databags</u></b></span></div> 
+                                <ul style="list-style:none outside none;font-size:12px;">
+                                  <li> <a class="panel-databag" > Users </a> </li>
+                                  <li> <a class="panel-databag" > Groups </a> </li>
+                                  <li> <a class="panel-databag" > Oracle_Bag </a> </li>
+                                  <li> <a class="panel-databag" > Database </a> </li>
+                                  <li> <a class="panel-databag" > Servers </a> </li>
+                                </ul>
+                              </div>
+                              <div  id="data_bag_div2" class="serviceBox2"  >
+                              <div style="width:140px;padding-left:14px;"><span style="font-size:13px;"><b><u>Databag Items</u></b></div> 
+                                  <ul style="list-style:none outside none;font-size:12px;">
+                                    <li> <a class="panel-databag1"  > Frank </a> </li>
+                                    <li> <a  class="panel-databag1" > bobo </a> </li>
+                                  </ul>
+                              </div>
+                              <div id="data_bag_div3" class="serviceBox3" >
+                                 <i class="fa fa-pencil txt-color-blue" style="float:right;padding-top:10px"><a data-toggle="modal" href="#myModal"> Edit </a></i>
+                              <div style="width:140px;padding-left:24px;"><span style="font-size:13px;"><b><u>Edit Frank</u></b></div> 
+
+                                 <ul style="list-style:none outside none;padding-top:5px;font-size:12px;">
+                                   <li > id: frank </li>
+                                   <li> comment: Frank </li>
+                                   <li> uid: 2000 </li>
+                                   <li> gid: 0 </li>
+                                   <li> home: /home/frank </li>
+                                   <li> shell: /bin/bash </li>
+                                 </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div><!--collapse Data Bags ends here-->
+                      </div>
                     </div>
                     <a href="" class="btn btn-primary" style="width:100px;border-radius:5px;float:right;margin-top:10px;margin-right:10px;">Save</a>
                 </div>
@@ -473,11 +516,9 @@
               <div class="col-md-12">
                 <div class="clearfix form-actions" style="text-align:center">
                   <div class="btn-group">
-                    <a href="index.html#ajax/Dev.html">
-                      <button class="btn pull-left btn-primary" style="margin-left:5px">
+                      <button class="btn pull-left btn-primary" style="margin-left:5px" onclick="history.back()">
                         Back to Instances
                       </button>
-                    </a>
                   </div>
                 </div>
               </div>
@@ -487,6 +528,11 @@
 
 </div>
 </article>
+
+<div class="loadingControlPanelIndicator">
+<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
+</div>
+
 </div>
 
 
@@ -508,7 +554,62 @@
     </div>
   </div>
 </div>
-  
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    Edit Data Bag Item
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form action="" id="" class="">
+                        <div action="" id="" class="smart-form" novalidate="novalidate">
+
+                        <div class="row" style="margin:0px;">
+                           <div style="height:200px; width:200px; padding-left:20px; padding-top:10px;" contenteditable="true">
+                              <ul style="list-style:none outside none;font-size:12px;">
+                                 <li> id: frank </li>
+                                 <li> comment: Frank </li>
+                                 <li> uid: 2000 </li>
+                                 <li> gid: 0 </li>
+                                 <li> home: /home/frank </li>
+                                 <li> shell: /bin/bash </li>
+                             </ul>
+                           </div>
+    
+                        </div>
+
+
+                    
+
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    Save
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Cancel
+                                </button>
+
+                            </footer>
+                        </div>
+                    
+                </form>                     
+                        
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <!-- div of Contant tab starts here -->
 
@@ -551,8 +652,8 @@ $.get('/instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('stopped');          
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
   } else if(data.instanceState == 'stopped'){
-            $domainRolesCaption.find('.componentlistContainer').addClass('paused');
-            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-paused');          
+            $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
+            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');          
   } else {
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
@@ -641,8 +742,8 @@ $.get('/instances/'+urlParams.id,function(data){
 
             case 'stopped':
              cssClasses.ringClass = 'paused';
-             cssClasses.textClass = 'instance-state-text-paused';
-             cssClasses.tableViewStatusClass ="paused";
+             cssClasses.textClass = 'instance-state-text-stopped';
+             cssClasses.tableViewStatusClass ="stopped";
             break;
 
             case 'terminated':
@@ -787,7 +888,8 @@ $.get('/instances/'+urlParams.id,function(data){
   $cfmwareTbody.append($tr);
 
 
-  
+  $('.loadingControlPanelIndicator').hide();
+  $('#controlPanelContainer').show();
 
 
 });
@@ -804,3 +906,21 @@ $.get('/instances/'+urlParams.id,function(data){
   $(".thumbnails").css("height", totalHeight);
   console.log(totalHeight);
 </script>-->
+
+<script type="text/javascript">
+  
+  $( document ).ready(function() {
+    $('#data_bag_div2').hide();
+});
+  $('.panel-databag').click(function(e){
+      $('#data_bag_div2').show();
+  });
+
+
+  $( document ).ready(function() {
+    $('#data_bag_div3').hide();
+});
+  $('.panel-databag1').click(function(e){
+      $('#data_bag_div3').show();
+  });
+</script>
