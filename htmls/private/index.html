@@ -348,9 +348,16 @@
 			            var $ulOrgList = $('.orgsList').empty();
             			var $workspace = $('#Workspace').empty();
 			            for(var i=0;i<data.length;i++) {
-			            	 var $li = $('<li data-id="org'+i+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+data[i].name+'</span></a>');
-				 
+			            	var classOrgSelected = '';
+			            	if(i==0) {
+                               classOrgSelected = 'orgSelected';
+			            	}
+			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+data[i].name+'</span></a>');
+				             
               				$li.click(function(e){
+                             var $parents = $(this).parents('ul');
+                             $parents.children('li').removeClass('orgSelected');
+                             $(this).addClass('orgSelected');
 
                 			 var id = $(this).attr('data-id');
                  			$('.org').hide();
