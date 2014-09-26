@@ -2,7 +2,7 @@ var d4dModel = require('../classes/d4dmasters/d4dmastersmodel.js');
 var settingsController = require('../controller/settings');
 var fileIo = require('../classes/utils/fileio');
 var uuid = require('node-uuid');
-
+var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -23,6 +23,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			name: 'master2'
 		}]);
 	});
+	//getAccessFilesForRole
+	app.get('/d4dMasters/getaccessroles/:loginname', function(req, res) {
+		configmgmtDao.getAccessFilesForRole(req.params.loginname,req,res,function(err,getAccessFiles){
+			if(getAccessFiles){
+				getAccessFiles = getAccessFiles.replace(/\"/g,'').replace(/\:/g,'')
+			console.log('Rcvd in call: ' + getAccessFiles);
+			
+			res.end(getAccessFiles);
+			}
+		});
+	});
+
 
 	app.get('/d4dMasters/getuser', function(req, res) {
 		res.send({"user":[{
