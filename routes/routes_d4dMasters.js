@@ -29,8 +29,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			if(getAccessFiles){
 				getAccessFiles = getAccessFiles.replace(/\"/g,'').replace(/\:/g,'')
 			console.log('Rcvd in call: ' + getAccessFiles);
-			
-			res.end(getAccessFiles);
+			req.session.user.authorizedfiles = getAccessFiles;
+			res.end(req.session.user.authorizedfiles);
 			}
 		});
 	});

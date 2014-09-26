@@ -32,6 +32,7 @@ module.exports.setRoutes = function(app) {
   app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    
     next();
   });
 
@@ -72,6 +73,27 @@ module.exports.setRoutes = function(app) {
   // for private html files
   app.all('/private/*', function(req, res, next) {
     if (req.session && req.session.user) {
+      if(req.session.user.authorizedfiles){
+       var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
+       authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
+      // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
+       if(req.originalUrl.indexOf('.html') > 0) //its a html file.
+       {
+          var urlpart = req.originalUrl.split('/');
+        //  console.log(urlpart[urlpart.length -1], authfiles.length, authfiles.indexOf(urlpart[urlpart.length -1]));
+          if(authfiles.indexOf(urlpart[urlpart.length -1]) < 0 && req.session.user.cn !='sd2')
+          {
+              console.log('not authorized');
+              res.redirect('/private/ajax/noaccess.html');
+              return;
+          }
+          else{
+              console.log('Authorized');
+          }
+
+       }
+      }
+      console.log('req received ' + req.originalUrl);
       next();
     } else {
       //res.redirect('/login');
