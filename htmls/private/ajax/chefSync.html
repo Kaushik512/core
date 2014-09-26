@@ -56,7 +56,7 @@
 		</tbody>
 	</table>
    
-  <div style="text-align:center"> <input type="button" class="btn btn-info showChefImportNodesModalBtn" value="Import Nodes"/> </div>
+  <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div>
 
 </div>
 
@@ -147,7 +147,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
    $orgListInput.append($('<option></option>').val(data.orgname).html(data.orgname));
     var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
     var $providerlist = $('#chefImportProviderSelect');
-    $providerlist.append($('<option></option>').val('choose').html('choose'));
+    $providerlist.append($('<option></option>').val('choose').html('Choose'));
     for(var i=0;i<getProviders.length;i++) {
       $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
     }
@@ -155,7 +155,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
 
    
     $bgList.empty();
-    $bgList.append($('<option></option>').val('choose').html('choose'));
+    $bgList.append($('<option></option>').val('choose').html('Choose'));
     var getBGs = getRelatedValues_Top(2, "orgname",data.orgname, "productgroupname"); 
     for(var i=0;i<getBGs.length;i++) {
         $bgList.append($('<option></option>').val(getBGs[i]).html(getBGs[i]));
@@ -169,7 +169,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
           return;
       }
       $projectList.empty();
-      $projectList.append($('<option></option>').val('choose').html('choose'));
+      $projectList.append($('<option></option>').val('choose').html('Choose'));
 
       var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
       for(var i=0;i<getProjs.length;i++) {

@@ -500,10 +500,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
            $ul.append($li);
          }
         }
-        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:20px;bottom:4px;"></div>');
+        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:10px;bottom:4px;"></div>');
         if(data[i].versionsList) {
+           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i>Edit</a>').addClass('btn btn-primary');
            var $selectVer =  $('<select style="padding:2px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
-           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;" class="bpEditBtn">Edit</a>').addClass('btn btn-primary');
 
            $selectVerEdit.click(function(e){
                 var $parent = $(this).parents('.cardimage');
@@ -521,7 +521,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
           
                     $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
                     var keys = Object.keys(data);
-                    var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
+                    
+                    var $cookbooksList = $('<select style="height:200px;width:300px;"></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
                     for(var i=0;i<keys.length;i++) {
                         var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                         $cookbooksList.append($option);
@@ -605,6 +606,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
           });
        } 
     });
+    pageSetUp();
 
 });
 
@@ -639,7 +641,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
          
         var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
         var $spanheadingMiddle = $('<span></span>');
-        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('title','More Info'));  
+        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
 
         $divHeading.append($spanheadingLeft); 
         $divHeading.append($spanheadingRight);
@@ -684,7 +686,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             }
         }*/
         //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-        $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').addClass('fa fa-lg fa-fw fa-2x fa-list  txt-color-blue instance-bootstrap-list-faimage'));
+        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('fa fa-lg fa-fw fa-2x fa-list  txt-color-blue instance-bootstrap-list-faimage'));
 
         $divComponentItem.click(function(e){
             $(this).parents('.flip-toggle').toggleClass('flip');
@@ -696,13 +698,13 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         $divComponentListContainer.append($divComponentList);
 
-        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').addClass('instance-bootstrap-list-image');
+        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Import').addClass('instance-bootstrap-list-image');
 
         $divComponentListContainer.append($divComponentListImage);
 
         //For Table View
         $rowContainter.append('<td>'+(i+1)+'</td>');
-        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/></td>');
+        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:27px;width:27px;margin-right:5px;"/></td>');
         
 
         $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
@@ -737,7 +739,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
         $rowContainter.append($tableInstanceStatusIndicator);
 
-        $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="'+data[i]._id+'" href="javascript:void(0)" ><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
+        $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="'+data[i]._id+'" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
         
         $divDomainRolesCaption.append($divComponentListContainer);
         var $divInstanceDetails = $('<div></div>')
@@ -772,9 +774,9 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
           if(!data[i].chef) {
             data[i].chef = {};
           }  
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId',data[i].chef.serverId));
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId',data[i].chef.serverId).attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Restart'));
           $divActionBtnContainer.append($divActionReStartContainer);
-          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop'));
+          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Shutdown'));
           $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
@@ -1044,7 +1046,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     $(this).addClass('role-Selectedcard');
 
   });
-
+    pageSetUp();
 
 });
 
