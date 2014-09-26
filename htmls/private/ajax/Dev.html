@@ -698,7 +698,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         $divComponentListContainer.append($divComponentList);
 
-        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Import').addClass('instance-bootstrap-list-image');
+        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Import').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data[i].chef.serverId);
 
         $divComponentListContainer.append($divComponentListImage);
 
@@ -885,7 +885,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             break;
 
             case 'stopped':
-             cssClasses.ringClass = 'paused';
+             cssClasses.ringClass = 'stopped';
              cssClasses.textClass = 'instance-state-text-stopped';
              cssClasses.tableViewStatusClass ="stopped";
             break;
@@ -953,9 +953,9 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         }); 
     });
 
-    $('.instanceActionBtnUpdateRunlist').click(function(e){
+    $('.instanceActionBtnUpdateRunlist,.instance-bootstrap-list-image').click(function(e){
          var $this = $(this);
-         var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');
+         var instanceId = $this.parents('.domain-roles-caption').attr('data-instanceId');
          var chefServerId = $this.attr('data-chefServerId');
 
          $chefRunModalContainer = $('#chefRunModalContainer');
