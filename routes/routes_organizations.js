@@ -158,12 +158,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgname/cookbooks', function(req, res) {
-        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname,function(err,chefDetails){
-            if(err){
+        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
+            if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata",chefDetails);
+            console.log("chefdata", chefDetails);
+
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
 
             var chef = new Chef({
                 userChefRepoLocation: chefDetails.chefRepoLocation,
@@ -180,24 +185,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     return;
                 } else {
                     res.send({
-                        serverId:chefDetails.rowid,
-                        cookbooks:cookbooks
+                        serverId: chefDetails.rowid,
+                        cookbooks: cookbooks
                     });
                 }
             });
-            
+
         });
 
     });
 
     app.get('/organizations/:orgname/roles', function(req, res) {
-        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname,function(err,chefDetails){
-            if(err){
+        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
+            if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata",chefDetails);
-
+            console.log("chefdata", chefDetails);
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
             var chef = new Chef({
                 userChefRepoLocation: chefDetails.chefRepoLocation,
                 chefUserName: chefDetails.loginname,
@@ -213,12 +221,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     return;
                 } else {
                     res.send({
-                        serverId:chefDetails.rowid,
-                        roles:roles
+                        serverId: chefDetails.rowid,
+                        roles: roles
                     });
                 }
             });
-            
+
         });
 
     });
