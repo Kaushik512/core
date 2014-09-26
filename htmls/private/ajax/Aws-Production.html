@@ -879,15 +879,12 @@
                                                             <label class="label">Assign Users</label>
                                                             <label class="select select-multiple">
                                                                 <select class="custom-scroll" multiple="">
-                                                                    <option value="1">Alexandra</option>
-                                                                    <option value="2">Alice</option>
-                                                                    <option value="3">Anastasia</option>
-                                                                    <option value="4">Avelina</option>
-                                                                    <option value="5">Basilia</option>
-                                                                    <option value="6">Beatrice</option>
-                                                                    <option value="7">Cassandra</option>
-                                                                    <option value="8">Clemencia</option>
-                                                                    <option value="9">Desiderata</option>
+                                                                    <option value="1">User1</option>
+                                                                    <option value="2">User2</option>
+                                                                    <option value="3">User3</option>
+                                                                    <option value="4">User4</option>
+                                                                    <option value="5">User5</option>
+                                                                  
                                                                 </select> </label>
                                                         </section>
                                                         <section class="col col-6">
@@ -1179,7 +1176,8 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                             for(var i=0;i<getEnv.length;i++) {
                                  $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                             }
-
+                            $('.cookbookShow img').remove();
+                             $('#cookbookSelect').hide();
                             $('.cookbookShow').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
 
