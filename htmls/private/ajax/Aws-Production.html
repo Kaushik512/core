@@ -787,14 +787,14 @@
 
                         <div class="row glowBox" style="margin:0px;">
                             <section class="col col-6" style="float:right;">
-                                <label for="">Choose Organization 
+                                <label for="">Choose Organization <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
                                      <select id="orgnameSelect" class="form-control">
                                       </select>
                                  </label> 
                                  <div class="cookbookShow">
-                                    <select id="cookbookSelect" class="form-control" style="width: 200px;float:left" size="10" multiple="multiple">
+                                    <select id="cookbookSelect" class="form-control" style="width: 200px;float:left;display:none" size="10" multiple="multiple">
                                     </select> 
                                  </div>
                             </section>
@@ -802,7 +802,7 @@
 
                                                                             
                             <section class="col col-6">
-                                <label for="">Choose Operating System  
+                                <label for="">Choose Operating System  <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
                                     <select>
@@ -811,7 +811,7 @@
                                 </label>                                          
                             </section>
                             <section class="col col-6">
-                                <label for="category">Choose Security Group
+                                <label for="category">Choose Security Group <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
                                     <select>
@@ -826,7 +826,7 @@
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label for="category">Choose Instance Size
+                                <label for="category">Choose Instance Size <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
                                     <select class="instanceType">
@@ -855,7 +855,7 @@
                                                     <div class="row glowBox" style="margin:0px;">
                                                         
                                                         <section class="col col-6">
-                                                            <label for="category">Blueprint Name 
+                                                            <label for="category">Blueprint Name <span style="color:red">*</span>
                                                             </label>
                                                             <label class="input">
                                                             <!-- <i class="icon-append fa fa-building"></i>  -->
@@ -866,7 +866,7 @@
 
                                                         
                                                         <section class="col col-6">
-                                                            <label for="category">Business Group
+                                                            <label for="category">Business Group <span style="color:red">*</span>
                                                             </label>
                                                             <label class="select"> 
                                                                 <select id="bgListInput">
@@ -891,7 +891,7 @@
                                                                 </select> </label>
                                                         </section>
                                                         <section class="col col-6">
-                                                            <label for="category">Project
+                                                            <label for="category">Project <span style="color:red">*</span>
                                                             </label>
                                                             <label class="select"> 
                                                               <select id="projectListInput">
@@ -902,7 +902,7 @@
                                                         </section>
                                                        
                                                         <section class="col col-6" style="float:right;">
-                                                            <label for="category">Environment
+                                                            <label for="category">Environment <span style="color:red">*</span>
                                                             </label>
                                                             <label class="select"> 
                                                                 <select  id="envList">
@@ -925,7 +925,7 @@
 
 
                                                                     <div class="">
-                                                                        <h3 class="alert alert-success"><b>Congratulations!</b> Blueprint Saved Successfully</h3>
+                                                                        <h3 class="alert alert-success">Blueprint Saved.</h3>
                                                                     </div>
 
                                                                    
@@ -1055,6 +1055,13 @@ $('#bootstrap-wizard-1').bootstrapWizard({
               alert('please choose a template');
               return false;
             }
+
+            if($('#orgnameSelect').val() === 'choose') {
+                alert('please choose an Organization');
+                return false;
+            }
+
+
             reqBody = {};
             reqBody.templateId = $selectedItem.attr('data-templateId');
             reqBody.templateType = $selectedItem.attr('data-templateType');
@@ -1133,8 +1140,9 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 
     var $selectedTemplate = $('.productdiv2').click(function(e){
               $selectedTemplate.removeClass('role-Selected');
+
               var $this = $(this);
-              $('.selectedTemplateArea').empty().append($this.clone(false));
+              $('.selectedTemplateArea').empty().append($this.clone(false).css({'cursor':'auto'}));
 
               $this.addClass('role-Selected');
     });
@@ -1171,18 +1179,25 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                             for(var i=0;i<getEnv.length;i++) {
                                  $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                             }
+
+                            $('.cookbookShow').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+
+
+
                             $.ajax({
                             url:'/organizations/'+orgName+'/cookbooks',
                             method:'GET',
                             async:false,
                             success :function(data) {
                              var keys = Object.keys(data.cookbooks);
+                             $('.cookbookShow img').remove();
                              var $cookbooksList = $('#cookbookSelect').data('chefServerId',data.serverId); 
                              for(var i=0;i<keys.length;i++) {
                                 var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                                 $cookbooksList.append($option);
                              }
-                                $cookbooksList.multiSelect({});
+                             $cookbooksList.show();
+                             $cookbooksList.multiSelect({});
                             },
                           });    
 

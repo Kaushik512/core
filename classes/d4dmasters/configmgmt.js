@@ -70,6 +70,114 @@ function Configmgmt() {
             }
         });
     };
+    this.getAccessFilesForRole = function(loginname,req,res,callback) {
+        console.log("Received Role name: " + loginname);
+        var accessibleFiles = [];
+        var mainRef = this;
+        var countOuter = 0;
+        var roleslist = this.getListFiltered(7,"userrolename","loginname",loginname,function(err,rolenames){
+            if(rolenames){
+                console.log("Rolenames for User:" + rolenames);
+                var rn = rolenames.replace(/\"/g,'').split(':')[0].split(',');
+                if(rn){
+                    
+                    rn.forEach(function(rn1){
+                        console.log("Role " + countOuter + ":" + rn1);
+                        countOuter++;
+                        var permissionlist = mainRef.getListFiltered(5,"globalaccessname","userrolename",rn1,function(err,globalaccessname){ 
+                        console.log("inside" + (globalaccessname == null));
+                        if (err) {
+                            console.log("Hit and error:" + err);
+                        }
+                        if(globalaccessname)
+                        {
+                            
+                            var ga = globalaccessname.replace(/\"/g,'').split(':')[0].split(',');
+                            if(ga){
+                                var count = 0;
+                                ga.forEach(function(ga1){
+                                    mainRef.getListFiltered(8,"files","globalaccessname",ga1,function(err,jlt){
+                                        console.log('inner loop ' + jlt);
+                                        count++;
+                                        if(accessibleFiles.indexOf(jlt) < 0){
+                                            accessibleFiles.push(jlt);
+                                        }
+                                        if(count == ga.length){
+                                            //callback(null,accessibleFiles.toString());
+                                        } 
+                                    });
+                                });
+                                
+                            }
+                        }
+                        if(countOuter == rn.length){
+                                           
+                                        }
+                        }); 
+                    });
+                    
+                }
+                else
+                    callback("err",null);
+               /* */
+                
+            }
+        });
+       // callback(null,"HIT");
+    };
+    //Receiving the permission level for Role
+    this.getAccessFilesForRole1 = function(rolename,req,res,callback) {
+        console.log("Received Role name: " + rolename);
+        var accessibleFiles = [];
+        var mainRef = this;
+        var roleslist = this.getListFiltered(6,"globalaccessname","userrolename",rolename,function(err,globalaccessname){ 
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if(globalaccessname)
+            {
+
+                //"\"Projects,Groups,Environments,Providers,ChefServer,Gallery,UserManagement,Design\":
+               /* var ga = globalaccessname.substring(1,globalaccessname.length);
+                console.log("First pass: " + ga);
+                ga = ga.substring(0,ga.length-2).split(',');
+                console.log("Second pass: " + ga);
+                for(var k = 0; k < ga.length;k++){
+                    //console.log(ga[k]);
+                }*/
+                var ga = globalaccessname.replace(/\"/g,'').split(':')[0].split(',');
+                if(ga){
+                    var testing = function(ga,callback){
+                            for(var k = 0; k < ga.length;k++){
+                                console.log('Set Global Access : ' + ga[k]);
+                                
+                                
+                                var justlikethat = mainRef.getListFiltered(8,"files","globalaccessname",ga[k],function(err,gafiles){
+                                    if(gafiles){
+                                        
+                                        var gaf = gafiles.split(',');
+                                        for(var l = 0; l < gaf.length;l++){
+                                            if(accessibleFiles.indexOf(gaf[l]) < 0){
+                                                accessibleFiles.push(gaf[l]);
+                                                console.log('File List for Global ' + accessibleFiles);
+
+                                            }
+                                        }
+                                    }
+                                });
+                                
+                            }
+                        
+                    }
+                    
+                }
+               // callback(null,accessibleFiles);
+                //var obj1 = JSON.parse(globalaccessname);
+            }
+        }); //end call back getlistfiltereed
+        console.log('Final :' + accessibleFiles);
+    };
+
 
     this.getChefServerDetailsByOrgname = function(paramorgname, callback) {
         d4dModel.findOne({
@@ -226,14 +334,21 @@ function Configmgmt() {
             if (d4dMasterJson) {
                 var jsonlist = '';
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    //console.log("found" + itm.field.length);
+                    //console.log("Item Json" + JSON.stringify(itm));
                     var rowid = '';
                     var fieldvalue = '';
                     var isFilteredRow = false;
                     //filtering for the correct rows
                     for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j][comparedfieldname] == comparedfieldvalue) {
-                            isFilteredRow = true;
+                    //    console.log(JSON.stringify("in the loop : " + itm.field[j][]) + ":" + itm.field[j]['name'] + ':' + comparedfieldvalue);
+                        
+                        if (itm.field[j]["name"] == comparedfieldname) {
+                            if(itm.field[j]["values"].value == comparedfieldvalue){
+                                console.log("In Field [ " + itm.field[j]["name"] + "]" + itm.field[j]["values"].value);
+                                isFilteredRow = true;
+                            }
+                                
                         }
                     }
                     if (isFilteredRow) {
@@ -255,6 +370,7 @@ function Configmgmt() {
                 configmgmt = "{" + jsonlist + "}";
                 console.log(JSON.stringify(jsonlist));
                 callback(null, jsonlist);
+                return(jsonlist);
             }
         });
     };

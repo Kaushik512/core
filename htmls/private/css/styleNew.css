@@ -262,6 +262,7 @@ html
     padding: 4px;
     width:152px;
     transition: all 0.2s ease-in-out 0s;
+    cursor: pointer;
 }
 
 .btn1{display:inline-block;margin-bottom:0;font-weight:normal;text-align:center;vertical-align:middle;cursor:pointer;background-image:none;border:1px solid transparent;white-space:nowrap;padding:2px 6px;font-size:13px;line-height:1.428571429;border-radius:2px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}
@@ -298,7 +299,7 @@ html
 }*/
 /*.fixed-footer #footer{position:fixed;width:100%;z-index:1003}.container.fixed-footer #footer{max-width:1164px}.fixed-footer #footer .ajax-dropdown{z-index:1000}.fixed-footer #shortcut{position:fixed}.fixed-footer #main{margin-top:49px}*/
 .orgSelected {
-    background:linear-gradient(to right, lightgrey 99%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background-color: #2C3742;
   }
 /*Arabinda added for Tag input*/
 .smart-form .label{

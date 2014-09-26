@@ -350,6 +350,11 @@ function readform(formID) {
                         }
                         if (inputC.getType().toLowerCase() == "div") {
                             $(inputC).attr('savedvalue',v[k1])
+                            //Set saved values to div.
+                            var divselect1 = v[k1].split(',');
+                            for(var j = 0; j < divselect1.length; j++){
+                                inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                              }
                         }
                     });
                 }
@@ -421,13 +426,15 @@ function saveform(formID){
        k =  $(this).attr("id");
       $(this).find("input").each(function (){
           if ($(this).is(":checked")) {
-            v.push("\"" + $(this).val() + "\"");
+        //    v.push("\"" + $(this).val() + "\"");
+            v.push($(this).val());
           }
       });
     });
   //  alert(k + ":" + v.toString());
     if(k != ''){
-        data1.append(k,"[" + v.toString() + "]");
+        //data1.append(k,"[" + v.toString() + "]");
+        data1.append(k,v);
     }
     
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
