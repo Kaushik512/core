@@ -350,6 +350,11 @@ function readform(formID) {
                         }
                         if (inputC.getType().toLowerCase() == "div") {
                             $(inputC).attr('savedvalue',v[k1])
+                            //Set saved values to div.
+                            var divselect1 = v[k1].split(',');
+                            for(var j = 0; j < divselect1.length; j++){
+                                inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                              }
                         }
                     });
                 }

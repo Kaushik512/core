@@ -1,0 +1,1208 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'nodemon' ]
+2 info using npm@1.2.18
+3 info using node@v0.10.4
+4 verbose read json /usr/local/lib/package.json
+5 verbose read json /usr/local/lib/package.json
+6 verbose cache add [ 'nodemon', null ]
+7 verbose cache add name=undefined spec="nodemon" args=["nodemon",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'nodemon',
+8 verbose parsed url   path: 'nodemon',
+8 verbose parsed url   href: 'nodemon' }
+9 silly lockFile 1625b929-nodemon nodemon
+10 verbose lock nodemon /root/.npm/1625b929-nodemon.lock
+11 silly lockFile 1625b929-nodemon nodemon
+12 silly lockFile 1625b929-nodemon nodemon
+13 verbose addNamed [ 'nodemon', '' ]
+14 verbose addNamed [ null, '' ]
+15 silly lockFile 4f5e51c6-nodemon nodemon@
+16 verbose lock nodemon@ /root/.npm/4f5e51c6-nodemon.lock
+17 silly addNameRange { name: 'nodemon', range: '', hasData: false }
+18 verbose url raw nodemon
+19 verbose url resolving [ 'https://registry.npmjs.org/', './nodemon' ]
+20 verbose url resolved https://registry.npmjs.org/nodemon
+21 info trying registry request attempt 1 at 23:34:41
+22 verbose etag "1YDM9FPRUSYRYBE4LDOC7ICQ5"
+23 http GET https://registry.npmjs.org/nodemon
+24 http 200 https://registry.npmjs.org/nodemon
+25 silly registry.get cb [ 200,
+25 silly registry.get   { date: 'Thu, 25 Sep 2014 06:34:44 GMT',
+25 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+25 silly registry.get     etag: '"BS6KMDJ5LXWDGG3M3OKALUZ5"',
+25 silly registry.get     'content-type': 'application/json',
+25 silly registry.get     'cache-control': 'max-age=60',
+25 silly registry.get     'content-length': '122503',
+25 silly registry.get     'accept-ranges': 'bytes',
+25 silly registry.get     via: '1.1 varnish',
+25 silly registry.get     age: '77',
+25 silly registry.get     'x-served-by': 'cache-lax1430-LAX',
+25 silly registry.get     'x-cache': 'HIT',
+25 silly registry.get     'x-cache-hits': '1',
+25 silly registry.get     'x-timer': 'S1411626884.909873,VS0,VE73',
+25 silly registry.get     vary: 'Accept',
+25 silly registry.get     'keep-alive': 'timeout=10, max=50',
+25 silly registry.get     connection: 'Keep-Alive' } ]
+26 silly addNameRange number 2 { name: 'nodemon', range: '', hasData: true }
+27 silly addNameRange versions [ 'nodemon',
+27 silly addNameRange   [ '0.1.4',
+27 silly addNameRange     '0.1.5',
+27 silly addNameRange     '0.1.6',
+27 silly addNameRange     '0.1.7',
+27 silly addNameRange     '0.1.8',
+27 silly addNameRange     '0.2.0',
+27 silly addNameRange     '0.2.1',
+27 silly addNameRange     '0.2.2',
+27 silly addNameRange     '0.3.0',
+27 silly addNameRange     '0.3.1',
+27 silly addNameRange     '0.3.2',
+27 silly addNameRange     '0.4.0',
+27 silly addNameRange     '0.4.1',
+27 silly addNameRange     '0.5.0',
+27 silly addNameRange     '0.5.1',
+27 silly addNameRange     '0.5.2',
+27 silly addNameRange     '0.5.3',
+27 silly addNameRange     '0.5.4',
+27 silly addNameRange     '0.5.5',
+27 silly addNameRange     '0.5.6',
+27 silly addNameRange     '0.5.7',
+27 silly addNameRange     '0.6.0',
+27 silly addNameRange     '0.6.1',
+27 silly addNameRange     '0.6.2',
+27 silly addNameRange     '0.6.3',
+27 silly addNameRange     '0.6.4',
+27 silly addNameRange     '0.6.5',
+27 silly addNameRange     '0.6.6',
+27 silly addNameRange     '0.6.7',
+27 silly addNameRange     '0.6.8',
+27 silly addNameRange     '0.6.9',
+27 silly addNameRange     '0.6.10',
+27 silly addNameRange     '0.6.11',
+27 silly addNameRange     '0.6.12',
+27 silly addNameRange     '0.6.13',
+27 silly addNameRange     '0.6.14',
+27 silly addNameRange     '0.6.15',
+27 silly addNameRange     '0.6.16',
+27 silly addNameRange     '0.6.17',
+27 silly addNameRange     '0.6.18',
+27 silly addNameRange     '0.6.19',
+27 silly addNameRange     '0.6.20',
+27 silly addNameRange     '0.6.21',
+27 silly addNameRange     '0.6.22',
+27 silly addNameRange     '0.6.23',
+27 silly addNameRange     '0.7.0',
+27 silly addNameRange     '0.7.1',
+27 silly addNameRange     '0.7.2',
+27 silly addNameRange     '0.7.3',
+27 silly addNameRange     '0.7.4',
+27 silly addNameRange     '0.7.5',
+27 silly addNameRange     '0.7.6',
+27 silly addNameRange     '0.7.7',
+27 silly addNameRange     '0.7.8',
+27 silly addNameRange     '0.7.10',
+27 silly addNameRange     '0.9.0',
+27 silly addNameRange     '0.9.1',
+27 silly addNameRange     '0.9.2',
+27 silly addNameRange     '0.9.3',
+27 silly addNameRange     '0.9.5',
+27 silly addNameRange     '0.9.6',
+27 silly addNameRange     '0.9.7',
+27 silly addNameRange     '0.9.10',
+27 silly addNameRange     '0.9.11',
+27 silly addNameRange     '0.9.12',
+27 silly addNameRange     '0.9.14',
+27 silly addNameRange     '0.9.16',
+27 silly addNameRange     '0.9.17',
+27 silly addNameRange     '1.0.0',
+27 silly addNameRange     '1.0.1',
+27 silly addNameRange     '1.0.2',
+27 silly addNameRange     '1.0.2-rc',
+27 silly addNameRange     '0.6.10-a',
+27 silly addNameRange     '1.0.2-rc3',
+27 silly addNameRange     '1.0.2-rc4',
+27 silly addNameRange     '1.0.3',
+27 silly addNameRange     '1.0.4',
+27 silly addNameRange     '1.0.5',
+27 silly addNameRange     '1.0.6',
+27 silly addNameRange     '1.0.7',
+27 silly addNameRange     '1.0.8',
+27 silly addNameRange     '1.0.9',
+27 silly addNameRange     '1.0.10',
+27 silly addNameRange     '1.0.11',
+27 silly addNameRange     '1.0.12',
+27 silly addNameRange     '1.0.13',
+27 silly addNameRange     '1.0.14',
+27 silly addNameRange     '1.0.15',
+27 silly addNameRange     '1.0.16',
+27 silly addNameRange     '1.0.17-rc1',
+27 silly addNameRange     '1.0.17-rc2',
+27 silly addNameRange     '1.0.17',
+27 silly addNameRange     '1.0.18',
+27 silly addNameRange     '1.0.19',
+27 silly addNameRange     '1.0.20',
+27 silly addNameRange     '1.1.0-alpha',
+27 silly addNameRange     '1.1.0',
+27 silly addNameRange     '1.1.1',
+27 silly addNameRange     '1.2.0',
+27 silly addNameRange     '1.2.1' ] ]
+28 verbose addNamed [ 'nodemon', '1.2.1' ]
+29 verbose addNamed [ '1.2.1', '1.2.1' ]
+30 silly lockFile 891e98f0-nodemon-1-2-1 nodemon@1.2.1
+31 verbose lock nodemon@1.2.1 /root/.npm/891e98f0-nodemon-1-2-1.lock
+32 verbose read json /root/.npm/nodemon/1.2.1/package/package.json
+33 silly lockFile 891e98f0-nodemon-1-2-1 nodemon@1.2.1
+34 silly lockFile 891e98f0-nodemon-1-2-1 nodemon@1.2.1
+35 silly lockFile 4f5e51c6-nodemon nodemon@
+36 silly lockFile 4f5e51c6-nodemon nodemon@
+37 silly resolved [ { name: 'nodemon',
+37 silly resolved     homepage: 'http://nodemon.io',
+37 silly resolved     author: { name: 'Remy Sharp', url: 'http://github.com/remy' },
+37 silly resolved     bin: { nodemon: './bin/nodemon.js' },
+37 silly resolved     engines: { node: '>=0.8' },
+37 silly resolved     repository: { type: 'git', url: 'http://github.com/remy/nodemon.git' },
+37 silly resolved     description: 'Simple monitor script for use during development of a node.js app.',
+37 silly resolved     keywords:
+37 silly resolved      [ 'monitor',
+37 silly resolved        'development',
+37 silly resolved        'restart',
+37 silly resolved        'autoload',
+37 silly resolved        'reload',
+37 silly resolved        'terminal' ],
+37 silly resolved     version: '1.2.1',
+37 silly resolved     preferGlobal: 'true',
+37 silly resolved     licenses: [ [Object] ],
+37 silly resolved     main: './lib/nodemon',
+37 silly resolved     scripts:
+37 silly resolved      { coverage: 'istanbul cover _mocha -- --timeout 30000 --ui bdd --reporter list test/**/*.test.js',
+37 silly resolved        test: 'node_modules/mocha/bin/_mocha --timeout 30000 --ui bdd test/**/*.test.js',
+37 silly resolved        web: 'node web' },
+37 silly resolved     devDependencies:
+37 silly resolved      { connect: '~2.19.1',
+37 silly resolved        mocha: '~1.20.0',
+37 silly resolved        should: '~4.0.0',
+37 silly resolved        istanbul: '~0.2.10',
+37 silly resolved        touch: '~0.0.3',
+37 silly resolved        'coffee-script': '~1.7.1' },
+37 silly resolved     dependencies:
+37 silly resolved      { 'update-notifier': '~0.1.8',
+37 silly resolved        minimatch: '~0.3.0',
+37 silly resolved        'ps-tree': '~0.0.3' },
+37 silly resolved     readme: '![nodemon logo](http://nodemon.io/nodemon.png)\n\n# nodemon\n\n[![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1211372/remynodemon-on-GitHub)\n\nFor use during development of a node.js based application.\n\nnodemon will watch the files in the directory that nodemon was started, and if they change, it will automatically restart your node application.\n\nnodemon does **not** require *any* changes to your code or method of development. nodemon simply wraps your node application and keeps an eye on any files that have changed. Remember that nodemon is a replacement wrapper for `node`, think of it as replacing the word "node" on the command line when you run your script.\n\n[![NPM version](https://badge.fury.io/js/nodemon.svg)](http://badge.fury.io/js/nodemon)\n[![Travis Status](https://travis-ci.org/remy/nodemon.svg)](https://travis-ci.org/remy/nodemon)\n\n# Installation\n\nEither through forking or by using [npm](http://npmjs.org) (the recommended way):\n\n    npm install -g nodemon\n\nAnd nodemon will be installed in to your bin path. Note that as of npm v1, you must explicitly tell npm to install globally as nodemon is a command line utility.\n\n# Usage\n\nnodemon wraps your application, so you can pass all the arguments you would normally pass to your app:\n\n    nodemon [your node app]\n\nFor CLI options, use the `-h` (or `--help`) argument:\n\n    nodemon -h\n\nUsing nodemon is simple, if my application accepted a host and port as the arguments, I would start it as so:\n\n    nodemon ./server.js localhost 8080\n\nAny output from this script is prefixed with `[nodemon]`, otherwise all output from your application, errors included, will be echoed out as expected.\n\nnodemon also supports running and monitoring [coffee-script](http://jashkenas.github.com/coffee-script/) apps:\n\n    nodemon server.coffee\n\nIf no script is given, nodemon will test for a `package.json` file and if found, will run the file associated with the *main* property ([ref](https://github.com/remy/nodemon/issues/14)).\n\nYou can also pass the debug flag to node through the command line as you would normally:\n\n    nodemon --debug ./server.js 80\n\nIf you have a `package.json` file for your app, you can omit the main script entirely and nodemon will read the `package.json` for the `main` property and use that value as the app.\n\nnodemon will also search for the `scripts.start` property in `package.json` (as of nodemon 1.1.x).\n\nAlso check out the [FAQ](https://github.com/remy/nodemon/blob/master/faq.md) or [issues](https://github.com/remy/nodemon/issues) for nodemon.\n\n## Automatic re-running\n\nnodemon was original written to restart hanging processes such as web servers, but now supports apps that cleanly exit. If your script exits cleanly, nodemon will continue to monitor the directory (or directories) and restart the script if there are any changes.\n\n## Manual restarting\n\nWhilst nodemon is running, if you need to manually restart your application, instead of stopping and restart nodemon, you can simply type `rs` with a carriage return, and nodemon will restart your process.\n\n## Config files\n\nnodemon supports local and global configuration files. These are named `nodemon.json` and can be located in the current working directory or in your home directory.\n\nThe specificity is as follows, so that a command line argument will always override the config file settings:\n\n- command line arguments\n- local config\n- global config\n\nA config file can take any of the command line arguments as JSON key values, for example:\n\n    {\n      "verbose": true,\n      "ignore": ["*.test.js", "fixtures/*"],\n      "execMap": {\n        "rb": "ruby",\n        "pde": "processing --sketch={{pwd}} --run"\n      }\n    }\n\nThe above `nodemon.json` file might be my global config so that I have support for ruby files and processing files, and I can simply run `nodemon demo.pde` and nodemon will automatically know how to run the script even though out of the box support for processing scripts.\n\nA further example of options can be seen in [sample-nodemon.md](https://github.com/remy/nodemon/blob/master/doc/sample-nodemon.md)\n\n*This section needs better documentation, but for now you can also see `nodemon --help config` ([also here](https://github.com/remy/nodemon/blob/master/doc/cli/config.txt))*.\n\n## Using nodemon as a module\n\nPlease see [doc/requireable.md](doc/requireable.md)\n\n## Running non-node scripts\n\nnodemon can also be used to execute and monitor other programs. nodemon will read the file extension of the script being run and monitor that extension instead of .js if there\'s no .nodemonignore:\n\n    nodemon --exec "python -v" ./app.py\n\nNow nodemon will run `app.py` with python in verbose mode (note that if you\'re not passing args to the exec program, you don\'t need the quotes), and look for new or modified files with the `.py` extension.\n\n### Default executables\n\nUsing the `nodemon.json` config file, you can define your own default executables using the `execMap` property. This is particularly useful if you\'re working with a language that isn\'t supported by default by nodemon.\n\nTo add support for nodemon to know about the .pl extension (for Perl), the nodemon.json file would add:\n\n    {\n      "execMap": {\n         "pl": "perl"\n      }\n    }\n\nNow running the following, nodemon will know to use `perl` as the executable:\n\n    nodemon script.pl\n\nIt\'s generally recommended to use the global `nodemon.json` to add your own `execMap` options. However, if there\'s a common default that\'s missing, this can be merged in to the project so that nodemon supports it by default, by changing [default.js](https://github.com/remy/nodemon/blob/master/lib/config/defaults.js) and sending a pull request.\n\n## Monitoring multiple directories\n\nBy default nodemon monitors the current working directory. If you want to take control of that option, use the `--watch` option to add specific paths:\n\n    nodemon --watch app --watch libs app/server.js\n\nNow nodemon will only restart if there are changes in the `./app` or `./libs` directory. By default nodemon will traverse sub-directories, so there\'s no need in explicitly including sub-directories.\n\n## Specifying extension watch list\n\nBy default, nodemon looks for files with the `.js`, `.coffee`, and `.litcoffee` extensions. If you use the `--exec` option and monitor `app.py` nodemon will monitor files with the extension of `.py`. However, you can specify your own list with the `-e` (or `--ext`) switch like so:\n\n    nodemon -e js,jade\n\nNow nodemon will restart on any changes to files in the directory (or subdirectories) with the extensions .js, .jade.\n\n## Ignoring files\n\nBy default, nodemon will only restart when a `.js` JavaScript file changes. In some cases you will want to ignore some specific files, directories or file patterns, to prevent nodemon from prematurely restarting your application.\n\nThis can be done via the command line:\n\n    nodemon --ignore lib/ --ignore tests/\n\nOr specific files can be ignored:\n\n    nodemon --ignore lib/app.js\n\nPatterns can also be ignored (but be sure to quote the arguments):\n\n    nodemon --ignore \'lib/*.js\'\n\nNote that by default, nodemon will ignore the `.git`, `node_modules`, `bower_components` and `.sass-cache` directories.\n\n## Delaying restarting\n\nIn some situations, you may want to wait until a number of files have changed. The timeout before checking for new file changes is 1 second. If you\'re uploading a number of files and it\'s taking some number of seconds, this could cause your app to restart multiple times unnecessarily.\n\nTo add an extra throttle, or delay restarting, use the `--delay` command:\n\n    nodemon --delay 10 server.js\n\nFor more precision, milliseconds can be specified.  Either as a float:\n\n    nodemon --delay 2.5 server.js\n\nOr using the time specifier (ms):\n\n    nodemon --delay 2500ms server.js\n\nThe delay figure is number of seconds (or milliseconds, if specified) to delay before restarting. So nodemon will only restart your app the given number of seconds after the *last* file change.\n\n## Controlling shutdown of your script\n\nnodemon sends a kill signal to your application when it sees a file update. If you need to clean up on shutdown inside your script you can capture the kill signal and handle it yourself.\n\nThe following example will listen once for the `SIGUSR2` signal (used by nodemon to restart), run the clean up process and then kill itself for nodemon to continue control:\n\n    process.once(\'SIGUSR2\', function () {\n      gracefulShutdown(function () {\n        process.kill(process.pid, \'SIGUSR2\');\n      });\n    });\n\nNote that the `process.kill` is *only* called once your shutdown jobs are complete. Hat tip to [Benjie Gillam](http://www.benjiegillam.com/2011/08/node-js-clean-restart-and-faster-development-with-nodemon/) for writing this technique up.\n\n## Pipe output to somewhere else\n\n```js\nnodemon({\n  script: ...,\n  stdout: false // important: this tells nodemon not to output to console\n}).on(\'readable\', function() { // the `readable` event indicates that data is ready to pick up\n  this.stdout.pipe(fs.createWriteStream(\'output.txt\'));\n  this.stderr.pipe(fs.createWriteStream(\'err.txt\'));\n});\n```\n\n## Using nodemon in your gulp workflow\n\nCheck out the [gulp-nodemon](https://github.com/JacksonGariety/gulp-nodemon) plugin to integrate nodemon with the rest of your project\'s gulp workflow.\n\n## Using nodemon in your Grunt workflow\n\nCheck out the [grunt-nodemon](https://github.com/ChrisWren/grunt-nodemon) plugin to integrate nodemon with the rest of your project\'s grunt workflow.\n\n# License\n\nMIT [http://rem.mit-license.org](http://rem.mit-license.org)\n\n# Contributors\n\n* [remy](https://github.com/remy)\n* [ChrisWren](https://github.com/ChrisWren)\n* [dylanmcd](https://github.com/dylanmcd)\n* [fearphage](https://github.com/fearphage)\n* [pasindud](https://github.com/pasindud)\n* [coen-hyde](https://github.com/coen-hyde)\n* [shawncplus](https://github.com/shawncplus)\n* [albertnetymk](https://github.com/albertnetymk)\n* [theredcoder](https://github.com/theredcoder)\n* [aivopaas](https://github.com/aivopaas)\n* [haircuttedfreak](https://github.com/haircuttedfreak)\n* [jdavis](https://github.com/jdavis)\n* [binarykitchen](https://github.com/binarykitchen)\n* [kuba-kubula](https://github.com/kuba-kubula)\n* [vadimi](https://github.com/vadimi)\n* [mentatxx](https://github.com/mentatxx)\n* [bryankaplan](https://github.com/bryankaplan)\n* [lordnox](https://github.com/lordnox)\n* [jaredhanson](https://github.com/jaredhanson)\n* [skaushik92](https://github.com/skaushik92)\n* [twolfson](https://github.com/twolfson)\n* [chrisklaiber](https://github.com/chrisklaiber)\n* [wasche](https://github.com/wasche)\n* [nuxlli](https://github.com/nuxlli)\n* [mvasilkov](https://github.com/mvasilkov)\n* [morganrallen](https://github.com/morganrallen)\n* [DennisKehrig](https://github.com/DennisKehrig)\n* [sahat](https://github.com/sahat)\n* [didoarellano](https://github.com/didoarellano)\n* [arielyang](https://github.com/arielyang)\n* [ZombieHippie](https://github.com/ZombieHippie)\n* [mikemaccana](https://github.com/mikemaccana)\n* [paularmstrong](https://github.com/paularmstrong)\n* [sainaen](https://github.com/sainaen)\n* [matthew-andrews](https://github.com/matthew-andrews)\n* [SlexAxton](https://github.com/SlexAxton)\n* [davedoesdev](https://github.com/davedoesdev)\n* [rps](https://github.com/rps)\n* [pauloadaoag](https://github.com/pauloadaoag)\n* [focusaurus](https://github.com/focusaurus)\n',
+37 silly resolved     readmeFilename: 'README.md',
+37 silly resolved     _id: 'nodemon@1.2.1',
+37 silly resolved     _from: 'nodemon@' } ]
+38 info install nodemon@1.2.1 into /usr/local/lib
+39 info installOne nodemon@1.2.1
+40 verbose from cache /root/.npm/nodemon/1.2.1/package/package.json
+41 info /usr/local/lib/node_modules/nodemon unbuild
+42 verbose read json /usr/local/lib/node_modules/nodemon/package.json
+43 verbose tar unpack /root/.npm/nodemon/1.2.1/package.tgz
+44 silly lockFile 49f7ed19-r-local-lib-node-modules-nodemon /usr/local/lib/node_modules/nodemon
+45 verbose lock /usr/local/lib/node_modules/nodemon /root/.npm/49f7ed19-r-local-lib-node-modules-nodemon.lock
+46 silly lockFile 825f084e-ot-npm-nodemon-1-2-1-package-tgz /root/.npm/nodemon/1.2.1/package.tgz
+47 verbose lock /root/.npm/nodemon/1.2.1/package.tgz /root/.npm/825f084e-ot-npm-nodemon-1-2-1-package-tgz.lock
+48 silly gunzTarPerm modes [ '755', '644' ]
+49 silly gunzTarPerm extractEntry package.json
+50 silly gunzTarPerm extractEntry .npmignore
+51 silly gunzTarPerm extractEntry README.md
+52 silly gunzTarPerm extractEntry bin/nodemon.js
+53 silly gunzTarPerm extractEntry .jshintrc
+54 silly gunzTarPerm extractEntry .travis.yml
+55 silly gunzTarPerm extractEntry doc/arch.md
+56 silly gunzTarPerm extractEntry doc/cli/authors.txt
+57 silly gunzTarPerm extractEntry doc/cli/config.txt
+58 silly gunzTarPerm extractEntry doc/cli/help.txt
+59 silly gunzTarPerm extractEntry doc/cli/logo.txt
+60 silly gunzTarPerm extractEntry doc/cli/topics.txt
+61 silly gunzTarPerm extractEntry doc/cli/usage.txt
+62 silly gunzTarPerm extractEntry doc/cli/whoami.txt
+63 silly gunzTarPerm extractEntry doc/events.md
+64 silly gunzTarPerm extractEntry doc/requireable.md
+65 silly gunzTarPerm extractEntry doc/rules.md
+66 silly gunzTarPerm extractEntry doc/sample-nodemon.md
+67 silly gunzTarPerm extractEntry faq.md
+68 silly gunzTarPerm extractEntry lib/index.js
+69 silly gunzTarPerm extractEntry lib/nodemon.js
+70 silly gunzTarPerm extractEntry lib/version.js
+71 silly gunzTarPerm extractEntry lib/cli/index.js
+72 silly gunzTarPerm extractEntry lib/cli/parse.js
+73 silly gunzTarPerm extractEntry lib/config/checkWatchSupport.js
+74 silly gunzTarPerm extractEntry lib/config/command.js
+75 silly gunzTarPerm extractEntry lib/config/defaults.js
+76 silly gunzTarPerm extractEntry lib/config/exec.js
+77 silly gunzTarPerm extractEntry lib/config/index.js
+78 silly gunzTarPerm extractEntry lib/config/load.js
+79 silly gunzTarPerm extractEntry lib/config/watchable.js
+80 silly gunzTarPerm extractEntry lib/help/index.js
+81 silly gunzTarPerm extractEntry lib/monitor/changed-since.js
+82 silly gunzTarPerm extractEntry lib/monitor/index.js
+83 silly gunzTarPerm extractEntry lib/monitor/match.js
+84 silly gunzTarPerm extractEntry lib/monitor/run.js
+85 silly gunzTarPerm extractEntry lib/monitor/watch.js
+86 silly gunzTarPerm extractEntry lib/rules/add.js
+87 silly gunzTarPerm extractEntry lib/rules/index.js
+88 silly gunzTarPerm extractEntry lib/rules/parse.js
+89 silly gunzTarPerm extractEntry lib/utils/bus.js
+90 silly gunzTarPerm extractEntry lib/utils/clone.js
+91 silly gunzTarPerm extractEntry lib/utils/colour.js
+92 silly gunzTarPerm extractEntry lib/utils/index.js
+93 silly gunzTarPerm extractEntry lib/utils/log.js
+94 silly gunzTarPerm extractEntry lib/utils/merge.js
+95 silly gunzTarPerm extractEntry CONTRIBUTING.md
+96 silly gunzTarPerm extractEntry web/index.js
+97 silly gunzTarPerm extractEntry web/index.html
+98 verbose read json /usr/local/lib/node_modules/nodemon/package.json
+99 silly lockFile 49f7ed19-r-local-lib-node-modules-nodemon /usr/local/lib/node_modules/nodemon
+100 silly lockFile 49f7ed19-r-local-lib-node-modules-nodemon /usr/local/lib/node_modules/nodemon
+101 silly lockFile 825f084e-ot-npm-nodemon-1-2-1-package-tgz /root/.npm/nodemon/1.2.1/package.tgz
+102 silly lockFile 825f084e-ot-npm-nodemon-1-2-1-package-tgz /root/.npm/nodemon/1.2.1/package.tgz
+103 info preinstall nodemon@1.2.1
+104 verbose from cache /usr/local/lib/node_modules/nodemon/package.json
+105 verbose readDependencies using package.json deps
+106 verbose from cache /usr/local/lib/node_modules/nodemon/package.json
+107 verbose readDependencies using package.json deps
+108 verbose cache add [ 'update-notifier@~0.1.8', null ]
+109 verbose cache add name=undefined spec="update-notifier@~0.1.8" args=["update-notifier@~0.1.8",null]
+110 verbose parsed url { protocol: null,
+110 verbose parsed url   slashes: null,
+110 verbose parsed url   auth: null,
+110 verbose parsed url   host: null,
+110 verbose parsed url   port: null,
+110 verbose parsed url   hostname: null,
+110 verbose parsed url   hash: null,
+110 verbose parsed url   search: null,
+110 verbose parsed url   query: null,
+110 verbose parsed url   pathname: 'update-notifier@~0.1.8',
+110 verbose parsed url   path: 'update-notifier@~0.1.8',
+110 verbose parsed url   href: 'update-notifier@~0.1.8' }
+111 verbose cache add name="update-notifier" spec="~0.1.8" args=["update-notifier","~0.1.8"]
+112 verbose parsed url { protocol: null,
+112 verbose parsed url   slashes: null,
+112 verbose parsed url   auth: null,
+112 verbose parsed url   host: null,
+112 verbose parsed url   port: null,
+112 verbose parsed url   hostname: null,
+112 verbose parsed url   hash: null,
+112 verbose parsed url   search: null,
+112 verbose parsed url   query: null,
+112 verbose parsed url   pathname: '~0.1.8',
+112 verbose parsed url   path: '~0.1.8',
+112 verbose parsed url   href: '~0.1.8' }
+113 verbose addNamed [ 'update-notifier', '~0.1.8' ]
+114 verbose addNamed [ null, '>=0.1.8- <0.2.0-' ]
+115 silly lockFile 162cceb2-update-notifier-0-1-8 update-notifier@~0.1.8
+116 verbose lock update-notifier@~0.1.8 /root/.npm/162cceb2-update-notifier-0-1-8.lock
+117 verbose cache add [ 'minimatch@~0.3.0', null ]
+118 verbose cache add name=undefined spec="minimatch@~0.3.0" args=["minimatch@~0.3.0",null]
+119 verbose parsed url { protocol: null,
+119 verbose parsed url   slashes: null,
+119 verbose parsed url   auth: null,
+119 verbose parsed url   host: null,
+119 verbose parsed url   port: null,
+119 verbose parsed url   hostname: null,
+119 verbose parsed url   hash: null,
+119 verbose parsed url   search: null,
+119 verbose parsed url   query: null,
+119 verbose parsed url   pathname: 'minimatch@~0.3.0',
+119 verbose parsed url   path: 'minimatch@~0.3.0',
+119 verbose parsed url   href: 'minimatch@~0.3.0' }
+120 verbose cache add name="minimatch" spec="~0.3.0" args=["minimatch","~0.3.0"]
+121 verbose parsed url { protocol: null,
+121 verbose parsed url   slashes: null,
+121 verbose parsed url   auth: null,
+121 verbose parsed url   host: null,
+121 verbose parsed url   port: null,
+121 verbose parsed url   hostname: null,
+121 verbose parsed url   hash: null,
+121 verbose parsed url   search: null,
+121 verbose parsed url   query: null,
+121 verbose parsed url   pathname: '~0.3.0',
+121 verbose parsed url   path: '~0.3.0',
+121 verbose parsed url   href: '~0.3.0' }
+122 verbose addNamed [ 'minimatch', '~0.3.0' ]
+123 verbose addNamed [ null, '>=0.3.0- <0.4.0-' ]
+124 silly lockFile ccaaa04c-minimatch-0-3-0 minimatch@~0.3.0
+125 verbose lock minimatch@~0.3.0 /root/.npm/ccaaa04c-minimatch-0-3-0.lock
+126 silly addNameRange { name: 'update-notifier',
+126 silly addNameRange   range: '>=0.1.8- <0.2.0-',
+126 silly addNameRange   hasData: false }
+127 verbose cache add [ 'ps-tree@~0.0.3', null ]
+128 verbose cache add name=undefined spec="ps-tree@~0.0.3" args=["ps-tree@~0.0.3",null]
+129 verbose parsed url { protocol: null,
+129 verbose parsed url   slashes: null,
+129 verbose parsed url   auth: null,
+129 verbose parsed url   host: null,
+129 verbose parsed url   port: null,
+129 verbose parsed url   hostname: null,
+129 verbose parsed url   hash: null,
+129 verbose parsed url   search: null,
+129 verbose parsed url   query: null,
+129 verbose parsed url   pathname: 'ps-tree@~0.0.3',
+129 verbose parsed url   path: 'ps-tree@~0.0.3',
+129 verbose parsed url   href: 'ps-tree@~0.0.3' }
+130 verbose cache add name="ps-tree" spec="~0.0.3" args=["ps-tree","~0.0.3"]
+131 verbose parsed url { protocol: null,
+131 verbose parsed url   slashes: null,
+131 verbose parsed url   auth: null,
+131 verbose parsed url   host: null,
+131 verbose parsed url   port: null,
+131 verbose parsed url   hostname: null,
+131 verbose parsed url   hash: null,
+131 verbose parsed url   search: null,
+131 verbose parsed url   query: null,
+131 verbose parsed url   pathname: '~0.0.3',
+131 verbose parsed url   path: '~0.0.3',
+131 verbose parsed url   href: '~0.0.3' }
+132 verbose addNamed [ 'ps-tree', '~0.0.3' ]
+133 verbose addNamed [ null, '>=0.0.3- <0.1.0-' ]
+134 silly lockFile b5bd920b-ps-tree-0-0-3 ps-tree@~0.0.3
+135 verbose lock ps-tree@~0.0.3 /root/.npm/b5bd920b-ps-tree-0-0-3.lock
+136 silly addNameRange { name: 'minimatch', range: '>=0.3.0- <0.4.0-', hasData: false }
+137 silly addNameRange { name: 'ps-tree', range: '>=0.0.3- <0.1.0-', hasData: false }
+138 verbose url raw update-notifier
+139 verbose url resolving [ 'https://registry.npmjs.org/', './update-notifier' ]
+140 verbose url resolved https://registry.npmjs.org/update-notifier
+141 info trying registry request attempt 1 at 23:34:55
+142 verbose etag "EK7W2ENJBBLVVDU563PC48TQE"
+143 http GET https://registry.npmjs.org/update-notifier
+144 verbose url raw ps-tree
+145 verbose url resolving [ 'https://registry.npmjs.org/', './ps-tree' ]
+146 verbose url resolved https://registry.npmjs.org/ps-tree
+147 info trying registry request attempt 1 at 23:34:55
+148 verbose etag "AK6XXGABDRNIJ9XYJ3SUFF39A"
+149 http GET https://registry.npmjs.org/ps-tree
+150 verbose url raw minimatch
+151 verbose url resolving [ 'https://registry.npmjs.org/', './minimatch' ]
+152 verbose url resolved https://registry.npmjs.org/minimatch
+153 info trying registry request attempt 1 at 23:34:55
+154 verbose etag "667Q92RS6N1601AM7ZZ1NERE8"
+155 http GET https://registry.npmjs.org/minimatch
+156 http 200 https://registry.npmjs.org/ps-tree
+157 silly registry.get cb [ 200,
+157 silly registry.get   { date: 'Thu, 25 Sep 2014 06:34:56 GMT',
+157 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+157 silly registry.get     etag: '"49SH9KA05KX8V6PVT4HVG0GJF"',
+157 silly registry.get     'content-type': 'application/json',
+157 silly registry.get     'cache-control': 'max-age=60',
+157 silly registry.get     'content-length': '5749',
+157 silly registry.get     'accept-ranges': 'bytes',
+157 silly registry.get     via: '1.1 varnish',
+157 silly registry.get     age: '827',
+157 silly registry.get     'x-served-by': 'cache-lax1421-LAX',
+157 silly registry.get     'x-cache': 'HIT',
+157 silly registry.get     'x-cache-hits': '1',
+157 silly registry.get     'x-timer': 'S1411626896.824160,VS0,VE0',
+157 silly registry.get     vary: 'Accept',
+157 silly registry.get     'keep-alive': 'timeout=10, max=50',
+157 silly registry.get     connection: 'Keep-Alive' } ]
+158 silly addNameRange number 2 { name: 'ps-tree', range: '>=0.0.3- <0.1.0-', hasData: true }
+159 silly addNameRange versions [ 'ps-tree', [ '0.0.0', '0.0.1', '0.0.2', '0.0.3' ] ]
+160 verbose addNamed [ 'ps-tree', '0.0.3' ]
+161 verbose addNamed [ '0.0.3', '0.0.3' ]
+162 silly lockFile d4596f2e-ps-tree-0-0-3 ps-tree@0.0.3
+163 verbose lock ps-tree@0.0.3 /root/.npm/d4596f2e-ps-tree-0-0-3.lock
+164 verbose read json /root/.npm/ps-tree/0.0.3/package/package.json
+165 http 200 https://registry.npmjs.org/update-notifier
+166 silly registry.get cb [ 200,
+166 silly registry.get   { date: 'Thu, 25 Sep 2014 06:34:56 GMT',
+166 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+166 silly registry.get     etag: '"6BIHXZVP00B11MKOJG6NYUAKW"',
+166 silly registry.get     'content-type': 'application/json',
+166 silly registry.get     'cache-control': 'max-age=60',
+166 silly registry.get     'content-length': '23957',
+166 silly registry.get     'accept-ranges': 'bytes',
+166 silly registry.get     via: '1.1 varnish',
+166 silly registry.get     age: '457',
+166 silly registry.get     'x-served-by': 'cache-lax1422-LAX',
+166 silly registry.get     'x-cache': 'HIT',
+166 silly registry.get     'x-cache-hits': '1',
+166 silly registry.get     'x-timer': 'S1411626896.701584,VS0,VE0',
+166 silly registry.get     vary: 'Accept',
+166 silly registry.get     'keep-alive': 'timeout=10, max=50',
+166 silly registry.get     connection: 'Keep-Alive' } ]
+167 silly addNameRange number 2 { name: 'update-notifier',
+167 silly addNameRange   range: '>=0.1.8- <0.2.0-',
+167 silly addNameRange   hasData: true }
+168 silly addNameRange versions [ 'update-notifier',
+168 silly addNameRange   [ '0.1.0',
+168 silly addNameRange     '0.1.1',
+168 silly addNameRange     '0.1.2',
+168 silly addNameRange     '0.1.3',
+168 silly addNameRange     '0.1.4',
+168 silly addNameRange     '0.1.5',
+168 silly addNameRange     '0.1.6',
+168 silly addNameRange     '0.1.7',
+168 silly addNameRange     '0.1.8',
+168 silly addNameRange     '0.1.9',
+168 silly addNameRange     '0.1.10',
+168 silly addNameRange     '0.2.0',
+168 silly addNameRange     '0.2.1' ] ]
+169 verbose addNamed [ 'update-notifier', '0.1.10' ]
+170 verbose addNamed [ '0.1.10', '0.1.10' ]
+171 silly lockFile 21a7571c-update-notifier-0-1-10 update-notifier@0.1.10
+172 verbose lock update-notifier@0.1.10 /root/.npm/21a7571c-update-notifier-0-1-10.lock
+173 verbose read json /root/.npm/update-notifier/0.1.10/package/package.json
+174 silly lockFile d4596f2e-ps-tree-0-0-3 ps-tree@0.0.3
+175 silly lockFile d4596f2e-ps-tree-0-0-3 ps-tree@0.0.3
+176 silly lockFile b5bd920b-ps-tree-0-0-3 ps-tree@~0.0.3
+177 silly lockFile b5bd920b-ps-tree-0-0-3 ps-tree@~0.0.3
+178 http 200 https://registry.npmjs.org/minimatch
+179 silly registry.get cb [ 200,
+179 silly registry.get   { date: 'Thu, 25 Sep 2014 06:34:56 GMT',
+179 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+179 silly registry.get     etag: '"DJRLDPA98I9L6YA58JA95JQFQ"',
+179 silly registry.get     'content-type': 'application/json',
+179 silly registry.get     'cache-control': 'max-age=60',
+179 silly registry.get     'content-length': '32495',
+179 silly registry.get     'accept-ranges': 'bytes',
+179 silly registry.get     via: '1.1 varnish',
+179 silly registry.get     age: '682',
+179 silly registry.get     'x-served-by': 'cache-lax1435-LAX',
+179 silly registry.get     'x-cache': 'HIT',
+179 silly registry.get     'x-cache-hits': '2',
+179 silly registry.get     'x-timer': 'S1411626896.865821,VS0,VE0',
+179 silly registry.get     vary: 'Accept',
+179 silly registry.get     'keep-alive': 'timeout=10, max=50',
+179 silly registry.get     connection: 'Keep-Alive' } ]
+180 silly addNameRange number 2 { name: 'minimatch', range: '>=0.3.0- <0.4.0-', hasData: true }
+181 silly addNameRange versions [ 'minimatch',
+181 silly addNameRange   [ '0.0.1',
+181 silly addNameRange     '0.0.2',
+181 silly addNameRange     '0.0.4',
+181 silly addNameRange     '0.0.5',
+181 silly addNameRange     '0.1.1',
+181 silly addNameRange     '0.1.2',
+181 silly addNameRange     '0.1.3',
+181 silly addNameRange     '0.1.4',
+181 silly addNameRange     '0.1.5',
+181 silly addNameRange     '0.2.0',
+181 silly addNameRange     '0.2.2',
+181 silly addNameRange     '0.2.3',
+181 silly addNameRange     '0.2.4',
+181 silly addNameRange     '0.2.5',
+181 silly addNameRange     '0.2.6',
+181 silly addNameRange     '0.2.7',
+181 silly addNameRange     '0.2.8',
+181 silly addNameRange     '0.2.9',
+181 silly addNameRange     '0.2.10',
+181 silly addNameRange     '0.2.11',
+181 silly addNameRange     '0.2.12',
+181 silly addNameRange     '0.2.13',
+181 silly addNameRange     '0.2.14',
+181 silly addNameRange     '0.3.0',
+181 silly addNameRange     '0.4.0',
+181 silly addNameRange     '1.0.0' ] ]
+182 verbose addNamed [ 'minimatch', '0.3.0' ]
+183 verbose addNamed [ '0.3.0', '0.3.0' ]
+184 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+185 verbose lock minimatch@0.3.0 /root/.npm/fbcfe8c1-minimatch-0-3-0.lock
+186 verbose read json /root/.npm/minimatch/0.3.0/package/package.json
+187 silly lockFile 21a7571c-update-notifier-0-1-10 update-notifier@0.1.10
+188 silly lockFile 21a7571c-update-notifier-0-1-10 update-notifier@0.1.10
+189 silly lockFile 162cceb2-update-notifier-0-1-8 update-notifier@~0.1.8
+190 silly lockFile 162cceb2-update-notifier-0-1-8 update-notifier@~0.1.8
+191 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+192 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+193 silly lockFile ccaaa04c-minimatch-0-3-0 minimatch@~0.3.0
+194 silly lockFile ccaaa04c-minimatch-0-3-0 minimatch@~0.3.0
+195 silly resolved [ { name: 'ps-tree',
+195 silly resolved     version: '0.0.3',
+195 silly resolved     description: 'get all children of a pid',
+195 silly resolved     homepage: 'http://github.com/indexzero/ps-tree',
+195 silly resolved     repository: { type: 'git', url: 'https://github.com/indexzero/ps-tree.git' },
+195 silly resolved     dependencies: { 'event-stream': '~0.5' },
+195 silly resolved     author: { name: 'Charlie Robbins' },
+195 silly resolved     readme: '#ps-tree\n\nsometimes you cannot kill child processes like you would expect,  \nthis a feature of UNIX.\n\n>in UNIX,  a process may terminate by using the exit call, and it\'s parent process may wait for that event by using the wait system call. the wait system call returns the process identifier of a terminated child, so that the parent tell which of the possibly many children has terminated. If the parent terminates, however, all it\'s children have assigned as their new parent the init process. Thus, the children still have a parent to collect their status and execution statistics.  \n> (from "operating system concepts")\n\nsolution: use `ps-tree` to get all processes that a child_process may have started, so that they may all be terminated.\n\n``` js\n  var cp = require(\'child_process\'),\n      psTree = require(\'ps-tree\')\n    \n  var child = cp.exec("node -e \'while (true);\'",function () {...})\n\n  child.kill() //this will not actually kill the child it will kill the `sh` process.\n\n```\n\nwtf? it\'s because exec actually works like this:\n\n``` js\nfunction exec (cmd, cb) {\n  spawn(\'sh\', [\'-c\', cmd])\n  ...\n}\n\n```\n\nsh starts parses the command string and starts processes, and waits for them to terminate.  \nbut exec returns a process object with the pid of the sh process.  \nbut since it is in `wait` mode killing it does not kill the children.\n\nused ps tree like this:\n\n``` js\n\n  var cp = require(\'child_process\'),\n      psTree = require(\'ps-tree\')\n    \n  var child = cp.exec("node -e \'while (true);\'",function () {...})\n\n  psTree(child.pid, function (err, children) {\n    cp.spawn(\'kill\', [\'-9\'].concat(children.map(function (p) {return p.PID})))\n  })\n\n```',
+195 silly resolved     readmeFilename: 'readme.markdown',
+195 silly resolved     _id: 'ps-tree@0.0.3',
+195 silly resolved     _from: 'ps-tree@~0.0.3' },
+195 silly resolved   { name: 'update-notifier',
+195 silly resolved     version: '0.1.10',
+195 silly resolved     description: 'Update notifier for your package',
+195 silly resolved     keywords: [ 'npm', 'update', 'notify', 'notifier', 'check', 'checker' ],
+195 silly resolved     author:
+195 silly resolved      { name: 'Sindre Sorhus',
+195 silly resolved        email: 'sindresorhus@gmail.com',
+195 silly resolved        url: 'http://sindresorhus.com' },
+195 silly resolved     main: 'lib/update-notifier.js',
+195 silly resolved     repository:
+195 silly resolved      { type: 'git',
+195 silly resolved        url: 'git://github.com/yeoman/update-notifier.git' },
+195 silly resolved     scripts: { test: 'mocha --timeout 20000' },
+195 silly resolved     dependencies:
+195 silly resolved      { chalk: '^0.4.0',
+195 silly resolved        configstore: '^0.3.0',
+195 silly resolved        request: '^2.36.0',
+195 silly resolved        semver: '^2.3.0' },
+195 silly resolved     devDependencies: { mocha: '*' },
+195 silly resolved     engines: { node: '>=0.10.0' },
+195 silly resolved     licenses: [ [Object] ],
+195 silly resolved     readme: '# update-notifier [![Build Status](https://secure.travis-ci.org/yeoman/update-notifier.svg?branch=master)](http://travis-ci.org/yeoman/update-notifier)\n\n##### Update notifier for your Node.js NPM package\n\n![screenshot](https://raw.github.com/yeoman/update-notifier/master/screenshot.png)\n\nInform your package users of updates in a non-intrusive way. Mainly targets global CLI apps.\n\nWhenever you initiate the update notifier and it\'s not within the interval threshold, it will asynchronously check with NPM in the background for available updates, then persist the result. The next time the notifier is initiated the result will be loaded into the `.update` property. This prevents any impact on your package startup performance.\nThe check process is done with [fork](http://nodejs.org/api/child_process.html#child_process_child_fork). This means that if you call `process.exit`, the check will still be performed in its own process.\n\n#### Table of Contents\n\n* [Examples](#examples)\n* [Docs](#documentation)\n* [Settings](#settings)\n\n## About\n\nThe idea for this module came from the desire to apply the browser update strategy to CLI tools, where everyone is always on the latest version. We first tried automatic updating, which we discovered wasn\'t popular. This is the second iteration of that idea, but limited to just update notifications.\n\nThere are a few projects using it:\n\n- [Yeoman](http://yeoman.io) - modern workflows for modern webapps\n\n- [Bower](http://bower.io) - a package manager for the web\n\n- [Roots](http://roots.cx) - a toolkit for advanced front-end development\n\n- [Automaton](https://github.com/IndigoUnited/automaton) - task automation tool\n\n- [Spoon.js CLI](https://npmjs.org/package/spoonjs)\n\n- [Node GH](http://nodegh.io) - GitHub command line tool\n\n- [Hoodie CLI](http://hood.ie) - Hoodie command line tool\n\n- [pullr](https://github.com/mojotech/pullr) - GitHub pull requests from the command line\n\n## Examples\n\n### Example usage\n\n```js\nvar updateNotifier = require(\'update-notifier\');\n\n// Checks for available update and returns an instance\nvar notifier = updateNotifier();\n\nif (notifier.update) {\n\t// Notify using the built-in convenience method\n\tnotifier.notify();\n}\n\n// `notifier.update` contains some useful info about the update\nconsole.log(notifier.update);\n/*\n{\n\tlatest: \'0.9.5\',\n\tcurrent: \'0.9.3\',\n\ttype: \'patch\', // possible values: latest, major, minor, patch\n\tdate: \'2012-11-05T14:32:37.603Z\',\n\tname: \'yeoman\'\n}\n*/\n```\n\n### Example with settings and custom message\n\n```js\nvar notifier = updateNotifier({\n\tupdateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week\n});\n\nif (notifier.update) {\n\tnotifier.notify(\'Update available: \' + notifier.update.latest);\n}\n```\n\n\n## Documentation\n\n\n### updateNotifier([settings])\n\nChecks if there is an available update. Accepts settings defined below. Returns an object with update info if there is an available update, otherwise `undefined`.\n\n### updateNotifier.notify([message || defer])\n\nA convenience method that will inform the user about an available update (see screenshot). By default it will display the message right away. However, if you supply a custom message or `true` it will be displayed right before the process exits.\n\n\n### Settings\n\n\n#### callback\n\nType: `function`  \nDefault: `null`\n\nIf provided, a callback function will be called,\npassed `(error[, update])`\n\n`update` is equal to `notifier.update`\n\n\n#### packagePath\n\nType: `string`  \nDefault: `\'package.json\'`\n\nRelative path to your module `package.json`.\n\n\n#### packageName\n\nType: `string`  \nDefault: Inferred from `packageFile`\n\nUsed instead of inferring it from `packageFile`.  \nRequires you to also specify `packageVersion`.\n\n\n#### packageVersion\n\nType: `string`  \nDefault: Inferred from `packageFile`\n\nUsed instead of inferring it from `packageFile`.  \nRequires you to also specify `packageName`.\n\n\n#### updateCheckInterval\n\nType: `number`  \nDefault: `1000 * 60 * 60 * 24` (1 day)\n\nHow often it should check for updates.\n\n\n#### updateCheckTimeout\n\nType: `number`  \nDefault: `20000` (20 secs)\n\nHow long the update can take.  \nIf it takes longer than the timeout, it will be aborted.\n\n#### registryUrl\n\nType: `string`  \nDefault: `\'http://registry.npmjs.org/%s\'`\n\nAlternative registry mirrors:\n\n- `http://85.10.209.91/%s`\n- `http://165.225.128.50:8000/%s`\n\n\n### Proxy settings\n\nIf you are behind a proxy server the `process.env` property is used to take the proxy server value from `HTTP_PROXY` or `HTTPS_PROXY` in order to make the call to the server. This means that you need to [set](https://github.com/sindresorhus/guides/blob/master/set-environment-variables.md) those properties as environment variables.\n\n\n### User settings\n\nUsers of your module have the ability to opt-out of the update notifier by changing the `optOut` property to `true` in `~/.config/configstore/update-notifier-[your-module-name].yml`. The path is available in `notifier.config.path`.\n\nYou could also let the user opt-out on a per run basis:\n\n```js\nif (process.argv.indexOf(\'--no-update-notifier\') === -1) {\n\t// run updateNotifier()\n}\n```\n\n\n## License\n\n[BSD license](http://opensource.org/licenses/bsd-license.php) and copyright Google\n',
+195 silly resolved     readmeFilename: 'readme.md',
+195 silly resolved     _id: 'update-notifier@0.1.10',
+195 silly resolved     _from: 'update-notifier@~0.1.8' },
+195 silly resolved   { author:
+195 silly resolved      { name: 'Isaac Z. Schlueter',
+195 silly resolved        email: 'i@izs.me',
+195 silly resolved        url: 'http://blog.izs.me' },
+195 silly resolved     name: 'minimatch',
+195 silly resolved     description: 'a glob matcher in javascript',
+195 silly resolved     version: '0.3.0',
+195 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/minimatch.git' },
+195 silly resolved     main: 'minimatch.js',
+195 silly resolved     scripts: { test: 'tap test/*.js' },
+195 silly resolved     engines: { node: '*' },
+195 silly resolved     dependencies: { 'lru-cache': '2', sigmund: '~1.0.0' },
+195 silly resolved     devDependencies: { tap: '' },
+195 silly resolved     license:
+195 silly resolved      { type: 'MIT',
+195 silly resolved        url: 'http://github.com/isaacs/minimatch/raw/master/LICENSE' },
+195 silly resolved     readme: '# minimatch\n\nA minimal matching utility.\n\n[![Build Status](https://secure.travis-ci.org/isaacs/minimatch.png)](http://travis-ci.org/isaacs/minimatch)\n\n\nThis is the matching library used internally by npm.\n\nEventually, it will replace the C binding in node-glob.\n\nIt works by converting glob expressions into JavaScript `RegExp`\nobjects.\n\n## Usage\n\n```javascript\nvar minimatch = require("minimatch")\n\nminimatch("bar.foo", "*.foo") // true!\nminimatch("bar.foo", "*.bar") // false!\nminimatch("bar.foo", "*.+(bar|foo)", { debug: true }) // true, and noisy!\n```\n\n## Features\n\nSupports these glob features:\n\n* Brace Expansion\n* Extended glob matching\n* "Globstar" `**` matching\n\nSee:\n\n* `man sh`\n* `man bash`\n* `man 3 fnmatch`\n* `man 5 gitignore`\n\n## Minimatch Class\n\nCreate a minimatch object by instanting the `minimatch.Minimatch` class.\n\n```javascript\nvar Minimatch = require("minimatch").Minimatch\nvar mm = new Minimatch(pattern, options)\n```\n\n### Properties\n\n* `pattern` The original pattern the minimatch object represents.\n* `options` The options supplied to the constructor.\n* `set` A 2-dimensional array of regexp or string expressions.\n  Each row in the\n  array corresponds to a brace-expanded pattern.  Each item in the row\n  corresponds to a single path-part.  For example, the pattern\n  `{a,b/c}/d` would expand to a set of patterns like:\n\n        [ [ a, d ]\n        , [ b, c, d ] ]\n\n    If a portion of the pattern doesn\'t have any "magic" in it\n    (that is, it\'s something like `"foo"` rather than `fo*o?`), then it\n    will be left as a string rather than converted to a regular\n    expression.\n\n* `regexp` Created by the `makeRe` method.  A single regular expression\n  expressing the entire pattern.  This is useful in cases where you wish\n  to use the pattern somewhat like `fnmatch(3)` with `FNM_PATH` enabled.\n* `negate` True if the pattern is negated.\n* `comment` True if the pattern is a comment.\n* `empty` True if the pattern is `""`.\n\n### Methods\n\n* `makeRe` Generate the `regexp` member if necessary, and return it.\n  Will return `false` if the pattern is invalid.\n* `match(fname)` Return true if the filename matches the pattern, or\n  false otherwise.\n* `matchOne(fileArray, patternArray, partial)` Take a `/`-split\n  filename, and match it against a single row in the `regExpSet`.  This\n  method is mainly for internal use, but is exposed so that it can be\n  used by a glob-walker that needs to avoid excessive filesystem calls.\n\nAll other methods are internal, and will be called as necessary.\n\n## Functions\n\nThe top-level exported function has a `cache` property, which is an LRU\ncache set to store 100 items.  So, calling these methods repeatedly\nwith the same pattern and options will use the same Minimatch object,\nsaving the cost of parsing it multiple times.\n\n### minimatch(path, pattern, options)\n\nMain export.  Tests a path against the pattern using the options.\n\n```javascript\nvar isJS = minimatch(file, "*.js", { matchBase: true })\n```\n\n### minimatch.filter(pattern, options)\n\nReturns a function that tests its\nsupplied argument, suitable for use with `Array.filter`.  Example:\n\n```javascript\nvar javascripts = fileList.filter(minimatch.filter("*.js", {matchBase: true}))\n```\n\n### minimatch.match(list, pattern, options)\n\nMatch against the list of\nfiles, in the style of fnmatch or glob.  If nothing is matched, and\noptions.nonull is set, then return a list containing the pattern itself.\n\n```javascript\nvar javascripts = minimatch.match(fileList, "*.js", {matchBase: true}))\n```\n\n### minimatch.makeRe(pattern, options)\n\nMake a regular expression object from the pattern.\n\n## Options\n\nAll options are `false` by default.\n\n### debug\n\nDump a ton of stuff to stderr.\n\n### nobrace\n\nDo not expand `{a,b}` and `{1..3}` brace sets.\n\n### noglobstar\n\nDisable `**` matching against multiple folder names.\n\n### dot\n\nAllow patterns to match filenames starting with a period, even if\nthe pattern does not explicitly have a period in that spot.\n\nNote that by default, `a/**/b` will **not** match `a/.d/b`, unless `dot`\nis set.\n\n### noext\n\nDisable "extglob" style patterns like `+(a|b)`.\n\n### nocase\n\nPerform a case-insensitive match.\n\n### nonull\n\nWhen a match is not found by `minimatch.match`, return a list containing\nthe pattern itself if this option is set.  When not set, an empty list\nis returned if there are no matches.\n\n### matchBase\n\nIf set, then patterns without slashes will be matched\nagainst the basename of the path if it contains slashes.  For example,\n`a?b` would match the path `/xyz/123/acb`, but not `/xyz/acb/123`.\n\n### nocomment\n\nSuppress the behavior of treating `#` at the start of a pattern as a\ncomment.\n\n### nonegate\n\nSuppress the behavior of treating a leading `!` character as negation.\n\n### flipNegate\n\nReturns from negate expressions the same as if they were not negated.\n(Ie, true on a hit, false on a miss.)\n\n\n## Comparisons to other fnmatch/glob implementations\n\nWhile strict compliance with the existing standards is a worthwhile\ngoal, some discrepancies exist between minimatch and other\nimplementations, and are intentional.\n\nIf the pattern starts with a `!` character, then it is negated.  Set the\n`nonegate` flag to suppress this behavior, and treat leading `!`\ncharacters normally.  This is perhaps relevant if you wish to start the\npattern with a negative extglob pattern like `!(a|B)`.  Multiple `!`\ncharacters at the start of a pattern will negate the pattern multiple\ntimes.\n\nIf a pattern starts with `#`, then it is treated as a comment, and\nwill not match anything.  Use `\\#` to match a literal `#` at the\nstart of a line, or set the `nocomment` flag to suppress this behavior.\n\nThe double-star character `**` is supported by default, unless the\n`noglobstar` flag is set.  This is supported in the manner of bsdglob\nand bash 4.1, where `**` only has special significance if it is the only\nthing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but\n`a/**b` will not.\n\nIf an escaped pattern has no matches, and the `nonull` flag is set,\nthen minimatch.match returns the pattern as-provided, rather than\ninterpreting the character escapes.  For example,\n`minimatch.match([], "\\\\*a\\\\?")` will return `"\\\\*a\\\\?"` rather than\n`"*a?"`.  This is akin to setting the `nullglob` option in bash, except\nthat it does not resolve escaped pattern characters.\n\nIf brace expansion is not disabled, then it is performed before any\nother interpretation of the glob pattern.  Thus, a pattern like\n`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded\n**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are\nchecked for validity.  Since those two are valid, matching proceeds.\n',
+195 silly resolved     readmeFilename: 'README.md',
+195 silly resolved     _id: 'minimatch@0.3.0',
+195 silly resolved     _from: 'minimatch@~0.3.0' } ]
+196 info install ps-tree@0.0.3 into /usr/local/lib/node_modules/nodemon
+197 info install update-notifier@0.1.10 into /usr/local/lib/node_modules/nodemon
+198 info install minimatch@0.3.0 into /usr/local/lib/node_modules/nodemon
+199 info installOne ps-tree@0.0.3
+200 info installOne update-notifier@0.1.10
+201 info installOne minimatch@0.3.0
+202 verbose from cache /root/.npm/ps-tree/0.0.3/package/package.json
+203 info /usr/local/lib/node_modules/nodemon/node_modules/ps-tree unbuild
+204 verbose read json /usr/local/lib/node_modules/nodemon/node_modules/ps-tree/package.json
+205 verbose from cache /root/.npm/update-notifier/0.1.10/package/package.json
+206 info /usr/local/lib/node_modules/nodemon/node_modules/update-notifier unbuild
+207 verbose read json /usr/local/lib/node_modules/nodemon/node_modules/update-notifier/package.json
+208 verbose from cache /root/.npm/minimatch/0.3.0/package/package.json
+209 info /usr/local/lib/node_modules/nodemon/node_modules/minimatch unbuild
+210 verbose read json /usr/local/lib/node_modules/nodemon/node_modules/minimatch/package.json
+211 verbose tar unpack /root/.npm/ps-tree/0.0.3/package.tgz
+212 silly lockFile 964c041c-les-nodemon-node-modules-ps-tree /usr/local/lib/node_modules/nodemon/node_modules/ps-tree
+213 verbose lock /usr/local/lib/node_modules/nodemon/node_modules/ps-tree /root/.npm/964c041c-les-nodemon-node-modules-ps-tree.lock
+214 silly lockFile 75374c37-ot-npm-ps-tree-0-0-3-package-tgz /root/.npm/ps-tree/0.0.3/package.tgz
+215 verbose lock /root/.npm/ps-tree/0.0.3/package.tgz /root/.npm/75374c37-ot-npm-ps-tree-0-0-3-package-tgz.lock
+216 verbose tar unpack /root/.npm/update-notifier/0.1.10/package.tgz
+217 silly lockFile 6f79537d-mon-node-modules-update-notifier /usr/local/lib/node_modules/nodemon/node_modules/update-notifier
+218 verbose lock /usr/local/lib/node_modules/nodemon/node_modules/update-notifier /root/.npm/6f79537d-mon-node-modules-update-notifier.lock
+219 silly lockFile 545ff93a-date-notifier-0-1-10-package-tgz /root/.npm/update-notifier/0.1.10/package.tgz
+220 verbose lock /root/.npm/update-notifier/0.1.10/package.tgz /root/.npm/545ff93a-date-notifier-0-1-10-package-tgz.lock
+221 verbose tar unpack /root/.npm/minimatch/0.3.0/package.tgz
+222 silly lockFile 75fe59ba-s-nodemon-node-modules-minimatch /usr/local/lib/node_modules/nodemon/node_modules/minimatch
+223 verbose lock /usr/local/lib/node_modules/nodemon/node_modules/minimatch /root/.npm/75fe59ba-s-nodemon-node-modules-minimatch.lock
+224 silly lockFile 213bb7d4--npm-minimatch-0-3-0-package-tgz /root/.npm/minimatch/0.3.0/package.tgz
+225 verbose lock /root/.npm/minimatch/0.3.0/package.tgz /root/.npm/213bb7d4--npm-minimatch-0-3-0-package-tgz.lock
+226 silly gunzTarPerm modes [ '755', '644' ]
+227 silly gunzTarPerm modes [ '755', '644' ]
+228 silly gunzTarPerm modes [ '755', '644' ]
+229 silly gunzTarPerm extractEntry package.json
+230 silly gunzTarPerm extractEntry package.json
+231 silly gunzTarPerm extractEntry package.json
+232 silly gunzTarPerm extractEntry .npmignore
+233 silly gunzTarPerm extractEntry index.js
+234 silly gunzTarPerm extractEntry contributing.md
+235 silly gunzTarPerm extractEntry lib/check.js
+236 silly gunzTarPerm extractEntry .npmignore
+237 silly gunzTarPerm extractEntry README.md
+238 silly gunzTarPerm extractEntry readme.markdown
+239 silly gunzTarPerm extractEntry LICENSE
+240 silly gunzTarPerm extractEntry minimatch.js
+241 silly gunzTarPerm extractEntry lib/update-notifier.js
+242 silly gunzTarPerm extractEntry readme.md
+243 silly gunzTarPerm extractEntry test/basic.js
+244 silly gunzTarPerm extractEntry test/brace-expand.js
+245 silly gunzTarPerm extractEntry test/caching.js
+246 verbose read json /usr/local/lib/node_modules/nodemon/node_modules/ps-tree/package.json
+247 silly lockFile 964c041c-les-nodemon-node-modules-ps-tree /usr/local/lib/node_modules/nodemon/node_modules/ps-tree
+248 silly lockFile 964c041c-les-nodemon-node-modules-ps-tree /usr/local/lib/node_modules/nodemon/node_modules/ps-tree
+249 silly gunzTarPerm extractEntry test/defaults.js
+250 silly gunzTarPerm extractEntry test/extglob-ending-with-state-char.js
+251 silly lockFile 75374c37-ot-npm-ps-tree-0-0-3-package-tgz /root/.npm/ps-tree/0.0.3/package.tgz
+252 silly lockFile 75374c37-ot-npm-ps-tree-0-0-3-package-tgz /root/.npm/ps-tree/0.0.3/package.tgz
+253 info preinstall ps-tree@0.0.3
+254 verbose read json /usr/local/lib/node_modules/nodemon/node_modules/update-notifier/package.json
+255 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/ps-tree/package.json
+256 verbose readDependencies using package.json deps
+257 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/ps-tree/package.json
+258 verbose readDependencies using package.json deps
+259 verbose cache add [ 'event-stream@~0.5', null ]
+260 verbose cache add name=undefined spec="event-stream@~0.5" args=["event-stream@~0.5",null]
+261 verbose parsed url { protocol: null,
+261 verbose parsed url   slashes: null,
+261 verbose parsed url   auth: null,
+261 verbose parsed url   host: null,
+261 verbose parsed url   port: null,
+261 verbose parsed url   hostname: null,
+261 verbose parsed url   hash: null,
+261 verbose parsed url   search: null,
+261 verbose parsed url   query: null,
+261 verbose parsed url   pathname: 'event-stream@~0.5',
+261 verbose parsed url   path: 'event-stream@~0.5',
+261 verbose parsed url   href: 'event-stream@~0.5' }
+262 verbose cache add name="event-stream" spec="~0.5" args=["event-stream","~0.5"]
+263 verbose parsed url { protocol: null,
+263 verbose parsed url   slashes: null,
+263 verbose parsed url   auth: null,
+263 verbose parsed url   host: null,
+263 verbose parsed url   port: null,
+263 verbose parsed url   hostname: null,
+263 verbose parsed url   hash: null,
+263 verbose parsed url   search: null,
+263 verbose parsed url   query: null,
+263 verbose parsed url   pathname: '~0.5',
+263 verbose parsed url   path: '~0.5',
+263 verbose parsed url   href: '~0.5' }
+264 verbose addNamed [ 'event-stream', '~0.5' ]
+265 verbose addNamed [ null, '>=0.5.0- <0.6.0-' ]
+266 silly lockFile e4abd6f5-event-stream-0-5 event-stream@~0.5
+267 verbose lock event-stream@~0.5 /root/.npm/e4abd6f5-event-stream-0-5.lock
+268 silly addNameRange { name: 'event-stream',
+268 silly addNameRange   range: '>=0.5.0- <0.6.0-',
+268 silly addNameRange   hasData: false }
+269 silly lockFile 6f79537d-mon-node-modules-update-notifier /usr/local/lib/node_modules/nodemon/node_modules/update-notifier
+270 silly lockFile 6f79537d-mon-node-modules-update-notifier /usr/local/lib/node_modules/nodemon/node_modules/update-notifier
+271 silly lockFile 545ff93a-date-notifier-0-1-10-package-tgz /root/.npm/update-notifier/0.1.10/package.tgz
+272 silly lockFile 545ff93a-date-notifier-0-1-10-package-tgz /root/.npm/update-notifier/0.1.10/package.tgz
+273 info preinstall update-notifier@0.1.10
+274 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/update-notifier/package.json
+275 verbose readDependencies using package.json deps
+276 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/update-notifier/package.json
+277 verbose readDependencies using package.json deps
+278 verbose cache add [ 'chalk@^0.4.0', null ]
+279 verbose cache add name=undefined spec="chalk@^0.4.0" args=["chalk@^0.4.0",null]
+280 verbose parsed url { protocol: null,
+280 verbose parsed url   slashes: null,
+280 verbose parsed url   auth: null,
+280 verbose parsed url   host: null,
+280 verbose parsed url   port: null,
+280 verbose parsed url   hostname: null,
+280 verbose parsed url   hash: null,
+280 verbose parsed url   search: null,
+280 verbose parsed url   query: null,
+280 verbose parsed url   pathname: 'chalk@^0.4.0',
+280 verbose parsed url   path: 'chalk@^0.4.0',
+280 verbose parsed url   href: 'chalk@^0.4.0' }
+281 verbose cache add name="chalk" spec="^0.4.0" args=["chalk","^0.4.0"]
+282 verbose parsed url { protocol: null,
+282 verbose parsed url   slashes: null,
+282 verbose parsed url   auth: null,
+282 verbose parsed url   host: null,
+282 verbose parsed url   port: null,
+282 verbose parsed url   hostname: null,
+282 verbose parsed url   hash: null,
+282 verbose parsed url   search: null,
+282 verbose parsed url   query: null,
+282 verbose parsed url   pathname: '^0.4.0',
+282 verbose parsed url   path: '^0.4.0',
+282 verbose parsed url   href: '^0.4.0' }
+283 verbose addNamed [ 'chalk', '^0.4.0' ]
+284 verbose addNamed [ null, null ]
+285 silly lockFile b2f4396d-chalk-0-4-0 chalk@^0.4.0
+286 verbose lock chalk@^0.4.0 /root/.npm/b2f4396d-chalk-0-4-0.lock
+287 verbose cache add [ 'configstore@^0.3.0', null ]
+288 verbose cache add name=undefined spec="configstore@^0.3.0" args=["configstore@^0.3.0",null]
+289 verbose parsed url { protocol: null,
+289 verbose parsed url   slashes: null,
+289 verbose parsed url   auth: null,
+289 verbose parsed url   host: null,
+289 verbose parsed url   port: null,
+289 verbose parsed url   hostname: null,
+289 verbose parsed url   hash: null,
+289 verbose parsed url   search: null,
+289 verbose parsed url   query: null,
+289 verbose parsed url   pathname: 'configstore@^0.3.0',
+289 verbose parsed url   path: 'configstore@^0.3.0',
+289 verbose parsed url   href: 'configstore@^0.3.0' }
+290 verbose cache add name="configstore" spec="^0.3.0" args=["configstore","^0.3.0"]
+291 verbose parsed url { protocol: null,
+291 verbose parsed url   slashes: null,
+291 verbose parsed url   auth: null,
+291 verbose parsed url   host: null,
+291 verbose parsed url   port: null,
+291 verbose parsed url   hostname: null,
+291 verbose parsed url   hash: null,
+291 verbose parsed url   search: null,
+291 verbose parsed url   query: null,
+291 verbose parsed url   pathname: '^0.3.0',
+291 verbose parsed url   path: '^0.3.0',
+291 verbose parsed url   href: '^0.3.0' }
+292 verbose addNamed [ 'configstore', '^0.3.0' ]
+293 verbose addNamed [ null, null ]
+294 silly lockFile 5d6e0360-configstore-0-3-0 configstore@^0.3.0
+295 verbose lock configstore@^0.3.0 /root/.npm/5d6e0360-configstore-0-3-0.lock
+296 info addNameTag [ 'chalk', '^0.4.0' ]
+297 info addNameTag [ 'configstore', '^0.3.0' ]
+298 verbose cache add [ 'request@^2.36.0', null ]
+299 verbose cache add name=undefined spec="request@^2.36.0" args=["request@^2.36.0",null]
+300 verbose parsed url { protocol: null,
+300 verbose parsed url   slashes: null,
+300 verbose parsed url   auth: null,
+300 verbose parsed url   host: null,
+300 verbose parsed url   port: null,
+300 verbose parsed url   hostname: null,
+300 verbose parsed url   hash: null,
+300 verbose parsed url   search: null,
+300 verbose parsed url   query: null,
+300 verbose parsed url   pathname: 'request@^2.36.0',
+300 verbose parsed url   path: 'request@^2.36.0',
+300 verbose parsed url   href: 'request@^2.36.0' }
+301 verbose cache add name="request" spec="^2.36.0" args=["request","^2.36.0"]
+302 verbose parsed url { protocol: null,
+302 verbose parsed url   slashes: null,
+302 verbose parsed url   auth: null,
+302 verbose parsed url   host: null,
+302 verbose parsed url   port: null,
+302 verbose parsed url   hostname: null,
+302 verbose parsed url   hash: null,
+302 verbose parsed url   search: null,
+302 verbose parsed url   query: null,
+302 verbose parsed url   pathname: '^2.36.0',
+302 verbose parsed url   path: '^2.36.0',
+302 verbose parsed url   href: '^2.36.0' }
+303 verbose addNamed [ 'request', '^2.36.0' ]
+304 verbose addNamed [ null, null ]
+305 silly lockFile b70a8d49-request-2-36-0 request@^2.36.0
+306 verbose lock request@^2.36.0 /root/.npm/b70a8d49-request-2-36-0.lock
+307 verbose cache add [ 'semver@^2.3.0', null ]
+308 verbose cache add name=undefined spec="semver@^2.3.0" args=["semver@^2.3.0",null]
+309 verbose parsed url { protocol: null,
+309 verbose parsed url   slashes: null,
+309 verbose parsed url   auth: null,
+309 verbose parsed url   host: null,
+309 verbose parsed url   port: null,
+309 verbose parsed url   hostname: null,
+309 verbose parsed url   hash: null,
+309 verbose parsed url   search: null,
+309 verbose parsed url   query: null,
+309 verbose parsed url   pathname: 'semver@^2.3.0',
+309 verbose parsed url   path: 'semver@^2.3.0',
+309 verbose parsed url   href: 'semver@^2.3.0' }
+310 verbose cache add name="semver" spec="^2.3.0" args=["semver","^2.3.0"]
+311 verbose parsed url { protocol: null,
+311 verbose parsed url   slashes: null,
+311 verbose parsed url   auth: null,
+311 verbose parsed url   host: null,
+311 verbose parsed url   port: null,
+311 verbose parsed url   hostname: null,
+311 verbose parsed url   hash: null,
+311 verbose parsed url   search: null,
+311 verbose parsed url   query: null,
+311 verbose parsed url   pathname: '^2.3.0',
+311 verbose parsed url   path: '^2.3.0',
+311 verbose parsed url   href: '^2.3.0' }
+312 verbose addNamed [ 'semver', '^2.3.0' ]
+313 verbose addNamed [ null, null ]
+314 silly lockFile 85d2d02f-semver-2-3-0 semver@^2.3.0
+315 verbose lock semver@^2.3.0 /root/.npm/85d2d02f-semver-2-3-0.lock
+316 info addNameTag [ 'request', '^2.36.0' ]
+317 info addNameTag [ 'semver', '^2.3.0' ]
+318 verbose url raw chalk
+319 verbose url resolving [ 'https://registry.npmjs.org/', './chalk' ]
+320 verbose url resolved https://registry.npmjs.org/chalk
+321 info trying registry request attempt 1 at 23:35:01
+322 verbose etag "69FT0FGV29OZUUH0VAIYSL1A2"
+323 http GET https://registry.npmjs.org/chalk
+324 verbose url raw configstore
+325 verbose url resolving [ 'https://registry.npmjs.org/', './configstore' ]
+326 verbose url resolved https://registry.npmjs.org/configstore
+327 info trying registry request attempt 1 at 23:35:01
+328 verbose etag "4J7XVEG69I95CK6K13W63FG1F"
+329 http GET https://registry.npmjs.org/configstore
+330 verbose url raw event-stream
+331 verbose url resolving [ 'https://registry.npmjs.org/', './event-stream' ]
+332 verbose url resolved https://registry.npmjs.org/event-stream
+333 info trying registry request attempt 1 at 23:35:01
+334 verbose etag "7QQHQ4GWR3GP84QYVXW5L59AF"
+335 http GET https://registry.npmjs.org/event-stream
+336 verbose url raw semver
+337 verbose url resolving [ 'https://registry.npmjs.org/', './semver' ]
+338 verbose url resolved https://registry.npmjs.org/semver
+339 info trying registry request attempt 1 at 23:35:01
+340 verbose etag "8QOIXKQO0GQDKLIWR6FKZLORP"
+341 http GET https://registry.npmjs.org/semver
+342 verbose url raw request
+343 verbose url resolving [ 'https://registry.npmjs.org/', './request' ]
+344 verbose url resolved https://registry.npmjs.org/request
+345 info trying registry request attempt 1 at 23:35:01
+346 verbose etag "BALAAD0DH1YU4D6OSSTH9ZVC0"
+347 http GET https://registry.npmjs.org/request
+348 verbose read json /usr/local/lib/node_modules/nodemon/node_modules/minimatch/package.json
+349 silly lockFile 75fe59ba-s-nodemon-node-modules-minimatch /usr/local/lib/node_modules/nodemon/node_modules/minimatch
+350 silly lockFile 75fe59ba-s-nodemon-node-modules-minimatch /usr/local/lib/node_modules/nodemon/node_modules/minimatch
+351 silly lockFile 213bb7d4--npm-minimatch-0-3-0-package-tgz /root/.npm/minimatch/0.3.0/package.tgz
+352 silly lockFile 213bb7d4--npm-minimatch-0-3-0-package-tgz /root/.npm/minimatch/0.3.0/package.tgz
+353 info preinstall minimatch@0.3.0
+354 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/minimatch/package.json
+355 verbose readDependencies using package.json deps
+356 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/minimatch/package.json
+357 verbose readDependencies using package.json deps
+358 verbose cache add [ 'lru-cache@2', null ]
+359 verbose cache add name=undefined spec="lru-cache@2" args=["lru-cache@2",null]
+360 verbose parsed url { protocol: null,
+360 verbose parsed url   slashes: null,
+360 verbose parsed url   auth: null,
+360 verbose parsed url   host: null,
+360 verbose parsed url   port: null,
+360 verbose parsed url   hostname: null,
+360 verbose parsed url   hash: null,
+360 verbose parsed url   search: null,
+360 verbose parsed url   query: null,
+360 verbose parsed url   pathname: 'lru-cache@2',
+360 verbose parsed url   path: 'lru-cache@2',
+360 verbose parsed url   href: 'lru-cache@2' }
+361 verbose cache add name="lru-cache" spec="2" args=["lru-cache","2"]
+362 verbose parsed url { protocol: null,
+362 verbose parsed url   slashes: null,
+362 verbose parsed url   auth: null,
+362 verbose parsed url   host: null,
+362 verbose parsed url   port: null,
+362 verbose parsed url   hostname: null,
+362 verbose parsed url   hash: null,
+362 verbose parsed url   search: null,
+362 verbose parsed url   query: null,
+362 verbose parsed url   pathname: '2',
+362 verbose parsed url   path: '2',
+362 verbose parsed url   href: '2' }
+363 verbose addNamed [ 'lru-cache', '2' ]
+364 verbose addNamed [ null, '>=2.0.0- <3.0.0-' ]
+365 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+366 verbose lock lru-cache@2 /root/.npm/b4f9d1ff-lru-cache-2.lock
+367 verbose cache add [ 'sigmund@~1.0.0', null ]
+368 verbose cache add name=undefined spec="sigmund@~1.0.0" args=["sigmund@~1.0.0",null]
+369 verbose parsed url { protocol: null,
+369 verbose parsed url   slashes: null,
+369 verbose parsed url   auth: null,
+369 verbose parsed url   host: null,
+369 verbose parsed url   port: null,
+369 verbose parsed url   hostname: null,
+369 verbose parsed url   hash: null,
+369 verbose parsed url   search: null,
+369 verbose parsed url   query: null,
+369 verbose parsed url   pathname: 'sigmund@~1.0.0',
+369 verbose parsed url   path: 'sigmund@~1.0.0',
+369 verbose parsed url   href: 'sigmund@~1.0.0' }
+370 verbose cache add name="sigmund" spec="~1.0.0" args=["sigmund","~1.0.0"]
+371 verbose parsed url { protocol: null,
+371 verbose parsed url   slashes: null,
+371 verbose parsed url   auth: null,
+371 verbose parsed url   host: null,
+371 verbose parsed url   port: null,
+371 verbose parsed url   hostname: null,
+371 verbose parsed url   hash: null,
+371 verbose parsed url   search: null,
+371 verbose parsed url   query: null,
+371 verbose parsed url   pathname: '~1.0.0',
+371 verbose parsed url   path: '~1.0.0',
+371 verbose parsed url   href: '~1.0.0' }
+372 verbose addNamed [ 'sigmund', '~1.0.0' ]
+373 verbose addNamed [ null, '>=1.0.0- <1.1.0-' ]
+374 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+375 verbose lock sigmund@~1.0.0 /root/.npm/584a4a05-sigmund-1-0-0.lock
+376 silly addNameRange { name: 'lru-cache', range: '>=2.0.0- <3.0.0-', hasData: false }
+377 silly addNameRange { name: 'sigmund', range: '>=1.0.0- <1.1.0-', hasData: false }
+378 verbose url raw sigmund
+379 verbose url resolving [ 'https://registry.npmjs.org/', './sigmund' ]
+380 verbose url resolved https://registry.npmjs.org/sigmund
+381 info trying registry request attempt 1 at 23:35:01
+382 verbose etag "191T401EREIBE0X2WPG0GNNE1"
+383 http GET https://registry.npmjs.org/sigmund
+384 verbose url raw lru-cache
+385 verbose url resolving [ 'https://registry.npmjs.org/', './lru-cache' ]
+386 verbose url resolved https://registry.npmjs.org/lru-cache
+387 info trying registry request attempt 1 at 23:35:02
+388 verbose etag "6YD8G6QB2SQ0RSNCOG67NUYV8"
+389 http GET https://registry.npmjs.org/lru-cache
+390 http 200 https://registry.npmjs.org/chalk
+391 silly registry.get cb [ 200,
+391 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:02 GMT',
+391 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+391 silly registry.get     etag: '"1SYQ9LRJYHN7AT8TK42L7I20B"',
+391 silly registry.get     'content-type': 'application/json',
+391 silly registry.get     'cache-control': 'max-age=60',
+391 silly registry.get     'content-length': '16701',
+391 silly registry.get     'accept-ranges': 'bytes',
+391 silly registry.get     via: '1.1 varnish',
+391 silly registry.get     age: '3282',
+391 silly registry.get     'x-served-by': 'cache-lax1424-LAX',
+391 silly registry.get     'x-cache': 'HIT',
+391 silly registry.get     'x-cache-hits': '2',
+391 silly registry.get     'x-timer': 'S1411626902.833678,VS0,VE0',
+391 silly registry.get     vary: 'Accept',
+391 silly registry.get     'keep-alive': 'timeout=10, max=50',
+391 silly registry.get     connection: 'Keep-Alive' } ]
+392 http 200 https://registry.npmjs.org/configstore
+393 silly registry.get cb [ 200,
+393 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:02 GMT',
+393 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+393 silly registry.get     etag: '"D1W1XMERFIC38R8J425PVCFWT"',
+393 silly registry.get     'content-type': 'application/json',
+393 silly registry.get     'cache-control': 'max-age=60',
+393 silly registry.get     'content-length': '21095',
+393 silly registry.get     'accept-ranges': 'bytes',
+393 silly registry.get     via: '1.1 varnish',
+393 silly registry.get     age: '1293',
+393 silly registry.get     'x-served-by': 'cache-lax1433-LAX',
+393 silly registry.get     'x-cache': 'HIT',
+393 silly registry.get     'x-cache-hits': '2',
+393 silly registry.get     'x-timer': 'S1411626902.864335,VS0,VE0',
+393 silly registry.get     vary: 'Accept',
+393 silly registry.get     'keep-alive': 'timeout=10, max=50',
+393 silly registry.get     connection: 'Keep-Alive' } ]
+394 silly lockFile 5d6e0360-configstore-0-3-0 configstore@^0.3.0
+395 silly lockFile 5d6e0360-configstore-0-3-0 configstore@^0.3.0
+396 verbose about to build /usr/local/lib/node_modules/nodemon/node_modules/update-notifier
+397 info /usr/local/lib/node_modules/nodemon/node_modules/update-notifier unbuild
+398 verbose from cache /usr/local/lib/node_modules/nodemon/node_modules/update-notifier/package.json
+399 info preuninstall update-notifier@0.1.10
+400 silly lockFile b2f4396d-chalk-0-4-0 chalk@^0.4.0
+401 silly lockFile b2f4396d-chalk-0-4-0 chalk@^0.4.0
+402 info uninstall update-notifier@0.1.10
+403 http 200 https://registry.npmjs.org/semver
+404 silly registry.get cb [ 200,
+404 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:02 GMT',
+404 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+404 silly registry.get     etag: '"3KUPCTTPO9UOUSKRETQ7DAIBS"',
+404 silly registry.get     'content-type': 'application/json',
+404 silly registry.get     'cache-control': 'max-age=60',
+404 silly registry.get     'content-length': '42175',
+404 silly registry.get     'accept-ranges': 'bytes',
+404 silly registry.get     via: '1.1 varnish',
+404 silly registry.get     age: '1642',
+404 silly registry.get     'x-served-by': 'cache-lax1423-LAX',
+404 silly registry.get     'x-cache': 'HIT',
+404 silly registry.get     'x-cache-hits': '1',
+404 silly registry.get     'x-timer': 'S1411626902.893247,VS0,VE0',
+404 silly registry.get     vary: 'Accept',
+404 silly registry.get     'keep-alive': 'timeout=10, max=50',
+404 silly registry.get     connection: 'Keep-Alive' } ]
+405 http 200 https://registry.npmjs.org/sigmund
+406 silly registry.get cb [ 200,
+406 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:03 GMT',
+406 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+406 silly registry.get     etag: '"B3EEO8J1FLHOF1JE91VSLO7DE"',
+406 silly registry.get     'content-type': 'application/json',
+406 silly registry.get     'cache-control': 'max-age=60',
+406 silly registry.get     'content-length': '5629',
+406 silly registry.get     'accept-ranges': 'bytes',
+406 silly registry.get     via: '1.1 varnish',
+406 silly registry.get     age: '3526',
+406 silly registry.get     'x-served-by': 'cache-lax1424-LAX',
+406 silly registry.get     'x-cache': 'HIT',
+406 silly registry.get     'x-cache-hits': '1',
+406 silly registry.get     'x-timer': 'S1411626903.315837,VS0,VE0',
+406 silly registry.get     vary: 'Accept',
+406 silly registry.get     'keep-alive': 'timeout=10, max=49',
+406 silly registry.get     connection: 'Keep-Alive' } ]
+407 http 200 https://registry.npmjs.org/lru-cache
+408 silly registry.get cb [ 200,
+408 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:03 GMT',
+408 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+408 silly registry.get     etag: '"148V9H9CDJEB2E15ON348FJ4V"',
+408 silly registry.get     'content-type': 'application/json',
+408 silly registry.get     'cache-control': 'max-age=60',
+408 silly registry.get     'content-length': '26435',
+408 silly registry.get     'accept-ranges': 'bytes',
+408 silly registry.get     via: '1.1 varnish',
+408 silly registry.get     age: '1428',
+408 silly registry.get     'x-served-by': 'cache-lax1433-LAX',
+408 silly registry.get     'x-cache': 'HIT',
+408 silly registry.get     'x-cache-hits': '4',
+408 silly registry.get     'x-timer': 'S1411626903.319522,VS0,VE0',
+408 silly registry.get     vary: 'Accept',
+408 silly registry.get     'keep-alive': 'timeout=10, max=49',
+408 silly registry.get     connection: 'Keep-Alive' } ]
+409 verbose false,/usr/local/lib/node_modules,/usr/local/lib/node_modules/nodemon/node_modules unbuild update-notifier@0.1.10
+410 info postuninstall update-notifier@0.1.10
+411 http 200 https://registry.npmjs.org/event-stream
+412 silly registry.get cb [ 200,
+412 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:02 GMT',
+412 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+412 silly registry.get     etag: '"EC13NZXI2DC9DIOAQTOHSVZK4"',
+412 silly registry.get     'content-type': 'application/json',
+412 silly registry.get     'cache-control': 'max-age=60',
+412 silly registry.get     'content-length': '84751',
+412 silly registry.get     'accept-ranges': 'bytes',
+412 silly registry.get     via: '1.1 varnish',
+412 silly registry.get     age: '1170',
+412 silly registry.get     'x-served-by': 'cache-lax1423-LAX',
+412 silly registry.get     'x-cache': 'HIT',
+412 silly registry.get     'x-cache-hits': '1',
+412 silly registry.get     'x-timer': 'S1411626902.861956,VS0,VE80',
+412 silly registry.get     vary: 'Accept',
+412 silly registry.get     'keep-alive': 'timeout=10, max=50',
+412 silly registry.get     connection: 'Keep-Alive' } ]
+413 http 200 https://registry.npmjs.org/request
+414 silly registry.get cb [ 200,
+414 silly registry.get   { date: 'Thu, 25 Sep 2014 06:35:02 GMT',
+414 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+414 silly registry.get     etag: '"50UEULNFUCLXISVF4PD58FLAW"',
+414 silly registry.get     'content-type': 'application/json',
+414 silly registry.get     'cache-control': 'max-age=60',
+414 silly registry.get     'content-length': '106274',
+414 silly registry.get     'accept-ranges': 'bytes',
+414 silly registry.get     via: '1.1 varnish',
+414 silly registry.get     age: '526',
+414 silly registry.get     'x-served-by': 'cache-lax1423-LAX',
+414 silly registry.get     'x-cache': 'HIT',
+414 silly registry.get     'x-cache-hits': '1',
+414 silly registry.get     'x-timer': 'S1411626902.964897,VS0,VE0',
+414 silly registry.get     vary: 'Accept',
+414 silly registry.get     'keep-alive': 'timeout=10, max=50',
+414 silly registry.get     connection: 'Keep-Alive' } ]
+415 silly lockFile 85d2d02f-semver-2-3-0 semver@^2.3.0
+416 silly lockFile 85d2d02f-semver-2-3-0 semver@^2.3.0
+417 silly addNameRange number 2 { name: 'sigmund', range: '>=1.0.0- <1.1.0-', hasData: true }
+418 silly addNameRange versions [ 'sigmund', [ '1.0.0' ] ]
+419 verbose addNamed [ 'sigmund', '1.0.0' ]
+420 verbose addNamed [ '1.0.0', '1.0.0' ]
+421 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+422 verbose lock sigmund@1.0.0 /root/.npm/7b2d1244-sigmund-1-0-0.lock
+423 silly addNameRange number 2 { name: 'lru-cache', range: '>=2.0.0- <3.0.0-', hasData: true }
+424 silly addNameRange versions [ 'lru-cache',
+424 silly addNameRange   [ '1.0.1',
+424 silly addNameRange     '1.0.2',
+424 silly addNameRange     '1.0.3',
+424 silly addNameRange     '1.0.4',
+424 silly addNameRange     '1.0.5',
+424 silly addNameRange     '1.0.6',
+424 silly addNameRange     '1.1.0',
+424 silly addNameRange     '1.1.1',
+424 silly addNameRange     '2.0.0',
+424 silly addNameRange     '2.0.1',
+424 silly addNameRange     '2.0.2',
+424 silly addNameRange     '2.0.3',
+424 silly addNameRange     '2.0.4',
+424 silly addNameRange     '2.1.0',
+424 silly addNameRange     '2.2.0',
+424 silly addNameRange     '2.2.1',
+424 silly addNameRange     '2.2.2',
+424 silly addNameRange     '2.2.4',
+424 silly addNameRange     '2.3.0',
+424 silly addNameRange     '2.3.1',
+424 silly addNameRange     '2.5.0' ] ]
+425 verbose addNamed [ 'lru-cache', '2.5.0' ]
+426 verbose addNamed [ '2.5.0', '2.5.0' ]
+427 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+428 verbose lock lru-cache@2.5.0 /root/.npm/30aa630e-lru-cache-2-5-0.lock
+429 silly addNameRange number 2 { name: 'event-stream',
+429 silly addNameRange   range: '>=0.5.0- <0.6.0-',
+429 silly addNameRange   hasData: true }
+430 silly addNameRange versions [ 'event-stream',
+430 silly addNameRange   [ '0.1.0',
+430 silly addNameRange     '0.2.0',
+430 silly addNameRange     '0.2.1',
+430 silly addNameRange     '0.3.0',
+430 silly addNameRange     '0.4.0',
+430 silly addNameRange     '0.5.0',
+430 silly addNameRange     '0.5.1',
+430 silly addNameRange     '0.5.2',
+430 silly addNameRange     '0.5.3',
+430 silly addNameRange     '0.6.0',
+430 silly addNameRange     '0.7.0',
+430 silly addNameRange     '0.8.0',
+430 silly addNameRange     '0.8.1',
+430 silly addNameRange     '0.8.2',
+430 silly addNameRange     '0.9.0',
+430 silly addNameRange     '0.9.1',
+430 silly addNameRange     '0.9.2',
+430 silly addNameRange     '0.9.3',
+430 silly addNameRange     '0.9.4',
+430 silly addNameRange     '0.9.6',
+430 silly addNameRange     '0.9.7',
+430 silly addNameRange     '0.9.8',
+430 silly addNameRange     '0.10.0',
+430 silly addNameRange     '1.0.0',
+430 silly addNameRange     '1.1.0',
+430 silly addNameRange     '1.2.0',
+430 silly addNameRange     '1.3.0',
+430 silly addNameRange     '1.3.1',
+430 silly addNameRange     '2.0.0',
+430 silly addNameRange     '2.0.1',
+430 silly addNameRange     '2.0.2',
+430 silly addNameRange     '2.0.3',
+430 silly addNameRange     '2.0.4',
+430 silly addNameRange     '2.0.9',
+430 silly addNameRange     '2.0.10',
+430 silly addNameRange     '2.1.0',
+430 silly addNameRange     '2.1.2',
+430 silly addNameRange     '2.1.3',
+430 silly addNameRange     '2.1.4',
+430 silly addNameRange     '2.1.5',
+430 silly addNameRange     '2.1.7',
+430 silly addNameRange     '2.1.8',
+430 silly addNameRange     '2.1.9',
+430 silly addNameRange     '2.2.0',
+430 silly addNameRange     '2.2.1',
+430 silly addNameRange     '2.2.2',
+430 silly addNameRange     '2.2.3',
+430 silly addNameRange     '3.0.0',
+430 silly addNameRange     '3.0.1',
+430 silly addNameRange     '3.0.2',
+430 silly addNameRange     '3.0.3',
+430 silly addNameRange     '3.0.4',
+430 silly addNameRange     '3.0.5',
+430 silly addNameRange     '3.0.6',
+430 silly addNameRange     '3.0.7',
+430 silly addNameRange     '3.0.8',
+430 silly addNameRange     '3.0.9',
+430 silly addNameRange     '3.0.10',
+430 silly addNameRange     '3.0.11',
+430 silly addNameRange     '3.0.12',
+430 silly addNameRange     '3.0.13',
+430 silly addNameRange     '3.0.14',
+430 silly addNameRange     '3.0.15',
+430 silly addNameRange     '3.0.16',
+430 silly addNameRange     '3.0.17',
+430 silly addNameRange     '3.0.18',
+430 silly addNameRange     '3.0.20',
+430 silly addNameRange     '3.1.0',
+430 silly addNameRange     '3.1.1',
+430 silly addNameRange     '3.1.2',
+430 silly addNameRange     '3.1.4',
+430 silly addNameRange     '3.1.5',
+430 silly addNameRange     '3.1.7' ] ]
+431 verbose addNamed [ 'event-stream', '0.5.3' ]
+432 verbose addNamed [ '0.5.3', '0.5.3' ]
+433 silly lockFile 64ac5a06-event-stream-0-5-3 event-stream@0.5.3
+434 verbose lock event-stream@0.5.3 /root/.npm/64ac5a06-event-stream-0-5-3.lock
+435 silly lockFile b70a8d49-request-2-36-0 request@^2.36.0
+436 silly lockFile b70a8d49-request-2-36-0 request@^2.36.0
+437 verbose about to build /usr/local/lib/node_modules/nodemon
+438 info /usr/local/lib/node_modules/nodemon unbuild
+439 verbose from cache /usr/local/lib/node_modules/nodemon/package.json
+440 info preuninstall nodemon@1.2.1
+441 verbose read json /root/.npm/lru-cache/2.5.0/package/package.json
+442 verbose read json /root/.npm/event-stream/0.5.3/package/package.json
+443 info uninstall nodemon@1.2.1
+444 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild nodemon@1.2.1
+445 verbose /usr/local/bin,[object Object] binRoot
+446 verbose read json /root/.npm/sigmund/1.0.0/package/package.json
+447 info postuninstall nodemon@1.2.1
+448 error Error: No compatible version found: configstore@'^0.3.0'
+448 error Valid install targets:
+448 error ["0.1.0","0.1.1","0.1.2","0.1.3","0.1.4","0.1.5","0.1.6","0.1.7","0.2.0","0.2.1","0.2.2","0.2.3","0.3.0","0.3.1"]
+448 error     at installTargetsError (/usr/local/lib/node_modules/npm/lib/cache.js:685:10)
+448 error     at /usr/local/lib/node_modules/npm/lib/cache.js:607:10
+448 error     at saved (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/get.js:138:7)
+448 error     at Object.oncomplete (fs.js:107:15)
+449 error If you need help, you may report this log at:
+449 error     <http://github.com/isaacs/npm/issues>
+449 error or email it to:
+449 error     <npm-@googlegroups.com>
+450 error System Linux 2.6.32-431.29.2.el6.x86_64
+451 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "nodemon"
+452 error cwd /development/catalyst/D4D
+453 error node -v v0.10.4
+454 error npm -v 1.2.18
+455 verbose exit [ 1, true ]
