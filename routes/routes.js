@@ -81,7 +81,7 @@ module.exports.setRoutes = function(app) {
        {
           var urlpart = req.originalUrl.split('/');
         //  console.log(urlpart[urlpart.length -1], authfiles.length, authfiles.indexOf(urlpart[urlpart.length -1]));
-          if(authfiles.indexOf(urlpart[urlpart.length -1]) < 0 && req.session.user.cn !='sd2')
+          if(authfiles.indexOf(urlpart[urlpart.length -1]) < 0 && req.session.user.cn !='sd1')
           {
               console.log('not authorized');
               res.redirect('/private/ajax/noaccess.html');
