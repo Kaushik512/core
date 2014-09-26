@@ -659,8 +659,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
         }
         else  if(data[i].instanceState == 'stopped'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer paused');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator paused');
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
         }  
         else {
             $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
@@ -752,7 +752,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         } else if(data[i].instanceState == 'terminated'){
              $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
         } else  if(data[i].instanceState == 'stopped'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-paused">'+data[i].instanceState+'</strong>');
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
         } else {
             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">'+data[i].instanceState+'</strong>');
         }
@@ -886,8 +886,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
             case 'stopped':
              cssClasses.ringClass = 'paused';
-             cssClasses.textClass = 'instance-state-text-paused';
-             cssClasses.tableViewStatusClass ="paused";
+             cssClasses.textClass = 'instance-state-text-stopped';
+             cssClasses.tableViewStatusClass ="stopped";
             break;
 
             case 'terminated':
