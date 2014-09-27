@@ -830,6 +830,44 @@ function enableUniqueCheckingForInputs(id){
     }
 }
 
+function checkusernameexistsinldap(inputID){
+    if($('#' + inputID).length > 0){
+        var inp = $('#' + inputID);
+        inp.blur(function(){
+            var uni = $('#unique_' + inp.attr("id")); //check if the error span is loaded.
+            if(uni.length > 0)
+                if(uni.html().indexOf('LDAP') > 0) //check if the message is from LDAP check
+                    uni.html('');
+              else{
+                 //alert("in");
+                  inp.closest('section').find('label').first().append('<span id="unique_' + inp.attr("id") + '" style="color:red"></span>');
+                  uni = $('#unique_' + $(this).attr("id"));
+            }
+            $.ajax({
+            type: "get",
+            dataType: "text",
+
+            async: false,
+            url: '/auth/userexists/' + inp.val(),
+            success: function (data) {
+                // alert(data.toString());  
+                // debugger;
+                //d4ddata = JSON.parse(data);
+               //alert(data);
+               if(data == "false"){
+                uni.css("color","red");
+                uni.html('selected is NOT in LDAP.');
+                $(this).focus(); 
+               }
+            },
+            failure: function (data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+            });
+        });
+    }
+}
 
 //STandby code to receive docker images. To be updated to receive the url from settings
 function getDockerTags(){

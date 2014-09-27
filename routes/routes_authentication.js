@@ -117,7 +117,7 @@ module.exports.setRoutes = function(app) {
 			res.redirect('/public/login.html');
 		}
 	});
-
+	
 
 	app.get('/auth/signout', function(req, res) {
 		req.session.destroy();
@@ -130,6 +130,14 @@ module.exports.setRoutes = function(app) {
 		//res.render('login');
 		res.redirect('/public/login.html');
 
+	});
+
+	app.get('/auth/userexists/:username',function(req,res){
+		console.log('received Username Exisits ' + req.params.username);
+		var ldapClient = new LdapClient();
+		ldapClient.compare(req.params.username,function(err,status){
+			res.send(status)
+		});
 	});
 
 	app.get('/auth/userrole',function(req,res){
