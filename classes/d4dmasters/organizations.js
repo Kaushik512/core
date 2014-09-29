@@ -1,5 +1,5 @@
 var d4dModel = require('./d4dmastersmodel.js');
-
+var uuid = require('node-uuid');
 
 
 function Orgs() {
@@ -27,7 +27,8 @@ function Orgs() {
 	};
 
 	this.createOrg = function(name, callback) {
-		var orgField = "{\"field\":[{\"values\":{\"value\":\"" + name + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
+		var uuid1 = uuid.v4();
+		var orgField = "{\"field\":[{\"values\":{\"value\":\"" + name + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":\"" + uuid1 + "\"},\"name\":\"rowid\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
 		
 		d4dModel.findOne({
 			id: '1'

@@ -456,7 +456,7 @@ function saveform(formID){
             contentType: false,
             type: 'POST',
             success:function(data,success){
-              alert('Successfully Saved'); 
+              //alert('Successfully Saved'); 
                 $(".savespinner").hide();
                 if($('#btncancel'))
                         $('#btncancel').click();
