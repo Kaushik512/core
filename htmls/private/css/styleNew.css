@@ -1781,7 +1781,7 @@ background-image:url('../img/rsz_inactive.png');
 
 .instancestatusindicator{
 background-repeat:no-repeat;
-background-position: center;
+background-position:center;
 background-size: contain;
 }
 .instancestatusindicator.started{ 

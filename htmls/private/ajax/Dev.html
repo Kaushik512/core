@@ -156,7 +156,7 @@
                                         <!--App Factory Starts here-->
                                         <div class="appFactoryPanel panel panel-default blueprintContainer">
                                             <div class="panel-heading">
-                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
+                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
                                             </div>
                                             <div id="collapse2" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -195,7 +195,7 @@
                                             Edit
                                         </button>-->                                       
                                          <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
-                                            <i class="ace-icon fa fa-plane bigger-110"></i>
+                                            <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
                                             Launch
                                         </button>
                                     </div>
@@ -220,17 +220,7 @@
                                                
                                             </ul>
                                         </div>
-                                        <div style="margin-top: 122px;" class="col col-2">
-                                            <div class="input-group">
-                                                <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div class="btn-group">
-                                                    <button class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         
                                     </div>
                                 </section>
@@ -291,7 +281,7 @@
                             </fieldset>
 
                         </form>
-                        <div class="row" style="margin-top:20px;position:static">
+                        <div class="row" style="margin-top:90px;position:static">
                             <div class="col-md-12">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
@@ -387,7 +377,29 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalTableRunlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    Chef-Receipes
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+         
 
+            </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 <script type="text/javascript">
@@ -547,17 +559,17 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 
         $ul.append($liCardName);
    
-        if(data[i].templateComponents) { 
-            console.log(data[i]);
-         for(var j=0;j<data[i].templateComponents.length;j++) {
-           var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
-           $ul.append($li);
-         }
-        }
-        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:10px;bottom:4px;"></div>');
+        // if(data[i].templateComponents) { 
+        //     console.log(data[i]);
+        //  for(var j=0;j<data[i].templateComponents.length;j++) {
+        //    var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
+        //    $ul.append($li);
+        //  }
+        // }
+        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:36px;bottom:11px;"></div>');
         if(data[i].versionsList) {
-           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i>Edit</a>').addClass('btn btn-primary');
-           var $selectVer =  $('<select style="padding:2px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
+           var $selectVerEdit =  $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Edit');
+           var $selectVer =  $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
 
            $selectVerEdit.click(function(e){
                 var $parent = $(this).parents('.cardimage');
@@ -576,7 +588,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
                     $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
                     var keys = Object.keys(data);
                     
-                    var $cookbooksList = $('<select style="height:200px;width:300px;"></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
+                    var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
                     for(var i=0;i<keys.length;i++) {
                         var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                         $cookbooksList.append($option);
@@ -678,9 +690,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     for(var i=0;i<data.length;i++) {
 
         //For Table view
-        
-          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data[i]._id+'"><i></i>'+data[i].chefNodeName+'</label></li>'));
-
+      
+          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data[i]._id+'"><i></i>'+data[i].chefNodeName+'</label></li>'));
 
         var $rowContainter = $('<tr data-instanceId="'+data[i]._id+'"></tr>');
 
@@ -693,7 +704,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
         var $spanheadingMiddle = $('<span></span>');
         var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
 
@@ -752,39 +763,44 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         $divComponentListContainer.append($divComponentList);
 
-        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Import').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data[i].chef.serverId);
+
+        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data[i].chef.serverId);
 
         $divComponentListContainer.append($divComponentListImage);
 
         //For Table View
         $rowContainter.append('<td>'+(i+1)+'</td>');
-        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:27px;width:27px;margin-right:5px;"/></td>');
+        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:36px;width:54px;"/></td>');
         
 
         $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
         //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
         $rowContainter.append('<td>' +data[i].instanceIP+ '</td>');
         var $tableRunlistDiv = $('<div></div>').append('<span>'+data[i].runlist.join()+'</span>');
-        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append("View All"));
-         $tableRunlistDiv.append($divComponentItem);
-        var $tableViewAllRecipes = $('<div class="tableViewAllRecipes"></div>').hide();
-        $tableRunlistDiv.append($tableViewAllRecipes);  
-        
-        $divComponentItem.click(function(){
-            $(this).parent().find('.tableViewAllRecipes').show();
-        });  
-
-        for(var j=0;j<data[i].runlist.length;j++) { 
-          var $divComponentItem;
-           if(j == 0) {
+        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void(0)').append("View All").data('runlist',data[i].runlist.join()).click(function(){
+            var $modal = $('#modalTableRunlist');
+            var $modalBody = $('#modalTableRunlist .modal-body').empty();
+            var runlist = $(this).data('runlist').split(',');
+            for(var j=0;j<runlist.length;j++) { 
+                 var $divComponentItem;
+                if(j == 0) {
           
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+                $divComponentItem = $('<span title="'+runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
 
-           } else {
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+                 } else {
+                    $divComponentItem = $('<span title="'+runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+                }
+
+             $modalBody.append($divComponentItem);          
            }
-           $tableViewAllRecipes.append($divComponentItem);          
-     }
+           $modal.modal('show');
+        }));
+         $tableRunlistDiv.append($divComponentItem);
+        
+        
+      
+
+        
         
 
 
@@ -856,10 +872,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
           var $divComponentItem;
            if(j == 0) {
           
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
 
            } else {
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad></span>').addClass('instance-details-item').append(data[i].runlist[j]);
            }
            $backRunlistContainer.append($divComponentItem);
             
