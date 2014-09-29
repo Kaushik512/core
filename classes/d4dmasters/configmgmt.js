@@ -70,7 +70,7 @@ function Configmgmt() {
             }
         });
     };
-    this.getAccessFilesForRole = function(loginname,req,res,callback){
+    this.getAccessFilesForRole = function(loginname,user,req,res,callback){
         console.log("Received Role name: " + loginname);
         var accessibleFiles = [];
         var mainRef = this;
@@ -81,8 +81,13 @@ function Configmgmt() {
                 if(rolenames){
                    console.log("Rolenames for User:" + rolenames); 
                    var rn = rolenames.replace(/\"/g,'').split(':')[0].split(',');
+
                    rn.forEach(function(rn1){
-                         
+                        if(user.rolename == null || user.rolename == '')
+                            user.rolename = rn1;
+                        else
+                            user.rolename += ",&nbsp;" + rn1;
+
                         console.log("Role " + countOuter + ":" + rn1);
                         var permissionlist = mainRef.getListFiltered(6,"globalaccessname","userrolename",rn1,function(err,globalaccessname){
                            

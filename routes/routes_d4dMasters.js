@@ -34,12 +34,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			}
 		});
 	});
-	
+
 	app.get('/d4dMasters/getuser', function(req, res) {
 		res.send({"user":[{
 			username: req.session.user
 		}, {
-			role: '[ ADMIN ]'
+			role: '[' +  req.session.user.rolename + ']'
 		}]});
 	});
 

@@ -845,7 +845,7 @@ function checkusernameexistsinldap(inputID){
             }
             $.ajax({
             type: "get",
-            dataType: "text",
+            dataType: "ltext",
 
             async: false,
             url: '/auth/userexists/' + inp.val(),

@@ -43,7 +43,7 @@ module.exports.setRoutes = function(app) {
 									user.roleId = data[0].roleId;
 									user.groupId = data[0].groupId;
 									console.log('Just before role');
-									configmgmtDao.getAccessFilesForRole(user.cn,req,res,function(err,getAccessFiles){
+									configmgmtDao.getAccessFilesForRole(user.cn,user,req,res,function(err,getAccessFiles){
 									if(getAccessFiles){
 										getAccessFiles = getAccessFiles.replace(/\"/g,'').replace(/\:/g,'')
 										console.log('Rcvd in call: ' + getAccessFiles);
