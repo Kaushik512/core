@@ -352,7 +352,7 @@
 			            	if(i==0) {
                                classOrgSelected = 'orgSelected';
 			            	}
-			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+data[i].name+'</span></a>');
+			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
 				             
               				$li.click(function(e){
                              var $parents = $(this).parents('ul');
@@ -365,7 +365,7 @@
               			  });
               			  $ulOrgList.append($li);
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
-              			  	var $liSideBar = $('<li></li>').css({'display':'none'}).append('<a href="#ajax/Dev.html"><img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;"><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
+              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().append('<a href="#"><img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;"><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
 			     				if(i==0 && j==0) {
 			  	   					$liSideBar.find('a').attr('id','firstA'); 
 			     				}
@@ -378,24 +378,57 @@
                   					  var $envUl = $('<ul></ul>');
                     				 liProject.append($envUl); 
                   					  for(var l=0;l<data[i].environments.length;l++) {
-                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'"><img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true"><img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
                     						$envUl.append($liEnv);
                         					$liEnv.click(function(e){
 	                        					window.selectedOrgName = $(this).attr('data-OrgName');
 
                         					});
 
-    					                	if(i==0 && j == 0 && k==0 && l==0 ) {
+    					                	/*if(i==0 && j == 0 && k==0 && l==0 ) {
                     							$('#firstA').attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'');
                     							 window.selectedOrgName = data[i].name;
-                    						}
+                    						}*/
 
                   					  
                   					  }
               			  		} 
 			            }
 			          }
-			          $ulOrgList.find('li:first').trigger('click'); 
+			          var href = window.location.href;
+			          var indexOfhash = href.lastIndexOf("#");
+			          $('.org').hide();
+			           console.log('indexOfhash =>',indexOfhash);
+			           var $a;
+			          if(indexOfhash!=-1) {
+
+                        var sub =  href.substring(indexOfhash+1);
+                        console.log('here',sub);
+                        $a = $('a[href="'+sub+'"]');
+                        var orgName = $a.parents('.org').data('orgName');
+                        window.selectedOrgName = orgName;
+                       
+                        $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
+                        //sconsole.log('$li',$li.length);
+                        
+                        $a.trigger('click');
+                        
+
+			          } else {
+			            $a = $workspace.find('li:first').find('a[data-link=true]'); 
+			            var orgName = $a.parents('.org').data('orgName');
+                        window.selectedOrgName = orgName;
+                       
+                        $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
+                        //sconsole.log('$li',$li.length);
+                        
+                        $a.trigger('click');
+                        
+			            window.location.assign('#'+$a.attr('href'));
+                         
+			          }
+
+			          	
 			        },
 			        failure: function (data) {
 			            alert(data.toString());

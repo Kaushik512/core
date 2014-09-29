@@ -793,9 +793,8 @@
                                      <select id="orgnameSelect" class="form-control">
                                       </select>
                                  </label> 
-                                 <div class="cookbookShow">
-                                    <select id="cookbookSelect" class="form-control" style="width: 200px;float:left;display:none" size="10" multiple="multiple">
-                                    </select> 
+                                 <div class="designCookbookContainer">
+                                    
                                  </div>
                             </section>
 
@@ -1063,8 +1062,13 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.templateId = $selectedItem.attr('data-templateId');
             reqBody.templateType = $selectedItem.attr('data-templateType');
             reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
-            reqBody.runlist = $('#cookbookSelect').val();
-            reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
+            var $cookbookSelect = $('.designCookbookSelect');
+            if(!$cookbookSelect.length) {
+               alert('Please wait while we load cookbooks');
+               return false;
+            }
+            reqBody.runlist = $cookbookSelect.val();
+            reqBody.chefServerId = $cookbookSelect.data('chefServerId')
             reqBody.instanceType = $('.instanceType').val();
             console.log(reqBody);
 
@@ -1176,9 +1180,8 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                             for(var i=0;i<getEnv.length;i++) {
                                  $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                             }
-                            $('.cookbookShow img').remove();
-                             $('#cookbookSelect').hide();
-                            $('.cookbookShow').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                            var $cookbookContainer = $('.designCookbookContainer').empty();
+                            $cookbookContainer.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
 
 
@@ -1188,13 +1191,13 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                             async:false,
                             success :function(data) {
                              var keys = Object.keys(data.cookbooks);
-                             $('.cookbookShow img').remove();
-                             var $cookbooksList = $('#cookbookSelect').data('chefServerId',data.serverId); 
+                             $cookbookContainer.empty();
+                             var $cookbooksList = $('<select multiple></select>').addClass('designCookbookSelect').data('chefServerId',data.serverId); 
                              for(var i=0;i<keys.length;i++) {
                                 var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                                 $cookbooksList.append($option);
                              }
-                             $cookbooksList.show();
+                             $cookbookContainer.append($cookbooksList);
                              $cookbooksList.multiSelect({});
                             },
                           });    
@@ -1220,32 +1223,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                 });
 
 
-/*
- $.ajax({
-    url:'/chef/cookbooks',
-    method:'GET',
-    async:false,
-    success :function(data) {
-        var keys = Object.keys(data);
-        var $cookbooksList = $('#cookbookSelect'); 
-          for(var i=0;i<keys.length;i++) {
-            var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-            $cookbooksList.append($option);
-          }
-        $cookbooksList.multiSelect({});
-    },
- })*/
- /*$.get('/chef/cookbooks',function(data){
-    var keys = Object.keys(data);
-    var $cookbooksList = $('#cookbookSelect'); 
-        for(var i=0;i<keys.length;i++) {
-         var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-         $cookbooksList.append($option);
-    }
-    $cookbooksList.multiSelect({});
 
-
-});*/
 
 
 

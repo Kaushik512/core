@@ -113,7 +113,7 @@ module.exports = function(options) {
                     if (typeof onStdErr === 'function') {
                         stream.stderr.on('data', function(data) {
                             console.log('STDERR: ' + data);
-                            onStdErr(onStdErr);
+                            onStdErr(data);
                         });
                     }
                 });

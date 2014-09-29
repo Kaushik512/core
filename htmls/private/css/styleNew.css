@@ -1839,3 +1839,10 @@ margin-top:0px;
 .cookbookShow{
     padding-top:32px;
 }
+.deploymentCookbookSelected {
+    border:1px solid green;
+}
+.designCookbookSelect {
+    width: 200px;
+    float:left;
+}

@@ -268,7 +268,7 @@ var Chef = function(settings) {
         if (!runlist) {
             runlist = [];
         }
-        sshConnection.exec('chef-client -r' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+        sshConnection.exec('chef-client -r ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
 
 
     };

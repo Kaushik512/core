@@ -253,11 +253,11 @@
                                         <div style="margin-top: 122px;" class="col col-2">
                                             <div class="input-group">
                                                 <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button id="btnAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                    <button id="btnDeploymentAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <div class="btn-group">
-                                                    <button id="btnremoveFromSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                    <button id="btnDeploymentRemoveSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -268,7 +268,7 @@
                                     <label class="label"><strong>Order RunList</strong></label>
                                     <div class="row">
                                         <div class="col col-10">
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedList">
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedRunList">
                                                 
                                             </ul>
                                         </div>
@@ -295,7 +295,7 @@
                             <div class="col-md-12">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
-                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                        <button class="btn pull-left btn-primary editBtn deploymentChefRunBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-pencil  bigger-110"></i>
                                             Execute Chef Run
                                         </button>                                       
@@ -426,7 +426,7 @@ $.get('/organizations/'+urlParams.org+'/cookbooks',function(data) {
   var keys = Object.keys(cookbooks);
   var $deploymentCookbookList = $('.deploymentCookbookList');
   for(i=0;i<keys.length;i++) {
-     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="role['+keys[i]+']" data-cookbookName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
+     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe['+keys[i]+']" data-cookbookName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
   }
 
 });
@@ -437,29 +437,83 @@ $.get('/organizations/'+urlParams.org+'/roles',function(data) {
   var keys = Object.keys(roles);
   var $deploymentRolesList = $('.deploymentRolesList');
   for(i=0;i<keys.length;i++) {
-     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="recipe['+keys[i]+']" data-roleName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
+     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role['+keys[i]+']" data-roleName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
   }
 
 });
 
-$('#btnAddSelectedCookbook').click(function(e){
-   var $deploymentSelectedList = $('.deploymentSelectedList');
+$('#btnDeploymentAddSelectedCookbook').click(function(e){
+   var $deploymentSelectedList = $('.deploymentSelectedRunList');
    var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
    $selectedCookbooks.each(function(idx){
       var $this = $(this);
-      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-cookbookName')+'</label></li>'));
-
+      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-cookbookName')+'</label></li>').on('click',function(e){
+           if($(this).hasClass('deploymentCookbookSelected')){
+                $(this).removeClass('deploymentCookbookSelected');
+           } else {
+                $(this).addClass('deploymentCookbookSelected');
+           } 
+      }));
+      $this.attr('checked',false);
+      $this.parents('li').hide();
+      
    });
 
    var $selectedRoles = $("input[name=checkboxRoles]:checked");
    $selectedRoles.each(function(idx){
       var $this = $(this);
-      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-roleName')+'</label></li>'));
+      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-roleName')+'</label></li>').on('click',function(e){
+           if($(this).hasClass('deploymentCookbookSelected')){
+                $(this).removeClass('deploymentCookbookSelected');
+           } else {
+                $(this).addClass('deploymentCookbookSelected');
+           } 
+      }));
+      $this.attr('checked',false);
+      $this.parents('li').hide();
+    
           
    });
 
-   $deploymentSelectedList.sortable();
-      
+   $deploymentSelectedList.sortable({ cursor: "move" });
+});
+
+$('#btnDeploymentRemoveSelectedCookbook').click(function(e){
+   var $deploymentSelectedList = $('.deploymentSelectedRunList');
+   $deploymentSelectedList.find('.deploymentCookbookSelected').each(function(){
+    var value = $(this).find('input').val();
+    var selector = 'input[name=checkboxRoles][value="'+value+'"]';
+    console.log(selector);
+    $('input[name=checkboxRoles][value="'+value+'"]').parents('li').show();
+    $('input[name=checkboxCookbooks][value="'+value+'"]').parents('li').show();
+    $(this).remove();
+
+   });
+
+});
+
+
+
+
+$('.deploymentChefRunBtn').click(function(e){
+
+    var $selectedNodes = $('input[name=deploymentNodesCheckBox]:checked');
+    var $runlistInput = $('.deploymentSelectedRunList input');
+    var runlist = [];
+    $runlistInput.each(function(){
+        runlist.push($(this).val());
+    });
+    console.log(runlist);
+    $selectedNodes.each(function(e){
+        $.post('/instances/'+$(this).val()+'/updateRunlist',{
+         runlist:runlist
+        },function(data){
+           console.log('instance runlist updated');
+        });
+    })
+
+
+
 });
 
 
@@ -625,7 +679,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         //For Table view
         
-          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox" name="checkbox"><i></i>'+data[i].chefNodeName+'</label></li>'));
+          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data[i]._id+'"><i></i>'+data[i].chefNodeName+'</label></li>'));
 
 
         var $rowContainter = $('<tr data-instanceId="'+data[i]._id+'"></tr>');
@@ -1008,7 +1062,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
                 $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>'+date+'</div>'));
 
                 if (data[i].err){
-                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>'+data[i].log+'</span>'));
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>'+data[i].log+'</span>'));
                 }
                 else {
                     $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>'+data[i].log+'</span>'));

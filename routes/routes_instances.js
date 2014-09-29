@@ -66,6 +66,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             port: 22
                         }, function(err, retCode) {
                             if (err) {
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: true,
+                                    log: 'Unable to run chef-client',
+                                    timestamp: new Date().getTime()
+                                });
                                 return;
                             }
                             console.log("knife ret code", retCode);
