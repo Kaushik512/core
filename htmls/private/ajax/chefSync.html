@@ -29,7 +29,7 @@
 
 <div class="clearfix"></div>
 <ul class="nav nav-tabs " role="tablist">
-	<li class="active"><a href="#organiz" role="tab" data-toggle="tab">Organization</a></li>
+	<li class="active"><a href="#organiz" role="tab" data-toggle="tab">Nodes</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -138,6 +138,8 @@
 
 <script type="text/javascript">
 
+
+window.selectedOrgName = "Chef Import";
 var urlParams ={};
 (window.onpopstate = function () {
   var url = window.location.href;
@@ -151,6 +153,8 @@ var urlParams ={};
      
 })();
 $(function(){
+
+ drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
  $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
