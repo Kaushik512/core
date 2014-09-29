@@ -6,7 +6,7 @@ var awsSettings = {
 	region : "us-west-2",
 	keyPairName:"catalyst",
 	securityGroupId : "sg-c00ee1a5",
-	pemFileLocation : "/home/arabinda/",
+	pemFileLocation : "/home/arabindabehera/",
 	pemFile:"catalyst.pem",
 	instanceUserName:"root"
 }
