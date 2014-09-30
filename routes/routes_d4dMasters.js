@@ -43,6 +43,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		}]});
 	});
 
+	app.get('/d4dMasters/authorizedfiles', function(req, res) {
+		res.send('[' + req.session.user.authorizedfiles + ']');
+	});
+
 	app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
 		
 		console.log('received request ' + req.params.id);

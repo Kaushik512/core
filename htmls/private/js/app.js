@@ -1411,6 +1411,7 @@ function pageSetUp() {
 		// run form elements
 		runAllForms();
 		
+		
 	}
 
 }
@@ -1425,3 +1426,63 @@ $('body').on('click', function(e) {
 		}
 	});
 }); 
+
+function runAuthentication(){
+	
+	$.ajax({
+            url:'/d4dMasters/authorizedfiles',
+           
+            processData: false,
+            contentType: false,
+            type: 'GET',
+            success:function(data){
+              //alert('Successfully Saved'); 
+              
+              data = data.replace(/\[/g,'').replace(/\]/g,'');
+              
+              var sections = data.split(',');
+             // alert(sections[0]);
+              if(sections.length > 0){
+                if($.inArray('Workspace',sections) >= 0){
+                    $('li[data-target="#Workspace"]').removeClass('hidden');
+                }
+                if($.inArray('Settings',sections) >= 0){
+                    $('li[data-target="#Settings"]').removeClass('hidden');
+                }
+                if($.inArray('Track',sections) >= 0){
+                    $('li[data-target="#Track"]').removeClass('hidden');
+                }
+                
+                if($.inArray('blueprints',sections) >= 0){
+                	//alert('in1');
+                    $('li[data-target="#blueprints"]').removeClass('hidden');
+                }
+              }
+               if(sections.length == 1){
+               	
+                if(sections.toString().indexOf('Workspace') >= 0){
+                    $('li[data-target="#Workspace"]').removeClass('hidden');
+                }
+                if(sections.toString().indexOf('Settings') >= 0){
+                    $('li[data-target="#Settings"]').removeClass('hidden');
+                }
+                if(sections.toString().indexOf('Track') >= 0){
+                    $('li[data-target="#Track"]').removeClass('hidden');
+                }
+                if(sections.toString().indexOf('blueprints') >= 0){
+                    $('li[data-target="#blueprints"]').removeClass('hidden');
+                }
+              }
+             // alert($.inArray('CreateAuthentication.html',sections));}
+            }  ,
+            error:function(jqxhr){
+                alert(jqxhr.status);
+           }
+    });
+}
+
+runAuthentication();
+/*$('li[data-target="#Workspace"]').removeClass('hidden');
+$('li[data-target="#Settings"]').removeClass('hidden');
+$('li[data-target="#Track"]').removeClass('hidden');
+$('li[data-target="#blueprints"]').removeClass('hidden');*/

@@ -45,6 +45,7 @@ module.exports.setRoutes = function(app) {
 									console.log('Just before role');
 									configmgmtDao.getAccessFilesForRole(user.cn,user,req,res,function(err,getAccessFiles){
 									if(getAccessFiles){
+										
 										getAccessFiles = getAccessFiles.replace(/\"/g,'').replace(/\:/g,'')
 										console.log('Rcvd in call: ' + getAccessFiles);
 										//req.session.user.authorizedfiles = getAccessFiles;

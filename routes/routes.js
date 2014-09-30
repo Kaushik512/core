@@ -84,8 +84,8 @@ module.exports.setRoutes = function(app) {
           if(authfiles.indexOf(urlpart[urlpart.length -1]) < 0 && req.session.user.cn !='sd1')
           {
               console.log('not authorized');
-              res.redirect('/private/ajax/noaccess.html');
-              return;
+//              res.redirect('/private/ajax/noaccess.html'); //To be fixed when micro authentication is implemented.
+  //            return;
           }
           else{
               console.log('Authorized');

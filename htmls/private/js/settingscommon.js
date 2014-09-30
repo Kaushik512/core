@@ -425,13 +425,24 @@ function saveform(formID){
     $('div[cdata="catalyst"]').each(function (){
        k =  $(this).attr("id");
       $(this).find("input").each(function (){
+         // alert($(this).prop("type"));
           if ($(this).is(":checked")) {
         //    v.push("\"" + $(this).val() + "\"");
             v.push($(this).val());
           }
       });
+      //bg-success
+      $(this).find('p[class="bg-success"]').each(function (){
+          if($(this).text() != ''){
+             v.push($(this).text());
+          }
+          /*if ($(this).is(":checked")) {
+        //    v.push("\"" + $(this).val() + "\"");
+            v.push($(this).val());
+          }*/
+      });
     });
-  //  alert(k + ":" + v.toString());
+    alert(k + ":" + v.toString());
     if(k != ''){
         //data1.append(k,"[" + v.toString() + "]");
         data1.append(k,v);

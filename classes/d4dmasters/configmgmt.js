@@ -104,6 +104,7 @@ function Configmgmt() {
                                         console.log('inner loop ' + jlt);
                                        //count++;
                                         if(accessibleFiles.indexOf(jlt) < 0){
+                                            jlt = jlt.split(':')[0];
                                             accessibleFiles.push(jlt);
                                         }
                                         console.log(countOuter,rn.length,countInner,ga.length);
