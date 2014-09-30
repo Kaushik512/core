@@ -1,3 +1,11 @@
+.ChefClientRunImage{
+    background-image:url('../img/galleryIcons/Flip-icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    height:36px !important;
+    width:28px !important;
+    margin-left:14px !important;
+}
 .panel-databag{
  line-height:2.1;
  color:#333;
@@ -1824,7 +1832,7 @@ margin-top:0px;
     display:inline-block;
 }
 .swap-view{
-    margin:10px;
+    margin:5px;
 }
 
 .chefCookbookList {
