@@ -44,7 +44,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></button></span>
+                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><img src="img/galleryIcons/Table-view.png"/><!-- <i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/> --></a>&nbsp;<a class="btn1" style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -144,7 +144,7 @@
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
                                             </div>
-                                            <div id="collapseOne-2" class="panel-collapse collapse in">
+                                            <div id="collapseOne-2" class="panel-collapse collapse">
                                                 <div class="panel-body">
 
 
@@ -156,9 +156,9 @@
                                         <!--App Factory Starts here-->
                                         <div class="appFactoryPanel panel panel-default blueprintContainer">
                                             <div class="panel-heading">
-                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
+                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
                                             </div>
-                                            <div id="collapse2" class="panel-collapse collapse in">
+                                            <div id="collapse2" class="panel-collapse collapse">
                                                 <div class="panel-body">
 
                                                 </div>
@@ -195,7 +195,7 @@
                                             Edit
                                         </button>-->                                       
                                          <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
-                                            <i class="ace-icon fa fa-plane bigger-110"></i>
+                                            <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
                                             Launch
                                         </button>
                                     </div>
@@ -213,29 +213,25 @@
                             <fieldset>
                                
                                 <section class="col col-4">
-                                    <label class="label"><strong>Select Nodes</strong></label>
+                                    <label class="label">
+                                        <img src="img/templateicons/Select-nodes---deployment.png">
+                                        <strong>Select Nodes</strong>
+                                    </label>
                                     <div class="row">
                                         <div class="col col-10">
                                             <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentNodeList">
                                                
                                             </ul>
                                         </div>
-                                        <div style="margin-top: 122px;" class="col col-2">
-                                            <div class="input-group">
-                                                <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div class="btn-group">
-                                                    <button class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         
                                     </div>
                                 </section>
                                 <section class="col col-4">
-                                    <label class="label"><strong>Create Runlist</strong></label>
+                                    <label class="label">
+                                        <img src="img/templateicons/Create-run-list---deployment.png">
+                                        <strong>Create Runlist</strong>
+                                    </label>
                                     <div class="row">
                                         <div class="col col-10">
                                             <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;" class="deploymentCookbookList">
@@ -253,11 +249,11 @@
                                         <div style="margin-top: 122px;" class="col col-2">
                                             <div class="input-group">
                                                 <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button id="btnAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                    <button id="btnDeploymentAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <div class="btn-group">
-                                                    <button id="btnremoveFromSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                    <button id="btnDeploymentRemoveSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -265,10 +261,13 @@
                                     </div>
                                 </section>
                                 <section class="col col-4">
-                                    <label class="label"><strong>Order RunList</strong></label>
+                                    <label class="label">
+                                        <img src="img/templateicons/Order-run-list---deployment.png">
+                                        <strong>Order RunList</strong>
+                                    </label>
                                     <div class="row">
                                         <div class="col col-10">
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedList">
+                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedRunList">
                                                 
                                             </ul>
                                         </div>
@@ -291,11 +290,11 @@
                             </fieldset>
 
                         </form>
-                        <div class="row" style="margin-top:20px;position:static">
+                        <div class="row" style="margin-top:90px;position:static">
                             <div class="col-md-12">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
-                                        <button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
+                                        <button class="btn pull-left btn-primary editBtn deploymentChefRunBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-pencil  bigger-110"></i>
                                             Execute Chef Run
                                         </button>                                       
@@ -387,7 +386,29 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalTableRunlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    Chef-Receipes
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+         
 
+            </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 <script type="text/javascript">
@@ -426,7 +447,7 @@ $.get('/organizations/'+urlParams.org+'/cookbooks',function(data) {
   var keys = Object.keys(cookbooks);
   var $deploymentCookbookList = $('.deploymentCookbookList');
   for(i=0;i<keys.length;i++) {
-     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="role['+keys[i]+']" data-cookbookName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
+     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe['+keys[i]+']" data-cookbookName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
   }
 
 });
@@ -437,29 +458,83 @@ $.get('/organizations/'+urlParams.org+'/roles',function(data) {
   var keys = Object.keys(roles);
   var $deploymentRolesList = $('.deploymentRolesList');
   for(i=0;i<keys.length;i++) {
-     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="recipe['+keys[i]+']" data-roleName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
+     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role['+keys[i]+']" data-roleName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
   }
 
 });
 
-$('#btnAddSelectedCookbook').click(function(e){
-   var $deploymentSelectedList = $('.deploymentSelectedList');
+$('#btnDeploymentAddSelectedCookbook').click(function(e){
+   var $deploymentSelectedList = $('.deploymentSelectedRunList');
    var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
    $selectedCookbooks.each(function(idx){
       var $this = $(this);
-      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-cookbookName')+'</label></li>'));
-
+      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-cookbookName')+'</label></li>').on('click',function(e){
+           if($(this).hasClass('deploymentCookbookSelected')){
+                $(this).removeClass('deploymentCookbookSelected');
+           } else {
+                $(this).addClass('deploymentCookbookSelected');
+           } 
+      }));
+      $this.attr('checked',false);
+      $this.parents('li').hide();
+      
    });
 
    var $selectedRoles = $("input[name=checkboxRoles]:checked");
    $selectedRoles.each(function(idx){
       var $this = $(this);
-      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-roleName')+'</label></li>'));
+      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-roleName')+'</label></li>').on('click',function(e){
+           if($(this).hasClass('deploymentCookbookSelected')){
+                $(this).removeClass('deploymentCookbookSelected');
+           } else {
+                $(this).addClass('deploymentCookbookSelected');
+           } 
+      }));
+      $this.attr('checked',false);
+      $this.parents('li').hide();
+    
           
    });
 
-   $deploymentSelectedList.sortable();
-      
+   $deploymentSelectedList.sortable({ cursor: "move" });
+});
+
+$('#btnDeploymentRemoveSelectedCookbook').click(function(e){
+   var $deploymentSelectedList = $('.deploymentSelectedRunList');
+   $deploymentSelectedList.find('.deploymentCookbookSelected').each(function(){
+    var value = $(this).find('input').val();
+    var selector = 'input[name=checkboxRoles][value="'+value+'"]';
+    console.log(selector);
+    $('input[name=checkboxRoles][value="'+value+'"]').parents('li').show();
+    $('input[name=checkboxCookbooks][value="'+value+'"]').parents('li').show();
+    $(this).remove();
+
+   });
+
+});
+
+
+
+
+$('.deploymentChefRunBtn').click(function(e){
+
+    var $selectedNodes = $('input[name=deploymentNodesCheckBox]:checked');
+    var $runlistInput = $('.deploymentSelectedRunList input');
+    var runlist = [];
+    $runlistInput.each(function(){
+        runlist.push($(this).val());
+    });
+    console.log(runlist);
+    $selectedNodes.each(function(e){
+        $.post('/instances/'+$(this).val()+'/updateRunlist',{
+         runlist:runlist
+        },function(data){
+           console.log('instance runlist updated');
+        });
+    })
+
+
+
 });
 
 
@@ -493,17 +568,17 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 
         $ul.append($liCardName);
    
-        if(data[i].templateComponents) { 
-            console.log(data[i]);
-         for(var j=0;j<data[i].templateComponents.length;j++) {
-           var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
-           $ul.append($li);
-         }
-        }
-        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:10px;bottom:4px;"></div>');
+        // if(data[i].templateComponents) { 
+        //     console.log(data[i]);
+        //  for(var j=0;j<data[i].templateComponents.length;j++) {
+        //    var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
+        //    $ul.append($li);
+        //  }
+        // }
+        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:36px;bottom:11px;"></div>');
         if(data[i].versionsList) {
-           var $selectVerEdit =  $('<a style="padding:1px 4px;margin-left:5px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i>Edit</a>').addClass('btn btn-primary');
-           var $selectVer =  $('<select style="padding:2px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
+           var $selectVerEdit =  $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Edit');
+           var $selectVer =  $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
 
            $selectVerEdit.click(function(e){
                 var $parent = $(this).parents('.cardimage');
@@ -522,7 +597,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
                     $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
                     var keys = Object.keys(data);
                     
-                    var $cookbooksList = $('<select style="height:200px;width:300px;"></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
+                    var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
                     for(var i=0;i<keys.length;i++) {
                         var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                         $cookbooksList.append($option);
@@ -568,13 +643,21 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         $productdiv1.removeClass('role-Selected1');
         $(this).addClass('role-Selected1');
     });
+    
+    var expanded = false;
+    if($devopsRolepanelBody.children().length) {
+        var $devopsRolePanel = $devopsRolepanelBody.parents('.devopsRolePanel').show();
+        $devopsRolePanel.find('.collapse').addClass('in');
+        expanded = true;
+    }
 
     if($AppFactpanelBody.children().length) {
-        $AppFactpanelBody.parents('.appFactoryPanel').show();
+        var $appFactoryPanel = $AppFactpanelBody.parents('.appFactoryPanel').show();
+        if(!expanded) {
+            $appFactoryPanel.find('.collapse').addClass('in');
+        }
     }
-    if($devopsRolepanelBody.children().length) {
-        $devopsRolepanelBody.parents('.devopsRolePanel').show();
-    }
+    
 
 
     $('.bpEditBtn').click(function(e){
@@ -624,9 +707,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
     for(var i=0;i<data.length;i++) {
 
         //For Table view
-        
-          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox" name="checkbox"><i></i>'+data[i].chefNodeName+'</label></li>'));
-
+      
+          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data[i]._id+'"><i></i>'+data[i].chefNodeName+'</label></li>'));
 
         var $rowContainter = $('<tr data-instanceId="'+data[i]._id+'"></tr>');
 
@@ -639,7 +721,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
         var $spanheadingMiddle = $('<span></span>');
         var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
 
@@ -686,7 +768,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             }
         }*/
         //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('fa fa-lg fa-fw fa-2x fa-list  txt-color-blue instance-bootstrap-list-faimage'));
+        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('ChefClientRunImage instance-bootstrap-list-faimage'));
 
         $divComponentItem.click(function(e){
             $(this).parents('.flip-toggle').toggleClass('flip');
@@ -698,39 +780,44 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
         $divComponentListContainer.append($divComponentList);
 
-        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Import').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data[i].chef.serverId);
+
+        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data[i].chef.serverId);
 
         $divComponentListContainer.append($divComponentListImage);
 
         //For Table View
         $rowContainter.append('<td>'+(i+1)+'</td>');
-        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:27px;width:27px;margin-right:5px;"/></td>');
+        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:36px;width:54px;"/></td>');
         
 
         $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
         //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
         $rowContainter.append('<td>' +data[i].instanceIP+ '</td>');
-        var $tableRunlistDiv = $('<div></div>').append('<span>'+data[i].runlist.join()+'</span>');
-        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void').append("View All"));
-         $tableRunlistDiv.append($divComponentItem);
-        var $tableViewAllRecipes = $('<div class="tableViewAllRecipes"></div>').hide();
-        $tableRunlistDiv.append($tableViewAllRecipes);  
-        
-        $divComponentItem.click(function(){
-            $(this).parent().find('.tableViewAllRecipes').show();
-        });  
-
-        for(var j=0;j<data[i].runlist.length;j++) { 
-          var $divComponentItem;
-           if(j == 0) {
+        var $tableRunlistDiv = $('<div></div>');/*.append('<span>'+data[i].runlist.join()+'</span>');*/
+        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data[i].runlist.join()).click(function(){
+            var $modal = $('#modalTableRunlist');
+            var $modalBody = $('#modalTableRunlist .modal-body').empty();
+            var runlist = $(this).data('runlist').split(',');
+            for(var j=0;j<runlist.length;j++) { 
+                 var $divComponentItem;
+                if(j == 0) {
           
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+                $divComponentItem = $('<span title="'+runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
 
-           } else {
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+                 } else {
+                    $divComponentItem = $('<span title="'+runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+                }
+
+             $modalBody.append($divComponentItem);          
            }
-           $tableViewAllRecipes.append($divComponentItem);          
-     }
+           $modal.modal('show');
+        }));
+         $tableRunlistDiv.append($divComponentItem);
+        
+        
+      
+
+        
         
 
 
@@ -802,10 +889,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
           var $divComponentItem;
            if(j == 0) {
           
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
 
            } else {
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;text-align:center"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
+            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad></span>').addClass('instance-details-item').append(data[i].runlist[j]);
            }
            $backRunlistContainer.append($divComponentItem);
             
@@ -1008,7 +1095,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
                 $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>'+date+'</div>'));
 
                 if (data[i].err){
-                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>'+data[i].log+'</span>'));
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>'+data[i].log+'</span>'));
                 }
                 else {
                     $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>'+data[i].log+'</span>'));

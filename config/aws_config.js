@@ -1,4 +1,8 @@
 
+var path = require('path-extra');
+
+var currentDirectory = __dirname;
+console.log("aws ==> ",currentDirectory);
 
 var awsSettings = {
 	access_key : "AKIAI6TVFFD23LMBJUPA",
@@ -6,7 +10,7 @@ var awsSettings = {
 	region : "us-west-2",
 	keyPairName:"catalyst",
 	securityGroupId : "sg-c00ee1a5",
-	pemFileLocation : "/home/anshul/",
+	pemFileLocation : currentDirectory+'/',
 	pemFile:"catalyst.pem",
 	instanceUserName:"root"
 }

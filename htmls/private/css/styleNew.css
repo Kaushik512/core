@@ -1,3 +1,11 @@
+.ChefClientRunImage{
+    background-image:url('../img/galleryIcons/Flip-icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    height:36px !important;
+    width:28px !important;
+    margin-left:14px !important;
+}
 .panel-databag{
  line-height:2.1;
  color:#333;
@@ -1781,7 +1789,7 @@ background-image:url('../img/rsz_inactive.png');
 
 .instancestatusindicator{
 background-repeat:no-repeat;
-background-position: center;
+background-position:center;
 background-size: contain;
 }
 .instancestatusindicator.started{ 
@@ -1824,7 +1832,7 @@ margin-top:0px;
     display:inline-block;
 }
 .swap-view{
-    margin:10px;
+    margin:5px;
 }
 
 .chefCookbookList {
@@ -1838,4 +1846,11 @@ margin-top:0px;
 }
 .cookbookShow{
     padding-top:32px;
+}
+.deploymentCookbookSelected {
+    border:1px solid green;
+}
+.designCookbookSelect {
+    width: 200px;
+    float:left;
 }
