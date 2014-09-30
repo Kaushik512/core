@@ -44,7 +44,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><button id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/></button>&nbsp;<button style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></button></span>
+                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><img src="img/galleryIcons/Table-view.png"/><!-- <i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/> --></a>&nbsp;<a class="btn1" style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -213,7 +213,10 @@
                             <fieldset>
                                
                                 <section class="col col-4">
-                                    <label class="label"><strong>Select Nodes</strong></label>
+                                    <label class="label">
+                                        <img src="img/templateicons/Select-nodes---deployment.png">
+                                        <strong>Select Nodes</strong>
+                                    </label>
                                     <div class="row">
                                         <div class="col col-10">
                                             <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentNodeList">
@@ -225,7 +228,10 @@
                                     </div>
                                 </section>
                                 <section class="col col-4">
-                                    <label class="label"><strong>Create Runlist</strong></label>
+                                    <label class="label">
+                                        <img src="img/templateicons/Create-run-list---deployment.png">
+                                        <strong>Create Runlist</strong>
+                                    </label>
                                     <div class="row">
                                         <div class="col col-10">
                                             <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;" class="deploymentCookbookList">
@@ -255,7 +261,10 @@
                                     </div>
                                 </section>
                                 <section class="col col-4">
-                                    <label class="label"><strong>Order RunList</strong></label>
+                                    <label class="label">
+                                        <img src="img/templateicons/Order-run-list---deployment.png">
+                                        <strong>Order RunList</strong>
+                                    </label>
                                     <div class="row">
                                         <div class="col col-10">
                                             <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedRunList">
@@ -751,7 +760,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
             }
         }*/
         //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('fa fa-lg fa-fw fa-2x fa-list  txt-color-blue instance-bootstrap-list-faimage'));
+        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('ChefClientRunImage instance-bootstrap-list-faimage'));
 
         $divComponentItem.click(function(e){
             $(this).parents('.flip-toggle').toggleClass('flip');
@@ -776,8 +785,8 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
         //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
         $rowContainter.append('<td>' +data[i].instanceIP+ '</td>');
-        var $tableRunlistDiv = $('<div></div>').append('<span>'+data[i].runlist.join()+'</span>');
-        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void(0)').append("View All").data('runlist',data[i].runlist.join()).click(function(){
+        var $tableRunlistDiv = $('<div></div>');/*.append('<span>'+data[i].runlist.join()+'</span>');*/
+        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data[i].runlist.join()).click(function(){
             var $modal = $('#modalTableRunlist');
             var $modalBody = $('#modalTableRunlist .modal-body').empty();
             var runlist = $(this).data('runlist').split(',');
