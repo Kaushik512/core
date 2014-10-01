@@ -769,12 +769,13 @@ function addInstanceToDOM(data) {
         var $divHeading = $('<div></div>').addClass('domain-roles-heading');
          
 
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>'+data.blueprintData.blueprintName).attr('contenteditable','true'); 
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>').attr('contenteditable','false'); 
 
-        var $spanheadingMiddle = $('<span></span>');
+        var $spanheadingMiddle = $('<span>'+data.blueprintData.blueprintName+'</span>').addClass('cardHeadingTextoverflow');
         var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
 
-        $divHeading.append($spanheadingLeft); 
+        $divHeading.append($spanheadingLeft);
+        $divHeading.append($spanheadingMiddle); 
         $divHeading.append($spanheadingRight);
         $divDomainRolesCaption.append($divHeading);
         $divDomainRolesCaption.append($('<hr>'));
@@ -847,7 +848,10 @@ function addInstanceToDOM(data) {
         //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
         $rowContainter.append('<td class="instanceIPCol">' +data.instanceIP+ '</td>');
         var $tableRunlistDiv = $('<div></div>');/*.append('<span>'+data.runlist.join()+'</span>');*/
-        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data.runlist.join()).click(function(){
+        var $viewAllA= $('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data.runlist.join());
+
+        if(data.runlist.length) {
+            $viewAllA.click(function(){
             var $modal = $('#modalTableRunlist');
             var $modalBody = $('#modalTableRunlist .modal-body').empty();
             var runlist = $(this).data('runlist').split(',');
@@ -864,7 +868,9 @@ function addInstanceToDOM(data) {
              $modalBody.append($divComponentItem);          
            }
            $modal.modal('show');
-        }));
+        });
+        }
+        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
          $tableRunlistDiv.append($divComponentItem);
         
         
