@@ -1,3 +1,9 @@
+.chefClientRunlistImage{
+    margin-top: -7px !important;
+}
+.collapseActive{
+    background-color: #2c3742 !important;
+}
 .ChefClientRunImage{
     background-image:url('../img/galleryIcons/Flip-icon.png');
     background-size: contain;
@@ -47,7 +53,7 @@
     box-shadow: 0 0 10px #bdbdbd; */
 }
 .instance-bootstrap-list-image{
-    margin-left:22px;
+    margin-left:24px;
     margin-top:-2px;
     border-radius:0px !important;
     box-shadow:none !important;
@@ -201,7 +207,7 @@ html
     z-index: 1009;
 }
 #main-collapse ul {
-    padding: 3px 20px 10px;
+    padding: 0px;
     list-style: none;
     margin: 0;
     /*-webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
@@ -1751,7 +1757,7 @@ hr.layout {
     overflow:hidden;
 }
 .cardLogo {
-    height:70px;width:100px;padding-top:11px;
+    height:52px;padding-top:11px;margin-top: 9px;
 
 }
 
@@ -1790,7 +1796,7 @@ background-image:url('../img/rsz_inactive.png');
 .instancestatusindicator{
 background-repeat:no-repeat;
 background-position:center;
-background-size: contain;
+background-size: 30px 30px;
 }
 .instancestatusindicator.started{ 
 background-image:url('../img/aws_logo_started.png');
