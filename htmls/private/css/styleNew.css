@@ -1860,3 +1860,16 @@ margin-top:0px;
     width: 200px;
     float:left;
 }
+.logsArea {
+    height:400px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+.logsAreaBootstrap {
+    height:400px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    background-color: black;
+    padding-top: 5px;
+    margin-top: 5px;
+}
