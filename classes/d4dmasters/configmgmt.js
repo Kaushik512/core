@@ -357,11 +357,14 @@ function Configmgmt() {
     };
 
     this.getList = function(masterid, fieldname, callback) {
+        var configmgmt ='';
         d4dModel.findOne({
             id: masterid
         }, function(err, d4dMasterJson) {
             if (err) {
                 console.log("Hit and error:" + err);
+                callback(err,null);
+                return;
             }
             if (d4dMasterJson) {
                 var jsonlist = '';
@@ -378,14 +381,14 @@ function Configmgmt() {
                         }
                     }
                     if (jsonlist == '')
-                        jsonlist += "\"" + fieldvalue + "\":\"" + rowid + "\"";
+                        jsonlist += "{\"" + fieldvalue + "\":\"" + rowid + "\"}";
                     else
-                        jsonlist += ",\"" + fieldvalue + "\":\"" + rowid + "\"";
+                        jsonlist += ",{\"" + fieldvalue + "\":\"" + rowid + "\"}";
 
                 });
-                configmgmt = "{" + jsonlist + "}";
-                console.log(JSON.stringify(jsonlist));
-                callback(null, jsonlist);
+                configmgmt = "[" + jsonlist + "]";
+                console.log(JSON.stringify(configmgmt));
+                callback(null, JSON.parse(configmgmt));;
             }
         });
     };
