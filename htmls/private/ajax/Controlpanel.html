@@ -709,9 +709,10 @@ $.get('/instances/'+urlParams.id,function(data){
                 lastTimestamp = data[data.length -1].timestamp;
                 console.log(lastTimestamp);
                  $modalBody.append($table);
+                 $modalBody.scrollTop($modalBody[0].scrollHeight+100);
             }
            
-            $modalBody.scrollTop($modalBody[0].scrollHeight+100);
+            
             console.log('polling again');
             if($logTabBtn.parent('li').hasClass('active')) {
                    pollLogs(lastTimestamp,1000,false);
