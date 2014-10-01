@@ -4,6 +4,7 @@ var uuid = require('node-uuid');
 
 function Env() {
 
+
     this.createEnv = function(name, orgname, callback) {
         var uuid1 = uuid.v4();
         var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}},{\"name\":\"rowid\",\"values\":{\"value\":\"" + uuid1 + "\"}}]}";
@@ -76,8 +77,6 @@ function Env() {
         });
 
     }
-
-
 
 }
 

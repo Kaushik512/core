@@ -51,6 +51,22 @@ var Ldap = function() {
 
 
 	};
+	this.compare = function(username,callback){
+		var dnString = createDnString(username);
+		client.compare(dnString, 'sn', username , function(err, matched) {
+  				if(err){
+  					callback(null,"false");
+  				}
+  				else
+  				{
+
+  				console.log('matched: ' + matched);
+  				callback(null,"true");
+  				}
+			});
+
+	}
+
 	this.close = function(callback) {
 		client.unbind(function(err) {
 			callback(err);
