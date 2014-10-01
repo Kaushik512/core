@@ -1232,7 +1232,7 @@ function loadURL(url, container) {
 		},*/
 		success : function(data) {
 			// cog replaced here...
-			// alert("success")
+			 alert("success")
 			
 			container.css({
 				opacity : '0.0'

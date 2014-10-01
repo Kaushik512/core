@@ -70,7 +70,73 @@ function Configmgmt() {
             }
         });
     };
-    this.getAccessFilesForRole = function(loginname,req,res,callback) {
+    this.getAccessFilesForRole = function(loginname,user,req,res,callback){
+        console.log("Received Role name: " + loginname);
+        var accessibleFiles = [];
+        var mainRef = this;
+        var countOuter = 0;
+        var countInner = 0;
+        var countInnerInner = 0;
+        var roleslist = this.getListFiltered(7,"userrolename","loginname",loginname,function(err,rolenames){
+                if(rolenames){
+                   console.log("Rolenames for User:" + rolenames); 
+                   var rn = rolenames.replace(/\"/g,'').split(':')[0].split(',');
+
+                   rn.forEach(function(rn1){
+                        if(user.rolename == null || user.rolename == '')
+                            user.rolename = rn1;
+                        else
+                            user.rolename += ",&nbsp;" + rn1;
+
+                        console.log("Role " + countOuter + ":" + rn1);
+                        var permissionlist = mainRef.getListFiltered(6,"globalaccessname","userrolename",rn1,function(err,globalaccessname){
+                           
+                            console.log("inside globalaccessname : " + (globalaccessname == null));
+                            console.log("globalaccessname : " + globalaccessname.toString());
+                            var ga = globalaccessname.replace(/\"/g,'').split(':')[0].split(',');
+                            if(ga){
+
+                                ga.forEach(function(ga1){
+                                    
+                                    console.log('Access Type : ' + ga1);
+                                    mainRef.getListFiltered(8,"files","globalaccessname",ga1,function(err,jlt){
+                                        countInner++;
+                                        console.log('inner loop ' + jlt);
+                                       //count++;
+                                        if(accessibleFiles.indexOf(jlt) < 0){
+                                            jlt = jlt.split(':')[0];
+                                            accessibleFiles.push(jlt);
+                                        }
+                                        console.log(countOuter,rn.length,countInner,ga.length);
+                                        if(countOuter < rn.length) {
+                                            
+                                        }
+                                        if(countInner == ga.length && countOuter < rn.length) {
+                                            countOuter++;
+                                            if(countOuter < rn.length) {
+                                              countInner = 0;    
+                                            }
+                                            
+                                        }
+                                        console.log(countOuter,rn.length,countInner,ga.length);
+                                        if(countOuter == rn.length && countInner == ga.length){
+                                            callback(null,accessibleFiles.toString());
+
+                                        } 
+                                    });
+                                });
+                            }
+                        });
+
+                   }); //end of foreach rn
+
+                } //end if(rolename)
+
+        }); //filter1
+       // callback(null,accessibleFiles.toString());
+    };
+
+    this.getAccessFilesForRole2 = function(loginname,req,res,callback) {
         console.log("Received Role name: " + loginname);
         var accessibleFiles = [];
         var mainRef = this;

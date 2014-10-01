@@ -3,6 +3,7 @@ var usersDao = require('../controller/users.js');
 var usersGroups = require('../controller/user-groups.js');
 var usersRoles = require('../controller/user-roles.js');
 var cusers = require('../classes/d4dmasters/users.js');
+var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 
 module.exports.setRoutes = function(app) {
 
@@ -42,7 +43,25 @@ module.exports.setRoutes = function(app) {
 									user.roleId = data[0].roleId;
 									user.groupId = data[0].groupId;
 									console.log('Just before role');
-									cusers.getUserRole(null,user.cn,req);
+									configmgmtDao.getAccessFilesForRole(user.cn,user,req,res,function(err,getAccessFiles){
+									if(getAccessFiles){
+										
+										getAccessFiles = getAccessFiles.replace(/\"/g,'').replace(/\:/g,'')
+										console.log('Rcvd in call: ' + getAccessFiles);
+										//req.session.user.authorizedfiles = getAccessFiles;
+										//res.end(req.session.user.authorizedfiles);
+											user.roleName = "Admin";
+											user.authorizedfiles = getAccessFiles;
+											res.redirect('/private/index.html');
+										}
+									else
+										{
+											res.send(500);
+											return;
+										}
+									});
+									//Set the Access 
+									/*cusers.getUserRole(null,user.cn,req);
 									
 									usersRoles.getRoleById(user.roleId, function(err, roleData) {
 										if (err) {
@@ -58,7 +77,7 @@ module.exports.setRoutes = function(app) {
 												res.send(500);
 											}
 										}
-									});
+									});*/
 								} else {
 									//making an entry of that user in data base
 									usersDao.createUser(user.cn, 'firstname', 'lastname', 0, 3, function(err, data) {
@@ -99,7 +118,7 @@ module.exports.setRoutes = function(app) {
 			res.redirect('/public/login.html');
 		}
 	});
-
+	
 
 	app.get('/auth/signout', function(req, res) {
 		req.session.destroy();
@@ -112,6 +131,14 @@ module.exports.setRoutes = function(app) {
 		//res.render('login');
 		res.redirect('/public/login.html');
 
+	});
+
+	app.get('/auth/userexists/:username',function(req,res){
+		console.log('received Username Exisits ' + req.params.username);
+		var ldapClient = new LdapClient();
+		ldapClient.compare(req.params.username,function(err,status){
+			res.send(status)
+		});
 	});
 
 	app.get('/auth/userrole',function(req,res){

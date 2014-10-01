@@ -425,13 +425,24 @@ function saveform(formID){
     $('div[cdata="catalyst"]').each(function (){
        k =  $(this).attr("id");
       $(this).find("input").each(function (){
+         // alert($(this).prop("type"));
           if ($(this).is(":checked")) {
         //    v.push("\"" + $(this).val() + "\"");
             v.push($(this).val());
           }
       });
+      //bg-success
+      $(this).find('p[class="bg-success"]').each(function (){
+          if($(this).text() != ''){
+             v.push($(this).text());
+          }
+          /*if ($(this).is(":checked")) {
+        //    v.push("\"" + $(this).val() + "\"");
+            v.push($(this).val());
+          }*/
+      });
     });
-  //  alert(k + ":" + v.toString());
+    alert(k + ":" + v.toString());
     if(k != ''){
         //data1.append(k,"[" + v.toString() + "]");
         data1.append(k,v);
@@ -456,7 +467,7 @@ function saveform(formID){
             contentType: false,
             type: 'POST',
             success:function(data,success){
-              alert('Successfully Saved'); 
+              //alert('Successfully Saved'); 
                 $(".savespinner").hide();
                 if($('#btncancel'))
                         $('#btncancel').click();
@@ -830,6 +841,44 @@ function enableUniqueCheckingForInputs(id){
     }
 }
 
+function checkusernameexistsinldap(inputID){
+    if($('#' + inputID).length > 0){
+        var inp = $('#' + inputID);
+        inp.blur(function(){
+            var uni = $('#unique_' + inp.attr("id")); //check if the error span is loaded.
+            if(uni.length > 0)
+                if(uni.html().indexOf('LDAP') > 0) //check if the message is from LDAP check
+                    uni.html('');
+              else{
+                 //alert("in");
+                  inp.closest('section').find('label').first().append('<span id="unique_' + inp.attr("id") + '" style="color:red"></span>');
+                  uni = $('#unique_' + $(this).attr("id"));
+            }
+            $.ajax({
+            type: "get",
+            dataType: "ltext",
+
+            async: false,
+            url: '/auth/userexists/' + inp.val(),
+            success: function (data) {
+                // alert(data.toString());  
+                // debugger;
+                //d4ddata = JSON.parse(data);
+               //alert(data);
+               if(data == "false"){
+                uni.css("color","red");
+                uni.html('selected is NOT in LDAP.');
+                $(this).focus(); 
+               }
+            },
+            failure: function (data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+            });
+        });
+    }
+}
 
 //STandby code to receive docker images. To be updated to receive the url from settings
 function getDockerTags(){
