@@ -1090,6 +1090,12 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                 alert("Please choose an environment");
                 return false;
             }
+            reqBody.users = $('#userListSelect').val() 
+
+            if(!reqBody.users) {
+                alert("Please choose users");
+                return false;
+            }
 
 
 

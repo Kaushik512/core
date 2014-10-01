@@ -46,6 +46,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var orgId = reqBody.orgId;
         var count = 0;
 
+        var users = reqBody.users;
+        if (!projectId) {
+            res.send(400);
+            return;
+        }
+        if (!users || !users.length) {
+            res.send(400);
+            return;
+        }
+
         var insertNodeInMongo = function(node) {
             var platformId = '';
             var nodeIp = node.ip;
@@ -98,6 +108,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 instanceState: 'unknown',
                 bootStrapStatus: 'success',
                 hardware: hardwareData,
+                users: users,
                 chef: {
                     serverId: req.params.serverId,
                     chefNodeName: node.nodeName
