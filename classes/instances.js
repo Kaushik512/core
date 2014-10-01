@@ -12,6 +12,7 @@ var InstanceSchema = new Schema({
     instanceIP: String,
     instanceState: String,
     bootStrapStatus: String,
+    users:[String],
     hardware: {
         platform: String,
         platformVersion: String,
@@ -53,13 +54,16 @@ var InstancesDao = function() {
         });
     }
 
-    this.getInstancesByProjectAndEnvId = function(projectId, envId, instanceType, callback) {
+    this.getInstancesByProjectAndEnvId = function(projectId, envId, instanceType,userName, callback) {
         var queryObj = {
             projectId: projectId,
             envId: envId
         }
         if (instanceType) {
             queryObj['blueprintData.templateType'] = instanceType;
+        }
+        if(userName) {
+            queryObj.users = userName;
         }
         Instances.find(queryObj, function(err, data) {
             if (err) {

@@ -297,6 +297,13 @@ html
     text-overflow: ellipsis; 
     width: 130px;
 }
+.cardHeadingTextoverflow{
+    font-weight: bold; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    width: 30px;
+}
 .Cardtextoverflow{
     font-size:12px;
     overflow: hidden;
