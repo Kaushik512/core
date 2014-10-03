@@ -23,7 +23,7 @@
 		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.dataTables.css">
+		<!--<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.dataTables.css"> -->
 
 
 		<!-- SmartAdmin RTL Support is under construction
@@ -72,7 +72,8 @@
 			<div id="project-context" style="padding-top:15px;">
 
 				<li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-      	  			<a class="active" href="#" onclick="setleftnavigation(this);"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
+      	  			<a class="active" href="javascript:void(0)" onclick="setleftnavigation(this);"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
+
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
@@ -449,17 +450,20 @@
 
 			<ul class="" style="width:100%">
 				
-				<li>
-					<a href="index.html#ajax/Dev.html">Workzone</a>
+				<li class="collapseActive">
+					<a href="index.html#ajax/Dev.html">WORKZONE</a>
 				</li>
+				<br>
 				<li>
-					<a href="design.html#ajax/Aws-Production.html">Design</a>
+					<a href="design.html#ajax/Aws-Production.html">DESIGN</a>
 				</li>
+				<br>
 				<li>
 					<a href="Tracker.html#ajax/Dashboard.html"><span>TRACK</span></a>
 				</li>
+				<br>
 				<li>
-					<a href="#ajax/gallery.html"><span>SETTINGS</span></a>
+					<a href="#settings.html#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
 				</li>
 			</ul>
 		</div>
@@ -518,26 +522,26 @@
 		<!-- JARVIS WIDGETS -->
 		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
 
-		<!-- EASY PIE CHARTS -->
-		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+		<!-- EASY PIE CHARTS 
+		 <script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>-->
 
-		<!-- SPARKLINES -->
-		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+		<!-- SPARKLINES 
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>-->
 
 		<!-- JQUERY VALIDATE -->
 		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
 
-		<!-- JQUERY MASKED INPUT -->
-		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+		<!-- JQUERY MASKED INPUT 
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>-->
 
-		<!-- JQUERY SELECT2 INPUT -->
-		<script src="js/plugin/select2/select2.min.js"></script>
+		<!-- JQUERY SELECT2 INPUT 
+		<script src="js/plugin/select2/select2.min.js"></script>-->
 
-		<!-- JQUERY UI + Bootstrap Slider -->
-		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+		<!-- JQUERY UI + Bootstrap Slider 
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>-->
 
-		<!-- browser msie issue fix -->
-		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+		<!-- browser msie issue fix 
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>-->
 
 		<!-- SmartClick: For mobile devices -->
 		<script src="js/plugin/smartclick/smartclick.js"></script>
@@ -594,7 +598,7 @@
 			            	if(i==0) {
                                classOrgSelected = 'orgSelected';
 			            	}
-			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-group"></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
+			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-bank"></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
 				             
               				$li.click(function(e){
                              var $parents = $(this).parents('ul');
@@ -606,21 +610,24 @@
                  			$('.'+id).show();
               			  });
               			  $ulOrgList.append($li);
+              			  //<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
-              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().append('<a href="#"><img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;"><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
+              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().append('<a href="#"><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
 			     				if(i==0 && j==0) {
 			  	   					$liSideBar.find('a').attr('id','firstA'); 
 			     				}
 			     				$workspace.append($liSideBar);
 			     				var $projectUl = $('<ul></ul>'); 
                   				$liSideBar.append($projectUl); 
+                  				// <img src="img/demo/Project.png" alt="Project" style="padding-right:5px;">
                   				for(var k=0;k<data[i].businessGroups[j].projects.length;k++) {  
-                  					var liProject = $('<li></li>').append('<a href="#"><img src="img/demo/Project.png" alt="Project" style="padding-right:5px;"><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
+                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
                   					$projectUl.append(liProject);
                   					  var $envUl = $('<ul></ul>');
                     				 liProject.append($envUl); 
+                    				 // <img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">
                   					  for(var l=0;l<data[i].environments.length;l++) {
-                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true"><img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true"><i class="fa fa-fw fa-1x fa-desktop"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
                     						$envUl.append($liEnv);
                         					$liEnv.click(function(e){
 	                        					window.selectedOrgName = $(this).attr('data-OrgName');

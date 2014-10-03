@@ -123,6 +123,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     instanceIP: instanceData.PublicIpAddress,
                                     instanceState: instanceData.State.Name,
                                     bootStrapStatus: 'waiting',
+                                    users: blueprint.users,
                                     hardware: {
                                         platform: 'unknown',
                                         platformVersion: 'unknown',

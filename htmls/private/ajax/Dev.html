@@ -44,7 +44,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="border:0px;" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><img src="img/galleryIcons/Table-view.png"/><!-- <i class="fa fa-th-large fa-2x txt-color-blue" title="Card View"/> --></a>&nbsp;<a class="btn1" style="border:0px;" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -85,7 +85,7 @@
                                                     <ul class="thumbnails list-unstyled instancesList" id="divinstancescardview">
 
 
-                                                        <!--Card for Planning starts here-->
+                                                        <!--Card for Planning starts here
                                                         <!--Card for Planning ends here-->
 
 
@@ -271,7 +271,7 @@
                                                 
                                             </ul>
                                         </div>
-                                        <div style="margin-top: 122px;" class="col col-2">
+                                        <!-- <div style="margin-top: 122px;" class="col col-2">
                                             <div class="input-group">
                                                 <div style="padding-bottom: 10px;" class="btn-group">
                                                     <button id="btnItemUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-up"></i></button>
@@ -281,7 +281,7 @@
                                                     <button id="btnItemDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-down"></i></button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         
                                     </div>
                                 </section>
@@ -376,7 +376,7 @@
         <h4 class="modal-title" id="myModalLabel">Instance Logs</h4>
       </div>
       <div class="modal-body">
-        <div class="logsArea" style="height:400px;overflow-y:auto;overflow-x:hidden;"></div>
+        <div class="logsArea"></div>
          
       </div>
       <div class="modal-footer">
@@ -564,7 +564,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 
         var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId).attr('data-chefServerId',data[i].chefServerId); 
         var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({'text-align':'center'});
-        var $img = $('<img/>').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
+        var $img = $('<img />').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
         var $liImage = $('<li></li>').append($img);
         $ul.append($liImage);
         //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
@@ -584,7 +584,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         //    $ul.append($li);
         //  }
         // }
-        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:36px;bottom:11px;"></div>');
+        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
         if(data[i].versionsList) {
            var $selectVerEdit =  $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Edit');
            var $selectVer =  $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
@@ -703,272 +703,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 });
 
 
-
-
-$.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
-
-    
-    var $instancesList = $('.instancesList').empty();
-    var $deploymentNodeList = $('.deploymentNodeList').empty(); 
-    
-
-
-    for(var i=0;i<data.length;i++) {
-
-        //For Table view
-      
-          $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data[i]._id+'"><i></i>'+data[i].chefNodeName+'</label></li>'));
-
-        var $rowContainter = $('<tr data-instanceId="'+data[i]._id+'"></tr>');
-
-
-        var $li = $('<li></li>').addClass('domain-role-thumbnail');
-        var $container = $('<div class="flip-toggle"></div>').addClass('container');//<div class="container" id="flip-toggle">
-        var $card = $('<div></div>').addClass('card');//<div class="card">
-        var $front = $('<div></div>').addClass('front');//<div class="front">
-        var $div = $('<div></div>').addClass('domain-roles ');
-        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data[i]._id);
-        var $divHeading = $('<div></div>').addClass('domain-roles-heading');
-         
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>'+data[i].blueprintData.blueprintName).attr('contenteditable','true'); 
-        var $spanheadingMiddle = $('<span></span>');
-        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data[i]._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
-
-        $divHeading.append($spanheadingLeft); 
-        $divHeading.append($spanheadingRight);
-        $divDomainRolesCaption.append($divHeading);
-        $divDomainRolesCaption.append($('<hr>'));
-        var $divComponentListContainer ;
-        var $tdInstanceStatusIndicator ;
-
-        if(data[i].instanceState == 'running'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
-        }
-        else if(data[i].instanceState == 'terminated'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
-        }
-        else  if(data[i].instanceState == 'stopped'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
-        }  
-        else {
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
-            $tableInstanceStatusIndicator = $('<td style="background-size:36px auto;"></td>').addClass('instancestatusindicator pending');
-        }
-        $tableInstanceStatusIndicator.attr('data-instanceId',data[i]._id);
-
-
-        $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
-        
-        /*for(var j=0;j<data[i].runlist.length;j++) { 
-          var $divComponentItem;
-           if(j == 0) {
-          
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
-
-           } else {
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
-           }
-           $divComponentList.append($divComponentItem);
-            if(j==2) {
-                break;
-            }
-        }*/
-        //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('ChefClientRunImage instance-bootstrap-list-faimage'));
-
-        $divComponentItem.click(function(e){
-            $(this).parents('.flip-toggle').toggleClass('flip');
-        });
-        
-       
-        $divComponentList.append($divComponentItem);
-
-
-        $divComponentListContainer.append($divComponentList);
-
-
-        $divComponentListImage = $('<a class="btn"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data[i].chef.serverId);
-
-        $divComponentListContainer.append($divComponentListImage);
-
-        //For Table View
-        $rowContainter.append('<td>'+(i+1)+'</td>');
-        $rowContainter.append('<td><img src="img/templateicons/'+data[i].blueprintData.templateId+'.png" style="height:36px;width:54px;"/></td>');
-        
-
-        $rowContainter.append('<td>' +data[i].blueprintData.blueprintName+ '</td>');
-        //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
-        $rowContainter.append('<td>' +data[i].instanceIP+ '</td>');
-        var $tableRunlistDiv = $('<div></div>');/*.append('<span>'+data[i].runlist.join()+'</span>');*/
-        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data[i].runlist.join()).click(function(){
-            var $modal = $('#modalTableRunlist');
-            var $modalBody = $('#modalTableRunlist .modal-body').empty();
-            var runlist = $(this).data('runlist').split(',');
-            for(var j=0;j<runlist.length;j++) { 
-                 var $divComponentItem;
-                if(j == 0) {
-          
-                $divComponentItem = $('<span title="'+runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
-
-                 } else {
-                    $divComponentItem = $('<span title="'+runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
-                }
-
-             $modalBody.append($divComponentItem);          
-           }
-           $modal.modal('show');
-        }));
-         $tableRunlistDiv.append($divComponentItem);
-        
-        
-      
-
-        
-        
-
-
-
-        $rowContainter.append($('<td></td>').append($tableRunlistDiv));
-        //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
-        $rowContainter.append($tableInstanceStatusIndicator);
-
-        $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="'+data[i]._id+'" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
-        
-        $divDomainRolesCaption.append($divComponentListContainer);
-        var $divInstanceDetails = $('<div></div>')
-        var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong>'+data[i].instanceIP+'</strong>');
-        $instanceDetailsList.append($instanceDetailItemId);
-          var $instanceDetailItemStatus;
-        if(data[i].instanceState == 'running'){
-            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">'+data[i].instanceState+'</strong>');     
-        } else if(data[i].instanceState == 'terminated'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
-        } else  if(data[i].instanceState == 'stopped'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data[i].instanceState+'</strong>');
-        } else {
-            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">'+data[i].instanceState+'</strong>');
-        }
-       
-         $instanceDetailsList.append($instanceDetailItemStatus);
-
-         $divInstanceDetails.append($instanceDetailsList);
-
-         $divDomainRolesCaption.append($divInstanceDetails);
-
-         $divDomainRolesCaption.append($('<hr>'));
-
-
-         //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-          var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data[i]._id);
-
-          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','Start').attr('data-original-title','Start').attr('data-placement','top').attr('rel','tooltip'));
-          $divActionBtnContainer.append($divActionStartContainer);
-          if(!data[i].chef) {
-            data[i].chef = {};
-          }  
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId',data[i].chef.serverId).attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Restart'));
-          $divActionBtnContainer.append($divActionReStartContainer);
-          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Shutdown'));
-          $divActionBtnContainer.append($divActionShutdownContainer);
-    var $back = $('<div></div>').addClass('back card-backflip');
-    var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
-
-    var $backdiv = $('<span></span>').addClass('card-backflip-margin');
-    var $backdiva = $('<a style="color:#333;"></a>');
-    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-    var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Cookbooks');
-    var $backhr = $('<hr>');
-
-    
-    $backdivai.append($backdivaspan);
-    $backdiva.append($backdivai);
-    //$backdiva.append($backhr);
-    $backdiv.append($backdiva);
-    
-    $back.append($backdiv);
-
-    $back.append($backRunlistContainer);
-    $backdiv.append($backhr);
-
-    for(var j=0;j<data[i].runlist.length;j++) { 
-          var $divComponentItem;
-           if(j == 0) {
-          
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data[i].runlist[j]);
-
-           } else {
-            $divComponentItem = $('<span title="'+data[i].runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad></span>').addClass('instance-details-item').append(data[i].runlist[j]);
-           }
-           $backRunlistContainer.append($divComponentItem);
-            
-     }
-     var $flipbackdivaspanhr = $('<hr>');
-     $back.append($flipbackdivaspanhr);
-     var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href','javascript:void').append("Go Back"));
-     $flipbackdivaspan.click(function(e){
-            $(this).parents('.flip-toggle').toggleClass('flip');
-     });
-     $back.append($flipbackdivaspan);
-
-    
-
-    
-   // <div class="back" style="background-repeat:no-repeat;background-image:url('img/app-store-icons/Resized-5K7AL.png');">
-   //     <div style="margin-left:20px;margin-top:15px;">
-   //         <a>
-   //             <i class="fa fa-lg fa-fw fa-book"></i>
-   //             <span style="font-weight:bold" class="menu-item-parent">Cookbooks</span>
-   //         </a>
-   //     </div>
-   // </div>
-        $divDomainRolesCaption.append($divActionBtnContainer);
-        $front.append($div);
-        $card.append($front);
-        $card.append($back);
-        $container.append($card);
-        $li.append($container);
-        //$li.append($div);
-        $div.append($divDomainRolesCaption);
-
-        $instancesList.append($li);
-
-        //For Table View
-        $rowContainter.append('<td>' +$('<div></div>').append($divActionBtnContainer.clone()).html()+ '</td>');
-        $("#tableinstanceview").append($rowContainter);
-    }
-
-     
-
-
-
-   
-   //for table view
-   var tableinstanceview = $('#tableinstanceview').dataTable({
-     "pagingType": "full_numbers"
-    });
-    $('#tableinstanceview tbody').on('click','tr',function(){
-        if($(this).hasClass('rowcustomselected')){
-            $(this).removeClass('rowcustomselected');
-        }
-        else{
-            tableinstanceview.$('tr').removeClass('rowcustomselected');
-            $(this).addClass('rowcustomselected');
-        }
-
-    });
-    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
-    $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
-    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
-    //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
-   // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
-
-    //handling instance action btn
-  
-     function getCssClassFromStatus(status) {
+function getCssClassFromStatus(status) {
         var cssClasses = {
 
         };
@@ -1000,9 +735,274 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         }
 
         return cssClasses;
-     } 
+     }
 
-    $('.instanceActionBtn').click(function(e){
+
+     function pollInstanceState(instanceId,state, delay) {
+        var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
+        var timeout = setTimeout(function() {
+            $.get('/instances/' + instanceId, function(data) {
+                if (data) {
+                    if (data.instanceState === state) {
+                        pollInstanceState(instanceId,state, 5000);
+                    } else {
+                        console.log('polling complete');
+                        var cssClassed = getCssClassFromStatus(data.instanceState);
+                        $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                        $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                        $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                        $parent.find('.instance-details-id strong').html(data.instanceIP);
+                        $('tr[data-instanceId="'+instanceId+'"] td.instanceIPCol').html(data.instanceIP);
+                    }
+                }
+            })
+        }, delay);
+    } 
+
+
+function addInstanceToDOM(data) {
+    var $instancesList = $('.instancesList');
+     var $deploymentNodeList = $('.deploymentNodeList');
+
+    $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data._id+'"><i></i>'+data.chefNodeName+'</label></li>'));
+
+        var $rowContainter = $('<tr data-instanceId="'+data._id+'"></tr>');
+
+
+        var $li = $('<li></li>').addClass('domain-role-thumbnail');
+        var $container = $('<div class="flip-toggle"></div>').addClass('container');//<div class="container" id="flip-toggle">
+        var $card = $('<div></div>').addClass('card');//<div class="card">
+        var $front = $('<div></div>').addClass('front');//<div class="front">
+        var $div = $('<div></div>').addClass('domain-roles ');
+        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data._id);
+        var $divHeading = $('<div></div>').addClass('domain-roles-heading');
+         
+
+        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>').attr('contenteditable','false'); 
+
+        var $spanheadingMiddle = $('<span>'+data.blueprintData.blueprintName+'</span>').addClass('cardHeadingTextoverflow');
+        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
+
+        $divHeading.append($spanheadingLeft);
+        $divHeading.append($spanheadingMiddle); 
+        $divHeading.append($spanheadingRight);
+        $divDomainRolesCaption.append($divHeading);
+        $divDomainRolesCaption.append($('<hr>'));
+        var $divComponentListContainer ;
+        var $tdInstanceStatusIndicator ;
+
+        if(data.instanceState == 'running'){
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
+        }
+        else if(data.instanceState == 'terminated'){
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+        }
+        else  if(data.instanceState == 'stopped'){
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+        }  
+        else {
+            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
+            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
+        }
+        $tableInstanceStatusIndicator.attr('data-instanceId',data._id);
+
+
+        $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
+        
+        /*for(var j=0;j<data.runlist.length;j++) { 
+          var $divComponentItem;
+           if(j == 0) {
+          
+            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
+
+           } else {
+            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
+           }
+           $divComponentList.append($divComponentItem);
+            if(j==2) {
+                break;
+            }
+        }*/
+        //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('instance-bootstrap-list-faimage'));
+
+        $divComponentItem.click(function(e){
+            $(this).parents('.flip-toggle').toggleClass('flip');
+        });
+        
+       
+        $divComponentList.append($divComponentItem);
+
+
+        $divComponentListContainer.append($divComponentList);
+
+
+
+        $divComponentListImage = $('<a class="btn chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data.chef.serverId);
+
+        $divComponentListContainer.append($divComponentListImage);
+
+        //For Table View
+
+        var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
+
+        $rowContainter.append('<td>'+(numberOfRows+1)+'</td>');
+        $rowContainter.append('<td><img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:27px;width:54px;"/></td>');
+        
+
+        $rowContainter.append('<td>' +data.blueprintData.blueprintName+ '</td>');
+        //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
+        $rowContainter.append('<td class="instanceIPCol">' +data.instanceIP+ '</td>');
+        var $tableRunlistDiv = $('<div></div>');/*.append('<span>'+data.runlist.join()+'</span>');*/
+        var $viewAllA= $('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data.runlist.join());
+
+        if(data.runlist.length) {
+            $viewAllA.click(function(){
+            var $modal = $('#modalTableRunlist');
+            var $modalBody = $('#modalTableRunlist .modal-body').empty();
+            var runlist = $(this).data('runlist').split(',');
+            for(var j=0;j<runlist.length;j++) { 
+                 var $divComponentItem;
+                if(j == 0) {
+          
+                $divComponentItem = $('<span title="'+runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+
+                 } else {
+                    $divComponentItem = $('<span title="'+runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+                }
+
+             $modalBody.append($divComponentItem);          
+           }
+           $modal.modal('show');
+        });
+        }
+        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
+         $tableRunlistDiv.append($divComponentItem);
+        
+        
+      
+
+        
+        
+
+
+
+        $rowContainter.append($('<td></td>').append($tableRunlistDiv));
+        //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
+        $rowContainter.append($tableInstanceStatusIndicator);
+
+        $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="'+data._id+'" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
+        
+        $divDomainRolesCaption.append($divComponentListContainer);
+        var $divInstanceDetails = $('<div></div>')
+        var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
+        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong>'+data.instanceIP+'</strong>');
+        $instanceDetailsList.append($instanceDetailItemId);
+          var $instanceDetailItemStatus;
+        if(data.instanceState == 'running'){
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">'+data.instanceState+'</strong>');     
+        } else if(data.instanceState == 'terminated'){
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data.instanceState+'</strong>');
+        } else  if(data.instanceState == 'stopped'){
+             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data.instanceState+'</strong>');
+        } else {
+            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">'+data.instanceState+'</strong>');
+        }
+       
+         $instanceDetailsList.append($instanceDetailItemStatus);
+
+         $divInstanceDetails.append($instanceDetailsList);
+
+         $divDomainRolesCaption.append($divInstanceDetails);
+
+         $divDomainRolesCaption.append($('<hr>'));
+
+
+         //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
+          var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data._id);
+
+          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','Start').attr('data-original-title','Start').attr('data-placement','top').attr('rel','tooltip'));
+          $divActionBtnContainer.append($divActionStartContainer);
+          if(!data.chef) {
+            data.chef = {};
+          }  
+          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId',data.chef.serverId).attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Restart'));
+          $divActionBtnContainer.append($divActionReStartContainer);
+          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Shutdown'));
+          $divActionBtnContainer.append($divActionShutdownContainer);
+    var $back = $('<div></div>').addClass('back card-backflip');
+    var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
+
+    var $backdiv = $('<span></span>').addClass('card-backflip-margin');
+    var $backdiva = $('<a style="color:#333;"></a>');
+    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+    var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Cookbooks');
+    var $backhr = $('<hr>');
+
+    
+    $backdivai.append($backdivaspan);
+    $backdiva.append($backdivai);
+    //$backdiva.append($backhr);
+    $backdiv.append($backdiva);
+    
+    $back.append($backdiv);
+
+    $back.append($backRunlistContainer);
+    $backdiv.append($backhr);
+
+    for(var j=0;j<data.runlist.length;j++) { 
+          var $divComponentItem;
+           if(j == 0) {
+          
+            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+
+           } else {
+            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad></span>').addClass('instance-details-item').append(data.runlist[j]);
+           }
+           $backRunlistContainer.append($divComponentItem);
+            
+     }
+     var $flipbackdivaspanhr = $('<hr>');
+     $back.append($flipbackdivaspanhr);
+     var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href','javascript:void').append("Go Back"));
+     $flipbackdivaspan.click(function(e){
+            $(this).parents('.flip-toggle').toggleClass('flip');
+     });
+     $back.append($flipbackdivaspan);
+
+    $divDomainRolesCaption.append($divActionBtnContainer);
+        $front.append($div);
+        $card.append($front);
+        $card.append($back);
+        $container.append($card);
+        $li.append($container);
+        //$li.append($div);
+        $div.append($divDomainRolesCaption);
+
+        $instancesList.append($li);
+
+        //For Table View
+        $rowContainter.append('<td>' +$('<div></div>').append($divActionBtnContainer.clone()).html()+ '</td>');
+        $("#tableinstanceview").append($rowContainter);
+
+
+
+
+if(data.instanceState === 'pending' || data.instanceState === 'stopping') {
+     pollInstanceState(data._id,data.instanceState,2000);  
+}
+
+
+
+//handling events
+
+    
+
+
+$li.find('.instanceActionBtn').click(function(e){
         var $this = $(this);
         var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
         var type = $this.attr('data-actionType');
@@ -1028,28 +1028,12 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
             $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
             
-            function pollInstanceState(state,delay) {
-                var timeout = setTimeout(function() {
-                    $.get('/instances/'+instanceId,function(data){
-                        if(data) {
-                            if(data.instanceState === state) {
-                                pollInstanceState(state,5000);
-                            } else {
-                                console.log('polling complete');
-                                 var cssClassed = getCssClassFromStatus(data.instanceState); 
-                                 $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                                 $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                                  $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-                            } 
-                        }   
-                    })
-                }, delay);                
-            }
-            pollInstanceState(oldState,2000);                        
+            
+            pollInstanceState(instanceId,oldState,2000);                        
         }); 
     });
 
-    $('.instanceActionBtnUpdateRunlist,.instance-bootstrap-list-image').click(function(e){
+    $li.find('.instanceActionBtnUpdateRunlist,.instance-bootstrap-list-image').click(function(e){
          var $this = $(this);
          var instanceId = $this.parents('.domain-roles-caption').attr('data-instanceId');
          var chefServerId = $this.attr('data-chefServerId');
@@ -1070,7 +1054,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
     });
 
-    $('.moreInfo,.tableMoreInfo').click(function(e){
+    $li.find('.moreInfo,.tableMoreInfo').click(function(e){
          var instanceId =  $(this).attr('data-instanceId');
          var timeout;
          var $instanceLogModalContainer =  $('#instanceLogModalContainer');
@@ -1120,9 +1104,10 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
                 lastTimestamp = data[data.length -1].timestamp;
                 console.log(lastTimestamp);
                 $modalBody.append($table);
+                $modalBody.scrollTop($modalBody[0].scrollHeight+100);
             }
 
-             $modalBody.scrollTop($modalBody[0].scrollHeight+100);
+             
             console.log('polling again');
             if($instanceLogModalContainer.data()['bs.modal'].isShown) {
                    pollLogs(lastTimestamp,1000,false);
@@ -1137,12 +1122,52 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
     });
 
-   var $cardContainer =  $('.container').click(function (e) {
-    $cardContainer.removeClass('role-Selectedcard');
-    $(this).addClass('role-Selectedcard');
+   var $cardContainer = $li.find('.container').click(function (e) {
+     $('.container').removeClass('role-Selectedcard');
+     $(this).addClass('role-Selectedcard');
 
-  });
-    pageSetUp();
+    });
+   pageSetUp();
+
+
+}
+
+
+
+$.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
+
+    
+    var $instancesList = $('.instancesList').empty();
+    var $deploymentNodeList = $('.deploymentNodeList').empty(); 
+    
+
+
+    for(var i=0;i<data.length;i++) {
+        
+        addInstanceToDOM(data[i]); 
+      
+    }
+   //for table view
+   var tableinstanceview = $('#tableinstanceview').dataTable({
+     "pagingType": "full_numbers"
+    });
+    /*$('#tableinstanceview tbody').on('click','tr',function(){
+        if($(this).hasClass('rowcustomselected')){
+            $(this).removeClass('rowcustomselected');
+        }
+        else{
+            tableinstanceview.$('tr').removeClass('rowcustomselected');
+            $(this).addClass('rowcustomselected');
+        }
+
+    });*/
+    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
+    $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
+    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
+    //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
+   // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
+
+    //handling instance action btn
 
 });
 
@@ -1183,27 +1208,98 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 
         }
     });
-
-$('.launchBtn').click(function(e){
-   var $selectedItems = $('.role-Selected1');
-   var $launchResultContainer =  $('#launchResultContainer');
-   $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+$('.launchBtn').click(function(e) {
+    var $selectedItems = $('.role-Selected1');
+    var $launchResultContainer = $('#launchResultContainer');
+    $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
     $launchResultContainer.modal('show');
-   for(var i=0;i<$selectedItems.length;i++) {
-       var projectId = $($selectedItems.get(i)).attr('data-projectId');
-       var envId = $($selectedItems.get(i)).attr('data-envId');
-       var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
-       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-       
-       $.get('/blueprints/'+blueprintId+'/launch?version='+version,function(data){
-         
-         var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : '+data.id);  
+    for (var i = 0; i < $selectedItems.length; i++) {
+        var projectId = $($selectedItems.get(i)).attr('data-projectId');
+        var envId = $($selectedItems.get(i)).attr('data-envId');
+        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+        var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
 
-          $launchResultContainer.find('.modal-body').empty();  
-         $launchResultContainer.find('.modal-body').append($msg);
-        
-       })
-   } 
+        $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
+
+            var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
+
+            $launchResultContainer.find('.modal-body').empty();
+            $launchResultContainer.find('.modal-body').append($msg);
+
+            var instanceId = data.id;
+            var timeout;
+            
+            $launchResultContainer.on('hidden.bs.modal', function(e) {
+                $launchResultContainer.off('hidden.bs.modal');
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+            });
+            $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
+
+            $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
+            
+            var lastTimestamp;
+
+            function pollLogs(timestamp, delay, clearData) {
+                var url = '/instances/' + instanceId + '/logs';
+                if (timestamp) {
+                    url = url + '?timestamp=' + timestamp;
+                }
+
+                timeout = setTimeout(function() {
+                    $.get(url, function(data) {
+                        var $modalBody = $divBootstrapLogArea;
+                        if (clearData) {
+                            $modalBody.empty();
+                        }
+                        var $table = $('<div></div>');
+
+                        for (var i = 0; i < data.length; i++) {
+                            var $rowDiv = $('<div class="row"></div>');
+                            var timeString = new Date().setTime(data[i].timestamp);
+                            var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                            //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                            if (data[i].err) {
+                                $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                            } else {
+                                $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
+                            }
+
+                            $table.append($rowDiv);
+                        }
+
+
+                        if (data.length) {
+                            lastTimestamp = data[data.length - 1].timestamp;
+                            console.log(lastTimestamp);
+                            $modalBody.append($table);
+                            $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                        }
+
+                      
+                        console.log('polling again');
+                        if ($launchResultContainer.data()['bs.modal'].isShown) {
+                            pollLogs(lastTimestamp, 1000, false);
+                        } else {
+                            console.log('not polling again');
+                        }
+                    });
+                }, delay);
+            }
+            pollLogs(lastTimestamp, 0, true);
+
+
+
+
+
+            $.get('/instances/' + data.id, function(data) {
+                addInstanceToDOM(data);
+            });
+
+        })
+    }
 });
 
 

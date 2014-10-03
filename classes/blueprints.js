@@ -12,6 +12,7 @@ var BlueprintSchema = new Schema({
 	templateComponents: [String],
 	instanceType: String,
 	chefServerId:String,
+	users:[String],
 	versionsList: [{
 		ver: String,
 		runlist: [String],
@@ -63,13 +64,16 @@ var BlueprintsDao = function() {
 		});
 	}
 
-	this.getBlueprintsByProjectAndEnvId = function(projectId, envId, blueprintType, callback) {
+	this.getBlueprintsByProjectAndEnvId = function(projectId, envId, blueprintType,userName, callback) {
 		var queryObj = {
 			projectId: projectId,
 			envId: envId
 		}
 		if (blueprintType) {
 			queryObj.templateType = blueprintType;
+		}
+		if(userName) {
+			queryObj.users = userName;
 		}
 		Blueprint.find(queryObj, function(err, data) {
 			if (err) {
@@ -90,6 +94,7 @@ var BlueprintsDao = function() {
 			templateComponents: blueprintData.templateComponents,
 			chefServerId:blueprintData.chefServerId,
 			instanceType: blueprintData.instanceType,
+			users:blueprintData.users,
 			versionsList: [{
 				ver: generateBlueprintVersionNumber(null),
 				runlist: blueprintData.runlist,

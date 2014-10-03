@@ -53,6 +53,8 @@ module.exports.setRoutes = function(app) {
   chef.setRoutes(app, sessionVerificationFunc);
   ec2_routes.setRoutes(app, sessionVerificationFunc);
 
+  users.setRoutes(app,sessionVerificationFunc);
+
 
   app.get('/', function(req, res) {
     res.redirect('/private/index.html');

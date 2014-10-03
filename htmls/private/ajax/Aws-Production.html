@@ -105,6 +105,18 @@
 
                                                                             </div>
                                                                         </div>
+                                                                        <!--Devops Roles-->
+                                                                        <div class="" style="width:222px;float:left">
+
+                                                                            <div class="blueprintdiv devopsrole" data-templateType="templatesdevopsrole">
+                                                                                <div>
+                                                                                  <img style="height:25px;padding:2px;" alt="Logoheader" src="img/app-store-icons/Logoheader.png">
+                                                                                  <span style="padding-top:4px;position:absolute;padding-left: 4px;"><b>Devops Roles</b></span> 
+                                                                                </div>
+                                                                                <div style="padding-top:10px;padding-left:20px;"><img alt="DevOps Role" src="img/app-store-icons/DevopsRoles.png"></div>
+
+                                                                            </div>
+                                                                        </div>
                                                                          <!--Cloud Formation -->
                                                                         <div class="" style="width:222px;float:left">
 
@@ -118,18 +130,7 @@
 
                                                                             </div>
                                                                         </div>
-                                                                        <!--Devops Roles-->
-                                                                        <div class="" style="width:222px;float:left">
-
-                                                                            <div class="blueprintdiv devopsrole" data-templateType="templatesdevopsrole">
-                                                                                <div>
-                                                                                  <img style="height:25px;padding:2px;" alt="Logoheader" src="img/app-store-icons/Logoheader.png">
-                                                                                  <span style="padding-top:4px;position:absolute;padding-left: 4px;"><b>Devops Roles</b></span> 
-                                                                                </div>
-                                                                                <div style="padding-top:10px;padding-left:20px;"><img alt="DevOps Role" src="img/app-store-icons/DevopsRoles.png"></div>
-
-                                                                            </div>
-                                                                        </div>
+                                                                        
                                                                          <!--Docker-->
                                                                         <div class="" style="width:222px;float:left">
 
@@ -822,7 +823,7 @@
                                             <option value="2">Vpc-1</option>
                                             <option value="3">Vpc-2</option>
                                             <option value="4">Default VPC</option>
-                                            <option value="5">Create New</option>
+                                           
                                     </select>
                                 </label>
                                 </label>
@@ -880,14 +881,15 @@
                                                         <section class="col col-6">
                                                             <label class="label">Assign Users</label>
                                                             <label class="select select-multiple">
-                                                                <select class="custom-scroll" multiple="">
+                                                                <div class="userListLoadingContainer"></div>
+                                                                <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
                                                                     <option value="1">User1</option>
                                                                     <option value="2">User2</option>
                                                                     <option value="3">User3</option>
                                                                     <option value="4">User4</option>
                                                                     <option value="5">User5</option>
-                                                                  
-                                                                </select> </label>
+                                                                </select> 
+                                                            </label>
                                                         </section>
                                                         <section class="col col-6">
                                                             <label for="category">Project <span style="color:red">*</span>
@@ -1088,6 +1090,12 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                 alert("Please choose an environment");
                 return false;
             }
+            reqBody.users = $('#userListSelect').val() 
+
+            if(!reqBody.users) {
+                alert("Please choose users");
+                return false;
+            }
 
 
 
@@ -1222,33 +1230,20 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                 });
 
 
-/*
- $.ajax({
-    url:'/chef/cookbooks',
-    method:'GET',
-    async:false,
-    success :function(data) {
-        var keys = Object.keys(data);
-        var $cookbooksList = $('#cookbookSelect'); 
-          for(var i=0;i<keys.length;i++) {
-            var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-            $cookbooksList.append($option);
-          }
-        $cookbooksList.multiSelect({});
-    },
- })*/
- /*$.get('/chef/cookbooks',function(data){
-    var keys = Object.keys(data);
-    var $cookbooksList = $('#cookbookSelect'); 
-        for(var i=0;i<keys.length;i++) {
-         var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-         $cookbooksList.append($option);
-    }
-    $cookbooksList.multiSelect({});
+(function(){
 
-
-});*/
-
+var $loadingContainer = $('.userListLoadingContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
+$.get('/users',function(userList){
+  var $userListSelect = $('#userListSelect').empty(); 
+  for(var i=0;i<userList.length;i++) {
+    var keys = Object.keys(userList[i]);
+    var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+    $userListSelect.append($option);
+  }
+  $loadingContainer.hide();
+  $userListSelect.show();
+});
+})();
 
 
 </script>

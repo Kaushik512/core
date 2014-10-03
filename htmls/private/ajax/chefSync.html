@@ -114,14 +114,15 @@
       <section class="col col-12">
                                                             <label class="label">Assign Users</label>
                                                             <label class="select select-multiple">
-                                                                <select class="custom-scroll" multiple="">
+                                                                <div class="userListLoadingContainer"></div>
+                                                                <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
                                                                     <option value="1">User1</option>
                                                                     <option value="2">User2</option>
                                                                     <option value="3">User3</option>
                                                                     <option value="4">User4</option>
                                                                     <option value="5">User5</option>
-                                                                  
-                                                                </select> </label>
+                                                                </select> 
+                                                            </label>
                                                         </section>
     </div>
     </fieldset>
@@ -326,6 +327,11 @@ $('.showChefImportNodesModalBtn').click(function(e){
    var reqBody = {};
    reqBody.orgId = $orgListInput.val();
    reqBody.projectId = $projectList.val();
+   reqBody.users = $('#userListSelect').val();
+   if(!reqBody.users || !reqBody.users.length) {
+     alert('Please Choose Users');
+     return;
+   }
    reqBody.selectedNodes = [];
    for(var i=0;i<$checkBoxes.length;i++) {
       var nodeInfo = {};
@@ -349,6 +355,21 @@ $('.showChefImportNodesModalBtn').click(function(e){
  });
 
  });
+
+(function(){
+
+var $loadingContainer = $('.userListLoadingContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
+$.get('/users',function(userList){
+  var $userListSelect = $('#userListSelect').empty(); 
+  for(var i=0;i<userList.length;i++) {
+    var keys = Object.keys(userList[i]);
+    var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+    $userListSelect.append($option);
+  }
+  $loadingContainer.hide();
+  $userListSelect.show();
+});
+})();
 
 
 </script>
