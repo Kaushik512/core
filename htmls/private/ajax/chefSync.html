@@ -141,6 +141,7 @@
 
 
 window.selectedOrgName = "Chef Import";
+drawBreadCrumb1();
 var urlParams ={};
 (window.onpopstate = function () {
   var url = window.location.href;
@@ -155,7 +156,7 @@ var urlParams ={};
 })();
 $(function(){
 
- drawBreadCrumb();
+ //drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
  $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
@@ -350,15 +351,18 @@ $('.showChefImportNodesModalBtn').click(function(e){
    $.post('/chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){
    	$('#chefImportNodesModal').modal('hide');
 
-   })
+   }).error(function(){
+    alert('Unable to import nodes. Please try again later');
+   });
 
  });
 
  });
+
 
 (function(){
 
-var $loadingContainer = $('.userListLoadingContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
+var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
 $.get('/users',function(userList){
   var $userListSelect = $('#userListSelect').empty(); 
   for(var i=0;i<userList.length;i++) {
@@ -368,8 +372,11 @@ $.get('/users',function(userList){
   }
   $loadingContainer.hide();
   $userListSelect.show();
+}).error(function(){
+    $loadingContainer.empty().append('Unable to load users. Please try again later.');
 });
 })();
+
 
 
 </script>
