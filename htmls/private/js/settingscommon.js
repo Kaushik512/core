@@ -158,7 +158,6 @@ var forceEdit = false; //variable used to force save one record ex. Authenticati
 
 function readform(formID) {
     var formData = null;
-
   //  alert("force edit:" + forceEdit);
     //Prefilling dropdowns
     $('select').each(function () {
@@ -745,6 +744,16 @@ $("#id-input-file-2").change(function () {
     $(".ace-file-name").html('<i class=" ace-icon fa fa-upload"></i>' + this.files[0].name);
 
 });
+
+function getCount(jsonID){
+    readMasterJson(jsonID);
+    var formData = d4ddata.masterjson;
+    var count = 0;
+    if(formData){
+        count = formData.rows.row.length;
+    }
+    return(count);
+}
 
 function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     readMasterJson(jsonID);

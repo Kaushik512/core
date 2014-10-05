@@ -71,9 +71,9 @@
 			<!-- projects dropdown -->
 			<div id="project-context" style="padding-top:15px;">
 
+
 				<li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
       	  			<a class="active" href="javascript:void(0)" onclick="setleftnavigation(this);"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
-
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
@@ -107,13 +107,13 @@
 				<!-- end logout button -->
 				<div id="project-context" style="padding-top:15px;">
 					<li class="left-projects-links hidden" data-target="#Track"  navigation="track">
-      	  				<a class="dropdown-toggle" href="Tracker.html#ajax/Dashboard.html"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+      	  				<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this);"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
      				</li>
 				</div>
 
 				<div id="project-context" style="padding-top:15px;">
 					<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
-      	  				<a class="dropdown-toggle" href="#ajax/Settings/OrgList.html"  onclick="setleftnavigation(this);"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+      	  				<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html"  onclick="setleftnavigation(this);"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
      				</li>
 				</div>
 
@@ -644,6 +644,7 @@
               			  		} 
 			            }
 			          }
+			          $(function(){
 			          var href = window.location.href;
 			          var indexOfhash = href.lastIndexOf("#");
 			          $('.org').hide();
@@ -676,6 +677,7 @@
 			            window.location.assign('#'+$a.attr('href'));
                          
 			          }
+			      });
 
 			          	
 			        },
