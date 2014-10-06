@@ -158,7 +158,6 @@ var forceEdit = false; //variable used to force save one record ex. Authenticati
 
 function readform(formID) {
     var formData = null;
-
   //  alert("force edit:" + forceEdit);
     //Prefilling dropdowns
     $('select').each(function () {

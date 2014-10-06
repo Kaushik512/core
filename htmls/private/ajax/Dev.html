@@ -51,7 +51,7 @@
                                                     <div class="widget-box" id="divinstancestableview">
                                                         <div class="widget-body">
                                                             <div class="widget-main" style="min-height:300px"> 
-                                                                <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:0">
+                                                                <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
                                                                     <div class="table-responsive table-div" >
                                                                             <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
                                                                                 <thead>
@@ -417,6 +417,12 @@
       
 //       document.querySelector('#flip-toggle').classList.toggle('flip');
 //   });
+
+//setting the workzone link to current page
+//alert(window.location.href);
+var wzlink = window.location.href.split('#')[1];
+//alert(wzlink);
+$('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
 
 var urlParams = {};
 (window.onpopstate = function() {
@@ -1112,9 +1118,11 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
 
     }
     //for table view
-    /*var tableinstanceview = $('#tableinstanceview').dataTable({
-     "pagingType": "full_numbers"
-    });*/
+    if(!$.fn.dataTable.isDataTable('#tableinstanceview')){
+       var tableinstanceview = $('#tableinstanceview').dataTable({
+         "pagingType": "full_numbers"
+        });
+    }
     /*$('#tableinstanceview tbody').on('click','tr',function(){
         if($(this).hasClass('rowcustomselected')){
             $(this).removeClass('rowcustomselected');
@@ -1125,9 +1133,11 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
         }
 
     });*/
-    /*$('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
+
+    console.log('loading table');
+    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
     $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
-    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box*/
+    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
     //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
     // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
 
