@@ -1243,8 +1243,9 @@ function checkURL() {
 		$this = $('nav > ul > li:first-child > a[href!="#"]');
 
 		//update hash
-		window.location.hash = $this.attr('href');
-
+		if($this.attr('href')) {
+		  window.location.hash = $this.attr('href');
+        }
 	}
 
 }

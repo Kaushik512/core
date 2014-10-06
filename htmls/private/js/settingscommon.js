@@ -746,6 +746,16 @@ $("#id-input-file-2").change(function () {
 
 });
 
+function getCount(jsonID){
+    readMasterJson(jsonID);
+    var formData = d4ddata.masterjson;
+    var count = 0;
+    if(formData){
+        count = formData.rows.row.length;
+    }
+    return(count);
+}
+
 function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     readMasterJson(jsonID);
     formData = d4ddata.masterjson;

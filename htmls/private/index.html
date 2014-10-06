@@ -72,7 +72,7 @@
 			<div id="project-context" style="padding-top:15px;">
 
 				<li class="left-projects-links" data-target="#Workspace">
-      	  			<a class="active" href="javascript:void(0)"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
+      	  			<a class="active" href="index.html"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
@@ -112,7 +112,7 @@
 
 				<div id="project-context" style="padding-top:15px;">
 					<li class="left-projects-links active hidden" data-target="#Settings">
-      	  				<a class="dropdown-toggle" href="settings.html#ajax/Settings/OrgList.html"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+      	  				<a class="dropdown-toggle" href="settings.html#ajax/Settings/Dashboard.html"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
      				</li>
 				</div>
 
@@ -401,6 +401,7 @@
               			  		} 
 			            }
 			          }
+			          $(function(){
 			          var href = window.location.href;
 			          var indexOfhash = href.lastIndexOf("#");
 			          $('.org').hide();
@@ -433,6 +434,7 @@
 			            window.location.assign('#'+$a.attr('href'));
                          
 			          }
+			      });
 
 			          	
 			        },

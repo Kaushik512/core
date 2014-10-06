@@ -568,13 +568,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
 
         $ul.append($liCardName);
    
-        // if(data[i].templateComponents) { 
-        //     console.log(data[i]);
-        //  for(var j=0;j<data[i].templateComponents.length;j++) {
-        //    var $li = $('<li></li>').css({"font-size":'10px'}).append(data[i].templateComponents[j]);;
-        //    $ul.append($li);
-        //  }
-        // }
+     
         var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
         if(data[i].versionsList) {
            var $selectVerEdit =  $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Edit');
@@ -591,9 +585,9 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
                     var blueprintId = $parent.attr('data-blueprintId');
                     var chefServerId =  $parent.attr('data-chefServerId');
                     var version = $parent.find('.blueprintVersionDropDown').val();
-      
+                    
                   $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
-          
+                    
                     $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
                     var keys = Object.keys(data);
                     
@@ -604,7 +598,13 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
                     }
                     $blueprintEditResultContainer.find('.modal-body').empty(); 
                     $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
-            }); 
+            }).error(function(){
+                $blueprintEditResultContainer.find('.modal-body').empty(); 
+                $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+            });; 
+          }).error(function(){
+            $blueprintEditResultContainer.find('.modal-body').empty(); 
+            $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
           });
       
         });
@@ -630,12 +630,6 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         }  else {
            $devopsRolepanelBody.append($itemContainer);
         }
-        //For Table View
-        //$rowContainter.append('<td>' +$itemContainer+ '</td>');
-
-        //For Table View
-        //$rowContainter.append('<td>' +$itemContainer+ '</td>');
-
     }
     var $productdiv1 = $('.productdiv1');
 
@@ -658,37 +652,6 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data)
         }
     }
     
-
-
-    $('.bpEditBtn').click(function(e){
-     var $selectedItems = $('.role-Selected1');
-      var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
-     $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-      $blueprintEditResultContainer.modal('show');
-      for(var i=0;i<$selectedItems.length;i++) {
-       var projectId = $($selectedItems.get(i)).attr('data-projectId');
-       var envId = $($selectedItems.get(i)).attr('data-envId');
-       var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
-       var chefServerId =  $($selectedItems.get(i)).attr('data-chefServerId');
-       var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-      
-       $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
-          
-        $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
-            var keys = Object.keys(data);
-            var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
-            for(var i=0;i<keys.length;i++) {
-               var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-               $cookbooksList.append($option);
-            }
-            $blueprintEditResultContainer.find('.modal-body').empty(); 
-           $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
-           
-       
-            }); 
-          });
-       } 
-    });
     pageSetUp();
 
 });
@@ -1043,6 +1006,8 @@ $li.find('.instanceActionBtn').click(function(e){
             }
              $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
 
+        }).error(function(){
+            $chefRunModalContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
         });
 
     });
@@ -1211,7 +1176,7 @@ $('.launchBtn').click(function(e) {
         var envId = $($selectedItems.get(i)).attr('data-envId');
         var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
         var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-
+       
         $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
             var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
@@ -1291,7 +1256,9 @@ $('.launchBtn').click(function(e) {
                 addInstanceToDOM(data);
             });
 
-        })
+        }).error(function(){
+            $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+        });
     }
 });
 
@@ -1343,50 +1310,4 @@ $('.actionControlPanel').click(function (e) {
     }
 });
 </script>
-<script type="text/javascript">
-//To add the wizard
-    $("#btnaddToSuite").on('click', function () {
-        var x = document.getElementById("jsonFiles");
-        for (var i = 0; i < x.options.length; i++) {
-            if (x.options[i].selected == true) {
-                var y = document.createElement("option");
-                y.value = x.options[i].value;
-                y.innerHTML = x.options[i].text;
-                $("#suiteFiles").append(y);
-
-            }
-        }
-    });
-
-    $("#btnremoveFromSuite").on('click', function () {
-        $("#suiteFiles option:selected").remove();
-    });
-
-    $("#btnSuiteItemUp").on('click', function () {
-        $("#suiteFiles option:selected").each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
-
-            if (listItemPosition == 1) return false;
-
-            listItem.insertBefore(listItem.prev());
-        });
-
-    });
-
-    $("#btnSuiteItemDown").on('click', function () {
-        var itemsCount = $("#suiteFiles option").length;
-
-        $($("#suiteFiles option:selected").get().reverse()).each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
-
-            if (listItemPosition == itemsCount) return false;
-
-            listItem.insertAfter(listItem.next());
-
-        });
-    });
-
-    </script>
 

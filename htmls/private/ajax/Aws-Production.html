@@ -797,8 +797,7 @@
                                       </select>
                                  </label> 
                                  <div class="cookbookShow">
-                                    <select id="cookbookSelect" class="form-control" style="width: 200px;float:left;display:none" size="10" multiple="multiple">
-                                    </select> 
+                                    
                                  </div>
                             </section>
 
@@ -879,15 +878,11 @@
                                                             </label>
                                                         </section>
                                                         <section class="col col-6">
-                                                            <label class="label">Assign Users</label>
+                                                            <label class="label">Assign Users  <span style="color:red">*</span></label>
                                                             <label class="select select-multiple">
                                                                 <div class="userListLoadingContainer"></div>
                                                                 <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
-                                                                    <option value="1">User1</option>
-                                                                    <option value="2">User2</option>
-                                                                    <option value="3">User3</option>
-                                                                    <option value="4">User4</option>
-                                                                    <option value="5">User5</option>
+                                                                   
                                                                 </select> 
                                                             </label>
                                                         </section>
@@ -1067,6 +1062,10 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.templateId = $selectedItem.attr('data-templateId');
             reqBody.templateType = $selectedItem.attr('data-templateType');
             reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
+            if(!$('#cookbookSelect').length) {
+              alert('Please wait while we are fetching cookbooks.');
+              return false;
+            }
             reqBody.runlist = $('#cookbookSelect').val();
             reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
             reqBody.instanceType = $('.instanceType').val();
@@ -1186,26 +1185,30 @@ $('#bootstrap-wizard-1').bootstrapWizard({
                             for(var i=0;i<getEnv.length;i++) {
                                  $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                             }
-                            $('.cookbookShow img').remove();
-                             $('#cookbookSelect').hide();
-                            $('.cookbookShow').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
-
-
+                            var $cookbookShow = $('.cookbookShow').empty();
+                            $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                           
                             $.ajax({
                             url:'/organizations/'+orgName+'/cookbooks',
                             method:'GET',
                             async:false,
                             success :function(data) {
                              var keys = Object.keys(data.cookbooks);
-                             $('.cookbookShow img').remove();
-                             var $cookbooksList = $('#cookbookSelect').data('chefServerId',data.serverId); 
+                             
+                             $cookbookShow.empty();
+                             var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
                              for(var i=0;i<keys.length;i++) {
                                 var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                                 $cookbooksList.append($option);
                              }
+                             $cookbookShow.append($cookbooksList);
                              $cookbooksList.show();
                              $cookbooksList.multiSelect({});
+                            },
+                            error : function(){
+                               $cookbookShow.empty();
+                               $cookbookShow.append('<span>Unable to load cookbooks. Please try again later.</span>'); 
                             },
                           });    
 
@@ -1232,7 +1235,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 
 (function(){
 
-var $loadingContainer = $('.userListLoadingContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
+var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
 $.get('/users',function(userList){
   var $userListSelect = $('#userListSelect').empty(); 
   for(var i=0;i<userList.length;i++) {
@@ -1242,6 +1245,8 @@ $.get('/users',function(userList){
   }
   $loadingContainer.hide();
   $userListSelect.show();
+}).error(function(){
+    $loadingContainer.empty().append('Unable to load users. Please try again later.');
 });
 })();
 
