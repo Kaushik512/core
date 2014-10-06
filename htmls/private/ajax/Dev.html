@@ -51,7 +51,7 @@
                                                     <div class="widget-box" id="divinstancestableview">
                                                         <div class="widget-body">
                                                             <div class="widget-main" style="min-height:300px"> 
-                                                                <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
+                                                                <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:0">
                                                                     <div class="table-responsive table-div" >
                                                                             <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
                                                                                 <thead>
@@ -418,21 +418,20 @@
 //       document.querySelector('#flip-toggle').classList.toggle('flip');
 //   });
 
+var urlParams = {};
+(window.onpopstate = function() {
+    var url = window.location.href;
+    var indexOfQues = url.lastIndexOf("?");
+    if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+            var paramParts = params[i].split('=');
+            urlParams[paramParts[0]] = paramParts[1];
+        }
+    }
 
-var urlParams ={};
-(window.onpopstate = function () {
-  var url = window.location.href;
-  var indexOfQues = url.lastIndexOf("?");
-  if(indexOfQues!=-1) {
-  var sub =  url.substring(indexOfQues+1);
-  console.log(sub);
-  var params = sub.split('&')
-  for(var i=0;i<params.length;i++) {
-    var paramParts = params[i].split('=');
-    urlParams[paramParts[0]] = paramParts[1];
-  }
- }
-     
 })();
 console.log(urlParams);
 var projectId = urlParams['projid'];
@@ -441,95 +440,97 @@ var envId = urlParams['envid'];
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
 
-$.get('/organizations/'+urlParams.org+'/cookbooks',function(data) {
-  console.log(data);
-  var cookbooks = data.cookbooks;
-  var keys = Object.keys(cookbooks);
-  var $deploymentCookbookList = $('.deploymentCookbookList');
-  for(i=0;i<keys.length;i++) {
-     $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe['+keys[i]+']" data-cookbookName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
-  }
+$.get('/organizations/' + urlParams.org + '/cookbooks', function(data) {
+    console.log(data);
+    var cookbooks = data.cookbooks;
+    var keys = Object.keys(cookbooks);
+    var $deploymentCookbookList = $('.deploymentCookbookList');
+    for (i = 0; i < keys.length; i++) {
+        $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+    }
 
 });
 
-$.get('/organizations/'+urlParams.org+'/roles',function(data) {
-  console.log(data);
-  var roles = data.roles;
-  var keys = Object.keys(roles);
-  var $deploymentRolesList = $('.deploymentRolesList');
-  for(i=0;i<keys.length;i++) {
-     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role['+keys[i]+']" data-roleName="'+keys[i]+'"><i></i>'+keys[i]+'</label></li>'));
-  }
+$.get('/organizations/' + urlParams.org + '/roles', function(data) {
+    console.log(data);
+    var roles = data.roles;
+    var keys = Object.keys(roles);
+    var $deploymentRolesList = $('.deploymentRolesList');
+    for (i = 0; i < keys.length; i++) {
+        $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+    }
 
 });
 
-$('#btnDeploymentAddSelectedCookbook').click(function(e){
-   var $deploymentSelectedList = $('.deploymentSelectedRunList');
-   var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
-   $selectedCookbooks.each(function(idx){
-      var $this = $(this);
-      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-cookbookName')+'</label></li>').on('click',function(e){
-           if($(this).hasClass('deploymentCookbookSelected')){
+$('#btnDeploymentAddSelectedCookbook').click(function(e) {
+    var $deploymentSelectedList = $('.deploymentSelectedRunList');
+    var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
+    $selectedCookbooks.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+            if ($(this).hasClass('deploymentCookbookSelected')) {
                 $(this).removeClass('deploymentCookbookSelected');
-           } else {
+            } else {
                 $(this).addClass('deploymentCookbookSelected');
-           } 
-      }));
-      $this.attr('checked',false);
-      $this.parents('li').hide();
-      
-   });
+            }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
 
-   var $selectedRoles = $("input[name=checkboxRoles]:checked");
-   $selectedRoles.each(function(idx){
-      var $this = $(this);
-      $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="'+$this.val()+'"/>'+$this.attr('data-roleName')+'</label></li>').on('click',function(e){
-           if($(this).hasClass('deploymentCookbookSelected')){
+    });
+
+    var $selectedRoles = $("input[name=checkboxRoles]:checked");
+    $selectedRoles.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+            if ($(this).hasClass('deploymentCookbookSelected')) {
                 $(this).removeClass('deploymentCookbookSelected');
-           } else {
+            } else {
                 $(this).addClass('deploymentCookbookSelected');
-           } 
-      }));
-      $this.attr('checked',false);
-      $this.parents('li').hide();
-    
-          
-   });
+            }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
 
-   $deploymentSelectedList.sortable({ cursor: "move" });
+
+    });
+
+    $deploymentSelectedList.sortable({
+        cursor: "move"
+    });
 });
 
-$('#btnDeploymentRemoveSelectedCookbook').click(function(e){
-   var $deploymentSelectedList = $('.deploymentSelectedRunList');
-   $deploymentSelectedList.find('.deploymentCookbookSelected').each(function(){
-    var value = $(this).find('input').val();
-    var selector = 'input[name=checkboxRoles][value="'+value+'"]';
-    console.log(selector);
-    $('input[name=checkboxRoles][value="'+value+'"]').parents('li').show();
-    $('input[name=checkboxCookbooks][value="'+value+'"]').parents('li').show();
-    $(this).remove();
+$('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
+    var $deploymentSelectedList = $('.deploymentSelectedRunList');
+    $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
+        var value = $(this).find('input').val();
+        var selector = 'input[name=checkboxRoles][value="' + value + '"]';
+        console.log(selector);
+        $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
+        $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
+        $(this).remove();
 
-   });
+    });
 
 });
 
 
 
 
-$('.deploymentChefRunBtn').click(function(e){
+$('.deploymentChefRunBtn').click(function(e) {
 
     var $selectedNodes = $('input[name=deploymentNodesCheckBox]:checked');
     var $runlistInput = $('.deploymentSelectedRunList input');
     var runlist = [];
-    $runlistInput.each(function(){
+    $runlistInput.each(function() {
         runlist.push($(this).val());
     });
     console.log(runlist);
-    $selectedNodes.each(function(e){
-        $.post('/instances/'+$(this).val()+'/updateRunlist',{
-         runlist:runlist
-        },function(data){
-           console.log('instance runlist updated');
+    $selectedNodes.each(function(e) {
+        $.post('/instances/' + $(this).val() + '/updateRunlist', {
+            runlist: runlist
+        }, function(data) {
+            console.log('instance runlist updated');
         });
     })
 
@@ -538,235 +539,361 @@ $('.deploymentChefRunBtn').click(function(e){
 });
 
 
-$.get('/projects/'+projectId+'/environments/'+envId+'/blueprints',function(data){
-    
+$.get('/projects/' + projectId + '/environments/' + envId + '/blueprints', function(data) {
+
     var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
     $AppFactpanelBody.empty();
 
     var $devopsRolepanelBody = $('.devopsRolePanel').find('.panel-body');
     $devopsRolepanelBody.empty();
 
-   
-    
-    for(var i=0;i<data.length;i++) {
 
-        
+
+    for (var i = 0; i < data.length; i++) {
+
+
         var $itemContainer = $('<div></div>').addClass("productdiv4");
 
-        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId',data[i]._id).attr('data-projectId',data[i].projectId).attr('data-envId',data[i].envId).attr('data-chefServerId',data[i].chefServerId); 
-        var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({'text-align':'center'});
-        var $img = $('<img />').attr('src','img/templateicons/'+data[i].templateId+'.png').attr('alt',data[i].name).addClass('cardLogo');
+        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId);
+        var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
+            'text-align': 'center'
+        });
+        var $img = $('<img />').attr('src', 'img/templateicons/' + data[i].templateId + '.png').attr('alt', data[i].name).addClass('cardLogo');
         var $liImage = $('<li></li>').append($img);
         $ul.append($liImage);
         //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
-        var $liCardName = $('<li title="'+data[i].name+'"></li>').addClass('Cardtextoverflow').html('<u><b>'+data[i].name+'</b></u>');
+        var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
         //For Table View
         //$rowContainter.append('<td>' +data[i].name + '</td>');
-        
+
 
 
         $ul.append($liCardName);
-   
-     
-        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-        if(data[i].versionsList) {
-           var $selectVerEdit =  $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Edit');
-           var $selectVer =  $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId',data[i]._id);
 
-           $selectVerEdit.click(function(e){
+
+        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
+        if (data[i].versionsList) {
+            var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
+            var $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+
+            $selectVerEdit.click(function(e) {
                 var $parent = $(this).parents('.cardimage');
-                var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
+                var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
                 $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                 $blueprintEditResultContainer.modal('show');
-                
-                    var projectId = $parent.attr('data-projectId');
-                    var envId = $parent.attr('data-envId');
-                    var blueprintId = $parent.attr('data-blueprintId');
-                    var chefServerId =  $parent.attr('data-chefServerId');
-                    var version = $parent.find('.blueprintVersionDropDown').val();
-                    
-                  $.get('/blueprints/'+blueprintId+'/versions/'+version,function(data){
-                    
-                    $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
-                    var keys = Object.keys(data);
-                    
-                    var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId',blueprintId).attr('multiple',true); 
-                    for(var i=0;i<keys.length;i++) {
-                        var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-                        $cookbooksList.append($option);
-                    }
-                    $blueprintEditResultContainer.find('.modal-body').empty(); 
-                    $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
-            }).error(function(){
-                $blueprintEditResultContainer.find('.modal-body').empty(); 
-                $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-            });; 
-          }).error(function(){
-            $blueprintEditResultContainer.find('.modal-body').empty(); 
-            $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-          });
-      
-        });
-           
 
-         var $li = $('<li></li>').css({"font-size":'10px'}).append($selectVer,$selectVerEdit);
-         for(var j=0;j<data[i].versionsList.length;j++) {
-           var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-           $selectVer.append($options);
-         }
-         $selecteditBtnContainer.append($li);    
+                var projectId = $parent.attr('data-projectId');
+                var envId = $parent.attr('data-envId');
+                var blueprintId = $parent.attr('data-blueprintId');
+                var chefServerId = $parent.attr('data-chefServerId');
+                var version = $parent.find('.blueprintVersionDropDown').val();
+
+                $.get('/blueprints/' + blueprintId + '/versions/' + version, function(data) {
+
+                    $.get('/chef/servers/' + chefServerId + '/cookbooks', function(data) {
+                        var keys = Object.keys(data);
+
+                        var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
+                        for (var i = 0; i < keys.length; i++) {
+                            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
+                            $cookbooksList.append($option);
+                        }
+                        $blueprintEditResultContainer.find('.modal-body').empty();
+                        $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+                    }).error(function() {
+                        $blueprintEditResultContainer.find('.modal-body').empty();
+                        $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                    });;
+                }).error(function() {
+                    $blueprintEditResultContainer.find('.modal-body').empty();
+                    $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                });
+
+            });
+
+
+            var $li = $('<li></li>').css({
+                "font-size": '10px'
+            }).append($selectVer, $selectVerEdit);
+            for (var j = 0; j < data[i].versionsList.length; j++) {
+                var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                $selectVer.append($options);
+            }
+            $selecteditBtnContainer.append($li);
         }
 
         $itemBody.append($ul);
         $itemBody.append($selecteditBtnContainer);
-        
+
 
 
 
         $itemContainer.append($itemBody);
-        if(data[i].templateType=='appFactory') {
+        if (data[i].templateType == 'appFactory') {
             $AppFactpanelBody.append($itemContainer);
-        }  else {
-           $devopsRolepanelBody.append($itemContainer);
+        } else {
+            $devopsRolepanelBody.append($itemContainer);
         }
     }
     var $productdiv1 = $('.productdiv1');
 
-    $productdiv1.click(function (e) {
+    $productdiv1.click(function(e) {
         $productdiv1.removeClass('role-Selected1');
         $(this).addClass('role-Selected1');
     });
-    
+
     var expanded = false;
-    if($devopsRolepanelBody.children().length) {
+    if ($devopsRolepanelBody.children().length) {
         var $devopsRolePanel = $devopsRolepanelBody.parents('.devopsRolePanel').show();
         $devopsRolePanel.find('.collapse').addClass('in');
         expanded = true;
     }
 
-    if($AppFactpanelBody.children().length) {
+    if ($AppFactpanelBody.children().length) {
         var $appFactoryPanel = $AppFactpanelBody.parents('.appFactoryPanel').show();
-        if(!expanded) {
+        if (!expanded) {
             $appFactoryPanel.find('.collapse').addClass('in');
         }
     }
-    
+
     pageSetUp();
 
 });
 
 
 function getCssClassFromStatus(status) {
-        var cssClasses = {
+    var cssClasses = {
 
-        };
-        switch(status) {
-            
-            case 'running':
+    };
+    switch (status) {
+
+        case 'running':
             cssClasses.ringClass = 'started';
-             cssClasses.textClass = 'instance-state-text-started';
-             cssClasses.tableViewStatusClass ="started";
+            cssClasses.textClass = 'instance-state-text-started';
+            cssClasses.tableViewStatusClass = "started";
             break;
 
-            case 'stopped':
-             cssClasses.ringClass = 'stopped';
-             cssClasses.textClass = 'instance-state-text-stopped';
-             cssClasses.tableViewStatusClass ="stopped";
+        case 'stopped':
+            cssClasses.ringClass = 'stopped';
+            cssClasses.textClass = 'instance-state-text-stopped';
+            cssClasses.tableViewStatusClass = "stopped";
             break;
 
-            case 'terminated':
-             cssClasses.ringClass = 'stopped';
-             cssClasses.textClass = 'instance-state-text-stopped';
-             cssClasses.tableViewStatusClass ="stopped";
+        case 'terminated':
+            cssClasses.ringClass = 'stopped';
+            cssClasses.textClass = 'instance-state-text-stopped';
+            cssClasses.tableViewStatusClass = "stopped";
             break;
 
-            default :
-             cssClasses.ringClass = 'pending';
-             cssClasses.textClass = 'instance-state-text-pending';
-             cssClasses.tableViewStatusClass ="pending";
+        default:
+            cssClasses.ringClass = 'pending';
+            cssClasses.textClass = 'instance-state-text-pending';
+            cssClasses.tableViewStatusClass = "pending";
 
+    }
+
+    return cssClasses;
+}
+
+
+function pollInstanceState(instanceId, state, delay) {
+    var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+    var timeout = setTimeout(function() {
+        $.get('/instances/' + instanceId, function(data) {
+            if (data) {
+                if (data.instanceState === state) {
+                    pollInstanceState(instanceId, state, 5000);
+                } else {
+                    console.log('polling complete');
+                    var cssClassed = getCssClassFromStatus(data.instanceState);
+                    $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                    $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                    $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                    $parent.find('.instance-details-id strong').html(data.instanceIP);
+                    $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
+                }
+            }
+        })
+    }, delay);
+}
+
+
+var startStopInstanceHandler = function(e) {
+    var $this = $(this);
+    var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
+    var type = $this.attr('data-actionType');
+    url = '/instances/' + instanceId + '/startInstance';
+    if (type === 'stop') {
+        url = '/instances/' + instanceId + '/stopInstance'
+    }
+    var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+    $parent.find('.moreInfo').trigger('click');
+    $.get(url, function(data) {
+
+        console.log($parent.length, $parent);
+
+
+
+        var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
+
+        var oldState = data.instanceCurrentState;
+
+        $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+
+        $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
+
+        $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+
+
+        pollInstanceState(instanceId, oldState, 2000);
+    });
+}
+
+
+var instanceUpdateRunlistHandler = function(e) {
+    var $this = $(this);
+    var instanceId = $this.parents('.domain-roles-caption').attr('data-instanceId');
+    var chefServerId = $this.attr('data-chefServerId');
+
+    $chefRunModalContainer = $('#chefRunModalContainer');
+    $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
+    $chefRunModalContainer.modal('show');
+    $.get('/chef/servers/' + chefServerId + '/cookbooks', function(data) {
+        var keys = Object.keys(data);
+        var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId', instanceId).attr('multiple', true);
+        for (var i = 0; i < keys.length; i++) {
+            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
+            $cookbooksList.append($option);
+        }
+        $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
+
+    }).error(function() {
+        $chefRunModalContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+    });
+
+};
+
+var instanceLogsHandler = function(e) {
+    var instanceId = $(this).attr('data-instanceId');
+    var timeout;
+    var $instanceLogModalContainer = $('#instanceLogModalContainer');
+    $instanceLogModalContainer.on('hidden.bs.modal', function(e) {
+        $instanceLogModalContainer.off('hidden.bs.modal');
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+    });
+    $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    $instanceLogModalContainer.modal('show');
+    var lastTimestamp;
+
+    function pollLogs(timestamp, delay, clearData) {
+        var url = '/instances/' + instanceId + '/logs';
+        if (timestamp) {
+            url = url + '?timestamp=' + timestamp;
         }
 
-        return cssClasses;
-     }
-
-
-     function pollInstanceState(instanceId,state, delay) {
-        var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
-        var timeout = setTimeout(function() {
-            $.get('/instances/' + instanceId, function(data) {
-                if (data) {
-                    if (data.instanceState === state) {
-                        pollInstanceState(instanceId,state, 5000);
-                    } else {
-                        console.log('polling complete');
-                        var cssClassed = getCssClassFromStatus(data.instanceState);
-                        $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                        $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                        $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-                        $parent.find('.instance-details-id strong').html(data.instanceIP);
-                        $('tr[data-instanceId="'+instanceId+'"] td.instanceIPCol').html(data.instanceIP);
-                    }
+        timeout = setTimeout(function() {
+            $.get(url, function(data) {
+                var $modalBody = $instanceLogModalContainer.find('.logsArea')
+                if (clearData) {
+                    $modalBody.empty();
                 }
-            })
+                var $table = $('<div></div>');
+
+                for (var i = 0; i < data.length; i++) {
+                    var $rowDiv = $('<div class="row"></div>');
+                    var timeString = new Date().setTime(data[i].timestamp);
+                    var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                    $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                    if (data[i].err) {
+                        $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                    } else {
+                        $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                    }
+
+                    $table.append($rowDiv);
+                    $table.append('<hr/>');
+
+                }
+
+
+                if (data.length) {
+                    lastTimestamp = data[data.length - 1].timestamp;
+                    console.log(lastTimestamp);
+                    $modalBody.append($table);
+                    $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                }
+
+
+                console.log('polling again');
+                if ($instanceLogModalContainer.data()['bs.modal'].isShown) {
+                    pollLogs(lastTimestamp, 1000, false);
+                } else {
+                    console.log('not polling again');
+                }
+            });
         }, delay);
-    } 
+    }
+    pollLogs(lastTimestamp, 0, true);
+};
+
 
 
 function addInstanceToDOM(data) {
     var $instancesList = $('.instancesList');
-     var $deploymentNodeList = $('.deploymentNodeList');
+    var $deploymentNodeList = $('.deploymentNodeList');
 
-    $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="'+data._id+'"><i></i>'+data.chefNodeName+'</label></li>'));
+    $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data._id + '"><i></i>' + data.chefNodeName + '</label></li>'));
 
-        var $rowContainter = $('<tr data-instanceId="'+data._id+'"></tr>');
-
-
-        var $li = $('<li></li>').addClass('domain-role-thumbnail');
-        var $container = $('<div class="flip-toggle"></div>').addClass('container');//<div class="container" id="flip-toggle">
-        var $card = $('<div></div>').addClass('card');//<div class="card">
-        var $front = $('<div></div>').addClass('front');//<div class="front">
-        var $div = $('<div></div>').addClass('domain-roles ');
-        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId',data._id);
-        var $divHeading = $('<div></div>').addClass('domain-roles-heading');
-         
-
-        var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:22px;width:33px;margin-right:5px;"/>').attr('contenteditable','false'); 
-
-        var $spanheadingMiddle = $('<span>'+data.blueprintData.blueprintName+'</span>').addClass('cardHeadingTextoverflow');
-        var $spanheadingRight = $('<span></span>').css({'float':'right'}).append($('<a href="javascript:void(0)" data-instanceId="'+data._id+'"></a>').addClass('moreInfo').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','MoreInfo'));  
-
-        $divHeading.append($spanheadingLeft);
-        $divHeading.append($spanheadingMiddle); 
-        $divHeading.append($spanheadingRight);
-        $divDomainRolesCaption.append($divHeading);
-        $divDomainRolesCaption.append($('<hr>'));
-        var $divComponentListContainer ;
-        var $tdInstanceStatusIndicator ;
-
-        if(data.instanceState == 'running'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
-        }
-        else if(data.instanceState == 'terminated'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
-        }
-        else  if(data.instanceState == 'stopped'){
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
-        }  
-        else {
-            $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
-            $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
-        }
-        $tableInstanceStatusIndicator.attr('data-instanceId',data._id);
+    var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
 
 
-        $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
-        
-        /*for(var j=0;j<data.runlist.length;j++) { 
+    var $li = $('<li></li>').addClass('domain-role-thumbnail');
+    var $container = $('<div class="flip-toggle"></div>').addClass('container'); //<div class="container" id="flip-toggle">
+    var $card = $('<div></div>').addClass('card'); //<div class="card">
+    var $front = $('<div></div>').addClass('front'); //<div class="front">
+    var $div = $('<div></div>').addClass('domain-roles ');
+    var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId', data._id);
+    var $divHeading = $('<div></div>').addClass('domain-roles-heading');
+
+
+    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;"/>').attr('contenteditable', 'false');
+
+    var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow');
+    var $spanheadingRight = $('<span></span>').css({
+        'float': 'right'
+    }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
+
+    $divHeading.append($spanheadingLeft);
+    $divHeading.append($spanheadingMiddle);
+    $divHeading.append($spanheadingRight);
+    $divDomainRolesCaption.append($divHeading);
+    $divDomainRolesCaption.append($('<hr>'));
+    var $divComponentListContainer;
+    var $tdInstanceStatusIndicator;
+
+    if (data.instanceState == 'running') {
+        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
+        $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
+    } else if (data.instanceState == 'terminated') {
+        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+        $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+    } else if (data.instanceState == 'stopped') {
+        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+        $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+    } else {
+        $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
+        $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
+    }
+    $tableInstanceStatusIndicator.attr('data-instanceId', data._id);
+
+
+    $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
+
+    /*for(var j=0;j<data.runlist.length;j++) { 
           var $divComponentItem;
            if(j == 0) {
           
@@ -780,113 +907,106 @@ function addInstanceToDOM(data) {
                 break;
             }
         }*/
-        //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href','javascript:void').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','View All Runlist').addClass('instance-bootstrap-list-faimage'));
+    //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'View All Runlist').addClass('instance-bootstrap-list-faimage'));
 
-        $divComponentItem.click(function(e){
-            $(this).parents('.flip-toggle').toggleClass('flip');
-        });
-        
-       
-        $divComponentList.append($divComponentItem);
+    $divComponentItem.click(function(e) {
+        $(this).parents('.flip-toggle').toggleClass('flip');
+    });
 
 
-        $divComponentListContainer.append($divComponentList);
+    $divComponentList.append($divComponentItem);
+
+
+    $divComponentListContainer.append($divComponentList);
 
 
 
-        $divComponentListImage = $('<a class="btn chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId',data.chef.serverId);
+    $divComponentListImage = $('<a class="btn chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId);
 
-        $divComponentListContainer.append($divComponentListImage);
+    $divComponentListContainer.append($divComponentListImage);
 
-        //For Table View
+    //For Table View
 
-        var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
+    var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
 
-        $rowContainter.append('<td>'+(numberOfRows+1)+'</td>');
-        $rowContainter.append('<td><img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:27px;width:54px;"/></td>');
-        
+    $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
+    $rowContainter.append('<td><img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:27px;width:54px;"/></td>');
 
-        $rowContainter.append('<td>' +data.blueprintData.blueprintName+ '</td>');
-        //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
-        $rowContainter.append('<td class="instanceIPCol">' +data.instanceIP+ '</td>');
-        var $tableRunlistDiv = $('<div></div>');/*.append('<span>'+data.runlist.join()+'</span>');*/
-        var $viewAllA= $('<a></a>').attr('href','javascript:void(0)').append("View All Runlist").data('runlist',data.runlist.join());
 
-        if(data.runlist.length) {
-            $viewAllA.click(function(){
+    $rowContainter.append('<td>' + data.blueprintData.blueprintName + '</td>');
+    //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
+    $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
+    var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
+    var $viewAllA = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist").data('runlist', data.runlist.join());
+
+    if (data.runlist.length) {
+        $viewAllA.click(function() {
             var $modal = $('#modalTableRunlist');
             var $modalBody = $('#modalTableRunlist .modal-body').empty();
             var runlist = $(this).data('runlist').split(',');
-            for(var j=0;j<runlist.length;j++) { 
-                 var $divComponentItem;
-                if(j == 0) {
-          
-                $divComponentItem = $('<span title="'+runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+            for (var j = 0; j < runlist.length; j++) {
+                var $divComponentItem;
+                if (j == 0) {
 
-                 } else {
-                    $divComponentItem = $('<span title="'+runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+                    $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+
+                } else {
+                    $divComponentItem = $('<span title="' + runlist[j] + '" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
                 }
 
-             $modalBody.append($divComponentItem);          
-           }
-           $modal.modal('show');
+                $modalBody.append($divComponentItem);
+            }
+            $modal.modal('show');
         });
-        }
-        var  $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
-         $tableRunlistDiv.append($divComponentItem);
-        
-        
-      
-
-        
-        
+    }
+    var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
+    $tableRunlistDiv.append($divComponentItem);
 
 
+    $rowContainter.append($('<td></td>').append($tableRunlistDiv));
+    //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
+    $rowContainter.append($tableInstanceStatusIndicator);
 
-        $rowContainter.append($('<td></td>').append($tableRunlistDiv));
-        //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
-        $rowContainter.append($tableInstanceStatusIndicator);
+    $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
 
-        $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="'+data._id+'" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
-        
-        $divDomainRolesCaption.append($divComponentListContainer);
-        var $divInstanceDetails = $('<div></div>')
-        var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-        var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong>'+data.instanceIP+'</strong>');
-        $instanceDetailsList.append($instanceDetailItemId);
-          var $instanceDetailItemStatus;
-        if(data.instanceState == 'running'){
-            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">'+data.instanceState+'</strong>');     
-        } else if(data.instanceState == 'terminated'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data.instanceState+'</strong>');
-        } else  if(data.instanceState == 'stopped'){
-             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">'+data.instanceState+'</strong>');
-        } else {
-            $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">'+data.instanceState+'</strong>');
-        }
-       
-         $instanceDetailsList.append($instanceDetailItemStatus);
+    $divDomainRolesCaption.append($divComponentListContainer);
+    var $divInstanceDetails = $('<div></div>')
+    var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
+    var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong>' + data.instanceIP + '</strong>');
+    $instanceDetailsList.append($instanceDetailItemId);
+    var $instanceDetailItemStatus;
+    if (data.instanceState == 'running') {
+        $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">' + data.instanceState + '</strong>');
+    } else if (data.instanceState == 'terminated') {
+        $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">' + data.instanceState + '</strong>');
+    } else if (data.instanceState == 'stopped') {
+        $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">' + data.instanceState + '</strong>');
+    } else {
+        $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">' + data.instanceState + '</strong>');
+    }
 
-         $divInstanceDetails.append($instanceDetailsList);
+    $instanceDetailsList.append($instanceDetailItemStatus);
 
-         $divDomainRolesCaption.append($divInstanceDetails);
+    $divInstanceDetails.append($instanceDetailsList);
 
-         $divDomainRolesCaption.append($('<hr>'));
+    $divDomainRolesCaption.append($divInstanceDetails);
+
+    $divDomainRolesCaption.append($('<hr>'));
 
 
-         //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-          var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId',data._id);
+    //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
+    var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
 
-          var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType','Start').attr('data-original-title','Start').attr('data-placement','top').attr('rel','tooltip'));
-          $divActionBtnContainer.append($divActionStartContainer);
-          if(!data.chef) {
-            data.chef = {};
-          }  
-          var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId',data.chef.serverId).attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Restart'));
-          $divActionBtnContainer.append($divActionReStartContainer);
-          var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType','stop').attr('rel','tooltip').attr('data-placement','top').attr('data-original-title','Shutdown'));
-          $divActionBtnContainer.append($divActionShutdownContainer);
+    var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-original-title', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip'));
+    $divActionBtnContainer.append($divActionStartContainer);
+    if (!data.chef) {
+        data.chef = {};
+    }
+    var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
+    $divActionBtnContainer.append($divActionReStartContainer);
+    var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Shutdown'));
+    $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
@@ -896,217 +1016,105 @@ function addInstanceToDOM(data) {
     var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Cookbooks');
     var $backhr = $('<hr>');
 
-    
+
     $backdivai.append($backdivaspan);
     $backdiva.append($backdivai);
     //$backdiva.append($backhr);
     $backdiv.append($backdiva);
-    
+
     $back.append($backdiv);
 
     $back.append($backRunlistContainer);
     $backdiv.append($backhr);
 
-    for(var j=0;j<data.runlist.length;j++) { 
-          var $divComponentItem;
-           if(j == 0) {
-          
-            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+    for (var j = 0; j < data.runlist.length; j++) {
+        var $divComponentItem;
+        if (j == 0) {
 
-           } else {
-            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad></span>').addClass('instance-details-item').append(data.runlist[j]);
-           }
-           $backRunlistContainer.append($divComponentItem);
-            
-     }
-     var $flipbackdivaspanhr = $('<hr>');
-     $back.append($flipbackdivaspanhr);
-     var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href','javascript:void').append("Go Back"));
-     $flipbackdivaspan.click(function(e){
-            $(this).parents('.flip-toggle').toggleClass('flip');
-     });
-     $back.append($flipbackdivaspan);
+            $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+
+        } else {
+            $divComponentItem = $('<span title="' + data.runlist[j] + '" style="overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad></span>').addClass('instance-details-item').append(data.runlist[j]);
+        }
+        $backRunlistContainer.append($divComponentItem);
+
+    }
+    var $flipbackdivaspanhr = $('<hr>');
+    $back.append($flipbackdivaspanhr);
+    var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href', 'javascript:void').append("Go Back"));
+    $flipbackdivaspan.click(function(e) {
+        $(this).parents('.flip-toggle').toggleClass('flip');
+    });
+    $back.append($flipbackdivaspan);
 
     $divDomainRolesCaption.append($divActionBtnContainer);
-        $front.append($div);
-        $card.append($front);
-        $card.append($back);
-        $container.append($card);
-        $li.append($container);
-        //$li.append($div);
-        $div.append($divDomainRolesCaption);
+    $front.append($div);
+    $card.append($front);
+    $card.append($back);
+    $container.append($card);
+    $li.append($container);
+    //$li.append($div);
+    $div.append($divDomainRolesCaption);
 
-        $instancesList.append($li);
+    $instancesList.append($li);
 
-        //For Table View
-        $rowContainter.append('<td>' +$('<div></div>').append($divActionBtnContainer.clone()).html()+ '</td>');
-        $("#tableinstanceview").append($rowContainter);
-
-
-
-
-if(data.instanceState === 'pending' || data.instanceState === 'stopping') {
-     pollInstanceState(data._id,data.instanceState,2000);  
-}
+    //For Table View
+    $rowContainter.append('<td>' + $('<div></div>').append($divActionBtnContainer.clone()).html() + '</td>');
+    $("#tableinstanceview").append($rowContainter);
 
 
 
-//handling events
 
-    
-
-
-$li.find('.instanceActionBtn').click(function(e){
-        var $this = $(this);
-        var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
-        var type = $this.attr('data-actionType');
-        url = '/instances/'+instanceId+'/startInstance';
-        if(type==='stop') {
-            url = '/instances/'+instanceId+'/stopInstance'
-        }
-        var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
-        $parent.find('.moreInfo').trigger('click');
-        $.get(url,function(data){
-            
-            console.log($parent.length,$parent);
-
-            
-           
-            var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
-            
-            var oldState = data.instanceCurrentState;
-
-            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-
-            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
-
-            $('.instancestatusindicator[data-instanceId="'+instanceId+'"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-            
-            
-            pollInstanceState(instanceId,oldState,2000);                        
-        }); 
-    });
-
-    $li.find('.instanceActionBtnUpdateRunlist,.instance-bootstrap-list-image').click(function(e){
-         var $this = $(this);
-         var instanceId = $this.parents('.domain-roles-caption').attr('data-instanceId');
-         var chefServerId = $this.attr('data-chefServerId');
-
-         $chefRunModalContainer = $('#chefRunModalContainer');
-         $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
-         $chefRunModalContainer.modal('show');
-         $.get('/chef/servers/'+chefServerId+'/cookbooks',function(data){
-            var keys = Object.keys(data);
-            var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId',instanceId).attr('multiple',true); 
-            for(var i=0;i<keys.length;i++) {
-             var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-             $cookbooksList.append($option);
-            }
-             $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
-
-        }).error(function(){
-            $chefRunModalContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
-        });
-
-    });
-
-    $li.find('.moreInfo,.tableMoreInfo').click(function(e){
-         var instanceId =  $(this).attr('data-instanceId');
-         var timeout;
-         var $instanceLogModalContainer =  $('#instanceLogModalContainer');
-         $instanceLogModalContainer.on('hidden.bs.modal', function (e) {
-            $instanceLogModalContainer.off('hidden.bs.modal');
-            if(timeout) {
-                clearTimeout(timeout);
-            }
-         });
-         $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-         $instanceLogModalContainer.modal('show');
-         var lastTimestamp;
-         function pollLogs(timestamp,delay,clearData) {
-         var url = '/instances/'+instanceId+'/logs';
-         if(timestamp) {
-            url = url + '?timestamp='+timestamp;
-         }
-         
-         timeout = setTimeout(function(){
-         $.get(url,function(data){
-            var $modalBody = $instanceLogModalContainer.find('.logsArea')
-            if(clearData) {
-               $modalBody.empty();
-            }
-            var $table  = $('<div></div>');
-            
-            for(var i=0;i<data.length;i++) {  
-                var $rowDiv = $('<div class="row"></div>');
-                var timeString = new Date().setTime(data[i].timestamp);
-                var date = new Date(timeString).toUTCString();//converts to human readable strings
-                $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>'+date+'</div>'));
-
-                if (data[i].err){
-                    $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>'+data[i].log+'</span>'));
-                }
-                else {
-                    $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>'+data[i].log+'</span>'));
-                }
-
-                $table.append($rowDiv);
-                $table.append('<hr/>');
-                
-            }
-           
-           
-            if(data.length) {
-                lastTimestamp = data[data.length -1].timestamp;
-                console.log(lastTimestamp);
-                $modalBody.append($table);
-                $modalBody.scrollTop($modalBody[0].scrollHeight+100);
-            }
-
-             
-            console.log('polling again');
-            if($instanceLogModalContainer.data()['bs.modal'].isShown) {
-                   pollLogs(lastTimestamp,1000,false);
-            } else {
-                 console.log('not polling again');
-            }            
-          });
-         },delay);
-        }
-        pollLogs(lastTimestamp,0,true);
-
-
-    });
-
-   var $cardContainer = $li.find('.container').click(function (e) {
-     $('.container').removeClass('role-Selectedcard');
-     $(this).addClass('role-Selectedcard');
-
-    });
-   pageSetUp();
-
-
-}
-
-
-
-$.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
-
-    
-    var $instancesList = $('.instancesList').empty();
-    var $deploymentNodeList = $('.deploymentNodeList').empty(); 
-    
-
-
-    for(var i=0;i<data.length;i++) {
-        
-        addInstanceToDOM(data[i]); 
-      
+    if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
+        pollInstanceState(data._id, data.instanceState, 2000);
     }
-   //for table view
-   var tableinstanceview = $('#tableinstanceview').dataTable({
-     "pagingType": "full_numbers"
+
+
+
+    //handling events
+
+
+
+    $rowContainter.find('.instanceActionBtn').click(startStopInstanceHandler);
+    $li.find('.instanceActionBtn').click(startStopInstanceHandler);
+
+
+    $rowContainter.find('.instanceActionBtnUpdateRunlist').click(instanceUpdateRunlistHandler);
+    $li.find('.instanceActionBtnUpdateRunlist,.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler);
+
+
+    $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
+    $li.find('.moreInfo').click(instanceLogsHandler);
+
+    var $cardContainer = $li.find('.container').click(function(e) {
+        $('.container').removeClass('role-Selectedcard');
+        $(this).addClass('role-Selectedcard');
+
     });
+    pageSetUp();
+
+
+}
+
+
+
+$.get('/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
+
+
+    var $instancesList = $('.instancesList').empty();
+    var $deploymentNodeList = $('.deploymentNodeList').empty();
+
+
+
+    for (var i = 0; i < data.length; i++) {
+
+        addInstanceToDOM(data[i]);
+
+    }
+    //for table view
+    /*var tableinstanceview = $('#tableinstanceview').dataTable({
+     "pagingType": "full_numbers"
+    });*/
     /*$('#tableinstanceview tbody').on('click','tr',function(){
         if($(this).hasClass('rowcustomselected')){
             $(this).removeClass('rowcustomselected');
@@ -1117,11 +1125,11 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
         }
 
     });*/
-    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
+    /*$('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
     $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
-    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
+    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box*/
     //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
-   // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
+    // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
 
     //handling instance action btn
 
@@ -1131,7 +1139,7 @@ $.get('/projects/'+projectId+'/environments/'+envId+'/instances',function(data){
 
 $('#bootstrap-wizard-1').bootstrapWizard({
     'tabClass': 'form-wizard',
-    'onNext': function (tab, navigation, index) {
+    'onNext': function(tab, navigation, index) {
         console.log(typeof index, index)
         if (index === 1) {
             console.log('in here')
@@ -1148,22 +1156,22 @@ $('#bootstrap-wizard-1').bootstrapWizard({
         $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
             'complete');
         $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
-        .html('<i class="fa fa-check"></i>');
-            //$('#tab'+(index)).removeClass('active');
-            //$('#tab'+(index+1)).addClass('active');
-            //return true;
+            .html('<i class="fa fa-check"></i>');
+        //$('#tab'+(index)).removeClass('active');
+        //$('#tab'+(index+1)).addClass('active');
+        //return true;
 
 
-        },
-        'onPrevious': function (tab, navigation, index) {
-            //console.log(index);
-            $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
-                'complete');
-            $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
+    },
+    'onPrevious': function(tab, navigation, index) {
+        //console.log(index);
+        $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
+            'complete');
+        $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
             .html(index + 2);
 
-        }
-    });
+    }
+});
 $('.launchBtn').click(function(e) {
     var $selectedItems = $('.role-Selected1');
     var $launchResultContainer = $('#launchResultContainer');
@@ -1174,7 +1182,7 @@ $('.launchBtn').click(function(e) {
         var envId = $($selectedItems.get(i)).attr('data-envId');
         var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
         var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-       
+
         $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
             var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
@@ -1184,7 +1192,7 @@ $('.launchBtn').click(function(e) {
 
             var instanceId = data.id;
             var timeout;
-            
+
             $launchResultContainer.on('hidden.bs.modal', function(e) {
                 $launchResultContainer.off('hidden.bs.modal');
                 if (timeout) {
@@ -1194,7 +1202,7 @@ $('.launchBtn').click(function(e) {
             $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
 
             $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
-            
+
             var lastTimestamp;
 
             function pollLogs(timestamp, delay, clearData) {
@@ -1234,7 +1242,7 @@ $('.launchBtn').click(function(e) {
                             $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
                         }
 
-                      
+
                         console.log('polling again');
                         if ($launchResultContainer.data()['bs.modal'].isShown) {
                             pollLogs(lastTimestamp, 1000, false);
@@ -1246,15 +1254,11 @@ $('.launchBtn').click(function(e) {
             }
             pollLogs(lastTimestamp, 0, true);
 
-
-
-
-
             $.get('/instances/' + data.id, function(data) {
                 addInstanceToDOM(data);
             });
 
-        }).error(function(){
+        }).error(function() {
             $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
         });
     }
@@ -1262,50 +1266,51 @@ $('.launchBtn').click(function(e) {
 
 
 
-$('.blueprintUpdateBtn').click(function(e){
-  
-  var $blueprintEditResultContainer =  $('#blueprintEditResultContainer');
-  var $chefRunlist = $blueprintEditResultContainer.find('.blueprintChefCookbookList'); 
-  var blueprintId = $chefRunlist.attr('data-blueprintId');
-  if(blueprintId) {
-    console.log($chefRunlist.val());
-    var blueprintData = {
+$('.blueprintUpdateBtn').click(function(e) {
+
+    var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+    var $chefRunlist = $blueprintEditResultContainer.find('.blueprintChefCookbookList');
+    var blueprintId = $chefRunlist.attr('data-blueprintId');
+    if (blueprintId) {
+        console.log($chefRunlist.val());
+        var blueprintData = {
             runlist: $chefRunlist.val(),
             expirationDays: 0,
-    };
+        };
 
-    $.post('/blueprints/'+blueprintId+'/update',{
-        blueprintUpdateData :blueprintData
-    },function(data){
-       $('.blueprintVersionDropDown[data-blueprintId="'+blueprintId+'"]').append($('<option value="'+data.version+'">'+data.version+'</option>').attr('selected',true));
-      console.log(data);
+        $.post('/blueprints/' + blueprintId + '/update', {
+            blueprintUpdateData: blueprintData
+        }, function(data) {
+            $('.blueprintVersionDropDown[data-blueprintId="' + blueprintId + '"]').append($('<option value="' + data.version + '">' + data.version + '</option>').attr('selected', true));
+            console.log(data);
+        });
+
+    }
+});
+
+$('.btnUpdateInstanceRunlist').click(function(e) {
+    var instanceId = $('.chefCookbookList').attr('data-instanceId');
+    var runlist = $('.chefCookbookList').val();
+    console.log(runlist);
+    $.post('/instances/' + instanceId + '/updateRunlist', {
+        runlist: runlist
+    }, function(data) {
+        $chefRunModalContainer = $('#chefRunModalContainer').modal('hide');
+        var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+        $parent.find('.moreInfo').trigger('click');
+        console.log(data);
     });
-
-  }
 });
 
-$('.btnUpdateInstanceRunlist').click(function(e){
-  var instanceId  = $('.chefCookbookList').attr('data-instanceId');
-  var runlist = $('.chefCookbookList').val();
-  console.log(runlist); 
-  $.post('/instances/'+instanceId+'/updateRunlist',{
-    runlist:runlist
-  },function(data){
-      $chefRunModalContainer = $('#chefRunModalContainer').modal('hide');
-      var $parent = $('.domain-roles-caption[data-instanceId="'+instanceId+'"]');
-      $parent.find('.moreInfo').trigger('click');
-      console.log(data);
-  });
-});
-
-$('.actionControlPanel').click(function (e) {
+$('.actionControlPanel').click(function(e) {
     var $selectedCard = $('.role-Selectedcard');
     if ($selectedCard.length) {
         var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
-        if(instanceId) {
-            window.location.href = 'index.html#ajax/Controlpanel.html?id='+instanceId;
+        if (instanceId) {
+            window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
         }
     }
-});
+}); 
+
 </script>
 
