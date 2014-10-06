@@ -613,7 +613,8 @@
               			  $ulOrgList.append($li);
               			  //<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
-              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide();
+              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
+              			  	    console.log('here');
 			     				$workspace.append($liSideBar);
 			     				var $projectUl = $('<ul></ul>'); 
                   				$liSideBar.append($projectUl); 
@@ -632,15 +633,17 @@
 
                         					});
 
-                        					if(!$liSideBar.data('addedToTree')) {
+                        					console.log('data==>',$liSideBar.data('addToTree'));
 
+                        					if($liSideBar.data('addToTree')) {
+                                              
     					                	   $liSideBar.prepend($('<a><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').click(function(e){
                         						e.preventDefault();
                         						e.stopPropagation();
                         						return false;
                         					    }).attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'')).addClass('org').addClass('org'+i);
-                                           } else {
-                                              $liSideBar.data('addedToTree',true);
+
+    					                	    $liSideBar.data('addToTree',false);
                                            }
 
                   					  
