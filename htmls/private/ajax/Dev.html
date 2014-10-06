@@ -745,12 +745,12 @@ var startStopInstanceHandler = function(e) {
 
         var oldState = data.instanceCurrentState;
 
+
         $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
 
         $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
 
         $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-
 
         pollInstanceState(instanceId, oldState, 2000);
     });
@@ -866,9 +866,9 @@ function addInstanceToDOM(data) {
     var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
 
-    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;"/>').attr('contenteditable', 'false');
+    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
 
-    var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow');
+    var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRight = $('<span></span>').css({
         'float': 'right'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
