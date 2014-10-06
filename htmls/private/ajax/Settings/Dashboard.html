@@ -1,19 +1,14 @@
 <script src="/private/js/settingscommon.js"></script> 
 <div id="page-wrapper">
-
-       
-
-         <div class="row">
-          
+        <div class="row">
         <div class="col-lg-3">
-    
     <div class="circle-tile" >
         <a href="#">
     <div class="circle-tile-heading light-blue">
     <i class="fa fa-group fa-fw fa-3x"></i>
     </div></a>
     
-        <div class="circle-tile-content light-blue">
+        <div class="circle-tile-content light-blue" onclick="$(this).closest('a').trigger('click')">
         <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/OrgList.html"> ORGANIZATIONS </a></div>
         <div class="circle-tile-number text-faded organizationcount" itemid="1">
            0
