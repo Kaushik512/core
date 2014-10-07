@@ -420,6 +420,7 @@
 
 //setting the workzone link to current page
 //alert(window.location.href);
+//alert('what is this');
 var wzlink = window.location.href.split('#')[1];
 //alert(wzlink);
 $('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
@@ -849,6 +850,7 @@ var instanceLogsHandler = function(e) {
 
 
 function addInstanceToDOM(data) {
+
     var $instancesList = $('.instancesList');
     var $deploymentNodeList = $('.deploymentNodeList');
 
@@ -1105,12 +1107,12 @@ function addInstanceToDOM(data) {
 
 
 $.get('/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
-
+    console.log(">>>>>>>>>>>>>> Hit");
 
     var $instancesList = $('.instancesList').empty();
     var $deploymentNodeList = $('.deploymentNodeList').empty();
 
-
+    //alert(data.length);
 
     for (var i = 0; i < data.length; i++) {
 
@@ -1142,6 +1144,9 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
     // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
 
     //handling instance action btn
+    //default selecting first card
+    if($("#divinstancescardview li").length > 0)
+        $("#divinstancescardview li").first().find('.flip-toggle').trigger('click');
 
 });
 

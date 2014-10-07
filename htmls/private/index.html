@@ -428,21 +428,7 @@
 		<div id="shortcut" style="margin-left: 102px;margin-top: 90px;">
 			<ul class="orgsList">
 				
-				<!--<li>
-					<a href="#ajax/Dev.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
-				</li>
-				<li>
-					<a href="#ajax/gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
-				</li>
-				<li>
-					<a href="#ajax/invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
-				</li>
-				<li>
-					<a href="#ajax/gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
-				</li>-->
+				
 			</ul>
 		</div>
 		<!-- END SHORTCUT AREA -->
@@ -451,42 +437,24 @@
 			<ul class="" style="width:100%">
 				
 				<li class="collapseActive">
-					<a href="index.html#ajax/Dev.html">WORKZONE</a>
+					<a href="#ajax/Dev.html">WORKZONE</a>
 				</li>
 				<br>
 				<li>
-					<a href="design.html#ajax/Aws-Production.html">DESIGN</a>
+					<a href="#ajax/Aws-Production.html">DESIGN</a>
 				</li>
 				<br>
 				<li>
-					<a href="Tracker.html#ajax/Dashboard.html"><span>TRACK</span></a>
+					<a href="#ajax/Dashboard.html"><span>TRACK</span></a>
 				</li>
 				<br>
 				<li>
-					<a href="#settings.html#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
+					<a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
 				</li>
 			</ul>
 		</div>
 
-		<!--================================================== -->
-
-		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
-		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
-
-		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-		<script>
-			if (!window.jQuery) {
-				document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');
-			}
-		</script>
-
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-		<script>
-			if (!window.jQuery.ui) {
-				document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
-			}
-		</script>-->
+		
 
 		<script src="js/libs/jquery-2.0.2.min.js"></script>
 		<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
@@ -581,6 +549,7 @@
 
          var serviceURL = "/d4dMasters/";
          window.selectedOrgName; 
+         //alert('in');
 
          $.ajax({
 			        type: "get",
@@ -590,7 +559,7 @@
 			        url: "/organizations/getTree",
 			        success: function (data) {
 			            // alert(data.toString());   
-			            console.log(data);
+			            
 			            var $ulOrgList = $('.orgsList').empty();
             			var $workspace = $('#Workspace').empty();
 			            for(var i=0;i<data.length;i++) {
@@ -634,16 +603,12 @@
 
                         					});
 
-    					                	/*if(i==0 && j == 0 && k==0 && l==0 ) {
-                    							$('#firstA').attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'');
-                    							 window.selectedOrgName = data[i].name;
-                    						}*/
-
+    					                	
                   					  
                   					  }
               			  		} 
-			            }
-			          }
+			            	}
+			          	}
 			         // $(function(){
 			          var href = window.location.href;
 			          var indexOfhash = href.lastIndexOf("#");
@@ -672,14 +637,12 @@
                         $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
                         //sconsole.log('$li',$li.length);
                         
-                        $a.trigger('click');
-                        
+                        //$a.trigger('click');
+                       // alert('in click');
+                       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>its in',$a.attr('href'));
 			            window.location.assign('#'+$a.attr('href'));
                          
 			          }
-			     // });
-
-			          	
 			        },
 			        failure: function (data) {
 			            alert(data.toString());
