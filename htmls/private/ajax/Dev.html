@@ -1144,9 +1144,11 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
     // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
 
     //handling instance action btn
-    //default selecting first card
+    //default selecting first card in Instance and Blueprints
     if($("#divinstancescardview li").length > 0)
         $("#divinstancescardview li").first().find('.flip-toggle').trigger('click');
+
+    $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
 });
 
