@@ -558,6 +558,7 @@
 			        async: false,
 			        url: "/organizations/getTree",
 			        success: function (data) {
+			        	console.log('ajax success');
 			            // alert(data.toString());   
 			            
 			            var $ulOrgList = $('.orgsList').empty();
@@ -567,7 +568,7 @@
 			            	if(i==0) {
                                classOrgSelected = 'orgSelected';
 			            	}
-			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-bank"></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
+			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-bookmark-o "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
 				             
               				$li.click(function(e){
                              var $parents = $(this).parents('ul');
@@ -581,10 +582,8 @@
               			  $ulOrgList.append($li);
               			  //<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
-              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().append('<a href="#"><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
-			     				if(i==0 && j==0) {
-			  	   					$liSideBar.find('a').attr('id','firstA'); 
-			     				}
+              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
+              			  	    console.log('here');
 			     				$workspace.append($liSideBar);
 			     				var $projectUl = $('<ul></ul>'); 
                   				$liSideBar.append($projectUl); 
@@ -603,7 +602,18 @@
 
                         					});
 
-    					                	
+                        					console.log('data==>',$liSideBar.data('addToTree'));
+
+                        					if($liSideBar.data('addToTree')) {
+                                              
+    					                	   $liSideBar.prepend($('<a><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').click(function(e){
+                        						e.preventDefault();
+                        						e.stopPropagation();
+                        						return false;
+                        					    }).attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'')).addClass('org').addClass('org'+i);
+
+    					                	    $liSideBar.data('addToTree',false);
+                                           }
                   					  
                   					  }
               			  		} 
@@ -624,24 +634,15 @@
                         window.selectedOrgName = orgName;
                        
                         $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
-                        //sconsole.log('$li',$li.length);
-                        
-                        $a.trigger('click');
                         
 
 			          } else {
-			            $a = $workspace.find('li:first').find('a[data-link=true]'); 
-			            var orgName = $a.parents('.org').data('orgName');
+			            $a = $workspace.find('li').find('a[data-link=true]'); 
+			            var orgName = $($a.get(0)).parents('.org').data('orgName');
                         window.selectedOrgName = orgName;
                        
                         $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
                         //sconsole.log('$li',$li.length);
-                        
-                        //$a.trigger('click');
-                       // alert('in click');
-                       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>its in',$a.attr('href'));
-			            window.location.assign('#'+$a.attr('href'));
-                         
 			          }
 			        },
 			        failure: function (data) {
@@ -660,16 +661,7 @@
          </script>
          <script type="text/javascript">
 
-          $('.orgsOption').click(function(e){
-				var $this = $(this);
-				var target = $this.attr('data-target-link');
-			    var $org = $('.org').hide();
-			    var $a = $org.find('a[href="'+target+'"]');
-			    console.log($a.length);
-			    $a.parents('ul,li').addClass('active open').show();
-			    $a.trigger('click');
-
-			});
+         
           //selecting workzone by default - to be changed to user based.
           $('li[navigation*="Workspace"]').find('a').trigger('click');
 

@@ -298,11 +298,13 @@ html
     width: 130px;
 }
 .cardHeadingTextoverflow{
-    font-weight: bold; 
-    overflow: hidden; 
-    white-space: nowrap; 
-    text-overflow: ellipsis; 
-    width: 30px;
+    display: inline-block;
+    font-weight: bold;
+    margin-top: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 72px;
 }
 .Cardtextoverflow{
     font-size:12px;
@@ -501,6 +503,7 @@ width:0% !important;
     font-size:12px;
     height: 25px;
     overflow: hidden;
+    width:152px;
 }
 .row1 {
         padding: 0px;
