@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
 
-		<title>DevOps</title>
+		<title>Catalyst</title>
 		<meta name="description" content="">
 		<meta name="author" content="">
 
@@ -23,6 +23,7 @@
 		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+
 		<!--<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.dataTables.css"> -->
 
 
@@ -50,6 +51,8 @@
 
 		<!-- GOOGLE FONT -->
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+		<!-- multiselect stylesheet -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">
 	</head>
 	<body class="desktop-detected smart-style-2">
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
@@ -428,21 +431,7 @@
 		<div id="shortcut" style="margin-left: 102px;margin-top: 90px;">
 			<ul class="orgsList">
 				
-				<!--<li>
-					<a href="#ajax/Dev.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
-				</li>
-				<li>
-					<a href="#ajax/gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
-				</li>
-				<li>
-					<a href="#ajax/invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
-				</li>
-				<li>
-					<a href="#ajax/gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
-				</li>-->
+				
 			</ul>
 		</div>
 		<!-- END SHORTCUT AREA -->
@@ -451,42 +440,24 @@
 			<ul class="" style="width:100%">
 				
 				<li class="collapseActive">
-					<a href="index.html#ajax/Dev.html">WORKZONE</a>
+					<a href="#ajax/Dev.html">WORKZONE</a>
 				</li>
 				<br>
 				<li>
-					<a href="design.html#ajax/Aws-Production.html">DESIGN</a>
+					<a href="#ajax/Aws-Production.html">DESIGN</a>
 				</li>
 				<br>
 				<li>
-					<a href="Tracker.html#ajax/Dashboard.html"><span>TRACK</span></a>
+					<a href="#ajax/Dashboard.html"><span>TRACK</span></a>
 				</li>
 				<br>
 				<li>
-					<a href="#settings.html#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
+					<a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
 				</li>
 			</ul>
 		</div>
 
-		<!--================================================== -->
-
-		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
-		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
-
-		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-		<script>
-			if (!window.jQuery) {
-				document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');
-			}
-		</script>
-
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-		<script>
-			if (!window.jQuery.ui) {
-				document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
-			}
-		</script>-->
+		
 
 		<script src="js/libs/jquery-2.0.2.min.js"></script>
 		<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
@@ -547,14 +518,15 @@
 		<script src="js/plugin/smartclick/smartclick.js"></script>
 		<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 		<script type="text/javascript" src="js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
+		<script type="text/javascript" src="js/jquery.multi-select.js"></script>
 		<!--[if IE 7]>
 
 		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
 
 		<![endif]-->
 
-		<!-- Demo purpose only -->
-		<script src="js/demo.js"></script>
+		<!-- Demo purpose only *** Removed as issue fix to avoid user changing theme ***
+		<script src="js/demo.js"></script>-->
 		<script src="/private/js/jquery.dataTables.js"></script>
 		<!-- MAIN APP JS FILE -->
 
@@ -581,6 +553,7 @@
 
          var serviceURL = "/d4dMasters/";
          window.selectedOrgName; 
+         //alert('in');
 
          $.ajax({
 			        type: "get",
@@ -589,8 +562,9 @@
 			        async: false,
 			        url: "/organizations/getTree",
 			        success: function (data) {
+			        	console.log('ajax success');
 			            // alert(data.toString());   
-			            console.log(data);
+			            
 			            var $ulOrgList = $('.orgsList').empty();
             			var $workspace = $('#Workspace').empty();
 			            for(var i=0;i<data.length;i++) {
@@ -612,10 +586,8 @@
               			  $ulOrgList.append($li);
               			  //<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
-              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().append('<a href="#"><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').addClass('org').addClass('org'+i); 
-			     				if(i==0 && j==0) {
-			  	   					$liSideBar.find('a').attr('id','firstA'); 
-			     				}
+              			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
+              			  	    console.log('here');
 			     				$workspace.append($liSideBar);
 			     				var $projectUl = $('<ul></ul>'); 
                   				$liSideBar.append($projectUl); 
@@ -634,16 +606,23 @@
 
                         					});
 
-    					                	/*if(i==0 && j == 0 && k==0 && l==0 ) {
-                    							$('#firstA').attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'');
-                    							 window.selectedOrgName = data[i].name;
-                    						}*/
+                        					console.log('data==>',$liSideBar.data('addToTree'));
 
+                        					if($liSideBar.data('addToTree')) {
+                                              
+    					                	   $liSideBar.prepend($('<a><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').click(function(e){
+                        						e.preventDefault();
+                        						e.stopPropagation();
+                        						return false;
+                        					    }).attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'')).addClass('org').addClass('org'+i);
+
+    					                	    $liSideBar.data('addToTree',false);
+                                           }
                   					  
                   					  }
               			  		} 
-			            }
-			          }
+			            	}
+			          	}
 			         // $(function(){
 			          var href = window.location.href;
 			          var indexOfhash = href.lastIndexOf("#");
@@ -659,27 +638,16 @@
                         window.selectedOrgName = orgName;
                        
                         $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
-                        //sconsole.log('$li',$li.length);
-                        
-                        $a.trigger('click');
                         
 
 			          } else {
-			            $a = $workspace.find('li:first').find('a[data-link=true]'); 
-			            var orgName = $a.parents('.org').data('orgName');
+			            $a = $workspace.find('li').find('a[data-link=true]'); 
+			            var orgName = $($a.get(0)).parents('.org').data('orgName');
                         window.selectedOrgName = orgName;
                        
                         $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
                         //sconsole.log('$li',$li.length);
-                        
-                        $a.trigger('click');
-                        
-			            window.location.assign('#'+$a.attr('href'));
-                         
 			          }
-			     // });
-
-			          	
 			        },
 			        failure: function (data) {
 			            alert(data.toString());
@@ -697,16 +665,7 @@
          </script>
          <script type="text/javascript">
 
-          $('.orgsOption').click(function(e){
-				var $this = $(this);
-				var target = $this.attr('data-target-link');
-			    var $org = $('.org').hide();
-			    var $a = $org.find('a[href="'+target+'"]');
-			    console.log($a.length);
-			    $a.parents('ul,li').addClass('active open').show();
-			    $a.trigger('click');
-
-			});
+         
           //selecting workzone by default - to be changed to user based.
           $('li[navigation*="Workspace"]').find('a').trigger('click');
 

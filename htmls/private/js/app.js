@@ -1221,7 +1221,7 @@ function checkURL() {
 		title = ($('nav a[href="' + url + '"]').attr('title'))
     
 		// change page title from global var
-		document.title = (title || document.title);
+		//document.title = (title || document.title);
 		//console.log("page title: " + document.title);
         //Changed by Anshul
         /*var $a = $('ul li a[href="#' + url + '"]');
@@ -1270,7 +1270,7 @@ function loadURL(url, container) {
 			if (container[0] == $("#content")[0]) {
 				drawBreadCrumb();
 				// update title with breadcrumb...
-				document.title = $(".breadcrumb li:last-child").text();
+				//document.title = $(".breadcrumb li:last-child").text(); //Removed last page visited title. Issue Fix : 7-Oct : Vinod
 				// scroll up
 				$("html, body").animate({
 					scrollTop : 0

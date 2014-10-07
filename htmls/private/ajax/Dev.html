@@ -43,8 +43,9 @@
                                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();pageSetUp();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+
+                                                <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
+                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -53,20 +54,25 @@
                                                             <div class="widget-main" style="min-height:300px"> 
                                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
                                                                     <div class="table-responsive table-div" >
-                                                                        <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
-                                                                        <thead>
-                                                                            <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                                <td>S.No.</td>
-                                                                                <td>Logo</td>
-                                                                                <td>Name</td>
-                                                                                <td>IPAddress</td>
-                                                                                <td>Recipes</td>
-                                                                                <td>Status</td>
-                                                                                <td>Log Info</td>
-                                                                                <td class="widthAdjustment">Action</td>
-                                                                            </tr>
-                                                                            </thead>
-                                                                            <tbody>
+
+                                                                            <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                                                <thead>
+                                                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                                                        <td>S.No.</td>
+                                                                                        <td>Logo</td>
+                                                                                        <td>Name</td>
+                                                                                        <td>IPAddress</td>
+                                                                                        <td>Recipes</td>
+                                                                                        <td>Status</td>
+                                                                                        <td>Log Info</td>
+                                                                                        <td>Chef Run</td>
+                                                                                        <td class="widthAdjustment">Action</td>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    
+                                                                                   
+                                                                                </tbody>
                                                                                 
                                                                                
                                                                             </tbody>
@@ -343,8 +349,8 @@
       </div>
       <div class="modal-footer">
 
-        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save Version</button>
-        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -422,6 +428,7 @@
 
 //setting the workzone link to current page
 //alert(window.location.href);
+//alert('what is this');
 var wzlink = window.location.href.split('#')[1];
 //alert(wzlink);
 $('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
@@ -761,9 +768,9 @@ var startStopInstanceHandler = function(e) {
 
 var instanceUpdateRunlistHandler = function(e) {
     var $this = $(this);
-    var instanceId = $this.parents('.domain-roles-caption').attr('data-instanceId');
+    var instanceId = $this.attr('data-instanceId');
     var chefServerId = $this.attr('data-chefServerId');
-
+    console.log(instanceId);
     $chefRunModalContainer = $('#chefRunModalContainer');
     $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
     $chefRunModalContainer.modal('show');
@@ -851,6 +858,7 @@ var instanceLogsHandler = function(e) {
 
 
 function addInstanceToDOM(data) {
+
     var $instancesList = $('.instancesList');
     var $deploymentNodeList = $('.deploymentNodeList');
 
@@ -930,7 +938,7 @@ function addInstanceToDOM(data) {
 
 
 
-    $divComponentListImage = $('<a class="btn chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId);
+    $divComponentListImage = $('<a class="btn chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
 
     $divComponentListContainer.append($divComponentListImage);
 
@@ -946,10 +954,13 @@ function addInstanceToDOM(data) {
     //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
     $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
     var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
-    var $viewAllA = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist").data('runlist', data.runlist.join());
-
+   
+    var $viewAllA;
     if (data.runlist.length) {
-        $viewAllA.click(function() {
+        $viewAllA  = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist").data('runlist', data.runlist.join());
+        $viewAllA.click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var $modal = $('#modalTableRunlist');
             var $modalBody = $('#modalTableRunlist .modal-body').empty();
             var runlist = $(this).data('runlist').split(',');
@@ -966,7 +977,10 @@ function addInstanceToDOM(data) {
                 $modalBody.append($divComponentItem);
             }
             $modal.modal('show');
+            return false;
         });
+    } else {
+       $viewAllA  = $('<span></span>').append("View All Runlist");
     }
     var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
     $tableRunlistDiv.append($divComponentItem);
@@ -1067,6 +1081,8 @@ function addInstanceToDOM(data) {
     $instancesList.append($li);
 
     //For Table View
+    $divComponentListImage
+    $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');
     $rowContainter.append('<td>' + $('<div></div>').append($divActionBtnContainer.clone()).html() + '</td>');
     $("#tableinstanceview").append($rowContainter);
 
@@ -1087,8 +1103,8 @@ function addInstanceToDOM(data) {
     $li.find('.instanceActionBtn').click(startStopInstanceHandler);
 
 
-    $rowContainter.find('.instanceActionBtnUpdateRunlist').click(instanceUpdateRunlistHandler);
-    $li.find('.instanceActionBtnUpdateRunlist,.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler);
+    $rowContainter.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler);
+    $li.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler);
 
 
     $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
@@ -1107,12 +1123,11 @@ function addInstanceToDOM(data) {
 
 
 $.get('/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
-
-
+    
     var $instancesList = $('.instancesList').empty();
     var $deploymentNodeList = $('.deploymentNodeList').empty();
 
-
+    //alert(data.length);
 
     for (var i = 0; i < data.length; i++) {
 
@@ -1120,12 +1135,34 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
 
     }
     //for table view
-    if(!$.fn.dataTable.isDataTable('#tableinstanceview')){
-       var tableinstanceview = $('#tableinstanceview').dataTable({
-         "pagingType": "full_numbers"
+    if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
+        var tableinstanceview = $('#tableinstanceview').dataTable({
+            "pagingType": "full_numbers",
+            "aoColumns": [null,
+                {
+                    "bSortable": false
+                },
+                null,
+                null,
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                }
+            ]
         });
     }
-    /*$('#tableinstanceview tbody').on('click','tr',function(){
+    $('#tableinstanceview tbody').on('click','tr',function(){
         if($(this).hasClass('rowcustomselected')){
             $(this).removeClass('rowcustomselected');
         }
@@ -1134,7 +1171,7 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
             $(this).addClass('rowcustomselected');
         }
 
-    });*/
+    });
 
     console.log('loading table');
     $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
@@ -1144,6 +1181,11 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/instances', functi
     // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
 
     //handling instance action btn
+    //default selecting first card in Instance and Blueprints
+    if($("#divinstancescardview li").length > 0)
+        $("#divinstancescardview li").first().find('.flip-toggle').trigger('click');
+
+    $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
 });
 
@@ -1315,11 +1357,23 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
 });
 
 $('.actionControlPanel').click(function(e) {
-    var $selectedCard = $('.role-Selectedcard');
-    if ($selectedCard.length) {
-        var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
-        if (instanceId) {
-            window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+   
+    if ($('#divinstancescardview').is(':visible')) {
+
+        var $selectedCard = $('.role-Selectedcard');
+        if ($selectedCard.length) {
+            var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
+            if (instanceId) {
+                window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+            }
+        }
+    } else {
+        var $selectedCard = $('.rowcustomselected');
+        if ($selectedCard.length) {
+            var instanceId = $selectedCard.attr('data-instanceId');
+            if (instanceId) {
+                window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+            }
         }
     }
 }); 
