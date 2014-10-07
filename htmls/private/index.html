@@ -621,13 +621,13 @@
                   				$liSideBar.append($projectUl); 
                   				// <img src="img/demo/Project.png" alt="Project" style="padding-right:5px;">
                   				for(var k=0;k<data[i].businessGroups[j].projects.length;k++) {  
-                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
+                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent Projtextoverflow" title="'+data[i].businessGroups[j].projects[k]+'" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
                   					$projectUl.append(liProject);
                   					  var $envUl = $('<ul></ul>');
                     				 liProject.append($envUl); 
                     				 // <img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">
                   					  for(var l=0;l<data[i].environments.length;l++) {
-                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true"><i class="fa fa-fw fa-1x fa-desktop"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
                     						$envUl.append($liEnv);
                         					$liEnv.click(function(e){
 	                        					window.selectedOrgName = $(this).attr('data-OrgName');

@@ -26,7 +26,7 @@
 	};
 
 	var init = function(plot) {
-
+        
 		var tipPosition = {x: 0, y: 0};
 		var opts = plot.getOptions();
 		

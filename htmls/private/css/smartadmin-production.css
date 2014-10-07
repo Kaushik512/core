@@ -886,6 +886,7 @@ body.nooverflow {
     opacity: 0;
 }
 */.smart-form1 .input-file .button {
+    
     position: absolute;
     top: 4px;
     right: 4px;
@@ -935,6 +936,21 @@ body.nooverflow {
     border-bottom: 4px solid #404040;
 }
 .smart-form1 .select-multiple select {
+    height: auto;
+}
+/*Arabinda added for textarea in smartform-1*/
+.smart-form1 .textarea textarea {
+    height: auto;
+    resize: none;
+}
+.smart-form1 .textarea-resizable textarea {
+    resize: vertical;
+}
+.smart-form1 .textarea-expandable textarea {
+    height: 31px;
+}
+/*Arabinda ended for textarea in smartform-1*/
+.smart-form1 .textarea-expandable textarea:focus {
     height: auto;
 }
 .smart-form .textarea textarea {
@@ -5540,11 +5556,11 @@ div.dataTables_paginate .pagination {
 .dataTables_scrollBody {
     -webkit-overflow-scrolling: touch;
 }
-.dataTables_wrapper .bottom, .dataTables_wrapper .top {
+/*.dataTables_wrapper .bottom, .dataTables_wrapper .top {
     background-color: #f5f5f5;
     border: 1px solid #CCC;
     padding: 15px;
-}
+}*/
 .top .dataTables_info {
     float: none;
 }
@@ -18338,7 +18354,8 @@ body.nooverflow {
     -webkit-transition: color .3s;
 }
 .smart-form1 .button {
-    background-color: #3276B1;
+    background-color: #40baf1;
+    /*background-color: #3276B1;*/
     opacity: .8;
     transition: opacity .2s;
     -webkit-transition: opacity .2s;
@@ -22398,11 +22415,11 @@ div.dataTables_paginate .pagination {
 .dataTables_scrollBody {
     -webkit-overflow-scrolling: touch;
 }
-.dataTables_wrapper .bottom, .dataTables_wrapper .top {
+/*.dataTables_wrapper .bottom, .dataTables_wrapper .top {
     background-color: #f5f5f5;
     border: 1px solid #CCC;
     padding: 15px;
-}
+}*/
 .top .dataTables_info {
     float: none;
 }

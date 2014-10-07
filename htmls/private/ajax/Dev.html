@@ -44,7 +44,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-1" href="#collapseOne-1">Instance</a></h4>
-                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();pageSetUp();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                                 <div class="panel-body">
@@ -53,25 +53,25 @@
                                                             <div class="widget-main" style="min-height:300px"> 
                                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
                                                                     <div class="table-responsive table-div" >
-                                                                            <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
-                                                                                <thead>
-                                                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                                        <td>S.No.</td>
-                                                                                        <td>Logo</td>
-                                                                                        <td>Name</td>
-                                                                                        <td>IPAddress</td>
-                                                                                        <td>Recipes</td>
-                                                                                        <td>Status</td>
-                                                                                        <td>Log Info</td>
-                                                                                        <td class="widthAdjustment">Action</td>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    
-                                                                                   
-                                                                                </tbody>
+                                                                        <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                                        <thead>
+                                                                            <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                                                <td>S.No.</td>
+                                                                                <td>Logo</td>
+                                                                                <td>Name</td>
+                                                                                <td>IPAddress</td>
+                                                                                <td>Recipes</td>
+                                                                                <td>Status</td>
+                                                                                <td>Log Info</td>
+                                                                                <td class="widthAdjustment">Action</td>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
                                                                                 
-                                                                            </table>
+                                                                               
+                                                                            </tbody>
+                                                                            
+                                                                        </table>
                                                                     </div>
                                                                </div>
                                                             </div> 
@@ -106,12 +106,12 @@
 
 
                         </div>
-                        <div class="row" style="margin-top:20px;position:static">
+                        <div class="row">
                             <div class="col-md-12">
-                                <div class="clearfix form-actions" style="text-align:center">
+                                <div class="clearfix form-actions" style="text-align:center;">
                                     <div class="btn-group">
                                         
-                                        <button class="btn pull-left btn-primary actionControlPanel" style="margin-left:5px">
+                                        <button class="btn pull-left btn-primary actionControlPanel">
                                             <i class="fa fa-gears"></i>
                                             Control Panel
                                         </button>
@@ -342,7 +342,9 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
+
+        <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save Version</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
       </div>
     </div>
   </div>
@@ -1004,7 +1006,7 @@ function addInstanceToDOM(data) {
     //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
     var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
 
-    var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-original-title', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip'));
+    var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
     $divActionBtnContainer.append($divActionStartContainer);
     if (!data.chef) {
         data.chef = {};

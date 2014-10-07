@@ -1372,12 +1372,12 @@ function pageSetUp() {
 		$("[rel=tooltip]").tooltip();
 	
 		// activate popovers
-		$("[rel=popover]").popover();
+		/*$("[rel=popover]").popover();
 	
 		// activate popovers with hover states
 		$("[rel=popover-hover]").popover({
 			trigger : "hover"
-		});
+		});*/
 	
 		// activate inline charts
 		runAllCharts();
