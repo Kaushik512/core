@@ -118,7 +118,9 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             });
 
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
-
+                            editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                            editButton.removeClass('btn-xs');
+                            editButton.addClass('btn-sg');
                             //importbutton will be present for config management screen.
                             var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
                            // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
@@ -134,6 +136,9 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             var deletebutton = $('.rowtemplate').find("[title='Remove']");
                             if (deletebutton) {
                                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\",this);');
+                                deletebutton.removeClass('btn-xs');
+                                deletebutton.addClass('btn-sg');
+                                deletebutton.addClass('tableactionbutton');
                             }
                         }
                         setOrgname = false;
