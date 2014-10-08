@@ -127,6 +127,9 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             //&& tdorgname.length > 0
                             if(importbutton.length > 0 ){
                                 importbutton.attr("href", "#ajax/chefSync.html?" + tv);
+                                importbutton.removeClass('btn-xs');
+                                importbutton.addClass('btn-sg');
+                                importbutton.addClass('tableactionbutton');
                             }
 
 
