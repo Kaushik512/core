@@ -1,3 +1,6 @@
+.paddingEnvTree{
+    margin-right: 5px !important;
+}
 .chefClientRunlistImage{
     margin-top: -7px !important;
 }
@@ -86,6 +89,7 @@ margin-top:15px;
 .container {
     -webkit-perspective: 1000;
     -moz-perspective: 1000;
+    -ms-perspective:1000;
     perspective: 1000;
     /*border: 1px solid #ccc;*/
     padding-left: 0px !important;
@@ -94,6 +98,7 @@ margin-top:15px;
 .flip-toggle.flip .card {
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
     transform: rotateY(180deg);
     filter: FlipH;
     -ms-filter:"FlipH";
@@ -111,6 +116,8 @@ margin-top:15px;
     -webkit-transform-style: preserve-3d;
     -moz-transition: 0.6s;
     -moz-transform-style: preserve-3d;
+    -ms-transition: 0.6s;
+    /*-ms-transform-style: preserve-3d;*/
     transition: 0.6s;
     transform-style: preserve-3d;
     position: relative;
@@ -120,6 +127,7 @@ margin-top:15px;
 .front, .back {
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
     backface-visibility: hidden;
     position: absolute;
     top: 0;
@@ -129,9 +137,9 @@ margin-top:15px;
 .back {
     
     /*border-radius: 11px;*/
-    
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
     transform: rotateY(180deg);
 }
 .cardBackRunlistContaner {
@@ -295,7 +303,23 @@ html
     overflow: hidden; 
     white-space: nowrap; 
     text-overflow: ellipsis; 
-    width: 130px;
+    width: 152px;
+}
+.Projtextoverflow{
+    font-weight: bold; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    width: 142px;
+    padding-left: 5px !important;
+}
+.Envtextoverflow{
+    font-weight: bold; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    /*width: 132px;
+    padding-left: 5px !important;*/
 }
 .cardHeadingTextoverflow{
     display: inline-block;

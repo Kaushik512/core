@@ -13,13 +13,13 @@
                             <div class="domain-roles">
                               <div class="domain-roles-caption">
                                 <div class="domain-roles-heading">
-                                  <span contenteditable="false" class="domain-roles-icon">
+                                  <!-- <span contenteditable="false" class="domain-roles-icon">
                                     <img style="height:20px;width:20px;margin-right:5px;" src="img/templateicons/chef_import.png">chef import
                                   </span>
                                   <span style="float: right;">
                                     <a data-instanceid="53fed8535d3753774753ecb1" href="javascript:void(0)" class="moreInfo" title="More Info">
                                     </a>
-                                  </span>
+                                  </span> -->
                                 </div>
                                 <hr>
                                 <div class="componentlistContainer started">
@@ -29,8 +29,8 @@
                                       </a>
                                     </span>
                                   </div>-->
-                                  <a class="btn instance-bootstrap-list-image instanceActionBtnUpdateRunlist" style="padding-top:36px;">
-                                    <img alt="Chefimport" src="img/galleryIcons/Chefimport.png">
+                                  <a class="btn instance-bootstrap-list-image instanceActionBtnUpdateRunlist" style="padding-top:36px;" >
+                                    <img rel="tooltip" data-placement="top" data-original-title="ChefClientRun" alt="Chefimport" src="img/galleryIcons/Chefimport.png">
                                   </a>
                                 </div>
                                 <div>
@@ -44,15 +44,15 @@
                                 <hr>
                                 <div style="width:140px !important;" class="instanceActionBtnCtr" data-instanceid="53fed8535d3753774753ecb1">
                                   <div class="instance-bootstrap-ActionStart">
-                                    <a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="start">
+                                    <a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Start">
                                     </a>
                                   </div>
                                   <div class="instance-bootstrap-ActionRestart">
-                                    <a href="javascript:void(0)" class="actionbuttonRestart">
+                                    <a href="javascript:void(0)" class="actionbuttonRestart" rel="tooltip" data-placement="top" data-original-title="Restart">
                                     </a>
                                   </div>
                                   <div class="instance-bootstrap-ActionShutdown">
-                                    <a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop">
+                                    <a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Shutdown">
                                     </a>
                                   </div>
                                 </div>
@@ -280,6 +280,7 @@
                                 </tr>
                                 
                             </tbody>
+                            <a class="btn btn-primary" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
                         </table>
 
                     </div>
@@ -289,6 +290,63 @@
                 <!-- end widget div -->
 
             </div> <!-- Tab of Action ends here -->
+            <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
+                  </div>
+                  <div class="modal-body">
+                     <div novalidate="novalidate" class="smart-form1" id="checkout-form" action="">
+
+                        <div style="margin:0px;" class="row ">
+                                                                            
+                            <section class="col col-12">
+                                <label for="">Name of the Service<span style="color:red">*</span>
+                                </label>
+                                <label class="input"> 
+                                    <input type="text">
+                                </label>                                          
+                            </section>
+                            <section class="col col-12">
+                                <label for="category">Type of the Service<span style="color:red">*</span>
+                                </label>
+                                <label class="input"> 
+                                    <input type="text">
+                                </label>
+                                
+                            </section>
+                            <section class="col col-12">
+                                <label for="">Choose Logo</label>
+                                <label class="input input-file" for="file">
+                                    <!-- <div value="1" class="imgdiv"></div> -->
+                                    <div class="button">
+                                      <input type="file">Browse</div>
+                                      <input type="text" readonly="">
+                                </label>
+                            </section>
+                            <section class="col col-12">
+                              <label for="">Command</label>
+                              <label class="textarea textarea-expandable">             
+                                <textarea class="custom-scroll" rows="3"></textarea> 
+                              </label>
+                              <div class="note">
+                                <strong>Note:</strong> expands on focus.
+                              </div>
+                            </section>
+                            
+                                                      
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Save Deployment Blueprint</button>
+                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <!-- Configure tab contents starts here -->
             <div class="tab-pane" id="l3" style="height:444px;overflow-y: auto;">
@@ -642,7 +700,22 @@ var urlParams ={};
 $.get('/instances/'+urlParams.id,function(data){
    console.log(data);
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId);
-   $domainRolesCaption.find('.domain-roles-icon').empty().append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
+   var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
+
+   var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+
+    var $spanheadingMiddleCP = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
+    var $spanheadingRightCP = $('<span></span>').css({
+        'float': 'right'
+    }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
+
+    $divHeadingCP.append($spanheadingLeftCP);
+    $divHeadingCP.append($spanheadingMiddleCP);
+    $divHeadingCP.append($spanheadingRightCP);
+    //$domainRolesCaption.append($divHeadingCP);
+
+
+   // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
   $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
   $domainRolesCaption.find('.instance-state').html(data.instanceState);
   if(data.instanceState == 'running'){
@@ -658,6 +731,7 @@ $.get('/instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
+  pageSetUp();
 
   var timeout;
   

@@ -23,6 +23,7 @@
 		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+
 		<!--<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.dataTables.css"> -->
 
 
@@ -50,6 +51,8 @@
 
 		<!-- GOOGLE FONT -->
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+		<!-- multiselect stylesheet -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">
 	</head>
 	<body class="desktop-detected smart-style-2">
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
@@ -515,6 +518,7 @@
 		<script src="js/plugin/smartclick/smartclick.js"></script>
 		<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 		<script type="text/javascript" src="js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
+		<script type="text/javascript" src="js/jquery.multi-select.js"></script>
 		<!--[if IE 7]>
 
 		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
@@ -589,13 +593,13 @@
                   				$liSideBar.append($projectUl); 
                   				// <img src="img/demo/Project.png" alt="Project" style="padding-right:5px;">
                   				for(var k=0;k<data[i].businessGroups[j].projects.length;k++) {  
-                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
+                  					var liProject = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent Projtextoverflow" title="'+data[i].businessGroups[j].projects[k]+'" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
                   					$projectUl.append(liProject);
                   					  var $envUl = $('<ul></ul>');
                     				 liProject.append($envUl); 
                     				 // <img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">
                   					  for(var l=0;l<data[i].environments.length;l++) {
-                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true"><i class="fa fa-fw fa-1x fa-desktop"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+                  					  	       var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
                     						$envUl.append($liEnv);
                         					$liEnv.click(function(e){
 	                        					window.selectedOrgName = $(this).attr('data-OrgName');
