@@ -851,9 +851,11 @@ function enableUniqueCheckingForInputs(id){
 }
 
 function checkusernameexistsinldap(inputID){
+    
     if($('#' + inputID).length > 0){
         var inp = $('#' + inputID);
         inp.blur(function(){
+            alert('in');
             var uni = $('#unique_' + inp.attr("id")); //check if the error span is loaded.
             if(uni.length > 0)
                 if(uni.html().indexOf('LDAP') > 0) //check if the message is from LDAP check
@@ -863,7 +865,16 @@ function checkusernameexistsinldap(inputID){
                   inp.closest('section').find('label').first().append('<span id="unique_' + inp.attr("id") + '" style="color:red"></span>');
                   uni = $('#unique_' + $(this).attr("id"));
             }
-            $.ajax({
+            $.get('/auth/userexists/' + inp.val(),function(data){
+                    if(data == "false"){
+                        uni.css("color","red");
+                        uni.html('selected is NOT in LDAP.');
+                        $(this).focus(); 
+                    }
+            });
+
+
+            /*$.ajax({
             type: "get",
             dataType: "ltext",
 
@@ -874,6 +885,7 @@ function checkusernameexistsinldap(inputID){
                 // debugger;
                 //d4ddata = JSON.parse(data);
                //alert(data);
+               alert(uni.html());
                if(data == "false"){
                 uni.css("color","red");
                 uni.html('selected is NOT in LDAP.');
@@ -882,9 +894,9 @@ function checkusernameexistsinldap(inputID){
             },
             failure: function (data) {
                 // debugger;
-                //  alert(data.toString());
+                  alert(data.toString());
             }
-            });
+            });*/
         });
     }
 }
