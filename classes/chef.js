@@ -264,7 +264,7 @@ var Chef = function(settings) {
         argList.push(credentialArg);
 
         if (params.instanceOS == 'windows') {
-            argList.push('-p 5985');
+            argList.push('-p5985');
         }
         argList = argList.concat(['-r' + runlist.join(), '-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
 
@@ -319,10 +319,7 @@ var Chef = function(settings) {
                     callbackOnStdErr(data);
                 }
             }
-            if ((!(params.runlist) || !params.runlist.length)) {
-                params.runlist = [' '];
-
-            }
+            
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
 
             var proc = new Process('knife', ['winrm', options.host, 'chef-client -o "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], options);
