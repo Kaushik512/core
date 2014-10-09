@@ -1344,11 +1344,16 @@ function drawBreadCrumb1() {
     if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
         $('#navWorkspace').css("display", '');
     }
-    if (window.location.href.indexOf("Settings") > 0) {
+    if (window.location.href.indexOf("Settings") > 0 && window.location.href.indexOf("Tracker") < 0) {
         $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
             $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
         });
 
+    }
+    if (window.location.href.indexOf("Settings") > 0 && window.location.href.indexOf("Tracker") > 0) {
+        $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
+            $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+        });
     }
     //force setting the breadcrumb visibility
     //if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
