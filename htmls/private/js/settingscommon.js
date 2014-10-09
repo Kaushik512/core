@@ -118,13 +118,18 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             });
 
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
-
+                            editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                            editButton.removeClass('btn-xs');
+                            editButton.addClass('btn-sg');
                             //importbutton will be present for config management screen.
                             var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
                            // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
                             //&& tdorgname.length > 0
                             if(importbutton.length > 0 ){
                                 importbutton.attr("href", "#ajax/chefSync.html?" + tv);
+                                importbutton.removeClass('btn-xs');
+                                importbutton.addClass('btn-sg');
+                                importbutton.addClass('tableactionbutton');
                             }
 
 
@@ -134,6 +139,9 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             var deletebutton = $('.rowtemplate').find("[title='Remove']");
                             if (deletebutton) {
                                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\",this);');
+                                deletebutton.removeClass('btn-xs');
+                                deletebutton.addClass('btn-sg');
+                                deletebutton.addClass('tableactionbutton');
                             }
                         }
                         setOrgname = false;
@@ -441,7 +449,7 @@ function saveform(formID){
           }*/
       });
     });
-    alert(k + ":" + v.toString());
+    //alert(k + ":" + v.toString());
     if(k != ''){
         //data1.append(k,"[" + v.toString() + "]");
         data1.append(k,v);
@@ -851,9 +859,11 @@ function enableUniqueCheckingForInputs(id){
 }
 
 function checkusernameexistsinldap(inputID){
+    
     if($('#' + inputID).length > 0){
         var inp = $('#' + inputID);
         inp.blur(function(){
+            alert('in');
             var uni = $('#unique_' + inp.attr("id")); //check if the error span is loaded.
             if(uni.length > 0)
                 if(uni.html().indexOf('LDAP') > 0) //check if the message is from LDAP check
@@ -863,7 +873,16 @@ function checkusernameexistsinldap(inputID){
                   inp.closest('section').find('label').first().append('<span id="unique_' + inp.attr("id") + '" style="color:red"></span>');
                   uni = $('#unique_' + $(this).attr("id"));
             }
-            $.ajax({
+            $.get('/auth/userexists/' + inp.val(),function(data){
+                    if(data == "false"){
+                        uni.css("color","red");
+                        uni.html('selected is NOT in LDAP.');
+                        $(this).focus(); 
+                    }
+            });
+
+
+            /*$.ajax({
             type: "get",
             dataType: "ltext",
 
@@ -874,6 +893,7 @@ function checkusernameexistsinldap(inputID){
                 // debugger;
                 //d4ddata = JSON.parse(data);
                //alert(data);
+               alert(uni.html());
                if(data == "false"){
                 uni.css("color","red");
                 uni.html('selected is NOT in LDAP.');
@@ -882,9 +902,9 @@ function checkusernameexistsinldap(inputID){
             },
             failure: function (data) {
                 // debugger;
-                //  alert(data.toString());
+                  alert(data.toString());
             }
-            });
+            });*/
         });
     }
 }
