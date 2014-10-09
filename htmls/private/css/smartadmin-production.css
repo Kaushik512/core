@@ -28453,9 +28453,11 @@ aside {
     margin-left: 9px;
 }
 #logo img {
-    width: 110px;
+    /*width: 110px;*/
+    width: 170px;
     height: auto;
-    padding-left: 3px;
+    /*padding-left: 3px;*/
+    padding-left: 0px;
 }
 #logo-group>span .badge {
     position: absolute;

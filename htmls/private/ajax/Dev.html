@@ -924,7 +924,7 @@ function addInstanceToDOM(data) {
             }
         }*/
     //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'View All Runlist').addClass('instance-bootstrap-list-faimage'));
+    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'bottom').attr('data-original-title', 'View All Runlist').addClass('instance-bootstrap-list-faimage'));
 
     $divComponentItem.click(function(e) {
         $(this).parents('.flip-toggle').toggleClass('flip');
