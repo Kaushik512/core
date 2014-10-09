@@ -48,6 +48,10 @@
                                                 <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                             </div>
                                             <div id="collapseOne-1" class="panel-collapse collapse in">
+                                            <!-- <div id="myCarousel-2" class="carousel slide">
+                                              <div class="carousel-inner"> -->
+                                                <!-- Slide 1 -->
+                                               <!-- <div class="item active"> -->
                                                 <div class="panel-body">
                                                     <div class="widget-box" id="divinstancestableview">
                                                         <div class="widget-body">
@@ -98,7 +102,30 @@
                                                     </ul>
 
                                                 </div>
-                                            </div>
+                                               <!-- </div> -->
+                                               <!-- <div class="item">
+                                                2nd Carousel Coming...
+                                                <br>
+                                                2nd Carousel Coming...
+                                                <br>
+                                                2nd Carousel Coming...
+                                                <br>
+                                                2nd Carousel Coming...
+                                               </div>
+                                               <div class="item">
+                                                3rd Carousel Coming...
+                                                <br>
+                                                3rd Carousel Coming...
+                                                <br>
+                                                3rd Carousel Coming...
+                                                <br>
+                                                3rd Carousel Coming...
+                                               </div> -->
+                                              </div>
+                                              <!-- <a class="left carousel-control" href="#myCarousel-2" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a>
+                                              <a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a> -->
+                                            <!-- </div>
+                                            </div> -->
                                         </div>
 
                                         
@@ -876,7 +903,7 @@ function addInstanceToDOM(data) {
     var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
 
-    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/Small-Icon/' + data.blueprintData.templateId + '.png" style="margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
 
     var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRight = $('<span></span>').css({
@@ -924,7 +951,7 @@ function addInstanceToDOM(data) {
             }
         }*/
     //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'bottom').attr('data-original-title', 'View All Runlist').addClass('instance-bootstrap-list-faimage'));
+    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'ViewAllRunlist').addClass('instance-bootstrap-list-faimage'));
 
     $divComponentItem.click(function(e) {
         $(this).parents('.flip-toggle').toggleClass('flip');
@@ -947,7 +974,7 @@ function addInstanceToDOM(data) {
     var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
 
     $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
-    $rowContainter.append('<td><img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:27px;width:54px;"/></td>');
+    $rowContainter.append('<td><img src="img/templateicons/Small-Icon/' + data.blueprintData.templateId + '.png" /></td>');
 
 
     $rowContainter.append('<td>' + data.blueprintData.blueprintName + '</td>');
