@@ -20,11 +20,17 @@ var InstanceSchema = new Schema({
         memory: {
             total: String,
             free: String,
-        }
+        },
+        os:String,
     },
     chef: {
         serverId: String,
         chefNodeName: String
+    },
+    credentials : {
+        username:String,
+        password:String,
+        pemFileLocation :String, 
     },
     blueprintData: {
         blueprintId: String,

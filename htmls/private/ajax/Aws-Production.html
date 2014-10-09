@@ -761,7 +761,7 @@
 
    <div class="col-sm-2 col-lg-2 col-md-2">
 
-                                                                            <div class="productdiv2" data-templateId="desktopProvisoning1" data-templateComponent="java,j2ee,eclipse,TFS 2013,Weblogic, Oracle Database" data-templateName="Build" data-templateType="desktopProvisoning">
+                                                                            <div class="productdiv2" data-templateId="desktopProvisioning1" data-templateComponent="java,j2ee,eclipse,TFS 2013,Weblogic, Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning">
                                                                                 <img src="img/templateicons/desktopProvisioning1.png"></img>
                                                                                 
 
@@ -771,7 +771,7 @@
 
                                                                          <div class="col-sm-2 col-lg-2 col-md-2">
 
-                                                                            <div class="productdiv2" data-templateId="desktopProvisoning2" data-templateComponent="Visual Studio,TFS 2013 Explorer,IIS,Oracle Database" data-templateName="Build" data-templateType="desktopProvisoning">
+                                                                            <div class="productdiv2" data-templateId="desktopProvisioning2" data-templateComponent="Visual Studio,TFS 2013 Explorer,IIS,Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning">
                                                                                 <img src="img/templateicons/desktopProvisioning2.png"></img>
                                                                                 
 
@@ -781,7 +781,7 @@
 
                                                                 <div class="col-sm-2 col-lg-2 col-md-2">
 
-                                                                            <div class="productdiv2" data-templateId="desktopProvisoning3" data-templateComponent="Toad,TFS 2013,Oracle Database" data-templateName="Build" data-templateType="desktopProvisoning">
+                                                                            <div class="productdiv2" data-templateId="desktopProvisioning3" data-templateComponent="Toad,TFS 2013,Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning">
                                                                                 <img src="img/templateicons/desktopProvisioning3.png"></img>
                                                                                 
 
@@ -830,12 +830,13 @@
                                 <label for="">Choose Operating System  <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
-                                    <select>
-                                        <option value="0">Cent OS</option>
+                                    <select id="instanceOS">
+                                        <option value="linux">Cent OS</option>
+                                        <option value="windows">windows</option>
                                     </select>
                                 </label>                                          
                             </section>
-                            <section class="col col-6">
+                            <section class="col col-6 securityGroupSection">
                                 <label for="category">Choose Security Group <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
@@ -850,7 +851,7 @@
                                 </label>
                                 </label>
                             </section>
-                            <section class="col col-6">
+                            <section class="col col-6 instanceSizeSection" >
                                 <label for="category">Choose Instance Size <span style="color:red">*</span>
                                 </label>
                                 <label class="select"> 
@@ -862,6 +863,14 @@
                                             <option value="m1.large">m1.large</option>
                                             <option value="m1.xlarge">m1.xlarge</option>
                                     </select>
+                                </label> 
+                                
+                            </section>
+                            <section class="col col-6 desktopProvisioningSection" >
+                                <label for="category">Import Node <span style="color:red"><input type="checkbox" id="desktopProvisioningImportNode" /></span>
+                                </label>
+                                <label class="select"> 
+                                    
                                 </label> 
                                 
                             </section>
@@ -1065,9 +1074,18 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
               alert('please choose a template');
               return false;
             }
-            if($selectedItem.attr('data-templateType') == 'desktopProvisoning') {
-                wizard.show(4);
-                return false;
+            if($selectedItem.attr('data-templateType') == 'desktopProvisioning') {
+                
+                $('.instanceSizeSection').hide();    
+                $('.securityGroupSection').hide();    
+                $('.desktopProvisioningSection').show();    
+                
+                //wizard.data('bootstrapWizard').show(3);
+                //return false;
+            } else {
+                $('.instanceSizeSection').show();    
+                $('.securityGroupSection').show();    
+                $('.desktopProvisioningSection').hide(); 
             }
            
 
@@ -1097,6 +1115,9 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.runlist = $('#cookbookSelect').val();
             reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
             reqBody.instanceType = $('.instanceType').val();
+            reqBody.instanceOS = $('#instanceOS').val();
+            reqBody.importInstance = $('#desktopProvisioningImportNode').is(':checked');
+
             console.log(reqBody);
 
 

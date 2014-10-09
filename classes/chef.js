@@ -116,7 +116,7 @@ var Chef = function(settings) {
         });
     };
 
-    this.getRolesList = function(callback){
+    this.getRolesList = function(callback) {
 
         initializeChefClient(function(err, chefClient) {
             if (err) {
@@ -244,9 +244,34 @@ var Chef = function(settings) {
             params.runlist = [];
 
         }
-        var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
+        var argList = ['bootstrap'];
 
-        var proc = new Process('knife', ['bootstrap', params.instanceIp, '-i' + params.pemFilePath, '-r' + runlist.join(), '-x' + params.instanceUserName, '-N' + params.nodeName, '-E' + params.environment], options);
+        if (params.instanceOS == 'windows') {
+
+            argList.push('windows');
+            argList.push('winrm');
+        }
+        argList.push(params.instanceIp);
+
+        var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
+        var credentialArg;
+        if (params.pemFilePath) {
+            credentialArg = '-i' + params.pemFilePath;
+
+        } else {
+            credentialArg = '-P' + params.instancePassword;
+        }
+        argList.push(credentialArg);
+
+        if(params.instanceOS == 'windows') {
+            argList.push('-p 5985');
+        }
+        argList = argList.concat(['-r' + runlist.join(), '-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
+
+        console.log('bootstrap arglist ==>',argList);
+
+
+        var proc = new Process('knife', argList, options);
         proc.start();
     };
 
