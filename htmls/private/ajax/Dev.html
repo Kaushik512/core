@@ -335,7 +335,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Blueprint Launch Result</h4>
+        <h4 class="modal-title" id="myModalLabel">Launching Blueprint</h4>
       </div>
       <div class="modal-body">
         ...
@@ -1000,7 +1000,7 @@ function addInstanceToDOM(data) {
             }
         }*/
     //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'View All Runlist').addClass('instance-bootstrap-list-faimage'));
+    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'bottom').attr('data-original-title', 'View All Runlist').addClass('instance-bootstrap-list-faimage'));
 
     $divComponentItem.click(function(e) {
         $(this).parents('.flip-toggle').toggleClass('flip');
@@ -1318,6 +1318,7 @@ $('.launchBtn').click(function(e) {
     }
     var $launchResultContainer = $('#launchResultContainer');
     $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    $launchResultContainer.find('.modal-title').html('Launching Blueprint');
     $launchResultContainer.modal('show');
     for (var i = 0; i < $selectedItems.length; i++) {
         var projectId = $($selectedItems.get(i)).attr('data-projectId');
@@ -1419,6 +1420,7 @@ $('.desktopProvisioningLaunchBtn').click(function(e) {
     $modalDesktopProvisioning.modal('hide');
     var $launchResultContainer = $('#launchResultContainer');
     $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    $launchResultContainer.find('.modal-title').html('Provisioning Instance');
     $launchResultContainer.modal('show');
 
 
