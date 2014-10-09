@@ -275,7 +275,7 @@ var Chef = function(settings) {
         proc.start();
     };
 
-    this.runChefClient = function(runlist, options, callback, callbackOnStdOut, callbackOnStdErr) {
+    this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
         if (!runlist) {
             runlist = [];
@@ -299,8 +299,8 @@ var Chef = function(settings) {
             sshConnection.exec('chef-client -r ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
         } else {
 
-            var options = {
-                cwd: settings.chefReposLocation + settings.userChefRepoName,
+            var processOptions = {
+                cwd: settings.userChefRepoLocation,
                 onError: function(err) {
                     callback(err, null);
                 },
@@ -309,20 +309,20 @@ var Chef = function(settings) {
                 }
             };
             if (typeof callbackOnStdOut === 'function') {
-                options.onStdOut = function(data) {
+                processOptions.onStdOut = function(data) {
                     callbackOnStdOut(data);
                 }
             }
 
             if (typeof callbackOnStdErr === 'function') {
-                options.onStdErr = function(data) {
+                processOptions.onStdErr = function(data) {
                     callbackOnStdErr(data);
                 }
             }
             
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
-
-            var proc = new Process('knife', ['winrm', options.host, 'chef-client -o "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], options);
+            console.log('host name ==>',options.host);
+            var proc = new Process('knife', ['winrm', options.host, '\'chef-client -o "' + runlist.join() + '"\'', '-m', '-P' + options.password, '-x' + options.username], processOptions);
             proc.start();
 
         }

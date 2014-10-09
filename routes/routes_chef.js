@@ -118,6 +118,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     }
                 }
 
+                console.log('nodeip ==> ',nodeIp);
+
                 var instance = {
                     projectId: projectId,
                     envId: node.env,

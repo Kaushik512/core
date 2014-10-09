@@ -72,16 +72,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         hostedChefUrl: chefDetails.url,
                     });
 
-                    settingsController.getSettings(function(settings) {
 
-                        chef.runChefClient(req.body.runlist, {
+                    settingsController.getSettings(function(settings) {
+                        console.log('instance IP ==>',instance.instanceIP);
+                        var chefClientOptions = {
                             privateKey: instance.credentials.pemFileLocation,
                             username: instance.credentials.username,
                             host: instance.instanceIP,
                             instanceOS : instance.hardware.os,
                             port: 22,
                             runlist:req.body.runlist
-                        }, function(err, retCode) {
+                        }
+                        if(instance.credentials.pemFileLocation) {
+                            chefClientOptions.privateKey = instance.credentials.pemFileLocation; 
+                        } else {
+                            chefClientOptions.password = instance.credentials.password;
+                        }
+                        chef.runChefClient(chefClientOptions, function(err, retCode) {
                             if (err) {
                                 logsDao.insertLog({
                                     referenceId: req.params.instanceId,
