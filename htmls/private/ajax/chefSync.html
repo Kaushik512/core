@@ -111,6 +111,22 @@
         </div>
         </div>
       </section>
+      <section class="col col-12 usernameSection" style="display:none">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Username</label>
+          <div class="">
+          <input type="text" id="importUsernameInput" />
+        </div>
+        </div>
+      </section>
+      <section class="col col-12 passwordSection" style="display:none">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Password</label>
+          <div class="">
+          <input type="password" id="importPasswordInput" />
+        </div>
+        </div>
+      </section>
       <section class="col col-12">
                                                             <label class="label">Assign Users</label>
                                                             <label class="select select-multiple">
@@ -172,8 +188,20 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
     for(var i=0;i<getProviders.length;i++) {
       $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
     }
+    $providerlist.append($('<option></option>').val('datacenter').html('Data Center'));
+
+     $providerlist.change(function(e){
+      var val = $providerlist.val();
+      if(val == 'datacenter') {
+         $('.usernameSection').show();
+         $('.passwordSection').show(); 
+      } else {
+         $('.passwordSection').hide(); 
+         $('.usernameSection').hide();  
+      }
 
 
+     });
    
     $bgList.empty();
     $bgList.append($('<option></option>').val('choose').html('Choose'));
@@ -332,6 +360,12 @@ $('.showChefImportNodesModalBtn').click(function(e){
    if(!reqBody.users || !reqBody.users.length) {
      alert('Please Choose Users');
      return;
+   }
+   if($('.usernameSection').is(':visible')){
+     reqBody.credentials = {};
+     reqBody.credentials.username = $('#importUsernameInput').val();
+     reqBody.credentials.password = $('#importPasswordInput').val();
+       
    }
    reqBody.selectedNodes = [];
    for(var i=0;i<$checkBoxes.length;i++) {

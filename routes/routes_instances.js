@@ -40,7 +40,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
-                configmgmtDao.getChefServerDetails(data[0].chef.serverId, function(err, chefDetails) {
+                var instance = data[0];
+                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);
                         return;
@@ -60,10 +61,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     settingsController.getSettings(function(settings) {
 
                         chef.runChefClient(req.body.runlist, {
-                            privateKey: settings.aws.pemFileLocation + settings.aws.pemFile,
-                            username: settings.aws.instanceUserName,
-                            host: data[0].instanceIP,
-                            port: 22
+                            privateKey: instance.credentials.pemFileLocation,
+                            username: instance.credentials.username,
+                            host: instance.instanceIP,
+                            instanceOS : instance.hardware.os,
+                            port: 22,
+                            runlist:req.body.runlist
                         }, function(err, retCode) {
                             if (err) {
                                 logsDao.insertLog({
@@ -367,6 +370,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     hardwareData.memory = {};
                                     hardwareData.memory.total = nodeData.automatic.memory.total;
                                     hardwareData.memory.free = nodeData.automatic.memory.free;
+                                    hardwareData.os = instance.hardware.os;
                                     instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                         if (err) {
                                             console.log("Unable to set instance hardware details");

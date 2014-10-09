@@ -233,6 +233,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         hardwareData.memory = {};
                                                         hardwareData.memory.total = nodeData.automatic.memory.total;
                                                         hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                        hardwareData.os = instance.hardware.os;
                                                         instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                             if (err) {
                                                                 console.log("Unable to set instance hardware details");
@@ -475,6 +476,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             hardwareData.memory = {};
                                             hardwareData.memory.total = nodeData.automatic.memory.total;
                                             hardwareData.memory.free = nodeData.automatic.memory.free;
+                                            hardwareData.os = instance.hardware.os;
                                             instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                 if (err) {
                                                     console.log("Unable to set instance hardware details");

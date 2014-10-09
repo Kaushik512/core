@@ -866,14 +866,7 @@
                                 </label> 
                                 
                             </section>
-                            <section class="col col-6 desktopProvisioningSection" >
-                                <label for="category">Import Node <span style="color:red"><input type="checkbox" id="desktopProvisioningImportNode" /></span>
-                                </label>
-                                <label class="select"> 
-                                    
-                                </label> 
-                                
-                            </section>
+                            
                             <!--To add the Swipe Functionality-->                            
                         </div>
                     </div>
@@ -1116,7 +1109,7 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
             reqBody.instanceType = $('.instanceType').val();
             reqBody.instanceOS = $('#instanceOS').val();
-            reqBody.importInstance = $('#desktopProvisioningImportNode').is(':checked');
+            reqBody.importInstance = true;
 
             console.log(reqBody);
 

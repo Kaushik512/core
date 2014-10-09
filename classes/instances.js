@@ -200,7 +200,8 @@ var InstancesDao = function() {
                     memory: {
                         total: hardwareData.memory.total,
                         free: hardwareData.memory.free,
-                    }
+                    },
+                    os:hardwareData.os
                 }
             }
         }, {

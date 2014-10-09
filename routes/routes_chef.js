@@ -80,7 +80,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 memory: {
                     total: 'unknown',
                     free: 'unknown',
-                }
+                },
+                os: 'linux'
             };
             if (nodeData.automatic.kernel && nodeData.automatic.kernel.machine) {
                 hardwareData.architecture = nodeData.automatic.kernel.machine;
@@ -95,75 +96,69 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hardwareData.memory.total = nodeData.automatic.memory.total;
                 hardwareData.memory.free = nodeData.automatic.memory.free;
             }
+            if(hardwareData.platform === 'windows') {
+                hardwareData.os = 'windows';
+            } 
 
 
             console.log("runlist ==>", node.runlist);
-            var instance = {
-                projectId: projectId,
-                envId: node.env,
-                chefNodeName: node.nodeName,
-                runlist: node.runlist,
-                platformId: platformId,
-                instanceIP: nodeIp,
-                instanceState: 'unknown',
-                bootStrapStatus: 'success',
-                hardware: hardwareData,
-                users: users,
-                chef: {
-                    serverId: req.params.serverId,
-                    chefNodeName: node.nodeName
-                },
-                blueprintData: {
-                    blueprintName: node.nodeName,
-                    templateId: "chef_import"
+
+
+
+
+            settingsController.getAwsSettings(function(settings) {
+                var instanceCredentials = {};
+                if (reqBody.credentials) {
+                    instanceCredentials.username = reqBody.credentials.username;
+                    instanceCredentials.password = reqBody.credentials.password;
+                } else {
+                    instanceCredentials = {
+                        username: settings.instanceUserName,
+                        pemFileLocation: settings.pemFileLocation + settings.pemFile,
+                    }
                 }
 
-            }
+                var instance = {
+                    projectId: projectId,
+                    envId: node.env,
+                    chefNodeName: node.nodeName,
+                    runlist: node.runlist,
+                    platformId: platformId,
+                    instanceIP: nodeIp,
+                    instanceState: 'unknown',
+                    bootStrapStatus: 'success',
+                    hardware: hardwareData,
+                    credentials: instanceCredentials,
+                    users: users,
+                    chef: {
+                        serverId: req.params.serverId,
+                        chefNodeName: node.nodeName
+                    },
+                    blueprintData: {
+                        blueprintName: node.nodeName,
+                        templateId: "chef_import"
+                    }
+                }
 
-            instancesDao.createInstance(instance, function(err, data) {
-                                if (err) {
-                                    console.log(err, 'occured in inserting node in mongo');
-                                    return;
-                                }
-                                logsDao.insertLog({
-                                    referenceId: data._id,
-                                    err: false,
-                                    log: "Node Imported",
-                                    timestamp: new Date().getTime()
-                                });
+
+
+                instancesDao.createInstance(instance, function(err, data) {
+                    if (err) {
+                        console.log(err, 'occured in inserting node in mongo');
+                        return;
+                    }
+                    logsDao.insertLog({
+                        referenceId: data._id,
+                        err: false,
+                        log: "Node Imported",
+                        timestamp: new Date().getTime()
+                    });
+
+                });
+
+
 
             });
-
-            /*settingsController.getAwsSettings(function(settings) {
-                var ec2 = new EC2(settings);
-                if (platformId) {
-                    ec2.getInstanceState(platformId, function(err, state) {
-                        var instanceState;
-                        if (err) {
-                            return;
-                        }
-                        instance.instanceState = state
-
-                        if (instance.instanceState) {
-
-                            instancesDao.createInstance(instance, function(err, data) {
-                                if (err) {
-                                    console.log(err, 'occured in inserting node in mongo');
-                                    return;
-                                }
-                                logsDao.insertLog({
-                                    referenceId: data._id,
-                                    err: false,
-                                    log: "Node Imported",
-                                    timestamp: new Date().getTime()
-                                });
-
-                            });
-                        }
-
-                    });
-                }
-            });*/
 
         }
 
