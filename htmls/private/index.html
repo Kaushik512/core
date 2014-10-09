@@ -548,7 +548,11 @@
          		
          	}
          }
-
+		  
+		  //Expanding the providers tree
+          
+          $('#blueprints').find('li a').first().trigger('click');
+		  $('#blueprints').find('ul li a').first().trigger('click');
 
 
          var serviceURL = "/d4dMasters/";
@@ -654,7 +658,7 @@
 			        }
 		});
 
-   
+   		//Selecting the first provider in the list on load
 			
 
 
@@ -668,6 +672,8 @@
          
           //selecting workzone by default - to be changed to user based.
           $('li[navigation*="Workspace"]').find('a').trigger('click');
+
+
 
          </script>
 

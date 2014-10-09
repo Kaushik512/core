@@ -12,6 +12,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/instances/*', sessionVerificationFunc);
 
+
+    app.get('/instances',function(req,res){
+        instancesDao.getInstances(function(err, data) {
+            if (err) {
+                console.log(err);
+                res.send(500);
+                return;
+            }
+            res.send(data);
+             
+        });
+    });
+
     app.get('/instances/:instanceId', function(req, res) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
@@ -27,7 +40,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     })
 
-
+    
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         if (!req.body.runlist) {
             res.send(400);

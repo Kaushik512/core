@@ -54,6 +54,19 @@ var InstancesDao = function() {
         });
     }
 
+    this.getInstances = function(callback){
+       
+        Instances.find({},function(err,data){
+            if(err){
+                callback(err,null);
+                return;
+            }
+            callback(null,data);
+        });
+
+    };
+
+
     this.getInstancesByProjectAndEnvId = function(projectId, envId, instanceType,userName, callback) {
         var queryObj = {
             projectId: projectId,
