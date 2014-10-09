@@ -76,12 +76,12 @@
 
 
 				<li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-      	  			<a class="active" href="javascript:void(0)" onclick="setleftnavigation(this);"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
+      	  			<a class="active" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
      			</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
      			<li class="left-projects-links hidden" data-target="#blueprints"  navigation="blueprints">
-     				<a href="#ajax/Aws-Production.html" onclick="setleftnavigation(this);"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
+     				<a href="#ajax/Aws-Production.html" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
      			</li>
 			</div>
 		
@@ -110,13 +110,13 @@
 				<!-- end logout button -->
 				<div id="project-context" style="padding-top:15px;">
 					<li class="left-projects-links hidden" data-target="#Track"  navigation="Track">
-      	  				<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this);"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+      	  				<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
      				</li>
 				</div>
 
 				<div id="project-context" style="padding-top:15px;">
 					<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
-      	  				<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html"  onclick="setleftnavigation(this);"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+      	  				<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html"  onclick="setleftnavigation(this,'Setting');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
      				</li>
 				</div>
 
@@ -535,7 +535,7 @@
 		<!-- MAIN APP JS FILE -->
 
          <script type="text/javascript">
-         function setleftnavigation(toplink){
+         function setleftnavigation(toplink,breadcrumbHeader){
          	$('a[onclick*="setleftnavigation"]').removeClass('active');
          	$(toplink).addClass('active');
          	$('nav > ul').addClass('hidden'); //hiding all navigation elements
@@ -545,12 +545,16 @@
          	if(navbar.length){
          		var navs = navbar.split(',');
          		for(var i = 0; i< navs.length;i++){
-
-         			//alert(navs[i]);
          			$('#' + navs[i]).removeClass('hidden');
          			$('#' + navs[i]).css('display','');
          		}
          		
+         	}
+         	if(breadcrumbHeader == 'org') {
+               var orgName = $('.orgSelected span').text();
+               window.selectedOrgName = orgName;
+         	} else {
+         	    window.selectedOrgName = breadcrumbHeader;
          	}
          }
 		  
@@ -586,6 +590,7 @@
                                classOrgSelected = 'orgSelected';
 			            	}
 			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white" orname ><i class="fa fa-bookmark-o "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
+
 
 			            	 //Adding to Track tree Nav
 			            	var $TrackerOrgnameli = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].name+'" style="font-weight:bold">'+data[i].name+'</span></a>');
