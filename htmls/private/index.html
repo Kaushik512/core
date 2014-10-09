@@ -109,7 +109,7 @@
 				</div>
 				<!-- end logout button -->
 				<div id="project-context" style="padding-top:15px;">
-					<li class="left-projects-links hidden" data-target="#Track"  navigation="track">
+					<li class="left-projects-links hidden" data-target="#Track"  navigation="Track">
       	  				<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this);"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
      				</li>
 				</div>
@@ -345,6 +345,10 @@
 					
 					
 				</ul>
+				<ul class="menu-item-parentdemo" id="Track">
+					
+					
+				</ul>
 				<ul class="menu-item-parentdemo hidden" id="blueprints">	
 
 					<li>
@@ -541,7 +545,8 @@
          	if(navbar.length){
          		var navs = navbar.split(',');
          		for(var i = 0; i< navs.length;i++){
-         			//alert(navs[i]);
+
+         			alert(navs[i]);
          			$('#' + navs[i]).removeClass('hidden');
          			$('#' + navs[i]).css('display','');
          		}
@@ -571,12 +576,20 @@
 			            
 			            var $ulOrgList = $('.orgsList').empty();
             			var $workspace = $('#Workspace').empty();
+
+            			// track tree view
+            			var $track = $('#Track').empty();
+
 			            for(var i=0;i<data.length;i++) {
 			            	var classOrgSelected = '';
 			            	if(i==0) {
                                classOrgSelected = 'orgSelected';
 			            	}
 			            	 var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white"><i class="fa fa-bookmark-o "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
+
+			            	 //Adding to Track tree Nav
+			            	//var $trackerli = $('<li></li>').data('orgName',data[i].name).append(data[i].name);
+			            	var $trackerli = $('<li></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].name+'" style="font-weight:bold">'+data[i].name+'</span></a>');
 				             
               				$li.click(function(e){
                              var $parents = $(this).parents('ul');
@@ -588,6 +601,10 @@
                  			$('.'+id).show();
               			  });
               			  $ulOrgList.append($li);
+
+              			  //Adding to Track Tree
+              			  $track.append($trackerli);
+
               			  //<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
               			  for(var j=0;j<data[i].businessGroups.length;j++) {
               			  	var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);

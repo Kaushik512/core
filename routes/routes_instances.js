@@ -20,6 +20,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
+            
             res.send(data);
              
         });

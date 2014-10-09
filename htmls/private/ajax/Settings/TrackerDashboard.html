@@ -219,28 +219,17 @@ var envId = urlParams['envid'];
 function addInstanceToDOM(data,index) {
   //Get the Orgname - to be removed eventually
  
-    var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
-    $rowContainter.append($('<td></td>').append(index));
-    $rowContainter.append($('<td></td>').append(projectList));
-    $rowContainter.append($('<td></td>').append(''));
-    $rowContainter.append($('<td></td>').append(data.projectId));
-    $rowContainter.append($('<td></td>').append(data.envId));
-
-      $rowContainter.append($('<td></td>').append(data.chefNodeName));
-        $rowContainter.append($('<td></td>').append(data.instanceIP));
-          $rowContainter.append($('<td></td>').append(data.instanceState));
-
-      //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
-      /*$rowContainter.append($tableInstanceStatusIndicator);
-
-      $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
-      $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');
-      $rowContainter.append('<td>' + $('<div></div>').append($divActionBtnContainer.clone()).html() + '</td>');*/
-      $("#tabletrackerinstanceview").append($rowContainter);
-  //  alert(JSON.stringify(data));
-
-  
-  
+  var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
+  $rowContainter.append($('<td></td>').append(index));
+      $rowContainter.append($('<td></td>').append(''));
+          $rowContainter.append($('<td></td>').append(''));
+          
+  $rowContainter.append($('<td></td>').append(data.projectId)); //envId , chefNodeName,, instanceIP, instanceState
+  $rowContainter.append($('<td></td>').append(data.envId));
+  $rowContainter.append($('<td></td>').append(data.chefNodeName));
+  $rowContainter.append($('<td></td>').append(data.instanceIP));
+  $rowContainter.append($('<td></td>').append(data.instanceState));
+  $("#tabletrackerinstanceview").append($rowContainter);
 
 
 }
@@ -251,63 +240,29 @@ function addInstanceToDOM(data,index) {
 
 $.get('/instances', function(data) {
 
-    //alert(data.length);
-
+    
     for (var i = 0; i < data.length; i++) {
-       // addInstanceToDOM(data[i],i+1);
+        addInstanceToDOM(data[i],i+1);
     }
     //for table view
-    if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
-        var tableinstanceview = $('#tableinstanceview').dataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [null,
-                {
-                    "bSortable": false
-                },
-                null,
-                null,
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                }
-            ]
+    if (!$.fn.dataTable.isDataTable('#tabletrackerinstanceview')) {
+        var tabletrackerinstanceview = $('#tabletrackerinstanceview').dataTable({
+            "pagingType": "full_numbers"
         });
     }
-    $('#tableinstanceview tbody').on('click','tr',function(){
+    $('#tabletrackerinstanceview tbody').on('click','tr',function(){
         if($(this).hasClass('rowcustomselected')){
             $(this).removeClass('rowcustomselected');
         }
         else{
-            tableinstanceview.$('tr').removeClass('rowcustomselected');
+            tabletrackerinstanceview.$('tr').removeClass('rowcustomselected');
             $(this).addClass('rowcustomselected');
         }
 
     });
 
-    console.log('loading table');
-    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
-    $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
-    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
-    //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
-    // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
+    
 
-    //handling instance action btn
-    //default selecting first card in Instance and Blueprints
-    if($("#divinstancescardview li").length > 0)
-        $("#divinstancescardview li").first().find('.flip-toggle').trigger('click');
-
-    $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
 });
 </script>
