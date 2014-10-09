@@ -1907,3 +1907,10 @@ margin-top:0px;
     padding-top: 5px;
     margin-top: 5px;
 }
+
+.tableactionbutton{
+    border-radius:50% !important;
+}
+.tableactionbuttonpadding{
+    margin-left:10px !important;
+}
