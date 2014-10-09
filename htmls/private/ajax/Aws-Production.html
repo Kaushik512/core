@@ -145,7 +145,7 @@
                                                                         <!--Desktop provisioning-->
                                                                         <div class="" style="width:222px;float:left">
 
-                                                                            <div class="blueprintdiv desktoppositioning" data-templateType="templatesdesktoppositioning">
+                                                                            <div class="blueprintdiv desktoppositioning" data-templateType="templatesDesktopProvision">
                                                                                <div>
                                                                                   <img style="height:25px;padding:2px;" alt="Logoheader" src="img/app-store-icons/Logoheader.png">
                                                                                   <span style="padding-top:4px;position:absolute;padding-left: 4px;"><b>Desktop Provisioning</b></span> 
@@ -552,7 +552,7 @@
 
                                                                     <div class="templatesCloudformation templates" style="display:none">
                                                                        <div class="panel-group smart-accordion-default" id="accordion-21">
-                    <div class="panel panel-default">
+                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-21" href="#collapseOne-11"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Single Instance Samples</a></h4>
                         </div>
@@ -753,22 +753,45 @@
 
 
                         </div> 
-                                                                        <!--<div class="col-sm-3 col-md-3 col-lg-2">
+                                                                       
+                                                                    </div>
 
-                                                                            <div class="productdiv2">
-                                                                                <ul class="list-unstyled system-prop" style="text-align:center;">
-                                                                                    <li>
-                                                                                        <img style="height: 40px;width:100px;" alt="NodeJS Stack" src="img/app-store-icons/customApp.png">
-                                                                                    </li>
-                                                                                    <li style="font-size:12px;"><u><b>Custom App</b></u>
-                                                                                    </li>
-                                                                                    
 
-                                                                                </ul>
+<div class="templatesDesktopProvision templates" style="display:none">
+
+   <div class="col-sm-2 col-lg-2 col-md-2">
+
+                                                                            <div class="productdiv2" data-templateId="desktopProvisoning1" data-templateComponent="java,j2ee,eclipse,TFS 2013,Weblogic, Oracle Database" data-templateName="Build" data-templateType="desktopProvisoning">
+                                                                                <img src="img/templateicons/desktopProvisioning1.png"></img>
+                                                                                
 
                                                                             </div>
-                                                                        </div>-->
-                                                                    </div>
+                                                                        </div>
+
+
+                                                                         <div class="col-sm-2 col-lg-2 col-md-2">
+
+                                                                            <div class="productdiv2" data-templateId="desktopProvisoning2" data-templateComponent="Visual Studio,TFS 2013 Explorer,IIS,Oracle Database" data-templateName="Build" data-templateType="desktopProvisoning">
+                                                                                <img src="img/templateicons/desktopProvisioning2.png"></img>
+                                                                                
+
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                <div class="col-sm-2 col-lg-2 col-md-2">
+
+                                                                            <div class="productdiv2" data-templateId="desktopProvisoning3" data-templateComponent="Toad,TFS 2013,Oracle Database" data-templateName="Build" data-templateType="desktopProvisoning">
+                                                                                <img src="img/templateicons/desktopProvisioning3.png"></img>
+                                                                                
+
+                                                                            </div>
+                                                                        </div>
+
+
+
+</div>
+
                                                                     </div>
 
 
@@ -1018,7 +1041,7 @@
 
 <script type="text/javascript">
  var reqBody;
-$('#bootstrap-wizard-1').bootstrapWizard({
+var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
     'tabClass': 'form-wizard',
     'onNext': function (tab, navigation, index) {
         console.log(navigation,index)
@@ -1041,6 +1064,10 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             if(!$selectedItem.length) {
               alert('please choose a template');
               return false;
+            }
+            if($selectedItem.attr('data-templateType') == 'desktopProvisoning') {
+                wizard.show(4);
+                return false;
             }
            
 

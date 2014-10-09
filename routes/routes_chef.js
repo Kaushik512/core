@@ -120,7 +120,21 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
             }
 
-            settingsController.getAwsSettings(function(settings) {
+            instancesDao.createInstance(instance, function(err, data) {
+                                if (err) {
+                                    console.log(err, 'occured in inserting node in mongo');
+                                    return;
+                                }
+                                logsDao.insertLog({
+                                    referenceId: data._id,
+                                    err: false,
+                                    log: "Node Imported",
+                                    timestamp: new Date().getTime()
+                                });
+
+            });
+
+            /*settingsController.getAwsSettings(function(settings) {
                 var ec2 = new EC2(settings);
                 if (platformId) {
                     ec2.getInstanceState(platformId, function(err, state) {
@@ -149,7 +163,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                     });
                 }
-            });
+            });*/
 
         }
 
