@@ -778,7 +778,7 @@
    <div class="col-sm-2 col-lg-2 col-md-2">
 
 
-             <div class="productdiv2" data-templateId="desktopProvisioning1" data-templateComponent="java,j2ee,eclipse,TFS 2013,Weblogic, Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning">
+             <div class="productdiv2" data-templateId="desktopProvisioning1" data-templateComponent="java,j2ee,eclipse,TFS 2013,Weblogic, Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning" data-templateRunlist='recipe[wrapper_java]'>
              <ul style="text-align:center;" class="list-unstyled system-prop">
                 <li>
                     <img src="img/templateicons/desktopProvisioning1.png" alt="NodeJS Stack" style="height: 50px;width:72px;">
@@ -795,7 +795,7 @@
  
      <div class="col-sm-2 col-lg-2 col-md-2">
 
-       <div class="productdiv2" data-templateId="desktopProvisioning2" data-templateComponent="Visual Studio,TFS 2013 Explorer,IIS,Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning">
+       <div class="productdiv2" data-templateId="desktopProvisioning2" data-templateComponent="Visual Studio,TFS 2013 Explorer,IIS,Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning" data-templateRunlist='recipe[wrapper_ms]'>
            <ul style="text-align:center;" class="list-unstyled system-prop">
                 <li>
                     <img src="img/templateicons/desktopProvisioning2.png" alt="NodeJS Stack" style="height: 50px;width:112px;">
@@ -812,7 +812,7 @@
     </div>
 
 <div class="col-sm-2 col-lg-2 col-md-2">
-        <div class="productdiv2" data-templateId="desktopProvisioning3" data-templateComponent="Toad,TFS 2013,Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning">
+        <div class="productdiv2" data-templateId="desktopProvisioning3" data-templateComponent="Toad,TFS 2013,Oracle Database" data-templateName="Build" data-templateType="desktopProvisioning" data-templateRunlist='recipe[wrapper_db]'>
             <ul style="text-align:center;" class="list-unstyled system-prop">
                 <li>
                     <img src="img/templateicons/Database.png" alt="NodeJS Stack" style="height: 50px;width:72px;">
@@ -828,10 +828,10 @@
 </div>
     <div class="col-sm-2 col-lg-2 col-md-2">
 
-        <div class="productdiv2" data-templateId="desktopProvisoning4" data-templateComponent="" data-templateName="" data-templateType="desktopProvisioning" data-templateComponent="">
+        <div class="productdiv2" data-templateId="desktopProvisioning4" data-templateComponent="" data-templateName="" data-templateType="desktopProvisioning" data-templateComponent="">
             <ul style="text-align:center;" class="list-unstyled system-prop">
                 <li>
-                    <img src="img/templateicons/appFact12.png" alt="NodeJS Stack" style="height: 50px;width:72px;">
+                    <img src="img/templateicons/desktopProvisioning4.png" alt="NodeJS Stack" style="height: 50px;width:72px;">
                 </li>
                 <li style="font-size:12px;"><u><b>Custom</b></u>
                 </li>
@@ -1158,7 +1158,17 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
               alert('Please wait while we are fetching cookbooks.');
               return false;
             }
-            reqBody.runlist = $('#cookbookSelect').val();
+            var templateRunlist =  $selectedItem.attr('data-templateRunlist');
+            if(templateRunlist) {
+                templateRunlist = templateRunlist.split(',');
+            } else {
+                templateRunlist = [];
+            }
+            var selectedRunlist = $('#cookbookSelect').val();
+            if(!selectedRunlist || !selectedRunlist.length) {
+               selectedRunlist = [];
+            }
+            reqBody.runlist = templateRunlist.concat(selectedRunlist);
             reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
             reqBody.instanceType = $('.instanceType').val();
             reqBody.instanceOS = $('#instanceOS').val();
