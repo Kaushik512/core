@@ -305,6 +305,12 @@ function readform(formID) {
     if (editMode == false) {
         return (false);
     }
+
+    //Setting the header of the form to Edit if shown as Create
+    var head = $('.widget-header').html().replace('Create','Edit').replace('New','Edit');
+    $('.widget-header').html(head);
+
+
   //  debugger;
   //  alert('came here');
     //Read current form values with the field names
@@ -401,6 +407,10 @@ function readform(formID) {
 
 
 function saveform(formID){
+    //Validating the form
+    if(isFormValid() == false)
+        return(false);
+
 
     var data1 = new FormData();
     var fileNames = '';
@@ -822,6 +832,43 @@ function getProjectsForOrg(orgname){
 
     });
     return (getProj);
+}
+
+//function injects a error label for the input control and puts the message
+function errormessageforInput(id,msg){
+    var errlabel = $('#errmsg_' + id);
+    var currCtrl = $('#' + id);
+    if(errlabel.length > 0){ //no error label found
+        errlabel.html(msg);
+    }
+    else
+    {
+        currCtrl.closest('section').find('label').first().append('<span id="errmsg_' + $(this).attr("id") + '" style="color:red"></span>');
+        errlabel = $('#errmsg_' + $(this).attr("id")).html(msg);
+    }
+}
+
+//run validation tests on inputs 
+function isFormValid(){
+    var isValid = true;
+    $('[cat-validation]').each(function(itm){
+      var currCtrl = $(this);
+      var valiarr = $(this).attr('cat-validation').split(',');
+      $.each(valiarr,function(vali){
+        switch(valiarr[vali]){
+          case "required":
+            if(currCtrl.val() == ''){
+              isValid = false;
+              errormessageforInput(currCtrl.attr('id'),"Required");
+              currCtrl.focus();
+            }
+            break;
+        }
+        
+      });
+      
+    });
+    return(isValid);
 }
 
 function enableUniqueCheckingForInputs(id){

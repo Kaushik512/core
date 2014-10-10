@@ -167,12 +167,7 @@
 
     function validateForm() {
         //Check for required parameter
-        $('#orgname').each(function () {
-            if ($(this).val() == ''){
-                $("#msgOrgName").show();
-                retun(false);
-            }
-        });
+        
         return(true);
     }
     function readURL(input,onFileLoad) {
