@@ -2,16 +2,8 @@
 <script src="/ajax/Data/d4d.js"></script>
 <script>
     $(".login-info").hide();
-    
 </script>
 <script src="/private/js/settingscommon.js"></script>
-<style>
-    .rowCustomStyle {
-        height: 34px;
-        font-weight: bold;
-    }
-</style>
-
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -23,8 +15,7 @@
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
-                             
-                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/TemplatesList.html" style="display:none">
+                            <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/TemplatesList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
                             <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateTemplates.html?new">
@@ -37,7 +28,7 @@
                 </div>
                 <div class="widget-body">
                     <div class="widget-main" style="min-height:300px">
-                        <div class="col-md-12" style="padding-left:0px; padding-right:0px;">
+                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
                             <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
                                     <tr class="rowCustomStyle">
@@ -59,7 +50,7 @@
                                         <!--<td datafield="Templateschefserver"></td>-->
                                         <td datafield="templatescookbooks"></td>
                                         <td>
-                                            <div class=" hidden-sm hidden-xs btn-group">
+                                            <div class="btn-group tableactionWidth">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
                                                 <a class="btn btn-xs btn-info pull-left" title="Update">
                                                     <i class="ace-icon fa fa-pencil bigger-120"></i>

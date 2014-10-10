@@ -1914,3 +1914,13 @@ margin-top:0px;
 .tableactionbuttonpadding{
     margin-left:10px !important;
 }
+.tableactionWidth{
+    width:84px;
+}
+.rowCustomStyle {
+    height: 34px;
+    font-weight: bold;
+}
+.tableactionWidthCheficon{
+    width:140px;
+}

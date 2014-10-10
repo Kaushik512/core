@@ -696,7 +696,11 @@ $.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', fun
         var $appFactoryPanel = $AppFactpanelBody.parents('.appFactoryPanel').show();
         if (!expanded) {
             $appFactoryPanel.find('.collapse').addClass('in');
+            $appFactoryPanel.find('.panel-title a').removeClass('collapsed');
+        } else {
+            $appFactoryPanel.find('.panel-title a').addClass('collapsed');
         }
+        
     }
 
     pageSetUp();
