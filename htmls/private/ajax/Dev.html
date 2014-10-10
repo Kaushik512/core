@@ -482,7 +482,7 @@ var envId = urlParams['envid'];
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
 
-$.get('/organizations/' + urlParams.org + '/cookbooks', function(data) {
+$.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
     console.log(data);
     var cookbooks = data.cookbooks;
     var keys = Object.keys(cookbooks);
@@ -493,7 +493,7 @@ $.get('/organizations/' + urlParams.org + '/cookbooks', function(data) {
 
 });
 
-$.get('/organizations/' + urlParams.org + '/roles', function(data) {
+$.get('../organizations/' + urlParams.org + '/roles', function(data) {
     console.log(data);
     var roles = data.roles;
     var keys = Object.keys(roles);
@@ -569,7 +569,7 @@ $('.deploymentChefRunBtn').click(function(e) {
     });
     console.log(runlist);
     $selectedNodes.each(function(e) {
-        $.post('/instances/' + $(this).val() + '/updateRunlist', {
+        $.post('../instances/' + $(this).val() + '/updateRunlist', {
             runlist: runlist
         }, function(data) {
             console.log('instance runlist updated');
@@ -581,7 +581,7 @@ $('.deploymentChefRunBtn').click(function(e) {
 });
 
 
-$.get('/projects/' + projectId + '/environments/' + envId + '/blueprints', function(data) {
+$.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', function(data) {
 
     var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
     $AppFactpanelBody.empty();
@@ -631,9 +631,9 @@ $.get('/projects/' + projectId + '/environments/' + envId + '/blueprints', funct
                 var chefServerId = $parent.attr('data-chefServerId');
                 var version = $parent.find('.blueprintVersionDropDown').val();
 
-                $.get('/blueprints/' + blueprintId + '/versions/' + version, function(data) {
+                $.get('../blueprints/' + blueprintId + '/versions/' + version, function(data) {
 
-                    $.get('/chef/servers/' + chefServerId + '/cookbooks', function(data) {
+                    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
                         var keys = Object.keys(data);
 
                         var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
@@ -742,7 +742,7 @@ function getCssClassFromStatus(status) {
 function pollInstanceState(instanceId, state, delay) {
     var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
     var timeout = setTimeout(function() {
-        $.get('/instances/' + instanceId, function(data) {
+        $.get('../instances/' + instanceId, function(data) {
             if (data) {
                 if (data.instanceState === state) {
                     pollInstanceState(instanceId, state, 5000);
@@ -765,9 +765,9 @@ var startStopInstanceHandler = function(e) {
     var $this = $(this);
     var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
     var type = $this.attr('data-actionType');
-    url = '/instances/' + instanceId + '/startInstance';
+    url = '../instances/' + instanceId + '/startInstance';
     if (type === 'stop') {
-        url = '/instances/' + instanceId + '/stopInstance'
+        url = '../instances/' + instanceId + '/stopInstance'
     }
     var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
     $parent.find('.moreInfo').trigger('click');
@@ -801,7 +801,7 @@ var instanceUpdateRunlistHandler = function(e) {
     $chefRunModalContainer = $('#chefRunModalContainer');
     $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
     $chefRunModalContainer.modal('show');
-    $.get('/chef/servers/' + chefServerId + '/cookbooks', function(data) {
+    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
         var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId', instanceId).attr('multiple', true);
         for (var i = 0; i < keys.length; i++) {
@@ -831,7 +831,7 @@ var instanceLogsHandler = function(e) {
     var lastTimestamp;
 
     function pollLogs(timestamp, delay, clearData) {
-        var url = '/instances/' + instanceId + '/logs';
+        var url = '../instances/' + instanceId + '/logs';
         if (timestamp) {
             url = url + '?timestamp=' + timestamp;
         }
@@ -1149,7 +1149,7 @@ function addInstanceToDOM(data) {
 
 
 
-$.get('/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
+$.get('../projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
     
     var $instancesList = $('.instancesList').empty();
     var $deploymentNodeList = $('.deploymentNodeList').empty();
@@ -1264,7 +1264,7 @@ $('.launchBtn').click(function(e) {
         var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
         var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
 
-        $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
+        $.get('../blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
             var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
@@ -1287,7 +1287,7 @@ $('.launchBtn').click(function(e) {
             var lastTimestamp;
 
             function pollLogs(timestamp, delay, clearData) {
-                var url = '/instances/' + instanceId + '/logs';
+                var url = '../instances/' + instanceId + '/logs';
                 if (timestamp) {
                     url = url + '?timestamp=' + timestamp;
                 }
@@ -1335,7 +1335,7 @@ $('.launchBtn').click(function(e) {
             }
             pollLogs(lastTimestamp, 0, true);
 
-            $.get('/instances/' + data.id, function(data) {
+            $.get('../instances/' + data.id, function(data) {
                 addInstanceToDOM(data);
             });
 
@@ -1359,7 +1359,7 @@ $('.blueprintUpdateBtn').click(function(e) {
             expirationDays: 0,
         };
 
-        $.post('/blueprints/' + blueprintId + '/update', {
+        $.post('../blueprints/' + blueprintId + '/update', {
             blueprintUpdateData: blueprintData
         }, function(data) {
             $('.blueprintVersionDropDown[data-blueprintId="' + blueprintId + '"]').append($('<option value="' + data.version + '">' + data.version + '</option>').attr('selected', true));
@@ -1373,7 +1373,7 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
     var instanceId = $('.chefCookbookList').attr('data-instanceId');
     var runlist = $('.chefCookbookList').val();
     console.log(runlist);
-    $.post('/instances/' + instanceId + '/updateRunlist', {
+    $.post('../instances/' + instanceId + '/updateRunlist', {
         runlist: runlist
     }, function(data) {
         $chefRunModalContainer = $('#chefRunModalContainer').modal('hide');
@@ -1391,7 +1391,7 @@ $('.actionControlPanel').click(function(e) {
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {
-                window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+                window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
             }
         }
     } else {
@@ -1399,7 +1399,7 @@ $('.actionControlPanel').click(function(e) {
         if ($selectedCard.length) {
             var instanceId = $selectedCard.attr('data-instanceId');
             if (instanceId) {
-                window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+                window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
             }
         }
     }

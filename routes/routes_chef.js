@@ -121,16 +121,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
             instancesDao.createInstance(instance, function(err, data) {
-                                if (err) {
-                                    console.log(err, 'occured in inserting node in mongo');
-                                    return;
-                                }
-                                logsDao.insertLog({
-                                    referenceId: data._id,
-                                    err: false,
-                                    log: "Node Imported",
-                                    timestamp: new Date().getTime()
-                                });
+                if (err) {
+                    console.log(err, 'occured in inserting node in mongo');
+                    return;
+                }
+                logsDao.insertLog({
+                    referenceId: data._id,
+                    err: false,
+                    log: "Node Imported",
+                    timestamp: new Date().getTime()
+                });
 
             });
 
