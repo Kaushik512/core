@@ -131,7 +131,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         memory: {
                                             total: 'unknown',
                                             free: 'unknown',
-                                        }
+                                        },
+                                        os: blueprint.instanceOS
+                                    },
+                                    credentials: {
+                                        username: settings.aws.instanceUserName,
+                                        pemFileLocation: settings.aws.pemFileLocation + settings.aws.pemFile,
                                     },
                                     chef: {
                                         serverId: blueprint.chefServerId,
@@ -171,7 +176,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             return;
                                         }
                                         console.log(instanceData);
-
+                                        instance.instanceIP = instanceData.PublicIpAddress;
                                         instancesDao.updateInstanceIp(instance.id, instanceData.PublicIpAddress, function(err, updateCount) {
                                             if (err) {
                                                 console.log("update instance ip err ==>", err);
@@ -191,12 +196,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                         chef.bootstrapInstance({
-                                            instanceIp: instanceData.PublicIpAddress,
-                                            pemFilePath: settings.aws.pemFileLocation + settings.aws.pemFile,
+                                            instanceIp: instance.instanceIP,
+                                            pemFilePath: instance.credentials.pemFileLocation,
                                             runlist: instance.runlist,
-                                            instanceUserName: settings.aws.instanceUserName,
-                                            nodeName: instanceData.InstanceId,
-                                            environment: blueprint.envId
+                                            instanceUsername: instance.credentials.username,
+                                            nodeName: instance.chef.chefNodeName,
+                                            environment: instance.envId,
+                                            instanceOS: instance.hardware.os
                                         }, function(err, code) {
 
                                             console.log('process stopped ==> ', err, code);
@@ -227,6 +233,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         hardwareData.memory = {};
                                                         hardwareData.memory.total = nodeData.automatic.memory.total;
                                                         hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                        hardwareData.os = instance.hardware.os;
                                                         instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                             if (err) {
                                                                 console.log("Unable to set instance hardware details");
@@ -327,6 +334,226 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 });
             }
         });
+    });
+
+
+    app.post('/blueprints/:blueprintId/provision', function(req, res) {
+        console.log('body ==>',req.body);
+        blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
+            if (err) {
+                console.log(err);
+                res.send(500);
+                return;
+            }
+            if (data.length) {
+                var blueprint = data[0];
+                var launchVersionNumber = blueprint.latestVersion;
+                if (req.query.version) {
+                    launchVersionNumber = req.body.version;
+                }
+                var version;
+                for (var i = 0; i < blueprint.versionsList.length; i++) {
+                    if (blueprint.versionsList[i].ver === blueprint.latestVersion) {
+                        version = blueprint.versionsList[i];
+                        break;
+                    }
+                }
+                if (!version) {
+                    res.send(404);
+                    return;
+                }
+                configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(500);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
+                    });
+
+                    function provisionInstance() {
+
+                        var instance = {
+                            projectId: blueprint.projectId,
+                            envId: blueprint.envId,
+                            chefNodeName: req.body.instanceIP,
+                            runlist: version.runlist,
+                            platformId: 'datacenter',
+                            instanceIP: req.body.instanceIP,
+                            instanceState: 'running',
+                            bootStrapStatus: 'waiting',
+                            users: blueprint.users,
+                            hardware: {
+                                platform: 'unknown',
+                                platformVersion: 'unknown',
+                                architecture: 'unknown',
+                                memory: {
+                                    total: 'unknown',
+                                    free: 'unknown',
+                                },
+                                os: blueprint.instanceOS
+                            },
+                            chef: {
+                                serverId: blueprint.chefServerId,
+                                chefNodeName: req.body.instanceIP
+                            },
+                            credentials: {
+                                username: req.body.username,
+                                password: req.body.password,
+                            },
+                            blueprintData: {
+                                blueprintId: blueprint._id,
+                                blueprintName: blueprint.name,
+                                templateId: blueprint.templateId,
+                                templateType: blueprint.templateType,
+                                templateComponents: blueprint.templateComponents
+                            }
+                        }
+
+                        instancesDao.createInstance(instance, function(err, data) {
+                            if (err) {
+                                console.log(err);
+                                res.send(500);
+                                return;
+                            }
+                            instance.id = data._id;
+
+                            logsDao.insertLog({
+                                referenceId: instance.id,
+                                err: false,
+                                log: "Provisioning Instance",
+                                timestamp: new Date().getTime()
+                            });
+                            logsDao.insertLog({
+                                referenceId: instance.id,
+                                err: false,
+                                log: "Bootstrapping Instance",
+                                timestamp: new Date().getTime()
+                            });
+                            chef.bootstrapInstance({
+                                instanceIp: instance.instanceIP,
+                                runlist: instance.runlist,
+                                instanceUsername: instance.credentials.username,
+                                instancePassword: instance.credentials.password,
+                                nodeName: instance.chef.chefNodeName,
+                                environment: instance.envId,
+                                instanceOS: instance.hardware.os
+                            }, function(err, code) {
+
+                                console.log('process stopped ==> ', err, code);
+                                if (err) {
+                                    console.log("knife launch err ==>", err);
+                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+
+                                    });
+                                } else {
+                                    if (code == 0) {
+                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                            if (err) {
+                                                console.log("Unable to set instance bootstarp status");
+                                            } else {
+                                                console.log("Instance bootstrap status set to success");
+                                            }
+                                        });
+
+                                        chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                            if (err) {
+                                                console.log(err);
+                                                return;
+                                            }
+                                            var hardwareData = {};
+                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                            hardwareData.platform = nodeData.automatic.platform;
+                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                            hardwareData.memory = {};
+                                            hardwareData.memory.total = nodeData.automatic.memory.total;
+                                            hardwareData.memory.free = nodeData.automatic.memory.free;
+                                            hardwareData.os = instance.hardware.os;
+                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                if (err) {
+                                                    console.log("Unable to set instance hardware details");
+                                                } else {
+                                                    console.log("Instance hardware details set successessfully");
+                                                }
+                                            });
+                                        });
+
+                                    } else {
+                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                            if (err) {
+                                                console.log("Unable to set instance bootstarp status");
+                                            } else {
+                                                console.log("Instance bootstrap status set to failed");
+                                            }
+                                        });
+
+                                    }
+                                }
+
+                            }, function(stdOutData) {
+
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: false,
+                                    log: stdOutData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+
+                            }, function(stdErrData) {
+
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: true,
+                                    log: stdErrData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+
+                            });
+
+                            res.send(200, {
+                                "id": instance.id,
+                                "message": "instance launch success"
+                            });
+                        });
+
+                    }
+
+                    chef.getEnvironment(blueprint.envId, function(err, env) {
+                        if (err) {
+                            console.log(err);
+                            res.send(500);
+                            return;
+                        }
+
+                        if (!env) {
+                            console.log(blueprint.envId);
+                            chef.createEnvironment(blueprint.envId, function(err, envName) {
+                                if (err) {
+                                    res.send(500);
+                                    return;
+                                }
+                                provisionInstance();
+
+                            });
+                        } else {
+                            provisionInstance();
+                        }
+
+                    });
+                });
+            } else {
+                res.send(404);
+            }
+        });
+
     });
 
 };
