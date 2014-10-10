@@ -703,6 +703,22 @@ var urlParams ={};
 })();
 
 $.get('../instances/'+urlParams.id,function(data){
+
+   //setting tree and drawing breadcrumb
+
+   var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
+
+   var orgid = $selectedOrg.click().attr('data-id');
+   if(orgid) {
+    console.log('orgid ==>',orgid);
+    var $li = $('.'+orgid).find('li[data-envName="'+data.envId+'"]').addClass('active');
+    $li.parents('li').addClass('active open');
+    $li.parents('ul').css({'display':'block'});
+    drawBreadCrumb();
+
+   } 
+ 
+
    console.log(data);
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
@@ -1003,4 +1019,5 @@ $.get('../instances/'+urlParams.id,function(data){
   $('.panel-databag1').click(function(e){
       $('#data_bag_div3').show();
   });
+
 </script>

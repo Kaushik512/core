@@ -1391,7 +1391,7 @@ $('.actionControlPanel').click(function(e) {
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {
-                window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+                window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
             }
         }
     } else {
@@ -1399,7 +1399,7 @@ $('.actionControlPanel').click(function(e) {
         if ($selectedCard.length) {
             var instanceId = $selectedCard.attr('data-instanceId');
             if (instanceId) {
-                window.location.href = 'index.html#ajax/Controlpanel.html?id=' + instanceId;
+                window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
             }
         }
     }
