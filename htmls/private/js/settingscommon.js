@@ -663,7 +663,7 @@ function saveform_old(formID) {
         url: serviceURL + "savemasterjson/" + formID,
         success: function (data) {
             //alert(data.toString());
-            alert('Successfully Saved');
+           // alert('Successfully Saved');
         },
         failure: function (data) {
             alert(data.toString());
@@ -863,7 +863,7 @@ function checkusernameexistsinldap(inputID){
     if($('#' + inputID).length > 0){
         var inp = $('#' + inputID);
         inp.blur(function(){
-            alert('in');
+           // alert('in');
             var uni = $('#unique_' + inp.attr("id")); //check if the error span is loaded.
             if(uni.length > 0)
                 if(uni.html().indexOf('LDAP') > 0) //check if the message is from LDAP check
@@ -920,7 +920,7 @@ function getDockerTags(){
         url: "https://index.docker.io/v1/repositories/srinivasiyer/liferay_tomcat/tags",
         success: function (data) {
             //alert(data.toString());
-            alert(data);
+          //  alert(data);
             returnValue = data;
         },
         failure: function (data) {
@@ -940,7 +940,7 @@ function getDockerImages(){
         url: "https://index.docker.io/v1/search?q=rldevops/mysql",
         success: function (data) {
             //alert(data.toString());
-            alert(data);
+          //  alert(data);
             returnValue = data;
         },
         failure: function (data) {

@@ -5,41 +5,12 @@
 <script src="/private/js/settingscommon.js"></script> 
 <h4 style="color:black;">Tracker</h4>
 
- <form action="" class="smart-form" novalidate="novalidate">
-                                                        
-
- <fieldset>
-<div class="row">
-    
-        <section class="col col-6">
-            <label for="category">Organization</label>
-            <label class="input">
-                <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname']"  cdata="catalyst">
-                    <option value="">Select Organization</option>
-
-                </select>
-                <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-            </label>
-        </section>
-        <section class="col col-6">
-            <label for="category">Business Group</label>
-            <label class="input">
-                <select id="productgroupname" class="form-control" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst">
-                    <option value="">Select Business Group</option>
-                </select>
-                <span data-val-controltovalidate="domainname" id="Span1" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-            </label>
-         
-        </section>
-    
-</div>
-</fieldset>
-</form>
+ 
 <div class="row">
     <hr /><br />
 </div>
 <div id="page-wrapper">
-        <div class="row">
+     <div class="row">
         
       <!--col-lg-3 ends-->
 
@@ -232,6 +203,10 @@ function addInstanceToDOM(data,index) {
   $("#tabletrackerinstanceview").append($rowContainter);
 
 
+}
+
+function loadTrackContent(alink){
+  //To Do refresh tracker inner content
 }
 
 
