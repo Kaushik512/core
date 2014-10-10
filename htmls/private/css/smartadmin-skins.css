@@ -460,7 +460,9 @@ border-top: 1px solid #303031;
 }
 
 /********************************************************************* STYLE 2 *************************************************************/
-
+.smart-style-2 .border-radius-20{
+	border-radius: 20px !important;
+}
 .smart-style-2 #shortcut {
 	background-color: #40baf1;
 	width:auto;

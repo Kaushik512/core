@@ -9932,11 +9932,11 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
 }
 @media (min-width:768px) and (max-width:880px) {
     #login #header {
-    padding: 0 5px!important;
+    /*padding: 0 5px!important;*/
 }
 }@media only screen and (min-width:0) and (max-width:679px) {
     #login #header {
-    padding: 0 5px!important;
+    /*padding: 0 5px!important;*/
 }
 #login #header #logo img {
     width: 135px;
@@ -26794,11 +26794,12 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
 }
 @media (min-width:768px) and (max-width:880px) {
     #login #header {
-    padding: 0 5px!important;
+    /*padding: 0 5px!important;*/
 }
-}@media only screen and (min-width:0) and (max-width:679px) {
+}
+@media only screen and (min-width:0) and (max-width:679px) {
     #login #header {
-    padding: 0 5px!important;
+    /*padding: 0 5px!important;*/
 }
 #login #header #logo img {
     width: 135px;
@@ -31673,7 +31674,8 @@ img.away {
 .header-search>input[type=text] {
     margin-top: 9px;
 }
-}@media (min-width:768px) and (max-width:880px) {
+}
+@media (min-width:768px) and (max-width:880px) {
     #main {
     margin-left: 0;
 }
@@ -31696,7 +31698,7 @@ img.away {
     line-height: 38px!important;
 }
 #logo {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 /*Arabinda #logo img {
     width: 127px;
@@ -31736,7 +31738,8 @@ img.away {
 .header-search>input[type=text] {
     margin-top: 9px;
 }
-}@media (max-width:767px) {
+}
+@media (max-width:767px) {
     #main {
     margin-left: 0;
 }
@@ -31791,7 +31794,7 @@ img.away {
     width: 50px!important;
 }
 #logo {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 /*Arabinda #logo img {
     width: 127px;
@@ -31921,7 +31924,7 @@ img.away {
     width: 50px!important;
 }
 #logo {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 /*Arabinda #logo img {
     width: 127px;
@@ -32071,7 +32074,7 @@ img.away {
     line-height: 38px!important;
 }
 #logo {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 /*Arabinda #logo img {
     width: 127px;
