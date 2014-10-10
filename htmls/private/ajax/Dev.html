@@ -209,6 +209,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="desktopProvisioningPanel panel panel-default blueprintContainer">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse4"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Desktop Provisioning</a></h4>
+                                            </div>
+                                            <div id="collapse4" class="panel-collapse collapse">
+                                                <div class="panel-body">
+
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
 
@@ -352,7 +362,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Blueprint Launch Result</h4>
+        <h4 class="modal-title" id="myModalLabel">Launching Blueprint</h4>
       </div>
       <div class="modal-body">
         ...
@@ -438,6 +448,60 @@
 
             </div>
              <div class="modal-footer">
+                 <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    Enter instance details
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form role="form" class="smart-form1">
+          <fieldset>
+          <div class="">
+          <section class="col col-12">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Instance IP</label>
+              <div class="">
+                <input type="text" id="instanceIPInput">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Instance Username</label>
+              <div class="">
+              <input type="text" id="instanceUsernameInput">
+            </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="exampleInputEmail1">Instance Password</label>
+             <div class="">
+                <input type="password" id="instancePasswordInput">
+            </div>
+            </div>
+      </section>
+    
+  </div>
+
+</fieldset>
+  </form>
+         
+
+            </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default btn-primary desktopProvisioningLaunchBtn">Provision</button>
                  <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
              </div>
 
@@ -589,6 +653,9 @@ $.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', fun
     var $devopsRolepanelBody = $('.devopsRolePanel').find('.panel-body');
     $devopsRolepanelBody.empty();
 
+    var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
+    $devopsRolepanelBody.empty();
+
 
 
     for (var i = 0; i < data.length; i++) {
@@ -596,7 +663,7 @@ $.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', fun
 
         var $itemContainer = $('<div></div>').addClass("productdiv4");
 
-        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId);
+        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
         var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
             'text-align': 'center'
         });
@@ -674,8 +741,10 @@ $.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', fun
         $itemContainer.append($itemBody);
         if (data[i].templateType == 'appFactory') {
             $AppFactpanelBody.append($itemContainer);
-        } else {
+        } else if(data[i].templateType == 'devopsRole'){
             $devopsRolepanelBody.append($itemContainer);
+        } else {
+            $desktopProvisioningPanelBody.append($itemContainer);
         }
     }
     var $productdiv1 = $('.productdiv1');
@@ -696,9 +765,19 @@ $.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', fun
         var $appFactoryPanel = $AppFactpanelBody.parents('.appFactoryPanel').show();
         if (!expanded) {
             $appFactoryPanel.find('.collapse').addClass('in');
+            expanded = true;
             $appFactoryPanel.find('.panel-title a').removeClass('collapsed');
         } else {
             $appFactoryPanel.find('.panel-title a').addClass('collapsed');
+        }
+    }
+    if ($desktopProvisioningPanelBody.children().length) {
+        var $desktopProvisioningPanel = $desktopProvisioningPanelBody.parents('.desktopProvisioningPanel').show();
+        if (!expanded) {
+            $desktopProvisioningPanel.find('.collapse').addClass('in');
+            $desktopProvisioningPanel.find('.panel-title a').removeClass('collapsed');
+        } else {
+            $desktopProvisioningPanel.find('.panel-title a').addClass('collapsed');
         }
         
     }
@@ -1259,8 +1338,21 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 });
 $('.launchBtn').click(function(e) {
     var $selectedItems = $('.role-Selected1');
+    if(!$selectedItems.length) {
+      return;
+    }
+    if($selectedItems.attr('data-templateType') === 'desktopProvisioning') {
+        var $modalDesktopProvisioning =$('#modalDesktopProvisioningLaunch');
+        var blueprintId = $selectedItems.attr('data-blueprintId');
+        var version = $selectedItems.find('.blueprintVersionDropDown').val();
+        $modalDesktopProvisioning.data('blueprintId',blueprintId);
+        $modalDesktopProvisioning.data('blueprintVersion',version);
+        $modalDesktopProvisioning.modal('show');
+       return;
+    }
     var $launchResultContainer = $('#launchResultContainer');
     $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    $launchResultContainer.find('.modal-title').html('Launching Blueprint');
     $launchResultContainer.modal('show');
     for (var i = 0; i < $selectedItems.length; i++) {
         var projectId = $($selectedItems.get(i)).attr('data-projectId');
@@ -1347,6 +1439,104 @@ $('.launchBtn').click(function(e) {
             $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
         });
     }
+});
+
+$('.desktopProvisioningLaunchBtn').click(function(e) {
+    var $modalDesktopProvisioning = $('#modalDesktopProvisioningLaunch');
+    var blueprintId = $modalDesktopProvisioning.data('blueprintId');
+    var version = $modalDesktopProvisioning.data('blueprintVersion');;
+    var reqBody = {};
+    reqBody.version = version;
+    reqBody.username = $('#instanceUsernameInput').val();
+    reqBody.password = $('#instancePasswordInput').val();
+    reqBody.instanceIP = $('#instanceIPInput').val();
+
+    $modalDesktopProvisioning.modal('hide');
+    var $launchResultContainer = $('#launchResultContainer');
+    $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    $launchResultContainer.find('.modal-title').html('Provisioning Instance');
+    $launchResultContainer.modal('show');
+
+
+    $.post('/blueprints/' + blueprintId + '/provision', reqBody, function(data) {
+        var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
+
+        $launchResultContainer.find('.modal-body').empty();
+        $launchResultContainer.find('.modal-body').append($msg);
+
+        var instanceId = data.id;
+        var timeout;
+
+        $launchResultContainer.on('hidden.bs.modal', function(e) {
+            $launchResultContainer.off('hidden.bs.modal');
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        });
+        $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
+
+        $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
+
+        var lastTimestamp;
+
+        function pollLogs(timestamp, delay, clearData) {
+            var url = '/instances/' + instanceId + '/logs';
+            if (timestamp) {
+                url = url + '?timestamp=' + timestamp;
+            }
+
+            timeout = setTimeout(function() {
+                $.get(url, function(data) {
+                    var $modalBody = $divBootstrapLogArea;
+                    if (clearData) {
+                        $modalBody.empty();
+                    }
+                    var $table = $('<div></div>');
+
+                    for (var i = 0; i < data.length; i++) {
+                        var $rowDiv = $('<div class="row"></div>');
+                        var timeString = new Date().setTime(data[i].timestamp);
+                        var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                        //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                        if (data[i].err) {
+                            $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                        } else {
+                            $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
+                        }
+
+                        $table.append($rowDiv);
+                    }
+
+
+                    if (data.length) {
+                        lastTimestamp = data[data.length - 1].timestamp;
+                        console.log(lastTimestamp);
+                        $modalBody.append($table);
+                        $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                    }
+
+
+                    console.log('polling again');
+                    if ($launchResultContainer.data()['bs.modal'].isShown) {
+                        pollLogs(lastTimestamp, 1000, false);
+                    } else {
+                        console.log('not polling again');
+                    }
+                });
+            }, delay);
+        }
+        pollLogs(lastTimestamp, 0, true);
+        $.get('/instances/' + data.id, function(data) {
+            addInstanceToDOM(data);
+        });
+
+    }).error(function() {
+        $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+    });;
+
+
+
 });
 
 

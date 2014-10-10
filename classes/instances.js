@@ -20,11 +20,17 @@ var InstanceSchema = new Schema({
         memory: {
             total: String,
             free: String,
-        }
+        },
+        os:String,
     },
     chef: {
         serverId: String,
         chefNodeName: String
+    },
+    credentials : {
+        username:String,
+        password:String,
+        pemFileLocation :String, 
     },
     blueprintData: {
         blueprintId: String,
@@ -207,7 +213,8 @@ var InstancesDao = function() {
                     memory: {
                         total: hardwareData.memory.total,
                         free: hardwareData.memory.free,
-                    }
+                    },
+                    os:hardwareData.os
                 }
             }
         }, {

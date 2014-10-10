@@ -11,6 +11,8 @@ var BlueprintSchema = new Schema({
 	templateType: String,
 	templateComponents: [String],
 	instanceType: String,
+	instanceOS : String,
+	importInstance: Boolean,
 	chefServerId:String,
 	users:[String],
 	versionsList: [{
@@ -94,6 +96,8 @@ var BlueprintsDao = function() {
 			templateComponents: blueprintData.templateComponents,
 			chefServerId:blueprintData.chefServerId,
 			instanceType: blueprintData.instanceType,
+			instanceOS : blueprintData.instanceOS,
+			importInstance : blueprintData.importInstance,
 			users:blueprintData.users,
 			versionsList: [{
 				ver: generateBlueprintVersionNumber(null),

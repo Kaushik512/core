@@ -54,7 +54,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
-                configmgmtDao.getChefServerDetails(data[0].chef.serverId, function(err, chefDetails) {
+                var instance = data[0];
+                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);
                         return;
@@ -71,14 +72,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         hostedChefUrl: chefDetails.url,
                     });
 
-                    settingsController.getSettings(function(settings) {
 
-                        chef.runChefClient(req.body.runlist, {
-                            privateKey: settings.aws.pemFileLocation + settings.aws.pemFile,
-                            username: settings.aws.instanceUserName,
-                            host: data[0].instanceIP,
-                            port: 22
-                        }, function(err, retCode) {
+                    settingsController.getSettings(function(settings) {
+                        console.log('instance IP ==>',instance.instanceIP);
+                        var chefClientOptions = {
+                            privateKey: instance.credentials.pemFileLocation,
+                            username: instance.credentials.username,
+                            host: instance.instanceIP,
+                            instanceOS : instance.hardware.os,
+                            port: 22,
+                            runlist:req.body.runlist
+                        }
+                        if(instance.credentials.pemFileLocation) {
+                            chefClientOptions.privateKey = instance.credentials.pemFileLocation; 
+                        } else {
+                            chefClientOptions.password = instance.credentials.password;
+                        }
+                        chef.runChefClient(chefClientOptions, function(err, retCode) {
                             if (err) {
                                 logsDao.insertLog({
                                     referenceId: req.params.instanceId,
@@ -313,6 +323,134 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             res.send(data);
 
+        });
+
+    });
+
+    app.get('/instances/:instanceId/bootstrap', function(req, res) {
+        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+
+            if (data.length) {
+                var instance = data[0];
+                configmgmtDao.getChefServerDetails(data[0].chef.serverId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(500);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
+                    });
+
+                    chef.bootstrapInstance({
+                        instanceIp: instance.instanceIP,
+                        pemFilePath: instance.credentials.pemFileLocation,
+                        runlist: instance.runlist,
+                        instanceUsername: instance.credentials.username,
+                        nodeName: instance.chef.chefNodeName,
+                        environment: instance.envId,
+                        instanceOS: instance.hardware.os
+                    }, function(err, code) {
+
+                        console.log('process stopped ==> ', err, code);
+                        if (err) {
+                            console.log("knife launch err ==>", err);
+                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+
+                            });
+                        } else {
+                            if (code == 0) {
+                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                    if (err) {
+                                        console.log("Unable to set instance bootstarp status");
+                                    } else {
+                                        console.log("Instance bootstrap status set to success");
+                                    }
+                                });
+
+                                chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                    if (err) {
+                                        console.log(err);
+                                        return;
+                                    }
+                                    var hardwareData = {};
+                                    hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                    hardwareData.platform = nodeData.automatic.platform;
+                                    hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                    hardwareData.memory = {};
+                                    hardwareData.memory.total = nodeData.automatic.memory.total;
+                                    hardwareData.memory.free = nodeData.automatic.memory.free;
+                                    hardwareData.os = instance.hardware.os;
+                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                        if (err) {
+                                            console.log("Unable to set instance hardware details");
+                                        } else {
+                                            console.log("Instance hardware details set successessfully");
+                                        }
+                                    });
+                                });
+
+                            } else {
+                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                    if (err) {
+                                        console.log("Unable to set instance bootstarp status");
+                                    } else {
+                                        console.log("Instance bootstrap status set to failed");
+                                    }
+                                });
+
+                            }
+                        }
+
+                    }, function(stdOutData) {
+
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: false,
+                            log: stdOutData.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        }, function(err, data) {
+                            if (err) {
+                                console.log('unable to update bootStrapLog');
+                                return;
+                            }
+                            console.log('bootStrapLog updated');
+                        });
+
+                    }, function(stdErrData) {
+
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: true,
+                            log: stdErrData.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        }, function(err, data) {
+                            if (err) {
+                                console.log('unable to update bootStrapLog');
+                                return;
+                            }
+                            console.log('bootStrapLog updated');
+                        });
+
+
+                    });
+                    res.send(200);
+                });
+
+            } else {
+                res.send(404);
+            }
         });
 
     });
