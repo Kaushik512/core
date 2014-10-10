@@ -7,7 +7,6 @@ var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 
 module.exports.setRoutes = function(app) {
 
-
 	app.post('/auth/signin', function(req, res) {
 
 		console.log(req.originalUrl);

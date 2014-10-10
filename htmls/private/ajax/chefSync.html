@@ -163,7 +163,7 @@ var $projectList = $('#chefImportProjectSelect');
 
 $('.nodeListContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
-$.get('/chef/servers/'+urlParams.chefId,function(data){
+$.get('../chef/servers/'+urlParams.chefId,function(data){
    console.log('chefServer ==>',data);
    $orgListInput.append($('<option></option>').val(data.orgname).html(data.orgname));
     var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
@@ -198,7 +198,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
       }
     });
 
-  $.get('/chef/servers/'+urlParams.chefId+'/nodes',function(data){
+  $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(data){
     $('.nodeListContainer img').remove();
 
     var $tableBody = $('.table-hover tbody');
@@ -265,7 +265,7 @@ $.get('/chef/servers/'+urlParams.chefId,function(data){
 
 });
 
-  var serviceURL = "/d4dMasters/";
+  var serviceURL = "../d4dMasters/";
 
           function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
                 readMasterJson_Top(jsonID);
@@ -348,7 +348,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
    };
    console.log(reqBody);
 
-   $.post('/chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){
+   $.post('../chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){
    	$('#chefImportNodesModal').modal('hide');
 
    }).error(function(){
@@ -363,7 +363,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
 (function(){
 
 var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
-$.get('/users',function(userList){
+$.get('../users',function(userList){
   var $userListSelect = $('#userListSelect').empty(); 
   userList.sort(function(a, b){
     var keyA =Object.keys(a);
