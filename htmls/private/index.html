@@ -565,7 +565,7 @@
 		  $('#blueprints').find('ul li a').first().trigger('click');
 
 
-         var serviceURL = "/d4dMasters/";
+         var serviceURL = "../d4dMasters/";
          window.selectedOrgName = $('.orgSelected').text().trim(); 
          //alert('in');
 
@@ -574,7 +574,7 @@
 			        dataType: "json",
 
 			        async: false,
-			        url: "/organizations/getTree",
+			        url: "../organizations/getTree",
 			        success: function (data) {
 			        	console.log('ajax success');
 			            // alert(data.toString());   

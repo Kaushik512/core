@@ -1185,7 +1185,7 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
             console.log('pushing');
-            $.post('/projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
+            $.post('../projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
                 blueprintData:reqBody
             },function(data){
              console.log(data);
@@ -1244,7 +1244,7 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                     dataType: "json",
 
                     async: false,
-                    url: "/organizations/getTree",
+                    url: "../organizations/getTree",
                     success:function(data){
                         var $orgListInput = $('#orgnameSelect');
                         $orgListInput.append($('<option></option>').val('choose').html('Choose'));
@@ -1276,9 +1276,9 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                            
                             $.ajax({
-                            url:'/organizations/'+orgName+'/cookbooks',
+                            url:'../organizations/'+orgName+'/cookbooks',
                             method:'GET',
-                            async:false,
+                            async:true,
                             success :function(data) {
                              var keys = Object.keys(data.cookbooks);
                              
@@ -1323,7 +1323,7 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 (function(){
 
 var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
-$.get('/users',function(userList){
+$.get('../users',function(userList){
   var $userListSelect = $('#userListSelect').empty();
   userList.sort(function(a, b){
     var keyA =Object.keys(a);
