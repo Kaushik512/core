@@ -111,7 +111,7 @@
         </div>
         </div>
       </section>
-      <section class="col col-12 usernameSection" style="display:none">
+      <section class="col col-12 credentialSection" style="display:none">
         <div class="form-group">
           <label for="exampleInputEmail1">Username</label>
           <div class="">
@@ -119,11 +119,19 @@
         </div>
         </div>
       </section>
-      <section class="col col-12 passwordSection" style="display:none">
+      <section class="col col-12 credentialSection" style="display:none">
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
           <div class="">
           <input type="password" id="importPasswordInput" />
+        </div>
+        </div>
+      </section>
+      <section class="col col-12 credentialSection" style="display:none">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Pem File</label>
+          <div class="">
+          <input type="checkbox" id="pemFileCheckbox" />&nbsp;<input type="file" id="importPemfileInput" style="display:inline" disabled/>
         </div>
         </div>
       </section>
@@ -172,6 +180,18 @@ var urlParams ={};
 })();
 $(function(){
 
+
+  var $pemFileCheckBox = $('#pemFileCheckbox').change(function(){
+   
+    if($(this).is(':checked')) {
+      $('#importPemfileInput').attr('disabled',false);
+      $('#importPasswordInput').attr('disabled',true);
+    } else {
+      $('#importPemfileInput').attr('disabled',true);
+      $('#importPasswordInput').attr('disabled',false);
+    } 
+  });
+
  //drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
  $bgList = $('#chefImportBgSelect');
@@ -188,16 +208,15 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
     for(var i=0;i<getProviders.length;i++) {
       $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
     }
+    $providerlist.append($('<option></option>').val('azure').html('Azure Data Center'));
     $providerlist.append($('<option></option>').val('datacenter').html('Data Center'));
 
      $providerlist.change(function(e){
       var val = $providerlist.val();
-      if(val == 'datacenter') {
-         $('.usernameSection').show();
-         $('.passwordSection').show(); 
+      if(val == 'datacenter' || val == 'azure') {
+         $('.credentialSection').show();
       } else {
-         $('.passwordSection').hide(); 
-         $('.usernameSection').hide();  
+         $('.credentialSection').hide();
       }
 
 
@@ -361,12 +380,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
      alert('Please Choose Users');
      return;
    }
-   if($('.usernameSection').is(':visible')){
-     reqBody.credentials = {};
-     reqBody.credentials.username = $('#importUsernameInput').val();
-     reqBody.credentials.password = $('#importPasswordInput').val();
-       
-   }
+
    reqBody.selectedNodes = [];
    for(var i=0;i<$checkBoxes.length;i++) {
       var nodeInfo = {};
@@ -403,14 +417,45 @@ $('.showChefImportNodesModalBtn').click(function(e){
       }
       reqBody.selectedNodes.push(nodeInfo);
    };
-   console.log(reqBody);
 
+   if($('.credentialSection').is(':visible')){
+     reqBody.credentials = {};
+     reqBody.credentials.username = $('#importUsernameInput').val();
+     if(!$pemFileCheckBox.is(':checked')) {
+       reqBody.credentials.password = $('#importPasswordInput').val();
+       console.log(reqBody);
+       makeRequest();
+     } else {
+       var pemFileInput = $('#importPemfileInput').get(0);
+       if(!pemFileInput.files.length) {
+         alert('Please choose a pem file');
+         return;
+       }
+       var reader = new FileReader();
+
+       // Closure to capture the file information.
+       reader.onload = function(e) {
+           // Render thumbnail.
+            reqBody.credentials.pemFileData = e.target.result;
+            makeRequest();
+           
+       };
+       // Read in the image file as a data URL.
+       reader.readAsText(pemFileInput.files[0]);
+ 
+     }       
+   } else {
+     makeRequest();
+   }
+
+      function makeRequest() {
    $.post('../chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){
    	$('#chefImportNodesModal').modal('hide');
 
    }).error(function(){
     alert('Unable to import nodes. Please try again later');
    });
+  }
 
  });
 

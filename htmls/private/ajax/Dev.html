@@ -542,6 +542,7 @@ var urlParams = {};
 console.log(urlParams);
 var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
+var orgId = urlParams['org'];
 
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
@@ -645,7 +646,7 @@ $('.deploymentChefRunBtn').click(function(e) {
 });
 
 
-$.get('../projects/' + projectId + '/environments/' + envId + '/blueprints', function(data) {
+$.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/blueprints', function(data) {
 
     var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
     $AppFactpanelBody.empty();
@@ -1232,7 +1233,7 @@ function addInstanceToDOM(data) {
 
 
 
-$.get('../projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
+$.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
     
     var $instancesList = $('.instancesList').empty();
     var $deploymentNodeList = $('.deploymentNodeList').empty();

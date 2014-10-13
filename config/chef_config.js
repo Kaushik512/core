@@ -1,14 +1,10 @@
-var pathExtra = require('path-extra');
+var appConfig = require('./app_config');
 var mkdirp = require('mkdirp');
-
-var homeDirectory = pathExtra.homedir();
-
-console.log('homeDirectory ==>',homeDirectory);
 
 
 //creating path
 
-var dir = mkdirp.sync(homeDirectory+'/catalyst/chef-repos/');
+var dir = mkdirp.sync(appConfig.settingsDir+'/chef-repos/');
 console.log(dir);
 
 
@@ -23,6 +19,6 @@ var chefConfig = {
 
 }
 
-chefConfig.chefReposLocation = homeDirectory+'/catalyst/chef-repos/'
+chefConfig.chefReposLocation = appConfig.settingsDir+'/chef-repos/';
 
 module.exports = chefConfig

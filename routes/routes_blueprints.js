@@ -115,6 +115,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 console.log(version.runlist);
                                 console.log(instanceData);
                                 var instance = {
+                                    orgId : blueprint.orgId,
                                     projectId: blueprint.projectId,
                                     envId: blueprint.envId,
                                     chefNodeName: instanceData.InstanceId,
@@ -382,6 +383,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     function provisionInstance() {
 
                         var instance = {
+                            orgId : blueprint.projectId,
                             projectId: blueprint.projectId,
                             envId: blueprint.envId,
                             chefNodeName: req.body.instanceIP,

@@ -5,6 +5,9 @@ var instancesDao = require('../classes/instances');
 var environmentsDao = require('../classes/d4dmasters/environments.js');
 var logsDao = require('../classes/dao/logsdao.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
+var fileIo = require('../classes/utils/fileio');
+var appConfig = require('../config/app_config');
+var uuid = require('node-uuid');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -108,7 +111,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 var instanceCredentials = {};
                 if (reqBody.credentials) {
                     instanceCredentials.username = reqBody.credentials.username;
-                    instanceCredentials.password = reqBody.credentials.password;
+                    console.log("credentials ==>",reqBody.credentials);
+                    if (reqBody.credentials.password) {
+                        instanceCredentials.password = reqBody.credentials.password;
+                    } else {
+                        if (reqBody.credentials.pemFileLocation) {
+                            instanceCredentials.pemFileLocation = reqBody.credentials.pemFileLocation;
+                        } else {
+                            instanceCredentials.pemFileLocation = settings.pemFileLocation + settings.pemFile;
+                        }
+                    }
                 } else {
                     instanceCredentials = {
                         username: settings.instanceUserName,
@@ -119,6 +131,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 console.log('nodeip ==> ', nodeIp);
 
                 var instance = {
+                    orgId: orgId,
                     projectId: projectId,
                     envId: node.env,
                     chefNodeName: node.nodeName,
@@ -191,7 +204,23 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 return;
             }
             if (reqBody.selectedNodes.length) {
-                createEnv(reqBody.selectedNodes[count]);
+
+                if (reqBody.credentials && reqBody.credentials.pemFileData) {
+                    reqBody.credentials.pemFileLocation = appConfig.instancePemFilesDir + uuid.v4();
+                    fileIo.writeFile(reqBody.credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
+                        if (err) {
+                            console.log('unable to create pem file ', err);
+                            res.send(500);
+                            return;
+                        }
+                        createEnv(reqBody.selectedNodes[count]);
+                    });
+
+                } else {
+                    createEnv(reqBody.selectedNodes[count]);
+                }
+            } else {
+                res.send(400);
             }
         });
 

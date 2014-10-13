@@ -6,7 +6,7 @@ var http = require("http");
 var childProcess = require('child_process');
 var io = require('socket.io');
 
-var appConfig = require('./app_config');
+var appConfig = require('./config/app_config');
 var settingsController = require('./controller/settings');
 var RedisStore = require('connect-redis')(express);
 

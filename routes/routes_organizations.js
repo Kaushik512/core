@@ -1,6 +1,9 @@
 var masterjsonDao = require('../classes/d4dmasters/masterjson.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt.js');
 var Chef = require('../classes/chef');
+var blueprintsDao = require('../classes/blueprints');
+var settingsController = require('../controller/settings');
+var instancesDao = require('../classes/instances');
 
 
 
@@ -155,6 +158,49 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         });
 
+    });
+
+
+    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        blueprintsDao.getBlueprintsByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+        });
+    });
+
+    app.post('/organizations/:orgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        var blueprintData = req.body.blueprintData;
+        blueprintData.orgId = req.params.orgId;
+        blueprintData.projectId = req.params.projectId;
+        blueprintData.envId = req.params.envId;
+        if (!blueprintData.runlist) {
+            blueprintData.runlist = [];
+        }
+        if (!blueprintData.users || !blueprintData.users.length) {
+            res.send(400);
+            return;
+        }
+
+        blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+        });
+    });
+
+    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/instances', function(req, res) {
+        instancesDao.getInstancesByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+        });
     });
 
     app.get('/organizations/:orgname/cookbooks', function(req, res) {

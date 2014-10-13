@@ -1165,6 +1165,15 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             } else {
                 templateRunlist = [];
             }
+
+            var orgId = $('#orgnameSelect').val();
+            if(orgId && orgId === 'choose') {
+                alert('Please choose an organization');
+                return false;
+            }
+
+            reqBody.orgId = orgId;
+
             var selectedRunlist = $('#cookbookSelect').val();
             if(!selectedRunlist || !selectedRunlist.length) {
                selectedRunlist = [];
@@ -1205,7 +1214,7 @@ var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
             console.log('pushing');
-            $.post('../projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
+            $.post('../organizations/'+reqBody.orgId+'/projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
                 blueprintData:reqBody
             },function(data){
              console.log(data);

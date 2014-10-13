@@ -4,6 +4,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var Schema = mongoose.Schema;
 
 var InstanceSchema = new Schema({
+    orgId: String,
     projectId: String,
     envId: String,
     chefNodeName: String,
@@ -12,7 +13,7 @@ var InstanceSchema = new Schema({
     instanceIP: String,
     instanceState: String,
     bootStrapStatus: String,
-    users:[String],
+    users: [String],
     hardware: {
         platform: String,
         platformVersion: String,
@@ -21,16 +22,16 @@ var InstanceSchema = new Schema({
             total: String,
             free: String,
         },
-        os:String,
+        os: String,
     },
     chef: {
         serverId: String,
         chefNodeName: String
     },
-    credentials : {
-        username:String,
-        password:String,
-        pemFileLocation :String, 
+    credentials: {
+        username: String,
+        password: String,
+        pemFileLocation: String,
     },
     blueprintData: {
         blueprintId: String,
@@ -60,20 +61,20 @@ var InstancesDao = function() {
         });
     }
 
-    this.getInstances = function(callback){
-       
-        Instances.find({},function(err,data){
-            if(err){
-                callback(err,null);
+    this.getInstances = function(callback) {
+
+        Instances.find({}, function(err, data) {
+            if (err) {
+                callback(err, null);
                 return;
             }
-            callback(null,data);
+            callback(null, data);
         });
 
     };
 
 
-    this.getInstancesByProjectAndEnvId = function(projectId, envId, instanceType,userName, callback) {
+    this.getInstancesByProjectAndEnvId = function(projectId, envId, instanceType, userName, callback) {
         var queryObj = {
             projectId: projectId,
             envId: envId
@@ -81,7 +82,7 @@ var InstancesDao = function() {
         if (instanceType) {
             queryObj['blueprintData.templateType'] = instanceType;
         }
-        if(userName) {
+        if (userName) {
             queryObj.users = userName;
         }
         Instances.find(queryObj, function(err, data) {
@@ -92,6 +93,28 @@ var InstancesDao = function() {
             callback(null, data);
         });
     };
+
+    this.getInstancesByOrgProjectAndEnvId = function(orgId, projectId, envId, instanceType, userName, callback) {
+        var queryObj = {
+            orgId: orgId,
+            projectId: projectId,
+            envId: envId
+        }
+        if (instanceType) {
+            queryObj['blueprintData.templateType'] = instanceType;
+        }
+        if (userName) {
+            queryObj.users = userName;
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    };
+
 
     this.createInstance = function(instanceData, callback) {
         var instance = new Instances(instanceData);
@@ -214,7 +237,7 @@ var InstancesDao = function() {
                         total: hardwareData.memory.total,
                         free: hardwareData.memory.free,
                     },
-                    os:hardwareData.os
+                    os: hardwareData.os
                 }
             }
         }, {
