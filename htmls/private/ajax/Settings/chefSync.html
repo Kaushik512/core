@@ -111,6 +111,22 @@
         </div>
         </div>
       </section>
+      <section class="col col-12 usernameSection" style="display:none">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Username</label>
+          <div class="">
+          <input type="text" id="importUsernameInput" />
+        </div>
+        </div>
+      </section>
+      <section class="col col-12 passwordSection" style="display:none">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Password</label>
+          <div class="">
+          <input type="password" id="importPasswordInput" />
+        </div>
+        </div>
+      </section>
       <section class="col col-12">
                                                             <label class="label">Assign Users</label>
                                                             <label class="select select-multiple">
@@ -140,7 +156,7 @@
 <script type="text/javascript">
 
 
-window.selectedOrgName = "Chef Import";
+
 drawBreadCrumb1();
 var urlParams ={};
 (window.onpopstate = function () {
@@ -172,8 +188,20 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
     for(var i=0;i<getProviders.length;i++) {
       $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
     }
+    $providerlist.append($('<option></option>').val('datacenter').html('Data Center'));
+
+     $providerlist.change(function(e){
+      var val = $providerlist.val();
+      if(val == 'datacenter') {
+         $('.usernameSection').show();
+         $('.passwordSection').show(); 
+      } else {
+         $('.passwordSection').hide(); 
+         $('.usernameSection').hide();  
+      }
 
 
+     });
    
     $bgList.empty();
     $bgList.append($('<option></option>').val('choose').html('Choose'));
@@ -333,6 +361,12 @@ $('.showChefImportNodesModalBtn').click(function(e){
      alert('Please Choose Users');
      return;
    }
+   if($('.usernameSection').is(':visible')){
+     reqBody.credentials = {};
+     reqBody.credentials.username = $('#importUsernameInput').val();
+     reqBody.credentials.password = $('#importPasswordInput').val();
+       
+   }
    reqBody.selectedNodes = [];
    for(var i=0;i<$checkBoxes.length;i++) {
       var nodeInfo = {};
@@ -343,7 +377,30 @@ $('.showChefImportNodesModalBtn').click(function(e){
       nodeInfo.runlist = $ckb.attr('data-nodeRunlist').split(',');
       nodeInfo.platform = $ckb.attr('data-nodePlatform');
       nodeInfo.ip = $ckb.attr('data-nodeIp');
-      nodeInfo.nodeData = $ckb.data('nodeData');
+      var nodeData = $ckb.data('nodeData');
+      nodeInfo.nodeData = {};
+      nodeInfo.nodeData.automatic = {};
+      if(!nodeData.automatic) {
+         nodeData.automatic = {};
+      } 
+      if (nodeData.automatic.ec2) {
+        nodeInfo.nodeData.automatic.ec2 = {};
+        nodeInfo.nodeData.automatic.ec2.instance_id = nodeData.automatic.ec2.instance_id;;
+        nodeInfo.nodeData.automatic.ec2.public_ipv4 = nodeData.automatic.ec2.public_ipv4;;
+      }
+      if (nodeData.automatic.kernel && nodeData.automatic.kernel.machine) {
+          nodeInfo.nodeData.automatic.kernel = {};
+          nodeInfo.nodeData.automatic.kernel.machine = nodeData.automatic.kernel.machine;
+      }
+      if (nodeData.automatic.platform) {
+         nodeInfo.nodeData.automatic.platform = nodeData.automatic.platform;
+      }
+      if (nodeData.automatic.platform_version) {
+         nodeInfo.nodeData.automatic.platform_version = nodeData.automatic.platform_version;
+      }
+      if (nodeData.automatic.memory) {
+        nodeInfo.nodeData.automatic.memory = nodeData.automatic.memory;
+      }
       reqBody.selectedNodes.push(nodeInfo);
    };
    console.log(reqBody);
