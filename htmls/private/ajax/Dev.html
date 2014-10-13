@@ -402,8 +402,74 @@
         <h4 class="modal-title" id="myModalLabel">Update Runlist</h4>
       </div>
       <div class="modal-body">
-         <select class="chefCookbookList" multiple>
-         </select>
+        <div class="loadingContainer">
+            <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
+        </div>   
+        
+        <div class="smart-form" style="display:none;">
+            <div class="row">
+                <section style="padding-top:18px;">
+                    <div style="clear: both;" id="divCookbooks">
+                        
+                        <div class="col-lg-5">
+                            <select multiple="multiple" style="width: 200px;height:150px;margin-left:20px;" class="form-control" id="instanceCookbookList">
+                            </select>
+                        </div>
+                        <div style="margin-top: 50px;" class="col-lg-1">
+                            <div class="input-group">
+                        <div style="padding-bottom: 10px;" class="btn-group">
+                            <button id="btnaddInstanceCookbooks" class="btn btn-default btn-primary"style="width:30px;height:27px;" type="button">
+                                <i style="font-size:20px;" class="fa fa-angle-double-right">
+                                </i>
+                            </button>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <div class="btn-group">
+                            <button id="btnremoveinstanceCoookbooks" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
+                                <i style="font-size:20px;" class="fa fa-angle-double-left">
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="input-group">
+                        <div class="btn-group">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select multiple="multiple" style="width: 200px;height:150px;" class="form-control" id="instanceCookbookSelectedList">
+                                            </select>
+                                        </td>
+                                        <td style="padding-left:10px;">
+                                            <button id="btninstanceCookbookUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
+                                                <i style="font-size:20px;" class="fa fa-angle-double-up">
+                                                </i>
+                                            </button>
+                                            <div class="clearfix"></div>
+                                            <div class="clearfix"></div>
+                                            <div style="padding-top: 10px" class="btn-group"><button id="btninstanceCookbookDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
+                                                <i style="font-size:20px;" class="fa fa-angle-double-down">
+                                                </i>
+                                            </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="padding-bottom: 10px; margin-top: 40px;" class="btn-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </section>
+            </div>
+        </div>
+        <div class="errorContainer" style="display:none"></div>
+         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
@@ -876,26 +942,94 @@ var startStopInstanceHandler = function(e) {
 }
 
 
+$("#btnaddInstanceCookbooks").on('click', function () {
+
+        var $options = $('#instanceCookbookList option:selected');
+        var $selectedList = $("#instanceCookbookSelectedList");
+        $options.each(function(){
+            $selectedList.append($(this).clone());
+        });
+        
+    });
+    $("#btnremoveinstanceCoookbooks").on('click', function () {
+        $("#instanceCookbookSelectedList option:selected").remove();
+    });
+
+    $("#btninstanceCookbookUp").on('click', function () {
+        $("#instanceCookbookSelectedList option:selected").each(function () {
+            var listItem = $(this);
+            var listItemPosition = $("#instanceCookbookSelectedList option").index(listItem) + 1;
+
+            if (listItemPosition == 1) return false;
+
+            listItem.insertBefore(listItem.prev());
+        });
+
+    });
+
+    $("#btninstanceCookbookDown").on('click', function () {
+        var itemsCount = $("#instanceCookbookSelectedList option").length;
+
+        $($("#instanceCookbookSelectedList option:selected").get().reverse()).each(function () {
+            var listItem = $(this);
+            var listItemPosition = $("#instanceCookbookSelectedList option").index(listItem) + 1;
+
+            if (listItemPosition == itemsCount) return false;
+
+            listItem.insertAfter(listItem.next());
+
+        });
+    });
+
+
 var instanceUpdateRunlistHandler = function(e) {
     var $this = $(this);
     var instanceId = $this.attr('data-instanceId');
     var chefServerId = $this.attr('data-chefServerId');
-    console.log(instanceId);
+
+    //console.log(i+nstanceId);
     $chefRunModalContainer = $('#chefRunModalContainer');
-    $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
+    $chefRunModalContainer.find('.loadingContainer').show();
+    $chefRunModalContainer.find('.smart-form').hide();
+    $chefRunModalContainer.find('.errorContainer').hide();
     $chefRunModalContainer.modal('show');
+
+    //$demoChefClientRun = '';
+    //$chefRunModalContainer.find('.modal-body').empty().append($demoChefClientRun);
     $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
-        var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId', instanceId).attr('multiple', true);
+        var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);
+
+        
+
         for (var i = 0; i < keys.length; i++) {
             var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
             $cookbooksList.append($option);
         }
-        $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
+
+        var $selectedList = $("#instanceCookbookSelectedList").empty();
+        var runlist = $this.data('runlist');
+
+        if(runlist) {
+            for(var i=0;i<runlist.length;i++) {
+               var $option = $('<option></option>').append(runlist[i]).val(runlist[i]);
+              $selectedList.append($option);
+            }
+        } 
+
+
+
+        $chefRunModalContainer.find('.loadingContainer').hide();
+        $chefRunModalContainer.find('.smart-form').show();
+        //$demoChefClientRun.append($cookbooksList);
+        //$chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
 
     }).error(function() {
-        $chefRunModalContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+         $chefRunModalContainer.find('.loadingContainer').hide();
+         $chefRunModalContainer.find('.smart-form').hide();
+        $chefRunModalContainer.find('.errorContainer').empty().append('<span>Oops! Something went wrong. Please try again later</span>').show();
     });
+   
 
 };
 
@@ -1067,13 +1201,14 @@ function addInstanceToDOM(data) {
    
     var $viewAllA;
     if (data.runlist.length) {
-        $viewAllA  = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist").data('runlist', data.runlist.join());
+        $viewAllA  = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist");
         $viewAllA.click(function(e) {
             e.preventDefault();
             e.stopPropagation();
+
             var $modal = $('#modalTableRunlist');
             var $modalBody = $('#modalTableRunlist .modal-body').empty();
-            var runlist = $(this).data('runlist').split(',');
+            var runlist =  $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
             for (var j = 0; j < runlist.length; j++) {
                 var $divComponentItem;
                 if (j == 0) {
@@ -1159,6 +1294,8 @@ function addInstanceToDOM(data) {
     $back.append($backRunlistContainer);
     $backdiv.append($backhr);
 
+   
+
     for (var j = 0; j < data.runlist.length; j++) {
         var $divComponentItem;
         if (j == 0) {
@@ -1213,8 +1350,8 @@ function addInstanceToDOM(data) {
     $li.find('.instanceActionBtn').click(startStopInstanceHandler);
 
 
-    $rowContainter.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler);
-    $li.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler);
+    $rowContainter.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler).data('runlist',data.runlist);
+    $li.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler).data('runlist',data.runlist);
 
 
     $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
@@ -1564,8 +1701,14 @@ $('.blueprintUpdateBtn').click(function(e) {
 });
 
 $('.btnUpdateInstanceRunlist').click(function(e) {
-    var instanceId = $('.chefCookbookList').attr('data-instanceId');
-    var runlist = $('.chefCookbookList').val();
+    var instanceId = $('#instanceCookbookList').attr('data-instanceId');
+    
+    var runlist = [];
+    var $options = $('#instanceCookbookSelectedList').children();
+    $options.each(function(){
+       runlist.push($(this).val()); 
+    });
+
     console.log(runlist);
     $.post('../instances/' + instanceId + '/updateRunlist', {
         runlist: runlist
@@ -1600,4 +1743,3 @@ $('.actionControlPanel').click(function(e) {
 }); 
 
 </script>
-

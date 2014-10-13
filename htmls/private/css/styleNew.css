@@ -1924,3 +1924,10 @@ margin-top:0px;
 .tableactionWidthCheficon{
     width:140px;
 }
+.cookbookChefClientRun{
+    height: 150px;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 150px;
+    border: 1px solid #ccc;
+}
