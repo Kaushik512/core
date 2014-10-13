@@ -55,6 +55,14 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">
 	</head>
 	<body class="desktop-detected smart-style-2">
+		<script type="text/javascript">
+         //Refresh Issue Fix. This function will get executed when there is a refresh and the url is not of the home page.
+         function firstLoad(){
+         	if(window.location.href.indexOf('#') > 0)
+  				window.location.href = '/private/index.html';
+         }
+         firstLoad();
+         </script>
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 
 		<!-- HEADER -->
@@ -535,6 +543,7 @@
 		<!-- MAIN APP JS FILE -->
 
          <script type="text/javascript">
+         
          function setleftnavigation(toplink,breadcrumbHeader){
          	$('a[onclick*="setleftnavigation"]').removeClass('active');
          	$(toplink).addClass('active');
