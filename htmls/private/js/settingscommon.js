@@ -411,7 +411,7 @@ function saveform(formID){
     if(isFormValid() == false)
         return(false);
 
-
+    
     var data1 = new FormData();
     var fileNames = '';
     orgName = $('#orgname').val();
@@ -836,15 +836,30 @@ function getProjectsForOrg(orgname){
 
 //function injects a error label for the input control and puts the message
 function errormessageforInput(id,msg){
+   // alert(id);
     var errlabel = $('#errmsg_' + id);
+    var uniquelbl = $('#unique_' + id);
+
     var currCtrl = $('#' + id);
     if(errlabel.length > 0){ //no error label found
         errlabel.html(msg);
     }
     else
     {
-        currCtrl.closest('section').find('label').first().append('<span id="errmsg_' + $(this).attr("id") + '" style="color:red"></span>');
-        errlabel = $('#errmsg_' + $(this).attr("id")).html(msg);
+        currCtrl.closest('section').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        errlabel = $('#errmsg_' + id).html(msg);
+    }
+    //attaching a keydown event to clear the message
+    currCtrl.click(function(){
+        var el = $('#errmsg_' + id);
+        if(el.length > 0){
+            el.html('');
+        }
+    });
+
+    //hiding any unique messages thrown
+    if(uniquelbl.length > 0){
+        uniquelbl.addClass('hidden');
     }
 }
 
@@ -854,15 +869,40 @@ function isFormValid(){
     $('[cat-validation]').each(function(itm){
       var currCtrl = $(this);
       var valiarr = $(this).attr('cat-validation').split(',');
+      //alert(currCtrl.attr('id'));
       $.each(valiarr,function(vali){
         switch(valiarr[vali]){
           case "required":
             if(currCtrl.val() == ''){
               isValid = false;
-              errormessageforInput(currCtrl.attr('id'),"Required");
+              errormessageforInput(currCtrl.attr('id'),"required");
               currCtrl.focus();
             }
             break;
+          case "nospecial":
+            var str = currCtrl.val();
+            if(/^[a-zA-Z0-9- ]*$/.test(str) == false) {
+                isValid = false;
+                errormessageforInput(currCtrl.attr('id'),"special chars not allowed");
+                currCtrl.focus();
+            }
+            break;
+          case "numeric":
+            var str = currCtrl.val();
+            if(/^[0-9]*$/.test(str) == false) {
+                isValid = false;
+                errormessageforInput(currCtrl.attr('id'),"non numeric not allowed");
+                currCtrl.focus();
+            }
+            break; //
+          case "email":
+            var str = currCtrl.val();
+            if(/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false) {
+                isValid = false;
+                errormessageforInput(currCtrl.attr('id'),"not a valid email address");
+                currCtrl.focus();
+            }
+            break; 
         }
         
       });
@@ -1036,7 +1076,7 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     });    
     console.log(obj);
 
-    alert('in' + JSON.stringify(obj));
+    //alert('in' + JSON.stringify(obj));
 
     return obj;
   }

@@ -32,11 +32,11 @@
                                                                 <section class="col col-6">
                                                                     <label for="">
                                                                         Environment Name <span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
+                                                                        
                                                                     </label>
                                                                     <label class="input">
-                                                                        <i class="icon-append" id="iconpicker" title="Select an icon for the environment" datatype="image"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Environment" id="environmentname" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <i class="icon-append fa fa-lg fa-fw fa-th"></i>
+                                                                        <input name="ctl00$MainContent$orgname" value="Default Environment" id="environmentname" class="form-control" cat-validation="required,nospecial,max15" type="text"  cdata="catalyst">
                                                                     </label>
                                                                     
                                                                 </section>
@@ -48,12 +48,9 @@
                                                                 <section class="col col-6">
                                                                     <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                     <label class="input">
-                                                                        <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
+                                                                        <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required" cat-validation="required">
                                                                             <option value="">Select an Organization</option>
                                                                         </select>
-
-
-                                                                        <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-6">
@@ -455,13 +452,7 @@
     }
 
     function validateForm_todelete() {
-        //Check for required parameter
-        $('#orgname').each(function () {
-            if ($(this).val() == '') {
-                $("#msgOrgName").show();
-                retun(false);
-            }
-        });
+       
         return (true);
     }
     function readURL__todelete(input) {
