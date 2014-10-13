@@ -999,3 +999,44 @@ function getDockerImages(){
 
 
 //Cookbook popup to add to suite list
+
+//1. Will have to remove unwanted rows
+//2. Will have to remove unwanted columns
+function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
+    var myRows = [],count = 0, obj = {};
+    var colsCountArr = [];
+    var $headers = $("th");
+    var $rows = $("#"+tableid+" tr").each(function(index) {
+
+      $cells = $(this).find("td");
+      if($($cells[filterColumnNo]).text() == filterColumnValue){
+        $(colsArr).each(function(i,v){
+          var txt = $($cells[v]).text();
+          if(txt != ''){
+            if(obj[v]){
+              if(obj[v]['data'][txt]){
+                obj[v]['data'][txt]++;
+              }else{
+                obj[v].count++;
+                obj[v]['data'][txt] = 1;
+              }
+
+            }else{
+              obj[v] = {
+                "data" : {},
+                "count" : 1
+              }
+              obj[v]['data'][txt] = 1;
+            }
+
+          }
+        })
+      }
+
+    });    
+    console.log(obj);
+
+    alert('in' + JSON.stringify(obj));
+
+    return obj;
+  }

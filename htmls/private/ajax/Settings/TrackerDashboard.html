@@ -207,6 +207,11 @@ function addInstanceToDOM(data,index) {
 
 function loadTrackContent(alink){
   //To Do refresh tracker inner content
+  var res = aggregateTable("tabletrackerinstanceview",3,"Dailt_Project",[0,3,4]);
+  $(".envCount").first().text(res['0'].count);
+  $(".organizationcount").first().text(res['3'].count);
+  
+
 }
 
 
