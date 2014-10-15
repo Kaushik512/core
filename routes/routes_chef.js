@@ -30,12 +30,41 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            chef.getNodesDetailsForEachEnvironment(function(err, environmentList) {
+            chef.getNodesList(function(err, nodeList) {
                 if (err) {
                     res.send(500);
                     return;
                 } else {
-                    res.send(environmentList);
+                    res.send(nodeList);
+                }
+            });
+
+        });
+    });
+
+    app.get('/chef/servers/:serverId/nodes/:nodeName', function(req, res) {
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            chef.getNode(req.params.nodeName,function(err, nodeData) {
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(nodeData);
                 }
             });
 

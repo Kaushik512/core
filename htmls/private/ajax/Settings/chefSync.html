@@ -46,6 +46,7 @@
 				<th>Uptime</th>
 				<th>Last Check In</th>
 				<th>Environment</th>
+        <th>Get Details</th>
 				<th>Actions</th>
 
 			</tr>
@@ -245,11 +246,11 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
       }
     });
 
-  $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(data){
+  $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(nodeList){
     $('.nodeListContainer img').remove();
 
     var $tableBody = $('.table-hover tbody');
-    var environments = Object.keys(data);
+    /*var environments = Object.keys(data);
     for(var i=0;i<environments.length;i++) {
         var nodes = data[environments[i]].nodes;
       for(var j=0;j<nodes.length;j++) {
@@ -303,7 +304,71 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
 
       }
 
+    } */
+
+    for(var i=0;i<nodeList.length;i++) {
+       var $tr = $('<tr></tr>').addClass('show-settings');
+       $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
+       $tr.append($('<td></td>').addClass('chef-ip'));
+       $tr.append($('<td></td>').addClass('chef-fqdn'));
+       $tr.append($('<td></td>').addClass('chef-platform'));
+       $tr.append($('<td></td>').addClass('chef-uptime'));
+       $tr.append($('<td></td>').addClass('chef-lastCheckIn'));
+       $tr.append($('<td></td>').addClass('chef-env'));
+       $tr.append($('<td></td>').addClass('chef-detailBtn').append($('<a data-nodeName="'+nodeList[i]+'" href="javascript:void(0)" >Get Details</a><img class="center-block" style="height:20px;width:20px;display:none" src="img/loading.gif" />')));
+       $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
+       $tableBody.append($tr);     
     }
+
+    $('.chef-detailBtn a').click(function(e){
+         var nodeName = $(this).attr('data-nodeName');
+         var $tr = $(this).parents('tr');
+         $(this).hide();
+         $(this).parent().find('img').show();
+         $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeName,function(node){
+            var ip = 'unknown';
+            if(node.automatic.ipaddress) {
+                ip = node.automatic.ipaddress;
+            }
+            $tr.find('.chef-ip').append('<span>'+ip+'</span>');
+
+            var fqdn = 'unknown';
+            if(node.automatic.fqdn) {
+                fqdn = node.automatic.fqdn;
+            }
+            $tr.find('.chef-fqdn').append('<span>'+fqdn+'</span>');
+            var platform = 'unknown';
+            if(node.automatic.platform) {
+                platform = node.automatic.platform;
+            }
+            $tr.find('.chef-platform').append('<span>'+platform+'</span>');
+
+            var uptime = 'unknown';
+            if(node.automatic.uptime) {
+                uptime = node.automatic.uptime;
+            }
+            $tr.find('.chef-uptime').append('<span>'+uptime+'</span>');
+
+
+            var lastCheckIn = 'unknown';
+            if(node.automatic.lastCheckIn) {
+                lastCheckIn = node.automatic.lastCheckIn;
+            }
+            $tr.find('.chef-lastCheckIn').append('<span>'+lastCheckIn+'</span>');
+            
+            var environment = 'unknown';
+            if(node.chef_environment) {
+                environment = node.chef_environment;
+            }
+
+            $tr.find('.chef-env').append('<span>'+environment+'</span>');
+            
+            $tr.find('.chef-detailBtn').empty().append('<span>Fetched</span>'); 
+            
+         });
+    });
+
+
     $('#organiz').show();
 
   });
