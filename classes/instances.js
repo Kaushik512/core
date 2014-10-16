@@ -250,7 +250,7 @@ var InstancesDao = function() {
             callback(null, data);
         });
 
-    }
+    };
 
 
 }

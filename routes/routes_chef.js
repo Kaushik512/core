@@ -8,6 +8,7 @@ var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 var fileIo = require('../classes/utils/fileio');
 var appConfig = require('../config/app_config');
 var uuid = require('node-uuid');
+var taskStatusModule = require('../classes/taskstatus');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -59,7 +60,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            chef.getNode(req.params.nodeName,function(err, nodeData) {
+            chef.getNode(req.params.nodeName, function(err, nodeData) {
                 if (err) {
                     res.send(500);
                     return;
@@ -73,6 +74,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 
     app.post('/chef/servers/:serverId/sync/nodes', function(req, res) {
+
+
+        var taskStatusObj = null;
+        var chef = null;
         var reqBody = req.body;
         var projectId = reqBody.projectId;
         var orgId = reqBody.orgId;
@@ -90,19 +95,21 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         var insertNodeInMongo = function(node) {
             var platformId = '';
-            var nodeIp = node.ip;
-            var nodeData = node.nodeData;
-            if (!node.nodeData.automatic) {
-                node.nodeData.automatic = {};
+            if (!node.automatic) {
+                node.automatic = {};
             }
-            if (node.nodeData.automatic.ec2) {
-                platformId = node.nodeData.automatic.ec2.instance_id;
-                if (node.nodeData.automatic.ec2.public_ipv4) {
-                    nodeIp = node.nodeData.automatic.ec2.public_ipv4;
+            var nodeIp = 'unknown';
+            if (node.automatic.ipaddress) {
+                nodeIp = node.automatic.ipaddress;
+            }
+
+            if (node.automatic.cloud) {
+                nodeIp = node.automatic.cloud.public_ipv4;
+                if (node.automatic.cloud.provider === 'ec2') {
+                    if (node.automatic.ec2) {
+                        platformId = node.automatic.ec2.instance_id;
+                    }
                 }
-            }
-            if (node.nodeData.automatic.ec2) {
-                platformId = node.nodeData.automatic.ec2.instance_id;
             }
 
             var hardwareData = {
@@ -115,32 +122,37 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 },
                 os: 'linux'
             };
-            if (nodeData.automatic.kernel && nodeData.automatic.kernel.machine) {
-                hardwareData.architecture = nodeData.automatic.kernel.machine;
+            if (node.automatic.os) {
+                hardwareData.os = node.automatic.os;
             }
-            if (nodeData.automatic.platform) {
-                hardwareData.platform = nodeData.automatic.platform;
+            if (node.automatic.kernel && node.automatic.kernel.machine) {
+                hardwareData.architecture = node.automatic.kernel.machine;
             }
-            if (nodeData.automatic.platform_version) {
-                hardwareData.platformVersion = nodeData.automatic.platform_version;
+            if (node.automatic.platform) {
+                hardwareData.platform = node.automatic.platform;
             }
-            if (nodeData.automatic.memory) {
-                hardwareData.memory.total = nodeData.automatic.memory.total;
-                hardwareData.memory.free = nodeData.automatic.memory.free;
+            if (node.automatic.platform_version) {
+                hardwareData.platformVersion = node.automatic.platform_version;
             }
-            if (hardwareData.platform === 'windows') {
-                hardwareData.os = 'windows';
+            if (node.automatic.memory) {
+                hardwareData.memory.total = node.automatic.memory.total;
+                hardwareData.memory.free = node.automatic.memory.free;
+            }
+            var runlist = node.run_list;
+            if (!runlist) {
+                runlist = [];
             }
 
-
-            console.log("runlist ==>", node.runlist);
+            if(hardwareData.platform === 'windows') {
+               hardwareData.os = "windows"; 
+            }
 
 
             settingsController.getAwsSettings(function(settings) {
                 var instanceCredentials = {};
                 if (reqBody.credentials) {
                     instanceCredentials.username = reqBody.credentials.username;
-                    console.log("credentials ==>",reqBody.credentials);
+                    console.log("credentials ==>", reqBody.credentials);
                     if (reqBody.credentials.password) {
                         instanceCredentials.password = reqBody.credentials.password;
                     } else {
@@ -162,9 +174,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 var instance = {
                     orgId: orgId,
                     projectId: projectId,
-                    envId: node.env,
-                    chefNodeName: node.nodeName,
-                    runlist: node.runlist,
+                    envId: node.chef_environment,
+                    chefNodeName: node.name,
+                    runlist: runlist,
                     platformId: platformId,
                     instanceIP: nodeIp,
                     instanceState: 'unknown',
@@ -174,15 +186,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     users: users,
                     chef: {
                         serverId: req.params.serverId,
-                        chefNodeName: node.nodeName
+                        chefNodeName: node.name
                     },
                     blueprintData: {
-                        blueprintName: node.nodeName,
+                        blueprintName: node.name,
                         templateId: "chef_import"
                     }
                 }
-
-
 
                 instancesDao.createInstance(instance, function(err, data) {
                     if (err) {
@@ -204,23 +214,63 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         }
 
-        function createEnv(node) {
-            console.log('creating env ==>', node.env);
-            console.log('orgId ==>', orgId);
-            environmentsDao.createEnv(node.env, orgId, function(err, data) {
-                count++;
+        function updateTaskStatusNode(nodeName, msg, err,i) {
+            var status = {};
+            status.nodeName = nodeName;
+            status.message = msg;
+            status.err = err;
+            
+            console.log('taskstatus updated');
+
+            if(i==reqBody.selectedNodes.length-1) {
+               taskstatus.endTaskStatus(true,status);
+            } else {
+                taskstatus.updateTaskStatus(status);
+            }
+
+        };
+
+        function importNodes(nodeList) {
+            taskStatusModule.getTaskStatus(null, function(err, obj) {
                 if (err) {
-                    console.log(err, 'occured in creating environment in mongo');
+                    res.send(500);
                     return;
                 }
+                taskstatus = obj;
+                for (var i = 0; i < nodeList.length; i++) {
 
-                insertNodeInMongo(node);
-                if (count === reqBody.selectedNodes.length) {
-                    res.send(200);
-                } else {
-                    createEnv(reqBody.selectedNodes[count]);
+                 (function(nodeName,count){
+                    chef.getNode(nodeName, function(err, node) {
+                        if (err) {
+                            console.log(err);
+                            updateTaskStatusNode(nodeName,"Unable to import node "+nodeName,true,count);
+                            return;
+                        } else {
+
+                            console.log('creating env ==>', node.env);
+                            console.log('orgId ==>', orgId);
+                            environmentsDao.createEnv(node.chef_environment, orgId, function(err, data) {
+                                if (err) {
+                                    console.log(err, 'occured in creating environment in mongo');
+                                    updateTaskStatusNode(nodeName,"Unable to import node "+nodeName,true,count);
+                                    return;
+                                }
+                                insertNodeInMongo(node);
+                                console.log('importing node '+node.name);
+                                updateTaskStatusNode(nodeName,"Node Imported "+nodeName,false,count);
+
+                            });
+                        }
+                    });
+
+                  })(nodeList[i],i);
                 }
-            })
+
+                res.send(200,{
+                    taskId : taskstatus.getTaskId()
+                });
+            });
+
         }
 
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -232,6 +282,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(404);
                 return;
             }
+            chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
             if (reqBody.selectedNodes.length) {
 
                 if (reqBody.credentials && reqBody.credentials.pemFileData) {
@@ -242,11 +299,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                             res.send(500);
                             return;
                         }
-                        createEnv(reqBody.selectedNodes[count]);
+                        importNodes(reqBody.selectedNodes);
                     });
 
                 } else {
-                    createEnv(reqBody.selectedNodes[count]);
+                    importNodes(reqBody.selectedNodes);
                 }
             } else {
                 res.send(400);
