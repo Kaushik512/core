@@ -546,7 +546,9 @@
          
          function setleftnavigation(toplink,breadcrumbHeader){
          	$('a[onclick*="setleftnavigation"]').removeClass('active');
+         	$('a[onclick*="setleftnavigation"]').find("i").removeClass('txt-color-blue');
          	$(toplink).addClass('active');
+         	$(toplink).find('i').addClass('txt-color-blue');
          	$('nav > ul').addClass('hidden'); //hiding all navigation elements
          	var navbar = $(toplink).closest("li").attr('navigation');
          	$('#Workspace1').addClass('hidden');
