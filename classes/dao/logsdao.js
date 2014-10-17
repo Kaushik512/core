@@ -19,7 +19,9 @@ var LogsDao = function() {
         var log = new Logs(logData);
         log.save(function(err, data) {
             if (err) {
-                callback(err, null);
+                if (typeof callback === 'function') {
+                    callback(err, null);
+                }
                 return;
             }
             if (typeof callback === 'function') {
@@ -36,7 +38,7 @@ var LogsDao = function() {
         };
 
         if (timestamp) {
-            
+
             queryObj.timestamp = {
                 "$gt": timestamp
             };

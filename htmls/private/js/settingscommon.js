@@ -869,6 +869,11 @@ function isFormValid(){
     $('[cat-validation]').each(function(itm){
       var currCtrl = $(this);
       var valiarr = $(this).attr('cat-validation').split(',');
+      //$('#unique_loginname').text().indexOf('NOT') > 0
+      if($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0){
+        //There is an error message displayed. Do not save form
+        isValid = false;
+      }
       //alert(currCtrl.attr('id'));
       $.each(valiarr,function(vali){
         switch(valiarr[vali]){
@@ -912,8 +917,14 @@ function isFormValid(){
 }
 
 function enableUniqueCheckingForInputs(id){
+  
+
   if($('input[unique="true"], select[unique="true"]').length > 0) {
+
     $('input[unique="true"], select[unique="true"]').blur(function(){
+        //Disabling the save button while testing for uniqueness
+        $('button[onclick*="saveform"]').attr('disabled','disabled');
+
           var uni = $('#unique_' + $(this).attr("id"));
           if($(this).attr("initialvalue") != null){
             if($(this).attr("initialvalue") == $(this).val()){
@@ -941,6 +952,7 @@ function enableUniqueCheckingForInputs(id){
             uni.css("color","green");
             uni.html('available');
           }
+          $('button[onclick*="saveform"]').removeAttr('disabled');
         });
     }
 }
@@ -950,6 +962,8 @@ function checkusernameexistsinldap(inputID){
     if($('#' + inputID).length > 0){
         var inp = $('#' + inputID);
         inp.blur(function(){
+            //Disabling the save button while testing for uniqueness
+            $('button[onclick*="saveform"]').attr('disabled','disabled');
            // alert('in');
             var uni = $('#unique_' + inp.attr("id")); //check if the error span is loaded.
             if(uni.length > 0)
@@ -966,6 +980,7 @@ function checkusernameexistsinldap(inputID){
                         uni.html('selected is NOT in LDAP.');
                         $(this).focus(); 
                     }
+                    $('button[onclick*="saveform"]').removeAttr('disabled');
             });
 
 
