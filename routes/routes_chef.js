@@ -222,9 +222,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
             
             console.log('taskstatus updated');
 
-            if(i==reqBody.selectedNodes.length-1) {
+            if(i==reqBody.selectedNodes.length) {
+                console.log('setting complete');
                taskstatus.endTaskStatus(true,status);
             } else {
+                console.log('setting task status');
                 taskstatus.updateTaskStatus(status);
             }
 
@@ -239,31 +241,34 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 taskstatus = obj;
                 for (var i = 0; i < nodeList.length; i++) {
 
-                 (function(nodeName,count){
+                 (function(nodeName){
                     chef.getNode(nodeName, function(err, node) {
                         if (err) {
+                            count++;
                             console.log(err);
                             updateTaskStatusNode(nodeName,"Unable to import node "+nodeName,true,count);
                             return;
                         } else {
 
-                            console.log('creating env ==>', node.env);
+                            console.log('creating env ==>', node.chef_environment);
                             console.log('orgId ==>', orgId);
                             environmentsDao.createEnv(node.chef_environment, orgId, function(err, data) {
                                 if (err) {
+                                    count++;
                                     console.log(err, 'occured in creating environment in mongo');
-                                    updateTaskStatusNode(nodeName,"Unable to import node "+nodeName,true,count);
+                                    updateTaskStatusNode(nodeName,"Unable to import node : "+nodeName,true,count);
                                     return;
                                 }
+                                count++;
                                 insertNodeInMongo(node);
                                 console.log('importing node '+node.name);
-                                updateTaskStatusNode(nodeName,"Node Imported "+nodeName,false,count);
+                                updateTaskStatusNode(nodeName,"Node Imported : "+nodeName,false,count);
 
                             });
                         }
                     });
 
-                  })(nodeList[i],i);
+                  })(nodeList[i]);
                 }
 
                 res.send(200,{

@@ -67,8 +67,10 @@ function TaskStatusClass(taskId) {
             if (!taskStatus.length) {
                 callback(null, null);
                 return;
+            } else {
+                callback(null, taskStatus[0]);
             }
-            taskStatusDao.getStatusByTimestamp(taskId, timestamp, function(err, data) {
+            /*taskStatusDao.getStatusByTimestamp(taskId, timestamp, function(err, data) {
                 if (err) {
                     console.log('unable to get taskstatus', err);
                     if (typeof callback === 'function') {
@@ -79,14 +81,15 @@ function TaskStatusClass(taskId) {
                 console.log('statusList ==>', data);
                 taskStatus[0].statusList = [];
                 if (data.length) {
-                    //taskStatus[0].statusList = data[0].statusList;
-                    taskStatus = data;
+                    taskStatus[0].statusList = data[0].statusList;
+                    //taskStatus = data;
                 }
 
                 if (typeof callback === 'function') {
                     callback(null, taskStatus[0]);
                 }
-            });
+            });*/
+
         });
 
 

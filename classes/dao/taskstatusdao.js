@@ -23,18 +23,12 @@ var TaskStatusDao = function() {
         console.log(taskId);
         TaskStatus.find({
             "_id": new ObjectId(taskId)
-        }, {
-            timestampStarted: 1,
-            timestampEnded: 1,
-            timestampUpdated: 1,
-            completed: 1,
-            successful: 1
         }, function(err, data) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            console.log('data ==>', data);
+            //console.log('data ==>', data);
             callback(null, data);
 
         });
@@ -89,14 +83,19 @@ var TaskStatusDao = function() {
     };
 
     this.getStatusByTimestamp = function(taskId, timestamp, callback) {
-        TaskStatus.find({
+        var queryObj = {
             "_id": new ObjectId(taskId),
-            "statusList": {
+            "statusList.timestamp": {
+                $gt: timestamp
+            }
+        };
+
+        TaskStatus.find(queryObj, {
+            statusList: {
                 $elemMatch: {
                     timestamp: {
                         $gt: timestamp
                     }
-
                 }
             }
         }, function(err, data) {
