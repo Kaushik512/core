@@ -35,6 +35,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		});
 	});
 
+	app.get('/d4dMasters/getcodelist/:name',function(req,res){
+		configmgmtDao.getCodeList(req.params.name,function(err,cl){
+			console.log(cl);
+			if(cl){
+				console.log('Closing');
+				res.end(cl);
+			}
+		});
+	});
+
 	app.get('/d4dMasters/getuser', function(req, res) {
 		res.send({"user":[{
 			username: req.session.user

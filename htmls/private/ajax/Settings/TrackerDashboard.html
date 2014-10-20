@@ -1,167 +1,191 @@
 <script>
-    $(".login-info").hide();
-   
+  $(".login-info").hide();
+
 </script>
 <script src="/private/js/settingscommon.js"></script> 
-<strong style="color:black;">Tracker</strong>
+<h4 style="color:black;">Tracker</h4>
 
- 
+
 <div class="row">
-    <hr /><br />
+  <hr /><br />
 </div>
 <div id="page-wrapper">
-     <div class="row">
-        
-      <!--col-lg-3 ends-->
+ <div class="row">
+
+  <!--col-lg-3 ends-->
 
 
 
 
 
-    
-     
-       <!--heading orange ends-->
-        <!--Circle-tile ends--> 
-      <!-- col-lg-3 ends-->
-        
-    <div class="col-lg-3">
+
+
+  <!--heading orange ends-->
+  <!--Circle-tile ends--> 
+  <!-- col-lg-3 ends-->
+
+  <div class="col-lg-2">
     <div class="circle-tile">
-    <a href="#">
+      <a href="#">
        <div class="circle-tile-heading light-blue">
-       <i class="fa fa-inbox fa-fw fa-3x"></i>
+         <i class="fa fa-inbox fa-fw fa-3x"></i>
        </div></a>
-        <div class="circle-tile-content light-blue">
-        <div class="circle-tile-description text-faded">
-          <a href="#ajax/Settings/EnvironmentList.html" class="trackerAnchortag">ENVIRONMENTS</a></div>
-        <div class="circle-tile-number text-faded envCount"  itemid="3">
-            
-        </div>
-        
-   </div>
-    </div>    
-        </div>
-
-
-    <div class="col-lg-3">
-      <div class="circle-tile">
-    <a href="#">
-       <div class="circle-tile-heading light-black">
-       <i class="fa fa-shopping-cart fa-fw fa-3x"></i>
+       <div class="circle-tile-content light-blue">
+        <div class="circle-tile-description text-faded"><a href="#ajax/Settings/EnvironmentList.html">Organization</a></div>
+        <div class="circle-tile-number text-faded orgCount"  itemid="1">
+         <span></span>
        </div>
-    </a>
-        <div class="circle-tile-content light-black">
-            <div class="circle-tile-description text-faded">
-              <a href="#ajax/Settings/ProjectList.html" class="trackerAnchortag">Projects</a>
-            </div>
-        <div class="circle-tile-number text-faded projectCount"  itemid="4">
-            
-        </div>
-        
-      
-        </div>
-        </div>
-        </div>    
 
-    <div class="col-lg-3">
-    <div class="circle-tile" >
-        <a href="#">
-    <div class="circle-tile-heading light-blue">
-    <i class="fa fa-group fa-fw fa-3x"></i>
-    </div></a>
-    
-        <div class="circle-tile-content light-blue" onclick="$(this).closest('a').trigger('click')">
-        <div class="circle-tile-description text-faded">
-          <a href = "#ajax/Settings/OrgList.html" class="trackerAnchortag"> INSTANCES </a></div>
-        <div class="circle-tile-number text-faded organizationcount" itemid="1">
-           
-        </div>
-        
+     </div>
+   </div>    
+ </div>
+
+
+ <div class="col-lg-2">
+  <div class="circle-tile">
+    <a href="#">
+     <div class="circle-tile-heading light-black">
+       <i class="fa fa-shopping-cart fa-fw fa-3x"></i>
+     </div>
+   </a>
+   <div class="circle-tile-content light-black">
+    <div class="circle-tile-description text-faded"><a href="#ajax/Settings/ProjectList.html">Business Group</a>
     </div>
-        </div> <!--heading dark-blue ends-->
-    
-    </div>
+    <div class="circle-tile-number text-faded bgCount"  itemid="2">
+     <span></span>
+   </div>
 
-    <div class="col-lg-3">
-    <div class="circle-tile" >
-        <a href="#">
-    <div class="circle-tile-heading light-black">
-    <i class="fa fa-group fa-fw fa-3x"></i>
-    </div></a>
-    
-        <div class="circle-tile-content light-black" onclick="$(this).closest('a').trigger('click')">
-        <div class="circle-tile-description text-faded">
-          <a href = "#ajax/Settings/OrgList.html" class="trackerAnchortag"> USERS </a></div>
-        <div class="circle-tile-number text-faded organizationcount" itemid="1">
-           
+
+ </div>
+</div>
+</div>    
+
+<div class="col-lg-2">
+  <div class="circle-tile" >
+    <a href="#">
+      <div class="circle-tile-heading light-blue">
+        <i class="fa fa-group fa-fw fa-3x"></i>
+      </div></a>
+
+      <div class="circle-tile-content light-blue" onclick="$(this).closest('a').trigger('click')">
+        <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/OrgList.html"> Environment </a></div>
+        <div class="circle-tile-number text-faded envcount" itemid="3">
+         <span></span>
+       </div>
+
+     </div>
+   </div> <!--heading dark-blue ends-->
+
+ </div>
+
+ <div class="col-lg-2">
+  <div class="circle-tile" >
+    <a href="#">
+      <div class="circle-tile-heading light-black">
+        <i class="fa fa-group fa-fw fa-3x"></i>
+      </div></a>
+
+      <div class="circle-tile-content light-black" onclick="$(this).closest('a').trigger('click')">
+        <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/OrgList.html"> Projects </a></div>
+        <div class="circle-tile-number text-faded projectcount" itemid="4">
+         <span></span>
+       </div>
+
+     </div>
+   </div> <!--heading dark-blue ends-->
+
+ </div>
+ <div class="col-lg-2 hidden">
+  <div class="circle-tile">
+    <a href="#">
+     <div class="circle-tile-heading light-blue">
+       <i class="fa fa-inbox fa-fw fa-3x"></i>
+     </div></a>
+     <div class="circle-tile-content light-blue">
+       <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/OrgList.html"> Authentication </a></div>
+       <div class="circle-tile-number text-faded authcount" itemid="5">
+         <span></span>
+       </div>
+
+     </div>
+   </div>    
+ </div>
+ <div class="col-lg-2 hidden">
+  <div class="circle-tile" >
+    <a href="#">
+      <div class="circle-tile-heading light-black">
+        <i class="fa fa-group fa-fw fa-3x"></i>
+      </div></a>
+
+      <div class="circle-tile-content light-black" onclick="$(this).closest('a').trigger('click')">
+
+       <div class="circle-tile-description text-faded"><a href="#ajax/Settings/EnvironmentList.html">Users</a></div>
+       <div class="circle-tile-number text-faded usercount"  itemid="6">
+        <span></span>
+      </div>
+
+    </div>
+  </div> <!--heading dark-blue ends-->
+
+</div>
+
+
+</div> <!--row ends-->
+<div class="row">
+  <div class="widget-box" id="divinstancestableview">
+    <div class="widget-body">
+      <div class="widget-main" style="min-height:300px"> 
+        <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
+          <div class="table-responsive table-div" id="tabletrackersource">
+            <table id="tabletrackerinstanceview" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+              <thead>
+                <tr class="rowCustomStyle" style="font-weight:bold;">
+                  <td>S.No.</td>
+                  <td>Org Name</td>
+                  <td>BG Name</td>
+                  <td>Project Name</td>
+                  <td>Env Name</td>
+                  <td>Name</td>
+                  <td>IPAddress</td>
+                  <td>Status</td>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+
+            </table>
+          </div>
         </div>
-        
+      </div> 
+
     </div>
-        </div> <!--heading dark-blue ends-->
-    
-    </div>
+    <div class="widget-toolbox padding-8 clearfix">
+     <div id="tableFooterLeft" class="pull-left"></div>
+     <div id="tableFooterRight" class="pull-right"></div>
+   </div>
+ </div>
+</div><!--table view row ends-->
 
-
-      </div> <!--row ends-->
-    <div class="row">
-        <div class="widget-box" id="divinstancestableview">
-            <div class="widget-body">
-                <div class="widget-main" style="min-height:300px"> 
-                    <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
-                        <div class="table-responsive table-div" >
-
-                                <table id="tabletrackerinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
-                                    <thead>
-                                        <tr class="rowCustomStyle" style="font-weight:bold;">
-                                            <td>S.No.</td>
-                                            <td>Org Name</td>
-                                            <td>BG Name</td>
-                                            <td>Project Name</td>
-                                            <td>Env Name</td>
-                                            <td>Name</td>
-                                            <td>IPAddress</td>
-                                            <td>Status</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                       
-                                    </tbody>
-                                    
-                                   
-                                </tbody>
-                                
-                            </table>
-                        </div>
-                   </div>
-                </div> 
-                
-            </div>
-            <div class="widget-toolbox padding-8 clearfix">
-                   <div id="tableFooterLeft" class="pull-left"></div>
-                   <div id="tableFooterRight" class="pull-right"></div>
-                </div>
-        </div>
-    </div><!--table view row ends-->
-   
 </div>
 <style type="text/css">
-#content{
-	opacity: 2 !important;
-}
+  #content{
+    opacity: 2 !important;
+  }
 </style>
 <script type="text/javascript">
-         var serviceURL = "/d4dMasters/";
-         window.selectedOrgName = 'Settings'; 
-       	
-				$('[itemid]').each(function(){
-				    var count = getCount($(this).attr('itemid'));    
-				    $(this).html(count);
-				});
+ var serviceURL = "/d4dMasters/";
+ window.selectedOrgName = 'Settings'; 
+
+//  $('[itemid]').each(function(){
+//   var count = getCount($(this).attr('itemid'));    
+//   $(this).html(count);
+// });
 </script>
 <script type="text/javascript">
 
 // $(document.body).on('click', '.card', function () {
-      
+
 //       document.querySelector('#flip-toggle').classList.toggle('flip');
 //   });
 
@@ -174,31 +198,42 @@ $('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
 
 var urlParams = {};
 (window.onpopstate = function() {
-    var url = window.location.href;
-    var indexOfQues = url.lastIndexOf("?");
-    if (indexOfQues != -1) {
-        var sub = url.substring(indexOfQues + 1);
-        console.log(sub);
-        var params = sub.split('&')
-        for (var i = 0; i < params.length; i++) {
-            var paramParts = params[i].split('=');
-            urlParams[paramParts[0]] = paramParts[1];
-        }
+  var url = window.location.href;
+  var indexOfQues = url.lastIndexOf("?");
+  if (indexOfQues != -1) {
+    var sub = url.substring(indexOfQues + 1);
+    console.log(sub);
+    var params = sub.split('&')
+    for (var i = 0; i < params.length; i++) {
+      var paramParts = params[i].split('=');
+      urlParams[paramParts[0]] = paramParts[1];
     }
+  }
 
 })();
 console.log(urlParams);
 var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 //alert(projectId + ':' + envId);
+
 function addInstanceToDOM(data,index) {
   //Get the Orgname - to be removed eventually
- 
+  
+
   var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
   $rowContainter.append($('<td></td>').append(index));
-      $rowContainter.append($('<td></td>').append(''));
-          $rowContainter.append($('<td></td>').append(''));
-          
+  // To be cleared with actuals during implementation.
+  if(index%2 == 0){
+    $rowContainter.append($('<td></td>').append('Phoenix Inc'));
+    $rowContainter.append($('<td></td>').append('International'));
+  }
+  else{
+   $rowContainter.append($('<td></td>').append('ABc')); 
+   $rowContainter.append($('<td></td>').append('Mayank'));
+ }
+
+  //$rowContainter.append($('<td></td>').append(''));
+
   $rowContainter.append($('<td></td>').append(data.projectId)); //envId , chefNodeName,, instanceIP, instanceState
   $rowContainter.append($('<td></td>').append(data.envId));
   $rowContainter.append($('<td></td>').append(data.chefNodeName));
@@ -209,74 +244,227 @@ function addInstanceToDOM(data,index) {
 
 }
 
-function loadTrackContent(alink){
+function loadTrackContent(filters){ //filter[] => "org","businessgroup","project","environment"
+//Clone the source table and clear the rows.
+  if($('#tabletrackerinstancedisplay_wrapper').length > 0){
+    $('#tabletrackerinstancedisplay_wrapper').detach();
+  } //tabletrackerinstanceview - src table //tabletrackersource - div
+ // var filters = JSON.parse(filters1);
+  //alert('in' + filters.length);
+  var $tabletrackerinstanceview = $('#tabletrackerinstanceview').clone();
+  $('#tabletrackersource').append($tabletrackerinstanceview);
+
+  $tabletrackerinstanceview.attr('id','tabletrackerinstancedisplay');
+  
+  //Execute all the filters for this table
+  //Building the condition
+  var cond = ''; //
+  
+  for(i=0;i < filters.length;i++){
+    if(filters[i] != ''){
+      if(cond == '')
+          cond += "$($(this).first().find('td')[" + (i + 1) + "]).text() == '" + filters[i] + "' ";
+      else
+          cond += "&& $($(this).first().find('td')[" + (i + 1) + "]).text() == '" + filters[i] + "' ";
+
+      //Hide this column
+      $('#tabletrackerinstancedisplay tr td:nth-child(' + (i+2) + ')').addClass('hidden');
+    }
+  }
+
+  
+
+
+  //console.log("cond:" + cond);
+  //apply the generated filter on the rows.
+
+  $('#tabletrackerinstancedisplay tbody').find('tr').each(function(i,v){
+
+    if(eval(cond)){
+      //do nothing
+    }
+    else{
+      //mark for removal
+      $(this).addClass('removethisrow');
+    }
+  });
+
+  $('#tabletrackerinstancedisplay tbody').find('.removethisrow').detach();
+  
+  //Rebuild the serial no.
+  $('#tabletrackerinstancedisplay tbody').find('tr').each(function(i,v){
+    $(this).find('td').first().html(i+1);
+    
+  });
+
+
+  $('#tabletrackerinstancedisplay').dataTable(function(){});
+  $('#tabletrackerinstancedisplay').removeClass('hidden');
+  
+  //Add Count to tiles
+  $('.orgCount').find('span').html($('.tcorg').length);
+  $('.bgCount').find('span').html($('.tcbg').length);
+  $('.projectcount').find('span').html($('.tcproj').length);
+  $('.envcount').find('span').html($('.tcproj').first().find('.tcenv').length);
+
+  $('#tableFooterLeft , #tableFooterRight , #envtable_tools1 , #envtable_tools2').html('');
+  $('#tabletrackerinstancedisplay_info').detach().appendTo('#tableFooterLeft');
+  $('#tabletrackerinstancedisplay_paginate').detach().appendTo('#tableFooterRight');
+ /* $('#tabletrackerinstancedisplay_filter').detach().appendTo('#envtable_tools1');
+  $('#tabletrackerinstancedisplay_length').detach().appendTo('#envtable_tools2'); */
+
+  drawBreadCrumb1(); //To be fixed.
+
+
+  
   //To Do refresh tracker inner content
-  var res = aggregateTable("tabletrackerinstanceview",3,"Dailt_Project",[0,3,4]);
-  $(".envCount").first().text(res['0'].count);
-  $(".organizationcount").first().text(res['3'].count);
+  /*var res = aggregateTable("tabletrackerinstanceview",3,"Dailt_Project",[0,3,4]);
+  $(".envcount").first().text(res['0'].count);
+  $(".organizationcount").first().text(res['3'].count);*/
+
 }
 
+function getAggrCount(parentDiv, res){
+  var countLabelLength = $("#"+parentDiv+" .circle-tile-number").length;
+      // alert(countLabelLength);
+      for(var k = 0; k < countLabelLength; k++){
+        var li = $("#"+parentDiv).find(".circle-tile-number:eq("+k+")");
+        if(res[k]){
+          li.show();
+          li.children("span").html(res[k].count);
+        }else{
+          li.hide();
+        }
 
+      }
 
-
-
-$.get('../instances', function(data) {
-
-    
-    for (var i = 0; i < data.length; i++) {
-        addInstanceToDOM(data[i],i+1);
     }
+
+
+
+    $.get('../instances', function(data) {
+
+
+      for (var i = 0; i < data.length; i++) {
+        addInstanceToDOM(data[i],i+1);
+      }
+
     //for table view
-    if (!$.fn.dataTable.isDataTable('#tabletrackerinstanceview')) {
-        var tabletrackerinstanceview = $('#tabletrackerinstanceview').dataTable({
-            "pagingType": "full_numbers"
-        });
+    /*if (!$.fn.dataTable.isDataTable('#tabletrackerinstanceview')) {
+      var tabletrackerinstanceview = $('#tabletrackerinstanceview').dataTable({
+        "pagingType": "full_numbers"
+      });
+      var res = aggregateTable("tabletrackerinstanceview",-1);
+      getAggrCount("page-wrapper",res);
     }
     $('#tabletrackerinstanceview tbody').on('click','tr',function(){
-        if($(this).hasClass('rowcustomselected')){
-            $(this).removeClass('rowcustomselected');
-        }
-        else{
-            tabletrackerinstanceview.$('tr').removeClass('rowcustomselected');
-            $(this).addClass('rowcustomselected');
-        }
+      if($(this).hasClass('rowcustomselected')){
+        $(this).removeClass('rowcustomselected');
+      }
+      else{
+        tabletrackerinstanceview.$('tr').removeClass('rowcustomselected');
+        $(this).addClass('rowcustomselected');
+      }
 
-    });
-
+    });*/
     
+//     var targtblbody = $('#tabletrackerinstancedisplay tbody');
+//     targtblbody.html('');
+//     $('#tabletrackerinstanceview').addClass('hidden');
+//      $('#tabletrackerinstanceview tr').each(function(k1,v1){
+//  // console.log($(this).find("td").length);
+//        if(k1 > 0){
+//         var sourcetd = $(this).find("td");
+//         var $targtr = $('<tr></tr>');
+//         var toadd = false;
+//         sourcetd.each(function(k,v){
+//           //console.log(k,$(v).text());
+//           if(k == 1 && $(v).text() == "Phoenix Inc")
+//             toadd = true;
+//         });
+//         if(toadd){
+//           sourcetd.each(function(k,v){
+//                 //console.log(k,$(v).text());
+//                 $targtr.append('<td>' + $(v).text() + '</td>');
+//               });
+//           targtblbody.append($targtr);
+//         }
+//       }
+// });
+ 
+//      $('#tabletrackerinstancedisplay').DataTable({"pagingType":"full_numbers"});
+  
 
 
+ 
 });
 </script>
- 
-    
-		<!-- MAIN APP JS FILE -->
 
-         
-         
-         <script>
-         function inLineReady()
-         {
-          readform(4);
+
+<!-- MAIN APP JS FILE -->
+
+
+
+<script>
+ function inLineReady()
+ {
+  readform(4);
          //Force opening the left navigation menu
-          if ($('#navSettings').is(":visible") == false) {
-              $('#navSettings').css("display", '');
-              $('#navSettings > ul > li').first().addClass('open');
-              $('#navSettings > ul > li > ul').css("display", "none");
-              $('#navSettings > ul > li > ul').first().css("display", "block");
-          }
+         if ($('#navSettings').is(":visible") == false) {
+          $('#navSettings').css("display", '');
+          $('#navSettings > ul > li').first().addClass('open');
+          $('#navSettings > ul > li > ul').css("display", "none");
+          $('#navSettings > ul > li > ul').first().css("display", "block");
+        }
           //redrawing the breadcrumb and selecting the tree
           $('#ulsettingstree > li').removeClass('active');
           $('#ulsettingstree > li').each(function () {
-              if ($(this).text().trim() == "Projects")
-                  $(this).addClass('active');
+            if ($(this).text().trim() == "Projects")
+              $(this).addClass('active');
           });
           drawBreadCrumb1();
-         }
+        }
 
-    inLineReady();
-</script>
+        inLineReady();
+      </script>
 
 
+
+      <!-- end scripts -->
+      <script>
+        $(document).ready(function(){
+    //var c =  $("#tabletrackerinstanceview").DataTable({"pagingType": "full_numbers"});
+  //var res = aggregateTable("datatable",col,colValue);
+  // var tabletrackerinstanceview = $('#tabletrackerinstanceview').dataTable({
+  //       "pagingType": "full_numbers"
+  //     });
+
+
+//         $('#Track a').on('click',function(){
+//           var getTextVal = $(this).text();
+//           console.log(getTextVal);
+//           var arr = $( this ).parentsUntil( '#Track', 'li' );
+
+//    // console.log(arr);
+//    var col = arr.length-1, colValue= $(this);
+   
+//     //console.log(c);
+
+
+//     var res = aggregateTable("tabletrackerinstanceview",col,colValue);
+//     getAggrCount("page-wrapper",res);
     
-  <!-- end scripts -->
+//   // c.fnSetColumnVis(2,false);
+
+// });
+
+
+
+
+
+
+      });
+
+
+
+      </script>
