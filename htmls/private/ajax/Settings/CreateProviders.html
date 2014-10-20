@@ -76,7 +76,7 @@
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
                                                                     <label class="input">
-                                                                        <i class="icon-append fa fa-building"></i>
+                                                                        
                                                                         <select id="region" class="form-control" cdata="catalyst">
                                                                                 <option value="">Select Region</option>
                                                                                 <option value="us-west-2">us-west-2</option>
@@ -134,7 +134,16 @@
 
                                                                 </section>
                                                             </div>
-                                                            
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">Account PEM File</label>
+                                                                    <label for="file" class="input input-file">
+                                                                        <div class="imgdiv" value="1"></div>
+                                                                        <div class="button"><input id="accountpemfile" keyfield="accountpemfile" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                    </label>
+                                                                </section>
+                                                                
+                                                            </div>
                                                             <div class="row">
                                                                 <hr /><br />
                                                             </div>
