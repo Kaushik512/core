@@ -107,6 +107,9 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                         inputC.html(tv);
                     }
                     if (setOrgname == true) {
+                        //get all image tags
+                        imageTD = $('.rowtemplate').find("[datatype='image']");
+
                         editButton = $('.rowtemplate').find("[title='Update']");
                         if (editButton) {
                             var tv = '';
@@ -116,7 +119,11 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                                 else
                                     tv += ",&nbsp;" + v1;
                             });
-
+                            if(imageTD){
+                                var imgpath = '/d4dMasters/image/' + tv + '__' + imageTD.attr('datafieldoriginal')  + '__' + imageTD.html();
+                                imageTD.html('');
+                                imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+                            }
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
                             editButton.addClass("tableactionbutton tableactionbuttonpadding");
                             editButton.removeClass('btn-xs');

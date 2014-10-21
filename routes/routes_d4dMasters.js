@@ -35,6 +35,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		});
 	});
 
+	app.get('/d4dMasters/getaccessroles/:masterid/:fieldname/:filedvalue',function(req,res){
+		//configmgmtDao.getListFiltered(req.params.masterid,req.params.fieldname,req.params.fieldname)
+
+	});
+
 	app.get('/d4dMasters/getcodelist/:name',function(req,res){
 		configmgmtDao.getCodeList(req.params.name,function(err,cl){
 			console.log(cl);
@@ -125,7 +130,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 		});
 	});
-
+	
+	//Reading a icon file saved
+	app.get('/d4dMasters/image/:imagename', function(req, res) {
+		settingsController.getChefSettings(function(settings) {
+			var chefRepoPath = settings.chefReposLocation;
+			fs.readFile(chefRepoPath  + 'catalyst_files/' +req.params.imagename,function(err,data){
+				if(err){
+					res.end(404);
+				}
+				res.writeHead(200,{'Content-Type': 'image/gif' });
+				res.end(data, 'binary');
+			});
+			
+		});
+	});
 
 	app.get('/d4dMasters/readmasterjson/:id', function(req, res) {
 		console.log('received request ' + req.params.id);
@@ -354,6 +373,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		settingsController.getChefSettings(function(settings) {
 			var chefRepoPath = settings.chefReposLocation;
 			console.log(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1));
+
+			//Handling the exception to handle uploads without orgname
+			if(req.params.orgname == "undefined"){
+				req.params.orgname = "catalyst_files";
+			}
+
 			var path = chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1);
 			
 			
