@@ -297,7 +297,7 @@ function Configmgmt() {
                                     configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
 
                                     configmgmt = "{" + configmgmt + "}";
-                                    //console.log(JSON.stringify(configmgmt));
+                                    //console.log(">>>>>>" + JSON.stringify(configmgmt));
                                     configmgmt = JSON.parse(configmgmt);
                                     return;
                                 }

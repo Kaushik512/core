@@ -27,6 +27,11 @@ var Chef = function(settings) {
 
     this.getNodesList = function(callback) {
         initializeChefClient(function(err, chefClient) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+                return;
+            }
             chefClient.get('/nodes', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
