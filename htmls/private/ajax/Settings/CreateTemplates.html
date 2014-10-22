@@ -76,30 +76,51 @@
                                                                         Chef Server 
                                                                     </label>
                                                                     <label class="select">
-                                                                        <select id="configname" class="form-control" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst">
+                                                                        <select id="configname" class="form-control" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadChefServerObjects($(this).val());">
                                                                             
                                                                         </select>
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-6">
-                                                                        <label for="category">Cookbooks</label>
-                                                                       
-                                                                        <select size=30 id="templatescookbooks"  cdata="catalyst" class="input-group from-control col-md-12"  style="height:25px;overflow-y:auto;padding:2px;border:1px solid silver;width:100%">
-
-
-                                                                        </select>
-                                                                    <section class="col col-6">
-
-                                                                  <div class="btn-group pull-left" >
-       														     <div  style= "padding-left: 40px; margin-left: -50px;">
-            													
-            														<a class="button" id="launchProviderTypeSelection" href="#popupSelectProvider" data-toggle="modal" style="margin-left: -3px;">Select Cookbooks</a> 
-                                                                    </div>
-            														
-                                                                  
-                                                                  </div>
-																	</section>
-                                                                    </section>
+                                                                            <label for="">
+                                                                                Chef Server Objects List
+                                                                            </label>
+                                                                            <span class="pull-right">
+                                                                                Template Run List
+                                                                            </span>
+                                                                            <div class="row">
+                                                                                <div class="col col-5">
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;" class="deploymentCookbookList">
+                                                                                        <label class="label" style="text-align:center;">Select Cookbooks</label>
+                                                                                        <hr>
+                                                                                    </ul>
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;"  class="deploymentRolesList">
+                                                                                        
+                                                                                        <label class="label" style="text-align:center;">Select Roles</label>
+                                                                                        <hr>
+                                                                                        
+                                                                                    </ul>
+                                                                                </div>
+                                                                                <div style="margin-top: 60px;" class="col col-2">
+                                                                                    <div class="input-group">
+                                                                                        <div style="padding-bottom: 10px;" class="btn-group">
+                                                                                            <button id="btnDeploymentAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                                                        </div>
+                                                                                        <div class="clearfix"></div>
+                                                                                        <div class="btn-group">
+                                                                                            <button id="btnDeploymentRemoveSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                               
+                                                                                <div class="col col-5">
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;" class="deploymentSelectedRunList" id="templatescookbooks" cdata="catalyst">
+                                                                                        
+                                                                                    </ul>
+                                                                                </div>
+                                                                                
+                                                                            </div>
+                                                                </section>
                                                                 </div>
                                                             
 
@@ -366,9 +387,83 @@
             
             var y = $('<option>' + x + ' </option>').val(x);
             //alert(y);
-            $("#templatescookbooks").append(y);
+            //$("#templatescookbooks").append(y);
         }
     });
    
+   function loadChefServerObjects(chefServer){
+            $.get('/d4dMasters/' + chefServer + '/cookbooks', function(data) {
+            console.log(data);
+            var cookbooks = data.cookbooks;
+            var keys = Object.keys(cookbooks);
+            var $deploymentCookbookList = $('.deploymentCookbookList').empty();
+            for (i = 0; i < keys.length; i++) {
+                $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+            }
 
+        });
+
+        $.get('/d4dMasters/' + chefServer + '/roles', function(data) {
+            console.log(data);
+            var roles = data.roles;
+            var keys = Object.keys(roles);
+            var $deploymentRolesList = $('.deploymentRolesList').empty();
+            for (i = 0; i < keys.length; i++) {
+                $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+            }
+
+        });
+   }
+   $('#btnDeploymentAddSelectedCookbook').click(function(e) {
+    var $deploymentSelectedList = $('.deploymentSelectedRunList');
+    var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
+    $selectedCookbooks.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+            if ($(this).hasClass('deploymentCookbookSelected')) {
+                $(this).removeClass('deploymentCookbookSelected');
+            } else {
+                $(this).addClass('deploymentCookbookSelected');
+            }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+
+    });
+
+    var $selectedRoles = $("input[name=checkboxRoles]:checked");
+    $selectedRoles.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+            if ($(this).hasClass('deploymentCookbookSelected')) {
+                $(this).removeClass('deploymentCookbookSelected');
+            } else {
+                $(this).addClass('deploymentCookbookSelected');
+            }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+
+
+    });
+
+    $deploymentSelectedList.sortable({
+        cursor: "move"
+    });
+});
+
+$('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
+    var $deploymentSelectedList = $('.deploymentSelectedRunList');
+    $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
+        var value = $(this).find('input').val();
+        var selector = 'input[name=checkboxRoles][value="' + value + '"]';
+        console.log(selector);
+        $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
+        $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
+        $(this).remove();
+
+    });
+
+});
+   loadChefServerObjects($('#configname').val());
 </script>
