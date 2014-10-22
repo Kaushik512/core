@@ -477,12 +477,18 @@
 	<!-- Demo purpose only *** Removed as issue fix to avoid user changing theme ***
 	<script src="js/demo.js"></script>-->
 	<script src="/private/js/jquery.dataTables.js"></script>
+
+	<!--Due to scroll bar looks better -->
+	<script src="js/metro-scroll.js"></script>
+
 	<!-- MAIN APP JS FILE -->
 	<script type="text/javascript">
 	
 	function setleftnavigation(toplink,breadcrumbHeader){
 		$('a[onclick*="setleftnavigation"]').removeClass('active');
+		$('a[onclick*="setleftnavigation"]').find("i").removeClass('txt-color-blue')
 		$(toplink).addClass('active');
+		$(toplink).find('i').addClass('txt-color-blue');
 		$('nav > ul').addClass('hidden'); //hiding all navigation elements
 		var navbar = $(toplink).closest("li").attr('navigation');
 		$('#Workspace1').addClass('hidden');
