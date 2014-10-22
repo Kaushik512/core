@@ -569,6 +569,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 						}
 						else{ //in edit mode
 							if(rowtoedit){
+								uuid1 = bodyJson["rowid"];
 								for(var j = 0; j < rowtoedit.field.length; j++){
 									if(bodyJson[rowtoedit.field[j].name] != null){
 										rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
@@ -601,6 +602,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 								   	   	   //saveuploadedfile(suffix,fileinputs,orgname,req,res,callback)
 								   	   	   console.log(req.params.fileinputs == 'null');
 								   	   	   console.log('folderpath:' + folderpath);
+
 								   	   	   if(req.params.fileinputs != 'null')
 								   	   	   		res.send(saveuploadedfile(uuid1+ '__',folderpath,req));
 								   	   	   else

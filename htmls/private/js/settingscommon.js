@@ -120,9 +120,11 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                                     tv += ",&nbsp;" + v1;
                             });
                             if(imageTD){
-                                var imgpath = '/d4dMasters/image/' + tv + '__' + imageTD.attr('datafieldoriginal')  + '__' + imageTD.html();
-                                imageTD.html('');
-                                imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+                                if(imageTD.length > 0){
+                                    var imgpath = '/d4dMasters/image/' + tv + '__' + imageTD.attr('datafieldoriginal')  + '__' + imageTD.html();
+                                    imageTD.html('');
+                                    imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+                                }
                             }
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
                             editButton.addClass("tableactionbutton tableactionbuttonpadding");
