@@ -35,6 +35,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		});
 	});
 
+	app.get('/d4dMasters/getaccessroles/:masterid/:fieldname/:filedvalue',function(req,res){
+		//configmgmtDao.getListFiltered(req.params.masterid,req.params.fieldname,req.params.fieldname)
+
+	});
+
 	app.get('/d4dMasters/getcodelist/:name',function(req,res){
 		configmgmtDao.getCodeList(req.params.name,function(err,cl){
 			console.log(cl);
@@ -125,7 +130,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 		});
 	});
-
+	
+	//Reading a icon file saved
+	app.get('/d4dMasters/image/:imagename', function(req, res) {
+		settingsController.getChefSettings(function(settings) {
+			var chefRepoPath = settings.chefReposLocation;
+			fs.readFile(chefRepoPath  + 'catalyst_files/' +req.params.imagename,function(err,data){
+				if(err){
+					res.end(404);
+				}
+				res.writeHead(200,{'Content-Type': 'image/gif' });
+				res.end(data, 'binary');
+			});
+			
+		});
+	});
 
 	app.get('/d4dMasters/readmasterjson/:id', function(req, res) {
 		console.log('received request ' + req.params.id);
@@ -354,6 +373,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		settingsController.getChefSettings(function(settings) {
 			var chefRepoPath = settings.chefReposLocation;
 			console.log(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1));
+
+			//Handling the exception to handle uploads without orgname
+			if(req.params.orgname == "undefined"){
+				req.params.orgname = "catalyst_files";
+			}
+
 			var path = chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1);
 			
 			
@@ -389,12 +414,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
 									}
 								});*/
 						if(folderpath == ''){
-							console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+							console.log('this is where file gets saved as (no folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
 							fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
 						}
 						else{
-							console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
-							fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+							if(folderpath.indexOf('.chef') > 0){ //identifying if its a chef config file
+								console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
+								fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+							}
+							else //not a a chef config file
+							{
+								console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+								fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+							}
 						}
 
 						
@@ -544,6 +576,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 						}
 						else{ //in edit mode
 							if(rowtoedit){
+								uuid1 = bodyJson["rowid"];
+								console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+								if( bodyJson["folderpath"] == undefined) //folderpath issue fix
+									folderpath = ''
+								else
+									folderpath = bodyJson["folderpath"];
 								for(var j = 0; j < rowtoedit.field.length; j++){
 									if(bodyJson[rowtoedit.field[j].name] != null){
 										rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
@@ -576,6 +614,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 								   	   	   //saveuploadedfile(suffix,fileinputs,orgname,req,res,callback)
 								   	   	   console.log(req.params.fileinputs == 'null');
 								   	   	   console.log('folderpath:' + folderpath);
+
 								   	   	   if(req.params.fileinputs != 'null')
 								   	   	   		res.send(saveuploadedfile(uuid1+ '__',folderpath,req));
 								   	   	   else

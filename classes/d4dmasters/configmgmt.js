@@ -301,8 +301,12 @@ function Configmgmt() {
                                     configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
 
                                     configmgmt = "{" + configmgmt + "}";
+<<<<<<< HEAD
                                     //console.log(JSON.stringify(configmgmt));
                                     console.log(configmgmt);
+=======
+                                    //console.log(">>>>>>" + JSON.stringify(configmgmt));
+>>>>>>> origin/feature_engineered
                                     configmgmt = JSON.parse(configmgmt);
                                     return;
                                 }
