@@ -414,12 +414,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
 									}
 								});*/
 						if(folderpath == ''){
-							console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+							console.log('this is where file gets saved as (no folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
 							fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
 						}
 						else{
-							console.log('this is where file gets saved as : ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
-							fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+							if(folderpath.indexOf('.chef') > 0){ //identifying if its a chef config file
+								console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
+								fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+							}
+							else //not a a chef config file
+							{
+								console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+								fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+							}
 						}
 
 						
@@ -570,6 +577,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
 						else{ //in edit mode
 							if(rowtoedit){
 								uuid1 = bodyJson["rowid"];
+								console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+								if( bodyJson["folderpath"] == undefined) //folderpath issue fix
+									folderpath = ''
+								else
+									folderpath = bodyJson["folderpath"];
 								for(var j = 0; j < rowtoedit.field.length; j++){
 									if(bodyJson[rowtoedit.field[j].name] != null){
 										rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
