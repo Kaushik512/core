@@ -187,21 +187,16 @@
                                     <td style="font-size:12px;">4.0.2</td>
                                     <td style="color:green;font-size:12px;"> Started </td>
                                     <td>   
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/Green.png'>
+                                      <div class="btn1 actionbuttonCPStart">
+                                          <!-- <img src='img/galleryIcons/Green.png'> -->
                                       </div>
 
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/red.png'>
-                                        
+                                      <div class="btn1 actionbuttonCPRestart">
+                                          <!-- <img src='img/galleryIcons/red.png'> -->
                                       </div>
                                     
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/yellow.png'>
-                                        
+                                      <div class="btn1 actionbuttonCPShutdown">
+                                          <!-- <img src='img/galleryIcons/yellow.png'> -->
                                       </div>
                                     </td>
                                     <td> </td>
@@ -211,20 +206,15 @@
                                     <td style="font-size:12px;">5.6.0</td>
                                     <td style="color:red;font-size:12px;"> Stopped </td>
                                     <td>   
-                                      <div class="btn1">
+                                      <div class="btn1 actionbuttonCPStart">
                                         
-                                          <img src='img/galleryIcons/Green.png'></i>
                                       </div>
 
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/red.png'></i>
+                                      <div class="btn1 actionbuttonCPRestart">
                                         
                                       </div>
                                     
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/yellow.png'></i>
+                                      <div class="btn1 actionbuttonCPShutdown">
                                         
                                       </div>
                                     </td>
@@ -233,22 +223,17 @@
                                 <tr>
                                     <td style="font-size:12px;">Chef-client</td>
                                     <td style="font-size:12px;">2.0</td>
-                                    <td style="color:yellowgreen;font-size:12px;"> Paused </td>
+                                    <td style="color:orange;font-size:12px;">Paused </td>
                                     <td>   
-                                      <div class="btn1">
+                                      <div class="btn1 actionbuttonCPStart">
                                         
-                                          <img src='img/galleryIcons/Green.png'></i>
                                       </div>
 
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/red.png'></i>
+                                      <div class="btn1 actionbuttonCPRestart">
                                         
                                       </div>
                                     
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/yellow.png'></i>
+                                      <div class="btn1 actionbuttonCPShutdown">
                                         
                                       </div>
                                     </td>
@@ -257,23 +242,18 @@
                                 <tr>
                                     <td style="font-size:12px;">Docker</td>
                                     <td style="font-size:12px;">1.0.4</td>
-                                    <td style="color:red;"> Stopped </td>
+                                    <td style="color:red;font-size:12px;"> Stopped </td>
                                     <td>   
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/Green.png'></i>
+                                      <div class="btn1 actionbuttonCPStart">
+
                                       </div>
 
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/red.png'></i>
-                                        
+                                      <div class="btn1 actionbuttonCPRestart">
+                                       
                                       </div>
                                     
-                                      <div class="btn1">
-                                        
-                                          <img src='img/galleryIcons/yellow.png'></i>
-                                        
+                                      <div class="btn1 actionbuttonCPShutdown">
+                                    
                                       </div>
                                     </td>
                                     <td> </td>
@@ -310,23 +290,47 @@
                                 </label>                                          
                             </section>
                             <section class="col col-12">
-                                <label for="category">Type of the Service<span style="color:red">*</span>
-                                </label>
-                                <label class="input"> 
-                                    <input type="text">
-                                </label>
-                                
+                              <label class="">Type of the Service
+                                <span style="color:red">*</span>
+                              </label>
+                              <label class="select">
+                                <select class="input-sm">
+                                  <option value="0">Start</option>
+                                  <option value="1">Restart</option>
+                                  <option value="2">Stop</option>
+                                </select> <i></i> 
+                              </label>
                             </section>
                             <section class="col col-12">
+                              <label class="">Assign Action</label>
+                              <div class="inline-group">
+                                <label class="radio serviceCookbookRadio">
+                                  <input type="radio" checked="checked" name="radio-inline">
+                                  <i></i>Service Cookbook
+                                </label>
+                                <label class="radio customActionRadio" style="padding-top:15px;">
+                                  <input type="radio" name="radio-inline">
+                                  <i style="margin-top: 16px;"></i>Custom Action</label>
+                              </div>
+                            </section>
+
+                            <!-- <section class="col col-12">
+                                <label for="category">Type of the Service<span style="color:red">*</span>
+                                </label>
+                                <label class="select"> 
+                                    
+                                </label>
+                             
+                            </section> -->
+                            <section class="col col-12 chooseLogo">
                                 <label for="">Choose Logo</label>
                                 <label class="input input-file" for="file">
-                                    <!-- <div value="1" class="imgdiv"></div> -->
                                     <div class="button">
-                                      <input type="file">Browse</div>
+                                      <input type="file"><span style="color:white;">Browse</span></div>
                                       <input type="text" readonly="">
                                 </label>
                             </section>
-                            <section class="col col-12">
+                            <section class="col col-12 chooseCommand" style="display:none">
                               <label for="">Command</label>
                               <label class="textarea textarea-expandable">             
                                 <textarea class="custom-scroll" rows="3"></textarea> 
@@ -335,6 +339,7 @@
                                 <strong>Note:</strong> expands on focus.
                               </div>
                             </section>
+
                             <section class="col col-12">
                                 <label class="">Assign Users</label>
                                 <label class="select select-multiple">
@@ -346,7 +351,7 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Save Deployment Blueprint</button>
+                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP">Save Deployment Blueprint</button>
                     <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
                   </div>
                 </div>
@@ -591,7 +596,7 @@
 
 </div>
 </article>
-
+<!--article ended-->
 <div class="loadingControlPanelIndicator">
 <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
 </div>
@@ -604,11 +609,78 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Update Runlist</h4>
+        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
       </div>
       <div class="modal-body">
-         <select class="chefCookbookList" multiple>
-         </select>
+        <div class="loadingContainer">
+            <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
+        </div>   
+        
+        <div class="smart-form" style="display:none;">
+            <div class="row">
+                <section style="padding-top:18px;">
+                    <div style="clear: both;" id="divCookbooks">
+                        
+                        <div class="col-lg-5">
+                            <select multiple="multiple" style="width: 200px;height:150px;margin-left:20px;" class="form-control" id="instanceCookbookList">
+                            </select>
+                        </div>
+                        <div style="margin-top: 50px;" class="col-lg-1">
+                            <div class="input-group">
+                        <div style="padding-bottom: 10px;" class="btn-group">
+                            <button id="btnaddInstanceCookbooks" class="btn btn-default btn-primary"style="width:30px;height:27px;" type="button">
+                                <i style="font-size:20px;" class="fa fa-angle-double-right">
+                                </i>
+                            </button>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <div class="btn-group">
+                            <button id="btnremoveinstanceCoookbooks" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
+                                <i style="font-size:20px;" class="fa fa-angle-double-left">
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="input-group">
+                        <div class="btn-group">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select multiple="multiple" style="width: 200px;height:150px;" class="form-control" id="instanceCookbookSelectedList">
+                                            </select>
+                                        </td>
+                                        <td style="padding-left:10px;">
+                                            <button id="btninstanceCookbookUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
+                                                <i style="font-size:20px;" class="fa fa-angle-double-up">
+                                                </i>
+                                            </button>
+                                            <div class="clearfix"></div>
+                                            <div class="clearfix"></div>
+                                            <div style="padding-top: 10px" class="btn-group"><button id="btninstanceCookbookDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
+                                                <i style="font-size:20px;" class="fa fa-angle-double-down">
+                                                </i>
+                                            </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="padding-bottom: 10px; margin-top: 40px;" class="btn-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </section>
+            </div>
+        </div>
+        <div class="errorContainer" style="display:none"></div>
+         <!-- <select class="chefCookbookList" multiple>
+         </select> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
@@ -684,7 +756,26 @@
   color: #000000 !important;
 }
 </style>
-
+<script type="text/javascript">
+  function serviceCookbookCP(){
+    console.log($('.serviceCookbookRadio').find('input').is(':checked'));
+    if($('.serviceCookbookRadio').find('input').is(':checked')){
+      $('.chooseLogo').css({'display': 'block'});
+      $('.chooseCommand').css({'display': 'none'});
+    }else {
+      $('.chooseLogo').css({'display': 'none'});
+      $('.chooseCommand').css({'display': 'block'});
+    }
+  }
+$('.serviceCookbookRadio input').click(function(e) {
+  // console.log(e);
+  serviceCookbookCP();
+});
+$('.customActionRadio input').click(function(e) {
+  // console.log(e);
+  serviceCookbookCP();
+});
+</script>
 <script type="text/javascript">
 var urlParams ={};
 (window.onpopstate = function () {
@@ -720,7 +811,7 @@ $.get('../instances/'+urlParams.id,function(data){
  
 
    console.log(data);
-   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId);
+   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
@@ -905,32 +996,113 @@ $.get('../instances/'+urlParams.id,function(data){
         }); 
     });
 
+  $("#btnaddInstanceCookbooks").on('click', function () {
+
+        var $options = $('#instanceCookbookList option:selected');
+        var $selectedList = $("#instanceCookbookSelectedList");
+        $options.each(function(){
+            $selectedList.append($(this).clone());
+        });
+        
+    });
+    $("#btnremoveinstanceCoookbooks").on('click', function () {
+        $("#instanceCookbookSelectedList option:selected").remove();
+    });
+
+    $("#btninstanceCookbookUp").on('click', function () {
+        $("#instanceCookbookSelectedList option:selected").each(function () {
+            var listItem = $(this);
+            var listItemPosition = $("#instanceCookbookSelectedList option").index(listItem) + 1;
+
+            if (listItemPosition == 1) return false;
+
+            listItem.insertBefore(listItem.prev());
+        });
+
+    });
+
+    $("#btninstanceCookbookDown").on('click', function () {
+        var itemsCount = $("#instanceCookbookSelectedList option").length;
+
+        $($("#instanceCookbookSelectedList option:selected").get().reverse()).each(function () {
+            var listItem = $(this);
+            var listItemPosition = $("#instanceCookbookSelectedList option").index(listItem) + 1;
+
+            if (listItemPosition == itemsCount) return false;
+
+            listItem.insertAfter(listItem.next());
+
+        });
+    });
     $('.instanceActionBtnUpdateRunlist').click(function(e){
          var $this = $(this);
          var $parent = $('.domain-roles-caption');
          var instanceId = $parent.attr('data-instanceId');
          var chefServerId = $parent.attr('data-chefServerId');
 
-         $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-         $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
-         $chefRunModalContainer.modal('show');
-         $.get('../chef/servers/'+chefServerId+'/cookbooks',function(data){
-            var keys = Object.keys(data);
-            var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId',instanceId).attr('multiple',true); 
-            for(var i=0;i<keys.length;i++) {
-             var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-             $cookbooksList.append($option);
-            }
-             $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
+        //  $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+        //  $chefRunModalContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>');
+        //  $chefRunModalContainer.modal('show');
+        //  $.get('../chef/servers/'+chefServerId+'/cookbooks',function(data){
+        //     var keys = Object.keys(data);
+        //     var $cookbooksList = $('<select></select>').addClass('chefCookbookList').attr('data-instanceId',instanceId).attr('multiple',true); 
+        //     for(var i=0;i<keys.length;i++) {
+        //      var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+        //      $cookbooksList.append($option);
+        //     }
+        //      $chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
 
-        });
+        // });
+  $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+    $chefRunModalContainer.find('.loadingContainer').show();
+    $chefRunModalContainer.find('.smart-form').hide();
+    $chefRunModalContainer.find('.errorContainer').hide();
+    $chefRunModalContainer.modal('show');
+
+    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
+        var keys = Object.keys(data);
+        var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);
+
+        for (var i = 0; i < keys.length; i++) {
+            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
+            $cookbooksList.append($option);
+        }
+
+        var $selectedList = $("#instanceCookbookSelectedList").empty();
+        var runlist = $parent.data('runlist');
+        //sss console.log(runlist);
+        if(runlist) {
+            for(var i=0;i<runlist.length;i++) {
+                var newsubStringRunlist = runlist[i].split('[');
+                if(newsubStringRunlist.length == 2) {
+                    newsubStringRunlist = newsubStringRunlist[1];
+                }
+               var $option = $('<option></option>').append(newsubStringRunlist.split(']')[0]).val(runlist[i]);
+              $selectedList.append($option);
+            }
+        } 
+
+        $chefRunModalContainer.find('.loadingContainer').hide();
+        $chefRunModalContainer.find('.smart-form').show();
+        //$demoChefClientRun.append($cookbooksList);
+        //$chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
+
+    }).error(function() {
+         $chefRunModalContainer.find('.loadingContainer').hide();
+         $chefRunModalContainer.find('.smart-form').hide();
+        $chefRunModalContainer.find('.errorContainer').empty().append('<span>Oops! Something went wrong. Please try again later</span>').show();
+    });
 
     });
 
    $('.btnUpdateInstanceRunlist').click(function(e){
-      var instanceId  = $('.chefCookbookList').attr('data-instanceId');
-      var runlist = $('.chefCookbookList').val();
-      console.log(runlist); 
+      var instanceId = $('#instanceCookbookList').attr('data-instanceId');
+    
+      var runlist = [];
+      var $options = $('#instanceCookbookSelectedList').children();
+      $options.each(function(){
+       runlist.push($(this).val()); 
+      });
       $.post('../instances/'+instanceId+'/updateRunlist',{
         runlist:runlist
       },function(data){

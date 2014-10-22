@@ -1,65 +1,132 @@
-var mongoose = require('mongoose');
-var ObjectId = require('mongoose').Types.ObjectId;
+var taskStatusDao = require('./dao/taskstatusdao');
 
-var Schema = mongoose.Schema;
+function TaskStatusClass(taskId) {
 
-var TaskStatusSchema = new Schema({
-	timeStarted: Number,
-	timeEnded: Number,
-	completed: Boolean,
-	status: Object
-});
+    this.updateTaskStatus = function(status, callback) {
+        var timestampUpdated = new Date().getTime();
+        taskStatusDao.updateTaskStatus(taskId, {
+            timestampUpdated: timestampUpdated,
+            statusObj: {
+                timestamp: timestampUpdated,
+                status: status
+            }
+        }, function(err, data) {
+            if (err) {
+                console.log('unable to update taskstatus', err);
+                if (typeof callback === 'function') {
+                    callback(err, null);
+                }
+                return;
+            }
+            if (typeof callback === 'function') {
+                callback(null, true);
+            }
+        });
+    };
 
-var TaskStatus = mongoose.model('taskstatus', TaskStatusSchema);
+    this.endTaskStatus = function(successful, status, callback) {
+        var timestamp = new Date().getTime();
+        var updateObj = {
+            timestampUpdated: timestamp,
+            timestampEnded: timestamp,
+            completed: true,
+            successful: successful
 
-var TaskStatusDao = function() {
+        }
+        if (status) {
+            updateObj.statusObj = {
+                timestamp: timestamp,
+                status: status
+            }
+        }
+        taskStatusDao.updateTaskStatus(taskId, updateObj, function(err, data) {
+            if (err) {
+                console.log('unable to update taskstatus', err);
+                if (typeof callback === 'function') {
+                    callback(err, null);
+                }
+                return;
+            }
+            if (typeof callback === 'function') {
+                callback(null, true);
+            }
+        });
 
-	this.getTaskStatusById = function(taskId, callback) {
-		console.log(taskId);
-		TaskStatus.find({
-			"_id": new ObjectId(taskId)
-		}, function(err, data) {
-			if (err) {
-				callback(err, null);
-				return;
-			}
-			console.log('data ==>', data);
-			callback(null, data);
+    };
 
-		});
-	},
+    this.getStatusByTimestamp = function(timestamp, callback) {
 
-	this.createTaskStatus = function(taskStatusData, callback) {
-		var taskStatus = new TaskStatus(taskStatusData);
+        taskStatusDao.getTaskStatusById(taskId, function(err, taskStatus) {
+            if (err) {
+                console.log('unable to get taskstatus', err);
+                if (typeof callback === 'function') {
+                    callback(err, null);
+                }
+                return;
+            }
+            if (!taskStatus.length) {
+                callback(null, null);
+                return;
+            } else {
+                callback(null, taskStatus[0]);
+            }
+            /*taskStatusDao.getStatusByTimestamp(taskId, timestamp, function(err, data) {
+                if (err) {
+                    console.log('unable to get taskstatus', err);
+                    if (typeof callback === 'function') {
+                        callback(err, null);
+                    }
+                    return;
+                }
+                console.log('statusList ==>', data);
+                taskStatus[0].statusList = [];
+                if (data.length) {
+                    taskStatus[0].statusList = data[0].statusList;
+                    //taskStatus = data;
+                }
 
-		taskStatus.save(function(err, data) {
-			if (err) {
-				callback(err, null);
-				return;
-			}
-			callback(null, data);
-		});
-	};
+                if (typeof callback === 'function') {
+                    callback(null, taskStatus[0]);
+                }
+            });*/
 
-	this.updateTaskStatus = function(instanceId, statusObj, callback) {
-		TaskStatus.update({
-			"_id": new ObjectId(instanceId),
-		}, {
-			$set: {
-				"timeEnded": statusObj.timeEnded,
-				"completed": statusObj.completed,
-				"status": statusObj.status
-			}
-		}, {
-			upsert: false
-		}, function(err, data) {
-			if (err) {
-				callback(err, null);
-				return;
-			}
-			callback(null, data);
-		});
-	};
+        });
+
+
+    };
+
+    this.getTaskId = function() {
+        return taskId;
+    }
+
+
+
+}
+
+function createNewTask(callback) {
+    taskStatusDao.createTaskStatus({
+        timestampStarted: new Date().getTime(),
+        completed: false,
+        successful: false,
+    }, function(err, data) {
+        if (err) {
+            console.log(err);
+            callback(err, null);
+            return
+        }
+        console.log(data);
+        callback(null, new TaskStatusClass(data._id));
+    });
+}
+
+
+
+
+
+module.exports.getTaskStatus = function(taskId, callback) {
+    if (taskId) {
+        callback(null, new TaskStatusClass(taskId));
+    } else {
+        createNewTask(callback);
+    }
 };
-
-module.exports = new TaskStatusDao();

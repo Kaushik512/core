@@ -1,3 +1,9 @@
+@media screen and (min-width:747px) and (max-width: 1024px) {
+    .technologyImage{
+        width:150px;
+        padding-top: 40px;
+    }
+}
 /*!
  * SmartAdmin - Responsive WebApp
  *
@@ -9867,7 +9873,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     margin-left: 0;
 }
 #login #header #logo img {
-    width: 137px;
+    width: 172px;
 }
 #login-header-space {
     float: right;
@@ -9939,7 +9945,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     /*padding: 0 5px!important;*/
 }
 #login #header #logo img {
-    width: 135px;
+    width: 172px;
 }
 #login #header #logo {
     margin-top: 22px;
@@ -26725,11 +26731,11 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     margin-bottom: 20px;
 }
 #login #header #logo {
-    margin-top: 22px;
+    margin-top: 12px;
     margin-left: 0;
 }
 #login #header #logo img {
-    width: 137px;
+    width: 172px;
 }
 #login-header-space {
     float: right;
@@ -26802,10 +26808,10 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     /*padding: 0 5px!important;*/
 }
 #login #header #logo img {
-    width: 135px;
+    width: 172px;
 }
 #login #header #logo {
-    margin-top: 22px;
+    margin-top: 12px;
 }
 }.dd {
     position: relative;

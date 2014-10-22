@@ -23,6 +23,7 @@ var organizations = require('./routes_organizations');
 var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
+var taskStatus = require('./routes_taskstatus');
 
 
 
@@ -55,7 +56,8 @@ module.exports.setRoutes = function(app) {
 
   users.setRoutes(app,sessionVerificationFunc);
 
-
+  taskStatus.setRoutes(app,sessionVerificationFunc);
+  
   app.get('/', function(req, res) {
     res.redirect('/private/index.html');
   });

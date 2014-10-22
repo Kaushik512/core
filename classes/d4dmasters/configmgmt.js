@@ -1,5 +1,6 @@
 var d4dModel = require('./d4dmastersmodel.js');
 var settingsController = require('../../controller/settings');
+var codelist = require('../../codelist.json');
 
 function Configmgmt() {
 
@@ -296,7 +297,7 @@ function Configmgmt() {
                                     configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
 
                                     configmgmt = "{" + configmgmt + "}";
-                                    //console.log(JSON.stringify(configmgmt));
+                                    //console.log(">>>>>>" + JSON.stringify(configmgmt));
                                     configmgmt = JSON.parse(configmgmt);
                                     return;
                                 }
@@ -442,6 +443,35 @@ function Configmgmt() {
                 return(jsonlist);
             }
         });
+    };
+
+    this.getCodeList = function(name,callback){
+        if(codelist){
+            var count = 0;
+            var list = '';
+            console.log('Code List Items length: ' + codelist.length);
+            codelist.forEach(function(k,v){
+                console.log("Code items: ",k.name,"Values",k.values.length);
+                if(k.name == name){
+                    for(var i = 0; i < k.values.length; i++){
+                       if(list == ''){
+                            list = k.values[i];
+                       }
+                       else
+                            list += ',' + k.values[i];
+
+                       console.log(k.values[i]);
+                    }
+                }
+                count++;
+                if(count >= codelist.length)
+                {
+                        console.log('reached callback');
+                        callback(null, list);
+                        //return;
+                }
+            });
+        }
     };
 
 }
