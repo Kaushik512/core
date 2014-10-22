@@ -327,6 +327,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
+
+app.get('/instances/:instanceId/service', function(req, res) {
+        var timestamp = req.query.timestamp;
+        if (timestamp) {
+            timestamp = parseInt(timestamp);
+        }
+        logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+
+        });
+
+    });
+
+
+
+
+
+
+
+
+
+
     app.get('/instances/:instanceId/bootstrap', function(req, res) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
