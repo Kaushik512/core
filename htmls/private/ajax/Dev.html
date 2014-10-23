@@ -1,3 +1,8 @@
+<style type="text/css">
+    .visibleClass{
+        display: block;
+    }
+</style>
 <div class="row">
 
     <article class="col-sm-12 col-md-12 col-lg-12">
@@ -40,9 +45,10 @@
                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-
                                 <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
-                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><!--<img src="img/galleryIcons/Table-view.png"/> --> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                <!-- <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
+                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span> -->
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
@@ -447,10 +453,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Instance Logs</h4>
+        <h4 class="modal-title" id="myModalLabel">
+            <i class="fa fa-bar-chart-o txt-color-blue"></i>
+            Instance Logs
+        </h4>
       </div>
       <div class="modal-body">
-        <div class="logsArea"></div>
+        <div class="logsArea" style="font-size:12px !important;"></div>
          
       </div>
       <div class="modal-footer">
@@ -1416,6 +1425,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
             ]
         });
     }
+    $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
     $('#tableinstanceview tbody').on('click','tr',function(){
         if($(this).hasClass('rowcustomselected')){
             $(this).removeClass('rowcustomselected');
@@ -1735,6 +1745,10 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
 });
 
 $('.actionControlPanel').click(function(e) {
+    var controlId = $(".visibleClass").attr("id");
+    //alert(controlId);
+    var urlText;
+    localStorage.setItem("dataEx", location.href);
    
     if ($('#divinstancescardview').is(':visible')) {
 
@@ -1742,7 +1756,9 @@ $('.actionControlPanel').click(function(e) {
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {
-                window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
+                urlText = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId + '&visibleControlid=' + controlId ;
+                window.location.href = urlText;
+                // window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
             }
         }
     } else {
@@ -1750,10 +1766,46 @@ $('.actionControlPanel').click(function(e) {
         if ($selectedCard.length) {
             var instanceId = $selectedCard.attr('data-instanceId');
             if (instanceId) {
-                window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
+                urlText = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId + '&visibleControlid=' + controlId ;
+                //localStorage.setItem("dataEx", urlText);
+                window.location.href = urlText;
+                // window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
             }
         }
     }
 }); 
+
+function showHideControl(objID)
+{
+    if(objID)
+    {
+        if(objID == "divinstancescardview" || objID == "defaultViewButton")
+        {
+            $("#divinstancestableview").removeClass("visibleClass");
+            $("#divinstancescardview").addClass("visibleClass");
+            $("#divinstancestableview").hide();
+            $("#divinstancescardview").show();
+        }
+        else
+        {   
+
+            $("#divinstancestableview").addClass("visibleClass");
+            $("#divinstancescardview").removeClass("visibleClass");
+            $("#divinstancestableview").show();
+            $("#divinstancescardview").hide();
+        }
+        //localStorage.clear();
+    }
+}
+window.onload= getViewTile();
+
+function getViewTile(){
+    var locationData = localStorage.getItem("ControlID");
+    if(locationData)
+    {
+        showHideControl(locationData);
+        localStorage.clear();
+    }
+}
 
 </script>

@@ -508,7 +508,7 @@
               <div class="col-md-12">
                 <div class="clearfix form-actions" style="text-align:center">
                   <div class="btn-group">
-                      <button class="btn pull-left btn-primary" style="margin-left:5px" onclick="history.back()">
+                      <button class="btn pull-left btn-primary" style="margin-left:5px" id="getViewAttr" onclick="getInfoLi();">
                         Back to Instances
                       </button>
                   </div>
@@ -1116,4 +1116,12 @@ $.get('../instances/'+urlParams.id,function(data){
       $('#data_bag_div3').show();
   });
 
+  function getInfoLi(){
+   var getURL = localStorage.getItem("dataEx");
+    var x= location.href;
+    var z= x.lastIndexOf("=");
+    var ControlID = x.slice(z+1, z.length);
+    localStorage.setItem("ControlID",ControlID);
+    location.href=getURL;
+  }
 </script>
