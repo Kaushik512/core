@@ -979,6 +979,7 @@ var instanceUpdateRunlistHandler = function(e) {
 
     //$demoChefClientRun = '';
     //$chefRunModalContainer.find('.modal-body').empty().append($demoChefClientRun);
+    alert(chefServerId);
     $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
         var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);

@@ -78,6 +78,12 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
+            data.forEach(function(inst){
+                console.log(inst.projectId);
+                inst.bggroup = 'test';
+               // inst['bggroup'] = 'test';
+            });
+            console.log(data);
             callback(null, data);
         });
 

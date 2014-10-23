@@ -362,13 +362,23 @@ function readform(formID) {
                             else
                                 inputC.val(v[k1]);
                         }
+
                         if (inputC.getType().toLowerCase() == "file") {
                             //  v[k1]
                             $(inputC).closest('div').next().val(v[k1]);
                         }
                         if (inputC.getType().toLowerCase() == "select") {
                             $(inputC).val(v[k1]);
-                            $(inputC).attr('savedvalue',v[k1])
+                            $(inputC).attr('savedvalue',v[k1]);
+                        }
+                        if (inputC.getType().toLowerCase() == "ul") {
+                            if(v[k1].indexOf(',') >= 0){
+                                var itms = v[k1].split(',');
+                                
+                                for(var j = 0; j < itms.length; j++){
+                                    $(inputC).append('<li><label style="margin: 5px;"><input type="hidden" value="recipe[' + itms[j] + '"]">' + itms[j] + '</label></li>');
+                                }
+                            }
                         }
                         if (inputC.getType().toLowerCase() == "div") {
                             $(inputC).attr('savedvalue',v[k1])
@@ -468,11 +478,35 @@ function saveform(formID){
           }*/
       });
     });
+
     //alert(k + ":" + v.toString());
     if(k != ''){
         //data1.append(k,"[" + v.toString() + "]");
         data1.append(k,v);
     }
+
+    //Reading UL type of data
+
+    var v1 = [];
+    var k1 = '';
+    $('ul[cdata="catalyst"]').each(function (){
+       k1 =  $(this).attr("id");
+      $(this).find("li").each(function (key1,value1){
+         // alert($(this).prop("type"));
+        
+            v1.push($(value1).text());
+          
+      });
+      
+    });
+
+    //alert(k + ":" + v.toString());
+    if(k1 != ''){
+        //data1.append(k,"[" + v.toString() + "]");
+        data1.append(k1,v1);
+    }
+
+
     
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
     if($('button[onclick*="saveform"]').attr("rowid") != null){
