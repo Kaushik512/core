@@ -832,7 +832,7 @@
 
                                                                 </div>
                                                                 <div class="tab-pane" id="tab3" style="height:450px;overflow-y: auto;">
-                                                                    <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
+                                                                    <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
                                                                     </div>
 
                                                                     <hr>
@@ -856,7 +856,7 @@
 
 
                                                                            <section class="col col-6">
-                                                                            <label for="">Choose Operating System  <span style="color:red">*</span>
+                                                                            <label for="">Choose Operating System <span style="color:red">*</span>
                                                                             </label>
                                                                             <label class="select"> 
                                                                                 <select>
@@ -877,7 +877,7 @@
 
                                                                                 </select>
                                                                             </label>
-                                                                        </label>
+                                                                        
                                                                     </section>
                                                                     <section class="col col-6">
                                                                         <label for="category">Choose Instance Size <span style="color:red">*</span>
@@ -1111,7 +1111,7 @@ $(document).ready(function(){
          }
 
          $("#templateContent").append(containerTemp);   
-         $("#templateContent #grid0").addClass("role-Selected");              ;
+         $("#templateContent #grid0").addClass("role-Selected");
     }
 
 
@@ -1146,13 +1146,13 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
    var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
     'tabClass': 'form-wizard',
     'onNext': function (tab, navigation, index) {
-       // alert(index);
+       
         console.log(navigation,index)
         if (index === 1) {
-
+            
              var $selectedItem = $('.role-Selected');
             if (!$selectedItem.length) {
-                alert('please choose a blueprint design')
+                alert('please choose a blueprint design');
                 return false;
             }
             var $clone = $selectedItem.clone().removeClass('role-Selected');
@@ -1189,6 +1189,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                 getTempName = '';
                 getRowID='';
                 getImage = '';
+                getTemplateType = '';
+                gettemplatescookbooks = '';
                 for(var x=0;x < data.masterjson.rows.row[z].field.length;x++){
                     if(data.masterjson.rows.row[z].field[x].name == "templatesicon_filename"){
                       getImage = data.masterjson.rows.row[z].field[x].values.value;
@@ -1197,7 +1199,12 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                     if(data.masterjson.rows.row[z].field[x].name == "rowid"){
                       getRowID = data.masterjson.rows.row[z].field[x].values.value;
                     }
-                    
+                    if(data.masterjson.rows.row[z].field[x].name == "templatetypename"){
+                      getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
+                    }
+                    if(data.masterjson.rows.row[z].field[x].name == "templatescookbooks"){
+                      gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
+                    }
                    
                     if(data.masterjson.rows.row[z].field[x].name == "templatename"){
                        getTempName = data.masterjson.rows.row[z].field[x].values.value;
@@ -1216,14 +1223,18 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                         '<div class="productdiv2" data-templateId="appFact'+z+'" data-'+
                                         'templateComponent="component'+z+'" '+
                                         'data-templateName="temp'+z+'" data-'+
-                                        'templateType="appFactory'+z+'">'+
+                                        'templateType="appFactory'+z+'" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks +'">'+
                                         '<ul class="list-unstyled system-prop" style="text-align:center;">'+
                                         '<li><img style="height:40px;width:auto;" alt="" '+
                             'src="/d4dMasters/image/'+getRowID+'__templatesicon__'+getImage+'">'+
-                                        '</li><li style="font-size:12px;"><u><b>'+getTempName+'</b></u></li>'+
-                                        '<li style="font-size:10px;"></li>'+
-                                        '<li style="font-size:10px;"></li>'+
-                                        '<li style="font-size:10px;"></li></ul></div></div>';
+                                        '</li><li style="font-size:12px;"><u><b>'+getTempName+'</b></u></li>';
+                                        var cb = gettemplatescookbooks.split(',');
+                                        var licb = '';
+                                        //alert(cb.length);
+                                        for(var cbi = 0; cbi < cb.length;cbi++){
+                                            licb += '<li style="font-size:10px;">'+ cb[cbi] +'</li>';
+                                        }
+                    getIndividualData +=    licb + '</ul></div></div>';
 
             }
            }        
@@ -1255,7 +1266,9 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
           //     return false;
 
           // }
+
            var $selectedItem = $('.role-Selected');
+          // alert('in ' + $selectedItem.length);
             if (!$selectedItem.length) {
                 alert('please choose a blueprint design')
                 return false;
@@ -1266,7 +1279,9 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
             wizard.show(4);
             return false;
         }
-
+        if($('#tab2 .role-Selected').length > 0){
+          $('#tab3 .selectedTemplateArea').empty().append($('#tab2 .role-Selected').clone());
+        }
 
     } else if(index == 3){
         var $selectedTemplateArea = $('.selectedTemplateArea')
