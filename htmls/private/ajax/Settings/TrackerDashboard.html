@@ -222,19 +222,14 @@ function addInstanceToDOM(data,index) {
 
   var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
   $rowContainter.append($('<td></td>').append(index));
-  // To be cleared with actuals during implementation.
-  if(index%2 == 0){
-    $rowContainter.append($('<td></td>').append('Phoenix Inc'));
-    $rowContainter.append($('<td></td>').append('International'));
-  }
-  else{
-   $rowContainter.append($('<td></td>').append('ABc')); 
-   $rowContainter.append($('<td></td>').append('Mayank'));
- }
+  $rowContainter.append($('<td></td>').append(data.orgId)); 
+  $rowContainter.append($('<td></td>').append(getBGNameFromProject(data.projectId).replace(/\"/g,'')));
+  $rowContainter.append($('<td></td>').append(data.projectId));
+  
 
   //$rowContainter.append($('<td></td>').append(''));
 
-  $rowContainter.append($('<td></td>').append(data.projectId)); //envId , chefNodeName,, instanceIP, instanceState
+  //$rowContainter.append($('<td></td>').append(data.projectId)); //envId , chefNodeName,, instanceIP, instanceState
   $rowContainter.append($('<td></td>').append(data.envId));
   $rowContainter.append($('<td></td>').append(data.chefNodeName));
   $rowContainter.append($('<td></td>').append(data.instanceIP));
@@ -324,6 +319,62 @@ function loadTrackContent(filters){ //filter[] => "org","businessgroup","project
 
 }
 
+//Section to be removed once BG has been included into instance object
+var formData = null;
+function getBGNameFromProject(projectid){
+  
+    if(!formData)
+      readMasterJson('4'); 
+
+    var idFieldName = "projectname";
+var returnField = "productgroupname";
+var idFieldValue = projectid;
+var returnValue = '';
+formData = d4ddata.masterjson;
+    $.each(formData.rows.row, function (i, item) {
+
+      $.each(item.field, function (j, item1) {
+        var setOrgname = false;
+          $.each(item1, function (k, v) {
+              if (k == "name") {
+                if (v == idFieldName) {
+                      //alert(formData.rows.row[i].field[j].values.value);
+                      var correctItem = false;
+                      
+                      $.each(formData.rows.row[i].field,function(l,item2){
+                        if(item2.name == idFieldName && item2.values.value == idFieldValue){
+                          correctItem = true;
+                        }
+                        if(correctItem){
+                          $.each(formData.rows.row[i].field,function(m,item3){
+                           // alert(JSON.stringify(item3));
+                            if(item3.name == returnField){
+                              //alert(item3.name + ':' +  returnField);
+                             // alert(JSON.stringify(item3.values.value));
+                              returnValue = JSON.stringify(item3.values.value);
+                            }
+                            
+                          });
+                          
+                          correctItem = false;
+                        }
+                      });
+                     // alert('next');
+                    }
+              }
+          });
+          
+      });
+    });
+  return(returnValue);
+}
+
+
+
+
+
+//End Section removal
+
 function getAggrCount(parentDiv, res){
   var countLabelLength = $("#"+parentDiv+" .circle-tile-number").length;
       // alert(countLabelLength);
@@ -343,8 +394,7 @@ function getAggrCount(parentDiv, res){
 
 
     $.get('../instances', function(data) {
-
-
+     
       for (var i = 0; i < data.length; i++) {
         addInstanceToDOM(data[i],i+1);
       }
