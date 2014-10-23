@@ -350,22 +350,31 @@ function Configmgmt() {
 
                                     for (var k = 0; k < itm.field.length; k++) {
                                         if (itm.field[k]["name"].indexOf("filename") > 0) {
+                                            console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
                                             if (configmgmt == '')
                                                 configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
                                             else
                                                 configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-
+                                            console.log("configmgmt ==>  ",configmgmt);
                                         } else {
+                                            console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
+                                            
                                             if (configmgmt == '')
                                                 configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
                                             else
                                                 configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+                                         console.log("configmgmt ==>  ",configmgmt);
                                         }
                                     }
                                     configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
 
                                     configmgmt = "{" + configmgmt + "}";
+<<<<<<< HEAD
+                                    //console.log(JSON.stringify(configmgmt));
+                                    console.log(configmgmt);
+=======
                                     //console.log(">>>>>>" + JSON.stringify(configmgmt));
+>>>>>>> origin/feature_engineered
                                     configmgmt = JSON.parse(configmgmt);
                                     return;
                                 }

@@ -1,66 +1,174 @@
 <style>
-  .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    border-top: 0px !important;
-  }
+	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+		border-top: 0px !important;
+	}
 
-  tr.show-settings:hover .settings{
-    display:block;
-  }
+	tr.show-settings:hover .settings{
+		display:block;
+	}
 
-  div.settings{
-    display:none;
-    width: 32px;
-    height: 18px;
-  }
-  .dropdown-content{
-    border-radius: 5px;
-      left: -30px;
-      min-width: 98px;
-      right: 0;
-  }
-  .show-settings input{
-    border: 1px solid #999;
-  }
-  .show-settings input, span{
-    height: 20px;
-  }
+	div.settings{
+		display:none;
+		width: 32px;
+		height: 18px;
+	}
+	.dropdown-content{
+		border-radius: 5px;
+	    left: -30px;
+	    min-width: 98px;
+	    right: 0;
+	}
+	.show-settings input{
+		border: 1px solid #999;
+	}
+	.show-settings input, span{
+		height: 20px;
+	}
 
 </style>
 
 <div class="clearfix"></div>
 <ul class="nav nav-tabs " role="tablist">
-  <li class="active"><a href="#organiz" role="tab" data-toggle="tab">Nodes</a></li>
+	<li class="active"><a href="#organiz" role="tab" data-toggle="tab">Nodes</a></li>
 </ul>
+<!--Dummy -->
+<!-- widget grid -->
+<section id="widget-grid" class="">
 
+  <!-- row -->
+  <div class="row">
+
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+      <!-- Widget ID (each widget will need unique ID)-->
+      
+      <!-- end widget -->
+
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false">
+        <!-- widget div-->
+        <div class="tab-content nodeListContainer">
+            <div class="tab-pane active tabContent table-responsive" id="organiz" style="display:none">
+
+              <!-- widget content -->
+              <div class="widget-body no-padding table-responsive" style="height:444px;overflow:auto;">
+
+                <table id="datatable_fixed_column" class="table table-striped table-bordered smart-form table-hover">
+                  <thead>
+                    <tr>
+                      <th>Node Name</th>
+                      <th>IP Address</th>
+                      <th>FQDN</th>
+                      <th>Platform</th>
+                      <th>Uptime</th>
+                      <th>Environment</th>
+                      <th>Actions</th>
+                    </tr>
+                    <tr class="second">
+                      <td>
+                        <label class="input">
+                          <input type="text" name="search_Node" value="Filter Node" class="search_init">
+                        </label>
+                      </td>
+                      <td>
+                        <label class="input">
+                          <input type="text" name="search_IP Addrs" value="Filter IP Addrs" class="search_init">
+                        </label>  
+                      </td>
+                      <td>
+                        <label class="input">
+                          <input type="text" name="search_FQDN" value="Filter FQDN" class="search_init">
+                        </label>  
+                      </td>
+                      <td>
+                        <label class="input">
+                          <input type="text" name="search_Platform" value="Filter Platform" class="search_init">
+                        </label>  
+                      </td>
+                      <td>
+                        <label class="input">
+                          <input type="text" name="search_Uptime" value="Filter Uptime" class="search_init">
+                        </label>  
+                      </td>
+                      <td>
+                        <label class="input">
+                          <input type="text" name="search_Environment" value="Filter Environment" class="search_init">
+                        </label>  
+                      </td>
+                      <td>
+                        <!-- <label class="input">
+                          <input type="text" name="search_Actions" value="Filter Actions" class="search_init">
+                        </label>   -->
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+              <!-- end widget content -->
+              <div class="row">
+                <div style="bottom:0px;position:fixed" class="col-md-10 col-sm-12 col-xs-12">
+                    <div style="text-align:center;" class="clearfix form-actions">
+                        <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- end widget div -->
+        </div>
+
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+
+  </div>
+
+</section>
+<!-- end widget grid -->
+
+<!--ended Dummy -->
 <!-- Tab panes -->
-<div  class="tab-content nodeListContainer">
-  <div  class="tab-pane active tabContent" id="organiz" style="display:none">
-    <table class="table table-hover">
-    
-    <thead>
-      <tr>
-        <th style="text-align: center">Node Name</th>
-        <th style="text-align: center">IP Address</th>
-        <th style="text-align: center">FQDN</th>
-        <th style="text-align: center">Platform</th>
-        <th style="text-align: center">Uptime</th>
-      
-        <th style="text-align: center">Environment</th>
-      
-        <th style="text-align: center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-  
+<!-- <div  class="tab-content nodeListContainer">
+	<div  class="tab-pane active tabContent table-responsive" id="organiz" style="display:none">
+    	<div style="height:444px;overflow:auto;">
+      	<table class="table table-hover">
+    		
+    		<thead>
+    			<tr>
+    				<th style="text-align: center">Node Name</th>
+    				<th style="text-align: center">IP Address</th>
+    				<th style="text-align: center">FQDN</th>
+    				<th style="text-align: center">Platform</th>
+    				<th style="text-align: center">Uptime</th>
+    			
+    				<th style="text-align: center">Environment</th>
+          
+    				<th style="text-align: center">Actions</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    	
 
-    </tbody>
-  </table>
-   
-  <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div>
+    		</tbody>
+    	</table>
+  </div> -->
+  <!-- <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div>
 
-</div>
-
-</div>  
+  </div> 
+  <div class="row">
+    <div style="bottom:0px;position:fixed" class="col-md-10 col-sm-12 col-xs-12">
+        <div style="text-align:center;" class="clearfix form-actions">
+            <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/>
+        </div>
+    </div>
+  </div>
+</div>	
+</div>-->
 
 <div class="modal fade" id="chefImportNodesModal">
   <div class="modal-dialog">
@@ -90,15 +198,15 @@
               </select>
             </div>
             </div>
-          
-          <div class="form-group">
-          <label for="exampleInputEmail1">Project</label>
+         	
+         	<div class="form-group">
+    			<label for="exampleInputEmail1">Project</label>
           <div class="">
-          <select id="chefImportProjectSelect"  class="form-control" >
+    			<select id="chefImportProjectSelect"  class="form-control" >
                 
-          </select>
+    			</select>
         </div>
-        </div>
+    		</div>
       </section>
       
       <section class="col col-12">
@@ -265,7 +373,7 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
 
     var $tableBody = $('.table-hover tbody');
     
-
+    //console.log(nodeList);
     for(var i=0;i<nodeList.length;i++) {
        var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName',nodeList[i]);
        $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
@@ -278,15 +386,28 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
       
        $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
        $tableBody.append($tr);  
-
+      var entityArray = [];
        $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeList[i],function(node){
+
+          var entity = {
+            "name":node.name,
+            "ip":node.automatic.ipaddress,
+            "platform":node.automatic.platform,
+            "fqdn":node.automatic.fqdn,
+            "Uptime":node.automatic.uptime,
+            "environment":node.chef_environment
+
+          }
+          console.log(entity);
+          entityArray.push(entity);
+          console.log(entityArray);
            var $tr = $tableBody.find('tr[data-nodeName="'+node.name+'"]');
             var ip = 'unknown';
             if(node.automatic.ipaddress) {
                 ip = node.automatic.ipaddress;
             }
             $tr.find('.chef-ip').empty().append('<span>'+ip+'</span>');
-
+            //console.log(node);
             var fqdn = 'unknown';
             if(node.automatic.fqdn) {
                 fqdn = node.automatic.fqdn;
@@ -314,16 +435,100 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
 
             $tr.find('.chef-env').empty().append('<span>'+environment+'</span>');
             
-            
+            if (nodeList.length == i){
+              $('#datatable_fixed_column').dataTableCust(
+      {
+       "sDom" : "<'dt-top-row'Tlf>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+       "bProcessing" : true,
+       "bLengthChange" : false,
+       // "bServerSide": true,
+       "bInfo" : true,
+       "bAutoWidth": true,
+       "bFilter" : true,
+       "bJQueryUI" : false,
+       "bDestroy":true,
+       "aaData" : entityArray,
+       "scrollX" : false,
+       "oTableTools" : {
+        "aButtons" : [ {
+         "sExtends" : "collection",
+         "sButtonText" : 'Export <span class="caret" />',
+         "aButtons" : [ "csv", "pdf" ]
+        } ],
+        "sSwfPath" : "js/plugin/datatables/media/swf/copy_csv_xls_pdf.swf"
+       },
+       "aoColumns" : [ {
+        "mDataProp" : "name",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "ip",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "fqdn",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "platform",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "uptime",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "environment",
+        "sDefaultContent" : ""
+       } ]
+        });          
+            }
             
          });
 
 
     }
 
-
+console.log(entityArray);
     $('#organiz').show();
-
+    var jsonarray=[];
+    $.each($("#datatable_fixed_column tr"), function(key,data){jsonarray[key]=[];var parent = key; $.each($(data).find('td'), function(key,data){if(key>3){jsonarray[parent][key]=$(data).text()}})});
+    $('#datatable_fixed_column tbody').empty();
+    $('#datatable_fixed_column').dataTableCust(
+      {
+       "sDom" : "<'dt-top-row'Tlf>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+       "bProcessing" : true,
+       "bLengthChange" : true,
+       // "bServerSide": true,
+       "bInfo" : true,
+       "bFilter" : false,
+       "bJQueryUI" : false,
+       "bDestroy":true,
+       "aaData" : entityArray,
+       "scrollX" : true,
+       "oTableTools" : {
+        "aButtons" : [ {
+         "sExtends" : "collection",
+         "sButtonText" : 'Export <span class="caret" />',
+         "aButtons" : [ "csv", "pdf" ]
+        } ],
+        "sSwfPath" : "js/plugin/datatables/media/swf/copy_csv_xls_pdf.swf"
+       },
+       "aoColumns" : [ {
+        "mDataProp" : "name",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "ip",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "fqdn",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "platform",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "uptime",
+        "sDefaultContent" : ""
+       }, {
+        "mDataProp" : "environment",
+        "sDefaultContent" : ""
+       } ]
+        });
   });
 
 
@@ -380,12 +585,12 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
 
 
 $('.showChefImportNodesModalBtn').click(function(e){
-   var $checkBoxes = $('.nodeCheckBox:checked');
-   if(!$checkBoxes.length) {
+	 var $checkBoxes = $('.nodeCheckBox:checked');
+	 if(!$checkBoxes.length) {
         alert('Please Choose nodes first');
         return; 
-   }
-  $('#chefImportNodesModal').modal('show');
+	 }
+	$('#chefImportNodesModal').modal('show');
 });
 
  $('.importNodesBtn').click(function(e){
@@ -448,7 +653,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
     });
 
      $modalBody.append($progressBar).append($msgDiv);
-     $('#chefImportNodesModal').modal('hide');
+   	 $('#chefImportNodesModal').modal('hide');
      $chefResultModalContainer.modal('show');
      var timeout;
      var count = 0;
@@ -527,18 +732,145 @@ $.get('../users',function(userList){
 var b = $('#tabContent tr td').width();
 var c = $('#tabContent tr ').width(); 
  b=c;
-$('.tabContent tr').find('span').on('click', function(){
-  var w = $(this).width();
-  var h = $(this).height();
-  var a = $(this).html();
-  $(this).hide();
-  $(this).parent().children('input').show().focus().val(a);
-  $(this).parent().children('input').css({"width": w+'px'});
+$('.tabContent tbody tr').find('span').on('click', function(){
+	var w = $(this).width();
+	var h = $(this).height();
+	var a = $(this).html();
+	$(this).hide();
+	$(this).parent().children('input').show().focus().val(a);
+	$(this).parent().children('input').css({"width": w+'px'});
 });
 
-$('.tabContent tr').find('input').on('blur', function(){
-  var inputVal = $(this).val();
-  $(this).hide();
-  $(this).parent().children('span').show().html(inputVal);
+$('.tabContent tbody tr').find('input').on('blur', function(){
+	var inputVal = $(this).val();
+	$(this).hide();
+	$(this).parent().children('span').show().html(inputVal);
 });
+</script>
+
+
+
+
+
+<script type="text/javascript">
+
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  
+  // PAGE RELATED SCRIPTS
+
+  // loadDataTableScripts();
+  function loadDataTableScripts() {
+
+    loadScript("js/plugin/datatables/jquery.dataTables-cust.js", dt_2);
+
+    function dt_2() {
+      loadScript("js/plugin/datatables/ColReorder.min.js", dt_3);
+    }
+
+    function dt_3() {
+      loadScript("js/plugin/datatables/FixedColumns.min.js", dt_4);
+    }
+
+    function dt_4() {
+      loadScript("js/plugin/datatables/ColVis.min.js", dt_5);
+    }
+
+    function dt_5() {
+      loadScript("js/plugin/datatables/ZeroClipboard.js", dt_6);
+    }
+
+    function dt_6() {
+      loadScript("js/plugin/datatables/media/js/TableTools.min.js", dt_7);
+    }
+
+    function dt_7() {
+      loadScript("js/plugin/datatables/DT_bootstrap.js", runDataTables);
+    }
+
+  }
+
+  function runDataTables() {
+
+    /*
+     * BASIC
+     */
+    $('#dt_basic').dataTableCust({
+      "sPaginationType" : "bootstrap_full"
+    });
+
+    /* END BASIC */
+
+    /* Add the events etc before DataTables hides a column */
+    $("#datatable_fixed_column thead input").keyup(function() {
+      oTable.fnFilter(this.value, oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(), $("thead input").index(this)));
+    });
+
+    $("#datatable_fixed_column thead input").each(function(i) {
+      this.initVal = this.value;
+    });
+    $("#datatable_fixed_column thead input").focus(function() {
+      if (this.className == "search_init") {
+        this.className = "";
+        this.value = "";
+      }
+    });
+    $("#datatable_fixed_column thead input").blur(function(i) {
+      if (this.value == "") {
+        this.className = "search_init";
+        this.value = this.initVal;
+      }
+    });   
+    
+
+    var oTable = $('#datatable_fixed_column').dataTableCust({
+      "sDom" : "<'dt-top-row'><'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+      //"sDom" : "t<'row dt-wrapper'<'col-sm-6'i><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'>>",
+      "oLanguage" : {
+        "sSearch" : "Search all columns:"
+      },
+      "bSortCellsTop" : true
+    });   
+    
+
+
+    /*
+     * COL ORDER
+     */
+    $('#datatable_col_reorder').dataTableCust({
+      "sPaginationType" : "bootstrap",
+      "sDom" : "R<'dt-top-row'Clf>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+      "fnInitComplete" : function(oSettings, json) {
+        $('.ColVis_Button').addClass('btn btn-default btn-sm').html('Columns <i class="icon-arrow-down"></i>');
+      }
+    });
+    
+    /* END COL ORDER */
+
+    /* TABLE TOOLS */
+
+
+    $('#datatable_tabletools').
+
+    dataTableCust({
+      "sDom" : "<'dt-top-row'Tlf>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
+      "oTableTools" : {
+        "aButtons" : ["copy", "print", {
+          "sExtends" : "collection",
+          "sButtonText" : 'Save <span class="caret" />',
+          "aButtons" : ["csv", "xls", "pdf"]
+        }],
+        "sSwfPath" : "js/plugin/datatables/media/swf/copy_csv_xls_pdf.swf"
+      },
+      "fnInitComplete" : function(oSettings, json) {
+        $(this).closest('#dt_table_tools_wrapper').find('.DTTT.btn-group').addClass('table_tools_group').children('a.btn').each(function() {
+          $(this).addClass('btn-sm btn-default');
+        });
+      }
+    });
+    
+    /* END TABLE TOOLS */
+
+  }
+loadDataTableScripts();
 </script>
