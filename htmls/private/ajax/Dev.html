@@ -686,28 +686,29 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
     var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
     $devopsRolepanelBody.empty();
 
-    alert(orgId + "/" + projectId + "/" + envId + data.length);
+    //alert(orgId + "/" + projectId + "/" + envId + data.length);
 
     //Displaying the Template Types.
-    $.get("/d4dMasters/readmasterjson/16",function(data){
+    $.get("/d4dMasters/readmasterjson/16",function(tdata){
 
-        var rowLength = JSON.stringify(data.masterjson.rows.row.length);
+        var rowLength = JSON.stringify(tdata.masterjson.rows.row.length);
         var $containerTemp = "";
         var selectedrow = false;
         var getDesignTypeImg; var getDesignTypeRowID;
+        $('#accordion-2').empty();
         for(var i=0; i<rowLength; i+=1){
              getDesignTypeImg= "";
              getDesignTypeRowID= "";
-            for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
-                if(data.masterjson.rows.row[i].field[x].name == "rowid"){
-                  getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
+            for(var x=0;x < tdata.masterjson.rows.row[i].field.length;x++){
+                if(tdata.masterjson.rows.row[i].field[x].name == "rowid"){
+                  getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
                 }
-                if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
-                  getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
+                if(tdata.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
+                  getDesignTypeImg = tdata.masterjson.rows.row[i].field[x].values.value;
                   
                 }
-                if(data.masterjson.rows.row[i].field[x].name == "templatetypename"){
-                  getDesignTypeName = data.masterjson.rows.row[i].field[x].values.value;
+                if(tdata.masterjson.rows.row[i].field[x].name == "templatetypename"){
+                  getDesignTypeName = tdata.masterjson.rows.row[i].field[x].values.value;
                   
                 }
             }
@@ -715,7 +716,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
         var $currRolePanel = null;
         switch (getDesignTypeName){
             case "AppFactory":
-                $AppFactpanelBody = $('<div class="panel-body AppFactorypanel"></div>');
+                $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
                 $currRolePanel = $AppFactpanelBody;
                 break;
             case "DevopsRoles":
@@ -749,15 +750,93 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' + 
                         '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' + 
                         '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' + 
-                        '</h4><div class="panel-collapse collapse" id="collapse' + i + '">' + 
-
-                        $currRolePanel + 
+                        '</h4><div class="panel-collapse collapse" id="collapse' + i + '"/>' + 
                         '</div>' + 
+                        '<div class="panel-body ' + getDesignTypeName + '"></div>' + 
                         '</div>';
-        $('#accordion-2').prepend($containerTemp);
-
+       // $($containerTemp).find('#collapse' + i).append($currRolePanel);
+        $('#accordion-2').append($containerTemp);
+        //alert('added');
        
                            
+         }
+         //To fix template id and template type
+        // alert('in' + data.length);
+         for (var i = 0; i < data.length; i++) {
+           // alert(JSON.stringify(data[i]));
+            //Find a panel-body with the template type class
+            var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
+            //alert($currRolePanel.length + data[i].templateType);
+            if($currRolePanel.length > 0){
+                var $itemContainer = $('<div></div>').addClass("productdiv4");
+
+                var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
+                var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
+                    'text-align': 'center'
+                });
+                var $img = $('<img />').attr('src', 'img/templateicons/' + data[i].templateId + '.png').attr('alt', data[i].name).addClass('cardLogo');
+                var $liImage = $('<li></li>').append($img);
+                $ul.append($liImage);
+                //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
+                var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
+                $ul.append($liCardName);
+                var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
+                if (data[i].versionsList) {
+                    var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
+                    var $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                    $selectVerEdit.click(function(e) {
+                        var $parent = $(this).parents('.cardimage');
+                        var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+                        $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                        $blueprintEditResultContainer.modal('show');
+
+                        var projectId = $parent.attr('data-projectId');
+                        var envId = $parent.attr('data-envId');
+                        var blueprintId = $parent.attr('data-blueprintId');
+                        var chefServerId = $parent.attr('data-chefServerId');
+                        var version = $parent.find('.blueprintVersionDropDown').val();
+                        $.get('../blueprints/' + blueprintId + '/versions/' + version, function(data) {
+                            $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
+                                var keys = Object.keys(data);
+
+                                var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
+                                for (var i = 0; i < keys.length; i++) {
+                                    var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
+                                    $cookbooksList.append($option);
+                                }
+                                $blueprintEditResultContainer.find('.modal-body').empty();
+                                $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+
+                            }).error(function() {
+                                $blueprintEditResultContainer.find('.modal-body').empty();
+                                $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                            });
+                        }).error(function() {
+                            $blueprintEditResultContainer.find('.modal-body').empty();
+                            $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                        });
+
+                    });
+                    var $li = $('<li></li>').css({
+                        "font-size": '10px'
+                    }).append($selectVer, $selectVerEdit);
+                    for (var j = 0; j < data[i].versionsList.length; j++) {
+                        var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                        $selectVer.append($options);
+                    }
+                    $selecteditBtnContainer.append($li);
+                }
+                $itemBody.append($ul);
+                $itemBody.append($selecteditBtnContainer);
+                $itemContainer.append($itemBody);
+
+                //Find the template type container and add to it.
+                //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
+                //alert($currpanel.length);
+                $currRolePanel.append($itemContainer);
+               // alert($currRolePanel.html());
+                $currRolePanel.parent().show();
+            }
          }
 
         // $("#myTabContent3").append(containerTemp);   
@@ -766,95 +845,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
 
     }); //end of readmasterjson to be pushed to the end of the function.
 
-    for (var i = 0; i < data.length; i++) {
-
-
-        var $itemContainer = $('<div></div>').addClass("productdiv4");
-
-        var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
-        var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
-            'text-align': 'center'
-        });
-        var $img = $('<img />').attr('src', 'img/templateicons/' + data[i].templateId + '.png').attr('alt', data[i].name).addClass('cardLogo');
-        var $liImage = $('<li></li>').append($img);
-        $ul.append($liImage);
-        //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
-        var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
-
-        //For Table View
-        //$rowContainter.append('<td>' +data[i].name + '</td>');
-
-
-
-        $ul.append($liCardName);
-
-
-        var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-        if (data[i].versionsList) {
-            var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
-            var $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
-
-            $selectVerEdit.click(function(e) {
-                var $parent = $(this).parents('.cardimage');
-                var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-                $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                $blueprintEditResultContainer.modal('show');
-
-                var projectId = $parent.attr('data-projectId');
-                var envId = $parent.attr('data-envId');
-                var blueprintId = $parent.attr('data-blueprintId');
-                var chefServerId = $parent.attr('data-chefServerId');
-                var version = $parent.find('.blueprintVersionDropDown').val();
-
-                $.get('../blueprints/' + blueprintId + '/versions/' + version, function(data) {
-
-                    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
-                        var keys = Object.keys(data);
-
-                        var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
-                        for (var i = 0; i < keys.length; i++) {
-                            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
-                            $cookbooksList.append($option);
-                        }
-                        $blueprintEditResultContainer.find('.modal-body').empty();
-                        $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
-                    }).error(function() {
-                        $blueprintEditResultContainer.find('.modal-body').empty();
-                        $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-                    });;
-                }).error(function() {
-                    $blueprintEditResultContainer.find('.modal-body').empty();
-                    $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-                });
-
-            });
-
-
-            var $li = $('<li></li>').css({
-                "font-size": '10px'
-            }).append($selectVer, $selectVerEdit);
-            for (var j = 0; j < data[i].versionsList.length; j++) {
-                var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                $selectVer.append($options);
-            }
-            $selecteditBtnContainer.append($li);
-        }
-
-        $itemBody.append($ul);
-        $itemBody.append($selecteditBtnContainer);
-
-
-
-
-        $itemContainer.append($itemBody);
-        if (data[i].templateType == 'appFactory') {
-            $AppFactpanelBody.append($itemContainer);
-        } else if(data[i].templateType == 'devopsRole'){
-            $devopsRolepanelBody.append($itemContainer);
-        } else {
-            $desktopProvisioningPanelBody.append($itemContainer);
-        }
-    }
+    
     var $productdiv1 = $('.productdiv1');
 
     $productdiv1.click(function(e) {

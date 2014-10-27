@@ -1220,10 +1220,10 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                 if(selectedrow){
                     getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">'+
-                                        '<div class="productdiv2" data-templateId="appFact'+z+'" data-'+
+                                        '<div class="productdiv2" data-templateId="'+getTempName+'" data-'+
                                         'templateComponent="component'+z+'" '+
-                                        'data-templateName="temp'+z+'" data-'+
-                                        'templateType="appFactory'+z+'" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks +'">'+
+                                        'data-templateName="'+getTempName+'" data-'+
+                                        'templateType="'+getTemplateType+'" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks +'">'+
                                         '<ul class="list-unstyled system-prop" style="text-align:center;">'+
                                         '<li><img style="height:40px;width:auto;" alt="" '+
                             'src="/d4dMasters/image/'+getRowID+'__templatesicon__'+getImage+'">'+
