@@ -686,7 +686,85 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
     var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
     $devopsRolepanelBody.empty();
 
-    alert(data);
+    alert(orgId + "/" + projectId + "/" + envId + data.length);
+
+    //Displaying the Template Types.
+    $.get("/d4dMasters/readmasterjson/16",function(data){
+
+        var rowLength = JSON.stringify(data.masterjson.rows.row.length);
+        var $containerTemp = "";
+        var selectedrow = false;
+        var getDesignTypeImg; var getDesignTypeRowID;
+        for(var i=0; i<rowLength; i+=1){
+             getDesignTypeImg= "";
+             getDesignTypeRowID= "";
+            for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
+                if(data.masterjson.rows.row[i].field[x].name == "rowid"){
+                  getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
+                }
+                if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
+                  getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
+                  
+                }
+                if(data.masterjson.rows.row[i].field[x].name == "templatetypename"){
+                  getDesignTypeName = data.masterjson.rows.row[i].field[x].values.value;
+                  
+                }
+            }
+        //Extracting the TT definitions. Add New Template types
+        var $currRolePanel = null;
+        switch (getDesignTypeName){
+            case "AppFactory":
+                $AppFactpanelBody = $('<div class="panel-body AppFactorypanel"></div>');
+                $currRolePanel = $AppFactpanelBody;
+                break;
+            case "DevopsRoles":
+                $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles"></div>');
+                $currRolePanel = $DevopsRolespanelBody;
+                break;
+            case "CloudFormation":
+                $CloudFormationBody = $('<div class="panel-body CloudFormation"></div>');
+                $currRolePanel = $CloudFormationBody;
+                break;
+            case "Docker":
+                $DockerpanelBody = $('<div class="panel-body Docker"></div>');
+                $currRolePanel = $DockerpanelBody;
+                break;
+            case "Desktop":
+                $DesktopProvisioningPanelBody = $('<div class="panel-body Desktop"></div>');
+                $currRolePanel = $DesktopProvisioningPanelBody;
+                break;
+            case "Environment":
+                $EnvironmentpanelBody = $('<div class="panel-body Environment"></div>');
+                $currRolePanel = $EnvironmentpanelBody;
+                break;
+
+        }
+
+
+        $containerTemp = '<div class="devopsRolePanel panel panel-default blueprintContainer">' + 
+                        '<div class="panel-heading">' + 
+
+                        '<h4 class="panel-title">' + 
+                        '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' + 
+                        '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' + 
+                        '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' + 
+                        '</h4><div class="panel-collapse collapse" id="collapse' + i + '">' + 
+
+                        $currRolePanel + 
+                        '</div>' + 
+                        '</div>';
+        $('#accordion-2').prepend($containerTemp);
+
+       
+                           
+         }
+
+        // $("#myTabContent3").append(containerTemp);   
+        // $("#templateContent #grid0").addClass("role-Selected");
+    
+
+    }); //end of readmasterjson to be pushed to the end of the function.
 
     for (var i = 0; i < data.length; i++) {
 

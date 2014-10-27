@@ -138,7 +138,7 @@ var BlueprintsDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log("Blueprint Created");
+            console.log("Blueprint Created >>>" + JSON.stringify(blueprint));
             callback(null, data);
         });
     };

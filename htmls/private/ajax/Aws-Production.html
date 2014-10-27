@@ -1313,6 +1313,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
 } else if(index == 4){
+    reqBody.orgId = $('#orgnameSelect').val();
     reqBody.projectId = $('#projectListInput').val();
     reqBody.envId = $('#envList').val();
     reqBody.name =$('#blueprintNameInput').val();
