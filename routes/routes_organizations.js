@@ -167,6 +167,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
+            console.log("BluePrint >>>>>>" + JSON.stringify(data));
             res.send(data);
         });
     });

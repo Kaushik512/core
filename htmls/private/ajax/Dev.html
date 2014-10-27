@@ -686,7 +686,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
     var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
     $devopsRolepanelBody.empty();
 
-
+    alert(data);
 
     for (var i = 0; i < data.length; i++) {
 
@@ -785,7 +785,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
     });
 
     var expanded = false;
-    if ($devopsRolepanelBody.children().length) {
+    if ($l.children().length) {
         var $devopsRolePanel = $devopsRolepanelBody.parents('.devopsRolePanel').show();
         $devopsRolePanel.find('.collapse').addClass('in');
         expanded = true;

@@ -99,6 +99,7 @@ var BlueprintsDao = function() {
         if (userName) {
             queryObj.users = userName;
         }
+        console.log('in here' + JSON.stringify(queryObj));
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
                 callback(err, null);
