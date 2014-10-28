@@ -486,7 +486,6 @@ function Configmgmt() {
                                 console.log("In Field [ " + itm.field[j]["name"] + "]" + itm.field[j]["values"].value);
                                 isFilteredRow = true;
                             }
-                                
                         }
                     }
                     if (isFilteredRow) {
