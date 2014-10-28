@@ -350,22 +350,27 @@ function Configmgmt() {
 
                                     for (var k = 0; k < itm.field.length; k++) {
                                         if (itm.field[k]["name"].indexOf("filename") > 0) {
+                                           // console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
                                             if (configmgmt == '')
                                                 configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
                                             else
                                                 configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-
+                                          //  console.log("configmgmt ==>  ",configmgmt);
                                         } else {
+                                          //  console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
+                                            
                                             if (configmgmt == '')
                                                 configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
                                             else
                                                 configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+                                        // console.log("configmgmt ==>  ",configmgmt);
                                         }
                                     }
                                     configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
 
                                     configmgmt = "{" + configmgmt + "}";
-                                    //console.log(">>>>>>" + JSON.stringify(configmgmt));
+                                    //console.log(JSON.stringify(configmgmt));
+                                    console.log(configmgmt);
                                     configmgmt = JSON.parse(configmgmt);
                                     return;
                                 }
@@ -485,7 +490,10 @@ function Configmgmt() {
                             if(itm.field[j]["values"].value == comparedfieldvalue){
                                 console.log("In Field [ " + itm.field[j]["name"] + "]" + itm.field[j]["values"].value);
                                 isFilteredRow = true;
+
                             }
+
+                               
                         }
                     }
                     if (isFilteredRow) {

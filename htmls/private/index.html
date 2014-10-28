@@ -59,7 +59,7 @@
 			<div id="logo-group">
 				<!-- PLACE YOUR LOGO HERE -->
 				<span id="logo">
-				<img src="img/version2_22.png" style="" alt="DevOps">
+				<!-- <img src="img/version2_22.png" style="" alt="DevOps"> -->
 				</span>
 			</div>
 			<!-- END AJAX-DROPDOWN -->
@@ -330,10 +330,10 @@
 				
 			</ul>
 			<ul class="menu-item-parentdemo hidden" id="blueprints">
-				<li>
+				<li class="active open">
 					<a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">PROVIDERS</span>
 					</a>
-					<ul>
+					<ul style="display:block">
 						<li>
 							<a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a>
 						</li>
@@ -477,12 +477,18 @@
 	<!-- Demo purpose only *** Removed as issue fix to avoid user changing theme ***
 	<script src="js/demo.js"></script>-->
 	<script src="/private/js/jquery.dataTables.js"></script>
+
+	<!--Due to scroll bar looks better -->
+	<script src="js/metro-scroll.js"></script>
+
 	<!-- MAIN APP JS FILE -->
 	<script type="text/javascript">
 	
 	function setleftnavigation(toplink,breadcrumbHeader){
 		$('a[onclick*="setleftnavigation"]').removeClass('active');
+		$('a[onclick*="setleftnavigation"]').find("i").removeClass('txt-color-blue');
 		$(toplink).addClass('active');
+		$(toplink).find('i').addClass('txt-color-blue');
 		$('nav > ul').addClass('hidden'); //hiding all navigation elements
 		var navbar = $(toplink).closest("li").attr('navigation');
 		$('#Workspace1').addClass('hidden');
@@ -526,9 +532,9 @@
 				for(var i=0;i<data.length;i++) {
 					var classOrgSelected = '';
 					if(i==0) {
-	classOrgSelected = 'orgSelected';
+				classOrgSelected = 'orgSelected';
 					}
-					var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white" orname ><i class="fa fa-bookmark-o "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
+					var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+'"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white" orname ><i class="fa fa-building "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
 					//Adding to Track tree Nav
 					var $params = [];
 					$params.push(data[i].name);
@@ -538,9 +544,9 @@
 					//End Track Adding
 					
 					$li.click(function(e){
-	var $parents = $(this).parents('ul');
-	$parents.children('li').removeClass('orgSelected');
-	$(this).addClass('orgSelected');
+				var $parents = $(this).parents('ul');
+				$parents.children('li').removeClass('orgSelected');
+				$(this).addClass('orgSelected');
 				var id = $(this).attr('data-id');
 				$('.org').hide();
 				$('.'+id).show();

@@ -175,89 +175,13 @@
 
                         <table class="table table-hover">
                             <thead>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-archive "></i><strong style="color:#3a87ad">Applications</strong></th>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-sort-amount-asc "></i><strong style="color:#3a87ad">Versions </strong></th>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-flash "></i><strong style="color:#3a87ad">Current Status </strong></th>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-location-arrow  "></i><strong style="color:#3a87ad">Actions </strong></th>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw  fa-copy"></i><strong style="color:#3a87ad">Status after Action </strong></th>
+                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-archive "></i><strong style="color:#3a87ad">Service Name</strong></th>
+                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-sort-amount-asc "></i><strong style="color:#3a87ad">Actions </strong></th>
+                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-flash "></i><strong style="color:#3a87ad">Status</strong></th>
+                                 
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td style="font-size:12px;">Apache2</td>
-                                    <td style="font-size:12px;">4.0.2</td>
-                                    <td style="color:green;font-size:12px;"> Started </td>
-                                    <td>   
-                                      <div class="btn1 actionbuttonCPStart">
-                                          <!-- <img src='img/galleryIcons/Green.png'> -->
-                                      </div>
-
-                                      <div class="btn1 actionbuttonCPRestart">
-                                          <!-- <img src='img/galleryIcons/red.png'> -->
-                                      </div>
-                                    
-                                      <div class="btn1 actionbuttonCPShutdown">
-                                          <!-- <img src='img/galleryIcons/yellow.png'> -->
-                                      </div>
-                                    </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size:12px;">MySQL</td>
-                                    <td style="font-size:12px;">5.6.0</td>
-                                    <td style="color:red;font-size:12px;"> Stopped </td>
-                                    <td>   
-                                      <div class="btn1 actionbuttonCPStart">
-                                        
-                                      </div>
-
-                                      <div class="btn1 actionbuttonCPRestart">
-                                        
-                                      </div>
-                                    
-                                      <div class="btn1 actionbuttonCPShutdown">
-                                        
-                                      </div>
-                                    </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size:12px;">Chef-client</td>
-                                    <td style="font-size:12px;">2.0</td>
-                                    <td style="color:orange;font-size:12px;">Paused </td>
-                                    <td>   
-                                      <div class="btn1 actionbuttonCPStart">
-                                        
-                                      </div>
-
-                                      <div class="btn1 actionbuttonCPRestart">
-                                        
-                                      </div>
-                                    
-                                      <div class="btn1 actionbuttonCPShutdown">
-                                        
-                                      </div>
-                                    </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size:12px;">Docker</td>
-                                    <td style="font-size:12px;">1.0.4</td>
-                                    <td style="color:red;font-size:12px;"> Stopped </td>
-                                    <td>   
-                                      <div class="btn1 actionbuttonCPStart">
-
-                                      </div>
-
-                                      <div class="btn1 actionbuttonCPRestart">
-                                       
-                                      </div>
-                                    
-                                      <div class="btn1 actionbuttonCPShutdown">
-                                    
-                                      </div>
-                                    </td>
-                                    <td> </td>
-                                </tr>
+                                
                                 
                             </tbody>
                             <a class="btn btn-primary" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
@@ -293,8 +217,8 @@
                               <label class="">Type of the Service
                                 <span style="color:red">*</span>
                               </label>
-                              <label class="select">
-                                <select class="input-sm">
+                              <label class="select select-multiple">
+                                <select class="input-sm" multiple="">
                                   <option value="0">Start</option>
                                   <option value="1">Restart</option>
                                   <option value="2">Stop</option>
@@ -323,7 +247,7 @@
                              
                             </section> -->
                             <section class="col col-12 chooseLogo">
-                                <label for="">Choose Logo</label>
+                                <label for="">Choose Cookbook</label>
                                 <label class="input input-file" for="file">
                                     <div class="button">
                                       <input type="file"><span style="color:white;">Browse</span></div>
@@ -351,8 +275,8 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP">Save Deployment Blueprint</button>
-                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP">Save</button>
+                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
               </div>
@@ -584,7 +508,7 @@
               <div class="col-md-12">
                 <div class="clearfix form-actions" style="text-align:center">
                   <div class="btn-group">
-                      <button class="btn pull-left btn-primary" style="margin-left:5px" onclick="history.back()">
+                      <button class="btn pull-left btn-primary" style="margin-left:5px" id="getViewAttr" onclick="getInfoLi();">
                         Back to Instances
                       </button>
                   </div>
@@ -1192,4 +1116,12 @@ $.get('../instances/'+urlParams.id,function(data){
       $('#data_bag_div3').show();
   });
 
+  function getInfoLi(){
+   var getURL = localStorage.getItem("dataEx");
+    var x= location.href;
+    var z= x.lastIndexOf("=");
+    var ControlID = x.slice(z+1, z.length);
+    localStorage.setItem("ControlID",ControlID);
+    location.href=getURL;
+  }
 </script>

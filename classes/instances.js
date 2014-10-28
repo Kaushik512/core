@@ -40,6 +40,16 @@ var InstanceSchema = new Schema({
         templateType: String,
         templateComponents: [String]
     }
+  /* , services: {[
+        serviceName: String,
+        serviceType: [String],
+         action: {
+            assignAction: String,
+            serviceRunlist: [String],
+            recipe: String,
+            command: String,
+                 }
+    ]} */
 });
 
 var Instances = mongoose.model('instances', InstanceSchema);
@@ -248,6 +258,39 @@ var InstancesDao = function() {
             }
         }, {
             upsert: false
+        }, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+
+    };
+
+
+
+
+
+
+    this.addService = function(instanceId, serviceData, callback) {
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $push: {
+                "services": {
+                    serviceName: serviceData.Name,
+                    serviceType: serviceData.Type,
+                    action: {
+                       assignAction : serviceData.Action,
+                       serviceRunlist: serviceData.runlist,
+                       recipe: serviceData.recipe,
+                       command: serviceData.command   
+                            },
+                }
+            }
+        }, {
+            upsert: true
         }, function(err, data) {
             if (err) {
                 callback(err, null);
