@@ -15,7 +15,7 @@ var mongoDbConnect = require('./controller/mongodb');
 mongoDbConnect({
   host: process.env.DB_PORT_27017_TCP_ADDR,
   port: process.env.DB_PORT_27017_TCP_PORT,
-  dbName: 'devops_new1'
+  dbName: 'devops_new'
 }, function(err) {
   if (err) {
     throw new Error(err);

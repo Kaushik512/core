@@ -39,8 +39,8 @@ var InstanceSchema = new Schema({
         templateId: String,
         templateType: String,
         templateComponents: [String]
-    },
-  /*  services: {[
+    }
+  /* , services: {[
         serviceName: String,
         serviceType: [String],
          action: {
