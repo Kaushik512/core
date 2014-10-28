@@ -115,6 +115,7 @@ var BlueprintsDao = function() {
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             name: blueprintData.name,
+            iconpath: blueprintData.iconpath,
             templateId: blueprintData.templateId,
             templateType: blueprintData.templateType,
             templateComponents: blueprintData.templateComponents,

@@ -1326,7 +1326,7 @@ function drawBreadCrumb1() {
     //console.log("breadcrumb")
     $("#ribbon ol.breadcrumb").empty();
     if (window.location.href.indexOf("Settings") > 0) {
-        $("#ribbon ol.breadcrumb").append($("<li>Settings</li>"));
+        $("#ribbon ol.breadcrumb").append($("<li>Settings 2</li>"));
     }
     else
     $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>"));

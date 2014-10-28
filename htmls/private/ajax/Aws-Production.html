@@ -1313,6 +1313,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
 } else if(index == 4){
+    regBody.iconpath = $('#tab3').find('img[src*="_templatesicon_"]').first().attr('src');
     reqBody.orgId = $('#orgnameSelect').val();
     reqBody.projectId = $('#projectListInput').val();
     reqBody.envId = $('#envList').val();
@@ -1440,10 +1441,20 @@ $.ajax({
 
            $cookbookShow.empty();
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
+           //Adding the template cookbooks
+           if($('#tab3').find('div[class*="productdiv2"]')){
+              var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
+              for(var key in tcb){
+                //alert(tcb[key]);
+                var $optiontcb =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+                $cookbooksList.append($optiontcb);
+              }
+            }
+            //End adding template cookbooks.
            for(var i=0;i<keys.length;i++) {
             var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
             $cookbooksList.append($option);
-        }
+            }
         $cookbookShow.append('<span>Choose Cookbooks <span><br/><br/>');
         $cookbookShow.append($cookbooksList);
         $cookbooksList.show();

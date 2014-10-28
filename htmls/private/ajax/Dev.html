@@ -773,7 +773,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
          //To fix template id and template type
         // alert('in' + data.length);
          for (var i = 0; i < data.length; i++) {
-           // alert(JSON.stringify(data[i]));
+           alert(JSON.stringify(data[i]));
             //Find a panel-body with the template type class
             var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
          //   alert($currRolePanel.length);
@@ -784,7 +784,11 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
                     'text-align': 'center'
                 });
-                var $img = $('<img />').attr('src', 'img/templateicons/' + data[i].templateId + '.png').attr('alt', data[i].name).addClass('cardLogo');
+                var $img
+                if(data[i].iconpath)
+                    $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
+                else
+                    $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
                 var $liImage = $('<li></li>').append($img);
                 $ul.append($liImage);
                 //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
@@ -850,7 +854,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 //Attaching the selection event.
                 if(i == (data.length - 1)){
                     var $productdiv1 = $('.productdiv1');
-                    alert($productdiv1.length);
+                    //alert($productdiv1.length);
                     $productdiv1.click(function(e) {
                         //alert('yes');
                         $productdiv1.removeClass('role-Selected1');

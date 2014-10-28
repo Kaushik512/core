@@ -607,7 +607,8 @@
 						$paramsenv.push(data[i].businessGroups[j].projects[k]);
 						$paramsenv.push(data[i].environments[l]);
 
-						var $liTrackerEnv = $('<li  class="tcenv"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsenv).replace(/\"/g,'\'') + ');"  href="ajax/Settings/TrackerDashboard.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+						
+						var $liTrackerEnv = $('<li  class="tcenv"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsenv).replace(/\"/g,'\'') + ');"  href="#" data-link="true" class="Envtextoverflow" title="'+data[i].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
 						$TrackerEnvUL.append($liTrackerEnv);
 						//End Track Setting
 					$liEnv.click(function(e){
