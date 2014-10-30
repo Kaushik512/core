@@ -7,6 +7,7 @@ var BlueprintSchema = new Schema({
     orgId: String,
     projectId: String,
     envId: String,
+    iconpath: String,
     name: String,
     templateId: String,
     templateType: String,

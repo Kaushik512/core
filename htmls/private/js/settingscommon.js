@@ -768,8 +768,22 @@ function addToCodeList(txtVal, inp) {
     $('#costcode').val('');
 }
 
+function addToTargetList(inputctrl){
+    
+    if(inputctrl.attr('targetelement')){
+        var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
+        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+        if(inputctrl.val() != ''){
+           // alert('in' + inputctrl.attr('targetelement') + '#' + $(inputctrl).attr('targetelement'));
+           $('#' + $(inputctrl).attr('targetelement')).append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;\'><p class=\'bg-success\'>' + imgCheck + inputctrl.val() + imgDed + '</p></div>');
+           inputctrl.val('');
+           inputctrl.focus();
+        }
+    }
+}
+
 function removeFromCodeList(btn) {
-    if (confirm('Are you sure you wish to remove this Cost Code?')) {
+    if (confirm('Are you sure you wish to remove this?')) {
         var closestDiv = $(btn).closest('div');
         closestDiv.detach();
     }

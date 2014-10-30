@@ -20,7 +20,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var blueprintData = req.body.blueprintData;
         blueprintData.projectId = req.params.projectId;
         blueprintData.envId = req.params.envId;
-        
+        console.log(JSON.stringify(blueprintData));
         if (!blueprintData.runlist) {
             blueprintData.runlist = [];
         }

@@ -1313,7 +1313,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
 } else if(index == 4){
-    regBody.iconpath = $('#tab3').find('img[src*="_templatesicon_"]').first().attr('src');
+    reqBody.iconpath = $('#tab3').find('img[src*="_templatesicon_"]').first().attr('src');
     reqBody.orgId = $('#orgnameSelect').val();
     reqBody.projectId = $('#projectListInput').val();
     reqBody.envId = $('#envList').val();
@@ -1337,7 +1337,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         alert("Please choose users");
         return false;
     }
-
+    alert(JSON.stringify(reqBody));
 
 
     console.log('pushing');
