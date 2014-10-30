@@ -34,7 +34,7 @@
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
                                                                     <label class="input">
-                                                                        <input name="ctl00$MainContent$orgname" value="_default" id="templatename" class="form-control"  cdata="catalyst" unique="true" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                        <input name="ctl00$MainContent$orgname" value="_default" id="templatename" class="form-control"  cdata="catalyst" unique="true" type="text" cat-validation="required,nospecial,max15"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-6">
@@ -71,29 +71,33 @@
                                                                 </section>
                                                             </div>
                                                             <div class="row">
+                                                                
                                                                 <section class="col col-6">
-                                                                   <label for="">
-                                                                        Docker Container
+                                                                    <label for="">
+                                                                      Chef Server <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                    </label>
+                                                                    <label class="select">
+                                                                        <!-- <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
+                                                                            
+                                                                        </select> -->
+                                                                        <select id="configname" class="form-control" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadChefServerObjects($(this).val());">
+                                                                                
+                                                                        </select>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                   <label for="" class="forDocker">
+                                                                        Add Docker Container Path
                                                                         <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
-                                                                    <label class="input">
+                                                                    <label class="input forDocker">
                                                                         <!--<i class="icon-append fa fa-building"></i>-->
                                                                         <div class="input-group"><input name="ctl00$MainContent$costcode" value="" id="dockercontainers" class="form-control" type="text" datavalues="dockercontainerpaths" targetelement="dockercontainerpaths">
                                                                                      <span class="input-group-addon" style="padding:1px !important;">
                                                                                      <input type="button" class="btn btn-sm btn-primary" title="Check to add to list" style="width:53px;height:34px;" value="Add" onclick="addToTargetList($('#dockercontainers'));" />
                                                                                      </span>
-                                                                                 </div>
-                                                                                 <div id="dockercontainerpaths" class="input-group from-control col-md-12" style="height:200px;overflow-y:auto;"  cdata="catalyst" ></div>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                      Template Type <span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                                    </label>
-                                                                    <label class="select">
-                                                                        <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
-                                                                            
-                                                                        </select>
+                                                                        </div>
+                                                                                 
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-6">
@@ -107,6 +111,52 @@
                                                                         </label>
                                                                     </label>
                                                                 </section> -->
+                                                            </div>
+                                                            <div class="row">
+                                                                
+                                                                <section class="col col-6">
+                                                                            <label for="">
+                                                                                Chef Server Objects List
+                                                                            </label>
+                                                                            <span class="pull-right">
+                                                                                Template Run List
+                                                                            </span>
+                                                                            <div class="row">
+                                                                                <div class="col col-5">
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;" class="deploymentCookbookList">
+                                                                                        <label class="label" style="text-align:center;">Select Cookbooks</label>
+                                                                                        <hr>
+                                                                                    </ul>
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;"  class="deploymentRolesList">
+                                                                                        
+                                                                                        <label class="label" style="text-align:center;">Select Roles</label>
+                                                                                        <hr>
+                                                                                        
+                                                                                    </ul>
+                                                                                </div>
+                                                                                <div style="margin-top: 60px;" class="col col-2">
+                                                                                    <div class="input-group">
+                                                                                        <div style="padding-bottom: 10px;" class="btn-group">
+                                                                                            <button id="btnDeploymentAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
+                                                                                        </div>
+                                                                                        <div class="clearfix"></div>
+                                                                                        <div class="btn-group">
+                                                                                            <button id="btnDeploymentRemoveSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                               
+                                                                                <div class="col col-5">
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;" class="deploymentSelectedRunList" id="templatescookbooks" cdata="catalyst">
+                                                                                        
+                                                                                    </ul>
+                                                                                </div>
+                                                                                
+                                                                            </div>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                          <div id="dockercontainerpaths" class="input-group from-control col-md-12 forDocker" style="height:200px;overflow-y:auto;"  cdata="catalyst" ctype="list" csource="dockercontainers" ></div>
+                                                                </section>
                                                             </div>
                                                             
                                                            </fieldset>   

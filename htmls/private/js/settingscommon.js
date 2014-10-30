@@ -383,9 +383,20 @@ function readform(formID) {
                         if (inputC.getType().toLowerCase() == "div") {
                             $(inputC).attr('savedvalue',v[k1])
                             //Set saved values to div.
+                            var ctype = '';
+                            var csource = '';
+                            if($(inputC).attr('ctype'))
+                                ctype = $(inputC).attr('ctype');
+                            if($(inputC).attr('csource'))
+                                csource = $(inputC).attr('csource');
                             var divselect1 = v[k1].split(',');
                             for(var j = 0; j < divselect1.length; j++){
-                                inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                                if(ctype == 'list' && csource != '')
+                                {
+                                   addToTargetList($('#' + csource).clone().val(divselect1[j]));
+                                }
+                                if(ctype == '')
+                                    inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
                               }
                         }
                     });
@@ -769,7 +780,6 @@ function addToCodeList(txtVal, inp) {
 }
 
 function addToTargetList(inputctrl){
-    
     if(inputctrl.attr('targetelement')){
         var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
         var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
@@ -802,7 +812,7 @@ function validateForm() {
 
 
 function readURL(input) {
-    if (input.files && input.files[0]) {
+    if (input.files && input.files[0]) {l
         var reader = new FileReader();
         reader.onload = function (e) {
             var imgLogoPreview = "<img src='" + e.target.result + "' style='border:0px;height:25px;width:28px'/>";
