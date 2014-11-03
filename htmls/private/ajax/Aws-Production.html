@@ -1266,11 +1266,22 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
           //     return false;
 
           // }
+            //alert('kickin 2');
+
+            //If a docker type of template selected then select the Org 
+            $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+            if($('.productdiv2.role-Selected').length > 0)
+            {
+              if($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker")
+                    wizard.show(4);
+            }
+
+
 
            var $selectedItem = $('.role-Selected');
           // alert('in ' + $selectedItem.length);
             if (!$selectedItem.length) {
-                alert('please choose a blueprint design')
+                alert('please choose a blueprint design');
                 return false;
             }
             var $clone = $selectedItem.clone().removeClass('role-Selected');
@@ -1283,7 +1294,9 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
           $('#tab3 .selectedTemplateArea').empty().append($('#tab2 .role-Selected').clone());
         }
 
+
     } else if(index == 3){
+
         var $selectedTemplateArea = $('.selectedTemplateArea')
         var $selectedItem = $selectedTemplateArea.find('.productdiv2');
         console.log($selectedItem.length);
@@ -1337,7 +1350,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         alert("Please choose users");
         return false;
     }
-    alert(JSON.stringify(reqBody));
+    //alert(JSON.stringify(reqBody));
 
 
     console.log('pushing');

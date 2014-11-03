@@ -11,6 +11,7 @@ module.exports = function(options) {
     function connect(connectionParamsObj, callback) {
         con = new sshConnection();
         con.connect(connectionParamsObj);
+        console.log("ConnectionParamsObj==>",connectionParamsObj);
         con.on('ready', function() {
             isConnected = true;
             callback(null);

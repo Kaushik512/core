@@ -3,6 +3,8 @@ var app = express();
 var engine = require("./node_modules/ejs");
 var path = require("path");
 var http = require("http");
+var https = require("https");
+var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
 
@@ -25,6 +27,7 @@ mongoDbConnect({
 });
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
+app.set('sport',appConfig.app_run_secure_port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -48,14 +51,23 @@ app.use(app.router);
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 
+var options = {key:    fs.readFileSync('rlcatalyst.key'),
+    cert:   fs.readFileSync('rlcatalyst.cert'),
+    requestCert:        true,
+    rejectUnauthorized: false}
+
 var routes = require('./routes/routes.js');
 routes.setRoutes(app);
 
-var server = http.createServer(app);
+//var server = http.createServer(app);
+var server = https.createServer(options,app).listen(app.get('sport'),function(){
+  console.log('Express server listening on https port ' + server.address().port);
+});
+
 io = io.listen(server, {
   log: false
 });
 
-server.listen(app.get('port'), function() {
+/*(server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
-});
+});*/
