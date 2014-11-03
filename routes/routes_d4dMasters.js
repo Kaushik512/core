@@ -361,6 +361,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			fi = new Array();
 			fi.push(req.params.fileinputs);
 		}
+		var bodyItems = Object.keys(req.body);
+		var saveAsfileName = '';
+		for(var i = 0; i < bodyItems.length;i++){
+			if(bodyItems[i].indexOf("_filename") > 0)
+				saveAsfileName = req.body[bodyItems[i]];
+		}
 
 
 		var filesNames = Object.keys(req.files);
@@ -425,8 +431,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
 							}
 							else //not a a chef config file
 							{
-								console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
-								fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+								console.log("Folderpath rcvd:" + folderpath);
+								
+								if(fil.name == saveAsfileName)
+									{
+										console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+										fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+										
+								}
+								else
+									{
+										console.log('this is where file gets saved as (with folderpath) fixed name: ' + chefRepoPath + req.params.orgname  + folderpath + '/' + saveAsfileName);
+										//fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
+										fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
+									}
+
 							}
 						}
 

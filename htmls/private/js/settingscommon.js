@@ -445,7 +445,7 @@ function saveform(formID){
     var data1 = new FormData();
     var fileNames = '';
     orgName = $('#orgname').val();
-
+    //alert('orgname' + orgName);
     //Iterate over each input control and get the items
     $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function(){
         // alert($(this).prop("type"));
@@ -457,8 +457,15 @@ function saveform(formID){
           if($(this).prop("type") == "file" && orgName != '')
           {
             if($(this).get(0).files[0]){
+               // alert('in' + $(this).attr('fixedname'));
                 data1.append($(this).prop("id"),$(this).get(0).files[0]);
-                data1.append($(this).prop("id") + "_filename",$(this).get(0).files[0].name);
+                if($(this).attr("fixedname")){
+                    alert('in' + $(this).attr('fixedname'));
+                    data1.append($(this).prop("id") + "_filename",$(this).attr("fixedname"));
+                }
+                else
+                    data1.append($(this).prop("id") + "_filename",$(this).get(0).files[0].name);
+                
                 if(fileNames == '')
                     fileNames = $(this).prop("id");
                 else

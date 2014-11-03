@@ -1,132 +1,134 @@
-<div novalidate="novalidate" class="smart-form" id="checkout-form" action="">
-    <div class="row" style="margin-top: 6px;">
-        <section class="col col-6" style="margin-left: 13px;">
-                                <label for="">Template Name<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                    <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                </label>
-                                <label class="input">
-                                    <input name="ctl00$MainContent$orgname" value="" id="dockertemplatename" class="form-control" type="text" cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                </label>
-                            </section>
-        </div>
-                        <div class="row">
-                            <section class="col col-6" style="margin-left: 13px;">
-                                <label for="">Description<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                    <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                </label>
-                                <label class="input">
-                                    <input name="ctl00$MainContent$orgname" value="" id="description" class="form-control" type="text" cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                </label>
-                            </section>
-                            </div>
-                        </div>
-<!--table view of docker template form-->
-
-<style>
-    .rowCustomStyle {
-        height: 34px;
-        font-weight: bold;
-    }
-</style>
+<script>
+    $(".login-info").hide();
+   
+</script>
+<script src="/private/js/settingscommon.js"></script>
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
-
             <div class="widget-box">
-                <div class="widget-header">
-                    <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Create Docker Templates</strong>
-                    </h5>
-                    <div class="widget-toolbar no-border">
-                        <div>
-                            <a class="btn btn-minier btn-primary" id="launchProviderTypeSelection" href="#popupSelectProvider" data-toggle="modal">Search</a>                     
-                            <a class="btn btn-minier btn-primary" onclick="addRow();sequencenumber();">Add </a>                                                 
-                        </div>
-                    </div>                    
-                </div>
+                <div class="widget-header"><h4 style="color:black;">New Docker  <span id="spndocker"></span></h4></div>
                 <div class="widget-body">
                     <div class="widget-main" style="min-height:300px">
-                        <div class="col-md-12" style="padding-left:0px; padding-right:0px;">
-                            <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
-                                <thead>
-                                    <tr class="rowCustomStyle">
-                                        <td>Seq#</td>
-                                            <td>Docker Path</td>
-                                            <td>Description</td>
-                                        <td>Cookbooks</td>
-                                            <td class="pull-left">Action</td>
+                        <div>
+                            <section id="widget-grid" class="">
+                                <!-- START ROW -->
+                                <div class="row">
+                                    <!-- NEW COL START -->
+                                    <article class="col-sm-12 col-md-12 col-lg-12">
+                                        <!-- Widget ID (each widget will need unique ID)-->
+                                        <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                                            <!-- widget div-->
+                                            <div>
+                                                <!-- widget content -->
+                                                <div class="widget-body no-padding">
+                                                    <form action="" id="frmconfigmanagement" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">
+                                                                        Docker Repository Name<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                        <label id="msgdockerrepositoryname" style="display:none;color:red;float:right;">Required</label>
+                                                                    </label>
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-building"></i>
+                                                                        <input name="ctl00$MainContent$orgname" value="_default" id="dockerreponame" class="form-control" type="text"  cdata="catalyst" unique="true"  cat-validation="required,nospecial,max15">
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <hr /><br />
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">
+                                                                        Docker Repository Path<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                        <label id="msguserName" style="display:none;color:red;float:right;">Required</label>
+                                                                    </label>
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-building"></i>
+                                                                        <input name="ctl00$MainContent$orgname" value="_default" id="dockerrepopath" class="form-control" type="text"  cdata="catalyst"  cat-validation="required,nospecial">
+                                                                    </label>
+                                                                </section>
+                                                               <!-- <section class="col col-6">
+                                                                    <label for="">
+                                                                        Password
+                                                                    </label>
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-building"></i>
+                                                                        <input name="ctl00$MainContent$orgname" value="" id="password" class="form-control" type="password"  cdata="catalyst"  cat-validation="required,nospecial,max15">
+                                                                    </label>
+                                                                </section> -->
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">
+                                                                        User ID <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                    </label>
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-building"></i>
+                                                                        <input name="ctl00$MainContent$orgname" value="" id="dockeruserid" class="form-control" type="text"  cdata="catalyst">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label for="category">Email ID<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                    <label class="input">
+                                                                        <input name="ctl00$MainContent$orgname" value="" id="dockeremailid" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+                                                                        
+                                                                    </label>
+                                                                </section>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="hidden rowtemplate" >
-                                        <td datafield="sequence"></td>
-                                        <td datafield="dockerpath"><input type="text" id="dockerimagepath"  class="form-control"/></td>
-                                        <td datafield="imagedescription"><input type="text" id="dockerimgDesc"  class="form-control"/></td>
-                                        <td datafield="dockertemplatescookbooks">
-                                            <div class=" hidden-sm hidden-xs btn-group">
-                                                <div id="cookbookcount"></div>
-                                                <input id="dockercookbooks"  class="form-control pull-left"  style="width: 182px; margin-right: -77px;"/>
-                                                  
-                                                <a class="btn btn-minier btn-primary" id="launchProviderTypeSelection" onclick="setSelectedRow(this);" href="#popupSelectCookbooks" data-toggle="modal"  style="height: 32px; border-bottom-width: 0px; margin-top: -1px; right: -82px; top: 1px; left: 80px;">Add cookbooks</a>
-                                               
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class=" hidden-sm hidden-xs btn-group">
-                                                <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove" onclick="removeRow(this);reorderSequencenumber();"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+                                                            </div>
+                                                            
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">Password <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                    <label class="input">
+                                                                    <input name="ctl00$MainContent$orgname" value="" id="dockerpassword" class="form-control" type="password"  cdata="catalyst" cat-validation="required">
+                                                                    </label>
+                                                                </section>
+                                                                
+                                                            </div>
+                                                            <div class="row">
+                                                                <hr /><br />
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label for="">Certificate Key File</label>
+                                                                    <label for="file" class="input input-file">
+                                                                        <div class="imgdiv" value="1"></div>
+                                                                        <div class="button"><input id="certkey" keyfield="dockerreponame" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                        <input id="folderpath"   cdata="catalyst" type="text" value="" style="display:none"/>
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                        </fieldset>
+
+                                                    </form>
+
+                                                </div>
+                                                <!-- end widget content -->
                                                 
-                                                    <a class="btn btn-xs btn-info pull-left" title="Up" onclick="moveUp(this);reorderSequencenumber();">
-                                                    <i class="fa fa-angle-double-up"></i></a>
-                                                        <a class="btn btn-xs btn-info pull-left" title="Down" onclick="moveDown(this);reorderSequencenumber();" >
-                                                    <i class="fa fa-angle-double-down"></i>
-                                                </a>
                                             </div>
-                                        </td>
+                                            <!-- end widget div -->
+                                            
+                                        </div>
+                                        <!-- end widget -->             
 
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-                                <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%">
-                                    <thead>
-                                        <tr class="rowCustomStyle">
-                                           <td>Seq#</td>
-                                            <td>Docker Path</td>
-                                            <td>Description</td>
-                                            <td class="">Cookbooks</td>
-                                        <td class="">Action</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                       
-                                    </tbody>
-                                    
-                                </table>
-                                    
-                            <div class="col-md-5">
-
-                            </div>
+                                    </article>
+                                    <!-- END COL -->
+                                </div>
+                                <!-- END ROW -->
+                            </section>
+                            <!-- end widget grid -->
+                            
                         </div>
-                        
                     </div>
-                    <!--<div class="widget-toolbox padding-8 clearfix">
-                       <div id="tableFooterLeft" class="pull-left"></div>
-                       <div id="tableFooterRight" class="pull-right"></div>
-                    </div>-->
-                   
-                    
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-     <div class="widget-toolbox clearfix" style="width: 1075px; margin-left: 13px;">
+
+                <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini " style="margin-right:10px;" onclick="saveTable();">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm()) {setfolderpath(); saveform('18');}">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
@@ -137,401 +139,63 @@
                         </div>
                 </div>
 
-</footer>
-
-<div style="display:none">
-    
- </div>
-
-<div class="modal fade" id="popupSelectProvider" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="margin-left: 310px;margin-top: 131px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">
-                    Image Details
-                </h4>
-            </div>
-            <div class="modal-body no-padding" style="float:center;">
-
-                <form action="" id="login-form" class="smart-form">
-
-                    <fieldset style="padding-top:20px;">
-                            <div class="row">
-                    <section class="col col-6" style="padding-left">
-                        <label for="">Image Name
-                        </label>
-                        <label class="input">
-                            <input class="search form-control" type="search">
-                            </label>
-                        </section>
-                            </div>
-                        <section class="col col-6" style="padding-left:0px;">
-                            <label for="">
-                                Select Image
-                            </label>
-                                    <label class="select">
-                                         
-                                <select class="image-name" id="imagename">
-                                  <option value="Apache">Apache</option>
-                                  <option value="Tomcat">Tomcat</option> 
-                                </select>
-                                        <span data-val-controltovalidate="domainname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                            </label>
-                        </section>
-                        <section class="col col-6" style="padding-left:0px;">
-                            <label for="">
-                                Select Tag 
-                            </label>
-                            
-           
-                        <label class="form-control">
-                           
-                            </label>
-                        </section>
-                    </fieldset>
-
-                    <footer>
-                        <a type="button" class="btn btn-default" onclick="cancelClicked();" data-dismiss="modal" href="#ajax/Settings/CreateDockerTemplates.html?new">
-                            Cancel
-                        </a>
-                        <button name="button" id="clickadd" onclick="addImageToTable();sequencenumber();return(false);" class="btn btn-primary">
-                           Add
-                        </button>
-                       
-                        <a href="#ajax/Settings/CreateDockerTemplates.html" id="abacklink" class="btn btn-primary providerchecked hidden">
-                            Back
-                        </a>
-                    </footer>
-                </form>
             </div>
 
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
 
+    </div>
 
-<div class="modal fade" id="popupSelectCookbooks" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    ×
-                </button>
-                <h4 class="modal-title">
-                    Cookbooks
-                </h4>
-            </div>
-            <div class="modal-body no-padding">
+</div>
 
-                <form class="" id="" action="">
-                        <div novalidate="novalidate" class="smart-form" id="" action="">
-
-                        <div style="margin:0px;" class="row">
-                            <section style="padding-top:17px;" class="col">
-
-                                <div style="clear: both; float: left;margin-left:40px;" id="divtable">
-                                <div style=" " class="col-lg-5">
-                                    <div class="input-group">
-                                        <div class="btn-group">
-                                            <select multiple="multiple" size="10" style="width: 180px" class="form-control" id="jsonFiles">
-                                            <option>apache </option>
-                                            <option>apache2</option>
-                                            <option>apt</option>
-                                            <option>aptgetupdate</option>
-                                            <option>art</option>
-                                            <option>art_active_windows</option>
-                                            <option>art_add_admin_grp</option>
-                                            <option>art_append_hosts</option>
-                                            <option>art_application_hosts</option>
-                                            <option>art_application_code</option>
-                                            <option>art_base</option>
-                                            <option>art_check_ms</option>
-                                            </select>
-                                        </div>
-                                        <!-- /btn-group -->
-                                    </div>
-                                    <!-- /input-group -->
-                                </div>
-                                <div style="margin-top: 50px; margin-left: 5px" class="col-lg-1">
-                                    <div class="input-group">
-                                        <div style="padding-bottom: 10px;" class="btn-group">
-                                            <button id="btnaddToSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="btn-group">
-                                            <button id="btnremoveFromSuite" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-5">
-                                    <div class="input-group">
-                                        <div class="btn-group">
-                                            <table>
-                                                
-                                                <tbody>
-                                                    <tr>
-                                                    <td>   <select multiple="multiple" size="10" style="width: 180px;" class="form-control" id="suiteFiles"></select>
-                                                    </td>
-                                                    <td style="padding-left:10px;">
-                                                        <button id="btnSuiteItemUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-up"></i></button>
-                                                        <div class="clearfix"></div>
-                                                        <div class="clearfix"></div>
-                                                        <div style="padding-top: 10px" class="btn-group">
-                                                            <button id="btnSuiteItemDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-down"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-                                            <div style="padding-bottom: 10px; margin-top: 40px;" class="btn-group">
-                                            </div>
-                                            <!-- /.btn-group -->
-                                        </div>
-                                        <!-- /.input-group -->
-                                    </div>
-                                </div>
-                            </div>
-                        </section></div>
-
-
-                    
-                            <footer>
-                        <a type="button" class="btn btn-default" onclick="cancelClicked();" data-dismiss="modal" href="#ajax/Settings/CreateDockeTemplates.html?new">
-                            Cancel
-                        </a>
-                        <button name="button" id="donebutton" data-dismiss="modal" class="btn btn-primary">
-                           Done
-                        </button>
-                       
-                        <a href="#ajax/Settings/CreateDockerTemplates.html" id="abacklink" class="btn btn-primary providerchecked hidden">
-                            Back
-                        </a>
-                    </footer>
-                        </div>
-                    
-                </form>                     
-                        
-
-            </div>
-
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal-dialog -->
-
+<!--Popup for selecting a cloud provider before proceeding-->
 
 <script>
-    function addRow() {
-        var rowtemplate = $('.rowtemplate').clone();
-        rowtemplate.find('td[datafield]').each(function () {
-            $(rowtemplate).removeClass('rowtemplate');
-            $(rowtemplate).removeClass('hidden');
-            $('#envtable').append(rowtemplate);
-
-        });
+    //Form Name
+    function cancelClicked() {
+        $("#popupSelectProvider").modal('hide');
+        $(".modal-backdrop.fade.in").detach();
+        $('#btncancel').click();
+    }
+    function setfolderpath(){ //Uncomment below line to set the folder path to uploaded files.
+        var folderpath = ''; //'/' + $('#dockerreponame').val() + "/dockerfiles/";
+     //   alert(folderpath);
+            $('#folderpath').val(folderpath);
     }
 
-    var selectedChefRow = null;
+    function inLineReady() {
 
-    function setSelectedRow(button1) {
-        //var selected = $("#dockercookbooks").val();
-        // alert(selected);
-        selectedChefRow = button1;
-        $("#suiteFiles option").detach();
-        var $inputTextTag = $(selectedChefRow).closest('tr').find('#dockercookbooks');
-        var cookbooks = $inputTextTag.data('selectedcookbooks');
-        //alert(cookbooks);
-        if (cookbooks) {
-            cookbooks = cookbooks.split(',');
-            var $suitFiles = $("#suiteFiles");
-            for (var i = 0; i < cookbooks.length; i++) {
-                var y = document.createElement("option");
-                y.value = cookbooks[i];
-                y.innerHTML = cookbooks[i];
-                $suitFiles.append(y);
-            }
+        $("input[type='text']").on("click", function () {
+            $(this).select();
+            $("#msgOrgName").hide();
+        });
+        $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
+        var ten = 10;
+        readform(18); //6 is for role
+        //
+       
+        $('#content').css("opacity", "1 !important");
+        //Force opening the left navigation menu
+        if ($('#navSettings').is(":visible") == false) {
+            $('#navSettings').css("display", '');
+            $('#navSettings > ul > li').first().addClass('open');
+            $('#navSettings > ul > li > ul').css("display", "none");
+            $('#navSettings > ul > li > ul').first().css("display", "block");
         }
+        //redrawing the breadcrumb and selecting the tree
+        $('#Settings  li').removeClass('active');
+        $('#Settings  li').each(function () {
 
-    }
-
-    function removeRow(curBtn) {
-        $(curBtn).closest('tr').detach();
-    }
-
-    function addImageToTable() {
-        var rowtemplate = $('.rowtemplate').clone();
-        rowtemplate.find('td[datafield]').each(function () {
-            if ($(this).attr('datafield') == "dockerpath") {
-                $(this).html($('#imagename').val());
-                $('#imagename').val = '';
-            }
-        });
-        $(rowtemplate).removeClass('rowtemplate');
-        $(rowtemplate).removeClass('hidden');
-        $('#envtable').append(rowtemplate);
-
-    }
-
-    $("#btnaddToSuite").on('click', function () {
-        var x = document.getElementById("jsonFiles");
-        for (var i = 0; i < x.options.length; i++) {
-            if (x.options[i].selected == true) {
-                var y = document.createElement("option");
-                y.value = x.options[i].value;
-                y.innerHTML = x.options[i].text;
-                $("#suiteFiles").append(y);
-            }
-        }
-    });
-
-
-    $("#btnremoveFromSuite").on('click', function () {
-        $("#suiteFiles option:selected").remove();
-    });
-    $("#btnSuiteItemUp").on('click', function () {
-        $("#suiteFiles option:selected").each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
-            if (listItemPosition == 1) return false;
-            listItem.insertBefore(listItem.prev());
-        });
-    });
-
-
-    $("#btnSuiteItemDown").on('click', function () {
-        var itemsCount = $("#suiteFiles option").length;
-        $($("#suiteFiles option:selected").get().reverse()).each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#suiteFiles option").index(listItem) + 1;
-            if (listItemPosition == itemsCount) return false;
-            listItem.insertAfter(listItem.next());
-        });
-    });
-
-    $("#donebutton").click(function () {
-        var cookbooks = "";
-        var count = 0;
-        $("#suiteFiles option").each(function () {
-            count = $("#suiteFiles option").length;
-            //alert(count);
-            if (cookbooks == '') {
-                cookbooks += $(this).html();
-            }
-            else {
-                cookbooks += "," + $(this).html();
-            }
-        });
-        if (selectedChefRow) {
-            var $inputTextTag = $(selectedChefRow).closest('tr').find('#dockercookbooks').val(count);
-            $inputTextTag.data('selectedcookbooks', cookbooks);
-
-        }
-        selectedChefRow = null;
-    });
-
-    function moveUp(element) {
-        var thisRow = $(element).closest('tr');
-        var prevRow = thisRow.prev();
-        if (prevRow.length) {
-            prevRow.before(thisRow);
-        }
-    }
-
-    function moveDown(element) {
-
-        var thisRow = $(element).closest('tr');
-        var nextRow = thisRow.next();
-        if (nextRow.length) {
-            nextRow.after(thisRow);
-        }
-    }
-    function reorderSequencenumber() {
-        $('tbody tr td:first-child').each(function (idx) {
-            $(this).text(idx);
-        });
-    }
-
-    function sequencenumber() {
-        $('#envtable tbody tr').each(function (idx) {
-            $(this).children(":eq(0)").html(idx + 1);
-
-        });
-    }
-
-    function saveTable() {
-        var doc = {
-            "masterjson": {
-                "rows": {
-                    "row": [{
-                        "field": [{
-                            "values": {
-                                "value": " "
-                            },
-                            "name": "dockertemplatename"
-                        }, {
-                            "values": {
-                                "value": " "
-                            },
-                            "name": "description"
-                        }, {
-                            "values": {
-                                "value": "1234-5678-901234"
-                            },
-                            "name": "rowid"
-                        }, {
-                            "values": {
-                                "value": [
-                                ]
-                            },
-                            "name": "dockercontainers"
-                        }
-                    ]
-                    }]
-                },
-                "name": "Dockertemplates"
-            }
-        }
-        var $rowtemplate = $('#envtable tbody tr');
-        $rowtemplate.each(function (idxtr) { 
-            var obj = {
-                "seqno": idxtr + 1,
-                "dockerpath": "path2",
-                "description": "desc2",
-                "cookbooks": ["Apache2"]
-
-            };
-            $(this).find('td').each(function (idxtd) {
-                console.log(this)
-
-                if ($(this).attr('datafield') == 'dockerpath') {
-                    obj.dockerpath = $(this).find('#dockerimagepath').val();
-
-
-                } else if ($(this).attr('datafield') == 'imagedescription') {
-                    obj.description = $(this).find('#dockerimgDesc').val();
-                } else {
-                    if ($(this).find('#dockercookbooks').length) {
-                        obj.cookbooks = $(this).find('#dockercookbooks').val();
-                    }
-
+            if ($(this).text().trim() == "Docker"){
+                
+                $(this).addClass('active');
                 }
-
-            });
-            doc.masterjson.rows.row[0].field[3].values.value.push(obj);
         });
-
-        for (var i = 0; i < doc.masterjson.rows.row[0].field.length; i++) {
-            if (doc.masterjson.rows.row[0].field[i].name == "dockertemplatename") {
-                var temp = $('#dockertemplatename').val();
-                doc.masterjson.rows.row[0].field[i].values.value = temp;
-            } else if (doc.masterjson.rows.row[0].field[i].name == "description") {
-                var desc = $('#description').val();
-                doc.masterjson.rows.row[0].field[i].values.value == desc;
-            }
-        }
-        var json = JSON.stringify(doc);
-        alert(json);
-
+       
+        $('#content').css('opacity','1 !important');
+       // drawBreadCrumb1();
+        enableUniqueCheckingForInputs(18);
     }
-    </script>
+
+    inLineReady();
+
+</script>

@@ -54,7 +54,7 @@
                                                                       Template Type <span style="color:Red;" class="control-label">&nbsp;*</span>
                                                                     </label>
                                                                     <label class="select">
-                                                                        <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
+                                                                        <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();}else {$('.forDocker').hide();$('.notforDocker').show();}">
                                                                             
                                                                         </select>
                                                                     </label>
@@ -73,10 +73,10 @@
                                                             <div class="row">
                                                                 
                                                                 <section class="col col-6">
-                                                                    <label for="">
+                                                                    <label for="" class="notforDocker">
                                                                       Chef Server <span style="color:Red;" class="control-label">&nbsp;*</span>
                                                                     </label>
-                                                                    <label class="select">
+                                                                    <label class="select notforDocker">
                                                                         <!-- <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
                                                                             
                                                                         </select> -->
@@ -84,20 +84,38 @@
                                                                                 
                                                                         </select>
                                                                     </label>
+                                                                    <label for=""  class="forDocker">
+                                                                      Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                    </label>
+                                                                    <label class="select forDocker">
+                                                                        <!-- <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
+                                                                            
+                                                                        </select> -->
+                                                                        <select id="dockerreponame" class="form-control" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
+                                                                                
+                                                                        </select>
+                                                                    </label>
+
                                                                 </section>
                                                                 <section class="col col-6">
-                                                                   <label for="" class="forDocker">
-                                                                        Add Docker Container Path
+                                                                   <!-- <label for="" class="forDocker">
+                                                                        Add  Docker Container Path
                                                                         <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
                                                                     <label class="input forDocker">
-                                                                        <!--<i class="icon-append fa fa-building"></i>-->
                                                                         <div class="input-group"><input name="ctl00$MainContent$costcode" value="" id="dockercontainers" class="form-control" type="text" datavalues="dockercontainerpaths" targetelement="dockercontainerpaths">
                                                                                      <span class="input-group-addon" style="padding:1px !important;">
                                                                                      <input type="button" class="btn btn-sm btn-primary" title="Check to add to list" style="width:53px;height:34px;" value="Add" onclick="addToTargetList($('#dockercontainers'));" />
                                                                                      </span>
                                                                         </div>
                                                                                  
+                                                                    </label> -->
+                                                                    <!-- To Set for Docker File upload -->
+                                                                    <label for=""  class="forDocker">Docker File</label>
+                                                                    <label for="file" class="input input-file forDocker">
+                                                                        <div class="imgdiv" value="1"></div>
+                                                                        <div class="button"><input id="dockerfile" keyfield="templatename" type="file" fixedname="dockerfile" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                        <input id="folderpath"   cdata="catalyst" type="text" value="" style="display:none"/>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-6">
@@ -112,16 +130,16 @@
                                                                     </label>
                                                                 </section> -->
                                                             </div>
-                                                            <div class="row">
+                                                            <div class="row notforDocker">
                                                                 
                                                                 <section class="col col-6">
-                                                                            <label for="">
+                                                                            <label for=""  class="notforDocker">
                                                                                 Chef Server Objects List
                                                                             </label>
-                                                                            <span class="pull-right">
+                                                                            <span class="pull-right notforDocker">
                                                                                 Template Run List
                                                                             </span>
-                                                                            <div class="row">
+                                                                            <div class="row notforDocker">
                                                                                 <div class="col col-5">
                                                                                     <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;" class="deploymentCookbookList">
                                                                                         <label class="label" style="text-align:center;">Select Cookbooks</label>
@@ -185,7 +203,7 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm()) saveform('17');">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm()){ setfolderpath();saveform('17');}">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
@@ -365,7 +383,11 @@
     }
     inLineReady();
     //Copkbook popup functionality
-
+    function setfolderpath(){ //Uncomment below line to set the folder path to uploaded files.
+        var folderpath = ''; //'/' + $('#dockerreponame').val() + "/dockerfiles/";
+     //   alert(folderpath);
+            $('#folderpath').val(folderpath);
+    }
     $("#btnaddToSuite").on('click', function () {
         var x = document.getElementById("jsonFiles");
         for (var i = 0; i < x.options.length; i++) {

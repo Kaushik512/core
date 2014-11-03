@@ -1308,6 +1308,9 @@ function loadURL(url, container) {
 
 // UPDATE BREADCRUMB
 function drawBreadCrumb() {
+	if(window.location.href.indexOf("Settings") > 0 && window.location.href.indexOf("?") > 0){
+		return;
+	}
 
 	//console.log("breadcrumb")
 	$("#ribbon ol.breadcrumb").empty();
@@ -1324,12 +1327,12 @@ function drawBreadCrumb() {
 function drawBreadCrumb1() {
     
     //console.log("breadcrumb")
-    $("#ribbon ol.breadcrumb").empty();
+   /* $("#ribbon ol.breadcrumb").empty();
     if (window.location.href.indexOf("Settings") > 0) {
         $("#ribbon ol.breadcrumb").append($("<li>Settings</li>"));
     }
     else
-    $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>"));
+    $("#ribbon ol.breadcrumb").append($("<li>" + selectedOrgName + "</li>")); */
 
     /*$('nav li.active > a, nav li.open > a').each(function () {
         $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
