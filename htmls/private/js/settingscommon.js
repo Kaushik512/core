@@ -27,6 +27,31 @@ function deleteItem(docid, key, value,button) {
 
 }
 
+function validatedockeruser(usernameInput,passwordInput){
+    var retval = false;
+    $.ajax({
+        type : "get",
+        dataType: "text",
+        async: false,
+        url: '/d4dmasters/dockervalidate/' + usernameInput.val() + '/' + passwordInput.val(),
+        success: function(data){
+                if(data == '200')
+                    retval = true;
+                else{
+                    errormessageforInput(usernameInput.attr('id'),"Not a valid Docker UserID / Password");
+                    retval = false;
+                }
+            },
+        failure: function(data){
+             errormessageforInput(usernameInput.attr('id'),"Not a valid Docker UserID / Password");
+                    retval = false;
+        }
+    });
+    
+   
+    return(retval);
+}
+
 function readMasterJson(id) {
     // debugger;
     $.ajax({

@@ -4,6 +4,7 @@ var fileIo = require('../classes/utils/fileio');
 var uuid = require('node-uuid');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 var Chef = require('../classes/chef');
+var Curl = require('../controller/utils/curl.js');
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -16,7 +17,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			res.send(data);
 		});
 	})*/
+	app.get('/d4dmasters/dockervalidate/:username/:password',function(req,res){
+		var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
+		var curl = new Curl();
+		curl.executecurl(cmd,function(err,stdout){
+			if(err){
+				res.end(err);
+			}
+			if(stdout){
+				if(stdout.indexOf('OK') > 0){
+					console.log('Good');
+					res.end('200');
+				}
+				else
+				{
+					console.log('No User');
+					res.end('402');
+				}
+			}
+		});
 
+	});
 	app.get('/d4dMasters/mastersjson', function(req, res) {
 		res.send([{
 			name: 'master'

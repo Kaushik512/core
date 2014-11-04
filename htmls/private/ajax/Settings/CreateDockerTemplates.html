@@ -128,7 +128,7 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm()) {setfolderpath(); saveform('18');}">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="validateandsaveform()">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
@@ -160,6 +160,16 @@
         var folderpath = ''; //'/' + $('#dockerreponame').val() + "/dockerfiles/";
      //   alert(folderpath);
             $('#folderpath').val(folderpath);
+    }
+    function validateandsaveform(){
+        if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
+            {
+                
+                if(validateForm()) {
+                    setfolderpath(); 
+                    saveform('18');
+                }
+            }
     }
 
     function inLineReady() {
