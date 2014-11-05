@@ -103,20 +103,36 @@
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-10">
-                                                                   <label for="" class="forDocker">
-                                                                        Add  Docker File Path
+                                                                    <section class="col col-2 noleftpadding">
+                                                                        <label for="" class="forDocker">
+                                                                        Title
                                                                         <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
                                                                     </label>
                                                                     <label class="input forDocker">
                                                                         <div class="input-group">
                                                                             
-                                                                            <input name="ctl00$MainContent$costcode" value="" id="dockercontainers" class="form-control" type="text" datavalues="dockercontainerpaths" targetelement="dockercontainerpaths">
-                                                                                     <span class="input-group-addon" style="padding:1px !important;">
-                                                                                     <input type="button" class="btn btn-sm btn-primary" title="Check to add to list" style="width:53px;height:34px;" value="Add" onclick="addToTargetList($('#dockercontainers'));" />
-                                                                                     </span>
+                                                                            <input name="ctl00$MainContent$costcode" value="" id="dockercontainerstitle" class="form-control" type="text" datavalues="dockercontainerstitle" targetelement="dockercontainerpathstitle"  show="imgCheck">
                                                                         </div>
                                                                                  
                                                                     </label>
+                                                                    </section>
+                                                                    <section class="col col-8">
+                                                                           <label for="" class="forDocker">
+                                                                                Add  Docker File Path
+                                                                                <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
+                                                                            </label>
+                                                                            <label class="input forDocker">
+                                                                                <div class="input-group">
+                                                                                    
+                                                                                    <input name="ctl00$MainContent$costcode" value="" id="dockercontainers" class="form-control" type="text" datavalues="dockercontainerpaths" targetelement="dockercontainerpaths"  relatedlist="dockercontainerpathstitle" show="imgDed">
+                                                                                         <span class="input-group-addon" style="padding:1px !important;">
+                                                                                         <input type="button" class="btn btn-sm btn-primary" title="Check to add to list" style="width:53px;height:34px;" value="Add" onclick="addToTargetList($('#dockercontainers'),$('#dockercontainerstitle'));" />
+                                                                                         </span>
+
+                                                                                </div>
+                                                                                         
+                                                                            </label>
+                                                                    </section>
                                                                     <!-- To Set for Docker File upload -->
                                                                     <!-- <label for=""  class="forDocker">Docker File</label>
                                                                     <label for="file" class="input input-file forDocker">
@@ -181,7 +197,14 @@
                                                                 </section>
                                                                 
                                                                 <section class="col col-10 forDocker">
-                                                                          <div id="dockercontainerpaths" class="input-group from-control col-md-12 forDocker" style="height:200px;overflow-y:auto;"  cdata="catalyst" ctype="list" csource="dockercontainers" ></div>
+                                                                   
+                                                                    <section class="col col-2 forDocker  noleftpadding">
+                                                                        <div id="dockercontainerpathstitle" class="input-group from-control col-md-12 forDocker" style="height:200px;overflow-y:auto;"  cdata="catalyst" ctype="list" csource="dockercontainerstitle" ></div>
+                                                                    </section>
+                                                                    <section class="col col-8 forDocker"> 
+                                                                        <div id="dockercontainerpaths" class="input-group from-control col-md-12 forDocker" style="height:200px;overflow-y:auto;"  cdata="catalyst" ctype="list" csource="dockercontainers"></div>
+                                                                    </section>
+                                                                          
                                                                 </section>
                                                             </div>
                                                             

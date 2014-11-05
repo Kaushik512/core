@@ -499,9 +499,10 @@ function saveform(formID){
           }
     });
     // reading  multiselect values
-    var v = [];
-    var k = '';
+    
     $('div[cdata="catalyst"]').each(function (){
+        var v = [];
+        var k = '';
        k =  $(this).attr("id");
       $(this).find("input").each(function (){
          // alert($(this).prop("type"));
@@ -520,13 +521,14 @@ function saveform(formID){
             v.push($(this).val());
           }*/
       });
+      if(k != ''){
+        //data1.append(k,"[" + v.toString() + "]");
+        data1.append(k,v);
+        }
     });
 
     //alert(k + ":" + v.toString());
-    if(k != ''){
-        //data1.append(k,"[" + v.toString() + "]");
-        data1.append(k,v);
-    }
+    
 
     //Reading UL type of data
 
@@ -811,23 +813,56 @@ function addToCodeList(txtVal, inp) {
     $('#costcode').val('');
 }
 
-function addToTargetList(inputctrl){
+function addToTargetList(inputctrl,inputctrl1){
     if(inputctrl.attr('targetelement')){
         var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
-        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this";
+            if(inputctrl.attr('relatedlist'))
+                imgDed += ",\"" + inputctrl.attr('relatedlist') + "\"";
+            imgDed += ");\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
         if(inputctrl.val() != ''){
            // alert('in' + inputctrl.attr('targetelement') + '#' + $(inputctrl).attr('targetelement'));
+           if(inputctrl.attr('show').indexOf('imgDed') < 0)
+                imgDed = '';
+            if(inputctrl.attr('show').indexOf('imgCheck') < 0)
+                imgCheck = '';
+
            $('#' + $(inputctrl).attr('targetelement')).append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;\'><p class=\'bg-success\'>' + imgCheck + inputctrl.val() + imgDed + '</p></div>');
            inputctrl.val('');
            inputctrl.focus();
         }
     }
+    if(inputctrl1){
+        if(inputctrl1.attr('targetelement')){
+            
+            var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
+            var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+            if(inputctrl1.val() != ''){
+               // alert('in');
+               // alert('in' + inputctrl.attr('targetelement') + '#' + $(inputctrl).attr('targetelement'));
+               if(inputctrl1.attr('show').indexOf('imgDed') < 0)
+                       imgDed = '';
+                if(inputctrl1.attr('show').indexOf('imgCheck') < 0)
+                     imgCheck = '';
+               $('#' + $(inputctrl1).attr('targetelement')).append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;\'><p class=\'bg-success\'>'  + imgCheck +  inputctrl1.val() +  imgDed + '</p></div>');
+               inputctrl1.val('');
+               inputctrl1.focus();
+            }
+        }
+    }
 }
 
-function removeFromCodeList(btn) {
+function removeFromCodeList(btn,div2) {
     if (confirm('Are you sure you wish to remove this?')) {
         var closestDiv = $(btn).closest('div');
-        closestDiv.detach();
+        //alert(closestDiv.index());
+        if($('#' + div2 + ' div').length > 0)
+        {
+            $('#' + div2 + ' div:nth-child(' + (closestDiv.index() + 1)+ ')').detach();
+            closestDiv.detach();
+        }
+        else
+            closestDiv.detach();
     }
 }
 

@@ -1968,3 +1968,7 @@ margin-top:0px;
 .panel{
     box-shadow:0 0 0 rgba(0, 0, 0, 0.05) !important;
 }
+
+.noleftpadding{
+    padding-left: 0px !important;
+}
