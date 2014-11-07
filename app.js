@@ -7,7 +7,7 @@ var https = require("https");
 var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
-var docker = require('docker.io')({socketPath:'/var/run/docker.sock'});
+
 
 var appConfig = require('./config/app_config');
 var settingsController = require('./controller/settings');

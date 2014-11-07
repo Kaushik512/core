@@ -996,6 +996,7 @@
                                                             <li id="nextSpecificValue" class="next">
                                                                 <a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;" > Next </a>
                                                             </li>
+                                                            
                                                         </ul>
 
                                                                             <!--<button class="btn btn-primary pull-left" type="button">
@@ -1105,7 +1106,7 @@ $(document).ready(function(){
                             '<div style="padding-top:10px;padding-left:27px;">'+
                              '<img alt="JBoss Stack" '+
             //'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'">'+
-            'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:40px;width:auto;">'+
+            'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
                             '</div></div></div>';
                            
          }
@@ -1191,6 +1192,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                 getImage = '';
                 getTemplateType = '';
                 gettemplatescookbooks = '';
+                dockercontainerpathstitle = '';
+                dockercontainerpaths = '';
                 for(var x=0;x < data.masterjson.rows.row[z].field.length;x++){
                     if(data.masterjson.rows.row[z].field[x].name == "templatesicon_filename"){
                       getImage = data.masterjson.rows.row[z].field[x].values.value;
@@ -1214,6 +1217,14 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                             selectedrow = true;
                         }
                     }
+
+                    //For docker 
+                     if(data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle"){
+                       dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
+                    }
+                     if(data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths"){
+                       dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
+                    }
                     
                 }
 
@@ -1228,12 +1239,26 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                         '<li><img style="height:40px;width:auto;" alt="" '+
                             'src="/d4dMasters/image/'+getRowID+'__templatesicon__'+getImage+'">'+
                                         '</li><li style="font-size:12px;"><u><b>'+getTempName+'</b></u></li>';
-                                        var cb = gettemplatescookbooks.split(',');
-                                        var licb = '';
-                                        //alert(cb.length);
-                                        for(var cbi = 0; cbi < cb.length;cbi++){
-                                            licb += '<li style="font-size:10px;">'+ cb[cbi] +'</li>';
+                                        //If standard template
+                                        if(getTemplateType != "Docker"){
+                                            var cb = gettemplatescookbooks.split(',');
+                                            var licb = '';
+                                            //alert(cb.length);
+                                            for(var cbi = 0; cbi < cb.length;cbi++){
+                                                licb += '<li style="font-size:10px;">'+ cb[cbi] +'</li>';
+                                            }
                                         }
+                                        else //when template type is docker
+                                        {
+                                            var cb = dockercontainerpathstitle.split(',');
+                                            var cbpath = dockercontainerpaths.split(',');
+                                            var licb = '';
+                                            //alert(cb.length);
+                                            for(var cbi = 0; cbi < cb.length;cbi++){
+                                                licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container">'+ cb[cbi] +'</li>';
+                                            }
+                                        }
+
                     getIndividualData +=    licb + '</ul></div></div>';
 
             }
@@ -1269,21 +1294,28 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
             //alert('kickin 2');
 
             //If a docker type of template selected then select the Org 
-            $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
-            if($('.productdiv2.role-Selected').length > 0)
-            {
-              if($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker")
-                    wizard.show(4);
-            }
-
-
-
-           var $selectedItem = $('.role-Selected');
+             var $selectedItem = $('.role-Selected');
           // alert('in ' + $selectedItem.length);
             if (!$selectedItem.length) {
                 alert('please choose a blueprint design');
                 return false;
             }
+
+            $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+            if($('.productdiv2.role-Selected').length > 0)
+            {
+              if($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker")
+              {
+                   //When docker stepping to 4th tab
+                   $('#orgnameSelect').trigger('change');
+                    $('a[href="#tab3"]').first().trigger('click');
+                        return(true);
+                }
+            }
+
+
+
+          
             var $clone = $selectedItem.clone().removeClass('role-Selected');
             var selectedText = $clone.attr("data-templateType");
           if($selectedItem.attr('data-templateType') == 'desktopProvisoning') {
@@ -1297,7 +1329,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
     } else if(index == 3){
 
-        var $selectedTemplateArea = $('.selectedTemplateArea')
+        var $selectedTemplateArea = $('.selectedTemplateArea');
         var $selectedItem = $selectedTemplateArea.find('.productdiv2');
         console.log($selectedItem.length);
         if(!$selectedItem.length) {
@@ -1320,17 +1352,19 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
       return false;
   }
   reqBody.runlist = $('#cookbookSelect').val();
-  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId')
+  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
   reqBody.instanceType = $('.instanceType').val();
   console.log(reqBody);
 
 
 } else if(index == 4){
-    reqBody.iconpath = $('#tab3').find('img[src*="_templatesicon_"]').first().attr('src');
+    alert(reqBody);
+    reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
     reqBody.orgId = $('#orgnameSelect').val();
     reqBody.projectId = $('#projectListInput').val();
     reqBody.envId = $('#envList').val();
     reqBody.name =$('#blueprintNameInput').val();
+    alert('in');
     if(!reqBody.name) {
         alert("Please enter a blueprint name");
         return false;
@@ -1358,7 +1392,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         blueprintData:reqBody
     },function(data){
        console.log(data);
-   })
+   });
     console.log('final',reqBody);
 } 
 
@@ -1424,6 +1458,7 @@ $.ajax({
             $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist',data[i].businessGroups).data('envList',data[i].environments));
         }
         $orgListInput.change(function(e){
+           alert('trigged org selection');
            var orgName = $(this).val();
            if(orgName == 'choose') {
             return;
