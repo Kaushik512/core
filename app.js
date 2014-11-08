@@ -60,15 +60,15 @@ var options = {key:    fs.readFileSync('rlcatalyst.key'),
 var routes = require('./routes/routes.js');
 routes.setRoutes(app);
 
-//var server = http.createServer(app);
-var server = https.createServer(options,app).listen(app.get('sport'),function(){
+var server = http.createServer(app);
+/*var server = https.createServer(options,app).listen(app.get('sport'),function(){
   console.log('Express server listening on https port ' + server.address().port);
-});
+});*/
 
 io = io.listen(server, {
   log: false
 });
 
-/*(server.listen(app.get('port'), function() {
+server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
-});*/
+});

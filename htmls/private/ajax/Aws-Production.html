@@ -1358,13 +1358,19 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
 } else if(index == 4){
-    alert(reqBody);
+    if(reqBody == "undefined"){
+        reqBody = {};
+        reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
+        reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
+        reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
+
+    }
     reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
     reqBody.orgId = $('#orgnameSelect').val();
     reqBody.projectId = $('#projectListInput').val();
     reqBody.envId = $('#envList').val();
     reqBody.name =$('#blueprintNameInput').val();
-    alert('in');
+    //alert('in');
     if(!reqBody.name) {
         alert("Please enter a blueprint name");
         return false;
@@ -1458,7 +1464,7 @@ $.ajax({
             $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist',data[i].businessGroups).data('envList',data[i].environments));
         }
         $orgListInput.change(function(e){
-           alert('trigged org selection');
+          // alert('trigged org selection');
            var orgName = $(this).val();
            if(orgName == 'choose') {
             return;
@@ -1491,12 +1497,14 @@ $.ajax({
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
            //Adding the template cookbooks
            if($('#tab3').find('div[class*="productdiv2"]')){
+            if($('#tab3').find('div[class*="productdiv2"]').length > 0){
               var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
               for(var key in tcb){
                 //alert(tcb[key]);
                 var $optiontcb =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                 $cookbooksList.append($optiontcb);
               }
+            }
             }
             //End adding template cookbooks.
            for(var i=0;i<keys.length;i++) {
