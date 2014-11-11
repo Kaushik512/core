@@ -11,6 +11,8 @@ var BlueprintSchema = new Schema({
     name: String,
     templateId: String,
     templateType: String,
+    dockercontainerpathstitle: String,
+    dockercontainerpaths: String,
     templateComponents: [String],
     instanceType: String,
     instanceOS: String,

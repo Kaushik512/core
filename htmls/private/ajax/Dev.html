@@ -797,7 +797,15 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
                 if (data[i].versionsList) {
                     var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
-                    var $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                    var $selectVer = null;
+                    //Docker Check
+                    if(data[i].templateType == "Docker")
+                     {$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                        alert(JSON.stringify(data[i]));}
+                    else   
+                         $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+
+
                     $selectVerEdit.click(function(e) {
                         
                         var $parent = $(this).parents('.cardimage');

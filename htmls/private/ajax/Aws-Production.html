@@ -1233,6 +1233,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                     getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">'+
                                         '<div class="productdiv2" data-templateId="'+getTempName+'" data-'+
                                         'templateComponent="component'+z+'" '+
+                                        'dockercontainerpathstitle="'+dockercontainerpathstitle+'" '+
+                                        'dockercontainerpaths="'+dockercontainerpaths+'" '+
                                         'data-templateName="'+getTempName+'" data-'+
                                         'templateType="'+getTemplateType+'" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks +'">'+
                                         '<ul class="list-unstyled system-prop" style="text-align:center;">'+
@@ -1245,7 +1247,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                             var licb = '';
                                             //alert(cb.length);
                                             for(var cbi = 0; cbi < cb.length;cbi++){
-                                                licb += '<li style="font-size:10px;">'+ cb[cbi] +'</li>';
+                                                licb += '<li style="font-size:10px;" blueprinttype="other">'+ cb[cbi] +'</li>';
                                             }
                                         }
                                         else //when template type is docker
@@ -1255,7 +1257,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                             var licb = '';
                                             //alert(cb.length);
                                             for(var cbi = 0; cbi < cb.length;cbi++){
-                                                licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container">'+ cb[cbi] +'</li>';
+                                                licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">'+ cb[cbi] +'</li>';
                                             }
                                         }
 
@@ -1347,6 +1349,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
     reqBody.templateId = $selectedItem.attr('data-templateId');
     reqBody.templateType = $selectedItem.attr('data-templateType');
     reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
+    reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
+    reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
     if(!$('#cookbookSelect').length) {
       alert('Please wait while we are fetching cookbooks.');
       return false;
@@ -1358,12 +1362,14 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
 } else if(index == 4){
+    alert('in' + reqBody);
     if(reqBody == "undefined"){
         reqBody = {};
         reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
         reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
         reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-
+    //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
+      //  reqBody.dockercontainerpaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths');
     }
     reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
     reqBody.orgId = $('#orgnameSelect').val();
