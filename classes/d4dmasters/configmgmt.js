@@ -430,6 +430,51 @@ function Configmgmt() {
 
     };
 
+    this.getMasterRow = function(masterid,fieldname,fieldvalue, callback) {
+
+        d4dModel.findOne({
+            id: masterid
+        }, function(err, d4dMasterJson) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (d4dMasterJson) {
+                var configmgmt = '';
+                var chefRepoPath = '';
+                var hasOrg = false;
+                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
+                    console.log("found" + itm.field.length);
+                    for (var j = 0; j < itm.field.length; j++) {
+                        if (itm.field[j]["name"] == fieldname) {
+                            if (itm.field[j]["values"].value == fieldvalue) {
+                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                hasOrg = true;
+                                //Re-construct the json with the item found
+                                var configmgmt = '';
+                                for (var k = 0; k < itm.field.length; k++) {
+
+                                    if (configmgmt == '')
+                                        configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+                                    else
+                                        configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+
+                                }
+                                configmgmt = "{" + configmgmt + "}";
+                                console.log('Before Call back ->' + JSON.stringify(configmgmt));
+                                //return(configmgmt);
+                                //return;
+                            }
+                        }
+                    }
+                    callback(null,configmgmt);
+
+                }); // rows loop
+              
+            }
+        });
+
+    };
+
     this.getList = function(masterid, fieldname, callback) {
         var configmgmt ='';
         d4dModel.findOne({

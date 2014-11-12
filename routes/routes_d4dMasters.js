@@ -38,6 +38,46 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		});
 
 	});
+
+	app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame',function(req,res){
+		//fetch the username and password from 
+		//Need to populate dockerrowid in template card. - done
+		configmgmtDao.getMasterRow(18,'dockerreponame',req.params.dockerreponame,function(err,data){
+			if(!err)
+				{
+					var dockerRepo = JSON.parse(data);
+					console.log('Docker Repo ->', JSON.stringify(dockerRepo));
+					var cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockeruserid + ' -X GET https://index.docker.io/v1/repositories/' + req.params.repopath + '/tags';
+					console.log('executing - ',cmd);
+					var curl = new Curl();
+					curl.executecurl(cmd,function(err,stdout){
+					if(err){
+						res.end(err);
+					}
+					if(stdout){
+						if(stdout.indexOf('404:') > 0){
+							console.log('No Data');
+							res.end('402');
+							
+						}
+						else
+						{
+							console.log('Received JSON');
+							res.end(stdout);
+						}
+					}
+					}); 
+					
+				}
+			else
+				res.end(err);
+		});
+		
+	/*	*/
+
+	});
+	
+
 	app.get('/d4dMasters/mastersjson', function(req, res) {
 		res.send([{
 			name: 'master'

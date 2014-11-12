@@ -801,7 +801,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     //Docker Check
                     if(data[i].templateType == "Docker")
                      {$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
-                        alert(JSON.stringify(data[i]));}
+                        //alert(JSON.stringify(data[i]));
+                    }
                     else   
                          $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
 
@@ -1444,7 +1445,8 @@ function addInstanceToDOM(data) {
 
 
     if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
-        pollInstanceState(data._id, data.instanceState, 2000);
+      //  pollInstanceState(data._id, data.instanceState, 2000);
+      // To be removed from comment later - Vinod
     }
 
 

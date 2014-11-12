@@ -473,11 +473,10 @@ function saveform(formID){
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
     $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function(){
-        // alert($(this).prop("type"));
-          if(($(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '')
+        
+          if(($(this).prop("type") == "password" || $(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '')
           {
             data1.append($(this).prop("id"),$(this).val());
-         //   alert("this alert "+ $(this).prop("id") + ":" + $(this).val())
           }
           if($(this).prop("type") == "file" && orgName != '')
           {
