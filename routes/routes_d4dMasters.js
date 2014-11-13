@@ -63,6 +63,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 						else
 						{
 							console.log('Received JSON');
+							
 							res.end(stdout);
 						}
 					}

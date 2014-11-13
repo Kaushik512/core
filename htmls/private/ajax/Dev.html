@@ -793,6 +793,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 $ul.append($liImage);
                 //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
                 var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
+                
                 $ul.append($liCardName);
                 var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
                 if (data[i].versionsList) {
@@ -800,47 +801,61 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     var $selectVer = null;
                     //Docker Check
                     if(data[i].templateType == "Docker")
-                     {$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                     {
+                        //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                        $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
+                        $itemBody.attr('dockerreponame',data[i].dockerreponame);
+                        $itemBody.attr('dockerrepotags',data[i].dockerrepotags);
+                        var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
+                        $ul.append($liDockerRepoName);
+                       if(data[i].dockerrepotags != ''){
+                        var dockerrepostags = data[i].dockerrepotags.split(',');
+                           $.each(dockerrepostags,function(k){
+                                    $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
+                            });
+                        } 
+                       $selectVerEdit.hide();
                         //alert(JSON.stringify(data[i]));
                     }
-                    else   
-                         $selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                    else   {
+                            $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
 
 
-                    $selectVerEdit.click(function(e) {
-                        
-                        var $parent = $(this).parents('.cardimage');
-                        var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-                        $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                        $blueprintEditResultContainer.modal('show');
+                            $selectVerEdit.click(function(e) {
+                                
+                                var $parent = $(this).parents('.cardimage');
+                                var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+                                $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                                $blueprintEditResultContainer.modal('show');
 
-                        var projectId = $parent.attr('data-projectId');
-                        var envId = $parent.attr('data-envId');
-                        var blueprintId = $parent.attr('data-blueprintId');
-                        var chefServerId = $parent.attr('data-chefServerId');
-                        var version = $parent.find('.blueprintVersionDropDown').val();
-                        $.get('../blueprints/' + blueprintId + '/versions/' + version, function(data) {
-                            $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
-                                var keys = Object.keys(data);
+                                var projectId = $parent.attr('data-projectId');
+                                var envId = $parent.attr('data-envId');
+                                var blueprintId = $parent.attr('data-blueprintId');
+                                var chefServerId = $parent.attr('data-chefServerId');
+                                var version = $parent.find('.blueprintVersionDropDown').val();
+                                $.get('../blueprints/' + blueprintId + '/versions/' + version, function(data) {
+                                    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
+                                        var keys = Object.keys(data);
 
-                                var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
-                                for (var i = 0; i < keys.length; i++) {
-                                    var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
-                                    $cookbooksList.append($option);
-                                }
-                                $blueprintEditResultContainer.find('.modal-body').empty();
-                                $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+                                        var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
+                                        for (var i = 0; i < keys.length; i++) {
+                                            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
+                                            $cookbooksList.append($option);
+                                        }
+                                        $blueprintEditResultContainer.find('.modal-body').empty();
+                                        $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
 
-                            }).error(function() {
-                                $blueprintEditResultContainer.find('.modal-body').empty();
-                                $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                                    }).error(function() {
+                                        $blueprintEditResultContainer.find('.modal-body').empty();
+                                        $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                                    });
+                                }).error(function() {
+                                    $blueprintEditResultContainer.find('.modal-body').empty();
+                                    $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                                });
+
                             });
-                        }).error(function() {
-                            $blueprintEditResultContainer.find('.modal-body').empty();
-                            $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-                        });
-
-                    });
+                    }
                     var $li = $('<li></li>').css({
                         "font-size": '10px'
                     }).append($selectVer, $selectVerEdit);

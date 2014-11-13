@@ -13,6 +13,8 @@ var BlueprintSchema = new Schema({
     templateType: String,
     dockercontainerpathstitle: String,
     dockercontainerpaths: String,
+    dockerrepotags: String,
+    dockerreponame: String,
     templateComponents: [String],
     instanceType: String,
     instanceOS: String,
@@ -113,6 +115,7 @@ var BlueprintsDao = function() {
     };
 
     this.createBlueprint = function(blueprintData, callback) {
+        console.log('Just before save ->', blueprintData);
         var blueprint = new Blueprint({
             orgId: blueprintData.orgId,
             projectId: blueprintData.projectId,
@@ -121,6 +124,12 @@ var BlueprintsDao = function() {
             iconpath: blueprintData.iconpath,
             templateId: blueprintData.templateId,
             templateType: blueprintData.templateType,
+            
+            dockercontainerpathstitle: blueprintData.dockercontainerpathstitle,
+            dockercontainerpaths: blueprintData.dockercontainerpaths,
+            dockerrepotags: blueprintData.dockerrepotags,
+            dockerreponame: blueprintData.dockerreponame,
+            
             templateComponents: blueprintData.templateComponents,
             chefServerId: blueprintData.chefServerId,
             instanceType: blueprintData.instanceType,
