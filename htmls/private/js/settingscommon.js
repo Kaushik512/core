@@ -641,7 +641,7 @@ function saveform_old(formID) {
                     $.each(v, function (k1, v1) {
                         //   debugger;
                         if (inputC.attr("datatype")) {
-                            debugger;
+                            //debugger;
                             if (inputC.attr("datatype") == "select") {
                                 // v.value.length = 0;
                                 // alert(v.value);
