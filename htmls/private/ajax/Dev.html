@@ -833,7 +833,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                                     $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
                             });
                         } 
-                        $selectVer.parent().prepend('Tags&nbsp;');
+                        
                        $selectVerEdit.hide();
                         //alert(JSON.stringify(data[i]));
                     }
@@ -913,13 +913,15 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
     }); //end of readmasterjson to be pushed to the end of the function.
 
     
-    
+    /*
 
     var expanded = false;
+    if($l != "undefined"){
     if ($l.children().length) {
         var $devopsRolePanel = $devopsRolepanelBody.parents('.devopsRolePanel').show();
         $devopsRolePanel.find('.collapse').addClass('in');
         expanded = true;
+    }
     }
 
     if ($AppFactpanelBody.children().length) {
@@ -941,12 +943,20 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
             $desktopProvisioningPanel.find('.panel-title a').addClass('collapsed');
         }
         
-    }
+    }*/
+
 
     pageSetUp();
 
 });
 
+$(document).ready(function(){
+    //Expanding the first accordion
+    $('#accordion-2').find('a').first().trigger('click');
+   //alert($('#accordion-2').find('a').first().html());
+   $('.dockerrepotagselect').parent().prepend('Tags&nbsp;');
+
+});
 
 function getCssClassFromStatus(status) {
     var cssClasses = {
