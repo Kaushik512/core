@@ -17,6 +17,7 @@
                     <!--<li class="pull-left">
                         <a href="#l2" data-toggle="tab">DevOps Roles</a>
                     </li>-->
+                    
                     <li class="pull-left">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
@@ -817,6 +818,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 if (data[i].versionsList) {
                     var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
                     var $selectVer = null;
+                    var tagLabel = '';
                     //Docker Check
                     if(data[i].templateType == "Docker")
                      {
@@ -835,6 +837,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         } 
                         
                        $selectVerEdit.hide();
+                       tagLabel = '<span>Tags&nbsp;</span';
                         //alert(JSON.stringify(data[i]));
                     }
                     else   {
@@ -876,7 +879,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     }
                     var $li = $('<li></li>').css({
                         "font-size": '10px'
-                    }).append($selectVer, $selectVerEdit);
+                    }).append(tagLabel,$selectVer, $selectVerEdit);
                     for (var j = 0; j < data[i].versionsList.length; j++) {
                         var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
                         $selectVer.append($options);
@@ -903,6 +906,9 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         $(this).addClass('role-Selected1');
                     });
                 }
+                //Expanding the fist Accordion.
+                if($('#accordion-2').length > 0)
+                    $('#accordion-2').find('a').first().trigger('click');
             }
          }
 
@@ -952,7 +958,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
 
 $(document).ready(function(){
     //Expanding the first accordion
-    $('#accordion-2').find('a').first().trigger('click');
+    
    //alert($('#accordion-2').find('a').first().html());
    $('.dockerrepotagselect').parent().prepend('Tags&nbsp;');
 
@@ -1693,6 +1699,7 @@ $('.launchBtn').click(function(e) {
 
             });
             $launchDockerInstanceSelector.modal('show');
+            $('#dockerintsancestab').dataTable();
             return;
     }
 
