@@ -3,6 +3,22 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var Schema = mongoose.Schema;
 
+var ServiceActionSchema = new Schema({
+    actionType: String,
+    serviceRunlist: [String],
+    command: String,
+});
+
+var ServiceAction = mongoose.model('ServiceActions', ServiceActionSchema);
+
+var ServiceSchema = new Schema({
+    serviceName: String,
+    serviceUsers: [String],
+    actions: [ServiceActionSchema]
+});
+
+var Service = mongoose.model('Services', ServiceSchema);
+
 var InstanceSchema = new Schema({
     orgId: String,
     projectId: String,
@@ -39,17 +55,9 @@ var InstanceSchema = new Schema({
         templateId: String,
         templateType: String,
         templateComponents: [String]
-    }
-  /* , services: {[
-        serviceName: String,
-        serviceType: [String],
-         action: {
-            assignAction: String,
-            serviceRunlist: [String],
-            recipe: String,
-            command: String,
-                 }
-    ]} */
+    },
+    services: [ServiceSchema]
+
 });
 
 var Instances = mongoose.model('instances', InstanceSchema);
@@ -78,10 +86,10 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            data.forEach(function(inst){
+            data.forEach(function(inst) {
                 console.log(inst.projectId);
                 inst.bggroup = 'test';
-               // inst['bggroup'] = 'test';
+                // inst['bggroup'] = 'test';
             });
             console.log(data);
             callback(null, data);
@@ -270,24 +278,32 @@ var InstancesDao = function() {
 
 
 
+    this.createService = function(instanceId, serviceData, callback) {
+
+        var service = new Service({
+            serviceName: serviceData.name,
+            serviceUsers: serviceData.serviceUsers
+        });
+
+        if (serviceData.actions && serviceData.actions.length) {
+            for (var i = 0; i < serviceData.actions.length; i++) {
+                console.log('action ==>',serviceData.actions[i]);
+                var serviceAction = new ServiceAction({
+                    actionType: serviceData.actions[i].actionType,
+                    serviceRunlist: serviceData.actions[i].runlist,
+                    command: serviceData.actions[i].command,
+                });
+
+                service.actions.push(serviceAction);
+            }
+        }
 
 
-
-    this.addService = function(instanceId, serviceData, callback) {
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $push: {
-                "services": {
-                    serviceName: serviceData.Name,
-                    serviceType: serviceData.Type,
-                    action: {
-                       assignAction : serviceData.Action,
-                       serviceRunlist: serviceData.runlist,
-                       recipe: serviceData.recipe,
-                       command: serviceData.command   
-                            },
-                }
+                "services": service
             }
         }, {
             upsert: true

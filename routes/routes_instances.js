@@ -13,16 +13,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/instances/*', sessionVerificationFunc);
 
 
-    app.get('/instances',function(req,res){
+    app.get('/instances', function(req, res) {
         instancesDao.getInstances(function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500);
                 return;
             }
-            
+
             res.send(data);
-             
+
         });
     });
 
@@ -41,7 +41,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     })
 
-    
+
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         if (!req.body.runlist) {
             res.send(400);
@@ -74,17 +74,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                     settingsController.getSettings(function(settings) {
-                        console.log('instance IP ==>',instance.instanceIP);
+                        console.log('instance IP ==>', instance.instanceIP);
                         var chefClientOptions = {
                             privateKey: instance.credentials.pemFileLocation,
                             username: instance.credentials.username,
                             host: instance.instanceIP,
-                            instanceOS : instance.hardware.os,
+                            instanceOS: instance.hardware.os,
                             port: 22,
-                            runlist:req.body.runlist
+                            runlist: req.body.runlist
                         }
-                        if(instance.credentials.pemFileLocation) {
-                            chefClientOptions.privateKey = instance.credentials.pemFileLocation; 
+                        if (instance.credentials.pemFileLocation) {
+                            chefClientOptions.privateKey = instance.credentials.pemFileLocation;
                         } else {
                             chefClientOptions.password = instance.credentials.password;
                         }
@@ -328,22 +328,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
 
-app.get('/instances/:instanceId/service', function(req, res) {
-        var timestamp = req.query.timestamp;
-        if (timestamp) {
-            timestamp = parseInt(timestamp);
-        }
-        logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            res.send(data);
+    app.get('/instances/:instanceId/services', function(req, res) {
 
-        });
 
     });
 
+    app.post('/instances/:instanceId/services/create', function(req, res) {
+        console.log(req.body);
+        instancesDao.createService(req.params.instanceId, req.body.serviceData, function(err, updateCount) {
+            if (err) {
+                console.log(err)
+                res.send(500);
+                return;
+            } 
+            console.log(updateCount);
+            res.send(200,"done");
+        });
+    });
 
 
 
