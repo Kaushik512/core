@@ -282,12 +282,12 @@ var InstancesDao = function() {
 
         var service = new Service({
             serviceName: serviceData.name,
-            serviceUsers: serviceData.serviceUsers
+            serviceUsers: serviceData.users
         });
 
         if (serviceData.actions && serviceData.actions.length) {
             for (var i = 0; i < serviceData.actions.length; i++) {
-                console.log('action ==>',serviceData.actions[i]);
+                console.log('action ==>', serviceData.actions[i]);
                 var serviceAction = new ServiceAction({
                     actionType: serviceData.actions[i].actionType,
                     serviceRunlist: serviceData.actions[i].runlist,
@@ -298,7 +298,6 @@ var InstancesDao = function() {
             }
         }
 
-
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -306,16 +305,74 @@ var InstancesDao = function() {
                 "services": service
             }
         }, {
-            upsert: true
-        }, function(err, data) {
+            upsert: false
+        }, function(err, updateCount) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            callback(null, data);
+            if (updateCount > 0) {
+                callback(null, service);
+            } else {
+                callback(null, null);
+            }
         });
 
     };
+
+    this.createServiceAction = function(instanceId, serviceId, actionData, callback) {
+        var serviceAction = new ServiceAction({
+            actionType: actionData.actionType,
+            serviceRunlist: actionData.runlist,
+            command: actionData.command,
+        });
+
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+            "services._id": new ObjectId(serviceId),
+        }, {
+            $push: {
+                "services.$.actions": serviceAction
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (updateCount > 0) {
+                callback(null, serviceAction);
+            } else {
+                callback(null, null);
+            }
+
+        });
+    };
+
+  /*  this.getServiceAction = function(instanceId, serviceId, actionId, callback) {
+
+        Instances.find({
+            "_id": new ObjectId(instanceId),
+            "services._id": new ObjectId(serviceId),
+        }, {
+           "services.actions._id":
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (updateCount > 0) {
+                callback(null, serviceAction);
+            } else {
+                callback(null, null);
+            }
+
+        });
+
+    }*/
 
 
 }

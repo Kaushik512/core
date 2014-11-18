@@ -335,14 +335,40 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.post('/instances/:instanceId/services/create', function(req, res) {
         console.log(req.body);
-        instancesDao.createService(req.params.instanceId, req.body.serviceData, function(err, updateCount) {
+        instancesDao.createService(req.params.instanceId, req.body.serviceData, function(err, service) {
             if (err) {
                 console.log(err)
                 res.send(500);
                 return;
             } 
-            console.log(updateCount);
-            res.send(200,"done");
+            console.log(service);
+            res.send(200,service);
+        });
+    });
+
+    app.post('/instances/:instanceId/services/:serviceId/actions/create', function(req, res) {
+        console.log(req.body);
+        instancesDao.createServiceAction(req.params.instanceId,req.params.serviceId, req.body.actionData, function(err, action) {
+            if (err) {
+                console.log(err)
+                res.send(500);
+                return;
+            } 
+            console.log(action);
+            res.send(200,action);
+        });
+    });
+
+    app.get('/instances/:instanceId/services/:serviceId/actions/:actionId/execute', function(req, res) {
+        console.log(req.body);
+        instancesDao.createServiceAction(req.params.instanceId,req.params.serviceId, req.body.actionData, function(err, action) {
+            if (err) {
+                console.log(err)
+                res.send(500);
+                return;
+            } 
+            console.log(action);
+            res.send(200,action);
         });
     });
 
