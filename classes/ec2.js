@@ -55,7 +55,7 @@ var EC2 = function(awsSettings) {
 
         var that = this; //"m1.small"
         ec.runInstances({
-            "ImageId": "ami-08bde95a", // "ami-b3bf2f83",ami-0b06483b
+            "ImageId": "ami-0b06483b", // "ami-b3bf2f83",ami-0b06483b
             "InstanceType": intanceType, //"m1.medium",
             "MinCount": 1,
             "MaxCount": 1,
