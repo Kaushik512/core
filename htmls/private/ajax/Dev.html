@@ -332,7 +332,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Select Instances</h4>
+        <h4 class="modal-title" id="dockerInstanceSelectionTitle">Select Instances for </h4>
       </div>
       <div class="modal-body">
         ...
@@ -1654,13 +1654,14 @@ $('.launchBtn').click(function(e) {
     if($selectedItems.attr('data-templateType') === 'Docker') {
           var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
           var blueprintId = $selectedItems.attr('data-blueprintId');
+          var dockerreponame = $selectedItems.attr('dockerreponame');
           $launchDockerInstanceSelector.data('blueprintId',blueprintId);
         //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
 
         
 
         $launchDockerInstanceSelector.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Docker Engine</td></tr></thead>");
+          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr></thead>");
           var $newinstancetbody = $('<tbody></tbody>');
           $newinstancetable.append($newinstancetbody);
           var $instancetable = $('#tableinstanceview').clone();
@@ -1679,7 +1680,7 @@ $('.launchBtn').click(function(e) {
               if(k > 3 )
                   $(this).detach();
             });
-           $('#dockerintsancestab thead tr').append('<td>Docker Engine</td>');
+           $('#dockerintsancestab thead tr').append('<td title="Select to add a docker engine">Add Engine</td>');
             $('#dockerintsancestab tbody tr').each(function(k,v){
 
               $(this).removeClass('rowcustomselected');
@@ -1690,6 +1691,10 @@ $('.launchBtn').click(function(e) {
               $(this).find('td').each(function(k1,v1){
                 if(k1 > 3 )
                   $(this).detach();
+                //inserting a checkbox to select instance
+                if(k1 == 0){
+                    $(this).append('&nbsp;<input type="checkbox" class="instanceselectedfordocker">')
+                }
               });
               $(this).append('<td><input type="checkbox"></td>');
             });
@@ -1698,6 +1703,7 @@ $('.launchBtn').click(function(e) {
                 $('#myModalLabel').first().html('Launching Blueprint');
 
             });
+            $('#dockerInstanceSelectionTitle').append(dockerreponame);
             $launchDockerInstanceSelector.modal('show');
             $('#dockerintsancestab').dataTable();
             return;
@@ -1713,8 +1719,8 @@ $('.launchBtn').click(function(e) {
         var envId = $($selectedItems.get(i)).attr('data-envId');
         var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
         var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-
-        $.get('../blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
+       // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
+        $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
             var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
@@ -1790,7 +1796,7 @@ $('.launchBtn').click(function(e) {
             });
 
         }).error(function() {
-            $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+            $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
         });
     }
 });

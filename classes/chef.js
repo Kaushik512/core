@@ -237,9 +237,12 @@ var Chef = function(settings) {
         });
     };
 
+
+
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
+        console.log('Chef Repo Location : ',settings.userChefRepoLocation )
         var options = {
-            cwd: settings.userChefRepoLocation,
+            cwd: settings.userChefRepoLocation + '/.chef',
             onError: function(err) {
                 callback(err, null);
             },
