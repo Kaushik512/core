@@ -350,29 +350,34 @@ var InstancesDao = function() {
         });
     };
 
-  /*  this.getServiceAction = function(instanceId, serviceId, actionId, callback) {
+    this.getServiceAction = function(instanceId, serviceId, actionId, callback) {
 
         Instances.find({
             "_id": new ObjectId(instanceId),
             "services._id": new ObjectId(serviceId),
         }, {
-           "services.actions._id":
-        }, {
-            upsert: false
-        }, function(err, updateCount) {
+            "services": {
+                "$elemMatch": {
+                    "_id": new ObjectId(serviceId),
+                    "actions":{
+                        "$elemMatch" : {
+                            "_id" : new ObjectId(actionId)
+                        } 
+                    }
+                }
+            }
+        }, function(err, data) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            if (updateCount > 0) {
-                callback(null, serviceAction);
-            } else {
-                callback(null, null);
-            }
+
+            callback(null, data);
+
 
         });
 
-    }*/
+    }
 
 
 }

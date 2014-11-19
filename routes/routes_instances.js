@@ -340,41 +340,146 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 console.log(err)
                 res.send(500);
                 return;
-            } 
+            }
             console.log(service);
-            res.send(200,service);
+            res.send(200, service);
         });
     });
 
     app.post('/instances/:instanceId/services/:serviceId/actions/create', function(req, res) {
         console.log(req.body);
-        instancesDao.createServiceAction(req.params.instanceId,req.params.serviceId, req.body.actionData, function(err, action) {
+        instancesDao.createServiceAction(req.params.instanceId, req.params.serviceId, req.body.actionData, function(err, action) {
             if (err) {
                 console.log(err)
                 res.send(500);
                 return;
-            } 
+            }
             console.log(action);
-            res.send(200,action);
+            res.send(200, action);
         });
     });
 
     app.get('/instances/:instanceId/services/:serviceId/actions/:actionId/execute', function(req, res) {
         console.log(req.body);
-        instancesDao.createServiceAction(req.params.instanceId,req.params.serviceId, req.body.actionData, function(err, action) {
+
+        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
-                console.log(err)
+                console.log(err);
                 res.send(500);
                 return;
-            } 
-            console.log(action);
-            res.send(200,action);
+            }
+            if (!data.length) {
+                res.send(400);
+                return;
+            }
+            data = data[0];
+            if (data && data.services && data.services.length) {
+                var action;
+                for (var i = 0; i < data.services.length; i++) {
+                    var service = data.services[i];
+                    if (service._id == req.params.serviceId) {
+                        if (service.actions && service.actions.length) {
+                            for (j = 0; j < service.actions.length; j++) {
+                                if (service.actions[j]._id == req.params.actionId) {
+                                    action = service.actions[j];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (action) {
+                        break;
+                    }
+                }
+
+                if (!action) {
+                    res.send(400);
+                    return;
+                }
+                var instance = data;
+
+                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(500);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
+                    });
+                    console.log('instance IP ==>', instance.instanceIP);
+                    var chefClientOptions = {
+                        privateKey: instance.credentials.pemFileLocation,
+                        username: instance.credentials.username,
+                        host: instance.instanceIP,
+                        instanceOS: instance.hardware.os,
+                        port: 22,
+                        runlist: action.serviceRunlist, // runing service runlist
+                        updateRunlist: true
+                    }
+                    if (instance.credentials.pemFileLocation) {
+                        chefClientOptions.privateKey = instance.credentials.pemFileLocation;
+                    } else {
+                        chefClientOptions.password = instance.credentials.password;
+                    }
+                    console.log('running chef client');
+                    chef.runChefClient(chefClientOptions, function(err, retCode) {
+                        if (err) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: 'Unable to run chef-client',
+                                timestamp: new Date().getTime()
+                            });
+                            return;
+                        }
+                        console.log("knife ret code", retCode);
+                        if (retCode == 0) {
+                            console.log('updating node runlist in db');
+                            instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+                                if (err) {
+                                    return;
+                                }
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: false,
+                                    log: 'instance runlist updated',
+                                    timestamp: new Date().getTime()
+                                });
+                            });
+                        } else {
+                            return;
+                        }
+                    }, function(stdOutData) {
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: false,
+                            log: stdOutData.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        });
+
+                    }, function(stdOutErr) {
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: true,
+                            log: stdOutErr.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        });
+                    });
+                    res.send(200);
+                });
+            } else {
+                res.send(400);
+            }
         });
     });
-
-
-
-
 
 
 
