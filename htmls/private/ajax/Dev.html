@@ -328,7 +328,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="launchDockerInstanceSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width:750px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -1693,18 +1693,20 @@ $('.launchBtn').click(function(e) {
                   $(this).detach();
                 //inserting a checkbox to select instance
                 if(k1 == 0){
-                    $(this).append('&nbsp;<input type="checkbox" class="instanceselectedfordocker">')
+                    $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                 }
               });
-              $(this).append('<td><input type="checkbox"></td>');
+             $(this).append('<td><input type="checkbox"></td>');
+
             });
             $('.launchdockerinstance').click(function(){
                 $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
                 $('#myModalLabel').first().html('Launching Blueprint');
 
             });
-            $('#dockerInstanceSelectionTitle').append(dockerreponame);
+            $('#dockerInstanceSelectionTitle').empty().append('Select Instances for ' + dockerreponame);
             $launchDockerInstanceSelector.modal('show');
+            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr>');
             $('#dockerintsancestab').dataTable();
             return;
     }
@@ -2007,4 +2009,9 @@ function getViewTile(){
     }
 }
 
+
+  $('.carousel.slide').carousel({
+    interval : false,
+    cycle : true
+  });
 </script>

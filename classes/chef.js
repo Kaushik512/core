@@ -305,7 +305,7 @@ var Chef = function(settings) {
             var sshParamObj = {
                 host: options.host,
                 port: options.port,
-                username: options.username,
+                username: 'ec2-user' //options.username,
             };
             if (options.privateKey) {
                 sshParamObj.privateKey = options.privateKey;
@@ -316,8 +316,12 @@ var Chef = function(settings) {
                 sshParamObj.password = options.password;
             }
             var sshConnection = new SSH(sshParamObj);
-
-            sshConnection.exec('chef-client -o ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+            var sshcmd = '';
+            console.log('Instance pem file Location:',options.privateKey); //for -i
+          //  sshcmd = 'sudo ssh ' + ' -i ' + options.privateKey + ' -t ' + sshParamObj.username + '@' + options.host + ' \'sudo ';
+            console.log('Constructed command : ',sshcmd + ' chef-client -o ' + runlist.join() + '\'');
+            //sshcmd = ''; //remove this comment when the security group is added
+            sshConnection.exec(sshcmd + 'sudo chef-client -o ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
         } else {
 
             var processOptions = {
