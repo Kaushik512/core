@@ -177,11 +177,97 @@
                             <thead>
                                  <th style="font-size: 13px;"><i class="fa fa-fw fa-archive "></i><strong style="color:#3a87ad">Service Name</strong></th>
                                  <th style="font-size: 13px;"><i class="fa fa-fw fa-sort-amount-asc "></i><strong style="color:#3a87ad">Actions </strong></th>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-flash "></i><strong style="color:#3a87ad">Status</strong></th>
+                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-flash "></i><strong style="color:#3a87ad">Options</strong></th>
                                  
                             </thead>
                             <tbody>
-                                
+                                <tbody>
+  <tr>
+    <td>
+      Restart_Apache_servers
+    </td>
+    <td>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontGreen">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip">
+                  <i class="fa fa-play fa-1x txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontRed">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip">
+                  <i class="fa fa-power-off fa-1x txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontRestart">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip">
+                  <i class="fa fa-undo fa-16px txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontKill">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Kill" data-placement="top" rel="tooltip">
+                  <i class="fa fa-times-circle fa-16px txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </td>
+    <td>
+      <div class="btn-group tableactionWidth">
+        <button data-original-title="Delete" data-placement="top" rel="tooltip" class="btn btn-danger pull-left btn-sg tableactionbutton">
+          <i class="ace-icon fa fa-trash-o bigger-120">
+          </i>
+        </button>
+        <a data-original-title="Edit" data-placement="top" rel="tooltip" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg">
+          <i class="ace-icon fa fa-pencil bigger-120">
+          </i>
+        </a>
+      </div>
+      
+    </td>
+  </tr>
+  
+  
+
+  
+</tbody>
                                 
                             </tbody>
                             <a class="btn btn-primary" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
@@ -202,77 +288,185 @@
                     <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
                   </div>
                   <div class="modal-body">
-                     <div novalidate="novalidate" class="smart-form1" id="checkout-form" action="">
+                    <div class="modal-body no-padding">
+               <div novalidate="novalidate" class="smart-form" id="checkout-form" action="">
 
                         <div style="margin:0px;" class="row ">
-                                                                            
-                            <section class="col col-12">
-                                <label for="">Name of the Service<span style="color:red">*</span>
-                                </label>
+                          <fieldset style="padding:0px;">                         
+                            <section class="col col-6">
+                                <label for="">Service Name</label>
                                 <label class="input"> 
                                     <input type="text">
                                 </label>                                          
                             </section>
-                            <section class="col col-12">
-                              <label class="">Type of the Service
-                                <span style="color:red">*</span>
-                              </label>
-                              <label class="select select-multiple">
-                                <select class="input-sm" multiple="">
-                                  <option value="0">Start</option>
-                                  <option value="1">Restart</option>
-                                  <option value="2">Stop</option>
-                                </select> <i></i> 
-                              </label>
-                            </section>
-                            <section class="col col-12">
-                              <label class="">Assign Action</label>
-                              <div class="inline-group">
-                                <label class="radio serviceCookbookRadio">
-                                  <input type="radio" checked="checked" name="radio-inline">
-                                  <i></i>Service Cookbook
-                                </label>
-                                <label class="radio customActionRadio" style="padding-top:15px;">
-                                  <input type="radio" name="radio-inline">
-                                  <i style="margin-top: 16px;"></i>Custom Action</label>
-                              </div>
-                            </section>
-
-                            <!-- <section class="col col-12">
-                                <label for="category">Type of the Service<span style="color:red">*</span>
-                                </label>
-                                <label class="select"> 
-                                    
-                                </label>
-                             
-                            </section> -->
-                            <section class="col col-12 chooseLogo">
-                                <label for="">Choose Cookbook</label>
-                                <label class="input input-file" for="file">
-                                    <div class="button">
-                                      <input type="file"><span style="color:white;">Browse</span></div>
-                                      <input type="text" readonly="">
+                          </fieldset> 
+                          <fieldset style="padding:0px;">   
+                            <section class="col col-6">
+                                <label class="">Select Available Services</label>
+                                <label class="select select-multiple">
+                                    <select multiple="" class="custom-scroll">
+                                      <option value="sc1">Apache</option>
+                                      <option value="sd1">Mysql</option>
+                                      <option value="sd2">Tomcat</option>
+                                    </select> 
                                 </label>
                             </section>
-                            <section class="col col-12 chooseCommand" style="display:none">
-                              <label for="">Command</label>
-                              <label class="textarea textarea-expandable">             
-                                <textarea class="custom-scroll" rows="3"></textarea> 
-                              </label>
-                              <div class="note">
-                                <strong>Note:</strong> expands on focus.
-                              </div>
-                            </section>
-
-                            <section class="col col-12">
+                            <section class="col col-6">
                                 <label class="">Assign Users</label>
                                 <label class="select select-multiple">
-                                    <select style="" id="" multiple="" class="custom-scroll"><option value="sc1">sc1</option><option value="sd1">sd1</option><option value="sd2">sd2</option></select> 
+                                    <select multiple="" class="custom-scroll">
+                                      <option value="sd1">Consumer</option>
+                                      <option value="sc1">Designer</option>  
+                                      <option value="sd2">User1</option>
+                                      <option value="sd2">User2</option>
+                                    </select> 
                                 </label>
                             </section>
-                                                      
+                            </fieldset>
+                            <fieldset style="padding:0px;">
+                              <section class="col col-10">
+                                <label class="label">Select Action</label>
+                                <div class="inline-group">
+                                  <label class="radio">
+                                    <input type="radio" checked="checked" name="radio-inline">
+                                    <i></i>Start</label>
+                                  <label class="radio">
+                                    <input type="radio" name="radio-inline">
+                                    <i></i>Stop</label>
+                                  <label class="radio">
+                                    <input type="radio" name="radio-inline">
+                                    <i></i>Restart</label>
+                                  <label class="radio">
+                                    <input type="radio" name="radio-inline">
+                                    <i></i>Kill</label>
+                                </div>
+                              </section>
+
+<!--                               <section class="col col-10">
+                                <label class="">Select Action</label>
+                                <div class="row">
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Start</label>
+                                  </div>
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Stop</label>
+                                  </div>
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Restart</label>
+                                  </div>
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Kill</label>
+                                  </div>
+                                </div>
+                              </section> -->
+                            <!-- <section class="col col-6">
+                                <label class="">Select Actions</label>
+                                <br>
+                                <label class="input">
+                                  <div class="btn-group tableactionWidth" style="width:200px;">
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;" data-original-title="Start" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-play bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Stop" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-power-off bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Restart" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-undo bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Kill" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
+                                    </button>
+                                  </div>
+                                </label>
+                            </section> -->
+                          </fieldset>
+                           <fieldset style="padding:0px;">
+                            <section class="col col-6">
+                              <label class="">
+                                  Assign Action
+                              </label>
+                              <div class="row">
+                                  <div class="col col-10">
+                                      <label class="select"> 
+                                          <select class="form-control chooseActiontype width-100">
+                                              <option id="ChefCookbook" value="Receipe">Chef Cookbook/Recepie</option>
+                                              <option id="CustomScript" value="Customs">Custom Script</option>
+                                          </select>
+                                      </label>
+                                  </div>  
+                              </div>
+                          </section>
+                          </fieldset>
+                          <fieldset style="padding:0px;">
+                            <section class="col col-10">
+                    <div id="chefCookbook-dropdown">
+                        <div id="collapseDataBag1">
+                          <div class="">
+                            <div style="width:100%;" id="servicebox1">
+                              <div style="width:30%" id="data_bag_div1" class="serviceBox1">
+                                <div style="width:100px;">
+                                  <span style="font-size:13px;">
+                                    <b><u>Cookbooks</u></b>
+                                  </span>
+                                </div> 
+                                <ul style="list-style:none outside none;font-size:12px;">
+                                  <li> <a class="panel-databag"> Apache </a> </li>
+                                  <li> <a class="panel-databag"> NodeJs </a> </li>
+                                  <li> <a class="panel-databag"> Oracle </a> </li>
+                                  <li> <a class="panel-databag"> Mysql </a> </li>
+                                  <li> <a class="panel-databag"> Joomla </a> </li>
+                                </ul>
+                              </div>
+                              <div style="display: none;" id="data_bag_div21" class="serviceBox2">
+                              <div style="width:140px;">
+                                <span style="font-size:13px;">
+                                  <b><u>Receipes</u></b>
+                                </span>
+                              </div> 
+                                  <ul style="list-style:none outside none;font-size:12px;">
+                                    <li> <a class="panel-databag1"> receipe[Start] </a> </li>
+                                    <li> <a class="panel-databag1"> receipe[stop] </a> </li>
+                                    <li> <a class="panel-databag1"> receipe[Restart] </a> </li>
+                                    <li> <a class="panel-databag1"> receipe[Kill] </a> </li>
+                                  </ul>
+                              </div>
+                              <div style="display: none;" id="data_bag_div31" class="serviceBox3">
+                                <div style="width:140px;">
+                                  <span style="font-size:13px;">
+                                  <b><u>Runlist</u></b>
+                                  </span>
+                                </div> 
+                                 <ul style="list-style:none outside none;padding-top:5px;font-size:12px;">
+                                   <li> <a class="panel-databag1"> receipe[Start] </a> </li>
+                                 </ul>
+                              </div>
+                            </div>  
+                          </div>
+                        </div><!--collapse Data Bags ends here-->
+                    </div>
+                              <div id="customScript-dropdown">
+                                <section class="col col-10" style="padding-left: 0px;">
+                                  <label>Command</label>
+                                  <label class="textarea">             
+                                    <textarea rows="3" class="custom-scroll"></textarea> 
+                                  </label>
+                                  
+                                </section>
+                              </div>
+                            </section>
+                          </fieldset>
                         </div>
                     </div>
+            </div>
+
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP">Save</button>
@@ -681,6 +875,51 @@
 }
 </style>
 <script type="text/javascript">
+$( document ).ready(function() {
+    $('#data_bag_div2').hide();
+});
+  $('.panel-databag').click(function(e){
+      $('#data_bag_div2').show();
+  });
+
+
+  $( document ).ready(function() {
+    $('#data_bag_div3').hide();
+});
+  $('.panel-databag1').click(function(e){
+      $('#data_bag_div3').show();
+  });
+
+
+
+  $( document ).ready(function() {
+    $('#data_bag_div21').hide();
+});
+  $('.panel-databag').click(function(e){
+      $('#data_bag_div21').show();
+  });
+
+
+  $( document ).ready(function() {
+    $('#data_bag_div31').hide();
+});
+  $('.panel-databag1').click(function(e){
+      $('#data_bag_div31').show();
+  });
+  // $(".chooseActiontype").select2();
+    
+    $("#customScript-dropdown").hide();
+
+    $('.chooseActiontype').change(function(e) {
+    if(this.value=="Receipe"){
+       $("#customScript-dropdown").hide();
+       $("#chefCookbook-dropdown").show();
+    }else{
+        $("#customScript-dropdown").show();
+       $("#chefCookbook-dropdown").hide();
+    }
+});
+
   function serviceCookbookCP(){
     console.log($('.serviceCookbookRadio').find('input').is(':checked'));
     if($('.serviceCookbookRadio').find('input').is(':checked')){
