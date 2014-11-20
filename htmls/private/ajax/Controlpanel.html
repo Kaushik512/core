@@ -181,7 +181,7 @@
                                  
                             </thead>
                             <tbody>
-                                <tbody>
+                                <tbody class="servicesTbody">
   <tr>
     <td>
       Restart_Apache_servers
@@ -296,7 +296,7 @@
                             <section class="col col-6">
                                 <label for="">Service Name</label>
                                 <label class="input"> 
-                                    <input type="text">
+                                    <input type="text" id="serviceNameText">
                                 </label>                                          
                             </section>
                           </fieldset> 
@@ -314,7 +314,7 @@
                             <section class="col col-6">
                                 <label class="">Assign Users</label>
                                 <label class="select select-multiple">
-                                    <select multiple="" class="custom-scroll">
+                                    <select multiple="" class="custom-scroll instanceUserList">
                                       <option value="sd1">Consumer</option>
                                       <option value="sc1">Designer</option>  
                                       <option value="sd2">User1</option>
@@ -328,16 +328,16 @@
                                 <label class="label">Select Action</label>
                                 <div class="inline-group">
                                   <label class="radio">
-                                    <input type="radio" checked="checked" name="radio-inline">
+                                    <input type="radio" checked="checked" name="radio-inline" value="start">
                                     <i></i>Start</label>
                                   <label class="radio">
-                                    <input type="radio" name="radio-inline">
+                                    <input type="radio" name="radio-inline" value="stop">
                                     <i></i>Stop</label>
                                   <label class="radio">
-                                    <input type="radio" name="radio-inline">
+                                    <input type="radio" name="radio-inline" value="restart">
                                     <i></i>Restart</label>
                                   <label class="radio">
-                                    <input type="radio" name="radio-inline">
+                                    <input type="radio" name="radio-inline" value="kill">
                                     <i></i>Kill</label>
                                 </div>
                               </section>
@@ -416,47 +416,25 @@
                                   <span style="font-size:13px;">
                                     <b><u>Cookbooks</u></b>
                                   </span>
-                                </div> 
-                                <ul style="list-style:none outside none;font-size:12px;">
-                                  <li> <a class="panel-databag"> Apache </a> </li>
-                                  <li> <a class="panel-databag"> NodeJs </a> </li>
-                                  <li> <a class="panel-databag"> Oracle </a> </li>
-                                  <li> <a class="panel-databag"> Mysql </a> </li>
-                                  <li> <a class="panel-databag"> Joomla </a> </li>
-                                </ul>
+                                </div>
+                                <select multiple="" class="custom-scroll servicesCookBookList">
+                                      <option value="sd1">Consumer</option>
+                                      <option value="sc1">Designer</option>  
+                                      <option value="sd2">User1</option>
+                                      <option value="sd2">User2</option>
+                                </select> 
+                              
                               </div>
-                              <div style="display: none;" id="data_bag_div21" class="serviceBox2">
-                              <div style="width:140px;">
-                                <span style="font-size:13px;">
-                                  <b><u>Receipes</u></b>
-                                </span>
-                              </div> 
-                                  <ul style="list-style:none outside none;font-size:12px;">
-                                    <li> <a class="panel-databag1"> receipe[Start] </a> </li>
-                                    <li> <a class="panel-databag1"> receipe[stop] </a> </li>
-                                    <li> <a class="panel-databag1"> receipe[Restart] </a> </li>
-                                    <li> <a class="panel-databag1"> receipe[Kill] </a> </li>
-                                  </ul>
-                              </div>
-                              <div style="display: none;" id="data_bag_div31" class="serviceBox3">
-                                <div style="width:140px;">
-                                  <span style="font-size:13px;">
-                                  <b><u>Runlist</u></b>
-                                  </span>
-                                </div> 
-                                 <ul style="list-style:none outside none;padding-top:5px;font-size:12px;">
-                                   <li> <a class="panel-databag1"> receipe[Start] </a> </li>
-                                 </ul>
-                              </div>
-                            </div>  
+                                
                           </div>
                         </div><!--collapse Data Bags ends here-->
                     </div>
-                              <div id="customScript-dropdown">
+                  </div>
+                              <div id="customScript-dropdown" style="display:none">
                                 <section class="col col-10" style="padding-left: 0px;">
                                   <label>Command</label>
                                   <label class="textarea">             
-                                    <textarea rows="3" class="custom-scroll"></textarea> 
+                                    <textarea rows="3" class="custom-scroll customScriptArea" ></textarea> 
                                   </label>
                                   
                                 </section>
@@ -469,7 +447,7 @@
 
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP">Save</button>
+                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService">Save</button>
                     <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -875,71 +853,6 @@
 }
 </style>
 <script type="text/javascript">
-$( document ).ready(function() {
-    $('#data_bag_div2').hide();
-});
-  $('.panel-databag').click(function(e){
-      $('#data_bag_div2').show();
-  });
-
-
-  $( document ).ready(function() {
-    $('#data_bag_div3').hide();
-});
-  $('.panel-databag1').click(function(e){
-      $('#data_bag_div3').show();
-  });
-
-
-
-  $( document ).ready(function() {
-    $('#data_bag_div21').hide();
-});
-  $('.panel-databag').click(function(e){
-      $('#data_bag_div21').show();
-  });
-
-
-  $( document ).ready(function() {
-    $('#data_bag_div31').hide();
-});
-  $('.panel-databag1').click(function(e){
-      $('#data_bag_div31').show();
-  });
-  // $(".chooseActiontype").select2();
-    
-    $("#customScript-dropdown").hide();
-
-    $('.chooseActiontype').change(function(e) {
-    if(this.value=="Receipe"){
-       $("#customScript-dropdown").hide();
-       $("#chefCookbook-dropdown").show();
-    }else{
-        $("#customScript-dropdown").show();
-       $("#chefCookbook-dropdown").hide();
-    }
-});
-
-  function serviceCookbookCP(){
-    console.log($('.serviceCookbookRadio').find('input').is(':checked'));
-    if($('.serviceCookbookRadio').find('input').is(':checked')){
-      $('.chooseLogo').css({'display': 'block'});
-      $('.chooseCommand').css({'display': 'none'});
-    }else {
-      $('.chooseLogo').css({'display': 'none'});
-      $('.chooseCommand').css({'display': 'block'});
-    }
-  }
-$('.serviceCookbookRadio input').click(function(e) {
-  // console.log(e);
-  serviceCookbookCP();
-});
-$('.customActionRadio input').click(function(e) {
-  // console.log(e);
-  serviceCookbookCP();
-});
-</script>
-<script type="text/javascript">
 var urlParams ={};
 (window.onpopstate = function () {
   var url = window.location.href;
@@ -956,10 +869,21 @@ var urlParams ={};
      
 })();
 
+$('.chooseActiontype').change(function(e){
+  if($(this).val() == 'Receipe') {
+    $('#customScript-dropdown').hide();
+    $('#chefCookbook-dropdown').show();
+  } else {
+    $('#customScript-dropdown').show();
+    $('#chefCookbook-dropdown').hide();
+  }
+});
+
+
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
-
+    
    var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
 
    var orgid = $selectedOrg.click().attr('data-id');
@@ -974,6 +898,29 @@ $.get('../instances/'+urlParams.id,function(data){
  
 
    console.log(data);
+   //setting users in service menu
+    var $usersList = $('.instanceUserList').empty();
+    for(var i=0;i<data.users.length;i++) {
+       $usersList.append('<option value="'+data.users[i]+'">'+data.users[i]+'</option>'); 
+    }
+
+   // fetching cookbooks  for service menu
+   $.get('../chef/servers/' + data.chef.serverId + '/cookbooks', function(data) {
+        var keys = Object.keys(data);
+        var $servicesCookbookList = $('.servicesCookBookList').empty();
+        for(var i=0;i<keys.length;i++) {
+          $servicesCookbookList.append('<option value="recipe['+keys[i]+']">'+keys[i]+'</li>');
+        }
+   });
+
+   //adding services to table 
+   $('.servicesTbody').empty();
+   for(var i=0;i<data.services.length;i++) {
+     var service = data.services[i];
+     addServiceToDom(service);
+   }
+    
+  
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
@@ -1321,6 +1268,73 @@ $.get('../instances/'+urlParams.id,function(data){
 
   $('.loadingControlPanelIndicator').hide();
   $('#controlPanelContainer').show();
+
+
+});
+
+function getActionBtnClass(actionType) {
+   switch(actionType) {
+    case 'start' : 
+      return {
+        bg : 'frontGreen',
+        icon:'fa-play'
+      }
+    case 'stop' : 
+      return {
+        bg : 'frontRed',
+        icon:'fa-power-off'
+      }
+
+
+   }
+}
+
+function addServiceToDom(serviceData) {
+  var $tr = $('<tr></tr>');
+  var $tdName = $('<td></td>').append(serviceData.serviceName);
+  $tr.append($tdName);
+  for(var i=0;i<serviceData.actions.length;i++) {
+    var actionBtnCss = getActionBtnClass(serviceData.actions[i].actionType);
+    var html = '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack '+actionBtnCss.bg+'"><div style="margin-top:5px;"><div class=""><a rel="tooltip" data-placement="top" data-original-title="Start" href="javascript:void(0)"><i class="fa '+actionBtnCss.icon+' fa-1x txt-color-white"></i></a></div></div></div></div></div>'
+    var $tdAction = $('<td></td>').html(html);
+     $tr.append($tdAction);
+
+  }
+  var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" rel="tooltip" data-placement="top" data-original-title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+
+  $tr.append($tdOption);
+
+  $('.servicesTbody').append($tr);
+  
+
+
+
+}
+
+$('.btnSaveService').click(function(e){
+
+  var reqBody = {};
+  reqBody.serviceData = {};
+  reqBody.serviceData.name = $('#serviceNameText').val();
+  reqBody.serviceData.users = $('.instanceUserList').val();
+  reqBody.serviceData.actions = [];
+  reqBody.serviceData.actions[0] = {};
+  reqBody.serviceData.actions[0].actionType = $('input[name=radio-inline]:checked').val();
+  
+  if($('.servicesCookBookList').is(':visible')) {
+    reqBody.serviceData.actions[0].runlist  = $('.servicesCookBookList').val(); 
+
+  } else {
+    reqBody.serviceData.actions[0].command = $('.customScriptArea').val();
+  }
+
+  reqBody.serviceData.actions[0].runlist  = $('.servicesCookBookList').val(); 
+  console.log(reqBody);
+  $.post('../instances/'+urlParams.id+'/services/create',reqBody,function(data){
+
+    console.log(data);
+
+  });  
 
 
 });

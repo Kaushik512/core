@@ -60,10 +60,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
 
-
+        console.log('Entered Launch');
         blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
             if (err) {
-                console.log(err);
+                console.log('getBlueprintByID Error:',err);
                 res.send(500);
                 return;
             }
@@ -84,6 +84,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(404);
                     return;
                 }
+                console.log('chef serverid : ',blueprint.chefServerId);
                 configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);
@@ -98,9 +99,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         chefUserName: chefDetails.loginname,
                         chefUserPemFile: chefDetails.userpemfile,
                         chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
+                        hostedChefUrl: chefDetails.url
                     });
-
+                    console.log('*************************');
+                    console.log('Chef ' + chefDetails.chefRepoLocation);
                     function launchInstance() {
 
                         settingsController.getSettings(function(settings) {
@@ -112,6 +114,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     res.send(500);
                                     return;
                                 }
+
                                 console.log(version.runlist);
                                 console.log(instanceData);
                                 var instance = {
@@ -195,6 +198,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         });
 
 
+                                        console.log('****************************');
+                                        console.log('UN:' + instance.credentials.username,' pemFile' + instance.credentials.pemFileLocation);
+                                        console.log('Chef ' + JSON.stringify(chef));
+                                        console.log('****************************');
 
                                         chef.bootstrapInstance({
                                             instanceIp: instance.instanceIP,

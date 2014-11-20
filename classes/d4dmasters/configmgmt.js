@@ -56,7 +56,7 @@ function Configmgmt() {
 
                                     configmgmt = "{" + configmgmt + "}";
                                     configmgmt = JSON.parse(configmgmt);
-                                    //console.log(JSON.stringify(configmgmt));
+                                    console.log(JSON.stringify(configmgmt));
                                 }
                             }
 

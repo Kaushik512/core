@@ -237,9 +237,12 @@ var Chef = function(settings) {
         });
     };
 
+
+
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
+        console.log('Chef Repo Location : ',settings.userChefRepoLocation )
         var options = {
-            cwd: settings.userChefRepoLocation,
+            cwd: settings.userChefRepoLocation + '/.chef',
             onError: function(err) {
                 callback(err, null);
             },
@@ -283,6 +286,9 @@ var Chef = function(settings) {
 
         if (params.instanceOS == 'windows') {
             argList.push('-p5985');
+
+        } else {
+            argList.push('--sudo');
         }
         argList = argList.concat(['-r' + runlist.join(), '-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
 
@@ -318,7 +324,8 @@ var Chef = function(settings) {
             }
             var sshConnection = new SSH(sshParamObj);
 
-            sshConnection.exec('chef-client '+chefRunParamOveright+' '+ runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+            sshConnection.exec('sudo chef-client '+chefRunParamOveright+' '+ runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+
         } else {
 
             var processOptions = {

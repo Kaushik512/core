@@ -74,7 +74,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                     settingsController.getSettings(function(settings) {
-                        console.log('instance IP ==>', instance.instanceIP);
+
                         var chefClientOptions = {
                             privateKey: instance.credentials.pemFileLocation,
                             username: instance.credentials.username,

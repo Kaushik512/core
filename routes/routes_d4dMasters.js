@@ -47,7 +47,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 				{
 					var dockerRepo = JSON.parse(data);
 					console.log('Docker Repo ->', JSON.stringify(dockerRepo));
-					var cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockeruserid + ' -X GET https://index.docker.io/v1/repositories/' + req.params.repopath + '/tags';
+					var cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
 					console.log('executing - ',cmd);
 					var curl = new Curl();
 					curl.executecurl(cmd,function(err,stdout){

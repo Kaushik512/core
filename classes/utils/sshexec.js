@@ -44,6 +44,7 @@ module.exports = function(options) {
                 host: options.host,
                 port: options.port,
                 username: options.username
+
             };
 
             if (options.privateKey) {
@@ -77,7 +78,7 @@ module.exports = function(options) {
                 return;
             }
             if (con) {
-                con.exec(cmd, function(err, stream) {
+                con.exec(cmd,{ pty:true}, function(err, stream) {
                     if (err) {
                         onComplete(err, -1);
                         return;

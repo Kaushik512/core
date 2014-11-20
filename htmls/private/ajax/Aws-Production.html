@@ -1313,7 +1313,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
           //     return false;
 
           // }
-            alert('kickin 2');
+            //alert('kickin 2');
 
             //If a docker type of template selected then select the Org 
              var $selectedItem = $('.role-Selected');
@@ -1326,6 +1326,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
             $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
             if($('.productdiv2.role-Selected').length > 0)
             {
+              //Setting controls connected to docker to hidden
+              $('.fordocker').hide();
               if($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker")
               {
                    //When docker stepping to 4th tab
@@ -1335,18 +1337,22 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                     //populating the docker repo titles
                     var $dockerrepotitles = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle').split(',');
+                    var $dockerrepopaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths').split(',');
+                    var $dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
                     var $dockerrepoListInput = $('#dockerrepoListInput');
                     $dockerrepoListInput.empty();
                     
                     $dockerrepotitles.forEach(function(k,v){
-                      var $opt = $('<option value="' + $dockerrepotitles[v] + '">' + $dockerrepotitles[v] + '</option>');
+                      var $opt = $('<option value="' + $dockerrepotitles[v] + '" repopath="' + $dockerrepopaths[v] + '">' + $dockerrepotitles[v] + '</option>');
                       $dockerrepoListInput.append($opt);
                     });
 
                     //Setting the appropriate tags
                     //Attaching the change event to pull tags for the select repo
                     $dockerrepoListInput.change(function(e){
-                        $.get('/d4dmasters/getdockertags/' + encodeURIComponent('tutum/centos') + '/RLRepo',function(data){
+                        //tutum/centos
+                        console.log('Docker Query -> ', '/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame);
+                        $.get('/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame,function(data){
                           //Sample json given below
                             //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
                             if(data){
@@ -1377,7 +1383,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                     //End Setting appropriate tags
                     //polulate the docker tags
                     var $dockerrepotagsul = $('#dockerrepotagsul');
-
+                    $('.fordocker').show();
                         return(true);
                 }
             }
@@ -1392,6 +1398,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
             {
               $('#tab3 .selectedTemplateArea').empty().append($('#tab2 .role-Selected').clone());
             }
+            //force clicking orgnameSelect
+            $('#orgnameSelect').trigger('change');
 
 
     } else if(index == 3){
@@ -1431,6 +1439,9 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
     if(!reqBody || reqBody == "undefined"){
         var reqBody = {};
     }
+    reqBody.runlist = $('#cookbookSelect').val();
+  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+  reqBody.instanceType = $('.instanceType').val();
         reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
         reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
         reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
@@ -1465,7 +1476,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         alert("Please choose users");
         return false;
     }
-    alert(JSON.stringify(reqBody));
+    //alert(JSON.stringify(reqBody));
 
 
     console.log('pushing');
@@ -1567,7 +1578,7 @@ $.ajax({
         async:true,
         success :function(data) {
            var keys = Object.keys(data.cookbooks);
-
+          // alert(data.serverId);
            $cookbookShow.empty();
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
            //Adding the template cookbooks

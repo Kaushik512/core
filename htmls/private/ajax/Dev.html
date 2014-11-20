@@ -17,6 +17,7 @@
                     <!--<li class="pull-left">
                         <a href="#l2" data-toggle="tab">DevOps Roles</a>
                     </li>-->
+                    
                     <li class="pull-left">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
@@ -327,11 +328,11 @@
 
 <!-- Modal -->
 <div class="modal fade" id="launchDockerInstanceSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width:750px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Select Instances</h4>
+        <h4 class="modal-title" id="dockerInstanceSelectionTitle">Select Instances for </h4>
       </div>
       <div class="modal-body">
         ...
@@ -817,6 +818,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 if (data[i].versionsList) {
                     var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
                     var $selectVer = null;
+                    var tagLabel = '';
                     //Docker Check
                     if(data[i].templateType == "Docker")
                      {
@@ -835,6 +837,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         } 
                         
                        $selectVerEdit.hide();
+                       tagLabel = '<span>Tags&nbsp;</span';
                         //alert(JSON.stringify(data[i]));
                     }
                     else   {
@@ -876,7 +879,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     }
                     var $li = $('<li></li>').css({
                         "font-size": '10px'
-                    }).append($selectVer, $selectVerEdit);
+                    }).append(tagLabel,$selectVer, $selectVerEdit);
                     for (var j = 0; j < data[i].versionsList.length; j++) {
                         var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
                         $selectVer.append($options);
@@ -903,6 +906,9 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         $(this).addClass('role-Selected1');
                     });
                 }
+                //Expanding the fist Accordion.
+                if($('#accordion-2').length > 0)
+                    $('#accordion-2').find('a').first().trigger('click');
             }
          }
 
@@ -952,7 +958,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
 
 $(document).ready(function(){
     //Expanding the first accordion
-    $('#accordion-2').find('a').first().trigger('click');
+    
    //alert($('#accordion-2').find('a').first().html());
    $('.dockerrepotagselect').parent().prepend('Tags&nbsp;');
 
@@ -1648,13 +1654,14 @@ $('.launchBtn').click(function(e) {
     if($selectedItems.attr('data-templateType') === 'Docker') {
           var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
           var blueprintId = $selectedItems.attr('data-blueprintId');
+          var dockerreponame = $selectedItems.attr('dockerreponame');
           $launchDockerInstanceSelector.data('blueprintId',blueprintId);
         //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
 
         
 
         $launchDockerInstanceSelector.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Docker Engine</td></tr></thead>");
+          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr></thead>");
           var $newinstancetbody = $('<tbody></tbody>');
           $newinstancetable.append($newinstancetbody);
           var $instancetable = $('#tableinstanceview').clone();
@@ -1673,7 +1680,7 @@ $('.launchBtn').click(function(e) {
               if(k > 3 )
                   $(this).detach();
             });
-           $('#dockerintsancestab thead tr').append('<td>Docker Engine</td>');
+           $('#dockerintsancestab thead tr').append('<td title="Select to add a docker engine">Add Engine</td>');
             $('#dockerintsancestab tbody tr').each(function(k,v){
 
               $(this).removeClass('rowcustomselected');
@@ -1684,15 +1691,23 @@ $('.launchBtn').click(function(e) {
               $(this).find('td').each(function(k1,v1){
                 if(k1 > 3 )
                   $(this).detach();
+                //inserting a checkbox to select instance
+                if(k1 == 0){
+                    $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
+                }
               });
-              $(this).append('<td><input type="checkbox"></td>');
+             $(this).append('<td><input type="checkbox"></td>');
+
             });
             $('.launchdockerinstance').click(function(){
                 $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
                 $('#myModalLabel').first().html('Launching Blueprint');
 
             });
+            $('#dockerInstanceSelectionTitle').empty().append('Select Instances for ' + dockerreponame);
             $launchDockerInstanceSelector.modal('show');
+            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr>');
+            $('#dockerintsancestab').dataTable();
             return;
     }
 
@@ -1706,8 +1721,8 @@ $('.launchBtn').click(function(e) {
         var envId = $($selectedItems.get(i)).attr('data-envId');
         var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
         var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
-
-        $.get('../blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
+       // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
+        $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
             var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
@@ -1783,7 +1798,7 @@ $('.launchBtn').click(function(e) {
             });
 
         }).error(function() {
-            $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+            $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
         });
     }
 });
@@ -1994,4 +2009,9 @@ function getViewTile(){
     }
 }
 
+
+  $('.carousel.slide').carousel({
+    interval : false,
+    cycle : true
+  });
 </script>
