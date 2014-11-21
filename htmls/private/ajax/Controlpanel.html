@@ -295,8 +295,15 @@
                           <fieldset style="padding:0px;">                         
                             <section class="col col-6">
                                 <label for="">Service Name</label>
-                                <label class="input"> 
+                                <label class="input serviceNameListContainer"> 
+                                   <select class="custom-scroll serviceNameList">
+                                     
+                                  </select> 
+                                  <a href="javascript:void(0)" class="createNewServiceLink">Create New</a>
+                                </label>
+                                <label class="input newSeviceNameContainer" style="display:none"> 
                                     <input type="text" id="serviceNameText">
+                                     <a href="javascript:void(0)" class="existingServiceLink">Existing Service</a>
                                 </label>                                          
                             </section>
                           </fieldset> 
@@ -417,13 +424,15 @@
                                     <b><u>Cookbooks</u></b>
                                   </span>
                                 </div>
-                                <select multiple="" class="custom-scroll servicesCookBookList">
-                                      <option value="sd1">Consumer</option>
-                                      <option value="sc1">Designer</option>  
-                                      <option value="sd2">User1</option>
-                                      <option value="sd2">User2</option>
+                                <select class="custom-scroll servicesCookBookList">
+                                 
+                                      
                                 </select> 
-                              
+
+                                <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:140px">
+                                      
+                                </select> 
+                                
                               </div>
                                 
                           </div>
@@ -879,6 +888,15 @@ $('.chooseActiontype').change(function(e){
   }
 });
 
+$('.createNewServiceLink').click(function(){
+   $('.serviceNameListContainer').hide();
+   $('.newSeviceNameContainer').show();
+});
+
+$('.existingServiceLink').click(function(){
+   $('.serviceNameListContainer').show();
+   $('.newSeviceNameContainer').hide();
+});
 
 $.get('../instances/'+urlParams.id,function(data){
 
@@ -907,16 +925,45 @@ $.get('../instances/'+urlParams.id,function(data){
    // fetching cookbooks  for service menu
    $.get('../chef/servers/' + data.chef.serverId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
+        console.log(data);
         var $servicesCookbookList = $('.servicesCookBookList').empty();
+         $servicesCookbookList.append('<option value="choose">Choose</option>');
         for(var i=0;i<keys.length;i++) {
-          $servicesCookbookList.append('<option value="recipe['+keys[i]+']">'+keys[i]+'</li>');
+          if(keys[i].indexOf('service_')==0) {
+            $servicesCookbookList.append('<option data-cookbook-url="'+data[keys[i]].url+'" value="'+keys[i]+'">'+keys[i]+'</option>');
+          }
         }
    });
 
+   //handling cookbookOnchangeEvent
+   $('.servicesCookBookList').change(function(e){
+     var val = $(this).val();
+     if(val==='choose') {
+      return;
+     }
+     $.get('../chef/servers/' + data.chef.serverId + '/cookbooks/'+$(this).val(), function(data) {
+      var $recipesList = $('.servicesCookBookRecipeList').empty();
+      for(var i=0;i<data.recipes.length;i++) {
+        var recipe = data.recipes[i];
+        var recipeName;
+        var indexOfExtension = recipe.name.indexOf('.rb');
+        recipeName = recipe.name.substring(0,indexOfExtension);
+        $recipesList.append('<option value="recipe['+data.cookbook_name+'::'+recipeName+']">'+recipeName+'</option>');
+      }
+      $recipesList.show();
+
+
+     });
+
+   });
+
+
    //adding services to table 
    $('.servicesTbody').empty();
+   var $modalServiceList = $('.serviceNameList')
    for(var i=0;i<data.services.length;i++) {
      var service = data.services[i];
+     $modalServiceList.append('<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>');
      addServiceToDom(service);
    }
     
@@ -924,7 +971,7 @@ $.get('../instances/'+urlParams.id,function(data){
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
-   var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+   var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
 
     var $spanheadingMiddleCP = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRightCP = $('<span></span>').css({
@@ -1273,6 +1320,7 @@ $.get('../instances/'+urlParams.id,function(data){
 });
 
 function getActionBtnClass(actionType) {
+  console.log(actionType)
    switch(actionType) {
     case 'start' : 
       return {
@@ -1284,57 +1332,109 @@ function getActionBtnClass(actionType) {
         bg : 'frontRed',
         icon:'fa-power-off'
       }
+    case 'restart' : 
+      return {
+        bg : 'frontRestart',
+        icon:'fa-undo'
+      }
+    case 'kill' : 
+      return {
+        bg : 'frontKill',
+        icon:'fa-times-circle'
+      }
 
 
    }
 }
 
+var $serviceTableBody = $('.servicesTbody');
+
+function addActionToServiceDom(serviceId,actionData) {
+    $td = $serviceTableBody.find('td[data-serviceId='+serviceId+']');
+    var actionBtnClass = getActionBtnClass(actionData.actionType);
+    console.log(actionBtnClass);
+    var html = '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div style="margin-top:5px;"><div class=""><a rel="tooltip" data-placement="top" data-original-title="'+actionData.actionType+'" data-action-id="' + actionData._id + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>'
+    $td.append(html);
+    $td.find('a').click(function(e) {
+        var actionId = $(this).attr('data-action-id');
+        $.get('../instances/' + urlParams.id + '/services/' + serviceId + '/actions/' + actionId + '/execute', function(data) {
+
+        });
+    });
+
+}
+
 function addServiceToDom(serviceData) {
-  var $tr = $('<tr></tr>');
+  var $tr = $('<tr></tr>').attr('data-serviceId',serviceData._id);
+  $('.servicesTbody').append($tr);
   var $tdName = $('<td></td>').append(serviceData.serviceName);
   $tr.append($tdName);
+  $tr.append($('<td></td>').attr('data-serviceId',serviceData._id))
   for(var i=0;i<serviceData.actions.length;i++) {
-    var actionBtnCss = getActionBtnClass(serviceData.actions[i].actionType);
-    var html = '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack '+actionBtnCss.bg+'"><div style="margin-top:5px;"><div class=""><a rel="tooltip" data-placement="top" data-original-title="Start" href="javascript:void(0)"><i class="fa '+actionBtnCss.icon+' fa-1x txt-color-white"></i></a></div></div></div></div></div>'
-    var $tdAction = $('<td></td>').html(html);
-     $tr.append($tdAction);
+    addActionToServiceDom(serviceData._id,serviceData.actions[i]);
+   
 
   }
   var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" rel="tooltip" data-placement="top" data-original-title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
 
-  $tr.append($tdOption);
-
-  $('.servicesTbody').append($tr);
   
 
-
+  $tr.append($tdOption);
 
 }
 
-$('.btnSaveService').click(function(e){
+$('.btnSaveService').click(function(e) {
 
-  var reqBody = {};
-  reqBody.serviceData = {};
-  reqBody.serviceData.name = $('#serviceNameText').val();
-  reqBody.serviceData.users = $('.instanceUserList').val();
-  reqBody.serviceData.actions = [];
-  reqBody.serviceData.actions[0] = {};
-  reqBody.serviceData.actions[0].actionType = $('input[name=radio-inline]:checked').val();
-  
-  if($('.servicesCookBookList').is(':visible')) {
-    reqBody.serviceData.actions[0].runlist  = $('.servicesCookBookList').val(); 
+    if ($('.newSeviceNameContainer').is(':visible')) {
 
-  } else {
-    reqBody.serviceData.actions[0].command = $('.customScriptArea').val();
-  }
 
-  reqBody.serviceData.actions[0].runlist  = $('.servicesCookBookList').val(); 
-  console.log(reqBody);
-  $.post('../instances/'+urlParams.id+'/services/create',reqBody,function(data){
 
-    console.log(data);
+        var reqBody = {};
+        reqBody.serviceData = {};
+        reqBody.serviceData.name = $('#serviceNameText').val();
+        reqBody.serviceData.users = $('.instanceUserList').val();
+        reqBody.serviceData.actions = [];
+        reqBody.serviceData.actions[0] = {};
+        reqBody.serviceData.actions[0].actionType = $('input[name=radio-inline]:checked').val();
 
-  });  
+        if ($('.servicesCookBookList').is(':visible')) {
+            reqBody.serviceData.actions[0].runlist = $('.servicesCookBookRecipeList').val();
+
+        } else {
+            reqBody.serviceData.actions[0].command = $('.customScriptArea').val();
+        }
+
+        console.log(reqBody);
+        $.post('../instances/' + urlParams.id + '/services/create', reqBody, function(data) {
+            console.log(data);
+            addServiceToDom(data);
+            var $modalServiceList = $('.serviceNameList');
+            $modalServiceList.append('<option value="'+data._id+'">'+data.serviceName+'</option>');
+
+            $('#serviceModalContainer').modal('hide');
+
+        });
+    } else {
+      var serviceId = $('.serviceNameList').val();
+       var reqBody = {};
+       reqBody.actionData = {};
+       reqBody.actionData.actionType = $('input[name=radio-inline]:checked').val();
+       if ($('.servicesCookBookList').is(':visible')) {
+          reqBody.actionData.runlist = $('.servicesCookBookRecipeList').val();
+       } else {
+          reqBody.actionData.command = $('.customScriptArea').val();
+       }
+       console.log(reqBody);
+       $.post('../instances/' + urlParams.id + '/services/'+serviceId+'/actions/create', reqBody, function(data) {
+            console.log(data);
+            addActionToServiceDom(serviceId,data);
+             $('#serviceModalContainer').modal('hide');
+
+
+       });
+
+
+    }
 
 
 });

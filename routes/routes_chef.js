@@ -368,6 +368,40 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
+    app.get('/chef/servers/:serverId/cookbooks/:cookbookName', function(req, res) {
+
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
+            chef.getCookbook(req.params.cookbookName,function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(cookbooks);
+                }
+            });
+
+
+        });
+
+    });
+
     app.get('/chef/servers/:serverId', function(req, res) {
         console.log(req.params.serverId);
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {

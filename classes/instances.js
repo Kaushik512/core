@@ -54,7 +54,8 @@ var InstanceSchema = new Schema({
         blueprintName: String,
         templateId: String,
         templateType: String,
-        templateComponents: [String]
+        templateComponents: [String],
+        iconPath:String,
     },
     services: [ServiceSchema]
 

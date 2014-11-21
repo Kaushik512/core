@@ -1274,7 +1274,7 @@ function addInstanceToDOM(data) {
     var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
 
-    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/Small-Icon/' + data.blueprintData.templateId + '.png" style="margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+    var $spanheadingLeft = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="margin-right:5px;margin-top:-10px;width:27px"/>').attr('contenteditable', 'false');
 
     var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRight = $('<span></span>').css({
