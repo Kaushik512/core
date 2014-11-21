@@ -338,7 +338,7 @@
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary dockerinstancestart" data-dismiss="modal" style="margin-right:5px;">Start</button>
+        <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -700,6 +700,39 @@ $('.deploymentChefRunBtn').click(function(e) {
 
 
 
+});
+
+
+$('.dockerinstancestart').click(function(e){
+    $('.instanceselectedfordocker').each(function(){
+      if($(this).is(':checked')){
+        
+        var instid = $(this).closest('tr').attr('data-instanceid');
+        if(instid)
+          var $that = $(this);
+            var $td =$that.closest('td');
+            var tdtext = $td.text();
+            $td.find('.dockerspinner').detach();
+            $td.find('.dockermessage').detach();
+            $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
+            $td.attr('title','Pulling in Images');
+          $.get('/instances/dockerimagepull/' + instid,function(data){
+            if(data == "OK"){
+                var $statmessage = $td.find('.dockerspinner').parent();
+                $td.find('.dockerspinner').detach();
+                $td.find('.dockermessage').detach();
+                $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                }
+                else
+                {
+                    var $statmessage = $('.dockerspinner').parent();
+                    $('.dockerspinner').detach();
+                    $td.find('.dockermessage').detach();
+                    $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage">Errored</span>');
+                }
+          });
+      }
+    });
 });
 
 
