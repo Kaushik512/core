@@ -6,6 +6,7 @@ var Chef = require('../classes/chef.js');
 var taskstatusDao = require('../classes/taskstatus');
 var logsDao = require('../classes/dao/logsdao.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
+var Docker = require('../classes/docker.js');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -39,7 +40,56 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(404);
             }
         });
-    })
+    });
+
+    app.get('/instances/dockerimagepull/:instanceid',function(req,res){
+        
+         console.log('reached here a');
+
+         var _docker = new Docker();
+         var stdmessages = '';
+        _docker.runDockerCommands('sudo docker pull centos',req.params.instanceid,
+                        function(err, retCode) {
+                            if (err) {
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: true,
+                                    log: 'Unable to run chef-client',
+                                    timestamp: new Date().getTime()
+                                });
+                                res.send(err);
+                                return;
+                            }
+                            
+                            console.log("docker return ", retCode);
+                            res.send(200);
+                            
+                        }
+                        ,
+                        function(stdOutData) {
+                            if(!stdOutData)
+                            {
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: false,
+                                    log: stdOutData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+                                stdmessages += stdOutData.toString('ascii');
+                            }
+                        }, function(stdOutErr) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: stdOutErr.toString('ascii'),
+                                timestamp: new Date().getTime()
+                            });
+                            console.log("docker return ", stdOutErr);
+                            res.send(stdOutErr);
+                           
+                        }); 
+        
+    });
 
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
