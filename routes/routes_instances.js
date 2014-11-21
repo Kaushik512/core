@@ -6,6 +6,7 @@ var Chef = require('../classes/chef.js');
 var taskstatusDao = require('../classes/taskstatus');
 var logsDao = require('../classes/dao/logsdao.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
+var Docker = require('../classes/docker.js');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -41,7 +42,44 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     })
 
-    
+    app.get('/instances/dockerimagepull/:instanceid',function(req,res){
+        
+         console.log('reached here a');
+         var _docker = new Docker();
+        _docker.runDockerCommands('sudo docker pull centos',
+                        function(err, retCode) {
+                            if (err) {
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: true,
+                                    log: 'Unable to run chef-client',
+                                    timestamp: new Date().getTime()
+                                });
+                                return;
+                            }
+                            console.log("docker return ", retCode);
+                        }
+                        ,
+                        function(stdOutData) {
+                            if(!stdOutData)
+                            {
+                                logsDao.insertLog({
+                                                            referenceId: req.params.instanceId,
+                                                            err: false,
+                                                      //      log: stdOutData.toString('ascii'),
+                                                            timestamp: new Date().getTime()
+                                                        });
+                            }
+                        }, function(stdOutErr) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: stdOutErr.toString('ascii'),
+                                timestamp: new Date().getTime()
+                            });
+                        }); 
+        res.send(200);
+    });
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         if (!req.body.runlist) {
             res.send(400);
