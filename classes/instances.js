@@ -55,7 +55,7 @@ var InstanceSchema = new Schema({
         templateId: String,
         templateType: String,
         templateComponents: [String],
-        iconPath:String,
+        iconPath: String,
     },
     services: [ServiceSchema]
 
@@ -321,6 +321,31 @@ var InstancesDao = function() {
 
     };
 
+    this.deleteService = function(instanceId, serviceId, callback) {
+
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $pull: {
+                "services": {
+                    "_id": new ObjectId(serviceId)
+                }
+            }
+        }, {
+            upsert: false,
+            multi: true
+        }, function(err, deleteCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            callback(null, deleteCount);
+
+        });
+
+    };
+
     this.createServiceAction = function(instanceId, serviceId, actionData, callback) {
         var serviceAction = new ServiceAction({
             actionType: actionData.actionType,
@@ -360,10 +385,10 @@ var InstancesDao = function() {
             "services": {
                 "$elemMatch": {
                     "_id": new ObjectId(serviceId),
-                    "actions":{
-                        "$elemMatch" : {
-                            "_id" : new ObjectId(actionId)
-                        } 
+                    "actions": {
+                        "$elemMatch": {
+                            "_id": new ObjectId(actionId)
+                        }
                     }
                 }
             }

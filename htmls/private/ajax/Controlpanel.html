@@ -1375,7 +1375,17 @@ function addServiceToDom(serviceData) {
    
 
   }
-  var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" rel="tooltip" data-placement="top" data-original-title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" rel="tooltip" data-placement="top" data-original-title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+    $tdOption.find('.deleteServiceBtn').click(function(e) {
+        $.ajax({
+            url: '../instances/' + urlParams.id + '/services/' + serviceData._id,
+            type: 'DELETE',
+            success: function() {
+              console.log($tr);
+                $tr.remove();
+            }
+        });
+    });
 
   
 

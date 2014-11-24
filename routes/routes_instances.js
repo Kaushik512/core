@@ -42,53 +42,51 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/instances/dockerimagepull/:instanceid',function(req,res){
-        
-         console.log('reached here a');
+    app.get('/instances/dockerimagepull/:instanceid', function(req, res) {
 
-         var _docker = new Docker();
-         var stdmessages = '';
-        _docker.runDockerCommands('sudo docker pull centos',req.params.instanceid,
-                        function(err, retCode) {
-                            if (err) {
-                                logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
-                                    err: true,
-                                    log: 'Unable to run chef-client',
-                                    timestamp: new Date().getTime()
-                                });
-                                res.send(err);
-                                return;
-                            }
-                            
-                            console.log("docker return ", retCode);
-                            res.send(200);
-                            
-                        }
-                        ,
-                        function(stdOutData) {
-                            if(!stdOutData)
-                            {
-                                logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
-                                    err: false,
-                                    log: stdOutData.toString('ascii'),
-                                    timestamp: new Date().getTime()
-                                });
-                                stdmessages += stdOutData.toString('ascii');
-                            }
-                        }, function(stdOutErr) {
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: true,
-                                log: stdOutErr.toString('ascii'),
-                                timestamp: new Date().getTime()
-                            });
-                            console.log("docker return ", stdOutErr);
-                            res.send(stdOutErr);
-                           
-                        }); 
-        
+        console.log('reached here a');
+
+        var _docker = new Docker();
+        var stdmessages = '';
+        _docker.runDockerCommands('sudo docker pull centos', req.params.instanceid,
+            function(err, retCode) {
+                if (err) {
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: true,
+                        log: 'Unable to run chef-client',
+                        timestamp: new Date().getTime()
+                    });
+                    res.send(err);
+                    return;
+                }
+
+                console.log("docker return ", retCode);
+                res.send(200);
+
+            },
+            function(stdOutData) {
+                if (!stdOutData) {
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: false,
+                        log: stdOutData.toString('ascii'),
+                        timestamp: new Date().getTime()
+                    });
+                    stdmessages += stdOutData.toString('ascii');
+                }
+            }, function(stdOutErr) {
+                logsDao.insertLog({
+                    referenceId: req.params.instanceId,
+                    err: true,
+                    log: stdOutErr.toString('ascii'),
+                    timestamp: new Date().getTime()
+                });
+                console.log("docker return ", stdOutErr);
+                res.send(stdOutErr);
+
+            });
+
     });
 
 
@@ -378,10 +376,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
 
-    app.get('/instances/:instanceId/services', function(req, res) {
 
-
-    });
 
     app.post('/instances/:instanceId/services/create', function(req, res) {
         console.log(req.body);
@@ -394,6 +389,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             console.log(service);
             res.send(200, service);
         });
+    });
+
+    app.delete('/instances/:instanceId/services/:serviceId', function(req, res) {
+        instancesDao.deleteService(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
+            if (err) {
+                console.log(err)
+                res.send(500);
+                return;
+            }
+            console.log(deleteCount);
+            if (deleteCount) {
+                res.send({
+                    deleteCount:deleteCount
+                },200);
+            } else {
+                res.send(400);
+            }
+
+        });
+
+
     });
 
     app.post('/instances/:instanceId/services/:serviceId/actions/create', function(req, res) {
