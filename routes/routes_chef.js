@@ -17,6 +17,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/chef/servers/:serverId/nodes', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
+                console.log(err);
                 res.send(500);
                 return;
             }

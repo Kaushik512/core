@@ -62,6 +62,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             
                             console.log("docker return ", retCode);
+                            // Try to start the container here
+                            
+
+
                             res.send(200);
                             
                         }
