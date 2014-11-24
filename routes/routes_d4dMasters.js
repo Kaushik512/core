@@ -95,9 +95,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		configmgmtDao.getAccessFilesForRole(req.params.loginname,req,res,function(err,getAccessFiles){
 			if(getAccessFiles){
 				getAccessFiles = getAccessFiles.replace(/\"/g,'').replace(/\:/g,'')
-			console.log('Rcvd in call: ' + getAccessFiles);
-			req.session.user.authorizedfiles = getAccessFiles;
-			res.end(req.session.user.authorizedfiles);
+				console.log('Rcvd in call: ' + getAccessFiles);
+				req.session.user.authorizedfiles = getAccessFiles;
+				res.end(req.session.user.authorizedfiles);
 			}
 		});
 	});

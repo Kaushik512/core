@@ -305,7 +305,7 @@ var Chef = function(settings) {
             var sshParamObj = {
                 host: options.host,
                 port: options.port,
-                username: 'ec2-user' //options.username,
+                username: options.username
             };
             if (options.privateKey) {
                 sshParamObj.privateKey = options.privateKey;

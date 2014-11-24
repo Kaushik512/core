@@ -716,7 +716,9 @@ $('.dockerinstancestart').click(function(e){
             $td.find('.dockermessage').detach();
             $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
             $td.attr('title','Pulling in Images');
-          $.get('/instances/dockerimagepull/' + instid,function(data){
+            var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
+            var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
+          $.get('/instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag,function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -855,10 +857,12 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     //Docker Check
                     if(data[i].templateType == "Docker")
                      {
+                        console.log("data[i}" + JSON.stringify(data[i]));
                         //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                         $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
                         $itemBody.attr('dockerreponame',data[i].dockerreponame);
                         $itemBody.attr('dockerrepotags',data[i].dockerrepotags);
+                        $itemBody.attr('dockercontainerpaths',data[i].dockercontainerpaths);
                         var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                         $ul.append($liDockerRepoName);
                        if(data[i].dockerrepotags != ''){

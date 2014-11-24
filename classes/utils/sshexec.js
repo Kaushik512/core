@@ -20,7 +20,7 @@ module.exports = function(options) {
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log('ssh error', err);
+            console.log('ssh error ', err);
             callback(err);
         });
 

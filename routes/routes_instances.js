@@ -42,13 +42,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/instances/dockerimagepull/:instanceid',function(req,res){
+    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname',function(req,res){
         
          console.log('reached here a');
 
          var _docker = new Docker();
          var stdmessages = '';
-        _docker.runDockerCommands('sudo docker pull centos',req.params.instanceid,
+         var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname  + ' /bin/bash';
+        _docker.runDockerCommands(cmd,req.params.instanceid,
                         function(err, retCode) {
                             if (err) {
                                 logsDao.insertLog({
@@ -63,7 +64,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             
                             console.log("docker return ", retCode);
                             // Try to start the container here
-                            
+
 
 
                             res.send(200);
@@ -142,6 +143,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         } else {
                             chefClientOptions.password = instance.credentials.password;
                         }
+
                         chef.runChefClient(chefClientOptions, function(err, retCode) {
                             if (err) {
                                 logsDao.insertLog({

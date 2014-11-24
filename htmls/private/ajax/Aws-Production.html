@@ -1446,7 +1446,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
         reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
     //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
-      //  reqBody.dockercontainerpaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths');
+    reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
     reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
     reqBody.dockerreponame = $('#dockerrepoListInput').val();
 
