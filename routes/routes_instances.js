@@ -401,8 +401,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             console.log(deleteCount);
             if (deleteCount) {
                 res.send({
-                    deleteCount:deleteCount
-                },200);
+                    deleteCount: deleteCount
+                }, 200);
             } else {
                 res.send(400);
             }
@@ -508,17 +508,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         console.log("knife ret code", retCode);
                         if (retCode == 0) {
-                            console.log('updating node runlist in db');
-                            instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
-                                if (err) {
-                                    return;
-                                }
-                                logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
-                                    err: false,
-                                    log: 'instance runlist updated',
-                                    timestamp: new Date().getTime()
-                                });
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: false,
+                                log: 'instance runlist updated',
+                                timestamp: new Date().getTime()
                             });
                         } else {
                             return;

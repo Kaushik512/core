@@ -73,7 +73,7 @@
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l1" data-toggle="tab" style="font-size: 16px" ><i class="fa fa-fw fa-exclamation-circle" style="font-size: 16px"></i>Information</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
-              <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Actions</a>
+              <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-sun-o"></i>Configuration</a>
@@ -290,38 +290,29 @@
                   <div class="modal-body">
                     <div class="modal-body no-padding">
                <div novalidate="novalidate" class="smart-form" id="checkout-form" action="">
-
                         <div style="margin:0px;" class="row ">
                           <fieldset style="padding:0px;">                         
                             <section class="col col-6">
-                                <label for="">Service Name</label>
-                                <label class="input serviceNameListContainer"> 
-                                   <select class="custom-scroll serviceNameList">
-                                     
-                                  </select> 
-                                  <a href="javascript:void(0)" class="createNewServiceLink">Create New</a>
-                                </label>
-                                <label class="input newSeviceNameContainer" style="display:none"> 
+                                <label class="newSeviceNameContainer" style="display:none">
+                                <label for="">Service Name <a href="javascript:void(0)" class="existingServiceLink">Existing Services</a></label>
+                                <label class="input "> 
                                     <input type="text" id="serviceNameText">
-                                     <a href="javascript:void(0)" class="existingServiceLink">Existing Service</a>
-                                </label>                                          
-                            </section>
-                          </fieldset> 
-                          <fieldset style="padding:0px;">   
-                            <section class="col col-6">
-                                <label class="">Select Available Services</label>
-                                <label class="select select-multiple">
-                                    <select multiple="" class="custom-scroll">
-                                      <option value="sc1">Apache</option>
-                                      <option value="sd1">Mysql</option>
-                                      <option value="sd2">Tomcat</option>
-                                    </select> 
+                                     
                                 </label>
+                                </label>
+                                <label class="serviceNameListContainer">
+                                <label class="">Select Available Services  <a href="javascript:void(0)" class="createNewServiceLink">Create New</a></label>
+                                <label class="select select-multiple">
+                                    <select size="5" class="custom-scroll serviceNameList">
+                                     
+                                    </select> 
+                                </label> 
+                                </label>                                        
                             </section>
                             <section class="col col-6">
                                 <label class="">Assign Users</label>
                                 <label class="select select-multiple">
-                                    <select multiple="" class="custom-scroll instanceUserList">
+                                    <select multiple="" class="custom-scroll instanceUserList" size="5">
                                       <option value="sd1">Consumer</option>
                                       <option value="sc1">Designer</option>  
                                       <option value="sd2">User1</option>
@@ -329,7 +320,8 @@
                                     </select> 
                                 </label>
                             </section>
-                            </fieldset>
+                          </fieldset> 
+                          
                             <fieldset style="padding:0px;">
                               <section class="col col-10">
                                 <label class="label">Select Action</label>
@@ -349,51 +341,7 @@
                                 </div>
                               </section>
 
-<!--                               <section class="col col-10">
-                                <label class="">Select Action</label>
-                                <div class="row">
-                                  <div class="col col-3">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
-                                      <i></i>Start</label>
-                                  </div>
-                                  <div class="col col-3">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
-                                      <i></i>Stop</label>
-                                  </div>
-                                  <div class="col col-3">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
-                                      <i></i>Restart</label>
-                                  </div>
-                                  <div class="col col-3">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
-                                      <i></i>Kill</label>
-                                  </div>
-                                </div>
-                              </section> -->
-                            <!-- <section class="col col-6">
-                                <label class="">Select Actions</label>
-                                <br>
-                                <label class="input">
-                                  <div class="btn-group tableactionWidth" style="width:200px;">
-                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;" data-original-title="Start" data-placement="top" rel="tooltip">
-                                      <i class="ace-icon fa fa-play bigger-120"></i>
-                                    </button>
-                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Stop" data-placement="top" rel="tooltip">
-                                      <i class="ace-icon fa fa-power-off bigger-120"></i>
-                                    </button>
-                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Restart" data-placement="top" rel="tooltip">
-                                      <i class="ace-icon fa fa-undo bigger-120"></i>
-                                    </button>
-                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Kill" data-placement="top" rel="tooltip">
-                                      <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
-                                    </button>
-                                  </div>
-                                </label>
-                            </section> -->
+
                           </fieldset>
                            <fieldset style="padding:0px;">
                             <section class="col col-6">
