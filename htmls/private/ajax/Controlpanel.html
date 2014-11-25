@@ -177,11 +177,97 @@
                             <thead>
                                  <th style="font-size: 13px;"><i class="fa fa-fw fa-archive "></i><strong style="color:#3a87ad">Service Name</strong></th>
                                  <th style="font-size: 13px;"><i class="fa fa-fw fa-sort-amount-asc "></i><strong style="color:#3a87ad">Actions </strong></th>
-                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-flash "></i><strong style="color:#3a87ad">Status</strong></th>
+                                 <th style="font-size: 13px;"><i class="fa fa-fw fa-flash "></i><strong style="color:#3a87ad">Options</strong></th>
                                  
                             </thead>
                             <tbody>
-                                
+                                <tbody class="servicesTbody">
+  <tr>
+    <td>
+      Restart_Apache_servers
+    </td>
+    <td>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontGreen">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip">
+                  <i class="fa fa-play fa-1x txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontRed">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip">
+                  <i class="fa fa-power-off fa-1x txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontRestart">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip">
+                  <i class="fa fa-undo fa-16px txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block" class="container1">
+        <div>
+          <div class="cardGreenRedYellowBlack frontKill">
+            <div style="margin-top:5px;">
+              <div class="">
+                <a href="javascript:void(0)" data-original-title="Kill" data-placement="top" rel="tooltip">
+                  <i class="fa fa-times-circle fa-16px txt-color-white">
+                  </i>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </td>
+    <td>
+      <div class="btn-group tableactionWidth">
+        <button data-original-title="Delete" data-placement="top" rel="tooltip" class="btn btn-danger pull-left btn-sg tableactionbutton">
+          <i class="ace-icon fa fa-trash-o bigger-120">
+          </i>
+        </button>
+        <a data-original-title="Edit" data-placement="top" rel="tooltip" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg">
+          <i class="ace-icon fa fa-pencil bigger-120">
+          </i>
+        </a>
+      </div>
+      
+    </td>
+  </tr>
+  
+  
+
+  
+</tbody>
                                 
                             </tbody>
                             <a class="btn btn-primary" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
@@ -202,80 +288,175 @@
                     <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
                   </div>
                   <div class="modal-body">
-                     <div novalidate="novalidate" class="smart-form1" id="checkout-form" action="">
+                    <div class="modal-body no-padding">
+               <div novalidate="novalidate" class="smart-form" id="checkout-form" action="">
 
                         <div style="margin:0px;" class="row ">
-                                                                            
-                            <section class="col col-12">
-                                <label for="">Name of the Service<span style="color:red">*</span>
+                          <fieldset style="padding:0px;">                         
+                            <section class="col col-6">
+                                <label for="">Service Name</label>
+                                <label class="input serviceNameListContainer"> 
+                                   <select class="custom-scroll serviceNameList">
+                                     
+                                  </select> 
+                                  <a href="javascript:void(0)" class="createNewServiceLink">Create New</a>
                                 </label>
-                                <label class="input"> 
-                                    <input type="text">
+                                <label class="input newSeviceNameContainer" style="display:none"> 
+                                    <input type="text" id="serviceNameText">
+                                     <a href="javascript:void(0)" class="existingServiceLink">Existing Service</a>
                                 </label>                                          
                             </section>
-                            <section class="col col-12">
-                              <label class="">Type of the Service
-                                <span style="color:red">*</span>
-                              </label>
-                              <label class="select select-multiple">
-                                <select class="input-sm" multiple="">
-                                  <option value="0">Start</option>
-                                  <option value="1">Restart</option>
-                                  <option value="2">Stop</option>
-                                </select> <i></i> 
-                              </label>
-                            </section>
-                            <section class="col col-12">
-                              <label class="">Assign Action</label>
-                              <div class="inline-group">
-                                <label class="radio serviceCookbookRadio">
-                                  <input type="radio" checked="checked" name="radio-inline">
-                                  <i></i>Service Cookbook
-                                </label>
-                                <label class="radio customActionRadio" style="padding-top:15px;">
-                                  <input type="radio" name="radio-inline">
-                                  <i style="margin-top: 16px;"></i>Custom Action</label>
-                              </div>
-                            </section>
-
-                            <!-- <section class="col col-12">
-                                <label for="category">Type of the Service<span style="color:red">*</span>
-                                </label>
-                                <label class="select"> 
-                                    
-                                </label>
-                             
-                            </section> -->
-                            <section class="col col-12 chooseLogo">
-                                <label for="">Choose Cookbook</label>
-                                <label class="input input-file" for="file">
-                                    <div class="button">
-                                      <input type="file"><span style="color:white;">Browse</span></div>
-                                      <input type="text" readonly="">
+                          </fieldset> 
+                          <fieldset style="padding:0px;">   
+                            <section class="col col-6">
+                                <label class="">Select Available Services</label>
+                                <label class="select select-multiple">
+                                    <select multiple="" class="custom-scroll">
+                                      <option value="sc1">Apache</option>
+                                      <option value="sd1">Mysql</option>
+                                      <option value="sd2">Tomcat</option>
+                                    </select> 
                                 </label>
                             </section>
-                            <section class="col col-12 chooseCommand" style="display:none">
-                              <label for="">Command</label>
-                              <label class="textarea textarea-expandable">             
-                                <textarea class="custom-scroll" rows="3"></textarea> 
-                              </label>
-                              <div class="note">
-                                <strong>Note:</strong> expands on focus.
-                              </div>
-                            </section>
-
-                            <section class="col col-12">
+                            <section class="col col-6">
                                 <label class="">Assign Users</label>
                                 <label class="select select-multiple">
-                                    <select style="" id="" multiple="" class="custom-scroll"><option value="sc1">sc1</option><option value="sd1">sd1</option><option value="sd2">sd2</option></select> 
+                                    <select multiple="" class="custom-scroll instanceUserList">
+                                      <option value="sd1">Consumer</option>
+                                      <option value="sc1">Designer</option>  
+                                      <option value="sd2">User1</option>
+                                      <option value="sd2">User2</option>
+                                    </select> 
                                 </label>
                             </section>
-                                                      
-                        </div>
+                            </fieldset>
+                            <fieldset style="padding:0px;">
+                              <section class="col col-10">
+                                <label class="label">Select Action</label>
+                                <div class="inline-group">
+                                  <label class="radio">
+                                    <input type="radio" checked="checked" name="radio-inline" value="start">
+                                    <i></i>Start</label>
+                                  <label class="radio">
+                                    <input type="radio" name="radio-inline" value="stop">
+                                    <i></i>Stop</label>
+                                  <label class="radio">
+                                    <input type="radio" name="radio-inline" value="restart">
+                                    <i></i>Restart</label>
+                                  <label class="radio">
+                                    <input type="radio" name="radio-inline" value="kill">
+                                    <i></i>Kill</label>
+                                </div>
+                              </section>
+
+<!--                               <section class="col col-10">
+                                <label class="">Select Action</label>
+                                <div class="row">
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Start</label>
+                                  </div>
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Stop</label>
+                                  </div>
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Restart</label>
+                                  </div>
+                                  <div class="col col-3">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox">
+                                      <i></i>Kill</label>
+                                  </div>
+                                </div>
+                              </section> -->
+                            <!-- <section class="col col-6">
+                                <label class="">Select Actions</label>
+                                <br>
+                                <label class="input">
+                                  <div class="btn-group tableactionWidth" style="width:200px;">
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;" data-original-title="Start" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-play bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Stop" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-power-off bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Restart" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-undo bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-primary pull-left btn-sm tableactionbutton" style="width:30px;margin-left:10px" data-original-title="Kill" data-placement="top" rel="tooltip">
+                                      <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
+                                    </button>
+                                  </div>
+                                </label>
+                            </section> -->
+                          </fieldset>
+                           <fieldset style="padding:0px;">
+                            <section class="col col-6">
+                              <label class="">
+                                  Assign Action
+                              </label>
+                              <div class="row">
+                                  <div class="col col-10">
+                                      <label class="select"> 
+                                          <select class="form-control chooseActiontype width-100">
+                                              <option id="ChefCookbook" value="Receipe">Chef Cookbook/Recepie</option>
+                                              <option id="CustomScript" value="Customs">Custom Script</option>
+                                          </select>
+                                      </label>
+                                  </div>  
+                              </div>
+                          </section>
+                          </fieldset>
+                          <fieldset style="padding:0px;">
+                            <section class="col col-10">
+                    <div id="chefCookbook-dropdown">
+                        <div id="collapseDataBag1">
+                          <div class="">
+                            <div style="width:100%;" id="servicebox1">
+                              <div style="width:30%" id="data_bag_div1" class="serviceBox1">
+                                <div style="width:100px;">
+                                  <span style="font-size:13px;">
+                                    <b><u>Cookbooks</u></b>
+                                  </span>
+                                </div>
+                                <select class="custom-scroll servicesCookBookList">
+                                 
+                                      
+                                </select> 
+
+                                <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:140px">
+                                      
+                                </select> 
+                                
+                              </div>
+                                
+                          </div>
+                        </div><!--collapse Data Bags ends here-->
                     </div>
                   </div>
+                              <div id="customScript-dropdown" style="display:none">
+                                <section class="col col-10" style="padding-left: 0px;">
+                                  <label>Command</label>
+                                  <label class="textarea">             
+                                    <textarea rows="3" class="custom-scroll customScriptArea" ></textarea> 
+                                  </label>
+                                  
+                                </section>
+                              </div>
+                            </section>
+                          </fieldset>
+                        </div>
+                    </div>
+            </div>
+
+                  </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP">Save</button>
+                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService">Save</button>
                     <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
@@ -681,26 +862,6 @@
 }
 </style>
 <script type="text/javascript">
-  function serviceCookbookCP(){
-    console.log($('.serviceCookbookRadio').find('input').is(':checked'));
-    if($('.serviceCookbookRadio').find('input').is(':checked')){
-      $('.chooseLogo').css({'display': 'block'});
-      $('.chooseCommand').css({'display': 'none'});
-    }else {
-      $('.chooseLogo').css({'display': 'none'});
-      $('.chooseCommand').css({'display': 'block'});
-    }
-  }
-$('.serviceCookbookRadio input').click(function(e) {
-  // console.log(e);
-  serviceCookbookCP();
-});
-$('.customActionRadio input').click(function(e) {
-  // console.log(e);
-  serviceCookbookCP();
-});
-</script>
-<script type="text/javascript">
 var urlParams ={};
 (window.onpopstate = function () {
   var url = window.location.href;
@@ -717,10 +878,30 @@ var urlParams ={};
      
 })();
 
+$('.chooseActiontype').change(function(e){
+  if($(this).val() == 'Receipe') {
+    $('#customScript-dropdown').hide();
+    $('#chefCookbook-dropdown').show();
+  } else {
+    $('#customScript-dropdown').show();
+    $('#chefCookbook-dropdown').hide();
+  }
+});
+
+$('.createNewServiceLink').click(function(){
+   $('.serviceNameListContainer').hide();
+   $('.newSeviceNameContainer').show();
+});
+
+$('.existingServiceLink').click(function(){
+   $('.serviceNameListContainer').show();
+   $('.newSeviceNameContainer').hide();
+});
+
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
-
+    
    var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
 
    var orgid = $selectedOrg.click().attr('data-id');
@@ -735,10 +916,62 @@ $.get('../instances/'+urlParams.id,function(data){
  
 
    console.log(data);
+   //setting users in service menu
+    var $usersList = $('.instanceUserList').empty();
+    for(var i=0;i<data.users.length;i++) {
+       $usersList.append('<option value="'+data.users[i]+'">'+data.users[i]+'</option>'); 
+    }
+
+   // fetching cookbooks  for service menu
+   $.get('../chef/servers/' + data.chef.serverId + '/cookbooks', function(data) {
+        var keys = Object.keys(data);
+        console.log(data);
+        var $servicesCookbookList = $('.servicesCookBookList').empty();
+         $servicesCookbookList.append('<option value="choose">Choose</option>');
+        for(var i=0;i<keys.length;i++) {
+          if(keys[i].indexOf('service_')==0) {
+            $servicesCookbookList.append('<option data-cookbook-url="'+data[keys[i]].url+'" value="'+keys[i]+'">'+keys[i]+'</option>');
+          }
+        }
+   });
+
+   //handling cookbookOnchangeEvent
+   $('.servicesCookBookList').change(function(e){
+     var val = $(this).val();
+     if(val==='choose') {
+      return;
+     }
+     $.get('../chef/servers/' + data.chef.serverId + '/cookbooks/'+$(this).val(), function(data) {
+      var $recipesList = $('.servicesCookBookRecipeList').empty();
+      for(var i=0;i<data.recipes.length;i++) {
+        var recipe = data.recipes[i];
+        var recipeName;
+        var indexOfExtension = recipe.name.indexOf('.rb');
+        recipeName = recipe.name.substring(0,indexOfExtension);
+        $recipesList.append('<option value="recipe['+data.cookbook_name+'::'+recipeName+']">'+recipeName+'</option>');
+      }
+      $recipesList.show();
+
+
+     });
+
+   });
+
+
+   //adding services to table 
+   $('.servicesTbody').empty();
+   var $modalServiceList = $('.serviceNameList')
+   for(var i=0;i<data.services.length;i++) {
+     var service = data.services[i];
+     $modalServiceList.append('<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>');
+     addServiceToDom(service);
+   }
+    
+  
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
-   var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="img/templateicons/' + data.blueprintData.templateId + '.png" style="height:22px;width:33px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+   var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
 
     var $spanheadingMiddleCP = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRightCP = $('<span></span>').css({
@@ -1082,6 +1315,136 @@ $.get('../instances/'+urlParams.id,function(data){
 
   $('.loadingControlPanelIndicator').hide();
   $('#controlPanelContainer').show();
+
+
+});
+
+function getActionBtnClass(actionType) {
+  console.log(actionType)
+   switch(actionType) {
+    case 'start' : 
+      return {
+        bg : 'frontGreen',
+        icon:'fa-play'
+      }
+    case 'stop' : 
+      return {
+        bg : 'frontRed',
+        icon:'fa-power-off'
+      }
+    case 'restart' : 
+      return {
+        bg : 'frontRestart',
+        icon:'fa-undo'
+      }
+    case 'kill' : 
+      return {
+        bg : 'frontKill',
+        icon:'fa-times-circle'
+      }
+
+
+   }
+}
+
+var $serviceTableBody = $('.servicesTbody');
+
+function addActionToServiceDom(serviceId,actionData) {
+    $td = $serviceTableBody.find('td[data-serviceId='+serviceId+']');
+    var actionBtnClass = getActionBtnClass(actionData.actionType);
+    console.log(actionBtnClass);
+    var html = '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div style="margin-top:5px;"><div class=""><a rel="tooltip" data-placement="top" data-original-title="'+actionData.actionType+'" data-action-id="' + actionData._id + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>'
+    $td.append(html);
+    $td.find('a').click(function(e) {
+        var actionId = $(this).attr('data-action-id');
+        $.get('../instances/' + urlParams.id + '/services/' + serviceId + '/actions/' + actionId + '/execute', function(data) {
+
+        });
+    });
+
+}
+
+function addServiceToDom(serviceData) {
+  var $tr = $('<tr></tr>').attr('data-serviceId',serviceData._id);
+  $('.servicesTbody').append($tr);
+  var $tdName = $('<td></td>').append(serviceData.serviceName);
+  $tr.append($tdName);
+  $tr.append($('<td></td>').attr('data-serviceId',serviceData._id))
+  for(var i=0;i<serviceData.actions.length;i++) {
+    addActionToServiceDom(serviceData._id,serviceData.actions[i]);
+   
+
+  }
+    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" rel="tooltip" data-placement="top" data-original-title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+    $tdOption.find('.deleteServiceBtn').click(function(e) {
+        $.ajax({
+            url: '../instances/' + urlParams.id + '/services/' + serviceData._id,
+            type: 'DELETE',
+            success: function() {
+              console.log($tr);
+                $tr.remove();
+            }
+        });
+    });
+
+  
+
+  $tr.append($tdOption);
+
+}
+
+$('.btnSaveService').click(function(e) {
+
+    if ($('.newSeviceNameContainer').is(':visible')) {
+
+
+
+        var reqBody = {};
+        reqBody.serviceData = {};
+        reqBody.serviceData.name = $('#serviceNameText').val();
+        reqBody.serviceData.users = $('.instanceUserList').val();
+        reqBody.serviceData.actions = [];
+        reqBody.serviceData.actions[0] = {};
+        reqBody.serviceData.actions[0].actionType = $('input[name=radio-inline]:checked').val();
+
+        if ($('.servicesCookBookList').is(':visible')) {
+            reqBody.serviceData.actions[0].runlist = $('.servicesCookBookRecipeList').val();
+
+        } else {
+            reqBody.serviceData.actions[0].command = $('.customScriptArea').val();
+        }
+
+        console.log(reqBody);
+        $.post('../instances/' + urlParams.id + '/services/create', reqBody, function(data) {
+            console.log(data);
+            addServiceToDom(data);
+            var $modalServiceList = $('.serviceNameList');
+            $modalServiceList.append('<option value="'+data._id+'">'+data.serviceName+'</option>');
+
+            $('#serviceModalContainer').modal('hide');
+
+        });
+    } else {
+      var serviceId = $('.serviceNameList').val();
+       var reqBody = {};
+       reqBody.actionData = {};
+       reqBody.actionData.actionType = $('input[name=radio-inline]:checked').val();
+       if ($('.servicesCookBookList').is(':visible')) {
+          reqBody.actionData.runlist = $('.servicesCookBookRecipeList').val();
+       } else {
+          reqBody.actionData.command = $('.customScriptArea').val();
+       }
+       console.log(reqBody);
+       $.post('../instances/' + urlParams.id + '/services/'+serviceId+'/actions/create', reqBody, function(data) {
+            console.log(data);
+            addActionToServiceDom(serviceId,data);
+             $('#serviceModalContainer').modal('hide');
+
+
+       });
+
+
+    }
 
 
 });

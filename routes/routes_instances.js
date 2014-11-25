@@ -14,16 +14,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/instances/*', sessionVerificationFunc);
 
 
-    app.get('/instances',function(req,res){
+    app.get('/instances', function(req, res) {
         instancesDao.getInstances(function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500);
                 return;
             }
-            
+
             res.send(data);
-             
+
         });
     });
 
@@ -41,6 +41,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
 
     app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname',function(req,res){
         
@@ -93,8 +94,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send(stdOutErr);
                            
                         }); 
-        
     });
+
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         if (!req.body.runlist) {
@@ -128,18 +129,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                     settingsController.getSettings(function(settings) {
-                        console.log('instance IP ==>',instance.instanceIP);
-                        console.log('connecting username ==>',instance.credentials.username);
+
                         var chefClientOptions = {
                             privateKey: instance.credentials.pemFileLocation,
                             username: instance.credentials.username,
                             host: instance.instanceIP,
-                            instanceOS : instance.hardware.os,
+                            instanceOS: instance.hardware.os,
                             port: 22,
-                            runlist:req.body.runlist
+                            runlist: req.body.runlist
                         }
-                        if(instance.credentials.pemFileLocation) {
-                            chefClientOptions.privateKey = instance.credentials.pemFileLocation; 
+                        if (instance.credentials.pemFileLocation) {
+                            chefClientOptions.privateKey = instance.credentials.pemFileLocation;
                         } else {
                             chefClientOptions.password = instance.credentials.password;
                         }
@@ -384,26 +384,176 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
 
-app.get('/instances/:instanceId/service', function(req, res) {
-        var timestamp = req.query.timestamp;
-        if (timestamp) {
-            timestamp = parseInt(timestamp);
-        }
-        logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
+
+
+    app.post('/instances/:instanceId/services/create', function(req, res) {
+        console.log(req.body);
+        instancesDao.createService(req.params.instanceId, req.body.serviceData, function(err, service) {
             if (err) {
+                console.log(err)
                 res.send(500);
                 return;
             }
-            res.send(data);
+            console.log(service);
+            res.send(200, service);
+        });
+    });
+
+    app.delete('/instances/:instanceId/services/:serviceId', function(req, res) {
+        instancesDao.deleteService(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
+            if (err) {
+                console.log(err)
+                res.send(500);
+                return;
+            }
+            console.log(deleteCount);
+            if (deleteCount) {
+                res.send({
+                    deleteCount:deleteCount
+                },200);
+            } else {
+                res.send(400);
+            }
 
         });
 
+
     });
 
+    app.post('/instances/:instanceId/services/:serviceId/actions/create', function(req, res) {
+        console.log(req.body);
+        instancesDao.createServiceAction(req.params.instanceId, req.params.serviceId, req.body.actionData, function(err, action) {
+            if (err) {
+                console.log(err)
+                res.send(500);
+                return;
+            }
+            console.log(action);
+            res.send(200, action);
+        });
+    });
 
+    app.get('/instances/:instanceId/services/:serviceId/actions/:actionId/execute', function(req, res) {
+        console.log(req.body);
 
+        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+            if (err) {
+                console.log(err);
+                res.send(500);
+                return;
+            }
+            if (!data.length) {
+                res.send(400);
+                return;
+            }
+            data = data[0];
+            if (data && data.services && data.services.length) {
+                var action;
+                for (var i = 0; i < data.services.length; i++) {
+                    var service = data.services[i];
+                    if (service._id == req.params.serviceId) {
+                        if (service.actions && service.actions.length) {
+                            for (j = 0; j < service.actions.length; j++) {
+                                if (service.actions[j]._id == req.params.actionId) {
+                                    action = service.actions[j];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (action) {
+                        break;
+                    }
+                }
 
+                if (!action) {
+                    res.send(400);
+                    return;
+                }
+                var instance = data;
 
+                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(500);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
+                    });
+                    console.log('instance IP ==>', instance.instanceIP);
+                    var chefClientOptions = {
+                        privateKey: instance.credentials.pemFileLocation,
+                        username: instance.credentials.username,
+                        host: instance.instanceIP,
+                        instanceOS: instance.hardware.os,
+                        port: 22,
+                        runlist: action.serviceRunlist, // runing service runlist
+                        updateRunlist: true
+                    }
+                    if (instance.credentials.pemFileLocation) {
+                        chefClientOptions.privateKey = instance.credentials.pemFileLocation;
+                    } else {
+                        chefClientOptions.password = instance.credentials.password;
+                    }
+                    console.log('running chef client');
+                    chef.runChefClient(chefClientOptions, function(err, retCode) {
+                        if (err) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: 'Unable to run chef-client',
+                                timestamp: new Date().getTime()
+                            });
+                            return;
+                        }
+                        console.log("knife ret code", retCode);
+                        if (retCode == 0) {
+                            console.log('updating node runlist in db');
+                            instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+                                if (err) {
+                                    return;
+                                }
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: false,
+                                    log: 'instance runlist updated',
+                                    timestamp: new Date().getTime()
+                                });
+                            });
+                        } else {
+                            return;
+                        }
+                    }, function(stdOutData) {
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: false,
+                            log: stdOutData.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        });
+
+                    }, function(stdOutErr) {
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: true,
+                            log: stdOutErr.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        });
+                    });
+                    res.send(200);
+                });
+            } else {
+                res.send(400);
+            }
+        });
+    });
 
 
 

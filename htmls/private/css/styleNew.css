@@ -1972,3 +1972,39 @@ margin-top:0px;
 .noleftpadding{
     padding-left: 0px !important;
 }
+
+ .cardGreenRedYellowBlack{
+display: block;
+height: 100%;
+width: 100%;
+/*line-height: 260px;*/
+border-radius: 15px;
+color: white;
+text-align: center;
+font-weight: bold;
+font-size: 14px;
+position: absolute;
+transition: all 0.5s linear;
+backface-visibility: hidden;
+}
+.frontGreen{
+    background: green;
+}
+.frontRed{
+    background: #B80000;
+}
+.frontRestart{
+    background: #FFCC00;
+}
+.frontKill{
+    background: #363636;
+}
+ .container1 {
+width: 30px;
+height: 30px;
+position: relative;
+/*margin: 0 auto 40px;*/
+/*border: 1px solid #CCC;*/
+-ms-perspective: 1000;
+perspective: 1000;
+}

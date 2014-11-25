@@ -38,7 +38,7 @@ var Chef = function(settings) {
                     return console.log(err);
                 }
                 var nodeNames = Object.keys(chefResBody);
-                callback(null,nodeNames);
+                callback(null, nodeNames);
             });
         });
     }
@@ -133,6 +133,30 @@ var Chef = function(settings) {
 
         });
     };
+
+    this.getCookbook = function(cookbookName, callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chefClient.get('/cookbooks/'+cookbookName+'/_latest', function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                console.log("chef status ", chefRes.statusCode);
+                console.log(chefResBody);
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefResBody);
+                } else {
+                    callback(true, null);
+                }
+
+            });
+
+        });
+    }
 
     this.getRolesList = function(callback) {
 
@@ -240,7 +264,7 @@ var Chef = function(settings) {
 
 
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
-        console.log('Chef Repo Location : ',settings.userChefRepoLocation )
+        console.log('Chef Repo Location : ', settings.userChefRepoLocation)
         var options = {
             cwd: settings.userChefRepoLocation + '/.chef',
             onError: function(err) {
@@ -286,6 +310,9 @@ var Chef = function(settings) {
 
         if (params.instanceOS == 'windows') {
             argList.push('-p5985');
+
+        } else {
+            argList.push('--sudo');
         }
         argList = argList.concat(['-r' + runlist.join(), '-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
 
@@ -298,6 +325,10 @@ var Chef = function(settings) {
 
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
+        var chefRunParamOveright = '-o';
+        if (options.updateRunlist) {
+            chefRunParamOveright = '-r';
+        }
         if (!runlist) {
             runlist = [];
         }
@@ -316,12 +347,9 @@ var Chef = function(settings) {
                 sshParamObj.password = options.password;
             }
             var sshConnection = new SSH(sshParamObj);
-            var sshcmd = '';
-            console.log('Instance pem file Location:',options.privateKey); //for -i
-          //  sshcmd = 'sudo ssh ' + ' -i ' + options.privateKey + ' -t ' + sshParamObj.username + '@' + options.host + ' \'sudo ';
-            console.log('Constructed command : ',sshcmd + ' chef-client -o ' + runlist.join() + '\'');
-            //sshcmd = ''; //remove this comment when the security group is added
-            sshConnection.exec(sshcmd + 'sudo chef-client -o ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+
+            sshConnection.exec('sudo chef-client ' + chefRunParamOveright + ' ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+
         } else {
 
             var processOptions = {
@@ -347,7 +375,7 @@ var Chef = function(settings) {
 
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
             console.log('host name ==>', options.host);
-            var proc = new Process('knife', ['winrm', options.host, 'chef-client -o "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
             proc.start();
 
         }

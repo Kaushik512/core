@@ -3,6 +3,22 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var Schema = mongoose.Schema;
 
+var ServiceActionSchema = new Schema({
+    actionType: String,
+    serviceRunlist: [String],
+    command: String,
+});
+
+var ServiceAction = mongoose.model('ServiceActions', ServiceActionSchema);
+
+var ServiceSchema = new Schema({
+    serviceName: String,
+    serviceUsers: [String],
+    actions: [ServiceActionSchema]
+});
+
+var Service = mongoose.model('Services', ServiceSchema);
+
 var InstanceSchema = new Schema({
     orgId: String,
     projectId: String,
@@ -38,18 +54,11 @@ var InstanceSchema = new Schema({
         blueprintName: String,
         templateId: String,
         templateType: String,
-        templateComponents: [String]
-    }
-  /* , services: {[
-        serviceName: String,
-        serviceType: [String],
-         action: {
-            assignAction: String,
-            serviceRunlist: [String],
-            recipe: String,
-            command: String,
-                 }
-    ]} */
+        templateComponents: [String],
+        iconPath: String,
+    },
+    services: [ServiceSchema]
+
 });
 
 var Instances = mongoose.model('instances', InstanceSchema);
@@ -78,10 +87,10 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            data.forEach(function(inst){
+            data.forEach(function(inst) {
                 console.log(inst.projectId);
                 inst.bggroup = 'test';
-               // inst['bggroup'] = 'test';
+                // inst['bggroup'] = 'test';
             });
             console.log(data);
             callback(null, data);
@@ -270,36 +279,131 @@ var InstancesDao = function() {
 
 
 
+    this.createService = function(instanceId, serviceData, callback) {
 
+        var service = new Service({
+            serviceName: serviceData.name,
+            serviceUsers: serviceData.users
+        });
 
+        if (serviceData.actions && serviceData.actions.length) {
+            for (var i = 0; i < serviceData.actions.length; i++) {
+                console.log('action ==>', serviceData.actions[i]);
+                var serviceAction = new ServiceAction({
+                    actionType: serviceData.actions[i].actionType,
+                    serviceRunlist: serviceData.actions[i].runlist,
+                    command: serviceData.actions[i].command,
+                });
 
-    this.addService = function(instanceId, serviceData, callback) {
+                service.actions.push(serviceAction);
+            }
+        }
+
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $push: {
+                "services": service
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (updateCount > 0) {
+                callback(null, service);
+            } else {
+                callback(null, null);
+            }
+        });
+
+    };
+
+    this.deleteService = function(instanceId, serviceId, callback) {
+
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $pull: {
                 "services": {
-                    serviceName: serviceData.Name,
-                    serviceType: serviceData.Type,
-                    action: {
-                       assignAction : serviceData.Action,
-                       serviceRunlist: serviceData.runlist,
-                       recipe: serviceData.recipe,
-                       command: serviceData.command   
-                            },
+                    "_id": new ObjectId(serviceId)
                 }
             }
         }, {
-            upsert: true
+            upsert: false,
+            multi: true
+        }, function(err, deleteCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            callback(null, deleteCount);
+
+        });
+
+    };
+
+    this.createServiceAction = function(instanceId, serviceId, actionData, callback) {
+        var serviceAction = new ServiceAction({
+            actionType: actionData.actionType,
+            serviceRunlist: actionData.runlist,
+            command: actionData.command,
+        });
+
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+            "services._id": new ObjectId(serviceId),
+        }, {
+            $push: {
+                "services.$.actions": serviceAction
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (updateCount > 0) {
+                callback(null, serviceAction);
+            } else {
+                callback(null, null);
+            }
+
+        });
+    };
+
+    this.getServiceAction = function(instanceId, serviceId, actionId, callback) {
+
+        Instances.find({
+            "_id": new ObjectId(instanceId),
+            "services._id": new ObjectId(serviceId),
+        }, {
+            "services": {
+                "$elemMatch": {
+                    "_id": new ObjectId(serviceId),
+                    "actions": {
+                        "$elemMatch": {
+                            "_id": new ObjectId(actionId)
+                        }
+                    }
+                }
+            }
         }, function(err, data) {
             if (err) {
                 callback(err, null);
                 return;
             }
+
             callback(null, data);
+
+
         });
 
-    };
+    }
 
 
 }
