@@ -35,7 +35,7 @@ var TaskDao = function() {
 
 
     this.createTask = function(TaskData, callback) {
-        var task = new Instances(TaskData);
+        var task = new Tasks(TaskData);
 
         task.save(function(err, data) {
             if (err) {
@@ -48,7 +48,6 @@ var TaskDao = function() {
     };
 
     this.getTaskById = function(taskId, callback) {
-        console.log(instanceId);
         Tasks.find({
             "_id": new ObjectId(taskId)
         }, function(err, data) {

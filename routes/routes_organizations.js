@@ -205,7 +205,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
-        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
+        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId,function(err, data) {
             if (err) {
                 res.send(500);
                 return;
