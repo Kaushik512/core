@@ -518,7 +518,16 @@ $.fn.extend({
 				}
 			}
 		});
-
+		setTimeout(function(){
+		//open active level
+		$this.find("li.active").each(function() {
+			//alert("active")
+			$(this).parents("ul").slideDown(opts.speed);
+			$(this).parents("ul").parent("li").find("b:first").html(opts.openedSign);
+			$(this).parents("ul").parent("li").addClass("open")
+		});
+		},0);
+		
 		//open active level
 		$this.find("li.active").each(function() {
 			$(this).parents("ul").slideDown(opts.speed);
