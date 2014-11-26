@@ -41,7 +41,78 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+    app.get('/instances/dockercontainerdetails/:instanceid',function(req,res){
+        //res.send(200);
+        console.log('reached here a');
+         var instanceid = req.params.instanceid;
+         var _docker = new Docker();
+         var stdmessages = '';
+         var cmd = 'echo -e \"GET /containers/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
 
+         console.log('cmd received: ' + cmd);
+         var stdOut = '';
+            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
+                //alert('Done');
+                var _stdout = stdOut.split('\r\n');
+                console.log('Docker containers : ' + _stdout.length);
+                var start = false;
+                var so = '';
+                _stdout.forEach(function(k,v){
+                    console.log(_stdout[v] + ':' + _stdout[v].length);
+                    if(start == true){
+                        so +=  _stdout[v];
+                        console.log(v +':' + _stdout[v].length);
+                    }
+                    if(_stdout[v].length == 1)
+                        start = true;
+                    if(v >= _stdout.length - 1)
+                        res.end(so);
+                });
+               
+            },function(stdOutData){
+                stdOut += stdOutData;
+               // alert(stdOutData);
+            },function(stdOutErr) {
+                res.send(500);
+            });
+
+    });
+app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(req,res){
+        //res.send(200);
+        console.log('reached here a');
+         var instanceid = req.params.instanceid;
+         var _docker = new Docker();
+         var stdmessages = '';
+         var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+
+         console.log('cmd received: ' + cmd);
+         var stdOut = '';
+            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
+                //alert('Done');
+                var _stdout = stdOut.split('\r\n');
+                console.log('Docker containers : ' + _stdout.length);
+                var start = false;
+                var so = '';
+                _stdout.forEach(function(k,v){
+                    console.log(_stdout[v] + ':' + _stdout[v].length);
+                    if(start == true){
+                        so +=  _stdout[v];
+                        console.log(v +':' + _stdout[v].length);
+                    }
+                    if(_stdout[v].length == 1)
+                        start = true;
+                    if(v >= _stdout.length - 1)
+                        res.end(so);
+                });
+               
+            },function(stdOutData){
+                stdOut += stdOutData;
+               // alert(stdOutData);
+            },function(stdOutErr) {
+                res.send(500);
+            });
+
+    });
 
     app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname',function(req,res){
         

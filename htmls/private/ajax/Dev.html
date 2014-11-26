@@ -327,36 +327,35 @@
                               <div class="widget-main" style="min-height:300px">
                               <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
 
-                                      <table class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%">
+                                      <table class="table table-striped table-bordered table-hover dataTable" id="dockercontainertable" cellpadding="5px" width="100%">
                                           <thead>
                                               <tr class="rowCustomStyle">
                                                 <th>Actions</th>
                                                 <th>State</th>
-                                                <th>Started At</th>
+                                                <th>Created</th>
                                                 <th>Name</th>
                                                 <th>Host Instance IP</th>
                                                 <th>Container ID</th>
                                                 <th>Image</th>
-                                                <th>Docker Repo</th>
                                                 <th>More Info</th>
                                               </tr>
                                           </thead>
                                           <tbody>
-                                              <tr>
+                                              <tr id="dockercontainertabletemplatetr" class="hidden">
                                                 <td>
                                                   <div class="container1" style="display:inline-block">
                                                       <div id="card1">
                                                           <div class="card1 front1">
                                                              <div id="flip1" style="margin-top:5px;">
                                                               <div class="">
-                                                                 <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip"><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
+                                                                 <a href="javascript:void(0)" data-original-title="Stop" dockercontaineraction="stop" data-placement="top" rel="tooltip" ><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
                                                           <div class="card1 back1">
                                                               <div id="flip2" style="margin-top:5px;">
                                                                   <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
+                                                                      <a href="javascript:void(0)" data-original-title="Start"  dockercontaineraction="start"  data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
                                                                   </div>
                                                               </div> 
                                                           </div>
@@ -367,7 +366,7 @@
                                                           <div class="card3 front3">
                                                              <div style="margin-top:5px;">
                                                               <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
+                                                                  <a href="javascript:void(0)" data-original-title="Restart"  dockercontaineraction="restart"  data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
@@ -378,14 +377,14 @@
                                                           <div class="card2 front2">
                                                              <div id="flip3" style="margin-top:5px;">
                                                               <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Pause" data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
+                                                                  <a href="javascript:void(0)" data-original-title="Pause"  dockercontaineraction="pause"  data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
                                                           <div class="card2 back2">
                                                               <div id="flip4" style="margin-top:5px;">
                                                                   <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Unpause" data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
+                                                                      <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="unpause"  data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
                                                                   </div>
                                                               </div> 
                                                           </div>
@@ -393,145 +392,17 @@
                                                   </div>
                                                   
                                                 </td>
-                                                <td style="color:green">Started</td>
-                                                <td>2014-09-25 19:52:31</td>
-                                                <td>MySql_Server</td>
-                                                <td>54.148.3.155</td>
-                                                <td>d00bafb88bdb</td>
+                                                <td class="dockercontainerstatus"></td>
+                                                <td  class="dockercontainerstartedon"></td>
+                                                <td  class="dockercontainername"></td>
+                                                <td  class="dockercontainerhostip"></td>
+                                                <td  class="dockercontainerid"></td>
+                                                <td  class="dockercontainerimagename"></td>
                                                 <td>
-                                                  bdc73ask1d65
-                                                </td>
-                                                <td>
-                                                  catalyst/mysql
-                                                </td>
-                                                <td>
-                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
+                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
                                                   </a>
                                                  </td>
                                               </tr>
-
-                                              <!--2nd row started -->
-                                              <tr>
-                                                <td>
-                                                  <div class="container1" style="display:inline-block">
-                                                      <div id="card11">
-                                                          <div class="card11 front11">
-                                                              <div id="flip11" style="margin-top:5px;">
-                                                                  <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
-                                                                  </div>
-                                                              </div> 
-                                                          </div>
-                                                          <div class="card11 back11">
-                                                             <div id="flip21" style="margin-top:5px;">
-                                                              <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip"><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
-                                                                  
-                                                              </div>
-                                                             </div> 
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="container1" style="display:inline-block;margin-left:4px">
-                                                      <div id="card31">
-                                                          <div class="card31 front31">
-                                                             <div style="margin-top:5px;">
-                                                              <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
-                                                              </div>
-                                                             </div> 
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                    <div class="container1" style="display:inline-block;margin-left:4px">
-                                                      <div id="card21">
-                                                          <div class="card21 front21">
-                                                             <div id="flip31" style="margin-top:5px;">
-                                                              <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Unpause" data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
-                                                                  
-                                                              </div>
-                                                             </div> 
-                                                          </div>
-                                                          <div class="card21 back21">
-                                                              <div id="flip41" style="margin-top:5px;">
-                                                                  <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Pause" data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
-                                                                  </div>
-                                                              </div> 
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  
-                                                </td>
-                                                <td style="color:orange">Paused</td>
-                                                <td>2014-07-13 04:02:59</td>
-                                                <td>Web_Server</td>
-                                                <td>54.68.148.92</td>
-                                                <td>5277783126f8</td>
-                                                <td>
-                                                  sdf69gkq1d72
-                                                </td>
-                                                <td>
-                                                  catalyst/apache2
-                                                </td>
-                                                <td>
-                                                  <a href="#modalContainermoreInfo1" class="moreInfo btn1" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
-                                                  </a>
-                                                 </td>
-                                              </tr>
-                                              <!--3rd row started-->
-                                              <tr>
-                                                <td>
-                                                  <div class="container1" style="display:inline-block">
-                                                      <div id="card12">
-                                                          <div class="card12 front12">
-                                                              <div id="flip12" style="margin-top:5px;">
-                                                                  <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
-                                                                  </div>
-                                                              </div> 
-                                                          </div>
-                                                          <div class="card12 back12">
-                                                             <div id="flip22" style="margin-top:5px;">
-                                                              <div class="">
-                                                                 <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip"><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
-                                                              </div>
-                                                             </div> 
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="container1" style="display:inline-block;margin-left:4px">
-                                                      <div id="card32">
-                                                          <div class="card32 front32">
-                                                             <div style="margin-top:5px;">
-                                                              <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
-                                                              </div>
-                                                             </div> 
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                      
-                                                  
-                                                </td>
-                                                <td style="color:red">Stopped</td>
-                                                <td>2014-09-03 17:12:29</td>
-                                                <td>chef-user-starter</td>
-                                                <td>10.0.2.15</td>
-                                                <td>865d610906fd</td>
-                                                <td>
-                                                  asf62pqr1d83
-                                                </td>
-                                                <td>
-                                                  catalyst/chef
-                                                </td>
-                                                <td>
-                                                  <a href="#modalContainermoreInfo2" class="moreInfo btn1" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
-                                                  </a>
-                                                 </td>
-                                              </tr>
-                                              
                                           </tbody>
                                           
                                       </table>
@@ -787,6 +658,197 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+<!-- Modal for Container tab started-->
+<div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Details of Container
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form novalidate="novalidate" action="" id="login-form" class="smart-form">
+                    <fieldset style="padding-top:7px !important;">
+                        <section>
+                            <div class="widget-body">
+
+                        <ul id="myTab1" class="nav nav-tabs bordered">
+                            <li class="active">
+                                <a href="#s1" data-toggle="tab">General-Info</a>
+                            </li>
+                            <li class="">
+                                <a href="#s2" data-toggle="tab">State</a>
+                            </li>
+                            <li class="">
+                                <a href="#s3" data-toggle="tab">Image</a>
+                            </li>
+                        </ul>
+
+                        <div id="myTabContent1" class="tab-content padding-10">
+                            <div class="tab-pane fade active in" id="s1">
+                                <div class="logsArea">
+                                     <section class="col col-10">
+                                        <div class="">
+                                            <table align="left">
+                                             <thead>
+                                               <tr style="line-height:2.3">
+                                                 <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
+                                                 </th>
+                                                 <th scope="col"> <u style="font-size:12px;"></u></th>
+                                               </tr>   
+                                             </thead>
+
+                                             <tbody> 
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;" width="20%" >Name&nbsp;:</td>
+                                                    <td style="font-size:12px;" width="80%"   containerdata="Config.Hostname"></td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">ContainerID&nbsp;:</td>
+                                                    <td style="font-size:12px;"  containerdata="Id"></td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">Created&nbsp;:</td>
+                                                    <td style="font-size:12px;"  containerdata="Created"></td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">Docker Repo&nbsp;:</td>
+                                                    <td style="font-size:12px;" containerdata=""></td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">Working Dir&nbsp;:</td>
+                                                    <td style="font-size:12px;" containerdata="Config.WorkingDir"></td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">Entry Point&nbsp;:</td>
+                                                    <td style="font-size:12px;" containerdata="Config.Entrypoint">[&nbsp;]</td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">Virtual Size&nbsp;:</td>
+                                                    <td style="font-size:12px;" containerdata="Config.Memory"></td>
+                                                  </tr>
+                                                  <tr style="line-height:2.1">
+                                                    <td style="font-size:12px;">Port Specs&nbsp;:</td>
+                                                    <td style="font-size:12px;" containerdata="Config.PortSpecs"></td>
+                                                  </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </section> 
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="s2">
+                                <div class="logsArea">
+                                  <section class="col col-10">
+                                    <div class="">
+                                <table align="left">
+                                 <thead>
+                                   <tr style="line-height:2.3">
+                                    
+                                     <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
+                                     </th>
+                                     <th scope="col"> <u style="font-size:12px;"></u></th>
+                                   </tr>   
+                                 </thead>
+
+                                 <tbody> 
+                                      <tr style="line-height:2.1">
+                                        <td style="font-size:12px;" width="20%" >Running&nbsp;:</td>
+                                        <td style="font-size:12px;"  width="80%" containerdata="State.Running"></td>
+                                      </tr>
+                                      
+                                      <tr style="line-height:2.1">
+                                        <td style="font-size:12px;">PID&nbsp;:</td>
+                                        <td style="font-size:12px;"  containerdata="State.Pid"></td>
+                                      </tr>
+                                      <tr style="line-height:2.1">
+                                        <td style="font-size:12px;">ExitCode(If Stopped)&nbsp;:</td>
+                                        <td style="font-size:12px;" containerdata="State.ExitCode"></td>
+                                      </tr>
+                                      <tr style="line-height:2.1">
+                                        <td style="font-size:12px;">Started At&nbsp;:</td>
+                                        <td style="font-size:12px;"  containerdata="State.StartedAt"></td>
+                                      </tr>
+                                      <tr style="line-height:2.1">
+                                        <td style="font-size:12px;">Finished At&nbsp;:</td>
+                                        <td style="font-size:12px;"  containerdata="State.FinishedAt">-</td>
+                                      </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                          </section>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="s3">
+                                <div class="logsArea">
+                                  <section class="col col-10">
+                                    <div class="">
+                                        <table align="left">
+                                         <thead>
+                                           <tr style="line-height:2.3">
+                                            
+                                             <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
+                                             </th>
+                                             <th scope="col"> <u style="font-size:12px;"></u></th>
+                                           </tr>   
+                                         </thead>
+
+                                         <tbody> 
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;" width="20%" >ImageID</td>
+                                                <td style="font-size:12px;" width="80%"  containerdata="Image"></td>
+                                              </tr>
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;">Storage Driver</td>
+                                                <td style="font-size:12px;"  containerdata=""></td>
+                                              </tr>
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;">Execution Driver</td>
+                                                <td style="font-size:12px;" containerdata="ExecDriver"></td>
+                                              </tr>
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;">Kernel Version</td>
+                                                <td style="font-size:12px;"  containerdata=""></td>
+                                              </tr>
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;">Operating System</td>
+                                                <td style="font-size:12px;"  containerdata=""></td>
+                                              </tr>
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;">Pool Name</td>
+                                                <td style="font-size:12px;"  containerdata=""></td>
+                                              </tr>
+                                              <tr style="line-height:2.1">
+                                                <td style="font-size:12px;">Pool Block Size</td>
+                                                <td style="font-size:12px;"  containerdata=""></td>
+                                              </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                  </section>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                        </section>   
+                    </fieldset>
+                </form>
+            </div>
+             <div class="modal-footer">
+                 <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                   <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                </button>
+             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal for Container tab ended-->
 
 <script type="text/javascript">
 
@@ -1270,7 +1332,7 @@ function pollInstanceState(instanceId, state, delay) {
                     $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                     $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                     $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-                    $parent.find('.instance-details-id strong').html(data.instanceIP);
+                    $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
                     $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                 }
             }
@@ -1594,11 +1656,11 @@ function addInstanceToDOM(data) {
 
 
 
-    $divComponentListImage = $('<a class="chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
+    $divComponentListImage = $('<a class="chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
 
     //Check if the docker status is succeeded
     if(data.docker != null){
-        var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:4px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+        var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
       
          $divComponentListContainer.append($dockerStatus);
     }
@@ -1660,7 +1722,7 @@ function addInstanceToDOM(data) {
     $divDomainRolesCaption.append($divComponentListContainer);
     var $divInstanceDetails = $('<div></div>')
     var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-    var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong>' + data.instanceIP + '</strong>');
+    var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong class="instanceip">' + data.instanceIP + '</strong>');
     $instanceDetailsList.append($instanceDetailItemId);
     var $instanceDetailItemStatus;
     if (data.instanceState == 'running') {
@@ -1685,7 +1747,7 @@ function addInstanceToDOM(data) {
 
 
     //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="height:30px;width:100%"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    var $divActionBtnContainer = $('<div style="height:30px;width:100%;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
     //alert($divComponentListImage.html());
 
     
@@ -1801,6 +1863,68 @@ function addInstanceToDOM(data) {
 
 }
 
+//Containers table build
+function loadContainersTable(){
+    //alert('called');
+    console.log('called');
+    $dockercontainertable = $('#dockercontainertable tbody');
+    $('.container').each(function(){
+      var $docker = $(this).find('.dockerenabledinstacne');
+      if($docker.html() != undefined){
+        //Get the instance ID
+        var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
+            $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
+                var dockerContainerData = JSON.parse(data);
+             //   alert(JSON.stringify(dockerContainerData));
+
+                $.each(dockerContainerData,function(i,item){
+                    var $docctr = createdockercontainerrow(item,instanceid);
+                   // alert($docctr.html());
+
+                   $dockercontainertable.append($docctr);
+                });
+            });
+      }
+    });
+}
+
+function createdockercontainerrow(dockerContainerItem, instanceid){
+    // <td class="dockercontainerstatus"></td>
+    // <td  class="dockercontainerstartedon"></td>
+    // <td  class="dockercontainername"></td>
+    // <td  class="dockercontainerhostip"></td>
+    // <td  class="dockercontainerid"></td>
+    // <td  class="dockercontainerimagename"></td>
+     //alert(instanceid);
+    var $docctr = $('#dockercontainertabletemplatetr').clone().removeClass('hidden');
+    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status);
+    var docdate = new Date(1000*dockerContainerItem.Created);
+    $docctr.find('.dockercontainerstartedon').html(docdate.toLocaleString());
+    $docctr.find('.dockercontainername').html(dockerContainerItem.Names[0]);
+    //Get the host IP from the card
+
+    var instanceip = $('.domain-roles-caption[data-instanceid="' + instanceid + '"]').first().find('.instanceip').text();
+    $docctr.find('.dockercontainerhostip').html(instanceip);
+    $docctr.find('.dockercontainerid').attr('containerid',dockerContainerItem.Id).html(dockerContainerItem.Id.substring(0,12));
+    $docctr.find('.dockercontainerimagename').html(dockerContainerItem.Image);
+    //Updating the more info popup event
+    $docctr.find('.modelcontainermoreinfo').click(function(){
+        $.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id,function(data){
+            var dockerContainerData = JSON.parse(data);
+            //alert(JSON.stringify(dockerContainerData));
+            $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
+                console.log("dockerContainerData." +  $(this).attr('containerdata'));
+                 if($(this).attr('containerdata') != '')
+                    $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
+            });
+
+        });
+    });
+    return($docctr);
+
+}
+
+//End Containers table build
 
 
 $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
@@ -1872,7 +1996,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
     $divinstancescardview.find('.item').first().addClass('active');
 
 
- 
+    loadContainersTable();
 
     $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
