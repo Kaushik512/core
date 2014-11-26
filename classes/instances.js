@@ -57,6 +57,10 @@ var InstanceSchema = new Schema({
         templateComponents: [String],
         iconPath: String,
     },
+    docker:{
+        dockerEngineStatus: String,
+        dockerEngineUrl: String
+    },
     services: [ServiceSchema]
 
 });
@@ -160,6 +164,28 @@ var InstancesDao = function() {
         }, {
             $set: {
                 "instanceIP": ipaddress
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+
+    };
+
+    this.updateInstanceDockerStatus = function(instanceId, dockerstatus,dockerapiurl, callback) {
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "docker": {
+                    dockerEngineStatus: dockerstatus,
+                    dockerEngineUrl: dockerapiurl
+                }
             }
         }, {
             upsert: false

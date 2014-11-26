@@ -24,6 +24,9 @@
                     <li class="pull-left">
                         <a href="#l3" data-toggle="tab"><i class="fa fa-upload"></i>&nbsp;Deployments</a>
                     </li>
+                     <li class="pull-left">
+                        <a href="#l4" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
+                    </li>
                     <!--<li class="pull-left">
                         <a href="#l4" data-toggle="tab">Enviornments</a>
                     </li>
@@ -318,7 +321,225 @@
                         </div><!--Launch div ends here style="margin-top:90px;position:static"-->
                     
                     </div>
+                    <!-- Container tab started  -->
+                        <div class="tab-pane" id="l4">
+                            <div class="widget-body">
+                              <div class="widget-main" style="min-height:300px">
+                              <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
 
+                                      <table class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%">
+                                          <thead>
+                                              <tr class="rowCustomStyle">
+                                                <th>Actions</th>
+                                                <th>State</th>
+                                                <th>Started At</th>
+                                                <th>Name</th>
+                                                <th>Host Instance IP</th>
+                                                <th>Container ID</th>
+                                                <th>Image</th>
+                                                <th>Docker Repo</th>
+                                                <th>More Info</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                <td>
+                                                  <div class="container1" style="display:inline-block">
+                                                      <div id="card1">
+                                                          <div class="card1 front1">
+                                                             <div id="flip1" style="margin-top:5px;">
+                                                              <div class="">
+                                                                 <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip"><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                          <div class="card1 back1">
+                                                              <div id="flip2" style="margin-top:5px;">
+                                                                  <div class="">
+                                                                      <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
+                                                                  </div>
+                                                              </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card3">
+                                                          <div class="card3 front3">
+                                                             <div style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                    <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card2">
+                                                          <div class="card2 front2">
+                                                             <div id="flip3" style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0)" data-original-title="Pause" data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                          <div class="card2 back2">
+                                                              <div id="flip4" style="margin-top:5px;">
+                                                                  <div class="">
+                                                                      <a href="javascript:void(0)" data-original-title="Unpause" data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
+                                                                  </div>
+                                                              </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  
+                                                </td>
+                                                <td style="color:green">Started</td>
+                                                <td>2014-09-25 19:52:31</td>
+                                                <td>MySql_Server</td>
+                                                <td>54.148.3.155</td>
+                                                <td>d00bafb88bdb</td>
+                                                <td>
+                                                  bdc73ask1d65
+                                                </td>
+                                                <td>
+                                                  catalyst/mysql
+                                                </td>
+                                                <td>
+                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
+                                                  </a>
+                                                 </td>
+                                              </tr>
+
+                                              <!--2nd row started -->
+                                              <tr>
+                                                <td>
+                                                  <div class="container1" style="display:inline-block">
+                                                      <div id="card11">
+                                                          <div class="card11 front11">
+                                                              <div id="flip11" style="margin-top:5px;">
+                                                                  <div class="">
+                                                                      <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
+                                                                  </div>
+                                                              </div> 
+                                                          </div>
+                                                          <div class="card11 back11">
+                                                             <div id="flip21" style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip"><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
+                                                                  
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card31">
+                                                          <div class="card31 front31">
+                                                             <div style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                    <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card21">
+                                                          <div class="card21 front21">
+                                                             <div id="flip31" style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0)" data-original-title="Unpause" data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
+                                                                  
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                          <div class="card21 back21">
+                                                              <div id="flip41" style="margin-top:5px;">
+                                                                  <div class="">
+                                                                      <a href="javascript:void(0)" data-original-title="Pause" data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
+                                                                  </div>
+                                                              </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  
+                                                </td>
+                                                <td style="color:orange">Paused</td>
+                                                <td>2014-07-13 04:02:59</td>
+                                                <td>Web_Server</td>
+                                                <td>54.68.148.92</td>
+                                                <td>5277783126f8</td>
+                                                <td>
+                                                  sdf69gkq1d72
+                                                </td>
+                                                <td>
+                                                  catalyst/apache2
+                                                </td>
+                                                <td>
+                                                  <a href="#modalContainermoreInfo1" class="moreInfo btn1" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
+                                                  </a>
+                                                 </td>
+                                              </tr>
+                                              <!--3rd row started-->
+                                              <tr>
+                                                <td>
+                                                  <div class="container1" style="display:inline-block">
+                                                      <div id="card12">
+                                                          <div class="card12 front12">
+                                                              <div id="flip12" style="margin-top:5px;">
+                                                                  <div class="">
+                                                                      <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
+                                                                  </div>
+                                                              </div> 
+                                                          </div>
+                                                          <div class="card12 back12">
+                                                             <div id="flip22" style="margin-top:5px;">
+                                                              <div class="">
+                                                                 <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip"><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card32">
+                                                          <div class="card32 front32">
+                                                             <div style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                      
+                                                  
+                                                </td>
+                                                <td style="color:red">Stopped</td>
+                                                <td>2014-09-03 17:12:29</td>
+                                                <td>chef-user-starter</td>
+                                                <td>10.0.2.15</td>
+                                                <td>865d610906fd</td>
+                                                <td>
+                                                  asf62pqr1d83
+                                                </td>
+                                                <td>
+                                                  catalyst/chef
+                                                </td>
+                                                <td>
+                                                  <a href="#modalContainermoreInfo2" class="moreInfo btn1" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
+                                                  </a>
+                                                 </td>
+                                              </tr>
+                                              
+                                          </tbody>
+                                          
+                                      </table>
+                              </div>                      
+                              </div>
+                            </div>
+                        </div>
+                    <!--Container tab ended -->
                 </div>
 
             </div>
@@ -1359,7 +1580,7 @@ function addInstanceToDOM(data) {
             }
         }*/
     //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
-    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-list txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'ViewAllRunlist').addClass('instance-bootstrap-list-faimage'));
+    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'ViewAllRunlist').addClass('instance-bootstrap-list-faimage'));
 
     $divComponentItem.click(function(e) {
         $(this).parents('.flip-toggle').toggleClass('flip');
@@ -1373,9 +1594,16 @@ function addInstanceToDOM(data) {
 
 
 
-    $divComponentListImage = $('<a class="btn chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
+    $divComponentListImage = $('<a class="chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
 
-    $divComponentListContainer.append($divComponentListImage);
+    //Check if the docker status is succeeded
+    if(data.docker != null){
+        var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:4px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+      
+         $divComponentListContainer.append($dockerStatus);
+    }
+
+   
 
     //For Table View
 
@@ -1447,6 +1675,8 @@ function addInstanceToDOM(data) {
 
     $instanceDetailsList.append($instanceDetailItemStatus);
 
+    
+
     $divInstanceDetails.append($instanceDetailsList);
 
     $divDomainRolesCaption.append($divInstanceDetails);
@@ -1455,23 +1685,29 @@ function addInstanceToDOM(data) {
 
 
     //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="width:140px !important;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    var $divActionBtnContainer = $('<div style="height:30px;width:100%"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    //alert($divComponentListImage.html());
 
-    var $divActionStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
+    
+    var $divActionChefRunContainer = $('<div></div>').addClass('instance-bootstrap-ActionChefRun').append($divComponentListImage);
+    $divActionBtnContainer.append($divActionChefRunContainer);
+
+    var $divActionStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
     $divActionBtnContainer.append($divActionStartContainer);
     if (!data.chef) {
         data.chef = {};
     }
-    var $divActionReStartContainer = $('<div></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
+    var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
     $divActionBtnContainer.append($divActionReStartContainer);
-    var $divActionShutdownContainer = $('<div></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Shutdown'));
+    var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Shutdown'));
     $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
     var $backdiv = $('<span></span>').addClass('card-backflip-margin');
     var $backdiva = $('<a style="color:#333;"></a>');
-    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+    var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue'); 
+
     var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Cookbooks');
     var $backhr = $('<hr>');
 
@@ -1506,6 +1742,11 @@ function addInstanceToDOM(data) {
     });
     $back.append($flipbackdivaspan);
 
+    //Testing
+    //$divActionBtnContainer.empty().append("<div style="float:left">One</div>").append("<div style="float:left">Two</div>").append("<div style="float:left">Three</div>");
+
+
+
     $divDomainRolesCaption.append($divActionBtnContainer);
     $front.append($div);
     $card.append($front);
@@ -1522,7 +1763,7 @@ function addInstanceToDOM(data) {
     //     $('#myCarousel-2 .item active').append($instancesList);
     // }
     //For Table View
-    $divComponentListImage
+    //$divComponentListImage
     $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');
     $rowContainter.append('<td>' + $('<div></div>').append($divActionBtnContainer.clone()).html() + '</td>');
     $("#tableinstanceview").append($rowContainter);

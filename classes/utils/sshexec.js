@@ -107,7 +107,7 @@ module.exports = function(options) {
 
                     if (typeof onStdOut === 'function') {
                         stream.on('data', function(data) {
-                            console.log('SSH STDOUT: ' + data);
+                           // console.log('SSH STDOUT: ' + data);
                             onStdOut(data);
                         })
                     }
