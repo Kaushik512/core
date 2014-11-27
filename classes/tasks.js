@@ -10,7 +10,7 @@ var taskSchema = new Schema({
     name: String,
     nodesIdList: [String],
     runlist: [String],
-    lastRun: Number,
+    lastRunTimestamp: Number,
 });
 
 var Tasks = mongoose.model('Tasks', taskSchema);
@@ -23,7 +23,7 @@ var TaskDao = function() {
             projectId: projectId,
             envId: envId
         }
-        
+
         Tasks.find(queryObj, function(err, data) {
             if (err) {
                 callback(err, null);
@@ -60,6 +60,42 @@ var TaskDao = function() {
 
         });
     }
+
+
+    this.removeTaskById = function(taskId, callback) {
+        Tasks.remove({
+            "_id": new ObjectId(taskId)
+        }, function(err, deleteCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            //console.log('data ==>', data);
+            callback(null, deleteCount);
+
+        });
+    };
+
+    this.updateLastRunTimeStamp = function(taskId, timestamp, callback) {
+        Tasks.update({
+            "_id": new ObjectId(taskId)
+        }, {
+            $set: {
+                lastRunTimestamp: timestamp
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            //console.log('data ==>', data);
+            callback(null, updateCount);
+
+        });
+
+    };
 
 }
 

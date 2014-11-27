@@ -1511,7 +1511,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
 
                     $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important"></div></div>');
+                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
 
                     $taskExecuteTabsContent.append($tabContent);
 
@@ -1543,11 +1543,27 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
 
         });
         $tr.append($tdExecute);
-
-        var $tdTime = $('<td></td>').append('');
+         var timestamp = "";
+        if(data[i].lastRunTimestamp) {
+            var date = new Date().setTime(data[i].lastRunTimestamp);
+            timestamp = new Date(date).toUTCString(); //converts to human readable strings
+        }
+       
+        var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a rel="tooltip" data-placement="top" data-original-title="Edit" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a rel="tooltip" data-placement="top" data-original-title="Edit" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+        $tdOptions.find('.btnDeleteTask').click(function(e){
+            var taskId = $(this).attr('data-taskId');
+          var that = this;
+          $.ajax({
+            url:'../tasks/'+taskId,
+            method:'DELETE',
+            success:function(data){
+              $(that).parents('tr').remove();
+            }
+          })
+        });
         $tr.append($tdOptions);
 
         $taskListArea.append($tr);

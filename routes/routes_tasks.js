@@ -27,7 +27,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             var instanceIds = task.nodesIdList;
             console.log(task.nodesIdList);
             if (!(instanceIds && instanceIds.length)) {
-            	console.log(task.nodesIdList);
+                console.log(task.nodesIdList);
                 res.send(500);
                 return;
             }
@@ -41,7 +41,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 for (var i = 0; i < instances.length; i++) {
                     (function(instance) {
-
+                        if (!instance.instanceIP) {
+                            return;
+                        }
                         configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                             if (err) {
                                 return;
@@ -109,12 +111,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     timestamp: new Date().getTime()
                                 });
                             });
-                            
+
                         });
 
 
                     })(instances[i]);
                 }
+                //setting last run timestamp
+                tasksDao.updateLastRunTimeStamp(req.params.taskId,new Date().getTime(), function(err, data) {
+                    if(err) {
+                        console.log(err);
+                    } 
+                });
+
                 res.send(instances);
 
             });
@@ -125,4 +134,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         });
     });
+
+    app.delete('/tasks/:taskId', function(req, res) {
+        tasksDao.removeTaskById(req.params.taskId, function(err, deleteCount) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (deleteCount) {
+                res.send({
+                    deleteCount: deleteCount
+                });
+            } else {
+                res.send(400);
+            }
+        });
+    });
+
 };
