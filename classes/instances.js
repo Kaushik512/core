@@ -84,18 +84,19 @@ var InstancesDao = function() {
         });
     }
 
-    this.getInstances = function(callback) {
+    this.getInstances = function(instanceIds, callback) {
+        var queryObj = {};
+        if(instanceIds && instanceIds.length) {
+            queryObj._id = {
+                $in:instanceIds
+            }
+        }
 
-        Instances.find({}, function(err, data) {
+        Instances.find(queryObj, function(err, data) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            data.forEach(function(inst) {
-                console.log(inst.projectId);
-                inst.bggroup = 'test';
-                // inst['bggroup'] = 'test';
-            });
             console.log(data);
             callback(null, data);
         });

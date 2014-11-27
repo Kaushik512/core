@@ -338,17 +338,20 @@ var Chef = function(settings) {
                 port: options.port,
                 username: options.username
             };
+            var sudoCmd;
             if (options.privateKey) {
                 sshParamObj.privateKey = options.privateKey;
                 if (options.passphrase) {
                     sshParamObj.passphrase = options.passphrase;
                 }
+                sudoCmd = "sudo";
             } else {
                 sshParamObj.password = options.password;
+                sudoCmd = 'echo "'+options.password+'" | sudo -S';
             }
             var sshConnection = new SSH(sshParamObj);
-
-            sshConnection.exec('sudo chef-client ' + chefRunParamOveright + ' ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
+            
+            sshConnection.exec(sudoCmd+' chef-client ' + chefRunParamOveright + ' ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
 
         } else {
 

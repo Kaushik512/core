@@ -21,12 +21,14 @@
                     <li class="pull-left">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
+
                     <li class="pull-left">
-                        <a href="#l3" data-toggle="tab"><i class="fa fa-upload"></i>&nbsp;Deployments</a>
+                        <a href="#l3" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
                      <li class="pull-left">
                         <a href="#l4" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                     </li>
+
                     <!--<li class="pull-left">
                         <a href="#l4" data-toggle="tab">Enviornments</a>
                     </li>
@@ -220,7 +222,7 @@
                         </div><!--Launch div ends here-->
                     </div>
 
-                    <div class="tab-pane" id="l3">
+                    <!-- <div class="tab-pane" id="l3">
                         
 
                         <form class="smart-form" action="">
@@ -287,18 +289,7 @@
                                                 
                                             </ul>
                                         </div>
-                                        <!-- <div style="margin-top: 122px;" class="col col-2">
-                                            <div class="input-group">
-                                                <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button id="btnItemUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-up"></i></button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div class="btn-group">
-                                                    <button id="btnItemDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-down"></i></button>
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                        
+                                       
                                     </div>
                                 </section>
 
@@ -318,7 +309,90 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!--Launch div ends here style="margin-top:90px;position:static"-->
+                        </div>
+                    
+                    </div> -->
+                                        <div class="tab-pane" id="l3">
+                        <div class="row">
+                          <div class="col-md-12">
+                              <div class="col-md-12">
+
+                                  <div class="widget-box">
+                                      <div class="widget-header">
+                                          <h5 class="widget-title" style="color:#4e5964;">
+                                          <strong>List of Tasks</strong>
+                                          </h5>
+                                          <div class="widget-toolbar no-border">
+                                              <div>     
+                                                  <a class="btn btn-minier btn-primary createTaskLink" href="javascript:void(0)">
+                                                      <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                                                      Create Task
+                                                  </a>                                                
+                                              </div>
+                                          </div>
+                                                                  
+                                      </div>
+                                      <div class="widget-body">
+                                          <div class="widget-main" style="min-height:300px">
+                                              <div class="col-md-12 table-responsive">
+                                                  <table class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed" cellpadding="5px" width="100%">
+                                                      <thead>
+                                                          <tr class="rowCustomStyle">    
+                                                              <td>Name</td>
+                                                              <td>Assigned Node</td>
+                                                              <td>Assigned Runlists</td>
+                                                              <td>Execute</td>
+                                                              <td>Last Run</td>
+                                                              <td>Action</td>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody class="taskListArea">
+                                                          <tr>
+                                                              <td>Restart_Apache_servers</td>
+                                                              <td>
+                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedNode" data-toggle="modal">
+                                                                      <i class="ace-icon fa fa-sitemap fa-14x"></i>
+                                                                  </a>
+                                                                  <!-- <select id="multiassign1" title="Node" multiple="multiple" name="Node" size="5">
+                                                                  </select> -->
+                                                              </td>
+                                                              <td>
+                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedRunlist" data-toggle="modal">
+                                                                      <i class="ace-icon fa fa-list-ul bigger-120"></i>
+                                                                  </a>
+                                                              </td>
+                                                              <td>
+                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedExecute" data-toggle="modal">
+                                                                      <i class="ace-icon fa fa-play bigger-120"></i>
+                                                                  </a>
+                                                              </td>
+                                                              <td>
+                                                                  2014-09-25&nbsp;&nbsp;19:52:31
+                                                              </td>
+                                                              <td>
+                                                                  <div class="btn-group tableactionWidth">
+                                                                      <a class="btn btn-danger pull-left btn-sg tableactionbutton" data-original-title="Delete" data-placement="top" rel="tooltip">
+                                                                          <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                      </a>
+                                                                      <a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip">
+                                                                          <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                                      </a>
+                                                                  </div>
+                                                              </td>
+                                                          </tr>
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                          <div class="widget-toolbox padding-8 clearfix">
+                                             <div id="tableFooterLeft" class="pull-left">Showing 1 to 4 of 4 entries</div>
+                                             <div id="tableFooterRight" class="pull-right">1</div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                     
                     </div>
                     <!-- Container tab started  -->
@@ -348,14 +422,14 @@
                                                           <div class="card1 front1">
                                                              <div id="flip1" style="margin-top:5px;">
                                                               <div class="">
-                                                                 <a href="javascript:void(0)" data-original-title="Stop" dockercontaineraction="stop" data-placement="top" rel="tooltip" ><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
+                                                                 <a href="javascript:dockerContainerAction();" data-original-title="Stop" dockercontaineraction="2" data-placement="top" rel="tooltip" ><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
                                                           <div class="card1 back1">
                                                               <div id="flip2" style="margin-top:5px;">
                                                                   <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Start"  dockercontaineraction="start"  data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
+                                                                      <a href="javascript:dockerContainerAction();" data-original-title="Start"  dockercontaineraction="1"  data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
                                                                   </div>
                                                               </div> 
                                                           </div>
@@ -366,7 +440,7 @@
                                                           <div class="card3 front3">
                                                              <div style="margin-top:5px;">
                                                               <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Restart"  dockercontaineraction="restart"  data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
+                                                                  <a href="javascript:dockerContainerAction();" data-original-title="Restart"  dockercontaineraction="3"  data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
@@ -377,14 +451,14 @@
                                                           <div class="card2 front2">
                                                              <div id="flip3" style="margin-top:5px;">
                                                               <div class="">
-                                                                  <a href="javascript:void(0)" data-original-title="Pause"  dockercontaineraction="pause"  data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
+                                                                  <a href="javascript:dockerContainerAction();" data-original-title="Pause"  dockercontaineraction="4"  data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
                                                           <div class="card2 back2">
                                                               <div id="flip4" style="margin-top:5px;">
                                                                   <div class="">
-                                                                      <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="unpause"  data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
+                                                                      <a href="javascript:dockerContainerAction();" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
                                                                   </div>
                                                               </div> 
                                                           </div>
@@ -658,6 +732,632 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    ×
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-sitemap txt-color-blue"></i>&nbsp;&nbsp;Assigned Nodes
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section>
+                            <div class="">
+                                <table align="left">
+                                 <thead>
+                                   <tr style="line-height:2.3">
+                                     <th style="width:80%;" scope="col"><u style="font-size:12px;">Name</u>
+                                     </th>
+                                     <th scope="col"> <u style="font-size:12px;">IP Address</u></th>
+                                   </tr>   
+                                 </thead>
+
+                                 <tbody class="taskNodeListContainer"> 
+                                
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>   
+                    </fieldset>
+                    <div>
+                    
+                    </div>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>                           
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedNode-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedRunlist" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    ×
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Assigned Runlists
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                       <section class="col col-6">
+                            <label class="label">
+                                <img src="img/templateicons/Order-run-list---deployment.png">
+                                <strong>RunLists</strong>
+                            </label>
+                            <div class="row">
+                                <div class="col col-10">
+                                    <ul class="taskRunListContainer" style="border:1px solid #dddddd;list-style:none outside none;min-height:100px;overflow-y:auto;">
+                                     
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                    </fieldset>
+                    <div>
+                    
+                    </div>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>                           
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedRunlist-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    ×
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section>
+                            
+                        <div role="content">
+                            <div class="widget-body">
+
+                                <ul id="taskExecuteTabsHeader" class="nav nav-tabs bordered">
+                                    <li class="active">
+                                        <a href="#a1" data-toggle="tab">MySql_Server</a>
+                                    </li>
+                                    <li>
+                                        <a href="#a2" data-toggle="tab">Web_Server</a>
+                                    </li>
+                                     <li>
+                                        <a href="#a3" data-toggle="tab">chef-user-starter</a>
+                                    </li>
+                                     <li>
+                                        <a href="#a4" data-toggle="tab">docker-c1</a>
+                                    </li>
+                                    <li class="dropdown dropdownlog">
+                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="#a5" data-toggle="tab">Web_Server</a>
+                                            </li>
+                                            <li>
+                                                <a href="#a6" data-toggle="tab">MySql_Server</a>
+                                            </li>
+                                            <li>
+                                                <a href="#a7" data-toggle="tab">azurevm</a>
+                                            </li>
+                                            <li>
+                                                <a href="#a8" data-toggle="tab">chef-docker</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                   
+                                </ul>
+
+                                <div id="taskExecuteTabsContent" class="tab-content padding-10">
+                                    <div class="tab-pane fade in active" id="a1">
+                                        <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:08 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Starting instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:12 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>Connecting to 54.69.61.136</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:16 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:24 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to Install Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:32 GMT</div>
+                                                    </div>
+                                                    <div  class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 downloading https://www.opscode.com/chef/metadata?v=11&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64 54.69.61.136 to file /tmp/install.sh.971/metadata.txt 54.69.61.136 trying curl... </span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:34 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client again...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installed Chef Client sucessfully</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="a2">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 30 Oct 2014 09:19:53 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Node Imported</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Tue, 04 Nov 2014 20:23:26 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unsucessfully run Web_Server</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:36:53 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>Connect 54.69.61.136 to run chef-client ....</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Instance Starting</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:44 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>Web_Server instance started.....</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="a3">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:08 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Starting instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:12 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>Connecting to 54.69.61.136</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:16 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:24 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to Install Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:32 GMT</div>
+                                                    </div>
+                                                    <div  class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 downloading https://www.opscode.com/chef/metadata?v=11&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64 54.69.61.136 to file /tmp/install.sh.971/metadata.txt 54.69.61.136 trying curl... </span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:34 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client again...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installed Chef Client sucessfully</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="a4">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 30 Oct 2014 09:19:53 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Node Imported</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Tue, 04 Nov 2014 20:23:26 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to run chef-client</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:36:53 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to run chef-client</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Instance Starting</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to start instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="tab-pane fade" id="a5">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 30 Oct 2014 09:19:53 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Node Imported</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Tue, 04 Nov 2014 20:23:26 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to run chef-client</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:36:53 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to run chef-client</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Instance Starting</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to start instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="tab-pane fade" id="a6">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:08 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Starting instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:12 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>Connecting to 54.69.61.136</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:16 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:24 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to Install Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:32 GMT</div>
+                                                    </div>
+                                                    <div  class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 downloading https://www.opscode.com/chef/metadata?v=11&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64 54.69.61.136 to file /tmp/install.sh.971/metadata.txt 54.69.61.136 trying curl... </span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:34 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client again...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installed Chef Client sucessfully</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="a7">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 30 Oct 2014 09:19:53 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Node Imported</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Tue, 04 Nov 2014 20:23:26 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to run chef-client</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:36:53 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to run chef-client</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Instance Starting</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Wed, 05 Nov 2014 08:57:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to start instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="a8">
+                                      <div class="logsArea">
+                                            <div>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:08 GMT</div></div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
+                                                        <span>Starting instance</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:12 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>Connecting to 54.69.61.136</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:16 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:24 GMT</div>
+                                                    </div>
+                                                    <div style="color:red;" class="col-lg-8 col-sm-8">
+                                                        <span>Unable to Install Chef Client...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:32 GMT</div>
+                                                    </div>
+                                                    <div  class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 downloading https://www.opscode.com/chef/metadata?v=11&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64 54.69.61.136 to file /tmp/install.sh.971/metadata.txt 54.69.61.136 trying curl... </span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:34 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installing Chef Client again...</span>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row" style="padding-left:20px;">
+                                                    <div class="col-lg-4 col-sm-4">
+                                                        <div>Thu, 06 Nov 2014 12:09:40 GMT</div>
+                                                    </div>
+                                                    <div style="color:DarkBlue;" class="col-lg-8 col-sm-8">
+                                                        <span>54.69.61.136 Installed Chef Client sucessfully</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        </section>  
+                    </fieldset>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>                           
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
 
 <!-- Modal for Container tab started-->
 <div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -884,6 +1584,10 @@ var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
+$('.createTaskLink').click(function(e){
+    window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
+});
+
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
 
@@ -1021,6 +1725,183 @@ $('.dockerinstancestart').click(function(e){
 });
 
 
+$.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' + envId + '/tasks', function(data) {
+    var $taskListArea = $('.taskListArea').empty();
+    for (var i = 0; i < data.length; i++) {
+        var $tr = $('<tr></tr>');
+        var $tdName = $('<td></td>').append(data[i].name);
+        $tr.append($tdName);
+        var $tdNodeList = $('<td></td>').append('<a data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
+        $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
+            $.post('../instances/', {
+                instanceIds: $(this).data('nodeList')
+            }, function(instances) {
+                var $taskNodeListContainer = $('.taskNodeListContainer').empty();
+                for (var i = 0; i < instances.length; i++) {
+                    var $tr = $('<tr></tr>').css({
+                        'line-height': '2.1'
+                    });
+                    var $tdInstanceName = $('<td></td>').append(instances[i].chef.chefNodeName).css({
+                        'font-size': '12px'
+                    });
+                    var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
+                        'font-size': '12px'
+                    });
+                    $tr.append($tdInstanceName).append($tdInstanceIp);
+                    $taskNodeListContainer.append($tr);
+                }
+                $('#assignedNode').modal('show');
+            });
+
+
+        });
+        $tr.append($tdNodeList);
+
+        var $tdRunlist = $('<td></td>').append('<a data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
+        $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
+            var $taskRunListContainer = $('.taskRunListContainer').empty();
+            var runlist = $(this).data('taskRunlist');
+            if (runlist && runlist.length) {
+                for (var i = 0; i < runlist.length; i++) {
+                    $li = $('<li></li>').append(runlist[i]).css({
+                        "font-size": "12px"
+                    });
+                    $taskRunListContainer.append($li);
+                }
+            }
+            $('#assignedRunlist').modal('show');
+        });
+        $tr.append($tdRunlist);
+
+        var $tdExecute = $('<td></td>').append('<a data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+        $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
+            var taskId = $(this).data('taskId');
+            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+            $.get('../tasks/' + taskId + '/run', function(instances) {
+
+                for (var i = 0; i < instances.length; i++) {
+                    var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                    if (i === 4) {
+                        var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
+
+                        $taskExecuteTabsHeaderContainer.append($liMoreHeader);
+
+                        $taskExecuteTabsHeaderContainer = $liMoreHeader.find(ul);
+
+                    }
+
+                    $taskExecuteTabsHeaderContainer.append($liHeader);
+
+                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important"></div></div>');
+
+                    $taskExecuteTabsContent.append($tabContent);
+
+
+                }
+                //shown event
+
+
+
+                $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                    $(e.target).attr('data-taskPolling', 'true');
+                    var tabId = $(e.target).attr('href')
+                    pollTaskLogs($(this), $(tabId), null, 0, false);
+                    //e.relatedTarget // previous active tab
+                });
+
+                $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
+                    $(e.target).attr('data-taskPolling', 'false');
+                    //e.relatedTarget // previous active tab
+                }).first().click();
+ 
+                $('#assignedExecute').modal('show');
+
+
+
+            });
+
+
+
+        });
+        $tr.append($tdExecute);
+
+        var $tdTime = $('<td></td>').append('');
+        $tr.append($tdTime);
+
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a rel="tooltip" data-placement="top" data-original-title="Edit" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+        $tr.append($tdOptions);
+
+        $taskListArea.append($tr);
+
+    }
+
+    function pollTaskLogs($tabLink, $tab, timestamp, delay, clearData) {
+        var instanceId = $tabLink.attr('data-taskInstanceId');
+        var timestamp = $tabLink.attr('data-taskPollLastTimestamp');
+        var poll = $tabLink.attr('data-taskPolling');
+
+        if (poll !== 'true') {
+            console.log('not polling');
+            return;
+        }
+
+
+        var url = '../instances/' + instanceId + '/logs';
+        if (timestamp) {
+            url = url + '?timestamp=' + timestamp;
+        }
+
+        timeout = setTimeout(function() {
+            $.get(url, function(data) {
+                var $modalBody = $tab.find('.taskLogArea')
+                if (clearData) {
+                    $modalBody.empty();
+                }
+                var $table = $('<div></div>');
+
+                for (var i = 0; i < data.length; i++) {
+                    var $rowDiv = $('<div class="row"></div>');
+                    var timeString = new Date().setTime(data[i].timestamp);
+                    var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                    $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                    if (data[i].err) {
+                        $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                    } else {
+                        $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                    }
+
+                    $table.append($rowDiv);
+                    $table.append('<hr/>');
+
+                }
+
+
+                if (data.length) {
+                    lastTimestamp = data[data.length - 1].timestamp;
+                    console.log(lastTimestamp);
+                    $modalBody.append($table);
+                    $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                     $tabLink.attr('data-taskPollLastTimestamp',data[data.length - 1].timestamp);
+                   
+                }
+
+
+                console.log('polling again');
+                if ($tabLink.attr('data-taskPolling') === 'true' && $('#assignedExecute').data()['bs.modal'].isShown) {
+
+                    pollTaskLogs($tabLink, $tab,  $tabLink.attr('data-taskPollLastTimestamp'), 1000, false);
+
+                } else {
+                    console.log('not polling again');
+                }
+            });
+        }, delay);
+    }
+
+
+});
 $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/blueprints', function(data) {
 
     var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
@@ -1675,7 +2556,7 @@ function addInstanceToDOM(data) {
     $rowContainter.append('<td><img src="img/templateicons/Small-Icon/' + data.blueprintData.templateId + '.png" /></td>');
 
 
-    $rowContainter.append('<td>' + data.blueprintData.blueprintName + '</td>');
+    $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0,15) + '</td>');
     //$rowContainter.append('<td>' +$divComponentList.text()+ '</td>');
     $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
     var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
@@ -1886,7 +2767,30 @@ function loadContainersTable(){
             });
       }
     });
+    //dockercontaineraction
+
+    
 }
+
+function dockerContainerAction(){
+        //alert($(this).html());
+
+        alert('test' + $this.html());
+        var $alink = $this;
+        var action = $alink.attr('dockercontaineraction');
+        
+        var instanceid = $alink.closest('tr').attr('instanceid');
+        var containerid = $alink.closest('tr').attr('containerid');
+        alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
+        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
+
+            $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
+              alert(data);
+              if(data == 'OK')
+                    $(this).parents('.flip-toggle').toggleClass('flip');
+            });
+        }
+    }
 
 function createdockercontainerrow(dockerContainerItem, instanceid){
     // <td class="dockercontainerstatus"></td>
@@ -1904,6 +2808,8 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     //Get the host IP from the card
 
     var instanceip = $('.domain-roles-caption[data-instanceid="' + instanceid + '"]').first().find('.instanceip').text();
+    $docctr.attr('instanceid',instanceid);
+    $docctr.attr('containerid',dockerContainerItem.Id.substring(0,12));
     $docctr.find('.dockercontainerhostip').html(instanceip);
     $docctr.find('.dockercontainerid').attr('containerid',dockerContainerItem.Id).html(dockerContainerItem.Id.substring(0,12));
     $docctr.find('.dockercontainerimagename').html(dockerContainerItem.Image);
@@ -1940,6 +2846,10 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
 
     }
     //for table view
+    //Clearing the additional chef client run from action.
+    $('#tableinstanceview').find('.instance-bootstrap-ActionChefRun').detach();
+
+
     if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
         var tableinstanceview = $('#tableinstanceview').dataTable({
             "pagingType": "full_numbers",
@@ -1962,7 +2872,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     "bSortable": false
                 },
                 {
-                    "bSortable": false
+                    "bSortable": false,
+                    "sWidth": "20%"
                 }
             ]
         });

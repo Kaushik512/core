@@ -26731,11 +26731,13 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     margin-bottom: 20px;
 }
 #login #header #logo {
-    margin-top: 12px;
+    margin-top: 4px;
+    /*margin-top: 12px;*/
     margin-left: 0;
 }
 #login #header #logo img {
-    width: 172px;
+    /*width: 172px;*/
+    width: 170px;
 }
 #login-header-space {
     float: right;
@@ -26808,7 +26810,8 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     /*padding: 0 5px!important;*/
 }
 #login #header #logo img {
-    width: 172px;
+    width: 140px;
+    /*width: 172px;*/
 }
 #login #header #logo {
     margin-top: 12px;

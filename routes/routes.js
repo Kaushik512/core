@@ -23,6 +23,7 @@ var organizations = require('./routes_organizations');
 var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
+var tasks = require('./routes_tasks');
 var taskStatus = require('./routes_taskstatus');
 
 
@@ -55,7 +56,9 @@ module.exports.setRoutes = function(app) {
   ec2_routes.setRoutes(app, sessionVerificationFunc);
 
   users.setRoutes(app,sessionVerificationFunc);
-
+  
+  tasks.setRoutes(app,sessionVerificationFunc);
+  
   taskStatus.setRoutes(app,sessionVerificationFunc);
   
   app.get('/', function(req, res) {

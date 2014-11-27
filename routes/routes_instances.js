@@ -15,7 +15,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances', function(req, res) {
-        instancesDao.getInstances(function(err, data) {
+        instancesDao.getInstances(null,function(err, data) {
+            if (err) {
+                console.log(err);
+                res.send(500);
+                return;
+            }
+
+            res.send(data);
+
+        });
+    });
+
+    app.post('/instances', function(req, res) {
+        instancesDao.getInstances(req.body.instanceIds,function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500);
@@ -79,7 +92,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(req,res){
         //res.send(200);
-        console.log('reached here a');
+        console.log('reached container details');
          var instanceid = req.params.instanceid;
          var _docker = new Docker();
          var stdmessages = '';
@@ -107,6 +120,73 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
                
             },function(stdOutData){
                 stdOut += stdOutData;
+               // alert(stdOutData);
+            },function(stdOutErr) {
+                res.send(500);
+            });
+
+    });
+    app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action',function(req,res){
+        //res.send(200);
+        console.log('reached here action');
+         var instanceid = req.params.instanceid;
+         var _docker = new Docker();
+         var stdmessages = '';
+         //Command mapping for security
+         var action = 'start';
+         switch (req.params.action){
+            case "1":
+                action = 'start';
+                break;
+            case "2":
+                action = 'stop';
+                break;
+            case "3":
+                action = 'restart';
+                break;
+            case "4":
+                action = 'pause';
+                break;
+            case "5":
+                action = 'unpause';
+                break;
+         }
+
+
+         //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
+         console.log('cmd received: ' + cmd);
+         var stdOut = '';
+            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
+                //alert('Done');
+                if(!err){
+                    logsDao.insertLog({
+                                    referenceId: instanceid,
+                                    err: false,
+                                    log: "Container  " + req.params.containerid  + " Action :" + action,
+                                    timestamp: new Date().getTime()
+                                });
+                    res.send(200);
+                }
+                else{
+                    console.log("Action Error : " + err);
+                    logsDao.insertLog({
+                                    referenceId: instanceid,
+                                    err: true,
+                                    log: "Action Error : " + err,
+                                    timestamp: new Date().getTime()
+                                });
+                    res.send(500);
+                }
+               
+            },function(stdOutData){
+                stdOut += stdOutData;
+                logsDao.insertLog({
+                                    referenceId: instanceid,
+                                    err: false,
+                                    log: "Container  " + req.params.containerid  + ":" + stdOutData,
+                                    timestamp: new Date().getTime()
+                                });
                // alert(stdOutData);
             },function(stdOutErr) {
                 res.send(500);
@@ -490,8 +570,8 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
             console.log(deleteCount);
             if (deleteCount) {
                 res.send({
-                    deleteCount:deleteCount
-                },200);
+                    deleteCount: deleteCount
+                }, 200);
             } else {
                 res.send(400);
             }
@@ -597,17 +677,11 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
                         }
                         console.log("knife ret code", retCode);
                         if (retCode == 0) {
-                            console.log('updating node runlist in db');
-                            instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
-                                if (err) {
-                                    return;
-                                }
-                                logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
-                                    err: false,
-                                    log: 'instance runlist updated',
-                                    timestamp: new Date().getTime()
-                                });
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: false,
+                                log: 'instance runlist updated',
+                                timestamp: new Date().getTime()
                             });
                         } else {
                             return;
