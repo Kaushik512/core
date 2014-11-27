@@ -787,7 +787,7 @@
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
                     <fieldset style="padding-top:7px !important;">
                         <section>
-                            
+
                         <div role="content">
                             <div class="widget-body">
 
@@ -2723,10 +2723,33 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
 });
 
 $('.actionControlPanel').click(function(e) {
+    //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        //alert('hi');
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    localStorage.setItem("breadcrumb", DummyBreadCrumb);
+}
+
     var controlId = $(".visibleClass").attr("id");
     //alert(controlId);
     var urlText;
     localStorage.setItem("dataEx", location.href);
+    
    
     if ($('#divinstancescardview').is(':visible')) {
 
