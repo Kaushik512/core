@@ -32,7 +32,7 @@
                     <div class="col col-10">
                         <label class="input">
                             <i class="icon-append fa fa-building"></i>
-                            <input type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control" name="ctl00$MainContent$orgname">
+                            <input type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
                         </label>
                     </div>  
                 </div>
@@ -888,11 +888,11 @@
         <div style="bottom:0px;position:fixed" class="col-md-10 col-sm-12 col-xs-12">
             <div style="text-align:center" class="clearfix form-actions">
                 <div class="btn-group">
-                    <a style="margin-left:5px" class="btn pull-left btn-primary">
+                    <a style="margin-left:5px" class="btn pull-left btn-primary btnSaveTask">
                         <i class="ace-icon fa fa-check bigger-110"></i>
                         Save Task
                     </a>  
-                    <a style="margin-left:5px" class="btn pull-left btn-primary" onclick="window.history.back();">
+                    <a style="margin-left:5px" class="btn pull-left btn-primary btnBack" onclick="window.history.back();">
                         <i class="ace-icon fa fa-rotate-left  bigger-110"></i>
                         Cancel
                     </a>                                     
@@ -902,6 +902,91 @@
         </div>
 </div>
 <script type="text/javascript">
+
+
+var urlParams = {};
+(window.onpopstate = function() {
+    var url = window.location.href;
+    var indexOfQues = url.lastIndexOf("?");
+    if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+            var paramParts = params[i].split('=');
+            urlParams[paramParts[0]] = paramParts[1];
+        }
+    }
+
+})();
+
+
+$.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
+    console.log(data);
+    var cookbooks = data.cookbooks;
+    var keys = Object.keys(cookbooks);
+    var $deploymentCookbookList = $('.deploymentCookbookList').empty();;
+    for (i = 0; i < keys.length; i++) {
+        $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+    }
+
+});
+
+$.get('../organizations/' + urlParams.org + '/roles', function(data) {
+    console.log(data);
+    var roles = data.roles;
+    var keys = Object.keys(roles);
+    var $deploymentRolesList = $('.deploymentRolesList').empty();
+    for (i = 0; i < keys.length; i++) {
+        $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+    }
+
+});
+
+$.get('../organizations/'+urlParams.org+'/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
+    var $deploymentNodeList = $('.deploymentNodeList').empty();
+    for(var i=0;i<data.length;i++) {
+      $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + data[i].chefNodeName + '</label></li>'));    
+    }
+});
+
+$('.btnSaveTask').click(function(e) {
+    if (!$("#chef-dropdown").is(':visible')) {
+        return;
+    }
+
+    var $selectedNodes = $('.deploymentNodeList input[type=checkbox]:checked');
+    var nodesList = [];
+    $selectedNodes.each(function() {
+        nodesList.push(this.value);
+    });
+
+    var $selectedRunlist = $('.deploymentSelectedRunList input');
+    var runlist = [];
+    $selectedRunlist.each(function() {
+        runlist.push(this.value);
+    });
+
+
+
+
+    var reqBody = {
+        taskData: {
+            name: $('.inputTaskName').val(),
+            nodesIdList: nodesList,
+            runlist: runlist,
+        }
+    };
+
+    $.post('../organizations/' + urlParams.org + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
+        console.log(data);
+        $('.btnBack').click();
+    });
+
+
+
+});
+
 $(document).ready(function() {
     $(".chooseTasktype").select2();
     $(".projectListJenkins").select2();
@@ -912,15 +997,15 @@ $("#Jenkins-dropdown").hide();
 $("#Custom-dropdown").hide();
 
 $('.chooseTasktype').change(function(e) {
-    if(this.value=="Chef"){
+    if (this.value == "Chef") {
         $("#Jenkins-dropdown").hide();
         $("#Custom-dropdown").hide();
         $("#chef-dropdown").show();
-    }else if(this.value=="Jenkins"){
+    } else if (this.value == "Jenkins") {
         $("#Jenkins-dropdown").show();
         $("#Custom-dropdown").hide();
         $("#chef-dropdown").hide();
-    }else{
+    } else {
         $("#Jenkins-dropdown").hide();
         $("#Custom-dropdown").show();
         $("#chef-dropdown").hide();
@@ -930,29 +1015,29 @@ $('#btnDeploymentAddSelectedCookbook').click(function(e) {
     var $deploymentSelectedList = $('.deploymentSelectedRunList');
     var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
     $selectedCookbooks.each(function(idx) {
-    var $this = $(this);
-    $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
-    if ($(this).hasClass('deploymentCookbookSelected')) {
-    $(this).removeClass('deploymentCookbookSelected');
-    } else {
-    $(this).addClass('deploymentCookbookSelected');
-    }
-    }));
-    $this.attr('checked', false);
-    $this.parents('li').hide();
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+            if ($(this).hasClass('deploymentCookbookSelected')) {
+                $(this).removeClass('deploymentCookbookSelected');
+            } else {
+                $(this).addClass('deploymentCookbookSelected');
+            }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
     });
     var $selectedRoles = $("input[name=checkboxRoles]:checked");
     $selectedRoles.each(function(idx) {
-    var $this = $(this);
-    $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
-    if ($(this).hasClass('deploymentCookbookSelected')) {
-    $(this).removeClass('deploymentCookbookSelected');
-    } else {
-    $(this).addClass('deploymentCookbookSelected');
-    }
-    }));
-    $this.attr('checked', false);
-    $this.parents('li').hide();
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+            if ($(this).hasClass('deploymentCookbookSelected')) {
+                $(this).removeClass('deploymentCookbookSelected');
+            } else {
+                $(this).addClass('deploymentCookbookSelected');
+            }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
     });
     // $deploymentSelectedList.sortable({
     // cursor: "move"
@@ -962,30 +1047,30 @@ $('#btnDeploymentAddSelectedCookbook').click(function(e) {
 $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
     var $deploymentSelectedList = $('.deploymentSelectedRunList');
     $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
-    var value = $(this).find('input').val();
-    var selector = 'input[name=checkboxRoles][value="' + value + '"]';
-    console.log(selector);
-    $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
-    $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
-    $(this).remove();
+        var value = $(this).find('input').val();
+        var selector = 'input[name=checkboxRoles][value="' + value + '"]';
+        console.log(selector);
+        $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
+        $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
+        $(this).remove();
     });
-}); 
+});
 
 
 
-$("#btnItemUp").on('click', function () {
-        var $selectedRunlist = $('.deploymentCookbookSelected');
+$("#btnItemUp").on('click', function() {
+    var $selectedRunlist = $('.deploymentCookbookSelected');
 
-        $selectedRunlist.insertBefore($selectedRunlist.first().prev());
+    $selectedRunlist.insertBefore($selectedRunlist.first().prev());
 });
 
 
 
 
 
-$("#btnItemDown").on('click', function () {
+$("#btnItemDown").on('click', function() {
     var $selectedRunlistDown = $('.deploymentCookbookSelected');
-        
+
     $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
 
 });
