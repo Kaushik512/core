@@ -419,17 +419,17 @@
                                                 <td>
                                                   <div class="container1" style="display:inline-block">
                                                       <div id="card1">
-                                                          <div class="card1 front1">
+                                                          <div class="card1 front1 flipper">
                                                              <div id="flip1" style="margin-top:5px;">
                                                               <div class="">
-                                                                 <a href="javascript:dockerContainerAction();" data-original-title="Stop" dockercontaineraction="2" data-placement="top" rel="tooltip" ><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
+                                                                 <a href="javascript:void(0);" data-original-title="Stop" dockercontaineraction="2" data-placement="top" rel="tooltip"  class="dockeractionbutton" ><i class="fa fa-power-off fa-1x txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card1 back1">
+                                                          <div class="card1 back1 flipper hidden">
                                                               <div id="flip2" style="margin-top:5px;">
                                                                   <div class="">
-                                                                      <a href="javascript:dockerContainerAction();" data-original-title="Start"  dockercontaineraction="1"  data-placement="top" rel="tooltip"><i class="fa fa-play fa-1x txt-color-white"></i></a>
+                                                                      <a href="javascript:void(0);" data-original-title="Start"  dockercontaineraction="1"  data-placement="top" rel="tooltip"  class="dockeractionbutton"><i class="fa fa-play fa-1x txt-color-white"></i></a>
                                                                   </div>
                                                               </div> 
                                                           </div>
@@ -440,7 +440,7 @@
                                                           <div class="card3 front3">
                                                              <div style="margin-top:5px;">
                                                               <div class="">
-                                                                  <a href="javascript:dockerContainerAction();" data-original-title="Restart"  dockercontaineraction="3"  data-placement="top" rel="tooltip"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
+                                                                  <a href="javascript:void(0);" data-original-title="Restart"  dockercontaineraction="3"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-undo fa-16px txt-color-white"></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
@@ -451,14 +451,14 @@
                                                           <div class="card2 front2">
                                                              <div id="flip3" style="margin-top:5px;">
                                                               <div class="">
-                                                                  <a href="javascript:dockerContainerAction();" data-original-title="Pause"  dockercontaineraction="4"  data-placement="top" rel="tooltip"><i class="fa fa-pause fa-16px txt-color-white"></i></a>
+                                                                  <a href="javascript:void(0);" data-original-title="Pause"  dockercontaineraction="4"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-pause fa-16px txt-color-white" ></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
                                                           <div class="card2 back2">
                                                               <div id="flip4" style="margin-top:5px;">
                                                                   <div class="">
-                                                                      <a href="javascript:dockerContainerAction();" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
+                                                                      <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
                                                                   </div>
                                                               </div> 
                                                           </div>
@@ -474,12 +474,14 @@
                                                 <td  class="dockercontainerimagename"></td>
                                                 <td>
                                                   <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
+                                                    <img class="dockercontainerprogress hidden" style="margin-left:30px" src="img/select2-spinner.gif"></img>
                                                   </a>
                                                  </td>
                                               </tr>
                                           </tbody>
                                           
                                       </table>
+                                    
                               </div>                      
                               </div>
                             </div>
@@ -2763,6 +2765,31 @@ function loadContainersTable(){
                    // alert($docctr.html());
 
                    $dockercontainertable.append($docctr);
+                   if(i >= dockerContainerData.length - 1)
+                   {
+                    $('.dockeractionbutton').click(function(){
+                       // alert('test' + $(this).attr('dockercontaineraction'));
+                       //append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                       var $progressicon = $(this).closest('tr').find('.dockercontainerprogress').first();
+                       $progressicon.removeClass('hidden');
+                        var action =  $(this).attr('dockercontaineraction');
+                        var instanceid =  $(this).closest('tr').attr('instanceid');
+                        var containerid =  $(this).closest('tr').attr('containerid');
+                       // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
+                        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
+                            $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
+                             // alert(data);
+                              if(data == 'OK'){
+                                //$(this).parents('.flip-toggle').toggleClass('flip1');
+                              //  alert('ok');
+                               // $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
+                                $progressicon.addClass('hidden');
+                              }
+                                    
+                            });
+                        }
+                    });
+                   }
                 });
             });
       }
@@ -2772,25 +2799,7 @@ function loadContainersTable(){
     
 }
 
-function dockerContainerAction(){
-        //alert($(this).html());
 
-        alert('test' + $this.html());
-        var $alink = $this;
-        var action = $alink.attr('dockercontaineraction');
-        
-        var instanceid = $alink.closest('tr').attr('instanceid');
-        var containerid = $alink.closest('tr').attr('containerid');
-        alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
-        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
-
-            $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
-              alert(data);
-              if(data == 'OK')
-                    $(this).parents('.flip-toggle').toggleClass('flip');
-            });
-        }
-    }
 
 function createdockercontainerrow(dockerContainerItem, instanceid){
     // <td class="dockercontainerstatus"></td>
