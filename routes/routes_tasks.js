@@ -31,8 +31,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
+            
+            console.log(instanceIds);
 
-            instancesDao.getInstances(req.body.instanceIds, function(err, instances) {
+            instancesDao.getInstances(instanceIds, function(err, instances) {
                 if (err) {
                     console.log(err);
                     res.send(500);
