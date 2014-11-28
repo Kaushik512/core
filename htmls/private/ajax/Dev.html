@@ -1356,7 +1356,6 @@ $.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
     for (i = 0; i < keys.length; i++) {
         $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
     }
-
 });
 
 $.get('../organizations/' + urlParams.org + '/roles', function(data) {
@@ -1367,7 +1366,6 @@ $.get('../organizations/' + urlParams.org + '/roles', function(data) {
     for (i = 0; i < keys.length; i++) {
         $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
     }
-
 });
 
 $('#btnDeploymentAddSelectedCookbook').click(function(e) {
@@ -1384,7 +1382,6 @@ $('#btnDeploymentAddSelectedCookbook').click(function(e) {
         }));
         $this.attr('checked', false);
         $this.parents('li').hide();
-
     });
 
     var $selectedRoles = $("input[name=checkboxRoles]:checked");
@@ -1399,8 +1396,6 @@ $('#btnDeploymentAddSelectedCookbook').click(function(e) {
         }));
         $this.attr('checked', false);
         $this.parents('li').hide();
-
-
     });
 
     $deploymentSelectedList.sortable({
@@ -1417,9 +1412,7 @@ $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
         $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
         $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
         $(this).remove();
-
     });
-
 });
 
 
@@ -1441,9 +1434,6 @@ $('.deploymentChefRunBtn').click(function(e) {
             console.log('instance runlist updated');
         });
     })
-
-
-
 });
 
 
