@@ -2673,7 +2673,7 @@ function addInstanceToDOM(data) {
 
 
     //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="height:30px;width:100%;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    var $divActionBtnContainer = $('<div style="height:30px;width:140px;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
     //alert($divComponentListImage.html());
 
     
@@ -2685,8 +2685,8 @@ function addInstanceToDOM(data) {
     if (!data.chef) {
         data.chef = {};
     }
-    var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
-    $divActionBtnContainer.append($divActionReStartContainer);
+    // var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
+    // $divActionBtnContainer.append($divActionReStartContainer);
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Shutdown'));
     $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
