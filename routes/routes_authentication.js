@@ -9,7 +9,7 @@ module.exports.setRoutes = function(app) {
 
 	app.post('/auth/signin', function(req, res) {
 
-		console.log(req.originalUrl);
+		console.log(req);
 
 		if (req.body && req.body.username && req.body.pass) {
 			var ldapClient = new LdapClient();
@@ -17,7 +17,8 @@ module.exports.setRoutes = function(app) {
 				if (err) {
 
 					//res.send(403);  
-					res.redirect('/private/index.html');
+					console.log('hitting index');
+					res.redirect('/../public/login.html?o=try');
 
 				} else {
 					console.log(user);
@@ -114,7 +115,7 @@ module.exports.setRoutes = function(app) {
 				}
 			});
 		} else {
-			res.redirect('/public/login.html');
+			res.redirect('/public/login.html?o=try');
 		}
 	});
 	
