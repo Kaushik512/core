@@ -243,8 +243,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         hardwareData.memory.total = nodeData.automatic.memory.total;
                                                         hardwareData.memory.free = nodeData.automatic.memory.free;
                                                         hardwareData.os = instance.hardware.os;
+                                                        //console.log(instance);
+                                                        //console.log(hardwareData,'==',instance.hardware.os);
                                                         instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                             if (err) {
+                                                                console.log(err);
                                                                 console.log("Unable to set instance hardware details");
                                                             } else {
                                                                 console.log("Instance hardware details set successessfully");
@@ -271,12 +274,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 err: false,
                                                 log: stdOutData.toString('ascii'),
                                                 timestamp: new Date().getTime()
-                                            }, function(err, data) {
-                                                if (err) {
-                                                    console.log('unable to update bootStrapLog');
-                                                    return;
-                                                }
-                                                console.log('bootStrapLog updated');
                                             });
 
                                         }, function(stdErrData) {
@@ -286,12 +283,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 err: true,
                                                 log: stdErrData.toString('ascii'),
                                                 timestamp: new Date().getTime()
-                                            }, function(err, data) {
-                                                if (err) {
-                                                    console.log('unable to update bootStrapLog');
-                                                    return;
-                                                }
-                                                console.log('bootStrapLog updated');
                                             });
 
 
@@ -489,6 +480,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             hardwareData.os = instance.hardware.os;
                                             instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                 if (err) {
+                                                    console.log(err);
                                                     console.log("Unable to set instance hardware details");
                                                 } else {
                                                     console.log("Instance hardware details set successessfully");
