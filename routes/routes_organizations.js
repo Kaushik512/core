@@ -184,7 +184,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
             res.send(400);
             return;
         }
-        console.log('Blueprint Rcvd for save : ' + JSON.stringify(blueprintData));
+        console.log(blueprintData);
+        
         blueprintsDao.createBlueprint(blueprintData, function(err, data) {
             if (err) {
                 res.send(500);

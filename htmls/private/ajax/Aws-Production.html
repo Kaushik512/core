@@ -845,7 +845,7 @@
                                                                                 <label for="">Choose Organization <span style="color:red">*</span>
                                                                                 </label>
                                                                                 <label class="select"> 
-                                                                                   <select id="orgnameSelect" class="form-control">
+                                                                                   <select id="orgnameSelect" class="chooseOrgselect2 width-100">
                                                                                    </select>
                                                                                </label> 
                                                                                <div class="cookbookShow">
@@ -858,17 +858,20 @@
                                                                            <section class="col col-6">
                                                                             <label for="">Choose Operating System <span style="color:red">*</span>
                                                                             </label>
-                                                                            <label class="select"> 
-                                                                                <select>
-                                                                                    <option value="0">Cent OS</option>
-                                                                                </select>
+                                                                            <label class="select">
+
+                                                                               <select id="instanceOS" class="chooseOS width-100">
+                                                                                    <option value="linux">Cent OS</option>
+                                                                                    
+                                                                              </select>
+
                                                                             </label>                                          
                                                                         </section>
                                                                         <section class="col col-6">
                                                                             <label for="category">Choose Security Group <span style="color:red">*</span>
                                                                             </label>
                                                                             <label class="select"> 
-                                                                                <select>
+                                                                                <select class="chooseSecurity width-100">
                                                                                     <option value="0">default-d4d</option>
                                                                                     <!--<option value="1">default-d4d</option>-->
                                                                                     <option value="2">Vpc-1</option>
@@ -883,7 +886,7 @@
                                                                         <label for="category">Choose Instance Size <span style="color:red">*</span>
                                                                         </label>
                                                                         <label class="select"> 
-                                                                            <select class="instanceType">
+                                                                            <select class="instanceType chooseInstance width-100">
                                                                                 <option value="t1.micro">t1.micro</option>
                                                                                 <!--<option value="1">t1.micro</option>-->
                                                                                 <option value="m1.small">m1.small</option>
@@ -923,7 +926,7 @@
                                                                         <label for="category">Business Group <span style="color:red">*</span>
                                                                         </label>
                                                                         <label class="select"> 
-                                                                            <select id="bgListInput">
+                                                                            <select id="bgListInput" class="chooseBG width-100">
 
                                                                             </select>
                                                                         </label>   
@@ -941,7 +944,7 @@
                                                                     <label for="category">Project <span style="color:red">*</span>
                                                                     </label>
                                                                     <label class="select"> 
-                                                                      <select id="projectListInput">
+                                                                      <select id="projectListInput" class="chooseProject width-100">
 
                                                                       </select>
                                                                   </label>   
@@ -952,7 +955,7 @@
                                                             <label for="category">Environment <span style="color:red">*</span>
                                                             </label>
                                                             <label class="select"> 
-                                                                <select  id="envList">
+                                                                <select  id="envList" class="chooseEnv width-100">
 
                                                                 </select>
                                                             </label>
@@ -962,7 +965,7 @@
                                                                         <label for="category">Select Docker Container <span style="color:red">*</span>
                                                                         </label>
                                                                         <label class="select"> 
-                                                                            <select id="dockerrepoListInput">
+                                                                            <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
 
                                                                             </select>
                                                                         </label>   
@@ -1088,9 +1091,17 @@
 
 </div>
 <script type="text/javascript">
+
    
 $(document).ready(function(){
-
+    $(".chooseOrgselect2").select2();
+    $(".chooseOS").select2();
+    $(".chooseSecurity").select2();
+    $(".chooseInstance").select2();
+    $(".chooseBG").select2();
+    $(".chooseProject").select2();
+    $(".chooseEnv").select2();
+    $(".chooseDockerContainer").select2();
    $.ajax({
     url: "/d4dMasters/readmasterjson/16",
     dataType: "json",
@@ -1439,17 +1450,20 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
   reqBody.runlist = $('#cookbookSelect').val();
   reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
   reqBody.instanceType = $('.instanceType').val();
+  reqBody.instanceOS = $('#instanceOS').val();
   console.log(reqBody);
 
 
 } else if(index == 4){
-    
+    console.log("reqBody ==>",reqBody);
     if(!reqBody || reqBody == "undefined"){
+        console.log('resetting');
         var reqBody = {};
     }
     reqBody.runlist = $('#cookbookSelect').val();
   reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
   reqBody.instanceType = $('.instanceType').val();
+  reqBody.instanceOS = $('#instanceOS').val();
         reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
         reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
         reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
@@ -1488,6 +1502,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
     console.log('pushing');
+    console.log(reqBody);
     $.post('../projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
         blueprintData:reqBody
     },function(data){

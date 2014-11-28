@@ -59,7 +59,7 @@
                                                                     <section class="col col-6">
                                                                         <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                         <label class="input">
-                                                                            <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname','environmentname']"  cdata="catalyst" cat-validation="required">
+                                                                            <select id="orgname" class="form-control chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname','environmentname']"  cdata="catalyst" cat-validation="required">
                                                                                 <option value="">Select Organization</option>
 
                                                                             </select>
@@ -69,7 +69,7 @@
                                                                     <section class="col col-6">
                                                                         <label for="category">Business Group<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                         <label class="input">
-                                                                            <select id="productgroupname" class="form-control" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst" cat-validation="required">
+                                                                            <select id="productgroupname" class="form-control chooseBG width-100" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst" cat-validation="required">
                                                                                 <option value="">Select Business Group</option>
 
                                                                             </select>
@@ -179,7 +179,10 @@
 
 <script>
     //Form Name
-
+    $(document).ready(function() {
+        $(".chooseOrganization").select2();
+        $(".chooseBG").select2();
+    });
 
     function inLineReady() {
         $("input[type='text']").on("click", function () {
