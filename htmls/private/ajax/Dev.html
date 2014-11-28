@@ -1552,7 +1552,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a rel="tooltip" data-placement="top" data-original-title="Edit" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'"><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
         $tdOptions.find('.btnDeleteTask').click(function(e){
             var taskId = $(this).attr('data-taskId');
           var that = this;
