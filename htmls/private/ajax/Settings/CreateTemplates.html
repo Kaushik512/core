@@ -54,7 +54,7 @@
                                                                       Template Type <span style="color:Red;" class="control-label">&nbsp;*</span>
                                                                     </label>
                                                                     <label class="select">
-                                                                        <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();}else {$('.forDocker').hide();$('.notforDocker').show();}">
+                                                                        <select id="templatetypename" class="form-control choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();}else {$('.forDocker').hide();$('.notforDocker').show();}">
                                                                             
                                                                         </select>
                                                                     </label>
@@ -77,7 +77,7 @@
                                                                         <!-- <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
                                                                             
                                                                         </select> -->
-                                                                        <select id="dockerreponame" class="form-control" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
+                                                                        <select id="dockerreponame" class="form-control choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
                                                                                 
                                                                         </select>
                                                                     </label>
@@ -93,7 +93,7 @@
                                                                         <!-- <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
                                                                             
                                                                         </select> -->
-                                                                        <select id="configname" class="form-control" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadChefServerObjects($(this).val());">
+                                                                        <select id="configname" class="form-control choosechefserver width-100" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadChefServerObjects($(this).val());">
                                                                                 
                                                                         </select>
                                                                     </label>
@@ -368,6 +368,11 @@
 
 <script>
     //Form Name
+    $(document).ready(function() {
+    $(".choosetemplateType").select2();
+    $(".choosedockerRepo").select2();
+    $(".choosechefserver").select2();
+    });
     function cancelClicked() {
         $("#popupSelectProvider").modal('hide');
         $(".modal-backdrop.fade.in").detach();

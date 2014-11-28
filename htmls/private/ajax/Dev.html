@@ -1586,14 +1586,23 @@ var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
-// $(document).ready(function() {
-//   $('#myTab3').find('.Instances').removeClass('active');
-//   $('#myTab3').find('.Orchestration').addClass('active');
-//   $('#myTabContent3').find('#l1').removeClass('active');
-//   $('#myTabContent3').find('#l3').addClass('active'); 
-// });
+$(document).ready(function() {
+  if(localStorage.getItem("SelectedClass") == "Orchestration")
+  {
+      localStorage.removeItem("SelectedClass");
+      $('#myTab3').find('.Instances').removeClass('active');
+      $('#myTab3').find('.Orchestration').addClass('active');
+      $('#myTabContent3').find('#l1').removeClass('active');
+      $('#myTabContent3').find('#l3').addClass('active'); 
+      $('#myTab3').click();
+  }
+});
+
+
 
 $('.createTaskLink').click(function(e){
+  localStorage.setItem("SelectedClass","Orchestration");
+
   //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
     var getbreadcrumbullength = getbreadcrumbul.length;
@@ -1638,7 +1647,6 @@ $.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
     for (i = 0; i < keys.length; i++) {
         $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
     }
-
 });
 
 $.get('../organizations/' + urlParams.org + '/roles', function(data) {
@@ -1649,7 +1657,6 @@ $.get('../organizations/' + urlParams.org + '/roles', function(data) {
     for (i = 0; i < keys.length; i++) {
         $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
     }
-
 });
 
 $('#btnDeploymentAddSelectedCookbook').click(function(e) {
@@ -1666,7 +1673,6 @@ $('#btnDeploymentAddSelectedCookbook').click(function(e) {
         }));
         $this.attr('checked', false);
         $this.parents('li').hide();
-
     });
 
     var $selectedRoles = $("input[name=checkboxRoles]:checked");
@@ -1681,8 +1687,6 @@ $('#btnDeploymentAddSelectedCookbook').click(function(e) {
         }));
         $this.attr('checked', false);
         $this.parents('li').hide();
-
-
     });
 
     $deploymentSelectedList.sortable({
@@ -1699,9 +1703,7 @@ $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
         $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
         $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
         $(this).remove();
-
     });
-
 });
 
 
@@ -1723,9 +1725,6 @@ $('.deploymentChefRunBtn').click(function(e) {
             console.log('instance runlist updated');
         });
     })
-
-
-
 });
 
 
@@ -2270,6 +2269,12 @@ function pollInstanceState(instanceId, state, delay) {
                     $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                     $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
                     $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
+                    if (data.instanceState == 'stopped'){
+                    $('.componentlistContainer.stopped').parent().find('.actionbuttonChefClientRun').hide();
+                    }
+                    if (data.instanceState == 'running'){
+                      $('.componentlistContainer.started').parent().find('.actionbuttonChefClientRun').show();
+                    }
                 }
             }
         })
@@ -2683,7 +2688,7 @@ function addInstanceToDOM(data) {
 
 
     //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="height:30px;width:100%;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    var $divActionBtnContainer = $('<div style="height:30px;width:140px;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
     //alert($divComponentListImage.html());
 
     
@@ -2695,8 +2700,8 @@ function addInstanceToDOM(data) {
     if (!data.chef) {
         data.chef = {};
     }
-    var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
-    $divActionBtnContainer.append($divActionReStartContainer);
+    // var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
+    // $divActionBtnContainer.append($divActionReStartContainer);
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Shutdown'));
     $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
@@ -2795,8 +2800,11 @@ function addInstanceToDOM(data) {
 
     });
     pageSetUp();
-
-
+    if (data.instanceState == 'stopped'){
+      //alert('hello');
+      //$('.instanceActionBtnCtr').find('.actionbuttonChefClientRun').hide();
+      $('.componentlistContainer.stopped').parent().find('.actionbuttonChefClientRun').hide();
+    }
 }
 
 //Containers table build
@@ -2941,6 +2949,31 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
         });
     }
     $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
+    function tableupdownRow(evt) {
+      evt = evt || window.event;
+      var key = evt.keyCode;
+      switch (key) {
+        case 38: // UP arrow
+          var $selectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected");
+          if($('#tableinstanceview tbody').find(".rowcustomselected").prev().length == 1){
+          var $newSelectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected").prev();
+          $newSelectedRowPre.addClass('rowcustomselected');
+          $selectedRowPre.removeClass('rowcustomselected'); 
+          break;
+        }
+        break;
+        case 40: // DOWN arrow
+          var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
+          if($('#tableinstanceview tbody').find(".rowcustomselected").next().length == 1){
+            var $newSelectedRow = $('#tableinstanceview tbody').find(".rowcustomselected").next();
+            $newSelectedRow.addClass('rowcustomselected');
+            $selectedRow.removeClass('rowcustomselected');
+            break;
+          }
+        break;
+      }
+    }
+  document.onkeydown = tableupdownRow;
     $('#tableinstanceview tbody').on('click','tr',function(){
         if($(this).hasClass('rowcustomselected')){
             $(this).removeClass('rowcustomselected');

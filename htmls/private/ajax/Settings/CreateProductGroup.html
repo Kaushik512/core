@@ -49,7 +49,7 @@
                                                                 <section class="col col-6">
                                                                     <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                     <label class="input">
-                                                                        <select id="orgname" class="form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
+                                                                        <select id="orgname" class="form-control chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
                                                                             <option value="">Select an Organization</option>
                                                                         </select>
 
@@ -142,6 +142,9 @@
 
 <script>
     //Form Name
+    $(document).ready(function() {
+    $(".chooseOrganization").select2();
+    });
 
 
     function inLineReady() {
