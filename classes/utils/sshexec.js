@@ -13,6 +13,7 @@ module.exports = function(options) {
         con.connect(connectionParamsObj);
         console.log("ConnectionParamsObj==>",connectionParamsObj);
         con.on('ready', function() {
+            console.log("connected to ==>",connectionParamsObj.host);
             isConnected = true;
             callback(null);
         });

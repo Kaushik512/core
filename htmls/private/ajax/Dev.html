@@ -13,18 +13,18 @@
 
 
                 <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
-                    <li class="active">
+                    <li class="active Instances">
                         <a href="#l1" data-toggle="tab"><i class="fa fa-reorder"></i>&nbsp;Instances</a>
                     </li>
                     <!--<li class="pull-left">
                         <a href="#l2" data-toggle="tab">DevOps Roles</a>
                     </li>-->
                     
-                    <li class="pull-left">
+                    <li class="pull-left Blueprints">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
 
-                    <li class="pull-left">
+                    <li class="pull-left Orchestration">
                         <a href="#l3" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
                      <li class="pull-left">
@@ -839,7 +839,7 @@
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
                     <fieldset style="padding-top:7px !important;">
                         <section>
-                            
+
                         <div role="content">
                             <div class="widget-body">
 
@@ -1588,7 +1588,44 @@ var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
+// $(document).ready(function() {
+//   $('#myTab3').find('.Instances').removeClass('active');
+//   $('#myTab3').find('.Orchestration').addClass('active');
+//   $('#myTabContent3').find('#l1').removeClass('active');
+//   $('#myTabContent3').find('#l3').addClass('active'); 
+// });
+
 $('.createTaskLink').click(function(e){
+  //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        //alert(getbreadcrumbulname);
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    localStorage.setItem("breadcrumb", DummyBreadCrumb);
+  }
+
+  var getmyTab3selectedli = $('#myTab3').find('.pull-left.active');
+  var getmyTab3selectedlilength = getmyTab3selectedli.length;
+  //alert(getmyTab3selectedlilength);
+  if(getmyTab3selectedlilength > 0){
+    var myTabContent3 = $('#myTabContent3').find('tab-pane.active').innerHTML;
+    //alert(myTabContent3);
+  }
+  
     window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
 });
 
@@ -1791,13 +1828,13 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
 
                         $taskExecuteTabsHeaderContainer.append($liMoreHeader);
 
-                        $taskExecuteTabsHeaderContainer = $liMoreHeader.find(ul);
+                        $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
 
                     }
 
                     $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important"></div></div>');
+                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
 
                     $taskExecuteTabsContent.append($tabContent);
 
@@ -1829,11 +1866,27 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
 
         });
         $tr.append($tdExecute);
-
-        var $tdTime = $('<td></td>').append('');
+         var timestamp = "";
+        if(data[i].lastRunTimestamp) {
+            var date = new Date().setTime(data[i].lastRunTimestamp);
+            timestamp = new Date(date).toUTCString(); //converts to human readable strings
+        }
+       
+        var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a rel="tooltip" data-placement="top" data-original-title="Edit" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'"><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
+        $tdOptions.find('.btnDeleteTask').click(function(e){
+            var taskId = $(this).attr('data-taskId');
+          var that = this;
+          $.ajax({
+            url:'../tasks/'+taskId,
+            method:'DELETE',
+            success:function(data){
+              $(that).parents('tr').remove();
+            }
+          })
+        });
         $tr.append($tdOptions);
 
         $taskListArea.append($tr);
@@ -2557,7 +2610,7 @@ function addInstanceToDOM(data) {
     var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
 
     $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
-    $rowContainter.append('<td><img src="img/templateicons/Small-Icon/' + data.blueprintData.templateId + '.png" /></td>');
+    $rowContainter.append('<td><img src="'+data.blueprintData.iconPath+'" style="width:auto;height:30px;" /></td>');
 
 
     $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0,15) + '</td>');
@@ -3301,10 +3354,33 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
 });
 
 $('.actionControlPanel').click(function(e) {
+    //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        //alert('hi');
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    localStorage.setItem("breadcrumb", DummyBreadCrumb);
+}
+
     var controlId = $(".visibleClass").attr("id");
     //alert(controlId);
     var urlText;
     localStorage.setItem("dataEx", location.href);
+    
    
     if ($('#divinstancescardview').is(':visible')) {
 

@@ -191,7 +191,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     },
                     blueprintData: {
                         blueprintName: node.name,
-                        templateId: "chef_import"
+                        templateId: "chef_import",
+                        iconPath:"../private/img/templateicons/chef_import.png"
                     }
                 }
 

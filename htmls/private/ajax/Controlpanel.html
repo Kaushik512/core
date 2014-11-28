@@ -849,20 +849,20 @@ $('.existingServiceLink').click(function(){
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
-    
+   //alert(data.projectId)
    var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
+   // alert($selectedOrg);
 
    var orgid = $selectedOrg.click().attr('data-id');
+   //alert(orgid);
    if(orgid) {
     console.log('orgid ==>',orgid);
-    var $li = $('.'+orgid).find('li[data-envName="'+data.envId+'"]').addClass('active');
-    $li.parents('li').addClass('active open');
-    $li.parents('ul').css({'display':'block'});
-    drawBreadCrumb();
-
+    // var $li = $('.'+orgid).find('li[data-envName="'+data.envId+'"]').addClass('active');
+    // $li.parents('li').addClass('active open');
+    // $li.parents('ul').css({'display':'block'});
+    // drawBreadCrumb();
    } 
  
-
    console.log(data);
    //setting users in service menu
     var $usersList = $('.instanceUserList').empty();
@@ -1387,14 +1387,8 @@ $('.btnSaveService').click(function(e) {
             console.log(data);
             addActionToServiceDom(serviceId,data);
              $('#serviceModalContainer').modal('hide');
-
-
        });
-
-
     }
-
-
 });
 
 
@@ -1414,7 +1408,7 @@ $('.btnSaveService').click(function(e) {
   
   $( document ).ready(function() {
     $('#data_bag_div2').hide();
-});
+  });
   $('.panel-databag').click(function(e){
       $('#data_bag_div2').show();
   });
@@ -1422,7 +1416,7 @@ $('.btnSaveService').click(function(e) {
 
   $( document ).ready(function() {
     $('#data_bag_div3').hide();
-});
+  });
   $('.panel-databag1').click(function(e){
       $('#data_bag_div3').show();
   });
@@ -1435,4 +1429,28 @@ $('.btnSaveService').click(function(e) {
     localStorage.setItem("ControlID",ControlID);
     location.href=getURL;
   }
+$(document).ready(function() {
+    var LocalBreadCrumb = localStorage.getItem("breadcrumb");
+    var splitBread = null;
+    if(LocalBreadCrumb != null && LocalBreadCrumb != 'undefined')
+    {
+        localStorage.removeItem("breadcrumb");
+        splitBread = LocalBreadCrumb.split('>');
+        if(splitBread.length > 0)
+        {
+            $('#ribbon').find('.breadcrumb').find('li').detach();
+            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+                var liNew = document.createElement('li');
+                liNew.innerHTML = splitBread[arraycount];
+                $('#ribbon').find('.breadcrumb').append(liNew);
+            }
+            var liCP = document.createElement('li');
+            liCP.innerHTML = "Control panel";
+            $('#ribbon').find('.breadcrumb').append(liCP);
+            var parentUl = $('li').filter(".referenceliClass.open").find('ul').find('li[data-envname='+splitBread[3]+']');
+            parentUl.addClass('active');
+        }
+    }
+});
+
 </script>

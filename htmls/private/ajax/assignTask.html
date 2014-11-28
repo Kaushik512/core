@@ -960,6 +960,10 @@ $('.btnSaveTask').click(function(e) {
     $selectedNodes.each(function() {
         nodesList.push(this.value);
     });
+    if( !nodesList.length) {
+       alert('Please choose nodes');
+       return;
+    }
 
     var $selectedRunlist = $('.deploymentSelectedRunList input');
     var runlist = [];
@@ -967,12 +971,22 @@ $('.btnSaveTask').click(function(e) {
         runlist.push(this.value);
     });
 
+    if( !runlist.length) {
+       alert('Please choose runlist');
+       return;
+    }
+    var taskName = $('.inputTaskName').val();
+    if(!taskName) {
+       alert('Please give a name');
+       return;
+    }
+
 
 
 
     var reqBody = {
         taskData: {
-            name: $('.inputTaskName').val(),
+            name: taskName,
             nodesIdList: nodesList,
             runlist: runlist,
         }
@@ -1056,23 +1070,38 @@ $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
     });
 });
 
-
-
 $("#btnItemUp").on('click', function() {
     var $selectedRunlist = $('.deploymentCookbookSelected');
 
     $selectedRunlist.insertBefore($selectedRunlist.first().prev());
 });
 
-
-
-
-
 $("#btnItemDown").on('click', function() {
     var $selectedRunlistDown = $('.deploymentCookbookSelected');
 
     $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
 
+});
+
+$(document).ready(function() {
+    var LocalBreadCrumb = localStorage.getItem("breadcrumb");
+    var splitBread = null;
+    if(LocalBreadCrumb != null && LocalBreadCrumb != 'undefined')
+    {
+        localStorage.removeItem("breadcrumb");
+        splitBread = LocalBreadCrumb.split('>');
+        if(splitBread.length > 0)
+        {
+            $('#ribbon').find('.breadcrumb').find('li').detach();
+            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+                var liNew = document.createElement('li');
+                liNew.innerHTML = splitBread[arraycount];
+                $('#ribbon').find('.breadcrumb').append(liNew);
+            }
+            var parentUl = $('li').filter(".referenceliClass.open").find('ul').find('li[data-envname='+splitBread[3]+']');
+            parentUl.addClass('active');
+        }
+    }
 });
 
 </script>
