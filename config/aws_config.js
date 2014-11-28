@@ -12,7 +12,7 @@ var awsSettings = {
 	securityGroupId : "sg-c00ee1a5",
 	pemFileLocation : currentDirectory+'/',
 	pemFile:"catalyst.pem",
-	instanceUserName:"ec2-user"
+	instanceUserName:"root"
 }
 
 
