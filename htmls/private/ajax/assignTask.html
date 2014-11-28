@@ -960,6 +960,10 @@ $('.btnSaveTask').click(function(e) {
     $selectedNodes.each(function() {
         nodesList.push(this.value);
     });
+    if( !nodesList.length) {
+       alert('Please choose nodes');
+       return;
+    }
 
     var $selectedRunlist = $('.deploymentSelectedRunList input');
     var runlist = [];
@@ -967,12 +971,22 @@ $('.btnSaveTask').click(function(e) {
         runlist.push(this.value);
     });
 
+    if( !runlist.length) {
+       alert('Please choose runlist');
+       return;
+    }
+    var taskName = $('.inputTaskName').val();
+    if(!taskName) {
+       alert('Please give a name');
+       return;
+    }
+
 
 
 
     var reqBody = {
         taskData: {
-            name: $('.inputTaskName').val(),
+            name: taskName,
             nodesIdList: nodesList,
             runlist: runlist,
         }
