@@ -21,8 +21,8 @@ var Docker = function(){
 				            host : instanceoptions.instanceIP,
 				            port : '22',
 				            username : instanceoptions.credentials.username,//'ec2-user',
-				            privateKey : instanceoptions.credentials.pemFileLocation //'/development/catalyst/D4DFE/D4D/config/catalyst.pem'
-				            
+				            privateKey : instanceoptions.credentials.pemFileLocation, //'/development/catalyst/D4DFE/D4D/config/catalyst.pem'
+				            password : instanceoptions.credentials.password
 				        };
 
 						 var sshParamObj = {

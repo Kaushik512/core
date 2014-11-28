@@ -336,7 +336,7 @@ var Chef = function(settings) {
             var sshParamObj = {
                 host: options.host,
                 port: options.port,
-                username: options.username,
+                username: options.username
             };
             var sudoCmd;
             if (options.privateKey) {
