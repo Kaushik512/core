@@ -11,18 +11,18 @@
 
 
                 <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
-                    <li class="active">
+                    <li class="active Instances">
                         <a href="#l1" data-toggle="tab"><i class="fa fa-reorder"></i>&nbsp;Instances</a>
                     </li>
                     <!--<li class="pull-left">
                         <a href="#l2" data-toggle="tab">DevOps Roles</a>
                     </li>-->
                     
-                    <li class="pull-left">
+                    <li class="pull-left Blueprints">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
 
-                    <li class="pull-left">
+                    <li class="pull-left Orchestration">
                         <a href="#l3" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
 
@@ -1304,7 +1304,44 @@ var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
+// $(document).ready(function() {
+//   $('#myTab3').find('.Instances').removeClass('active');
+//   $('#myTab3').find('.Orchestration').addClass('active');
+//   $('#myTabContent3').find('#l1').removeClass('active');
+//   $('#myTabContent3').find('#l3').addClass('active'); 
+// });
+
 $('.createTaskLink').click(function(e){
+  //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        //alert(getbreadcrumbulname);
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    localStorage.setItem("breadcrumb", DummyBreadCrumb);
+  }
+
+  var getmyTab3selectedli = $('#myTab3').find('.pull-left.active');
+  var getmyTab3selectedlilength = getmyTab3selectedli.length;
+  //alert(getmyTab3selectedlilength);
+  if(getmyTab3selectedlilength > 0){
+    var myTabContent3 = $('#myTabContent3').find('tab-pane.active').innerHTML;
+    //alert(myTabContent3);
+  }
+  
     window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
 });
 
@@ -2278,7 +2315,7 @@ function addInstanceToDOM(data) {
     var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
 
     $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
-    $rowContainter.append('<td><img src="img/templateicons/Small-Icon/' + data.blueprintData.templateId + '.png" /></td>');
+    $rowContainter.append('<td><img src="'+data.blueprintData.iconPath+'" style="width:auto;height:30px;" /></td>');
 
 
     $rowContainter.append('<td>' + data.blueprintData.blueprintName + '</td>');
@@ -2525,9 +2562,6 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');   
     }
     $divinstancescardview.find('.item').first().addClass('active');
-
-
- 
 
     $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
