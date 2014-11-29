@@ -123,6 +123,7 @@
 									
 								</fieldset>
 								<footer>
+									<div class="pull-left hidden incorrectlogin" style="color:red;font-size:9pt;margin-top:17px">The Username or Password is incorrect. </div>
 									<button type="submit" class="btn btn-primary">
 										Login
 									</button>
@@ -202,6 +203,18 @@
 					}
 				});
 			});
+			if(window.location.toString().indexOf('o=try') > 0){
+  				$('.incorrectlogin').removeClass('hidden');
+  				$('input[name="username"]').focus();
+  				$('input').click(function(){
+  					$('.incorrectlogin').addClass('hidden');
+  					$('input').unbind('click');
+  				});
+  				$('input').keyup(function(){
+  					$('.incorrectlogin').addClass('hidden');
+  					$('input').unbind('click');
+  				});
+			}
 		</script>
 
 		
