@@ -888,7 +888,7 @@
                                                                         <label class="select"> 
                                                                             <select class="instanceType chooseInstance width-100">
                                                                                 <option value="t1.micro">t1.micro</option>
-                                                                                <!--<option value="1">t1.micro</option>-->
+                                                                                
                                                                                 <option value="m1.small">m1.small</option>
                                                                                 <option value="m1.medium">m1.medium</option>
                                                                                 <option value="m1.large">m1.large</option>
@@ -1449,7 +1449,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
   }
   reqBody.runlist = $('#cookbookSelect').val();
   reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-  reqBody.instanceType = $('.instanceType').val();
+  reqBody.instanceType = $('select.instanceType').val();
   reqBody.instanceOS = $('#instanceOS').val();
   console.log(reqBody);
 
@@ -1462,7 +1462,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
     }
     reqBody.runlist = $('#cookbookSelect').val();
   reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-  reqBody.instanceType = $('.instanceType').val();
+  console.log("instanceType ==>",$('select.instanceType').val());
+  reqBody.instanceType = $('select.instanceType').val();
   reqBody.instanceOS = $('#instanceOS').val();
         reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
         reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
