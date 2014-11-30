@@ -125,12 +125,16 @@
                             <i class="fa fa-gears"></i>
                             Control Panel
                         </button>
+
                         
                          <!--<button class="btn pull-left btn-primary ChefconfigPanel" style="margin-left:5px">
                             <i class="fa fa-home"></i>
                             Chef config Panel
                         </button>-->
                     </div>
+                    <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" > <i class="fa fa-trash-o"></i></button>
+
+
                 </div>
             </div>
         </div><!--Launch div ends here-->
@@ -155,7 +159,7 @@
                                                 <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
                                             </div>
                                             <div id="collapseOne-2" class="panel-collapse collapse">
-                                                <div class="panel-body"> Testing
+                                                <div class="panel-body"> 
 
 
                                                 </div>
@@ -219,6 +223,7 @@
                                             Launch
                                         </button>
                                     </div>
+                                     <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
                                 </div>
                             </div>
                         </div><!--Launch div ends here-->
@@ -2026,7 +2031,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
         }
 
 
-        $containerTemp = '<div class="panel panel-default blueprintContainer">' + 
+        $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' + 
                         '<div class="panel-heading">' + 
 
                         '<h4 class="panel-title">' + 
@@ -2151,6 +2156,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
                 //alert($currpanel.length);
                 $currRolePanel.append($itemContainer);
+                //enabling the bluepintContiner div when item added.
+                $currRolePanel.closest('.blueprintContainer').removeClass('hidden');
                // alert($currRolePanel.html());
                 $currRolePanel.parent().parent().show();
                 //Attaching the selection event.
@@ -2253,6 +2260,57 @@ function getCssClassFromStatus(status) {
     }
 
     return cssClasses;
+}
+
+function removeSelectedInstance(){
+    var instanceid = $('.container.role-Selectedcard').find('[data-instanceid]').attr('data-instanceid');
+    if(instanceid){
+        //found now delete
+        if(confirm('Are you sure you would like to remove this instance?\nNote:\nThis will not terminate the instance from the provider.') == true){
+            $.get('/instances/delete/' + instanceid,function(data){
+            //  alert(data);
+              if(data == 'OK'){
+                $('.container.role-Selectedcard').detach();
+              }
+              else
+                alert(data);
+            });
+        }
+        
+    }
+    else
+    {
+        alert('Please select an instance to remove.');
+    }
+}
+
+
+function removeSelectedBlueprint(){
+    var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+    if(blueprintId){
+        //found now delete
+        if(confirm('Are you sure you would like to remove this blueprint?') == true){
+            $.get('/blueprints/delete/' + blueprintId,function(data){
+            //  alert(data);
+              if(data == 'OK'){
+                var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                $('.productdiv1.role-Selected1').parent().detach();
+                //Check if the closest bluprintcontainer is empty, if empty then hide it.
+               // alert($bcc.find('.panel-body').children().length);
+                if($bcc.find('.panel-body').children().length <= 0){
+                    $bcc.addClass('hidden');
+                }
+              }
+              else
+                alert(data);
+            });
+        }
+        
+    }
+    else
+    {
+        alert('Please select a blueprint to remove.');
+    }
 }
 
 

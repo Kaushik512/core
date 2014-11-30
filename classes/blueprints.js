@@ -197,6 +197,17 @@ var BlueprintsDao = function() {
         });
     };
 
+    this.removeBlueprintbyId= function(blueprintId,callback){
+        Blueprint.remove({"_id":ObjectId(blueprintId)},function(err,data){
+            if(err){
+                console.log(err);
+                callback(err,null);
+                return;
+            }
+            callback(null,data);
+        });
+    }
+
     this.getBlueprintVersionData = function(blueprintId, version, callback) {
         var queryObj = {
             "_id": new ObjectId(blueprintId)

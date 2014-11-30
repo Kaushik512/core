@@ -236,7 +236,16 @@ var InstancesDao = function() {
         });
     };
 
-
+    this.removeInstancebyId= function(instanceId,callback){
+        Instances.remove({"_id":ObjectId(instanceId)},function(err,data){
+            if(err){
+                console.log(err);
+                callback(err,null);
+                return;
+            }
+            callback(null,data);
+        });
+    }
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         Instances.update({

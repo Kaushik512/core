@@ -54,6 +54,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    app.get('/instances/delete/:instanceId', function(req, res) {
+        instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+
+            res.end('OK');
+        });
+    });
+
     app.get('/instances/dockercontainerdetails/:instanceid',function(req,res){
         //res.send(200);
         console.log('reached here a');
