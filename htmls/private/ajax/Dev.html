@@ -2262,7 +2262,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                 }
                 //Expanding the fist Accordion.
                 if($('#accordion-2').length > 0)
-                    $('#accordion-2').find('a').first().trigger('click');
+                    
+                    $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').trigger('click');
             }
          }
 
