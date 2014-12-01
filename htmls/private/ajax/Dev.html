@@ -133,7 +133,7 @@
                         </button>-->
                     </div>
                     <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" > <i class="fa fa-trash-o"></i></button>
-
+                    &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px"> <i class="fa fa-download"></i></a>
 
                 </div>
             </div>
@@ -828,6 +828,95 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedRunlist-->
+<div aria-hidden="true" aria-labelledby="mybootstrapandimport" role="dialog" tabindex="-1" id="bootstrapandimportnode" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    ×
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Bootstrap & Import
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form class="smart-form" id="import-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                       <section class="col col-6">
+                            
+                            <div class="row">
+                                
+                                <div class="col col-10">
+                                    <label class="label">
+                                IP / FQDN<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                </label>
+                                    <input type="text" id="importip" class="form-control">
+                                </div>
+                                
+                            </div><br/>
+                            <div class="row">
+                                
+                                <div class="col col-10">
+                                    <label class="label">
+                                Node Name<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                </label>
+                                    <label class="input"><input type="text" id="importnodename"  class="form-control"></label>
+                                </div>
+                                
+                            </div><br/>
+                            <div class="row">
+                                
+                                <div class="col col-10">
+                                    <label class="label">
+                                Node Type<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                </label>
+                                    <select id="importnodetype"  class="form-control">
+                                        <option value="linux">Linux</option>
+                                        <option value="windows">Windows</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                        </section>
+                        <section class="col col-6">
+                            <div class="row">
+                                
+                                <div class="col col-10">
+                                    <label class="label">
+                                    Status
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="input">
+                                <div class="col col-10" style="border:1px solid silver;height:190px;background-color:#eeeeee">
+                                </div>
+                                </label>
+                            </div>
+                        </section>
+                    </fieldset>
+                    <div>
+                    
+                    </div>
+                    <footer>
+                        <button class="btn btn-primary" type="" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                        <button class="btn btn-primary pull-right" type="submit">
+                            <i class="fa fa-download"></i>&nbsp;Import
+                        </button>
+                    </footer>
+                </form>                           
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedRunlist-->
+
+
+
+
+
 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">

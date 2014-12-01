@@ -574,17 +574,21 @@
 				$track.append($TrackerOrgnameli); //orgname added to root
 				//End Track Setting
 				//<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
+				console.log('BG found :' + data[i].businessGroups.length);
+				var $TrackerBGUL = $('<ul></ul>');
+				
+				$TrackerOrgnameli.append($TrackerBGUL); //UL added to the org li.
+				var $paramsbg = [];
 				for(var j=0;j<data[i].businessGroups.length;j++) {
-					var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
-					console.log('here');
+					var $liSideBar = $('<li ></li>').data('orgName',data[i].name).hide().data('addToTree',true);
+					console.log('BG Added :' + data[i].businessGroups[j].name);
 							$workspace.append($liSideBar);
 							var $projectUl = $('<ul></ul>');
 							//Adding to Track Tree
-							var $TrackerBGUL = $('<ul></ul>');
-							$TrackerOrgnameli.append($TrackerBGUL); //UL added to the org li.
+							
 							var $TrackerBGLI = $('<li class="tcbg"></li>');
 							$TrackerBGUL.append($TrackerBGLI);
-							var $paramsbg = [];
+							
 							$paramsbg.push(data[i].name);
 							$paramsbg.push(data[i].businessGroups[j].name);
 							
