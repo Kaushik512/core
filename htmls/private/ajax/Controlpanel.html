@@ -270,7 +270,7 @@
 </tbody>
                                 
                             </tbody>
-                            <a class="btn btn-primary" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
+                            <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
                         </table>
 
                     </div>
@@ -289,18 +289,18 @@
                   </div>
                   <div class="modal-body">
                     <div class="modal-body no-padding">
-               <div novalidate="novalidate" class="smart-form" id="checkout-form" action="">
+               <form id="servicesForm" novalidate="novalidate" class="smart-form" action="">
                         <div style="margin:0px;" class="row ">
                           <fieldset style="padding:0px;">                         
                             <section class="col col-6">
-                                <label class="newSeviceNameContainer" style="display:none">
+                                <label class="newSeviceNameContainer" >
                                 <label for="">Service Name <a href="javascript:void(0)" class="existingServiceLink">Existing Services</a></label>
                                 <label class="input "> 
                                     <input type="text" id="serviceNameText">
                                      
                                 </label>
                                 </label>
-                                <label class="serviceNameListContainer">
+                                <label class="serviceNameListContainer" style="display:none">
                                 <label class="">Select Available Services  <a href="javascript:void(0)" class="createNewServiceLink">Create New</a></label>
                                 <label class="select select-multiple">
                                     <select size="5" class="custom-scroll serviceNameList">
@@ -326,16 +326,16 @@
                               <section class="col col-10">
                                 <label class="label">Select Action</label>
                                 <div class="inline-group">
-                                  <label class="radio">
+                                  <label class="radio actionTypeContainer">
                                     <input type="radio" checked="checked" name="radio-inline" value="start">
                                     <i></i>Start</label>
-                                  <label class="radio">
+                                  <label class="radio actionTypeContainer">
                                     <input type="radio" name="radio-inline" value="stop">
                                     <i></i>Stop</label>
-                                  <label class="radio">
+                                  <label class="radio actionTypeContainer">
                                     <input type="radio" name="radio-inline" value="restart">
                                     <i></i>Restart</label>
-                                  <label class="radio">
+                                  <label class="radio actionTypeContainer">
                                     <input type="radio" name="radio-inline" value="kill">
                                     <i></i>Kill</label>
                                 </div>
@@ -376,7 +376,7 @@
                                  
                                       
                                 </select> 
-
+                                <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
                                 <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:140px">
                                       
                                 </select> 
@@ -399,7 +399,7 @@
                             </section>
                           </fieldset>
                         </div>
-                    </div>
+                    </form>
             </div>
 
                   </div>
@@ -839,22 +839,35 @@ $('.chooseActiontype').change(function(e){
 $('.createNewServiceLink').click(function(){
    $('.serviceNameListContainer').hide();
    $('.newSeviceNameContainer').show();
+    $('.actionTypeContainer').show();
+    $('.instanceUserList').parents('section').show();
 });
 
 $('.existingServiceLink').click(function(){
    $('.serviceNameListContainer').show();
    $('.newSeviceNameContainer').hide();
+   $('.actionTypeContainer').hide();
+   $('.instanceUserList').parents('section').hide();
 });
 
 $('.serviceNameList').change(function(e){
   $this = $(this);
   var $selectedOption = $this.find('option:selected');
   var actions =  $selectedOption.data('actions');
-  $('input[name=radio-inline]').show();
+  $('.actionTypeContainer').show();
   for(var i=0;i<actions.length;i++) {
-   $('input[name=radio-inline][value='+actions[i].actionType+']').hide();
+    console.log(actions[i].actionType);
+   $('input[name=radio-inline][value='+actions[i].actionType+']').parent().hide();
   }
 
+});
+
+$('.addServiceBtn').click(function(e){
+  $('#servicesForm')[0].reset();
+  $('.serviceNameListContainer').hide();
+  $('.newSeviceNameContainer').show();
+  $('.actionTypeContainer').show();
+  $('.servicesCookBookRecipeList').hide();
 });
 
 $.get('../instances/'+urlParams.id,function(data){
@@ -900,8 +913,14 @@ $.get('../instances/'+urlParams.id,function(data){
      if(val==='choose') {
       return;
      }
+     var $loadingContainer = $('.loadingChefRecipeContainer').show();
+    var $recipesList = $('.servicesCookBookRecipeList').hide().empty();
+
+     $('.servicesCookBookRecipeList')
      $.get('../chef/servers/' + data.chef.serverId + '/cookbooks/'+$(this).val(), function(data) {
-      var $recipesList = $('.servicesCookBookRecipeList').empty();
+      $loadingContainer.hide();
+      $recipesList.show();
+      
       for(var i=0;i<data.recipes.length;i++) {
         var recipe = data.recipes[i];
         var recipeName;
@@ -922,7 +941,7 @@ $.get('../instances/'+urlParams.id,function(data){
    var $modalServiceList = $('.serviceNameList');
    for(var i=0;i<data.services.length;i++) {
      var service = data.services[i];
-     var $option = '<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>';
+     var $option = $('<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>');
      $option.data('actions',data.services[i].actions); 
      $modalServiceList.append($option);
      addServiceToDom(service);
@@ -1344,7 +1363,10 @@ function addServiceToDom(serviceData) {
             type: 'DELETE',
             success: function() {
               console.log($tr);
-                $tr.remove();
+              var $modalServiceList = $('.serviceNameList');
+              var $option = $modalServiceList.find('option[value='+serviceData._id+']');
+              $tr.remove();
+              $option.remove();
             }
         });
     });
@@ -1379,7 +1401,10 @@ $('.btnSaveService').click(function(e) {
             console.log(data);
             addServiceToDom(data);
             var $modalServiceList = $('.serviceNameList');
-            $modalServiceList.append('<option value="'+data._id+'">'+data.serviceName+'</option>');
+            var $option = $('<option value="'+data._id+'">'+data.serviceName+'</option>');
+            $option.data('actions',data.actions); 
+            $modalServiceList.append($option);
+             
 
             $('#serviceModalContainer').modal('hide');
 
@@ -1397,6 +1422,13 @@ $('.btnSaveService').click(function(e) {
        console.log(reqBody);
        $.post('../instances/' + urlParams.id + '/services/'+serviceId+'/actions/create', reqBody, function(data) {
             console.log(data);
+            var $modalServiceList = $('.serviceNameList');
+            var $option = $modalServiceList.find('option[value='+serviceId+']');
+            var actions = $option.data('actions');
+            actions.push(data);
+            $option.data('actions',actions); 
+
+
             addActionToServiceDom(serviceId,data);
              $('#serviceModalContainer').modal('hide');
        });
