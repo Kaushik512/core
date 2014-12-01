@@ -846,6 +846,17 @@ $('.existingServiceLink').click(function(){
    $('.newSeviceNameContainer').hide();
 });
 
+$('.serviceNameList').change(function(e){
+  $this = $(this);
+  var $selectedOption = $this.find('option:selected');
+  var actions =  $selectedOption.data('actions');
+  $('input[name=radio-inline]').show();
+  for(var i=0;i<actions.length;i++) {
+   $('input[name=radio-inline][value='+actions[i].actionType+']').hide();
+  }
+
+});
+
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
@@ -908,12 +919,15 @@ $.get('../instances/'+urlParams.id,function(data){
 
    //adding services to table 
    $('.servicesTbody').empty();
-   var $modalServiceList = $('.serviceNameList')
+   var $modalServiceList = $('.serviceNameList');
    for(var i=0;i<data.services.length;i++) {
      var service = data.services[i];
-     $modalServiceList.append('<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>');
+     var $option = '<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>';
+     $option.data('actions',data.services[i].actions); 
+     $modalServiceList.append($option);
      addServiceToDom(service);
    }
+
     
   
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist);
@@ -997,8 +1011,8 @@ $.get('../instances/'+urlParams.id,function(data){
            
            
             if(data.length) {
-                lastTimestamp = data[data.length -1].timestamp;
-                console.log(lastTimestamp);
+                 lastTimestamp = data[data.length -1].timestamp;
+                 console.log(lastTimestamp);
                  $modalBody.append($table);
                  $modalBody.scrollTop($modalBody[0].scrollHeight+100);
             }
@@ -1323,7 +1337,7 @@ function addServiceToDom(serviceData) {
    
 
   }
-    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" rel="tooltip" data-placement="top" data-original-title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>');
+    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
     $tdOption.find('.deleteServiceBtn').click(function(e) {
         $.ajax({
             url: '../instances/' + urlParams.id + '/services/' + serviceData._id,
@@ -1344,8 +1358,6 @@ function addServiceToDom(serviceData) {
 $('.btnSaveService').click(function(e) {
 
     if ($('.newSeviceNameContainer').is(':visible')) {
-
-
 
         var reqBody = {};
         reqBody.serviceData = {};
