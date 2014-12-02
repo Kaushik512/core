@@ -236,6 +236,8 @@ function readform(formID) {
 
                 $(this).change(function () {
                     //  debugger;
+                    $('#content').attr('style',"opacity:1;")
+                    
                     var curCtrl = $(this);
                     $.each(eval($(this).attr('linkedfields')), function (i, item) {
                         var targetCtrl = $('#' + item);
@@ -246,8 +248,11 @@ function readform(formID) {
                                 addToSelectList(itm, targetCtrl);
                             else
                                 targetCtrl.append('<option value="' + itm + '">' + itm + '</option>');
-                        });
 
+                        });
+                        //fix for select2 control - Vinod 
+                        if (targetCtrl.attr('multiselect') == null)
+                            targetCtrl.select2();
 
                     });
                 });
