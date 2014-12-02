@@ -7,6 +7,7 @@ var taskstatusDao = require('../classes/taskstatus');
 var logsDao = require('../classes/dao/logsdao.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 var Docker = require('../classes/docker.js');
+var SSH = require('./utils/sshexec');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -15,7 +16,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances', function(req, res) {
-        instancesDao.getInstances(null,function(err, data) {
+        instancesDao.getInstances(null, function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500);
@@ -28,7 +29,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances', function(req, res) {
-        instancesDao.getInstances(req.body.instanceIds,function(err, data) {
+        instancesDao.getInstances(req.body.instanceIds, function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500);
@@ -66,87 +67,87 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/instances/dockercontainerdetails/:instanceid',function(req,res){
+    app.get('/instances/dockercontainerdetails/:instanceid', function(req, res) {
         //res.send(200);
         console.log('reached here a');
-         var instanceid = req.params.instanceid;
-         var _docker = new Docker();
-         var stdmessages = '';
-         var cmd = 'echo -e \"GET /containers/json?all=1 HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+        var instanceid = req.params.instanceid;
+        var _docker = new Docker();
+        var stdmessages = '';
+        var cmd = 'echo -e \"GET /containers/json?all=1 HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
 
-         console.log('cmd received: ' + cmd);
-         var stdOut = '';
-            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
-                //alert('Done');
-                var _stdout = stdOut.split('\r\n');
-                console.log('Docker containers : ' + _stdout.length);
-                var start = false;
-                var so = '';
-                _stdout.forEach(function(k,v){
-                    console.log(_stdout[v] + ':' + _stdout[v].length);
-                    if(start == true){
-                        so +=  _stdout[v];
-                        console.log(v +':' + _stdout[v].length);
-                    }
-                    if(_stdout[v].length == 1)
-                        start = true;
-                    if(v >= _stdout.length - 1)
-                        res.end(so);
-                });
-               
-            },function(stdOutData){
-                stdOut += stdOutData;
-               // alert(stdOutData);
-            },function(stdOutErr) {
-                res.send(500);
+        console.log('cmd received: ' + cmd);
+        var stdOut = '';
+        _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
+            //alert('Done');
+            var _stdout = stdOut.split('\r\n');
+            console.log('Docker containers : ' + _stdout.length);
+            var start = false;
+            var so = '';
+            _stdout.forEach(function(k, v) {
+                console.log(_stdout[v] + ':' + _stdout[v].length);
+                if (start == true) {
+                    so += _stdout[v];
+                    console.log(v + ':' + _stdout[v].length);
+                }
+                if (_stdout[v].length == 1)
+                    start = true;
+                if (v >= _stdout.length - 1)
+                    res.end(so);
             });
 
+        }, function(stdOutData) {
+            stdOut += stdOutData;
+            // alert(stdOutData);
+        }, function(stdOutErr) {
+            res.send(500);
+        });
+
     });
-app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(req,res){
+    app.get('/instances/dockercontainerdetails/:instanceid/:containerid', function(req, res) {
         //res.send(200);
         console.log('reached container details');
-         var instanceid = req.params.instanceid;
-         var _docker = new Docker();
-         var stdmessages = '';
-         var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+        var instanceid = req.params.instanceid;
+        var _docker = new Docker();
+        var stdmessages = '';
+        var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
 
-         console.log('cmd received: ' + cmd);
-         var stdOut = '';
-            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
-                //alert('Done');
-                var _stdout = stdOut.split('\r\n');
-                console.log('Docker containers : ' + _stdout.length);
-                var start = false;
-                var so = '';
-                _stdout.forEach(function(k,v){
-                    console.log(_stdout[v] + ':' + _stdout[v].length);
-                    if(start == true){
-                        so +=  _stdout[v];
-                        console.log(v +':' + _stdout[v].length);
-                    }
-                    if(_stdout[v].length == 1)
-                        start = true;
-                    if(v >= _stdout.length - 1)
-                        res.end(so);
-                });
-               
-            },function(stdOutData){
-                stdOut += stdOutData;
-               // alert(stdOutData);
-            },function(stdOutErr) {
-                res.send(500);
+        console.log('cmd received: ' + cmd);
+        var stdOut = '';
+        _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
+            //alert('Done');
+            var _stdout = stdOut.split('\r\n');
+            console.log('Docker containers : ' + _stdout.length);
+            var start = false;
+            var so = '';
+            _stdout.forEach(function(k, v) {
+                console.log(_stdout[v] + ':' + _stdout[v].length);
+                if (start == true) {
+                    so += _stdout[v];
+                    console.log(v + ':' + _stdout[v].length);
+                }
+                if (_stdout[v].length == 1)
+                    start = true;
+                if (v >= _stdout.length - 1)
+                    res.end(so);
             });
 
+        }, function(stdOutData) {
+            stdOut += stdOutData;
+            // alert(stdOutData);
+        }, function(stdOutErr) {
+            res.send(500);
+        });
+
     });
-    app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action',function(req,res){
+    app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action', function(req, res) {
         //res.send(200);
         console.log('reached here action');
-         var instanceid = req.params.instanceid;
-         var _docker = new Docker();
-         var stdmessages = '';
-         //Command mapping for security
-         var action = 'start';
-         switch (req.params.action){
+        var instanceid = req.params.instanceid;
+        var _docker = new Docker();
+        var stdmessages = '';
+        //Command mapping for security
+        var action = 'start';
+        switch (req.params.action) {
             case "1":
                 action = 'start';
                 break;
@@ -162,111 +163,106 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
             case "5":
                 action = 'unpause';
                 break;
-         }
+        }
 
 
-         //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
-         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
-         console.log('cmd received: ' + cmd);
-         var stdOut = '';
-            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
-                //alert('Done');
-                if(!err){
-                    logsDao.insertLog({
-                                    referenceId: instanceid,
-                                    err: false,
-                                    log: "Container  " + req.params.containerid  + " Action :" + action,
-                                    timestamp: new Date().getTime()
-                                });
-                    res.send(200);
-                }
-                else{
-                    console.log("Action Error : " + err);
-                    logsDao.insertLog({
-                                    referenceId: instanceid,
-                                    err: true,
-                                    log: "Action Error : " + err,
-                                    timestamp: new Date().getTime()
-                                });
-                    res.send(500);
-                }
-               
-            },function(stdOutData){
-                stdOut += stdOutData;
+        //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+        var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
+        console.log('cmd received: ' + cmd);
+        var stdOut = '';
+        _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
+            //alert('Done');
+            if (!err) {
                 logsDao.insertLog({
-                                    referenceId: instanceid,
-                                    err: false,
-                                    log: "Container  " + req.params.containerid  + ":" + stdOutData,
-                                    timestamp: new Date().getTime()
-                                });
-               // alert(stdOutData);
-            },function(stdOutErr) {
+                    referenceId: instanceid,
+                    err: false,
+                    log: "Container  " + req.params.containerid + " Action :" + action,
+                    timestamp: new Date().getTime()
+                });
+                res.send(200);
+            } else {
+                console.log("Action Error : " + err);
+                logsDao.insertLog({
+                    referenceId: instanceid,
+                    err: true,
+                    log: "Action Error : " + err,
+                    timestamp: new Date().getTime()
+                });
                 res.send(500);
+            }
+
+        }, function(stdOutData) {
+            stdOut += stdOutData;
+            logsDao.insertLog({
+                referenceId: instanceid,
+                err: false,
+                log: "Container  " + req.params.containerid + ":" + stdOutData,
+                timestamp: new Date().getTime()
             });
+            // alert(stdOutData);
+        }, function(stdOutErr) {
+            res.send(500);
+        });
 
     });
 
-    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname',function(req,res){
-        
-         console.log('reached here a');
-         var instanceid = req.params.instanceid;
-         var _docker = new Docker();
-         var stdmessages = '';
-         var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname  + ' /bin/bash';
-        _docker.runDockerCommands(cmd,req.params.instanceid,
-                        function(err, retCode) {
-                            if (err) {
-                                logsDao.insertLog({
-                                    referenceId: instanceid,
-                                    err: true,
-                                    log: 'Unable to run chef-client',
-                                    timestamp: new Date().getTime()
-                                });
-                                res.send(err);
-                                return;
-                            }
-                            
-                            console.log("docker return ", retCode);
-                            //if retCode == 0 //update docker status into instacne
-                            instancesDao.updateInstanceDockerStatus(instanceid,"success",'',function(data){
-                                console.log('Instance Docker Status set to Success');
-                            });
+    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname', function(req, res) {
+
+        console.log('reached here a');
+        var instanceid = req.params.instanceid;
+        var _docker = new Docker();
+        var stdmessages = '';
+        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+        _docker.runDockerCommands(cmd, req.params.instanceid,
+            function(err, retCode) {
+                if (err) {
+                    logsDao.insertLog({
+                        referenceId: instanceid,
+                        err: true,
+                        log: 'Unable to run chef-client',
+                        timestamp: new Date().getTime()
+                    });
+                    res.send(err);
+                    return;
+                }
+
+                console.log("docker return ", retCode);
+                //if retCode == 0 //update docker status into instacne
+                instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                    console.log('Instance Docker Status set to Success');
+                });
 
 
 
-                            res.send(200);
-                            
-                        }
-                        ,
-                        function(stdOutData) {
-                            if(!stdOutData)
-                            {
-                                
-                                console.log("SSH Stdout :" + stdOutData.toString('ascii'));
-                                stdmessages += stdOutData.toString('ascii');
-                            }
-                            else
-                            {
-                                logsDao.insertLog({
-                                    referenceId: instanceid,
-                                    err: false,
-                                    log: stdOutData.toString('ascii'),
-                                    timestamp: new Date().getTime()
-                                });
-                                console.log("SSH Stdout :" + instanceid +  stdOutData.toString('ascii'));
-                                stdmessages += stdOutData.toString('ascii');
-                            }
-                        }, function(stdOutErr) {
-                            logsDao.insertLog({
-                                referenceId: instanceid,
-                                err: true,
-                                log: stdOutErr.toString('ascii'),
-                                timestamp: new Date().getTime()
-                            });
-                            console.log("docker return ", stdOutErr);
-                            res.send(stdOutErr);
-                           
-                        }); 
+                res.send(200);
+
+            },
+            function(stdOutData) {
+                if (!stdOutData) {
+
+                    console.log("SSH Stdout :" + stdOutData.toString('ascii'));
+                    stdmessages += stdOutData.toString('ascii');
+                } else {
+                    logsDao.insertLog({
+                        referenceId: instanceid,
+                        err: false,
+                        log: stdOutData.toString('ascii'),
+                        timestamp: new Date().getTime()
+                    });
+                    console.log("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
+                    stdmessages += stdOutData.toString('ascii');
+                }
+            }, function(stdOutErr) {
+                logsDao.insertLog({
+                    referenceId: instanceid,
+                    err: true,
+                    log: stdOutErr.toString('ascii'),
+                    timestamp: new Date().getTime()
+                });
+                console.log("docker return ", stdOutErr);
+                res.send(stdOutErr);
+
+            });
     });
 
 
@@ -645,77 +641,102 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
                 }
                 var instance = data;
 
-                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                function onComplete(err, retCode) {
                     if (err) {
-                        res.send(500);
-                        return;
-                    }
-                    if (!chefDetails) {
-                        res.send(500);
-                        return;
-                    }
-                    var chef = new Chef({
-                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                        chefUserName: chefDetails.loginname,
-                        chefUserPemFile: chefDetails.userpemfile,
-                        chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
-                    });
-                    console.log('instance IP ==>', instance.instanceIP);
-                    var chefClientOptions = {
-                        privateKey: instance.credentials.pemFileLocation,
-                        username: instance.credentials.username,
-                        host: instance.instanceIP,
-                        instanceOS: instance.hardware.os,
-                        port: 22,
-                        runlist: action.serviceRunlist, // runing service runlist
-                        updateRunlist: true
-                    }
-                    if (instance.credentials.pemFileLocation) {
-                        chefClientOptions.privateKey = instance.credentials.pemFileLocation;
-                    } else {
-                        chefClientOptions.password = instance.credentials.password;
-                    }
-                    console.log('running chef client');
-                    chef.runChefClient(chefClientOptions, function(err, retCode) {
-                        if (err) {
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: true,
-                                log: 'Unable to run chef-client',
-                                timestamp: new Date().getTime()
-                            });
-                            return;
-                        }
-                        console.log("knife ret code", retCode);
-                        if (retCode == 0) {
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: false,
-                                log: 'instance runlist updated',
-                                timestamp: new Date().getTime()
-                            });
-                        } else {
-                            return;
-                        }
-                    }, function(stdOutData) {
-                        logsDao.insertLog({
-                            referenceId: req.params.instanceId,
-                            err: false,
-                            log: stdOutData.toString('ascii'),
-                            timestamp: new Date().getTime()
-                        });
-
-                    }, function(stdOutErr) {
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
                             err: true,
-                            log: stdOutErr.toString('ascii'),
+                            log: 'Unable to run services',
                             timestamp: new Date().getTime()
                         });
+                        return;
+                    }
+                    console.log("knife ret code", retCode);
+                    if (retCode == 0) {
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: false,
+                            log: 'Service run success',
+                            timestamp: new Date().getTime()
+                        });
+                    } else {
+                        return;
+                    }
+                }
+
+                function onStdOut(stdOutData) {
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: false,
+                        log: stdOutData.toString('ascii'),
+                        timestamp: new Date().getTime()
                     });
-                    res.send(200);
-                });
+                }
+
+                function onStdErr(stdOutErr) {
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: true,
+                        log: stdOutErr.toString('ascii'),
+                        timestamp: new Date().getTime()
+                    });
+                }
+
+                if (action.serviceRunlist && action.serviceRunlist.length) {
+
+                    configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                        if (err) {
+                            res.send(500);
+                            return;
+                        }
+                        if (!chefDetails) {
+                            res.send(500);
+                            return;
+                        }
+                        var chef = new Chef({
+                            userChefRepoLocation: chefDetails.chefRepoLocation,
+                            chefUserName: chefDetails.loginname,
+                            chefUserPemFile: chefDetails.userpemfile,
+                            chefValidationPemFile: chefDetails.validatorpemfile,
+                            hostedChefUrl: chefDetails.url,
+                        });
+                        console.log('instance IP ==>', instance.instanceIP);
+                        var chefClientOptions = {
+                            privateKey: instance.credentials.pemFileLocation,
+                            username: instance.credentials.username,
+                            host: instance.instanceIP,
+                            instanceOS: instance.hardware.os,
+                            port: 22,
+                            runlist: action.serviceRunlist, // runing service runlist
+                            updateRunlist: true
+                        }
+                        if (instance.credentials.pemFileLocation) {
+                            chefClientOptions.privateKey = instance.credentials.pemFileLocation;
+                        } else {
+                            chefClientOptions.password = instance.credentials.password;
+                        }
+                        console.log('running chef client');
+                        chef.runChefClient(chefClientOptions, onComplete, onStdOut, onStdErr);
+                        res.send(200);
+                    });
+                } else {
+                    //running command
+                    var sshParamObj = {
+                        host: instance.instanceIP,
+                        port: 22,
+                        username: instance.credentials.username,
+                    };
+                    var sudoCmd;
+                    if (instance.credentials.pemFileLocation) {
+                        sshParamObj.privateKey = instance.credentials.pemFileLocation;
+                    } else {
+                        sshParamObj.password = nstance.credentials.password;
+                    }
+                    var sshConnection = new SSH(sshParamObj);
+
+                    sshConnection.exec(action.command, onComplete, onStdOut, onStdErr);
+
+                }
             } else {
                 res.send(400);
             }
