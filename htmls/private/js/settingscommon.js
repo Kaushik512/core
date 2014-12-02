@@ -1228,3 +1228,613 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
 
     return obj;
   }
+
+//ChefItem with Organization
+//ChefItem added below
+    var chefItem = function(){
+    var $chefItemdiv = $("<div></div>").addClass('smart-form');
+
+    var $panelbody = $("<div></div>").addClass('panel-body');
+    var $fieldsetpanel = $("<fieldset></fieldset>").addClass('padding0');
+    var $section = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    var $label = $("<label></label>").text('Choose Organization');
+    var $divpanel = $("<div></div>").addClass('col col-9 padding0')
+    var $select = $("<select></select>").addClass('form-control width-100 chooseCheforgType');
+    var $optionorg1 = $("<option></option>").text('Choose');
+    var $optionorg2 = $("<option></option>").text('Phoenix');
+
+    $select.append($optionorg1);
+    $select.append($optionorg2);
+    $section.append($label);
+    $divpanel.append($select);
+    $section.append($divpanel);
+    $fieldsetpanel.append($section);
+    $panelbody.append($fieldsetpanel);
+
+    $chefItemdiv.append($panelbody);
+
+    var $fieldset = $("<fieldset></fieldset>").addClass('padding0');
+    var $section1 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+
+    var $label1 = $("<label></label>").addClass('label');
+    var $img1 = $("<img />").attr('src','img/templateicons/Create-run-list---deployment.png');
+    var $strong1 = $("<strong></strong>").text("Create Runlist");
+    $label1.append($img1);
+    $label1.append($strong1);
+    $section1.append($label1);
+    var $row1 = $("<div></div>").addClass('row');
+    var $div1 = $("<div></div>").addClass('col col-9');
+    var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
+    var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
+    var $hr1 = $("<hr>");
+    $ul1.append($label2);
+    $ul1.append($hr1);
+    //1st li added to ul
+        var $licookbook1 = $("<li></li>");
+        var $licookbook1label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook1input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','golang').attr('value','recipe[golang]').attr('name','checkboxCookbook');
+        $licookbook1label.append($licookbook1input);
+        var $licookbook1itag = $("<i></i>");
+        $licookbook1label.append($licookbook1itag);
+        $licookbook1label.append("golang");
+        $licookbook1.append($licookbook1label);
+        $ul1.append($licookbook1);
+
+    //2nd li added to ul
+        var $licookbook2 = $("<li></li>");
+        var $licookbook2label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook2input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','openssl').attr('value','recipe[openssl]').attr('name','checkboxCookbook');
+        $licookbook2label.append($licookbook2input);
+        var $licookbook2itag = $("<i></i>");
+        $licookbook2label.append($licookbook2itag);
+        $licookbook2label.append("openssl");
+        $licookbook2.append($licookbook2label);
+        $ul1.append($licookbook2);
+
+    //3rd li added to ul
+        var $licookbook3 = $("<li></li>");
+        var $licookbook3label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook3input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','ntp').attr('value','recipe[ntp]').attr('name','checkboxCookbook');
+        $licookbook3label.append($licookbook3input);
+        var $licookbook3itag = $("<i></i>");
+        $licookbook3label.append($licookbook3itag);
+        $licookbook3label.append("ntp");
+        $licookbook3.append($licookbook3label);
+        $ul1.append($licookbook3);
+
+    //4th li added to ul
+        var $licookbook4 = $("<li></li>");
+        var $licookbook4label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook4input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','postfix').attr('value','recipe[postfix]').attr('name','checkboxCookbook');
+        $licookbook4label.append($licookbook4input);
+        var $licookbook4itag = $("<i></i>");
+        $licookbook4label.append($licookbook4itag);
+        $licookbook4label.append("postfix");
+        $licookbook4.append($licookbook4label);
+        $ul1.append($licookbook4);
+
+    //5th li added to ul
+        var $licookbook5 = $("<li></li>");
+        var $licookbook5label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook5input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','java_mac').attr('value','recipe[java_mac]').attr('name','checkboxCookbook');
+        $licookbook5label.append($licookbook5input);
+        var $licookbook5itag = $("<i></i>");
+        $licookbook5label.append($licookbook5itag);
+        $licookbook5label.append("java_mac");
+        $licookbook5.append($licookbook5label);
+        $ul1.append($licookbook5);
+    $div1.append($ul1);
+    var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
+    var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
+    var $hr2 = $("<hr>");
+    $ul2.append($label3);
+    $ul2.append($hr2);
+    //1st li added to ul
+        var $lirole1 = $("<li></li>");
+        var $lirole1label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole1input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','IAP').attr('value','recipe[IAP]').attr('name','checkboxCookbook');
+        $lirole1label.append($lirole1input);
+        var $lirole1itag = $("<i></i>");
+        $lirole1label.append($lirole1itag);
+        $lirole1label.append("IAP");
+        $lirole1.append($lirole1label);
+        $ul2.append($lirole1);
+    //2nd li added to ul
+        var $lirole2 = $("<li></li>");
+        var $lirole2label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole2input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','IUP').attr('value','recipe[IUP]').attr('name','checkboxCookbook');
+        $lirole2label.append($lirole2input);
+        var $lirole2itag = $("<i></i>");
+        $lirole2label.append($lirole2itag);
+        $lirole2label.append("IUP");
+        $lirole2.append($lirole2label);
+        $ul2.append($lirole2);
+    //3rd li added to ul
+        var $lirole3 = $("<li></li>");
+        var $lirole3label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole3input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','R1').attr('value','recipe[R1]').attr('name','checkboxCookbook');
+        $lirole3label.append($lirole3input);
+        var $lirole3itag = $("<i></i>");
+        $lirole3label.append($lirole3itag);
+        $lirole3label.append("R1");
+        $lirole3.append($lirole3label);
+        $ul2.append($lirole3);
+    //4th li added to ul
+        var $lirole4 = $("<li></li>");
+        var $lirole4label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole4input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','R2').attr('value','recipe[R2]').attr('name','checkboxCookbook');
+        $lirole4label.append($lirole4input);
+        var $lirole4itag = $("<i></i>");
+        $lirole4label.append($lirole4itag);
+        $lirole4label.append("R2");
+        $lirole4.append($lirole4label);
+        $ul2.append($lirole4);
+    //5th li added to ul
+        var $lirole5 = $("<li></li>");
+        var $lirole5label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole5input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','backend').attr('value','recipe[backend]').attr('name','checkboxCookbook');
+        $lirole5label.append($lirole5input);
+        var $lirole5itag = $("<i></i>");
+        $lirole5label.append($lirole5itag);
+        $lirole5label.append("backend");
+        $lirole5.append($lirole5label);
+        $ul2.append($lirole5);
+
+    $div1.append($ul2);
+    $row1.append($div1);
+
+    $div2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divinputgroupAddRemove = $("<div></div>").addClass('input-group');
+    $divbtngroupAdd = $("<div></div>").addClass('btn-group padding-bottom-10');
+
+    $btntoAdd = $("<button></button>").addClass('btn btn-default btn-primary btnItemAdd btnItemCSS ');
+    $btntoAdditag = $("<i></i>").addClass('fa fa-angle-double-right font-size-20');
+    $btntoAdd.append($btntoAdditag);
+    $divbtngroupAdd.append($btntoAdd);
+    $divinputgroupAddRemove.append($divbtngroupAdd);
+
+    $btnClearfix = $("<div></div>").addClass('clearfix');
+    $divinputgroupAddRemove.append($btnClearfix);
+
+    $divbtngroupRemove = $("<div></div>").addClass('btn-group');
+    $btntoRemove = $("<button></button>").addClass('btn btn-default btn-primary btnItemRemove btnItemCSS');
+    $btntoRemoveitag = $("<i></i>").addClass('fa fa-angle-double-left font-size-20');
+    $btntoRemove.append($btntoRemoveitag);
+    $divbtngroupRemove.append($btntoRemove);
+    $divinputgroupAddRemove.append($divbtngroupRemove);
+
+    $div2.append($divinputgroupAddRemove);
+    $row1.append($div2);
+
+    $section1.append($row1);
+
+    //Section 2 started
+
+    var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    var $label2 = $("<label></label>").addClass('label');
+    var $img2 = $("<img />").attr('src','img/templateicons/Order-run-list---deployment.png');
+    var $strong2 = $("<strong></strong>").text("Order Runlist");
+    $label2.append($img2);
+    $label2.append($strong2);
+    $section2.append($label2);
+
+    var $rowOrder1 = $("<div></div>").addClass('row');
+    var $divOrder1 = $("<div></div>").addClass('col col-9');
+    var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
+    $divOrder1.append($ulOrder1);
+    $rowOrder1.append($divOrder1);
+
+
+
+    $divOrder2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divinputgroupUpDown= $("<div></div>").addClass('input-group');
+    $divbtngroupUp = $("<div></div>").addClass('btn-group padding-bottom-10');
+
+    $btntoUp = $("<button></button>").addClass('btn btn-default btn-primary btnItemUp btnItemCSS ');
+    $btntoUpitag = $("<i></i>").addClass('fa fa-angle-double-up font-size-20');
+    $btntoUp.append($btntoUpitag);
+    $divbtngroupUp.append($btntoUp);
+    $divinputgroupUpDown.append($divbtngroupUp);
+
+    $btnClearfix1 = $("<div></div>").addClass('clearfix');
+    $divinputgroupUpDown.append($btnClearfix1);
+
+    $divbtngroupDown = $("<div></div>").addClass('btn-group');
+    $btntoDown = $("<button></button>").addClass('btn btn-default btn-primary btnItemDown btnItemCSS');
+    $btntoDownitag = $("<i></i>").addClass('fa fa-angle-double-down font-size-20');
+    $btntoDown.append($btntoDownitag);
+    $divbtngroupDown.append($btntoDown);
+    $divinputgroupUpDown.append($divbtngroupDown);
+
+    $divOrder2.append($divinputgroupUpDown);
+    $rowOrder1.append($divOrder2);
+
+
+    $section2.append($rowOrder1);
+
+
+
+    $fieldset.append($section1);
+    $fieldset.append($section2);
+    $chefItemdiv.append($fieldset);
+
+    // $("#toAdd").click(function(e){
+    //    $("#toaddbtn").append($form);
+    // });
+    $chefItemdiv.find('.btnItemAdd').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");
+        $selectedCookbooks.each(function(idx) {
+        var $this = $(this);
+
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+        if ($(this).hasClass('deploymentCookbookSelected')) {
+        $(this).removeClass('deploymentCookbookSelected');
+        } else {
+        $(this).addClass('deploymentCookbookSelected');
+        }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+        });
+        var $selectedRoles = $("input[name=checkboxRole]:checked");
+        $selectedRoles.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+        if ($(this).hasClass('deploymentCookbookSelected')) {
+        $(this).removeClass('deploymentCookbookSelected');
+        } else {
+        $(this).addClass('deploymentCookbookSelected');
+        }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+        });
+        // $deploymentSelectedList.sortable({
+        // cursor: "move"
+        // });
+    });
+    $chefItemdiv.find('.btnItemRemove').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
+        var value = $(this).find('input').val();
+        var selector = 'input[name=checkboxRole][value="' + value + '"]';
+        console.log(selector);
+        $('input[name=checkboxRole][value="' + value + '"]').parents('li').show();
+        $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show();
+        $(this).remove();
+        });
+    });
+
+    $chefItemdiv.find(".btnItemUp").on('click', function () {
+            var $selectedRunlist = $('.deploymentCookbookSelected');
+
+            $selectedRunlist.insertBefore($selectedRunlist.first().prev());
+    });
+
+    $chefItemdiv.find(".btnItemDown").on('click', function () {
+        var $selectedRunlistDown = $('.deploymentCookbookSelected');
+           
+        $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
+
+    });
+
+    // $chefItemdiv.find(".chooseCheforgType").on('click', function () {
+    //     $(".chooseCheforgType").select2();
+    // });
+    // $chefItemdiv.ready(function() {
+    //     $(".chooseCheforgType").select2();
+    // });
+    $chefItemdiv.find('.chooseCheforgType').select2();
+    return $chefItemdiv;
+    }
+
+//ChefItem without Organization
+
+//ChefItem added below
+    var chefItemwithoutOrg = function(){
+    var $chefItemdiv = $("<div></div>").addClass('smart-form');
+
+    var $panelbody = $("<div></div>").addClass('panel-body');
+    var $fieldsetpanel = $("<fieldset></fieldset>").addClass('padding0');
+    var $section = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    // var $label = $("<label></label>").text('Choose Organization');
+    // var $divpanel = $("<div></div>").addClass('col col-9 padding0')
+    // var $select = $("<select></select>").addClass('form-control width-100 chooseCheforgType');
+    // var $optionorg1 = $("<option></option>").text('Choose');
+    // var $optionorg2 = $("<option></option>").text('Phoenix');
+
+    // $select.append($optionorg1);
+    // $select.append($optionorg2);
+    // $section.append($label);
+    // $divpanel.append($select);
+    // $section.append($divpanel);  
+    $loadingContainer = $('<div></div>').addClass('loadingContainer');
+    var $imgerrorContainer = $("<img />").attr('src','img/loading.gif').addClass('center-block chefItemwithoutOrgloadingContainerCSS');
+    $loadingContainer.append($imgerrorContainer);
+    $section.append($loadingContainer);
+    $fieldsetpanel.append($section);
+    $panelbody.append($fieldsetpanel);
+
+    $chefItemdiv.append($panelbody);
+
+    var $fieldset = $("<fieldset></fieldset>").addClass('padding0 fieldsetContainschefItem');
+    var $section1 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+
+    var $label1 = $("<label></label>").addClass('label');
+    var $img1 = $("<img />").attr('src','img/templateicons/Create-run-list---deployment.png');
+    var $strong1 = $("<strong></strong>").text("Create Runlist");
+    $label1.append($img1);
+    $label1.append($strong1);
+    $section1.append($label1);
+    var $row1 = $("<div></div>").addClass('row');
+    var $div1 = $("<div></div>").addClass('col col-9');
+    var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
+    var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
+    var $hr1 = $("<hr>");
+    $ul1.append($label2);
+
+    $ul1.append($hr1);
+    //1st li added to ul
+        var $licookbook1 = $("<li></li>");
+        var $licookbook1label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook1input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','golang').attr('value','recipe[golang]').attr('name','checkboxCookbook');
+        $licookbook1label.append($licookbook1input);
+        var $licookbook1itag = $("<i></i>");
+        $licookbook1label.append($licookbook1itag);
+        $licookbook1label.append("golang");
+        $licookbook1.append($licookbook1label);
+        $ul1.append($licookbook1);
+
+    //2nd li added to ul
+        var $licookbook2 = $("<li></li>");
+        var $licookbook2label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook2input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','openssl').attr('value','recipe[openssl]').attr('name','checkboxCookbook');
+        $licookbook2label.append($licookbook2input);
+        var $licookbook2itag = $("<i></i>");
+        $licookbook2label.append($licookbook2itag);
+        $licookbook2label.append("openssl");
+        $licookbook2.append($licookbook2label);
+        $ul1.append($licookbook2);
+
+    //3rd li added to ul
+        var $licookbook3 = $("<li></li>");
+        var $licookbook3label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook3input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','ntp').attr('value','recipe[ntp]').attr('name','checkboxCookbook');
+        $licookbook3label.append($licookbook3input);
+        var $licookbook3itag = $("<i></i>");
+        $licookbook3label.append($licookbook3itag);
+        $licookbook3label.append("ntp");
+        $licookbook3.append($licookbook3label);
+        $ul1.append($licookbook3);
+
+    //4th li added to ul
+        var $licookbook4 = $("<li></li>");
+        var $licookbook4label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook4input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','postfix').attr('value','recipe[postfix]').attr('name','checkboxCookbook');
+        $licookbook4label.append($licookbook4input);
+        var $licookbook4itag = $("<i></i>");
+        $licookbook4label.append($licookbook4itag);
+        $licookbook4label.append("postfix");
+        $licookbook4.append($licookbook4label);
+        $ul1.append($licookbook4);
+
+    //5th li added to ul
+        var $licookbook5 = $("<li></li>");
+        var $licookbook5label = $("<label></label>").addClass('checkbox margin-5');
+        var $licookbook5input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','java_mac').attr('value','recipe[java_mac]').attr('name','checkboxCookbook');
+        $licookbook5label.append($licookbook5input);
+        var $licookbook5itag = $("<i></i>");
+        $licookbook5label.append($licookbook5itag);
+        $licookbook5label.append("java_mac");
+        $licookbook5.append($licookbook5label);
+        $ul1.append($licookbook5);
+    $div1.append($ul1);
+    var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
+    var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
+    var $hr2 = $("<hr>");
+    $ul2.append($label3);
+    $ul2.append($hr2);
+    //1st li added to ul
+        var $lirole1 = $("<li></li>");
+        var $lirole1label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole1input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','IAP').attr('value','recipe[IAP]').attr('name','checkboxCookbook');
+        $lirole1label.append($lirole1input);
+        var $lirole1itag = $("<i></i>");
+        $lirole1label.append($lirole1itag);
+        $lirole1label.append("IAP");
+        $lirole1.append($lirole1label);
+        $ul2.append($lirole1);
+    //2nd li added to ul
+        var $lirole2 = $("<li></li>");
+        var $lirole2label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole2input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','IUP').attr('value','recipe[IUP]').attr('name','checkboxCookbook');
+        $lirole2label.append($lirole2input);
+        var $lirole2itag = $("<i></i>");
+        $lirole2label.append($lirole2itag);
+        $lirole2label.append("IUP");
+        $lirole2.append($lirole2label);
+        $ul2.append($lirole2);
+    //3rd li added to ul
+        var $lirole3 = $("<li></li>");
+        var $lirole3label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole3input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','R1').attr('value','recipe[R1]').attr('name','checkboxCookbook');
+        $lirole3label.append($lirole3input);
+        var $lirole3itag = $("<i></i>");
+        $lirole3label.append($lirole3itag);
+        $lirole3label.append("R1");
+        $lirole3.append($lirole3label);
+        $ul2.append($lirole3);
+    //4th li added to ul
+        var $lirole4 = $("<li></li>");
+        var $lirole4label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole4input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','R2').attr('value','recipe[R2]').attr('name','checkboxCookbook');
+        $lirole4label.append($lirole4input);
+        var $lirole4itag = $("<i></i>");
+        $lirole4label.append($lirole4itag);
+        $lirole4label.append("R2");
+        $lirole4.append($lirole4label);
+        $ul2.append($lirole4);
+    //5th li added to ul
+        var $lirole5 = $("<li></li>");
+        var $lirole5label = $("<label></label>").addClass('checkbox margin-5');
+        var $lirole5input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','backend').attr('value','recipe[backend]').attr('name','checkboxCookbook');
+        $lirole5label.append($lirole5input);
+        var $lirole5itag = $("<i></i>");
+        $lirole5label.append($lirole5itag);
+        $lirole5label.append("backend");
+        $lirole5.append($lirole5label);
+        $ul2.append($lirole5);
+
+    $div1.append($ul2);
+    $row1.append($div1);
+
+    $div2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divinputgroupAddRemove = $("<div></div>").addClass('input-group');
+    $divbtngroupAdd = $("<div></div>").addClass('btn-group padding-bottom-10');
+
+    $btntoAdd = $("<button></button>").addClass('btn btn-default btn-primary btnItemAdd btnItemCSS ');
+    $btntoAdditag = $("<i></i>").addClass('fa fa-angle-double-right font-size-20');
+    $btntoAdd.append($btntoAdditag);
+    $divbtngroupAdd.append($btntoAdd);
+    $divinputgroupAddRemove.append($divbtngroupAdd);
+
+    $btnClearfix = $("<div></div>").addClass('clearfix');
+    $divinputgroupAddRemove.append($btnClearfix);
+
+    $divbtngroupRemove = $("<div></div>").addClass('btn-group');
+    $btntoRemove = $("<button></button>").addClass('btn btn-default btn-primary btnItemRemove btnItemCSS');
+    $btntoRemoveitag = $("<i></i>").addClass('fa fa-angle-double-left font-size-20');
+    $btntoRemove.append($btntoRemoveitag);
+    $divbtngroupRemove.append($btntoRemove);
+    $divinputgroupAddRemove.append($divbtngroupRemove);
+
+    $div2.append($divinputgroupAddRemove);
+    $row1.append($div2);
+
+    $section1.append($row1);
+
+    //Section 2 started
+
+    var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    var $label2 = $("<label></label>").addClass('label');
+    var $img2 = $("<img />").attr('src','img/templateicons/Order-run-list---deployment.png');
+    var $strong2 = $("<strong></strong>").text("Order Runlist");
+    $label2.append($img2);
+    $label2.append($strong2);
+    $section2.append($label2);
+
+    var $rowOrder1 = $("<div></div>").addClass('row');
+    var $divOrder1 = $("<div></div>").addClass('col col-9');
+    var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
+    $divOrder1.append($ulOrder1);
+    $rowOrder1.append($divOrder1);
+
+
+
+    $divOrder2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divinputgroupUpDown= $("<div></div>").addClass('input-group');
+    $divbtngroupUp = $("<div></div>").addClass('btn-group padding-bottom-10');
+
+    $btntoUp = $("<button></button>").addClass('btn btn-default btn-primary btnItemUp btnItemCSS ');
+    $btntoUpitag = $("<i></i>").addClass('fa fa-angle-double-up font-size-20');
+    $btntoUp.append($btntoUpitag);
+    $divbtngroupUp.append($btntoUp);
+    $divinputgroupUpDown.append($divbtngroupUp);
+
+    $btnClearfix1 = $("<div></div>").addClass('clearfix');
+    $divinputgroupUpDown.append($btnClearfix1);
+
+    $divbtngroupDown = $("<div></div>").addClass('btn-group');
+    $btntoDown = $("<button></button>").addClass('btn btn-default btn-primary btnItemDown btnItemCSS');
+    $btntoDownitag = $("<i></i>").addClass('fa fa-angle-double-down font-size-20');
+    $btntoDown.append($btntoDownitag);
+    $divbtngroupDown.append($btntoDown);
+    $divinputgroupUpDown.append($divbtngroupDown);
+
+    $divOrder2.append($divinputgroupUpDown);
+    $rowOrder1.append($divOrder2);
+
+
+    $section2.append($rowOrder1);
+
+
+
+    $fieldset.append($section1);
+    $fieldset.append($section2);
+    $chefItemdiv.append($fieldset);
+
+    $errorContainer = $('<div></div>').addClass('errorContainer').text('This is Error Cointainer div');
+    $chefItemdiv.append($errorContainer);
+
+    // $("#toAdd").click(function(e){
+    //    $("#toaddbtn").append($form);
+    // });
+    $chefItemdiv.find('.btnItemAdd').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");
+        $selectedCookbooks.each(function(idx) {
+        var $this = $(this);
+
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+        if ($(this).hasClass('deploymentCookbookSelected')) {
+        $(this).removeClass('deploymentCookbookSelected');
+        } else {
+        $(this).addClass('deploymentCookbookSelected');
+        }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+        });
+        var $selectedRoles = $("input[name=checkboxRole]:checked");
+        $selectedRoles.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+        if ($(this).hasClass('deploymentCookbookSelected')) {
+        $(this).removeClass('deploymentCookbookSelected');
+        } else {
+        $(this).addClass('deploymentCookbookSelected');
+        }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+        });
+        // $deploymentSelectedList.sortable({
+        // cursor: "move"
+        // });
+    });
+    $chefItemdiv.find('.btnItemRemove').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
+        var value = $(this).find('input').val();
+        var selector = 'input[name=checkboxRole][value="' + value + '"]';
+        console.log(selector);
+        $('input[name=checkboxRole][value="' + value + '"]').parents('li').show();
+        $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show();
+        $(this).remove();
+        });
+    });
+
+    $chefItemdiv.find(".btnItemUp").on('click', function () {
+            var $selectedRunlist = $('.deploymentCookbookSelected');
+
+            $selectedRunlist.insertBefore($selectedRunlist.first().prev());
+    });
+
+    $chefItemdiv.find(".btnItemDown").on('click', function () {
+        var $selectedRunlistDown = $('.deploymentCookbookSelected');
+           
+        $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
+
+    });
+
+    // $chefItemdiv.find(".chooseCheforgType").on('click', function () {
+    //     $(".chooseCheforgType").select2();
+    // });
+    // $chefItemdiv.ready(function() {
+    //     $(".chooseCheforgType").select2();
+    // });
+    $chefItemdiv.find('.chooseCheforgType').select2();
+    return $chefItemdiv;
+    }
+
