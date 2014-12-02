@@ -4,7 +4,8 @@
     }
 </style>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet"> 
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
+<script src="js/settingscommon.js"></script>
 <div class="row">
 
     <article class="col-sm-12 col-md-12 col-lg-12">
@@ -1647,7 +1648,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
-
 <script type="text/javascript">
 
 // $(document.body).on('click', '.card', function () {
@@ -2517,8 +2517,22 @@ $("#btnaddInstanceCookbooks").on('click', function () {
 
 var instanceUpdateRunlistHandler = function(e) {
     var $this = $(this);
+    //alert($this);
     var instanceId = $this.attr('data-instanceId');
+    //alert(instanceId);
     var chefServerId = $this.attr('data-chefServerId');
+    //alert(chefServerId);
+
+    //For dynamic purpose added below 8 commented line
+    // var $chefItemwithoutOrgmainDiv = $('<div></div>').addClass('editchefRunlist');
+    // var $chefItemwithoutOrg = $chefItemwithoutOrgmainDiv.append(chefItemwithoutOrg);
+    // $chefRunModalContainer = $('#chefRunModalContainer');
+
+    // $chefItemwithoutOrg.find('.loadingContainer').show();
+    // $chefItemwithoutOrg.find('.fieldsetContainschefItem').hide();
+    // $chefItemwithoutOrg.find('.errorContainer').hide();
+    // $chefRunModalContainer.find('.modal-body').empty().append($chefItemwithoutOrgmainDiv);
+    // $chefRunModalContainer.modal('show');
 
     //console.log(i+nstanceId);
     $chefRunModalContainer = $('#chefRunModalContainer');
@@ -2866,8 +2880,9 @@ function addInstanceToDOM(data) {
     var $backhr = $('<hr>');
 
 
-    $backdivai.append($backdivaspan);
+    
     $backdiva.append($backdivai);
+    $backdiva.append($backdivaspan);
     //$backdiva.append($backhr);
     $backdiv.append($backdiva);
 
@@ -3629,4 +3644,5 @@ function getViewTile(){
     interval : false,
     cycle : true
   });
+  //$('.editchefRunlist').append(chefItem);
 </script>

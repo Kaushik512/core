@@ -1621,10 +1621,25 @@ $.ajax({
             var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
             $cookbooksList.append($option);
             }
-        $cookbookShow.append('<span>Choose Cookbooks <span><br/><br/>');
+        $cookbookShow.append('<span>Choose Cookbooks<span><br />');
+        var $inputtypetext = $('<input type="text">').addClass('width-170');
+        $cookbookShow.append($inputtypetext);
         $cookbookShow.append($cookbooksList);
         $cookbooksList.show();
         $cookbooksList.multiSelect({});
+
+
+        $('.width-170').keyup(function(){
+            var searchText = $(this).val();
+            //alert(searchText);
+            $allListElements = $('.ms-selectable ul > li');
+            $matchingListElements = $allListElements.filter(function(i, el){
+                return $(el).text().indexOf(searchText) !== -1;
+            });
+        $allListElements.hide();
+        $matchingListElements.show(); 
+        });
+
     },
     error : function(){
      $cookbookShow.empty();
