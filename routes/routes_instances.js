@@ -7,7 +7,7 @@ var taskstatusDao = require('../classes/taskstatus');
 var logsDao = require('../classes/dao/logsdao.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 var Docker = require('../classes/docker.js');
-var SSH = require('./utils/sshexec');
+var SSH = require('../classes/utils/sshexec');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -264,7 +264,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             });
     });
-
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         if (!req.body.runlist) {

@@ -391,7 +391,9 @@
                                 <section class="col col-10" style="padding-left: 0px;">
                                   <label>Command</label>
                                   <label class="textarea">             
-                                    <textarea rows="3" class="custom-scroll customScriptArea" ></textarea> 
+                                      <select class="custom-scroll commandsList">
+
+                                      </select>  
                                   </label>
                                   
                                 </section>
@@ -907,6 +909,18 @@ $.get('../instances/'+urlParams.id,function(data){
         }
    });
 
+    $.get('/d4dMasters/getlist/19/command/params', function(data) {
+        if (data) {
+            var ei = JSON.parse(data);
+            //alert(ei);
+            var $selectCommandList = $('.commandsList');
+            $.each(ei, function(k, v) {
+                var $option = $('<option></option>').val(v.command + " " + v.params).html(v.command + " " + v.params); 
+                $selectCommandList.append($option);
+            });
+        }
+    });
+
    //handling cookbookOnchangeEvent
    $('.servicesCookBookList').change(function(e){
      var val = $(this).val();
@@ -1393,7 +1407,7 @@ $('.btnSaveService').click(function(e) {
             reqBody.serviceData.actions[0].runlist = $('.servicesCookBookRecipeList').val();
 
         } else {
-            reqBody.serviceData.actions[0].command = $('.customScriptArea').val();
+            reqBody.serviceData.actions[0].command = $('.commandsList').val();
         }
 
         console.log(reqBody);
@@ -1417,7 +1431,7 @@ $('.btnSaveService').click(function(e) {
        if ($('.servicesCookBookList').is(':visible')) {
           reqBody.actionData.runlist = $('.servicesCookBookRecipeList').val();
        } else {
-          reqBody.actionData.command = $('.customScriptArea').val();
+          reqBody.actionData.command = $('.commandsList').val();
        }
        console.log(reqBody);
        $.post('../instances/' + urlParams.id + '/services/'+serviceId+'/actions/create', reqBody, function(data) {
