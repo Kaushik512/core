@@ -1851,7 +1851,7 @@ $('.dockerinstancestart').click(function(e){
                     var $statmessage = $('.dockerspinner').parent();
                     $('.dockerspinner').detach();
                     $td.find('.dockermessage').detach();
-                    $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage">Errored</span>');
+                    $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
                 }
           });
       }
@@ -3294,10 +3294,12 @@ $('.launchBtn').click(function(e) {
                 $('#myModalLabel').first().html('Launching Blueprint');
 
             });
-            $('#dockerInstanceSelectionTitle').empty().append('Select Instances for ' + dockerreponame);
+            $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
             $launchDockerInstanceSelector.modal('show');
             $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr>');
-            $('#dockerintsancestab').dataTable();
+            $('#dockerintsancestab').dataTable({
+                "bPaginate": false
+            });
             return;
     }
 

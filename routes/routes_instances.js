@@ -222,7 +222,7 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
                                     log: 'Unable to run chef-client',
                                     timestamp: new Date().getTime()
                                 });
-                                res.send(err);
+                                res.send(err.toString('ascii'));
                                 return;
                             }
                             
@@ -264,7 +264,7 @@ app.get('/instances/dockercontainerdetails/:instanceid/:containerid',function(re
                                 timestamp: new Date().getTime()
                             });
                             console.log("docker return ", stdOutErr);
-                            res.send(stdOutErr);
+                            res.send(stdOutErr.toString('ascii'));
                            
                         }); 
     });

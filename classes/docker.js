@@ -39,7 +39,6 @@ var Docker = function(){
 				                sshParamObj.password = options.password;
 				            }
 				            var sshConnection = new SSH(sshParamObj);
-
 				            sshConnection.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
         }
     });
