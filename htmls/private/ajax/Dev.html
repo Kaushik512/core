@@ -2018,9 +2018,9 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
                     $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                     if (data[i].err) {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                        $rowDiv.append($('<div class="col-lg-7 col-sm-7" style="color:red;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
                     } else {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                        $rowDiv.append($('<div class="col-lg-7 col-sm-7 " style="color:DarkBlue;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
                     }
 
                     $table.append($rowDiv);
@@ -2361,7 +2361,7 @@ function removeSelectedInstance(){
             $.get('/instances/delete/' + instanceid,function(data){
             //  alert(data);
               if(data == 'OK'){
-                $('.container.role-Selectedcard').detach();
+                $('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
               }
               else
                 alert(data);
