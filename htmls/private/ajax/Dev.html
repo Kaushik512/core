@@ -134,7 +134,7 @@
                         </button>-->
                     </div>
                     <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" > <i class="fa fa-trash-o"></i></button>
-                    &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px"> <i class="fa fa-download"></i></a>
+                    &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px"> <i class="fa fa-plug"></i></a>
 
                 </div>
             </div>
@@ -905,7 +905,7 @@
                             <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
                         </button>
                         <button class="btn btn-primary pull-right" type="submit">
-                            <i class="fa fa-download"></i>&nbsp;Import
+                            <i class="fa fa-plug"></i>&nbsp;Import
                         </button>
                     </footer>
                 </form>                           
@@ -1851,7 +1851,7 @@ $('.dockerinstancestart').click(function(e){
                     var $statmessage = $('.dockerspinner').parent();
                     $('.dockerspinner').detach();
                     $td.find('.dockermessage').detach();
-                    $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage">Errored</span>');
+                    $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
                 }
           });
       }
@@ -1946,7 +1946,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
                 });
 
                 $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
-                    $(e.target).attr('data-taskPolling', 'false');
+                    $(e.target).attr('data-taskPolling', 'true');
                     //e.relatedTarget // previous active tab
                 }).first().click();
  
@@ -3309,10 +3309,12 @@ $('.launchBtn').click(function(e) {
                 $('#myModalLabel').first().html('Launching Blueprint');
 
             });
-            $('#dockerInstanceSelectionTitle').empty().append('Select Instances for ' + dockerreponame);
+            $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
             $launchDockerInstanceSelector.modal('show');
             $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr>');
-            $('#dockerintsancestab').dataTable();
+            $('#dockerintsancestab').dataTable({
+                "bPaginate": false
+            });
             return;
     }
 
