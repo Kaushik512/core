@@ -146,10 +146,19 @@ function CreateTableFromJson(formID,idFieldName,createFileName) {
                             });
                             if(imageTD){
                                 if(imageTD.length > 0){
-                                    var imgpath = '/d4dMasters/image/' + tv + '__' + imageTD.attr('datafieldoriginal')  + '__' + imageTD.html();
-                                    imageTD.html('');
-                                    imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+                                    console.log("Template Icon:" + tv);
+                                    var imgpath = 'img/blank.png';
+                                    if(imageTD.html().indexOf('<img') >= 0){
+                                        imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                                    }
+                                    else
+                                        imgpath = '/d4dMasters/image/' + tv + '__' + imageTD.attr('datafieldoriginal')  + '__' + imageTD.html();
+                                        
+                                        imageTD.html('');
+                                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+                                    
                                 }
+                               
                             }
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
                             editButton.addClass("tableactionbutton tableactionbuttonpadding");
