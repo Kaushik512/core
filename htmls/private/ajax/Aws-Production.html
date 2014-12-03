@@ -1604,6 +1604,7 @@ $.ajax({
         async:true,
         success :function(data) {
            var keys = Object.keys(data.cookbooks);
+           keys.sort();
           // alert(data.serverId);
            $cookbookShow.empty();
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
@@ -1630,7 +1631,7 @@ $.ajax({
         $cookbooksList.show();
         $cookbooksList.multiSelect({});
 
-
+        //Search functionality added to the cookbooks
         $('.width-170').keyup(function(){
             var searchText = $(this).val();
             //alert(searchText);

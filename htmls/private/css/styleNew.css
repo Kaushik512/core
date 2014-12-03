@@ -169,11 +169,13 @@ margin-top:15px;
 }
  .front, .back {
     width: 160px;
-    height: 204px;
+    /*height: 204px;*/
+    height: 209px;
 }
 .container{
     width: 164px;
-    height: 208px;
+    /*height: 208px;*/
+    height: 213px;
 }
 .card {
     -webkit-transition: 0.6s;

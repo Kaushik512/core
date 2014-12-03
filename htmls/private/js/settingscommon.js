@@ -1547,6 +1547,7 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
 
 //ChefItem added below
     var chefItemwithoutOrg = function(){
+        
     var $chefItemdiv = $("<div></div>").addClass('smart-form');
 
     var $panelbody = $("<div></div>").addClass('panel-body');
@@ -1587,119 +1588,35 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
     var $hr1 = $("<hr>");
     $ul1.append($label2);
-
+    
+    $.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
+    console.log(data);
+    var cookbooks = data.cookbooks;
+    var keys = Object.keys(cookbooks);
+    var $deploymentCookbookList = $('.deploymentsCookbookList');
+        for (i = 0; i < keys.length; i++) {
+            $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+        }
+    });
     $ul1.append($hr1);
-    //1st li added to ul
-        var $licookbook1 = $("<li></li>");
-        var $licookbook1label = $("<label></label>").addClass('checkbox margin-5');
-        var $licookbook1input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','golang').attr('value','recipe[golang]').attr('name','checkboxCookbook');
-        $licookbook1label.append($licookbook1input);
-        var $licookbook1itag = $("<i></i>");
-        $licookbook1label.append($licookbook1itag);
-        $licookbook1label.append("golang");
-        $licookbook1.append($licookbook1label);
-        $ul1.append($licookbook1);
-
-    //2nd li added to ul
-        var $licookbook2 = $("<li></li>");
-        var $licookbook2label = $("<label></label>").addClass('checkbox margin-5');
-        var $licookbook2input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','openssl').attr('value','recipe[openssl]').attr('name','checkboxCookbook');
-        $licookbook2label.append($licookbook2input);
-        var $licookbook2itag = $("<i></i>");
-        $licookbook2label.append($licookbook2itag);
-        $licookbook2label.append("openssl");
-        $licookbook2.append($licookbook2label);
-        $ul1.append($licookbook2);
-
-    //3rd li added to ul
-        var $licookbook3 = $("<li></li>");
-        var $licookbook3label = $("<label></label>").addClass('checkbox margin-5');
-        var $licookbook3input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','ntp').attr('value','recipe[ntp]').attr('name','checkboxCookbook');
-        $licookbook3label.append($licookbook3input);
-        var $licookbook3itag = $("<i></i>");
-        $licookbook3label.append($licookbook3itag);
-        $licookbook3label.append("ntp");
-        $licookbook3.append($licookbook3label);
-        $ul1.append($licookbook3);
-
-    //4th li added to ul
-        var $licookbook4 = $("<li></li>");
-        var $licookbook4label = $("<label></label>").addClass('checkbox margin-5');
-        var $licookbook4input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','postfix').attr('value','recipe[postfix]').attr('name','checkboxCookbook');
-        $licookbook4label.append($licookbook4input);
-        var $licookbook4itag = $("<i></i>");
-        $licookbook4label.append($licookbook4itag);
-        $licookbook4label.append("postfix");
-        $licookbook4.append($licookbook4label);
-        $ul1.append($licookbook4);
-
-    //5th li added to ul
-        var $licookbook5 = $("<li></li>");
-        var $licookbook5label = $("<label></label>").addClass('checkbox margin-5');
-        var $licookbook5input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','java_mac').attr('value','recipe[java_mac]').attr('name','checkboxCookbook');
-        $licookbook5label.append($licookbook5input);
-        var $licookbook5itag = $("<i></i>");
-        $licookbook5label.append($licookbook5itag);
-        $licookbook5label.append("java_mac");
-        $licookbook5.append($licookbook5label);
-        $ul1.append($licookbook5);
+    
     $div1.append($ul1);
     var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
     var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
     var $hr2 = $("<hr>");
     $ul2.append($label3);
     $ul2.append($hr2);
-    //1st li added to ul
-        var $lirole1 = $("<li></li>");
-        var $lirole1label = $("<label></label>").addClass('checkbox margin-5');
-        var $lirole1input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','IAP').attr('value','recipe[IAP]').attr('name','checkboxCookbook');
-        $lirole1label.append($lirole1input);
-        var $lirole1itag = $("<i></i>");
-        $lirole1label.append($lirole1itag);
-        $lirole1label.append("IAP");
-        $lirole1.append($lirole1label);
-        $ul2.append($lirole1);
-    //2nd li added to ul
-        var $lirole2 = $("<li></li>");
-        var $lirole2label = $("<label></label>").addClass('checkbox margin-5');
-        var $lirole2input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','IUP').attr('value','recipe[IUP]').attr('name','checkboxCookbook');
-        $lirole2label.append($lirole2input);
-        var $lirole2itag = $("<i></i>");
-        $lirole2label.append($lirole2itag);
-        $lirole2label.append("IUP");
-        $lirole2.append($lirole2label);
-        $ul2.append($lirole2);
-    //3rd li added to ul
-        var $lirole3 = $("<li></li>");
-        var $lirole3label = $("<label></label>").addClass('checkbox margin-5');
-        var $lirole3input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','R1').attr('value','recipe[R1]').attr('name','checkboxCookbook');
-        $lirole3label.append($lirole3input);
-        var $lirole3itag = $("<i></i>");
-        $lirole3label.append($lirole3itag);
-        $lirole3label.append("R1");
-        $lirole3.append($lirole3label);
-        $ul2.append($lirole3);
-    //4th li added to ul
-        var $lirole4 = $("<li></li>");
-        var $lirole4label = $("<label></label>").addClass('checkbox margin-5');
-        var $lirole4input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','R2').attr('value','recipe[R2]').attr('name','checkboxCookbook');
-        $lirole4label.append($lirole4input);
-        var $lirole4itag = $("<i></i>");
-        $lirole4label.append($lirole4itag);
-        $lirole4label.append("R2");
-        $lirole4.append($lirole4label);
-        $ul2.append($lirole4);
-    //5th li added to ul
-        var $lirole5 = $("<li></li>");
-        var $lirole5label = $("<label></label>").addClass('checkbox margin-5');
-        var $lirole5input = $("<input/>").attr('type','checkbox').attr('data-cookbookname','backend').attr('value','recipe[backend]').attr('name','checkboxCookbook');
-        $lirole5label.append($lirole5input);
-        var $lirole5itag = $("<i></i>");
-        $lirole5label.append($lirole5itag);
-        $lirole5label.append("backend");
-        $lirole5.append($lirole5label);
-        $ul2.append($lirole5);
 
+    $.get('../organizations/' + urlParams.org + '/roles', function(data) {
+    console.log(data);
+    var roles = data.roles;
+    var keys = Object.keys(roles);
+    var $deploymentRolesList = $('.deploymentRoleList');
+        for (i = 0; i < keys.length; i++) {
+            $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+        }
+    });
+    
     $div1.append($ul2);
     $row1.append($div1);
 
