@@ -65,7 +65,7 @@
                                         <div class="widget-body">
                                             <div class="widget-main" style="min-height:300px"> 
                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
-                                                    <div class="table-responsive table-div" >
+                                                    <div class="table-responsive table-div tableinstanceviewouter" >
 
                                                             <table id="tableinstanceview" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
                                                                 <thead>
@@ -90,7 +90,31 @@
                                                             </tbody>
                                                             
                                                         </table>
+                                                        
                                                     </div>
+                                                    <table id="tableinstanceviewtemplate" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                                <thead>
+                                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                                        <td>S.No.</td>
+                                                                        <td>Logo</td>
+                                                                        <td>Name</td>
+                                                                        <td>IPAddress</td>
+                                                                        <td>Recipes</td>
+                                                                        <td>Status</td>
+                                                                        <td>Log Info</td>
+                                                                        <td>Chef Run</td>
+                                                                        <td class="widthAdjustment">Action</td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    
+                                                                   
+                                                                </tbody>
+                                                                
+                                                               
+                                                            </tbody>
+                                                            
+                                                        </table>
                                                </div>
                                             </div> 
                                             
@@ -2018,9 +2042,9 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
                     $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                     if (data[i].err) {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                        $rowDiv.append($('<div class="col-lg-7 col-sm-7" style="color:red;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
                     } else {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                        $rowDiv.append($('<div class="col-lg-7 col-sm-7 " style="color:DarkBlue;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
                     }
 
                     $table.append($rowDiv);
@@ -2361,7 +2385,12 @@ function removeSelectedInstance(){
             $.get('/instances/delete/' + instanceid,function(data){
             //  alert(data);
               if(data == 'OK'){
-                $('.container.role-Selectedcard').detach();
+                //$('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
+
+                $('.container.role-Selectedcard').parent().detach();
+                              $('#divinstancescardview .carousel-inner').empty();
+                tableinstanceviewload();
+                loadcarousel();
               }
               else
                 alert(data);
@@ -2943,7 +2972,9 @@ function addInstanceToDOM(data) {
     //$divComponentListImage
     $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');
     $rowContainter.append('<td>' + $('<div></div>').append($divActionBtnContainer.clone()).html() + '</td>');
-    $("#tableinstanceview").append($rowContainter);
+
+    //alert($rowContainter.html());
+    $("#tableinstanceview").find('tbody').append($rowContainter);
 
 
 
@@ -3106,14 +3137,27 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
 }
 
 //End Containers table build
+var tableinstanceview = null;
 
-
+function tableinstanceviewload(){
+//Clearing the instance view div
+//$('divinstancescardview
 $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
     
     //var $instancesList = $('.instancesList').empty();
     var $deploymentNodeList = $('.deploymentNodeList').empty();
 
     //alert(data.length);
+    $('.tableinstanceviewouter').first().empty();
+    $('#tableFooterLeft').html('');
+    $('#tableFooterRight').html('');
+    var $tiv = $('#tableinstanceviewtemplate').clone();
+    $tiv.attr('id','tableinstanceview').removeClass('hidden');
+    $('.tableinstanceviewouter').first().append($tiv);
+    if(tableinstanceview != null){
+       // alert('destroy');
+        tableinstanceview.destroy();
+    }
 
     for (var i = 0; i < data.length; i++) {
 
@@ -3126,7 +3170,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
 
 
     if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
-        var tableinstanceview = $('#tableinstanceview').dataTable({
+        //alert('loading table');
+        tableinstanceview = $('#tableinstanceview').DataTable({
             "pagingType": "full_numbers",
             "aoColumns": [null,
                 {
@@ -3213,7 +3258,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
 
 });
 
-
+}
+tableinstanceviewload();
 
 $('#bootstrap-wizard-1').bootstrapWizard({
     'tabClass': 'form-wizard',
@@ -3408,9 +3454,16 @@ $('.launchBtn').click(function(e) {
             }
             pollLogs(lastTimestamp, 0, true);
 
+            /* //Commented to accomodate tableview dynamic row addition fix - Vinod
             $.get('../instances/' + data.id, function(data) {
                 addInstanceToDOM(data);
-            });
+
+            }); */
+
+             $('#divinstancescardview .carousel-inner').empty();
+             tableinstanceviewload();
+             loadcarousel();
+                
 
         }).error(function() {
             $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
@@ -3647,10 +3700,12 @@ function getViewTile(){
     }
 }
 
-
+function loadcarousel() {
   $('.carousel.slide').carousel({
     interval : false,
     cycle : true
   });
-  //$('.editchefRunlist').append(chefItem);
+
+}
+loadcarousel();
 </script>
