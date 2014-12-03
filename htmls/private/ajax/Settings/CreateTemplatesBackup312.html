@@ -484,7 +484,7 @@
     });
    
    function loadChefServerObjects(chefServer){
-        $.get('/d4dMasters/' + chefServer + '/cookbooks', function(data) {
+            $.get('/d4dMasters/' + chefServer + '/cookbooks', function(data) {
             console.log(data);
             var cookbooks = data.cookbooks;
             var keys = Object.keys(cookbooks);
@@ -493,24 +493,16 @@
                 $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
             }
 
-            $.get('/d4dMasters/' + chefServer + '/roles', function(data) {
-                console.log(data);
-                var roles = data.roles;
-                var keys = Object.keys(roles);
-                var $deploymentRolesList = $('.deploymentRolesList').empty();
-                for (i = 0; i < keys.length; i++) {
-                    $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
-                }
-                var itms = $('#templatescookbooks').attr('defaultvalues').split(',');
-                //alert(itms.length);
-                $.each(itms,function(k,v){
-                    $('.deploymentCookbookList li').find('input[value="' + v + '"]').prop('checked','true');
-                    $('.deploymentRolesList li').find('input[value="' + v + '"]').prop('checked','true');
-                    
-                });
-                $('#btnDeploymentAddSelectedCookbook').trigger('click');
+        });
 
-            });
+        $.get('/d4dMasters/' + chefServer + '/roles', function(data) {
+            console.log(data);
+            var roles = data.roles;
+            var keys = Object.keys(roles);
+            var $deploymentRolesList = $('.deploymentRolesList').empty();
+            for (i = 0; i < keys.length; i++) {
+                $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+            }
 
         });
    }
