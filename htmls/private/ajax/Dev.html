@@ -28,7 +28,7 @@
                     <li class="pull-left Orchestration">
                         <a href="#l3" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
-                     <li class="pull-left">
+                     <li class="pull-left Containers">
                         <a href="#l4" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                     </li>
 
@@ -1656,9 +1656,171 @@ $(document).ready(function() {
       $('#myTab3').click();
   }
 });
-$('.Orchestration').click(function(e){
+$('.Instances').click(function(e){
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        //alert(getbreadcrumbulname);
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    DummyBreadCrumb += '>' + 'Instances';
+
+    if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+    {
+        localStorage.removeItem("breadcrumb");
+        splitBread = DummyBreadCrumb.split('>');
+        if(splitBread.length > 0)
+        {
+            $('#ribbon').find('.breadcrumb').find('li').detach();
+            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+              var liNew = document.createElement('li');
+              liNew.innerHTML = splitBread[arraycount];
+              $('#ribbon').find('.breadcrumb').append(liNew);
+            }
+        }
+    }
+    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
+    //alert(DummyBreadCrumb);
+  }
 
 });
+
+$('.Blueprints').click(function(e){
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        //alert(getbreadcrumbulname);
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    DummyBreadCrumb += '>' + 'Blueprints';
+
+    if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+    {
+        localStorage.removeItem("breadcrumb");
+        splitBread = DummyBreadCrumb.split('>');
+        if(splitBread.length > 0)
+        {
+            $('#ribbon').find('.breadcrumb').find('li').detach();
+            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+              var liNew = document.createElement('li');
+              liNew.innerHTML = splitBread[arraycount];
+              $('#ribbon').find('.breadcrumb').append(liNew);
+            }
+        }
+    }
+    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
+    //alert(DummyBreadCrumb);
+  }
+
+});
+
+$('.Orchestration').click(function(e){
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        //alert(getbreadcrumbulname);
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    DummyBreadCrumb += '>' + 'Orchestration';
+
+    if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+    {
+        localStorage.removeItem("breadcrumb");
+        splitBread = DummyBreadCrumb.split('>');
+        if(splitBread.length > 0)
+        {
+            $('#ribbon').find('.breadcrumb').find('li').detach();
+            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+              var liNew = document.createElement('li');
+              liNew.innerHTML = splitBread[arraycount];
+              $('#ribbon').find('.breadcrumb').append(liNew);
+            }
+        }
+    }
+    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
+    //alert(DummyBreadCrumb);
+  }
+
+});
+
+$('.Containers').click(function(e){
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
+    //alert(getbreadcrumbullength);
+    for(var counter=0;counter<getbreadcrumbullength;counter++){
+        var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+        //alert(getbreadcrumbulname);
+        if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
+        {
+            DummyBreadCrumb += '>' + getbreadcrumbulname;
+        }
+        else
+        {
+            DummyBreadCrumb = getbreadcrumbulname;
+        }
+    }
+    DummyBreadCrumb += '>' + 'Containers';
+
+    if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+    {
+        localStorage.removeItem("breadcrumb");
+        splitBread = DummyBreadCrumb.split('>');
+        if(splitBread.length > 0)
+        {
+            $('#ribbon').find('.breadcrumb').find('li').detach();
+            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+              var liNew = document.createElement('li');
+              liNew.innerHTML = splitBread[arraycount];
+              $('#ribbon').find('.breadcrumb').append(liNew);
+            }
+        }
+    }
+    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
+    //alert(DummyBreadCrumb);
+  }
+
+});
+
+
 
 
 $('.createTaskLink').click(function(e){
@@ -2228,7 +2390,6 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         $(this).addClass('role-Selected1');
                     });
                 }
-               
 
             }
          }
