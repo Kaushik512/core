@@ -318,6 +318,8 @@ var Chef = function(settings) {
         } else {
             argList.push('--sudo');
         }
+        console.log('runlist ==>',runlist);
+        console.log('runlist ==>',params.instanceUsername);
         argList = argList.concat(['-r' + runlist.join(), '-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
 
         console.log('bootstrap arglist ==>', argList);

@@ -590,73 +590,12 @@
         <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
       </div>
       <div class="modal-body">
-        <div class="loadingContainer">
-            <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
-        </div>   
+      
         
-        <div class="smart-form" style="display:none;">
-            <div class="row">
-                <section style="padding-top:18px;">
-                    <div style="clear: both;" id="divCookbooks">
-                        
-                        <div class="col-lg-5">
-                            <select multiple="multiple" style="width: 200px;height:150px;margin-left:20px;" class="form-control" id="instanceCookbookList">
-                            </select>
-                        </div>
-                        <div style="margin-top: 50px;" class="col-lg-1">
-                            <div class="input-group">
-                        <div style="padding-bottom: 10px;" class="btn-group">
-                            <button id="btnaddInstanceCookbooks" class="btn btn-default btn-primary"style="width:30px;height:27px;" type="button">
-                                <i style="font-size:20px;" class="fa fa-angle-double-right">
-                                </i>
-                            </button>
-                        </div>
-                        <div class="clearfix">
-                        </div>
-                        <div class="btn-group">
-                            <button id="btnremoveinstanceCoookbooks" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
-                                <i style="font-size:20px;" class="fa fa-angle-double-left">
-                                </i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="input-group">
-                        <div class="btn-group">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <select multiple="multiple" style="width: 200px;height:150px;" class="form-control" id="instanceCookbookSelectedList">
-                                            </select>
-                                        </td>
-                                        <td style="padding-left:10px;">
-                                            <button id="btninstanceCookbookUp" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
-                                                <i style="font-size:20px;" class="fa fa-angle-double-up">
-                                                </i>
-                                            </button>
-                                            <div class="clearfix"></div>
-                                            <div class="clearfix"></div>
-                                            <div style="padding-top: 10px" class="btn-group"><button id="btninstanceCookbookDown" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button">
-                                                <i style="font-size:20px;" class="fa fa-angle-double-down">
-                                                </i>
-                                            </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div style="padding-bottom: 10px; margin-top: 40px;" class="btn-group">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                </section>
-            </div>
+        <div class="chefRunlistContainer">
+            
         </div>
-        <div class="errorContainer" style="display:none"></div>
+        
          
       </div>
       <div class="modal-footer">
@@ -2224,7 +2163,8 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                                 
                                 var $parent = $(this).parents('.cardimage');
                                 var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-                                $blueprintEditResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+
+                                
                                 $blueprintEditResultContainer.modal('show');
 
                                 var projectId = $parent.attr('data-projectId');
@@ -2232,22 +2172,24 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                                 var blueprintId = $parent.attr('data-blueprintId');
                                 var chefServerId = $parent.attr('data-chefServerId');
                                 var version = $parent.find('.blueprintVersionDropDown').val();
-                                $.get('../blueprints/' + blueprintId + '/versions/' + version, function(data) {
-                                    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
-                                        var keys = Object.keys(data);
+                                $.get('../blueprints/' + blueprintId + '/versions/' + version, function(versionData) {
+                                    console.log('blueprint data',versionData);
+                                var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+                                    //To do additional selections
+                                    var $deploymentsCookbookList = $ccrs.find('.deploymentsCookbookList');
+                                    var $deploymentsRoleList = $ccrs.find('.deploymentRoleList');
+                                    console.log(versionData.runlist);
+                                    for (var i = 0; i < versionData.runlist.length; i++) {
+                                        $deploymentsCookbookList.find('li input[value="' + versionData.runlist[i] + '"]').first().click();
+                                        $deploymentsRoleList.find('li input[value="' + versionData.runlist[i] + '"]').first().click();
 
-                                        var $cookbooksList = $('<select></select>').addClass('blueprintChefCookbookList').attr('data-blueprintId', blueprintId).attr('multiple', true);
-                                        for (var i = 0; i < keys.length; i++) {
-                                            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
-                                            $cookbooksList.append($option);
-                                        }
-                                        $blueprintEditResultContainer.find('.modal-body').empty();
-                                        $blueprintEditResultContainer.find('.modal-body').append($cookbooksList);
+                                    }
+                                    $('.btnItemAdd').first().trigger('click');
+                                });
+                                $ccrs.find('.deploymentSelectedRunList').attr('data-blueprintId', blueprintId);
+                                $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs); 
 
-                                    }).error(function() {
-                                        $blueprintEditResultContainer.find('.modal-body').empty();
-                                        $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-                                    });
+                                   
                                 }).error(function() {
                                     $blueprintEditResultContainer.find('.modal-body').empty();
                                     $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
@@ -2286,51 +2228,27 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         $(this).addClass('role-Selected1');
                     });
                 }
-                //Expanding the fist Accordion.
-                if($('#accordion-2').length > 0){
-                  $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').trigger('click');
-                }
+               
+
             }
          }
 
         // $("#myTabContent3").append(containerTemp);   
         // $("#templateContent #grid0").addClass("role-Selected");
-    
+    if($('#accordion-2').length > 0){
+         console.log('object ==>',$('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a'));
+         $('#accordion-2').find('.blueprintContainer').first().find('.panel-heading a').click();
+    }
 
     }); //end of readmasterjson to be pushed to the end of the function.
 
+    $('#accordion-2').on('show.bs.collapse',function(e){
+                    console.log(e.target);
+                    $(e.target).find('.productdiv1').first().click();
+    });
+     //Expanding the fist Accordion.
+               
     
-    /*
-
-    var expanded = false;
-    if($l != "undefined"){
-    if ($l.children().length) {
-        var $devopsRolePanel = $devopsRolepanelBody.parents('.devopsRolePanel').show();
-        $devopsRolePanel.find('.collapse').addClass('in');
-        expanded = true;
-    }
-    }
-
-    if ($AppFactpanelBody.children().length) {
-        var $appFactoryPanel = $AppFactpanelBody.parents('.appFactoryPanel').show();
-        if (!expanded) {
-            $appFactoryPanel.find('.collapse').addClass('in');
-            expanded = true;
-            $appFactoryPanel.find('.panel-title a').removeClass('collapsed');
-        } else {
-            $appFactoryPanel.find('.panel-title a').addClass('collapsed');
-        }
-    }
-    if ($desktopProvisioningPanelBody.children().length) {
-        var $desktopProvisioningPanel = $desktopProvisioningPanelBody.parents('.desktopProvisioningPanel').show();
-        if (!expanded) {
-            $desktopProvisioningPanel.find('.collapse').addClass('in');
-            $desktopProvisioningPanel.find('.panel-title a').removeClass('collapsed');
-        } else {
-            $desktopProvisioningPanel.find('.panel-title a').addClass('collapsed');
-        }
-        
-    }*/
 
 
     pageSetUp();
@@ -2553,85 +2471,30 @@ var instanceUpdateRunlistHandler = function(e) {
     //alert(instanceId);
     var chefServerId = $this.attr('data-chefServerId');
     //alert(chefServerId);
+    var runlist = $this.data('runlist');
+    var  $chefRunModalContainer = $('#chefRunModalContainer');
 
-    //For dynamic purpose added below 8 commented line
-    // var $chefItemwithoutOrgmainDiv = $('<div></div>').addClass('editchefRunlist');
-    // var $chefItemwithoutOrg = $chefItemwithoutOrgmainDiv.append(chefItemwithoutOrg);
-    // $chefRunModalContainer = $('#chefRunModalContainer');
-
-    // $chefItemwithoutOrg.find('.loadingContainer').hide();
-    // $chefItemwithoutOrg.find('.fieldsetContainschefItem').show();
-    // $chefItemwithoutOrg.find('.errorContainer').hide();
-    // $chefRunModalContainer.find('.modal-body').empty().append($chefItemwithoutOrgmainDiv);
-    // $chefRunModalContainer.modal('show');
-
-    //console.log(i+nstanceId);
-    $chefRunModalContainer = $('#chefRunModalContainer');
-    $chefRunModalContainer.find('.loadingContainer').show();
-    $chefRunModalContainer.find('.smart-form').hide();
-    $chefRunModalContainer.find('.errorContainer').hide();
-    $chefRunModalContainer.modal('show');
-
-    //$demoChefClientRun = '';
-    //$chefRunModalContainer.find('.modal-body').empty().append($demoChefClientRun);
-    //alert(chefServerId);
-    $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
-        var keys = Object.keys(data);
-        // keys.sort();
-        keys.sort(function(a,b){
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-        var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);
-
-        for (var i = 0; i < keys.length; i++) {
-            var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
-            $cookbooksList.append($option);
-        }
-        var $selectedList = $("#instanceCookbookSelectedList").empty();
-        var $instanceCookbookList = $('#instanceCookbookList');
-
-        // var items = [];
-        // $("#instanceCookbookList").each(function(){
-        //    items.push($(this).text());
-        // })
-        // items.sort();
-        // alert(items);
-
-
-
-        var runlist = $this.data('runlist');
+    var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+        //To do additional selections
+        var $deploymentsCookbookList =  $ccrs.find('.deploymentsCookbookList');
+        var $deploymentsRoleList = $ccrs.find('.deploymentRoleList');
         console.log(runlist);
-        if(runlist) {
-            //console.log(runlist);
-            for(var i=0;i<runlist.length;i++) {
-                //var $runlistString = runlist[i];
-                //console.log($runlistString);
-                
-                
-                var newsubStringRunlist = runlist[i].split('[');
-                if(newsubStringRunlist.length == 2) {
-                    newsubStringRunlist = newsubStringRunlist[1];
-                }
-               var $option = $('<option></option>').append(newsubStringRunlist.split(']')[0]).val(runlist[i]);
-              $selectedList.append($option);
-              $instanceCookbookList.find('option[value="'+runlist[i]+'"]').hide();
-            }
-        } 
+        for(var i=0;i<runlist.length;i++) {
+          $deploymentsCookbookList.find('li input[value="' + runlist[i] + '"]').first().click();
+          $deploymentsRoleList.find('li input[value="' + runlist[i] + '"]').first().click();
 
+        }
 
-
-        $chefRunModalContainer.find('.loadingContainer').hide();
-        $chefRunModalContainer.find('.smart-form').show();
-        //$demoChefClientRun.append($cookbooksList);
-        //$chefRunModalContainer.find('.modal-body').empty().append($cookbooksList);
-
-    }).error(function() {
-         $chefRunModalContainer.find('.loadingContainer').hide();
-         $chefRunModalContainer.find('.smart-form').hide();
-        $chefRunModalContainer.find('.errorContainer').empty().append('<span>Oops! Something went wrong. Please try again later</span>').show();
+        
+        $('.btnItemAdd').first().trigger('click');
     });
-   
+    $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid',instanceId);
+    
 
+ 
+    $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+    $chefRunModalContainer.modal('show');
+ 
 };
 
 var instanceLogsHandler = function(e) {
@@ -3577,12 +3440,17 @@ $('.desktopProvisioningLaunchBtn').click(function(e) {
 $('.blueprintUpdateBtn').click(function(e) {
 
     var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-    var $chefRunlist = $blueprintEditResultContainer.find('.blueprintChefCookbookList');
-    var blueprintId = $chefRunlist.attr('data-blueprintId');
+    var $selectedRunlist =  $blueprintEditResultContainer.find('.deploymentSelectedRunList');
+    var blueprintId = $selectedRunlist.attr('data-blueprintId');
     if (blueprintId) {
-        console.log($chefRunlist.val());
+        var runlist = [];
+        var $inputs = $selectedRunlist.find('input');
+        $inputs.each(function(){
+           runlist.push($(this).val());
+        }); 
+
         var blueprintData = {
-            runlist: $chefRunlist.val(),
+            runlist: runlist,
             expirationDays: 0,
         };
 
@@ -3591,26 +3459,33 @@ $('.blueprintUpdateBtn').click(function(e) {
         }, function(data) {
             $('.blueprintVersionDropDown[data-blueprintId="' + blueprintId + '"]').append($('<option value="' + data.version + '">' + data.version + '</option>').attr('selected', true));
             console.log(data);
+            $blueprintEditResultContainer.modal('hide');
         });
 
     }
 });
 
 $('.btnUpdateInstanceRunlist').click(function(e) {
-    var instanceId = $('#instanceCookbookList').attr('data-instanceId');
+    $chefRunModalContainer = $('#chefRunModalContainer');
+    var $selectedRunlist =  $chefRunModalContainer.find('.deploymentSelectedRunList');
+    var instanceId = $selectedRunlist.attr('data-instanceId');
     
     var runlist = [];
-    var $options = $('#instanceCookbookSelectedList').children();
-    $options.each(function(){
-       runlist.push($(this).val()); 
-    });
+    var $inputs = $selectedRunlist.find('input');
+    $inputs.each(function(){
+        runlist.push($(this).val());
+    }); 
+  
 
     console.log(runlist);
     $.post('../instances/' + instanceId + '/updateRunlist', {
         runlist: runlist
     }, function(data) {
-        $chefRunModalContainer = $('#chefRunModalContainer').modal('hide');
+        $chefRunModalContainer.modal('hide');
         var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+        var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
+        $parent.find('.instance-bootstrap-list-image').data(runlist);
+        $parentTr.find('.instance-bootstrap-list-image').data(runlist);
         $parent.find('.moreInfo').trigger('click');
         console.log(data);
     });

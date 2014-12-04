@@ -1320,7 +1320,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback) {
             console.log("Runlist Query:" + data);
             var roles = data.roles;
             var keys = Object.keys(roles);
-            alert("ServerID:" + data.serverId);
+            //alert("ServerID:" + data.serverId);
             $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
             var $deploymentRolesList = $('.deploymentRoleList');
             for (i = 0; i < keys.length; i++) {

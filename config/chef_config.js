@@ -15,7 +15,7 @@ var chefConfig = {
 	chefUserPemFile: "/home/anshul/chef-repos/pcjoshi9/.chef/pcjoshi9.pem",
 	chefValidationPemFile:"pjlab-validator.pem",
 	hostedChefUrl: "https://api.opscode.com/organizations/pjlab",
-	defaultChefCookbooks:['recipe[a]']
+	defaultChefCookbooks:[]
 
 }
 
