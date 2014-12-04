@@ -354,6 +354,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			}
 		});
 	});
+
+	app.get('/d4dMasters/getorgnamebychefserver/:chefserver',function(req,res){
+			configmgmtDao.getListFiltered(10,'orgname','configname',req.params.chefserver, function(err, catorgname) {
+		            if (err) {
+		                res.send(500);
+		                return;
+		            }
+		            console.log("catorgname:", catorgname);
+
+		            if (!catorgname) {
+		                res.send('');
+		                
+		                return;
+		            }
+		            else{
+		            	res.end(catorgname);
+		            	return;
+		            }
+
+
+		    });
+	});
+
+
 	app.get('/d4dMasters/configmgmt/:rowid', function(req, res) {
 
  		d4dModel.findOne({ id: '10' }, function (err, d4dMasterJson) {
