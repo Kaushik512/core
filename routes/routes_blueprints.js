@@ -57,7 +57,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/blueprints/delete/:blueprintId/', function(req, res) {
+    app.get('/blueprints/delete/:blueprintId', function(req, res) {
 
         blueprintsDao.removeBlueprintbyId(req.params.blueprintId, function(err, data) {
             if (err) {
