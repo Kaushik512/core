@@ -1322,6 +1322,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback) {
             var keys = Object.keys(roles);
             //alert("ServerID:" + data.serverId);
             $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
+
             var $deploymentRolesList = $('.deploymentRoleList');
             for (i = 0; i < keys.length; i++) {
                 $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
