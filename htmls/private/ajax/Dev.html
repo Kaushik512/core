@@ -1717,7 +1717,9 @@ $(document).ready(function() {
       $('#myTab3').click();
   }
 });
-
+$('.Orchestration').click(function(e){
+    alert('fgdhf');
+});
 
 
 $('.createTaskLink').click(function(e){
@@ -2285,9 +2287,10 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     });
                 }
                 //Expanding the fist Accordion.
-                if($('#accordion-2').length > 0)
-                    
-                    $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').trigger('click');
+                if($('#accordion-2').length > 0){
+                    $('#accordion-2').find('.blueprintContainer').first().find('.panel-heading a').trigger('click');
+                    // $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').trigger('click');
+                }
             }
          }
 
@@ -2575,7 +2578,10 @@ var instanceUpdateRunlistHandler = function(e) {
     //alert(chefServerId);
     $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
-        keys.sort();
+        // keys.sort();
+        keys.sort(function(a,b){
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
         var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);
 
         for (var i = 0; i < keys.length; i++) {

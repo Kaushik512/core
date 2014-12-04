@@ -1604,7 +1604,13 @@ $.ajax({
         async:true,
         success :function(data) {
            var keys = Object.keys(data.cookbooks);
-           keys.sort();
+           //alert(keys);
+           // var compA = keys.text().toUpperCase();
+           // alert(compA);
+           //keys.sort();
+           keys.sort(function(a,b){
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+           });
           // alert(data.serverId);
            $cookbookShow.empty();
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
