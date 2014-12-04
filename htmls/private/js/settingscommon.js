@@ -1256,7 +1256,7 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
   }
 
 //ChefItem added below
-    var chefItemwithoutOrg = function(){
+    var $chefCookbookRoleSelector = function(catorgname,callback){
     var $chefItemdiv = $("<div></div>").addClass('smart-form');
 
     var $panelbody = $("<div></div>").addClass('panel-body');
@@ -1273,6 +1273,7 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     // $section.append($label);
     // $divpanel.append($select);
     // $section.append($divpanel);  
+    //alert('in' + catorgname);
     $loadingContainer = $('<div></div>').addClass('loadingContainer');
     var $imgerrorContainer = $("<img />").attr('src','img/loading.gif').addClass('center-block chefItemwithoutOrgloadingContainerCSS');
     $loadingContainer.append($imgerrorContainer);
@@ -1287,7 +1288,7 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
 
     var $label1 = $("<label></label>").addClass('label');
     var $img1 = $("<img />").attr('src','img/templateicons/Create-run-list---deployment.png');
-    var $strong1 = $("<strong></strong>").text("Create Runlist");
+    var $strong1 = $("<span></span>").text("Select Runlist").append('<img class="cookbookspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
     $label1.append($img1);
     $label1.append($strong1);
     $section1.append($label1);
@@ -1298,14 +1299,17 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     var $hr1 = $("<hr>");
     $ul1.append($label2);
     
-    $.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
-    console.log(data);
-    var cookbooks = data.cookbooks;
-    var keys = Object.keys(cookbooks);
-    var $deploymentCookbookList = $('.deploymentsCookbookList');
+    $.get('../organizations/' + catorgname + '/cookbooks', function(data) {
+        console.log("Cookbooks Query:" + data);
+
+        var cookbooks = data.cookbooks;
+        var keys = Object.keys(cookbooks);
+        
+        var $deploymentCookbookList = $('.deploymentsCookbookList');
         for (i = 0; i < keys.length; i++) {
             $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
         }
+        getRolesFunction();
     });
     $ul1.append($hr1);
     
@@ -1315,16 +1319,25 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     var $hr2 = $("<hr>");
     $ul2.append($label3);
     $ul2.append($hr2);
-
-    $.get('../organizations/' + urlParams.org + '/roles', function(data) {
-    console.log(data);
-    var roles = data.roles;
-    var keys = Object.keys(roles);
-    var $deploymentRolesList = $('.deploymentRoleList');
-        for (i = 0; i < keys.length; i++) {
-            $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
-        }
-    });
+    var getRolesFunction = function(){
+        $.get('../organizations/' + catorgname + '/roles', function(data) {
+            console.log("Runlist Query:" + data);
+            var roles = data.roles;
+            var keys = Object.keys(roles);
+            alert("ServerID:" + data.serverId);
+            $('.deploymentSelectedRunList').first().data('chefServerId',data.serverId);
+            var $deploymentRolesList = $('.deploymentRoleList');
+            for (i = 0; i < keys.length; i++) {
+                $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+            }
+            if($('.deploymentsCookbookList li').length <= 0)
+                $('.deploymentsCookbookList').append($('<span class="label text-align-center">[ None Found ]</span>'));
+            if($('.deploymentRoleList li').length <= 0)
+                $('.deploymentRoleList').append($('<span class="label text-align-center">[ None Found ]</span>')); 
+            $('.cookbookspinner').detach();
+            callback('done'); //callback to handle any read operations.
+        });
+    }
     
     $div1.append($ul2);
     $row1.append($div1);
@@ -1359,7 +1372,7 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
     var $label2 = $("<label></label>").addClass('label');
     var $img2 = $("<img />").attr('src','img/templateicons/Order-run-list---deployment.png');
-    var $strong2 = $("<strong></strong>").text("Order Runlist");
+    var $strong2 = $("<span></span>").text("Order Runlist");
     $label2.append($img2);
     $label2.append($strong2);
     $section2.append($label2);
@@ -1404,9 +1417,9 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
     $fieldset.append($section2);
     $chefItemdiv.append($fieldset);
 
-    $errorContainer = $('<div></div>').addClass('errorContainer').text('This is Error Cointainer div');
+    $errorContainer = $('<div></div>').addClass('errorContainer').addClass('hidden').text('This is Error Cointainer div');
     $chefItemdiv.append($errorContainer);
-
+    $loadingContainer.detach();
     // $("#toAdd").click(function(e){
     //    $("#toaddbtn").append($form);
     // });
@@ -1415,8 +1428,8 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
         var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");
         $selectedCookbooks.each(function(idx) {
         var $this = $(this);
-
-        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+        //
+        $deploymentSelectedList.append($('<li title="' + $this.attr('data-cookbookName') + '"><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' +  $this.attr('data-cookbookName').substr(0,15)  + '</label><img src="img/icon_cookbook_recipes.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
         if ($(this).hasClass('deploymentCookbookSelected')) {
         $(this).removeClass('deploymentCookbookSelected');
         } else {
@@ -1429,7 +1442,8 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
         var $selectedRoles = $("input[name=checkboxRole]:checked");
         $selectedRoles.each(function(idx) {
         var $this = $(this);
-        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+        //
+        $deploymentSelectedList.append($('<li title="' + $this.attr('data-roleName') + '"><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' +  $this.attr('data-roleName').substr(0,15)  + '</label><img src="img/icon_roles.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
         if ($(this).hasClass('deploymentCookbookSelected')) {
         $(this).removeClass('deploymentCookbookSelected');
         } else {

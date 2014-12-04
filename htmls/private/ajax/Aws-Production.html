@@ -1431,12 +1431,12 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         if(!$selectedItem.length) {
           alert('please choose a template');
           return false;
-      }
+        }
 
       if($('#orgnameSelect').val() === 'choose') {
         alert('please choose an Organization');
         return false;
-    }
+        }
 
 
     reqBody = {};
@@ -1445,12 +1445,18 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
     reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
     reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
     reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
-    if(!$('#cookbookSelect').length) {
+    /*if(!$('.deploymentsCookbookList').length) {
       alert('Please wait while we are fetching cookbooks.');
       return false;
-  }
-  reqBody.runlist = $('#cookbookSelect').val();
-  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+    }*/
+    //Get all the runlist 
+  var cbs = [];
+    $('.deploymentSelectedRunList input').each(function(){
+      cbs.push($(this).val());
+    });
+  reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+  //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
+  reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
   reqBody.instanceType = $('select.instanceType').val();
   reqBody.instanceOS = $('#instanceOS').val();
   console.log(reqBody);
@@ -1462,8 +1468,14 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
         console.log('resetting');
         var reqBody = {};
     }
-    reqBody.runlist = $('#cookbookSelect').val();
-  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+    //reqBody.runlist = $('#cookbookSelect').val();
+    var cbs = [];
+    $('.deploymentSelectedRunList input').each(function(){
+      cbs.push($(this).val());
+    });
+  reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+  //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+  reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
   console.log("instanceType ==>",$('select.instanceType').val());
   reqBody.instanceType = $('select.instanceType').val();
   reqBody.instanceOS = $('#instanceOS').val();
@@ -1576,88 +1588,51 @@ $.ajax({
             $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist',data[i].businessGroups).data('envList',data[i].environments));
         }
         $orgListInput.change(function(e){
-          // alert('trigged org selection');
-           var orgName = $(this).val();
-           if(orgName == 'choose') {
-            return;
-        }
-        var $selectedOrgOption =  $(this).find(":selected");
-        $bgList.empty();
-        $bgList.append($('<option></option>').val('choose').html('Choose'));
-        var getBGs =  $selectedOrgOption.data('bglist');
-        for(var i=0;i<getBGs.length;i++) {
-            $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList',getBGs[i].projects));
-        }
+              // alert('trigged org selection');
+              var orgName = $(this).val();
+              if(orgName == 'choose') {
+                return;
+            }
+            var $selectedOrgOption =  $(this).find(":selected");
+            $bgList.empty();
+            $bgList.append($('<option></option>').val('choose').html('Choose'));
+            var getBGs =  $selectedOrgOption.data('bglist');
+            for(var i=0;i<getBGs.length;i++) {
+                $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList',getBGs[i].projects));
+            }
 
-        $envList.empty();
-        var getEnv = $selectedOrgOption.data('envList');
-        for(var i=0;i<getEnv.length;i++) {
-           $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
-       }
+            $envList.empty();
+            var getEnv = $selectedOrgOption.data('envList');
+            for(var i=0;i<getEnv.length;i++) {
+             $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
+         }
 
-       var $cookbookShow = $('.cookbookShow').empty();
-       $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+         var $cookbookShow = $('.cookbookShow').empty();
+         $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
-       $.ajax({
-        url:'../organizations/'+orgName+'/cookbooks',
-        method:'GET',
-        async:true,
-        success :function(data) {
-           var keys = Object.keys(data.cookbooks);
-           keys.sort();
-          // alert(data.serverId);
-           $cookbookShow.empty();
-           var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
-           var checkarray = [];
-           //Adding the template cookbooks
-           if($('#tab3').find('div[class*="productdiv2"]')){
-            if($('#tab3').find('div[class*="productdiv2"]').length > 0){
-              var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
+         var $ccrs = $chefCookbookRoleSelector(orgName,function(data){
+            //To do additional selections
+            var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
               for(var key in tcb){
-                //alert(tcb[key]);
-                var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
+               //alert(tcb[key]);
+             //   var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
 
-                $cookbooksList.append($optiontcb);
-                checkarray.push(tcb[key]);
+               // $cookbooksList.append($optiontcb);
+              //  checkarray.push(tcb[key]);
+              if(tcb[key].indexOf('recipe') >= 0)
+                 $('.deploymentsCookbookList li input[value="' + tcb[key] + '"]').first().trigger('click');
+              else
+                  $('.deploymentRoleList li input[value="' + tcb[key] + '"]').first().trigger('click');  
+
               }
-            }
-            }
-            //End adding template cookbooks.
-           for(var i=0;i<keys.length;i++) {
-               // var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-                console.log("Found : " + $.inArray('recipe['+keys[i] + ']'));
-                if($.inArray('recipe['+keys[i] + ']',checkarray) < 0)
-                {var $option =  $('<option></option>').append('recipe['+keys[i]+']').val('recipe['+keys[i]+']');
-                                $cookbooksList.append($option);}
-                
-            }
-        $cookbookShow.append('<span>Choose Cookbooks<span><br />');
-        var $inputtypetext = $('<input type="text">').addClass('width-170');
-        $cookbookShow.append($inputtypetext);
-        $cookbookShow.append($cookbooksList);
-        $cookbooksList.show();
-        $cookbooksList.multiSelect({});
+              $('.btnItemAdd').first().trigger('click');
+         });
+         $cookbookShow.empty();
+         $cookbookShow.append($ccrs);
 
-        //Search functionality added to the cookbooks
-        $('.width-170').keyup(function(){
-            var searchText = $(this).val();
-            //alert(searchText);
-            $allListElements = $('.ms-selectable ul > li');
-            $matchingListElements = $allListElements.filter(function(i, el){
-                return $(el).text().indexOf(searchText) !== -1;
-            });
-        $allListElements.hide();
-        $matchingListElements.show(); 
+
+
         });
-
-    },
-    error : function(){
-     $cookbookShow.empty();
-     $cookbookShow.append('<span>Unable to load cookbooks. Please try again later.</span>'); 
- },
-});    
-
-   });
 
 var $projectList = $('#projectListInput');
 $bgList.change(function(e){
