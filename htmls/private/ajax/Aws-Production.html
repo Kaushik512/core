@@ -1634,7 +1634,7 @@ $.ajax({
                 console.log("Found : " + $.inArray('recipe['+keys[i] + ']'));
                 if($.inArray('recipe['+keys[i] + ']',checkarray) < 0)
                 {var $option =  $('<option></option>').append('recipe['+keys[i]+']').val('recipe['+keys[i]+']');
-                                $cookbooksList.append($option);}
+                $cookbooksList.append($option);}
                 
             }
         $cookbookShow.append('<span>Choose Cookbooks<span><br />');
