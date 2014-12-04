@@ -1256,8 +1256,224 @@ function aggregateTable(tableid,filterColumnNo,filterColumnValue,colsArr){
   }
 
 //ChefItem added below
-var chefcookbookroleselector = function(catorgname){
-    var $chefItemdiv = $('<div></div>').addClass('smart-form');
+    var chefItemwithoutOrg = function(){
+    var $chefItemdiv = $("<div></div>").addClass('smart-form');
+
+    var $panelbody = $("<div></div>").addClass('panel-body');
+    var $fieldsetpanel = $("<fieldset></fieldset>").addClass('padding0');
+    var $section = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    // var $label = $("<label></label>").text('Choose Organization');
+    // var $divpanel = $("<div></div>").addClass('col col-9 padding0')
+    // var $select = $("<select></select>").addClass('form-control width-100 chooseCheforgType');
+    // var $optionorg1 = $("<option></option>").text('Choose');
+    // var $optionorg2 = $("<option></option>").text('Phoenix');
+
+    // $select.append($optionorg1);
+    // $select.append($optionorg2);
+    // $section.append($label);
+    // $divpanel.append($select);
+    // $section.append($divpanel);  
+    $loadingContainer = $('<div></div>').addClass('loadingContainer');
+    var $imgerrorContainer = $("<img />").attr('src','img/loading.gif').addClass('center-block chefItemwithoutOrgloadingContainerCSS');
+    $loadingContainer.append($imgerrorContainer);
+    $section.append($loadingContainer);
+    $fieldsetpanel.append($section);
+    $panelbody.append($fieldsetpanel);
+
+    $chefItemdiv.append($panelbody);
+
+    var $fieldset = $("<fieldset></fieldset>").addClass('padding0 fieldsetContainschefItem');
+    var $section1 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+
+    var $label1 = $("<label></label>").addClass('label');
+    var $img1 = $("<img />").attr('src','img/templateicons/Create-run-list---deployment.png');
+    var $strong1 = $("<strong></strong>").text("Create Runlist");
+    $label1.append($img1);
+    $label1.append($strong1);
+    $section1.append($label1);
+    var $row1 = $("<div></div>").addClass('row');
+    var $div1 = $("<div></div>").addClass('col col-9');
+    var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
+    var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
+    var $hr1 = $("<hr>");
+    $ul1.append($label2);
     
+    $.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
+    console.log(data);
+    var cookbooks = data.cookbooks;
+    var keys = Object.keys(cookbooks);
+    var $deploymentCookbookList = $('.deploymentsCookbookList');
+        for (i = 0; i < keys.length; i++) {
+            $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+        }
+    });
+    $ul1.append($hr1);
+    
+    $div1.append($ul1);
+    var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
+    var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
+    var $hr2 = $("<hr>");
+    $ul2.append($label3);
+    $ul2.append($hr2);
+
+    $.get('../organizations/' + urlParams.org + '/roles', function(data) {
+    console.log(data);
+    var roles = data.roles;
+    var keys = Object.keys(roles);
+    var $deploymentRolesList = $('.deploymentRoleList');
+        for (i = 0; i < keys.length; i++) {
+            $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+        }
+    });
+    
+    $div1.append($ul2);
+    $row1.append($div1);
+
+    $div2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divinputgroupAddRemove = $("<div></div>").addClass('input-group');
+    $divbtngroupAdd = $("<div></div>").addClass('btn-group padding-bottom-10');
+
+    $btntoAdd = $("<button></button>").addClass('btn btn-default btn-primary btnItemAdd btnItemCSS ');
+    $btntoAdditag = $("<i></i>").addClass('fa fa-angle-double-right font-size-20');
+    $btntoAdd.append($btntoAdditag);
+    $divbtngroupAdd.append($btntoAdd);
+    $divinputgroupAddRemove.append($divbtngroupAdd);
+
+    $btnClearfix = $("<div></div>").addClass('clearfix');
+    $divinputgroupAddRemove.append($btnClearfix);
+
+    $divbtngroupRemove = $("<div></div>").addClass('btn-group');
+    $btntoRemove = $("<button></button>").addClass('btn btn-default btn-primary btnItemRemove btnItemCSS');
+    $btntoRemoveitag = $("<i></i>").addClass('fa fa-angle-double-left font-size-20');
+    $btntoRemove.append($btntoRemoveitag);
+    $divbtngroupRemove.append($btntoRemove);
+    $divinputgroupAddRemove.append($divbtngroupRemove);
+
+    $div2.append($divinputgroupAddRemove);
+    $row1.append($div2);
+
+    $section1.append($row1);
+
+    //Section 2 started
+
+    var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    var $label2 = $("<label></label>").addClass('label');
+    var $img2 = $("<img />").attr('src','img/templateicons/Order-run-list---deployment.png');
+    var $strong2 = $("<strong></strong>").text("Order Runlist");
+    $label2.append($img2);
+    $label2.append($strong2);
+    $section2.append($label2);
+
+    var $rowOrder1 = $("<div></div>").addClass('row');
+    var $divOrder1 = $("<div></div>").addClass('col col-9');
+    var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
+    $divOrder1.append($ulOrder1);
+    $rowOrder1.append($divOrder1);
+
+
+
+    $divOrder2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divinputgroupUpDown= $("<div></div>").addClass('input-group');
+    $divbtngroupUp = $("<div></div>").addClass('btn-group padding-bottom-10');
+
+    $btntoUp = $("<button></button>").addClass('btn btn-default btn-primary btnItemUp btnItemCSS ');
+    $btntoUpitag = $("<i></i>").addClass('fa fa-angle-double-up font-size-20');
+    $btntoUp.append($btntoUpitag);
+    $divbtngroupUp.append($btntoUp);
+    $divinputgroupUpDown.append($divbtngroupUp);
+
+    $btnClearfix1 = $("<div></div>").addClass('clearfix');
+    $divinputgroupUpDown.append($btnClearfix1);
+
+    $divbtngroupDown = $("<div></div>").addClass('btn-group');
+    $btntoDown = $("<button></button>").addClass('btn btn-default btn-primary btnItemDown btnItemCSS');
+    $btntoDownitag = $("<i></i>").addClass('fa fa-angle-double-down font-size-20');
+    $btntoDown.append($btntoDownitag);
+    $divbtngroupDown.append($btntoDown);
+    $divinputgroupUpDown.append($divbtngroupDown);
+
+    $divOrder2.append($divinputgroupUpDown);
+    $rowOrder1.append($divOrder2);
+
+
+    $section2.append($rowOrder1);
+
+
+
+    $fieldset.append($section1);
+    $fieldset.append($section2);
+    $chefItemdiv.append($fieldset);
+
+    $errorContainer = $('<div></div>').addClass('errorContainer').text('This is Error Cointainer div');
+    $chefItemdiv.append($errorContainer);
+
+    // $("#toAdd").click(function(e){
+    //    $("#toaddbtn").append($form);
+    // });
+    $chefItemdiv.find('.btnItemAdd').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");
+        $selectedCookbooks.each(function(idx) {
+        var $this = $(this);
+
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
+        if ($(this).hasClass('deploymentCookbookSelected')) {
+        $(this).removeClass('deploymentCookbookSelected');
+        } else {
+        $(this).addClass('deploymentCookbookSelected');
+        }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+        });
+        var $selectedRoles = $("input[name=checkboxRole]:checked");
+        $selectedRoles.each(function(idx) {
+        var $this = $(this);
+        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
+        if ($(this).hasClass('deploymentCookbookSelected')) {
+        $(this).removeClass('deploymentCookbookSelected');
+        } else {
+        $(this).addClass('deploymentCookbookSelected');
+        }
+        }));
+        $this.attr('checked', false);
+        $this.parents('li').hide();
+        });
+        // $deploymentSelectedList.sortable({
+        // cursor: "move"
+        // });
+    });
+    $chefItemdiv.find('.btnItemRemove').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
+        var value = $(this).find('input').val();
+        var selector = 'input[name=checkboxRole][value="' + value + '"]';
+        console.log(selector);
+        $('input[name=checkboxRole][value="' + value + '"]').parents('li').show();
+        $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show();
+        $(this).remove();
+        });
+    });
+
+    $chefItemdiv.find(".btnItemUp").on('click', function () {
+            var $selectedRunlist = $('.deploymentCookbookSelected');
+
+            $selectedRunlist.insertBefore($selectedRunlist.first().prev());
+    });
+
+    $chefItemdiv.find(".btnItemDown").on('click', function () {
+        var $selectedRunlistDown = $('.deploymentCookbookSelected');
+           
+        $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
+
+    });
+
+    // $chefItemdiv.find(".chooseCheforgType").on('click', function () {
+    //     $(".chooseCheforgType").select2();
+    // });
+    // $chefItemdiv.ready(function() {
+    //     $(".chooseCheforgType").select2();
+    // });
+    $chefItemdiv.find('.chooseCheforgType').select2();
     return $chefItemdiv;
     }

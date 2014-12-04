@@ -74,7 +74,7 @@
                                                                         <td>Logo</td>
                                                                         <td>Name</td>
                                                                         <td>IPAddress</td>
-                                                                        <td>Recipes</td>
+                                                                        <td>Runlists</td>
                                                                         <td>Status</td>
                                                                         <td>Log Info</td>
                                                                         <td>Chef Run</td>
@@ -697,7 +697,7 @@
                     &times;
                 </button>
                 <h4 class="modal-title">
-                    Chef-Receipes
+                    Chef-Runlists
                 </h4>
             </div>
             <div class="modal-body no-padding">
@@ -2557,8 +2557,8 @@ var instanceUpdateRunlistHandler = function(e) {
     // var $chefItemwithoutOrg = $chefItemwithoutOrgmainDiv.append(chefItemwithoutOrg);
     // $chefRunModalContainer = $('#chefRunModalContainer');
 
-    // $chefItemwithoutOrg.find('.loadingContainer').show();
-    // $chefItemwithoutOrg.find('.fieldsetContainschefItem').hide();
+    // $chefItemwithoutOrg.find('.loadingContainer').hide();
+    // $chefItemwithoutOrg.find('.fieldsetContainschefItem').show();
     // $chefItemwithoutOrg.find('.errorContainer').hide();
     // $chefRunModalContainer.find('.modal-body').empty().append($chefItemwithoutOrgmainDiv);
     // $chefRunModalContainer.modal('show');
@@ -2575,17 +2575,25 @@ var instanceUpdateRunlistHandler = function(e) {
     //alert(chefServerId);
     $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
+        keys.sort();
         var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);
-
-        
 
         for (var i = 0; i < keys.length; i++) {
             var $option = $('<option></option>').append(keys[i]).val('recipe[' + keys[i] + ']');
             $cookbooksList.append($option);
         }
-
         var $selectedList = $("#instanceCookbookSelectedList").empty();
         var $instanceCookbookList = $('#instanceCookbookList');
+
+        // var items = [];
+        // $("#instanceCookbookList").each(function(){
+        //    items.push($(this).text());
+        // })
+        // items.sort();
+        // alert(items);
+
+
+
         var runlist = $this.data('runlist');
         console.log(runlist);
         if(runlist) {
@@ -2905,7 +2913,7 @@ function addInstanceToDOM(data) {
     var $backdiva = $('<a style="color:#333;"></a>');
     var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue'); 
 
-    var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Cookbooks');
+    var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Runlists');
     var $backhr = $('<hr>');
 
 

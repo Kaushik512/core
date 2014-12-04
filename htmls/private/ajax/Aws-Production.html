@@ -88,7 +88,7 @@
                                                             <div class="clearfix"></div>
                                                         </div>
                                                         <div class="tab-content">
-                                                            <div class="tab-pane active" id="tab1" style="height: 450px;overflow-y: auto;">
+                                                            <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
 
                                                                 <div id="templateContent" class="row " style="margin:0px;min-height:200px;">
                                                                     <!--App Factory -->
@@ -168,7 +168,7 @@
 
                     </div>
 
-                    <div class="tab-pane" id="tab2" style="height:450px;overflow-y: auto;">
+                    <div class="tab-pane" id="tab2" style="padding-bottom:20px;overflow-y: auto;">
                         <div class="row " style="margin:0px">
                             <div id="individualTemplateNameGrid" class="templatesAppfactory templates">
 
@@ -831,7 +831,7 @@
 
 
                                                                 </div>
-                                                                <div class="tab-pane" id="tab3" style="height:450px;overflow-y: auto;">
+                                                                <div class="tab-pane" id="tab3" style="padding-bottom:20px;overflow-y: auto;">
                                                                     <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
                                                                     </div>
 
@@ -904,7 +904,7 @@
 
                                                         </div>
 
-                                                        <div class="tab-pane" id="tab4" style="height:450px;overflow-y: auto;">
+                                                        <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
 
 
                                                             <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
@@ -987,7 +987,7 @@
 
 
 
-                                        <div class="tab-pane" id="tab5" style="height:450px;overflow-y: auto;">
+                                        <div class="tab-pane" id="tab5" style="padding-bottom:20px;overflow-y: auto;">
 
                                             <h3 style="text-align:center"><strong>Blueprint Saved</strong></h3>
 
@@ -1001,8 +1001,8 @@
                                         </div>
 
                                     <div class="row">
-                                        <div style="bottom:0px;position:fixed" class="col-md-10 col-sm-12 col-xs-12">
-                                            <div style="text-align:center" class="clearfix form-actions">
+                                        <div style="bottom:0px;position:fixed;padding-left:0px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div style="text-align:center;padding-right:20%;" class="clearfix form-actions">
 
                                                 <div class="btn-group">
                                                     <ul class="pager wizard no-margin">
@@ -1604,6 +1604,7 @@ $.ajax({
         async:true,
         success :function(data) {
            var keys = Object.keys(data.cookbooks);
+           keys.sort();
           // alert(data.serverId);
            $cookbookShow.empty();
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
@@ -1637,7 +1638,7 @@ $.ajax({
         $cookbooksList.show();
         $cookbooksList.multiSelect({});
 
-
+        //Search functionality added to the cookbooks
         $('.width-170').keyup(function(){
             var searchText = $(this).val();
             //alert(searchText);
