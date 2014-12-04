@@ -242,7 +242,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 		});
 	});
-
+	
 	app.get('/d4dMasters/qmasterjson/:id/:name', function(req, res) {
 
 	});

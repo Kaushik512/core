@@ -1181,538 +1181,499 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 <script type="text/javascript">
    var reqBody;
    var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
-    'tabClass': 'form-wizard',
-    'onNext': function (tab, navigation, index) {
-       
-        console.log(navigation,index)
-        if (index === 1) {
-            
-             var $selectedItem = $('.role-Selected');
-            if (!$selectedItem.length) {
-                alert('please choose a blueprint design');
-                return false;
-            }
-            var $clone = $selectedItem.clone().removeClass('role-Selected');
-            var selectedText = $clone.attr("data-templateType");
-            var getID = parseInt($clone.attr("id").replace("grid", ""),10);
+       'tabClass': 'form-wizard',
+       'onNext': function(tab, navigation, index) {
 
-          // var getParent = '<div class="" style="width:222px;float:left">'+
-          //                   ' <div class="blueprintdiv appfactory" data-'+
-          //                   'templateType="">'+
-          //                   '<div style="">'+
-          //                   '<img  style="height:25px;padding:2px" alt="JBoss Stack" src="img/app-store-'+
-          //                   'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;'+
-          //                   'padding-left: 4px;">'+
-          //                   '<b>'+selectedText+'</b>'+
-          //                   '</span></div>'+
-          //                   '<div style="padding-top:10px;padding-left:27px;">'+
-          //                   '<img  style="" alt="JBoss Stack" src="img/app-store-icons/Appfactory.png">'+
-          //                   '</div></div></div><div cls=="clearfix"></div>';
-           
-    $.ajax({
-        url: "/d4dMasters/readmasterjson/17",
-        dataType: "json",
-        type:"GET",
-        cache: "true",
-        success: function(data){
-            var rowGridLength = (data.masterjson.rows.row.length);
-            var getIndividualData = "";
-            var getTempName;
-            var getRowID,  getImage;
-            for(var z=0; z<rowGridLength; z+=1){
-                //iterate thhrough columns to get correct column and value
-                var selectedrow = false;
-                var currField = null;
-                getTempName = '';
-                getRowID='';
-                getImage = '';
-                getTemplateType = '';
-                gettemplatescookbooks = '';
-                dockercontainerpathstitle = '';
-                dockercontainerpaths = '';
-                dockerreponame = '';
-                for(var x=0;x < data.masterjson.rows.row[z].field.length;x++){
-                    if(data.masterjson.rows.row[z].field[x].name == "templatesicon_filename"){
-                      getImage = data.masterjson.rows.row[z].field[x].values.value;
-                      //alert(getImage);
-                    }
-                    if(data.masterjson.rows.row[z].field[x].name == "rowid"){
-                      getRowID = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                    if(data.masterjson.rows.row[z].field[x].name == "templatetypename"){
-                      getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                    if(data.masterjson.rows.row[z].field[x].name == "templatescookbooks"){
-                      gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                   
-                    if(data.masterjson.rows.row[z].field[x].name == "templatename"){
-                       getTempName = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                    if(data.masterjson.rows.row[z].field[x].name == "templatetypename"){
-                        if(data.masterjson.rows.row[z].field[x].values.value == selectedText){
-                            selectedrow = true;
-                        }
-                    }
+           console.log(navigation, index)
+           if (index === 1) {
 
-                    //For docker 
-                     if(data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle"){
-                       dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                     if(data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths"){
-                       dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                    if(data.masterjson.rows.row[z].field[x].name == "dockerreponame"){
-                       dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
-                    }
-                    
-                }
+               var $selectedItem = $('.role-Selected');
+               if (!$selectedItem.length) {
+                   alert('please choose a blueprint design');
+                   return false;
+               }
+               var $clone = $selectedItem.clone().removeClass('role-Selected');
+               var selectedText = $clone.attr("data-templateType");
+               var getID = parseInt($clone.attr("id").replace("grid", ""), 10);
 
+               // var getParent = '<div class="" style="width:222px;float:left">'+
+               //                   ' <div class="blueprintdiv appfactory" data-'+
+               //                   'templateType="">'+
+               //                   '<div style="">'+
+               //                   '<img  style="height:25px;padding:2px" alt="JBoss Stack" src="img/app-store-'+
+               //                   'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;'+
+               //                   'padding-left: 4px;">'+
+               //                   '<b>'+selectedText+'</b>'+
+               //                   '</span></div>'+
+               //                   '<div style="padding-top:10px;padding-left:27px;">'+
+               //                   '<img  style="" alt="JBoss Stack" src="img/app-store-icons/Appfactory.png">'+
+               //                   '</div></div></div><div cls=="clearfix"></div>';
 
-                if(selectedrow){
-                    getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">'+
-                                        '<div class="productdiv2" data-templateId="'+getTempName+'" data-'+
-                                        'templateComponent="component'+z+'" '+
-                                        'dockercontainerpathstitle="'+dockercontainerpathstitle+'" '+
-                                        'dockercontainerpaths="'+dockercontainerpaths+'" '+
-                                        'dockerreponame="'+dockerreponame+'" '+
-                                        'data-templateName="'+getTempName+'" data-'+
-                                        'templateType="'+getTemplateType+'" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks +'">'+
-                                        '<ul class="list-unstyled system-prop" style="text-align:center;">'+
-                                        '<li><img style="height:40px;width:auto;" alt="" '+
-                            'src="/d4dMasters/image/'+getRowID+'__templatesicon__'+getImage+'">'+
-                                        '</li><li style="font-size:12px;"><u><b>'+getTempName+'</b></u></li>';
-                                        //If standard template
-                                        if(getTemplateType != "Docker"){
-                                            var cb = gettemplatescookbooks.split(',');
-                                            var licb = '';
-                                            //alert(cb.length);
-                                            for(var cbi = 0; cbi < cb.length;cbi++){
-                                                licb += '<li style="font-size:10px;" blueprinttype="other">'+ cb[cbi] +'</li>';
-                                            }
-                                        }
-                                        else //when template type is docker
-                                        {
-                                            var cb = dockercontainerpathstitle.split(',');
-                                            var cbpath = dockercontainerpaths.split(',');
-                                            var licb = '';
-                                            //alert(cb.length);
-                                            for(var cbi = 0; cbi < cb.length;cbi++){
-                                                licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">'+ cb[cbi] +'</li>';
-                                            }
-                                        }
+               $.ajax({
+                   url: "/d4dMasters/readmasterjson/17",
+                   dataType: "json",
+                   type: "GET",
+                   cache: "true",
+                   success: function(data) {
+                       var rowGridLength = (data.masterjson.rows.row.length);
+                       var getIndividualData = "";
+                       var getTempName;
+                       var getRowID, getImage;
+                       for (var z = 0; z < rowGridLength; z += 1) {
+                           //iterate thhrough columns to get correct column and value
+                           var selectedrow = false;
+                           var currField = null;
+                           getTempName = '';
+                           getRowID = '';
+                           getImage = '';
+                           getTemplateType = '';
+                           gettemplatescookbooks = '';
+                           dockercontainerpathstitle = '';
+                           dockercontainerpaths = '';
+                           dockerreponame = '';
+                           for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
+                               if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
+                                   getImage = data.masterjson.rows.row[z].field[x].values.value;
+                                   //alert(getImage);
+                               }
+                               if (data.masterjson.rows.row[z].field[x].name == "rowid") {
+                                   getRowID = data.masterjson.rows.row[z].field[x].values.value;
+                               }
+                               if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
+                                   getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
+                               }
+                               if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
+                                   gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
+                               }
 
-                    getIndividualData +=    licb + '</ul></div></div>';
+                               if (data.masterjson.rows.row[z].field[x].name == "templatename") {
+                                   getTempName = data.masterjson.rows.row[z].field[x].values.value;
+                               }
+                               if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
+                                   if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
+                                       selectedrow = true;
+                                   }
+                               }
 
-            }
-           }        
-            $("#individualTemplateNameGrid").html("");
-            //$("#individualTemplateNameGrid").append(getParent);
-            $("#individualTemplateNameGrid").append(getIndividualData).find('.productdiv2').first().click();
-        //$("#grid0").addClass("role-Selected");
-        }
+                               //For docker 
+                               if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
+                                   dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
+                               }
+                               if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
+                                   dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
+                               }
+                               if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
+                                   dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
+                               }
+
+                           }
 
 
-    });
-            //console.log('in here')
-            //alert('here');
-            // var $selectedItem = $('.role-Selected');
-            // if (!$selectedItem.length) {
-            //     alert('please choose a blueprint design')
-            //     return false;
-            // }
-            // var $clone = $selectedItem.clone().removeClass('role-Selected');
-            $('#tab' + (index + 1)).find('.temp').empty().append($clone);
-            $('.'+$selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
+                           if (selectedrow) {
+                               getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
+                                   '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
+                                   'templateComponent="component' + z + '" ' +
+                                   'dockercontainerpathstitle="' + dockercontainerpathstitle + '" ' +
+                                   'dockercontainerpaths="' + dockercontainerpaths + '" ' +
+                                   'dockerreponame="' + dockerreponame + '" ' +
+                                   'data-templateName="' + getTempName + '" data-' +
+                                   'templateType="' + getTemplateType + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks + '">' +
+                                   '<ul class="list-unstyled system-prop" style="text-align:center;">' +
+                                   '<li><img style="height:40px;width:auto;" alt="" ' +
+                                   'src="/d4dMasters/image/' + getRowID + '__templatesicon__' + getImage + '">' +
+                                   '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
+                               //If standard template
+                               if (getTemplateType != "Docker") {
+                                   var cb = gettemplatescookbooks.split(',');
+                                   var licb = '';
+                                   //alert(cb.length);
+                                   for (var cbi = 0; cbi < cb.length; cbi++) {
+                                       licb += '<li style="font-size:10px;" blueprinttype="other">' + cb[cbi] + '</li>';
+                                   }
+                               } else //when template type is docker
+                               {
+                                   var cb = dockercontainerpathstitle.split(',');
+                                   var cbpath = dockercontainerpaths.split(',');
+                                   var licb = '';
+                                   //alert(cb.length);
+                                   for (var cbi = 0; cbi < cb.length; cbi++) {
+                                       licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">' + cb[cbi] + '</li>';
+                                   }
+                               }
 
-        } else if(index == 2){
-          //   var $selectedTemplateArea = $('.selectedTemplateArea')
-          //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
-          //   console.log($selectedItem.length);
-          //   if(!$selectedItem.length) {
-          //     alert('please choose a template');
-          //     return false;
+                               getIndividualData += licb + '</ul></div></div>';
 
-          // }
-            //alert('kickin 2');
-
-            //If a docker type of template selected then select the Org 
-             var $selectedItem = $('.role-Selected');
-          // alert('in ' + $selectedItem.length);
-            if (!$selectedItem.length) {
-                alert('please choose a blueprint design');
-                return false;
-            }
-
-            $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
-            if($('.productdiv2.role-Selected').length > 0)
-            {
-              //Setting controls connected to docker to hidden
-              $('.fordocker').hide();
-              if($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker")
-              {
-                   //When docker stepping to 4th tab
-                   
-                   $('#orgnameSelect').trigger('change');
-                    $('a[href="#tab3"]').first().trigger('click');
-
-                    //populating the docker repo titles
-                    var $dockerrepotitles = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle').split(',');
-                    var $dockerrepopaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths').split(',');
-                    var $dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-                    var $dockerrepoListInput = $('#dockerrepoListInput');
-                    $dockerrepoListInput.empty();
-                    
-                    $dockerrepotitles.forEach(function(k,v){
-                      var $opt = $('<option value="' + $dockerrepotitles[v] + '" repopath="' + $dockerrepopaths[v] + '">' + $dockerrepotitles[v] + '</option>');
-                      $dockerrepoListInput.append($opt);
-                    });
-
-                    //Setting the appropriate tags
-                    //Attaching the change event to pull tags for the select repo
-                    $dockerrepoListInput.change(function(e){
-                        //tutum/centos
-                        console.log('Docker Query -> ', '/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame);
-                        $.get('/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame,function(data){
-                          //Sample json given below
-                            //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
-                            if(data){
-                                var tagJson = JSON.parse(data);
-                                var $dockerrepotagsdiv = $('#dockerrepotagsdiv');
-                                
-                                $dockerrepotagsdiv.empty();
-                                var dockerrepotags = [];
-                                tagJson.forEach(function(k,v){
-                                    //<p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>CentOS</p>
-                                    if(v < 3){
-                                        $('#dockerrepotagsdiv').append('<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' + tagJson[v].name + '</p></div>');
-                                        if(dockerrepotags == '')
-                                            dockerrepotags += tagJson[v].name;
-                                        else
-                                            dockerrepotags += ',' + tagJson[v].name;
-                                    }
-                                   //limiting the number to the top 5
-                                });   
-                                $('.productdiv2.role-Selected').first().attr('dockerrepotags',dockerrepotags) ;
-                                $('.productdiv2.role-Selected').first().attr('dockerreponame',$dockerrepoListInput.val());
-                            }
-                        });
-                    });                    
-                    //dockerrepotagsul
-                    $dockerrepoListInput.trigger('change');
-
-                    //End Setting appropriate tags
-                    //polulate the docker tags
-                    var $dockerrepotagsul = $('#dockerrepotagsul');
-                    $('.fordocker').show();
-                        return(true);
-                }
-            }
-            var $clone = $selectedItem.clone().removeClass('role-Selected');
-            var selectedText = $clone.attr("data-templateType");
-            if($selectedItem.attr('data-templateType') == 'desktopProvisoning')
-            {
-                wizard.show(4);
-                return false;
-            }
-            if($('#tab2 .role-Selected').length > 0)
-            {
-              $('#tab3 .selectedTemplateArea').empty().append($('#tab2 .role-Selected').clone());
-            }
-            //force clicking orgnameSelect
-            $('#orgnameSelect').trigger('change');
+                           }
+                       }
+                       $("#individualTemplateNameGrid").html("");
+                       //$("#individualTemplateNameGrid").append(getParent);
+                       $("#individualTemplateNameGrid").append(getIndividualData).find('.productdiv2').first().click();
+                       //$("#grid0").addClass("role-Selected");
+                   }
 
 
-    } else if(index == 3){
+               });
+               //console.log('in here')
+               //alert('here');
+               // var $selectedItem = $('.role-Selected');
+               // if (!$selectedItem.length) {
+               //     alert('please choose a blueprint design')
+               //     return false;
+               // }
+               // var $clone = $selectedItem.clone().removeClass('role-Selected');
+               $('#tab' + (index + 1)).find('.temp').empty().append($clone);
+               $('.' + $selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
 
-        var $selectedTemplateArea = $('.selectedTemplateArea');
-        var $selectedItem = $selectedTemplateArea.find('.productdiv2');
-        console.log($selectedItem.length);
-        if(!$selectedItem.length) {
-          alert('please choose a template');
-          return false;
-      }
+           } else if (index == 2) {
+               //   var $selectedTemplateArea = $('.selectedTemplateArea')
+               //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
+               //   console.log($selectedItem.length);
+               //   if(!$selectedItem.length) {
+               //     alert('please choose a template');
+               //     return false;
 
-      if($('#orgnameSelect').val() === 'choose') {
-        alert('please choose an Organization');
-        return false;
-    }
+               // }
+               //alert('kickin 2');
+
+               //If a docker type of template selected then select the Org 
+               var $selectedItem = $('.role-Selected');
+               // alert('in ' + $selectedItem.length);
+               if (!$selectedItem.length) {
+                   alert('please choose a blueprint design');
+                   return false;
+               }
+
+               $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+               if ($('.productdiv2.role-Selected').length > 0) {
+                   //Setting controls connected to docker to hidden
+                   $('.fordocker').hide();
+                   if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker") {
+                       //When docker stepping to 4th tab
+
+                       $('#orgnameSelect').trigger('change');
+                       $('a[href="#tab3"]').first().trigger('click');
+
+                       //populating the docker repo titles
+                       var $dockerrepotitles = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle').split(',');
+                       var $dockerrepopaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths').split(',');
+                       var $dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+                       var $dockerrepoListInput = $('#dockerrepoListInput');
+                       $dockerrepoListInput.empty();
+
+                       $dockerrepotitles.forEach(function(k, v) {
+                           var $opt = $('<option value="' + $dockerrepotitles[v] + '" repopath="' + $dockerrepopaths[v] + '">' + $dockerrepotitles[v] + '</option>');
+                           $dockerrepoListInput.append($opt);
+                       });
+
+                       //Setting the appropriate tags
+                       //Attaching the change event to pull tags for the select repo
+                       $dockerrepoListInput.change(function(e) {
+                           //tutum/centos
+                           console.log('Docker Query -> ', '/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame);
+                           $.get('/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame, function(data) {
+                               //Sample json given below
+                               //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
+                               if (data) {
+                                   var tagJson = JSON.parse(data);
+                                   var $dockerrepotagsdiv = $('#dockerrepotagsdiv');
+
+                                   $dockerrepotagsdiv.empty();
+                                   var dockerrepotags = [];
+                                   tagJson.forEach(function(k, v) {
+                                       //<p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>CentOS</p>
+                                       if (v < 3) {
+                                           $('#dockerrepotagsdiv').append('<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' + tagJson[v].name + '</p></div>');
+                                           if (dockerrepotags == '')
+                                               dockerrepotags += tagJson[v].name;
+                                           else
+                                               dockerrepotags += ',' + tagJson[v].name;
+                                       }
+                                       //limiting the number to the top 5
+                                   });
+                                   $('.productdiv2.role-Selected').first().attr('dockerrepotags', dockerrepotags);
+                                   $('.productdiv2.role-Selected').first().attr('dockerreponame', $dockerrepoListInput.val());
+                               }
+                           });
+                       });
+                       //dockerrepotagsul
+                       $dockerrepoListInput.trigger('change');
+
+                       //End Setting appropriate tags
+                       //polulate the docker tags
+                       var $dockerrepotagsul = $('#dockerrepotagsul');
+                       $('.fordocker').show();
+                       return (true);
+                   }
+               }
+               var $clone = $selectedItem.clone().removeClass('role-Selected');
+               var selectedText = $clone.attr("data-templateType");
+               if ($selectedItem.attr('data-templateType') == 'desktopProvisoning') {
+                   wizard.show(4);
+                   return false;
+               }
+               if ($('#tab2 .role-Selected').length > 0) {
+                   $('#tab3 .selectedTemplateArea').empty().append($('#tab2 .role-Selected').clone());
+               }
+               //force clicking orgnameSelect
+               $('#orgnameSelect').trigger('change');
 
 
-    reqBody = {};
-    reqBody.templateId = $selectedItem.attr('data-templateId');
-    reqBody.templateType = $selectedItem.attr('data-templateType');
-    reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
-    reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
-    reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
-    if(!$('#cookbookSelect').length) {
+           } else if (index == 3) {
+
+               var $selectedTemplateArea = $('.selectedTemplateArea');
+               var $selectedItem = $selectedTemplateArea.find('.productdiv2');
+               console.log($selectedItem.length);
+               if (!$selectedItem.length) {
+                   alert('please choose a template');
+                   return false;
+               }
+
+               if ($('#orgnameSelect').val() === 'choose') {
+                   alert('please choose an Organization');
+                   return false;
+               }
+
+
+               reqBody = {};
+               reqBody.templateId = $selectedItem.attr('data-templateId');
+               reqBody.templateType = $selectedItem.attr('data-templateType');
+               reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
+               reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
+               reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
+               /*if(!$('.deploymentsCookbookList').length) {
       alert('Please wait while we are fetching cookbooks.');
       return false;
-  }
-  reqBody.runlist = $('#cookbookSelect').val();
-  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-  reqBody.instanceType = $('select.instanceType').val();
-  reqBody.instanceOS = $('#instanceOS').val();
-  console.log(reqBody);
+    }*/
+               //Get all the runlist 
+               var cbs = [];
+               $('.deploymentSelectedRunList input').each(function() {
+                   cbs.push($(this).val());
+               });
+               reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+               //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
+               reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
+               reqBody.instanceType = $('select.instanceType').val();
+               reqBody.instanceOS = $('#instanceOS').val();
+               console.log(reqBody);
 
 
-} else if(index == 4){
-    console.log("reqBody ==>",reqBody);
-    if(!reqBody || reqBody == "undefined"){
-        console.log('resetting');
-        var reqBody = {};
-    }
-    reqBody.runlist = $('#cookbookSelect').val();
-  reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-  console.log("instanceType ==>",$('select.instanceType').val());
-  reqBody.instanceType = $('select.instanceType').val();
-  reqBody.instanceOS = $('#instanceOS').val();
-        reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
-        reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
-        reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-    //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
-    reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
-    reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
-    reqBody.dockerreponame = $('#dockerrepoListInput').val();
+           } else if (index == 4) {
+               console.log("reqBody ==>", reqBody);
+               if (!reqBody || reqBody == "undefined") {
+                   console.log('resetting');
+                   var reqBody = {};
+               }
+               //reqBody.runlist = $('#cookbookSelect').val();
+               var cbs = [];
+               $('.deploymentSelectedRunList input').each(function() {
+                   cbs.push($(this).val());
+               });
+               reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+               //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+               reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
+               console.log("instanceType ==>", $('select.instanceType').val());
+               reqBody.instanceType = $('select.instanceType').val();
+               reqBody.instanceOS = $('#instanceOS').val();
+               reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
+               reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
+               reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
+               //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
+               reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
+               reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
+               reqBody.dockerreponame = $('#dockerrepoListInput').val();
 
 
-    reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
-    reqBody.orgId = $('#orgnameSelect').val();
-    reqBody.projectId = $('#projectListInput').val();
-    reqBody.envId = $('#envList').val();
-    reqBody.name =$('#blueprintNameInput').val();
-    //alert('in');
-    if(!reqBody.name) {
-        alert("Please enter a blueprint name");
-        return false;
-    }
-    if(!reqBody.projectId || reqBody.projectId  === 'choose') {
-        alert("Please choose a project");
-        return false;
-    }
+               reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
+               reqBody.orgId = $('#orgnameSelect').val();
+               reqBody.projectId = $('#projectListInput').val();
+               reqBody.envId = $('#envList').val();
+               reqBody.name = $('#blueprintNameInput').val();
+               //alert('in');
+               if (!reqBody.name) {
+                   alert("Please enter a blueprint name");
+                   return false;
+               }
+               if (!reqBody.projectId || reqBody.projectId === 'choose') {
+                   alert("Please choose a project");
+                   return false;
+               }
 
-    if(!reqBody.envId || reqBody.envId  === 'choose') {
-        alert("Please choose an environment");
-        return false;
-    }
-    reqBody.users = $('#userListSelect').val() 
+               if (!reqBody.envId || reqBody.envId === 'choose') {
+                   alert("Please choose an environment");
+                   return false;
+               }
+               reqBody.users = $('#userListSelect').val()
 
-    if(!reqBody.users) {
-        alert("Please choose users");
-        return false;
-    }
-    //alert(JSON.stringify(reqBody));
-
-
-    console.log('pushing');
-    console.log(reqBody);
-    $.post('../projects/'+reqBody.projectId+'/environments/'+reqBody.envId+'/blueprints',{
-        blueprintData:reqBody
-    },function(data){
-       console.log(data);
-   });
-    console.log('final',reqBody);
-} 
+               if (!reqBody.users) {
+                   alert("Please choose users");
+                   return false;
+               }
+               //alert(JSON.stringify(reqBody));
 
 
-$('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
-    'complete');
-$('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
-.html('<i class="fa fa-check"></i>');
-            //$('#tab'+(index)).removeClass('active');
-            //$('#tab'+(index+1)).addClass('active');
-            //return true;
+               console.log('pushing');
+               console.log(reqBody);
+               $.post('../projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
+                   blueprintData: reqBody
+               }, function(data) {
+                   console.log(data);
+               });
+               console.log('final', reqBody);
+           }
 
 
-        },
-        'onPrevious': function (tab, navigation, index) {
-            //console.log(index);
-            $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
-                'complete');
-            $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
-            .html(index + 2);
-
-        }
-    });
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
+               'complete');
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
+               .html('<i class="fa fa-check"></i>');
+           //$('#tab'+(index)).removeClass('active');
+           //$('#tab'+(index+1)).addClass('active');
+           //return true;
 
 
-var $rolesCards = $('.blueprintdiv')
+       },
+       'onPrevious': function(tab, navigation, index) {
+           //console.log(index);
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
+               'complete');
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
+               .html(index + 2);
 
-$('.blueprintdiv').on("click", function () {
-    //alert("Inside");
-    $rolesCards.removeClass('role-Selected');
-    if ($(this).hasClass('role-Selected')) {
-        $(this).removeClass('role-Selected');
-    } else {
-        $(this).addClass('role-Selected');
-    }
-    // $('.templates').hide();
-    // console.log($(this).attr('data-templateType'));
-    // $('.'+$(this).attr('data-templateType')).show();
-        //$('.next a').attr('disabled',false);
-    });
-
-var $selectedTemplate = $('.productdiv2').click(function(e){
-  $selectedTemplate.removeClass('role-Selected');
-
-  var $this = $(this);
-  $('.selectedTemplateArea').empty().append($this.clone(false).css({'cursor':'auto'}));
-
-  $this.addClass('role-Selected');
-});
-
-$.ajax({
-    type: "get",
-    dataType: "json",
-
-    async: false,
-    url: "../organizations/getTree",
-    success:function(data){
-        var $orgListInput = $('#orgnameSelect');
-        $orgListInput.append($('<option></option>').val('choose').html('Choose'));
-        $bgList = $('#bgListInput');
-        var $envList = $('#envList');
-        for(var i=0;i<data.length;i++) {
-            $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist',data[i].businessGroups).data('envList',data[i].environments));
-        }
-        $orgListInput.change(function(e){
-          // alert('trigged org selection');
-           var orgName = $(this).val();
-           if(orgName == 'choose') {
-            return;
-        }
-        var $selectedOrgOption =  $(this).find(":selected");
-        $bgList.empty();
-        $bgList.append($('<option></option>').val('choose').html('Choose'));
-        var getBGs =  $selectedOrgOption.data('bglist');
-        for(var i=0;i<getBGs.length;i++) {
-            $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList',getBGs[i].projects));
-        }
-
-        $envList.empty();
-        var getEnv = $selectedOrgOption.data('envList');
-        for(var i=0;i<getEnv.length;i++) {
-           $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
        }
-
-       var $cookbookShow = $('.cookbookShow').empty();
-       $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-
-       $.ajax({
-        url:'../organizations/'+orgName+'/cookbooks',
-        method:'GET',
-        async:true,
-        success :function(data) {
-           var keys = Object.keys(data.cookbooks);
-           //alert(keys);
-           // var compA = keys.text().toUpperCase();
-           // alert(compA);
-           //keys.sort();
-           keys.sort(function(a,b){
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-           });
-          // alert(data.serverId);
-           $cookbookShow.empty();
-           var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
-           var checkarray = [];
-           //Adding the template cookbooks
-           if($('#tab3').find('div[class*="productdiv2"]')){
-            if($('#tab3').find('div[class*="productdiv2"]').length > 0){
-              var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
-              for(var key in tcb){
-                //alert(tcb[key]);
-                var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
-
-                $cookbooksList.append($optiontcb);
-                checkarray.push(tcb[key]);
-              }
-            }
-            }
-            //End adding template cookbooks.
-           for(var i=0;i<keys.length;i++) {
-               // var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-                console.log("Found : " + $.inArray('recipe['+keys[i] + ']'));
-                if($.inArray('recipe['+keys[i] + ']',checkarray) < 0)
-                {
-                    var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-                    $cookbooksList.append($option);
-                }  
-            }
-        $cookbookShow.append('<span>Choose Cookbooks<span><br />');
-        var $inputtypetext = $('<input type="text">').addClass('width-170');
-        $cookbookShow.append($inputtypetext);
-        $cookbookShow.append($cookbooksList);
-        $cookbooksList.show();
-        $cookbooksList.multiSelect({});
-
-        //Search functionality added to the cookbooks
-        $('.width-170').keyup(function(){
-            var searchText = $(this).val();
-            //alert(searchText);
-            $allListElements = $('.ms-selectable ul > li');
-            $matchingListElements = $allListElements.filter(function(i, el){
-                return $(el).text().indexOf(searchText) !== -1;
-            });
-        $allListElements.hide();
-        $matchingListElements.show(); 
-        });
-
-    },
-    error : function(){
-     $cookbookShow.empty();
-     $cookbookShow.append('<span>Unable to load cookbooks. Please try again later.</span>'); 
- },
-});    
-
    });
 
-var $projectList = $('#projectListInput');
-$bgList.change(function(e){
-    var bgName = $(this).val();
-    if(bgName == 'choose') {
-        return;
-    }
-    var $selectedOrgOption =  $(this).find(":selected");
-    $projectList.empty();
-    $projectList.append($('<option></option>').val('choose').html('Choose'));
-    var getProjs = $selectedOrgOption.data('projList');
-    for(var i=0;i<getProjs.length;i++) {
-        $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
-    }
-});
 
-}
-});
+   var $rolesCards = $('.blueprintdiv')
+
+    $('.blueprintdiv').on("click", function() {
+       //alert("Inside");
+       $rolesCards.removeClass('role-Selected');
+       if ($(this).hasClass('role-Selected')) {
+           $(this).removeClass('role-Selected');
+       } else {
+           $(this).addClass('role-Selected');
+       }
+       // $('.templates').hide();
+       // console.log($(this).attr('data-templateType'));
+       // $('.'+$(this).attr('data-templateType')).show();
+       //$('.next a').attr('disabled',false);
+   });
+
+   var $selectedTemplate = $('.productdiv2').click(function(e) {
+       $selectedTemplate.removeClass('role-Selected');
+
+       var $this = $(this);
+       $('.selectedTemplateArea').empty().append($this.clone(false).css({
+           'cursor': 'auto'
+       }));
+
+       $this.addClass('role-Selected');
+   });
+
+   $.ajax({
+       type: "get",
+       dataType: "json",
+
+       async: false,
+       url: "../organizations/getTree",
+       success: function(data) {
+           var $orgListInput = $('#orgnameSelect');
+           $orgListInput.append($('<option></option>').val('choose').html('Choose'));
+           $bgList = $('#bgListInput');
+           var $envList = $('#envList');
+           for (var i = 0; i < data.length; i++) {
+               $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+           }
+           $orgListInput.change(function(e) {
+               // alert('trigged org selection');
+               var orgName = $(this).val();
+               if (orgName == 'choose') {
+                   return;
+               }
+               var $selectedOrgOption = $(this).find(":selected");
+               $bgList.empty();
+               $bgList.append($('<option></option>').val('choose').html('Choose'));
+               var getBGs = $selectedOrgOption.data('bglist');
+               for (var i = 0; i < getBGs.length; i++) {
+                   $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
+               }
+
+               $envList.empty();
+               var getEnv = $selectedOrgOption.data('envList');
+               for (var i = 0; i < getEnv.length; i++) {
+                   $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
+               }
+
+               var $cookbookShow = $('.cookbookShow').empty();
+               $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+
+               var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
+                   //To do additional selections
+                   var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
+                   for (var key in tcb) {
+                       //alert(tcb[key]);
+                       //   var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
+
+                       // $cookbooksList.append($optiontcb);
+                       //  checkarray.push(tcb[key]);
+                       if (tcb[key].indexOf('recipe') >= 0)
+                           $('.deploymentsCookbookList li input[value="' + tcb[key] + '"]').first().trigger('click');
+                       else
+                           $('.deploymentRoleList li input[value="' + tcb[key] + '"]').first().trigger('click');
+
+                   }
+                   $('.btnItemAdd').first().trigger('click');
+               });
+               $cookbookShow.empty();
+               $cookbookShow.append($ccrs);
 
 
-(function(){
 
-    var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
-    $.get('../users',function(userList){
-      var $userListSelect = $('#userListSelect').empty();
-      userList.sort(function(a, b){
-        var keyA =Object.keys(a);
-        var keyB =Object.keys(b);
+           });
 
-        if(keyA[0] < keyB[0]) return -1;
-        if(keyA[0] > keyB[0]) return 1;
-        return 0;
-    }); 
-      for(var i=0;i<userList.length;i++) {
-        var keys = Object.keys(userList[i]);
-        var $option = $('<option></option>').append(keys[0]).val(keys[0]);
-        $userListSelect.append($option);
-    }
-    $loadingContainer.hide();
-    $userListSelect.show();
-}).error(function(){
-    $loadingContainer.empty().append('Unable to load users. Please try again later.');
-});
-})();
+           var $projectList = $('#projectListInput');
+           $bgList.change(function(e) {
+               var bgName = $(this).val();
+               if (bgName == 'choose') {
+                   return;
+               }
+               var $selectedOrgOption = $(this).find(":selected");
+               $projectList.empty();
+               $projectList.append($('<option></option>').val('choose').html('Choose'));
+               var getProjs = $selectedOrgOption.data('projList');
+               for (var i = 0; i < getProjs.length; i++) {
+                   $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+               }
+           });
+
+       }
+   });
 
 
+   (function() {
 
+       var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+       $.get('../users', function(userList) {
+           var $userListSelect = $('#userListSelect').empty();
+           userList.sort(function(a, b) {
+               var keyA = Object.keys(a);
+               var keyB = Object.keys(b);
 
+               if (keyA[0] < keyB[0]) return -1;
+               if (keyA[0] > keyB[0]) return 1;
+               return 0;
+           });
+           for (var i = 0; i < userList.length; i++) {
+               var keys = Object.keys(userList[i]);
+               var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+               $userListSelect.append($option);
+           }
+           $loadingContainer.hide();
+           $userListSelect.show();
+       }).error(function() {
+           $loadingContainer.empty().append('Unable to load users. Please try again later.');
+       });
+   })();
 
 
 </script>
