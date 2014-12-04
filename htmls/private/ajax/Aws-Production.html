@@ -1627,7 +1627,7 @@ $.ajax({
                // var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                 console.log("Found : " + $.inArray('recipe['+keys[i] + ']'));
                 if($.inArray('recipe['+keys[i] + ']',checkarray) < 0)
-                {var $option =  $('<option></option>').append('recipe['+keys[i]+']').val('recipe['+keys[i]+']');
+                {var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
                                 $cookbooksList.append($option);}
                 
             }
