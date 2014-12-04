@@ -37,6 +37,10 @@ var Chef = function(settings) {
                     callback(err, null);
                     return console.log(err);
                 }
+                if (chefRes.statusCode !== 200 || chefRes.statusCode !== 201 ) {
+                    callback(true, null);
+                    return;
+                }
                 var nodeNames = Object.keys(chefResBody);
                 callback(null, nodeNames);
             });
