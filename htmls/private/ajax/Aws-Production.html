@@ -1614,21 +1614,28 @@ $.ajax({
           // alert(data.serverId);
            $cookbookShow.empty();
            var $cookbooksList = $('<select></select>').attr('id','cookbookSelect').data('chefServerId',data.serverId).attr('multiple',true); 
+           var checkarray = [];
            //Adding the template cookbooks
            if($('#tab3').find('div[class*="productdiv2"]')){
             if($('#tab3').find('div[class*="productdiv2"]').length > 0){
               var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
               for(var key in tcb){
                 //alert(tcb[key]);
-                var $optiontcb =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+                var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
+
                 $cookbooksList.append($optiontcb);
+                checkarray.push(tcb[key]);
               }
             }
             }
             //End adding template cookbooks.
            for(var i=0;i<keys.length;i++) {
-            var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
-            $cookbooksList.append($option);
+               // var $option =  $('<option></option>').append(keys[i]).val('recipe['+keys[i]+']');
+                console.log("Found : " + $.inArray('recipe['+keys[i] + ']'));
+                if($.inArray('recipe['+keys[i] + ']',checkarray) < 0)
+                {var $option =  $('<option></option>').append('recipe['+keys[i]+']').val('recipe['+keys[i]+']');
+                                $cookbooksList.append($option);}
+                
             }
         $cookbookShow.append('<span>Choose Cookbooks<span><br />');
         var $inputtypetext = $('<input type="text">').addClass('width-170');
