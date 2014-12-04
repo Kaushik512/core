@@ -1717,7 +1717,9 @@ $(document).ready(function() {
       $('#myTab3').click();
   }
 });
+$('.Orchestration').click(function(e){
 
+});
 
 
 $('.createTaskLink').click(function(e){
@@ -2204,7 +2206,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         $itemBody.attr('dockercontainerpaths',data[i].dockercontainerpaths);
                         var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                         $ul.append($liDockerRepoName);
-                       if(data[i].dockerrepotags != ''){
+                       if(data[i].dockerrepotags && data[i].dockerrepotags != ''){
                         $selectVer.empty();
                         var dockerrepostags = data[i].dockerrepotags.split(',');
                            $.each(dockerrepostags,function(k){
@@ -2285,9 +2287,9 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                     });
                 }
                 //Expanding the fist Accordion.
-                if($('#accordion-2').length > 0)
-                    
-                    $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').trigger('click');
+                if($('#accordion-2').length > 0){
+                  $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').trigger('click');
+                }
             }
          }
 
@@ -2450,10 +2452,10 @@ function pollInstanceState(instanceId, state, delay) {
                     $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
                     $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                     if (data.instanceState == 'stopped'){
-                    $('.componentlistContainer.stopped').parent().find('.actionbuttonChefClientRun').hide();
+                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
                     }
                     if (data.instanceState == 'running'){
-                      $('.componentlistContainer.started').parent().find('.actionbuttonChefClientRun').show();
+                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
                     }
                 }
             }
@@ -2575,7 +2577,10 @@ var instanceUpdateRunlistHandler = function(e) {
     //alert(chefServerId);
     $.get('../chef/servers/' + chefServerId + '/cookbooks', function(data) {
         var keys = Object.keys(data);
-        keys.sort();
+        // keys.sort();
+        keys.sort(function(a,b){
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
         var $cookbooksList = $("#instanceCookbookList").empty().attr('data-instanceId', instanceId).attr('multiple', true);
 
         for (var i = 0; i < keys.length; i++) {
@@ -3006,9 +3011,7 @@ function addInstanceToDOM(data) {
     });
     pageSetUp();
     if (data.instanceState == 'stopped'){
-      //alert('hello');
-      //$('.instanceActionBtnCtr').find('.actionbuttonChefClientRun').hide();
-      $('.componentlistContainer.stopped').parent().find('.actionbuttonChefClientRun').hide();
+      $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
     }
 }
 

@@ -1498,9 +1498,9 @@ $(document).ready(function() {
         {
             $('#ribbon').find('.breadcrumb').find('li').detach();
             for(var arraycount=0;arraycount< splitBread.length;arraycount++){
-                var liNew = document.createElement('li');
-                liNew.innerHTML = splitBread[arraycount];
-                $('#ribbon').find('.breadcrumb').append(liNew);
+              var liNew = document.createElement('li');
+              liNew.innerHTML = splitBread[arraycount];
+              $('#ribbon').find('.breadcrumb').append(liNew);
             }
             var liCP = document.createElement('li');
             liCP.innerHTML = "Control panel";
