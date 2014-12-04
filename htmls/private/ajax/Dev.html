@@ -2206,7 +2206,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                         $itemBody.attr('dockercontainerpaths',data[i].dockercontainerpaths);
                         var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                         $ul.append($liDockerRepoName);
-                       if(data[i].dockerrepotags != ''){
+                       if(data[i].dockerrepotags && data[i].dockerrepotags != ''){
                         $selectVer.empty();
                         var dockerrepostags = data[i].dockerrepotags.split(',');
                            $.each(dockerrepostags,function(k){
