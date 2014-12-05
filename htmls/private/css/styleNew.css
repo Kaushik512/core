@@ -1,6 +1,10 @@
 .chefItemwithoutOrgloadingContainerCSS{
     height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;
 }
+.font-size-12{
+    font-size: 12px;
+    font-weight: 350;
+}
 .width-170{
     width:170px;
 }
@@ -114,8 +118,8 @@
 
 .serviceBox1, .serviceBox2, .serviceBox3 {
     float:left;
-    width:30%;
-    height: 115px;
+   /* width:30%;
+    height: 115px;*/
    /* background-color: white;*/
 }
 .instance-bootstrap-list-image{
