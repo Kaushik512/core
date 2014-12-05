@@ -1252,7 +1252,10 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
 }
 
 //ChefItem added below
-var $chefCookbookRoleSelector = function(catorgname, callback) {
+var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
+    if(!selectedRunlist) {
+      selectedRunlist = []; 
+    }
     var $chefItemdiv = $("<div></div>").addClass('smart-form');
 
     var $panelbody = $("<div></div>").addClass('panel-body');
@@ -1303,7 +1306,11 @@ var $chefCookbookRoleSelector = function(catorgname, callback) {
 
         var $deploymentCookbookList = $('.deploymentsCookbookList');
         for (i = 0; i < keys.length; i++) {
-            $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+            var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
+            if(selectedRunlist.indexOf('recipe[' + keys[i] + ']')!== -1) {
+              $li.hide();
+            }
+            $deploymentCookbookList.append($li);
         }
         getRolesFunction();
     });
@@ -1325,7 +1332,11 @@ var $chefCookbookRoleSelector = function(catorgname, callback) {
 
             var $deploymentRolesList = $('.deploymentRoleList');
             for (i = 0; i < keys.length; i++) {
-                $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
+                var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
+                if(selectedRunlist.indexOf('role[' + keys[i] + ']')!== -1) {
+                    $li.hide();
+                }
+                $deploymentRolesList.append($li);
             }
             if ($('.deploymentsCookbookList li').length <= 0)
                 $('.deploymentsCookbookList').append($('<span class="label text-align-center">[ None Found ]</span>'));
@@ -1377,6 +1388,36 @@ var $chefCookbookRoleSelector = function(catorgname, callback) {
     var $rowOrder1 = $("<div></div>").addClass('row');
     var $divOrder1 = $("<div></div>").addClass('col col-9');
     var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
+    for(var i=0;i<selectedRunlist.length;i++) {
+        var item  = selectedRunlist[i];
+        var indexOfBracketOpen = item.indexOf('[');
+        if(indexOfBracketOpen!=-1) {
+            var indexOfBracketClose = item.indexOf(']');
+            if(indexOfBracketClose != -1) {
+              var name = item.substring(indexOfBracketOpen+1,indexOfBracketClose);   
+            } 
+        }
+        if(item.indexOf('recipe') === 0) {
+          $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_cookbook_recipes.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
+                if ($(this).hasClass('deploymentCookbookSelected')) {
+                    $(this).removeClass('deploymentCookbookSelected');
+                } else {
+                    $(this).addClass('deploymentCookbookSelected');
+                }
+            }));
+        } else {
+          $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_roles.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
+                if ($(this).hasClass('deploymentCookbookSelected')) {
+                    $(this).removeClass('deploymentCookbookSelected');
+                } else {
+                    $(this).addClass('deploymentCookbookSelected');
+                }
+          }));
+        }
+            
+
+    }
+
     $divOrder1.append($ulOrder1);
     $rowOrder1.append($divOrder1);
 
@@ -1420,6 +1461,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback) {
     // $("#toAdd").click(function(e){
     //    $("#toaddbtn").append($form);
     // });
+     
     $chefItemdiv.find('.btnItemAdd').click(function(e) {
         var $deploymentSelectedList = $('.deploymentSelectedRunList');
         var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");

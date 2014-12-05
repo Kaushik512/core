@@ -37,7 +37,8 @@ var Chef = function(settings) {
                     callback(err, null);
                     return console.log(err);
                 }
-                if (chefRes.statusCode !== 200 || chefRes.statusCode !== 201 ) {
+                console.log("chef status",chefRes.statusCode);
+                if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201 ) {
                     callback(true, null);
                     return;
                 }
@@ -303,6 +304,7 @@ var Chef = function(settings) {
         argList.push(params.instanceIp);
 
         var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
+        var runlist = params.runlist
         var credentialArg;
         if (params.pemFilePath) {
             credentialArg = '-i' + params.pemFilePath;
@@ -318,10 +320,17 @@ var Chef = function(settings) {
         } else {
             argList.push('--sudo');
         }
+    
+        
+        console.log('runlist to length==>',runlist.length);
         console.log('runlist ==>',runlist);
-        console.log('runlist ==>',params.instanceUsername);
-        argList = argList.concat(['-r' + runlist.join(), '-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
+        if(runlist.length) {
+          console.log('runlist join ==>','-r "'+runlist.join()+'"', 'length==?' ,runlist.join().length);  
+          argList.push("-r"+runlist.join()+"");
+        }
 
+        argList = argList.concat(['-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
+        console.log('argList ==>',argList.join(" ")); 
         console.log('bootstrap arglist ==>', argList);
 
 
