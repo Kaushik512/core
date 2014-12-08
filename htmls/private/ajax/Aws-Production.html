@@ -1609,7 +1609,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
                    //To do additional selections
-                   alert('finished adding');
+                   //alert('finished adding');
                    var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
                    for (var key in tcb) {
                        //alert(tcb[key]);
@@ -1624,7 +1624,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                    }
                    $('.btnItemAdd').first().trigger('click');
-                   alert('finished clicking');
+                   //alert('finished clicking');
                });
                $cookbookShow.empty();
                $cookbookShow.append($ccrs);
