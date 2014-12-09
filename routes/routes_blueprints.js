@@ -85,11 +85,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 var blueprint = data[0];
                 var launchVersionNumber = blueprint.latestVersion;
                 if (req.query.version) {
+                    console.log('in version');
                     launchVersionNumber = req.query.version;
                 }
+                console.log("query v==>",req.query.version,launchVersionNumber);
                 var version;
                 for (var i = 0; i < blueprint.versionsList.length; i++) {
-                    if (blueprint.versionsList[i].ver === blueprint.latestVersion) {
+                    if (blueprint.versionsList[i].ver === launchVersionNumber) {
                         version = blueprint.versionsList[i];
                         break;
                     }
@@ -99,6 +101,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 }
                 console.log('chef serverid : ',blueprint.chefServerId);
+                console.log("version ==>",version);
                 configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);

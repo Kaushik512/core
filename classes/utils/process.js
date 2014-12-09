@@ -51,14 +51,14 @@ var Process = function(appPath, argList, options) {
 		processRunning = true;
 		if (typeof onStdOut === 'function') {
 			proc.stdout.on('data', function(data) {
-				console.log('stdout: ==> ' + data);
+				//console.log('stdout: ==> ' + data);
 				onStdOut(data);
 			});
 		}
 
 		if (typeof onStdErr === 'function') {
 			proc.stderr.on('data', function(errData) {
-				console.log('stderr: ==> ' + errData);
+				//console.log('stderr: ==> ' + errData);
 				onStdErr(errData);
 			});
 		}
