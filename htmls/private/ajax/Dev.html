@@ -2532,9 +2532,11 @@ function pollInstanceState(instanceId, state, delay) {
                     $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                     if (data.instanceState == 'stopped'){
                     $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+                    $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
                     }
                     if (data.instanceState == 'running'){
                       $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
+                      $('.instancestatusindicator.started').parent().find('.chefClientRunlistImage').show();
                     }
                 }
             }
@@ -3039,6 +3041,7 @@ function addInstanceToDOM(data) {
     pageSetUp();
     if (data.instanceState == 'stopped'){
       $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+      $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
 }
 
