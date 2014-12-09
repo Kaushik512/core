@@ -833,12 +833,21 @@ function addToCodeList(txtVal, inp) {
 }
 
 function addToTargetList(inputctrl, inputctrl1) {
+    if(inputctrl && inputctrl1)
+    {
+            if(inputctrl.val() == '' || inputctrl1.val() == '') //validating if both the controls have values
+            {
+                alert('Ensure you have a title and valid path before adding.');
+                inputctrl.focus();
+                return;
+            }
+    }
     if (inputctrl.attr('targetelement')) {
         var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
-        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this";
+        var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'return(removeFromCodeList(this";
         if (inputctrl.attr('relatedlist'))
             imgDed += ",\"" + inputctrl.attr('relatedlist') + "\"";
-        imgDed += ");\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+        imgDed += "));\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
         if (inputctrl.val() != '') {
             // alert('in' + inputctrl.attr('targetelement') + '#' + $(inputctrl).attr('targetelement'));
             if (inputctrl.attr('show').indexOf('imgDed') < 0)
@@ -855,7 +864,7 @@ function addToTargetList(inputctrl, inputctrl1) {
         if (inputctrl1.attr('targetelement')) {
 
             var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
-            var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
+            var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'return(removeFromCodeList(this));\' ><i class=\'ace-icon fa fa-trash-o bigger-110\'></i></button>";
             if (inputctrl1.val() != '') {
                 // alert('in');
                 // alert('in' + inputctrl.attr('targetelement') + '#' + $(inputctrl).attr('targetelement'));
@@ -881,6 +890,7 @@ function removeFromCodeList(btn, div2) {
         } else
             closestDiv.detach();
     }
+    return(false);
 }
 
 function validateForm() {
@@ -1502,6 +1512,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
         // $deploymentSelectedList.sortable({
         // cursor: "move"
         // });
+
+        //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return(false);
     });
     $chefItemdiv.find('.btnItemRemove').click(function(e) {
         var $deploymentSelectedList = $('.deploymentSelectedRunList');
@@ -1513,19 +1527,27 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
             $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show();
             $(this).remove();
         });
+         //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return(false);
     });
 
-    $chefItemdiv.find(".btnItemUp").on('click', function() {
+    $chefItemdiv.find(".btnItemUp").on('click', function(e) {
         var $selectedRunlist = $('.deploymentCookbookSelected');
 
         $selectedRunlist.insertBefore($selectedRunlist.first().prev());
+         //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return(false);
     });
 
-    $chefItemdiv.find(".btnItemDown").on('click', function() {
+    $chefItemdiv.find(".btnItemDown").on('click', function(e) {
         var $selectedRunlistDown = $('.deploymentCookbookSelected');
 
         $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
-
+         //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return(false);
     });
 
     // $chefItemdiv.find(".chooseCheforgType").on('click', function () {
