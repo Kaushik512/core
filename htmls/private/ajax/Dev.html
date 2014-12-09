@@ -63,7 +63,7 @@
                                 <div class="panel-body" style="padding:0px !important;">
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
-                                            <div class="widget-main" style="min-height:300px"> 
+                                            <div class="widget-main " style="min-height:300px"> 
                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
                                                     <div class="table-responsive table-div tableinstanceviewouter" >
 
@@ -142,7 +142,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
                 <div class="clearfix form-actions" style="text-align:center;">
                     <div class="btn-group">
                         
@@ -157,7 +157,7 @@
                             Chef config Panel
                         </button>-->
                     </div>
-                    <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" > <i class="fa fa-trash-o"></i></button>
+                    <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" style="margin-right:220px;" > <i class="fa fa-trash-o"></i></button>
                     &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px"> <i class="fa fa-plug"></i></a>
 
                 </div>
@@ -236,19 +236,19 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
                                         <!--<button class="btn pull-left btn-primary editBtn" style="margin-left:5px">
                                             <i class="ace-icon fa fa-pencil  bigger-110"></i>
                                             Edit
                                         </button>-->                                       
-                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
+                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px;">
                                             <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
                                             Launch
                                         </button>
                                     </div>
-                                     <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
+                                     <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()" style="margin-right:220px;" > <i class="fa fa-trash-o"></i></button>
                                 </div>
                             </div>
                         </div><!--Launch div ends here-->
@@ -2531,8 +2531,9 @@ function pollInstanceState(instanceId, state, delay) {
                     $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
                     $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                     if (data.instanceState == 'stopped'){
-                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
-                    }
+                        $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+                    }      
+
                     if (data.instanceState == 'running'){
                       $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
                     }
@@ -3036,6 +3037,9 @@ function addInstanceToDOM(data) {
     pageSetUp();
     if (data.instanceState == 'stopped'){
       $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+    }
+    if (data.instanceState == 'stopped'){
+      $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
 }
 
