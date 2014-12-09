@@ -125,7 +125,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         settingsController.getSettings(function(settings) {
 
                             var ec2 = new EC2(settings.aws);
-                            ec2.launchInstance(null, blueprint.instanceType, settings.aws.securityGroupId, function(err, instanceData) {
+                            ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, function(err, instanceData) {
                                 if (err) {
                                     console.log(err);
                                     res.send(500);
@@ -156,7 +156,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         os: blueprint.instanceOS
                                     },
                                     credentials: {
-                                        username: settings.aws.instanceUserName,
+                                        username: blueprint.instanceUsername,
                                         pemFileLocation: settings.aws.pemFileLocation + settings.aws.pemFile,
                                     },
                                     chef: {
