@@ -1313,6 +1313,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
 
         var cookbooks = data.cookbooks;
         var keys = Object.keys(cookbooks);
+        //alert(keys);
+        keys.sort(function(a,b){
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
 
         var $deploymentCookbookList = $('.deploymentsCookbookList');
         for (i = 0; i < keys.length; i++) {
@@ -1337,6 +1341,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
             console.log("Runlist Query:" + data);
             var roles = data.roles;
             var keys = Object.keys(roles);
+            keys.sort(function(a,b){
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+            });
             //alert("ServerID:" + data.serverId);
             $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
 
