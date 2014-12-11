@@ -1618,26 +1618,11 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                var $cookbookShow = $('.cookbookShow').empty();
                $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-
+                var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
+               console.log('tcb==>',tcb); 
                var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
-                   //To do additional selections
-                   //alert('finished adding');
-                   var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
-                   for (var key in tcb) {
-                       //alert(tcb[key]);
-                       //   var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
-
-                       // $cookbooksList.append($optiontcb);
-                       //  checkarray.push(tcb[key]);
-                       if (tcb[key].indexOf('recipe') >= 0)
-                           $('.deploymentsCookbookList li input[value="' + tcb[key] + '"]').first().trigger('click');
-                       else
-                           $('.deploymentRoleList li input[value="' + tcb[key] + '"]').first().trigger('click');
-
-                   }
-                   $('.btnItemAdd').first().trigger('click');
-                   //alert('finished clicking');
-               });
+                   
+               },tcb);
                $cookbookShow.empty();
                $cookbookShow.append($ccrs);
 
