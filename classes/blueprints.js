@@ -18,6 +18,8 @@ var BlueprintSchema = new Schema({
     templateComponents: [String],
     instanceType: String,
     instanceOS: String,
+    instanceAmiid: String,
+    instanceUsername: String,
     importInstance: Boolean,
     chefServerId: String,
     users: [String],
@@ -124,16 +126,18 @@ var BlueprintsDao = function() {
             iconpath: blueprintData.iconpath,
             templateId: blueprintData.templateId,
             templateType: blueprintData.templateType,
-            
+
             dockercontainerpathstitle: blueprintData.dockercontainerpathstitle,
             dockercontainerpaths: blueprintData.dockercontainerpaths,
             dockerrepotags: blueprintData.dockerrepotags,
             dockerreponame: blueprintData.dockerreponame,
-            
+
             templateComponents: blueprintData.templateComponents,
             chefServerId: blueprintData.chefServerId,
             instanceType: blueprintData.instanceType,
             instanceOS: blueprintData.instanceOS,
+            instanceAmiid: blueprintData.instanceAmiid,
+            instanceUsername: blueprintData.instanceUsername,
             importInstance: blueprintData.importInstance,
             users: blueprintData.users,
             versionsList: [{
@@ -197,14 +201,16 @@ var BlueprintsDao = function() {
         });
     };
 
-    this.removeBlueprintbyId= function(blueprintId,callback){
-        Blueprint.remove({"_id":ObjectId(blueprintId)},function(err,data){
-            if(err){
+    this.removeBlueprintbyId = function(blueprintId, callback) {
+        Blueprint.remove({
+            "_id": ObjectId(blueprintId)
+        }, function(err, data) {
+            if (err) {
                 console.log(err);
-                callback(err,null);
+                callback(err, null);
                 return;
             }
-            callback(null,data);
+            callback(null, data);
         });
     }
 

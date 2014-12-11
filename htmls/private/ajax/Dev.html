@@ -706,6 +706,38 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    ×
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;cAdvisor
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section><iframe src="http://www.google.com" id="cAdvisorPageFrame"></iframe>
+                            
+                        </section>   
+                    </fieldset>
+                    <div>
+                    
+                    </div>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Close
+                        </button>
+                    </footer>
+                </form>                           
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedNode-->
+
 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -2532,11 +2564,12 @@ function pollInstanceState(instanceId, state, delay) {
                     $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
                     $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                     if (data.instanceState == 'stopped'){
-                        $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
-                    }      
-
+                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+                    $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
+                    }
                     if (data.instanceState == 'running'){
                       $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
+                      $('.instancestatusindicator.started').parent().find('.chefClientRunlistImage').show();
                     }
                 }
             }
@@ -3041,6 +3074,7 @@ function addInstanceToDOM(data) {
     pageSetUp();
     if (data.instanceState == 'stopped'){
       $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+      $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
@@ -3119,15 +3153,30 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     // <td  class="dockercontainerhostip"></td>
     // <td  class="dockercontainerid"></td>
     // <td  class="dockercontainerimagename"></td>
-     //alert(instanceid);
+     //alert(instanceid); $modalDesktopProvisioning.modal('show');
+    var $cadvisor = $('<a class="linkcadvisor hidden pull-right" target="_blank" title="Open cAdvisor"></a>');
+
+
     var $docctr = $('#dockercontainertabletemplatetr').clone().removeClass('hidden');
-    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status);
+    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status).append($cadvisor);
     var docdate = new Date(1000*dockerContainerItem.Created);
     $docctr.find('.dockercontainerstartedon').html(docdate.toLocaleString());
     $docctr.find('.dockercontainername').html(dockerContainerItem.Names[0]);
     //Get the host IP from the card
 
     var instanceip = $('.domain-roles-caption[data-instanceid="' + instanceid + '"]').first().find('.instanceip').text();
+
+    //Building the cadvisor href
+    $cadvisor.append('<i class="fa fa-line-chart fa-lg " style="margin-top:9px"></i>').attr('href','http://' + instanceip + ':8080');
+
+    //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
+    /*$cadvisor.click(function(e){
+        $('#cadvisorpopup').modal('show');
+        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080');
+        e.preventDefault();
+        return(false);
+    });*/
+
     $docctr.attr('instanceid',instanceid);
     $docctr.attr('containerid',dockerContainerItem.Id.substring(0,12));
     $docctr.find('.dockercontainerhostip').html(instanceip);
@@ -3150,6 +3199,10 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     if(dockerContainerItem.Status.indexOf('Up') >= 0)
     {
         //Show Stop
+        //If the container is of type cadvisor show the link
+        if(dockerContainerItem.Image.indexOf('cadvisor') >= 0)
+            $cadvisor.removeClass('hidden');
+
         $docctr.find('.stop').removeClass('hidden');
         $docctr.find('.start').addClass('hidden');
     }

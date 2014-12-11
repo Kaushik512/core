@@ -55,18 +55,19 @@ var EC2 = function(awsSettings) {
 
         var that = this; //"m1.small"
         ec.runInstances({
-            "ImageId": "ami-b3bf2f83",//"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
+            "ImageId": image_id,//"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
             "InstanceType": intanceType, //"m1.medium",
             "MinCount": 1,
             "MaxCount": 1,
             "KeyName": awsSettings.keyPairName,
             SecurityGroupIds: [securityGroupId], // [awsSettings.securityGroupId],
-            BlockDeviceMappings: [{
+            /*BlockDeviceMappings: [{
                 DeviceName: "/dev/sda",
                 Ebs: {
-                    DeleteOnTermination: true
+                    DeleteOnTermination: true,
+                    "VolumeSize": 10
                 }
-            }]
+            }]*/
         }, function(err, data) {
             if (err) {
                 console.log("error occured while launching instance");
