@@ -92,7 +92,7 @@
                                                         </table>
                                                         
                                                     </div>
-                                                    <table id="tableinstanceviewtemplate" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                    <table id="tableinstanceviewtemplate" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important;text-align:center";>
                                                                 <thead>
                                                                     <tr class="rowCustomStyle" style="font-weight:bold;">
                                                                         <td>S.No.</td>
@@ -142,7 +142,7 @@
             </div>
         </div>
         
-       <!-- <div class="row">-->
+        <div class="row">
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
                 <div class="clearfix form-actions" style="text-align:center;">
                     <div class="btn-group">
@@ -163,7 +163,7 @@
 
                 </div>
             </div>
-       <!-- </div>--><!--Launch div ends here-->
+        </div><!--Launch div ends here-->
 
     </div> <!--tab-pane l1 gets over-->
 
@@ -236,7 +236,7 @@
 
 
                         </div>
-                     <!--   <div class="row"> -->
+                        <div class="row"> 
                             <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
@@ -252,7 +252,7 @@
                                      <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()"> <i class="fa fa-trash-o"></i></button>
                                 </div>
                             </div>
-                       <!-- </div>--><!--Launch div ends here-->
+                        </div><!--Launch div ends here-->
                     </div> <!--tab-pane l2 gets over -->
 
                     <!-- <div class="tab-pane" id="l3">
@@ -372,7 +372,7 @@
                                                       <thead>
                                                           <tr class="rowCustomStyle">    
                                                               <td>Name</td>
-                                                              <td>Assigned Node</td>
+                                                              <td>Assigned Nodes</td>
                                                               <td>Assigned Runlists</td>
                                                               <td>Execute</td>
                                                               <td>Last Run</td>
@@ -2129,7 +2129,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'"><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'" style="margin-left:22px";><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
         $tdOptions.find('.btnDeleteTask').click(function(e){
             var taskId = $(this).attr('data-taskId');
           var that = this;
