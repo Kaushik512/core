@@ -23,8 +23,8 @@ module.exports = {
     cryptoSettings: {
         algorithm: "aes192",
         password: "pass@!@#",
-        inputEncoding: "ascii",
-        outputEncoding: "base64",
+        encryptionEncoding: "ascii",
+        decryptionEncoding: "base64",
 
     },
     aws: {

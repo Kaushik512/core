@@ -1307,7 +1307,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
     var $hr1 = $("<hr>");
     $ul1.append($label2);
-
+    console.log(" selected runinlhkb,jhvbjhvj ",selectedRunlist);
     $.get('../organizations/' + catorgname + '/cookbooks', function(data) {
         console.log("Cookbooks Query:" + data);
 
@@ -1405,31 +1405,36 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     var $rowOrder1 = $("<div></div>").addClass('row');
     var $divOrder1 = $("<div></div>").addClass('col col-9');
     var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
+    //alert('here ==>');
+    //alert(selectedRunlist); 
     for(var i=0;i<selectedRunlist.length;i++) {
+        var name ='';
         var item  = selectedRunlist[i];
         var indexOfBracketOpen = item.indexOf('[');
         if(indexOfBracketOpen!=-1) {
             var indexOfBracketClose = item.indexOf(']');
             if(indexOfBracketClose != -1) {
-              var name = item.substring(indexOfBracketOpen+1,indexOfBracketClose);   
+              name = item.substring(indexOfBracketOpen+1,indexOfBracketClose);   
             } 
         }
-        if(item.indexOf('recipe') === 0) {
-          $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_cookbook_recipes.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
-                if ($(this).hasClass('deploymentCookbookSelected')) {
-                    $(this).removeClass('deploymentCookbookSelected');
-                } else {
-                    $(this).addClass('deploymentCookbookSelected');
-                }
-            }));
-        } else {
-          $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_roles.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
-                if ($(this).hasClass('deploymentCookbookSelected')) {
-                    $(this).removeClass('deploymentCookbookSelected');
-                } else {
-                    $(this).addClass('deploymentCookbookSelected');
-                }
-          }));
+        if (name) {
+            if (item.indexOf('recipe') === 0) {
+                $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_cookbook_recipes.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
+                    if ($(this).hasClass('deploymentCookbookSelected')) {
+                        $(this).removeClass('deploymentCookbookSelected');
+                    } else {
+                        $(this).addClass('deploymentCookbookSelected');
+                    }
+                }));
+            } else {
+                $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_roles.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
+                    if ($(this).hasClass('deploymentCookbookSelected')) {
+                        $(this).removeClass('deploymentCookbookSelected');
+                    } else {
+                        $(this).addClass('deploymentCookbookSelected');
+                    }
+                }));
+            }
         }
             
 

@@ -9,7 +9,7 @@ var fileIo = require('../classes/utils/fileio');
 var appConfig = require('../config/app_config');
 var uuid = require('node-uuid');
 var taskStatusModule = require('../classes/taskstatus');
-var Cryptography = require('../classes/utils/cryptography');
+var credentialCryptography = require('../classes/credentialcryptography');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -149,95 +149,95 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hardwareData.os = "windows";
             }
 
-            function encryptCredential(credentials, callback) {
-                var encryptedCredentials = {};
-                var cryptoConfig = appConfig.cryptoSettings;
-                var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                if (credentials) {
-                    encryptedCredentials.username = credentials.username;
-                    if (credentials.password) {
-                        encryptedCredentials.password = cryptography.encryptText(credentials.password, cryptoConfig.inputEncoding, cryptoConfig.outputEncoding);
-                        callback(null, encryptedCredentials);
-                    } else {
-                        var encryptedPemFileLocation = appConfig.instancePemFilesDir + uuid.v4();
-                        cryptography.encryptFile(credentials.pemFileLocation, cryptoConfig.inputEncoding, encryptedPemFileLocation, cryptoConfig.outputEncoding, function(err) {
-                            fileIo.removeFile(credentials.pemFileLocation, function(err) {
-                                if (err) {
-                                    console.log("Unable to delete temp pem file =>", err);
-                                } else {
-                                    console.log("temp pem file deleted =>");
-                                }
-                            });
+            function getCredentialsFromReq(callback) {
+                var credentials = {};
 
+                if (reqBody.credentials && reqBody.credentials.pemFileData) {
+                    credentials = reqBody.credentials;
+                    credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
+                    fileIo.writeFile(credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
+                        if (err) {
+                            console.log('unable to create pem file ', err);
+                            callback(err, null);
+                            return;
+                        }
+                        callback(null, credentials);
+                    });
+
+                } else {
+
+                    if (!reqBody.credentials) {
+                        var tempPemFileLocation = appConfig.tempDir + uuid.v4();
+                        fileIo.copyFile(appConfig.aws.pemFileLocation + appConfig.aws.pemFile, tempPemFileLocation, function() {
                             if (err) {
+                                console.log('unable to copy pem file ', err);
                                 callback(err, null);
                                 return;
                             }
-                            encryptedCredentials.pemFileLocation = encryptedPemFileLocation;
-                            callback(null, encryptedCredentials);
+                            credentials = {
+                                username: appConfig.aws.instanceUserName,
+                                pemFileLocation: tempPemFileLocation
+                            }
+                            callback(null, credentials);
                         });
+                    } else {
+                        callback(null, reqBody.credentials);
                     }
-
                 }
-
             }
-            // var instanceCredentials = {};
 
-            // instanceCredentials.username = reqBody.credentials.username;
-            // console.log("credentials ==>", reqBody.credentials);
-            // if (reqBody.credentials.password) {
-            //     instanceCredentials.password = reqBody.credentials.password;
-            // } else {
-            //     instanceCredentials.pemFileLocation = reqBody.credentials.pemFileLocation;
-            // }
-
-
-            encryptCredential(reqBody.credentials, function(err, encryptedCredentials) {
+            getCredentialsFromReq(function(err, credentials) {
                 if (err) {
-                    console.log("unable to encrypt credentials == >", err);
+                    console.log("unable to get credetials from request ", err);
                     return;
                 }
-
-                console.log('nodeip ==> ', nodeIp);
-
-                var instance = {
-                    orgId: orgId,
-                    projectId: projectId,
-                    envId: node.chef_environment,
-                    chefNodeName: node.name,
-                    runlist: runlist,
-                    platformId: platformId,
-                    instanceIP: nodeIp,
-                    instanceState: 'unknown',
-                    bootStrapStatus: 'success',
-                    hardware: hardwareData,
-                    credentials: encryptedCredentials,
-                    users: users,
-                    chef: {
-                        serverId: req.params.serverId,
-                        chefNodeName: node.name
-                    },
-                    blueprintData: {
-                        blueprintName: node.name,
-                        templateId: "chef_import",
-                        iconPath: "../private/img/templateicons/chef_import.png"
-                    }
-                }
-
-                instancesDao.createInstance(instance, function(err, data) {
+                credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                     if (err) {
-                        console.log(err, 'occured in inserting node in mongo');
+                        console.log("unable to encrypt credentials == >", err);
                         return;
                     }
-                    logsDao.insertLog({
-                        referenceId: data._id,
-                        err: false,
-                        log: "Node Imported",
-                        timestamp: new Date().getTime()
+
+                    console.log('nodeip ==> ', nodeIp);
+
+                    var instance = {
+                        orgId: orgId,
+                        projectId: projectId,
+                        envId: node.chef_environment,
+                        chefNodeName: node.name,
+                        runlist: runlist,
+                        platformId: platformId,
+                        instanceIP: nodeIp,
+                        instanceState: 'unknown',
+                        bootStrapStatus: 'success',
+                        hardware: hardwareData,
+                        credentials: encryptedCredentials,
+                        users: users,
+                        chef: {
+                            serverId: req.params.serverId,
+                            chefNodeName: node.name
+                        },
+                        blueprintData: {
+                            blueprintName: node.name,
+                            templateId: "chef_import",
+                            iconPath: "../private/img/templateicons/chef_import.png"
+                        }
+                    }
+
+                    instancesDao.createInstance(instance, function(err, data) {
+                        if (err) {
+                            console.log(err, 'occured in inserting node in mongo');
+                            return;
+                        }
+                        logsDao.insertLog({
+                            referenceId: data._id,
+                            err: false,
+                            log: "Node Imported",
+                            timestamp: new Date().getTime()
+                        });
+
                     });
 
                 });
-
             });
 
         }
@@ -323,41 +323,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hostedChefUrl: chefDetails.url,
             });
             if (reqBody.selectedNodes.length) {
+                importNodes(reqBody.selectedNodes);
 
-                if (reqBody.credentials && reqBody.credentials.pemFileData) {
-                    reqBody.credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
-                    fileIo.writeFile(reqBody.credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
-                        if (err) {
-                            console.log('unable to create pem file ', err);
-                            res.send(500);
-                            return;
-                        }
-                        importNodes(reqBody.selectedNodes);
-                    });
-
-                } else {
-
-                    if (!reqBody.credentials) {
-                        var tempPemFileLocation = appConfig.tempDir + uuid.v4();
-                        fileIo.copyFile(appConfig.aws.pemFileLocation + appConfig.aws.pemFile, tempPemFileLocation, function() {
-                            if (err) {
-                                console.log('unable to copy pem file ', err);
-                                res.send(500);
-                                return;
-                            }
-                            reqBody.credentials = {
-                                username: appConfig.aws.instanceUserName,
-                                pemFileLocation: tempPemFileLocation
-                            }
-                            importNodes(reqBody.selectedNodes);
-                        });
-                    } else {
-                        importNodes(reqBody.selectedNodes);
-                    }
-
-
-
-                }
             } else {
                 res.send(400);
             }
