@@ -101,7 +101,7 @@
         </div>
       </section>
       
-      <section class="col col-12">
+      <section class="col col-12" style="display:none">
         <div class="form-group">
           <label for="exampleInputEmail1">Provider</label>
           <div class="">
@@ -111,7 +111,7 @@
         </div>
         </div>
       </section>
-      <section class="col col-12 credentialSection" style="display:none">
+      <section class="col col-12 credentialSection">
         <div class="form-group">
           <label for="exampleInputEmail1">Username</label>
           <div class="">
@@ -119,7 +119,7 @@
         </div>
         </div>
       </section>
-      <section class="col col-12 credentialSection" style="display:none">
+      <section class="col col-12 credentialSection" >
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
           <div class="">
@@ -127,7 +127,7 @@
         </div>
         </div>
       </section>
-      <section class="col col-12 credentialSection" style="display:none">
+      <section class="col col-12 credentialSection" >
         <div class="form-group">
           <label for="exampleInputEmail1">Pem File</label>
           <div class="">
@@ -404,15 +404,26 @@ $('.showChefImportNodesModalBtn').click(function(e){
      reqBody.selectedNodes.push($(this).attr('data-nodeName'));
    });
  
-   if($('.credentialSection').is(':visible')){
+   //if($('.credentialSection').is(':visible')){
      reqBody.credentials = {};
      reqBody.credentials.username = $('#importUsernameInput').val();
      if(!$pemFileCheckBox.is(':checked')) {
        reqBody.credentials.password = $('#importPasswordInput').val();
+       if(!reqBody.credentials.username){
+         alert('please enter username');
+         return;
+       } if(!reqBody.credentials.password) {
+         alert('please enter password');
+         return;
+       }
        console.log(reqBody);
        makeRequest();
      } else {
        var pemFileInput = $('#importPemfileInput').get(0);
+       if(!reqBody.credentials.username){
+          alert('please enter username');
+          return;
+       }
        if(!pemFileInput.files.length) {
          alert('Please choose a pem file');
          return;
@@ -423,6 +434,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
        reader.onload = function(e) {
            // Render thumbnail.
             reqBody.credentials.pemFileData = e.target.result;
+           
             makeRequest();
            
        };
@@ -430,9 +442,9 @@ $('.showChefImportNodesModalBtn').click(function(e){
        reader.readAsText(pemFileInput.files[0]);
  
      }       
-   } else {
+   /*} else {
      makeRequest();
-   }
+   }*/
 
       function makeRequest() {
    $.post('../chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){

@@ -5699,6 +5699,7 @@ div.dataTables_filter input, div.dataTables_length select {
 }
 div.dataTables_paginate {
     margin: 4px 0 0;
+    cursor: pointer;
 }
 div.dataTables_paginate .pagination {
     margin: 0;
@@ -22558,6 +22559,7 @@ div.dataTables_filter input, div.dataTables_length select {
 }
 div.dataTables_paginate {
     margin: 4px 0 0;
+    cursor:pointer;
 }
 div.dataTables_paginate .pagination {
     margin: 0;

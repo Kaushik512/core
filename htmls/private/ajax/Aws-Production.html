@@ -861,7 +861,8 @@
                                                                             <label class="select">
 
                                                                                <select id="instanceOS" class="chooseOS width-100">
-                                                                                    <option value="linux">Cent OS</option>
+                                                                                    <option data-amiid="ami-b6bdde86" data-amiid-username="root" data-instanceOS="linux" value="CentOS">Cent OS</option>
+                                                                                     <option data-amiid="ami-37501207" data-amiid-username="ubuntu" data-instanceOS="linux" value="ubuntu">ubuntu</option>
                                                                                     
                                                                               </select>
 
@@ -1231,6 +1232,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                            dockercontainerpathstitle = '';
                            dockercontainerpaths = '';
                            dockerreponame = '';
+                           console.log('here START');
                            for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
                                if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
                                    getImage = data.masterjson.rows.row[z].field[x].values.value;
@@ -1267,6 +1269,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                }
 
                            }
+                           console.log('here end');
 
 
                            if (selectedrow) {
@@ -1381,6 +1384,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                    var dockerrepotags = [];
                                    tagJson.forEach(function(k, v) {
                                        //<p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>CentOS</p>
+                                       console.log('here again start');
                                        if (v < 3) {
                                            $('#dockerrepotagsdiv').append('<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' + tagJson[v].name + '</p></div>');
                                            if (dockerrepotags == '')
@@ -1388,8 +1392,13 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                            else
                                                dockerrepotags += ',' + tagJson[v].name;
                                        }
+                                       
+                                       
+                                       
+                                       console.log('here again ends');
                                        //limiting the number to the top 5
                                    });
+
                                    $('.productdiv2.role-Selected').first().attr('dockerrepotags', dockerrepotags);
                                    $('.productdiv2.role-Selected').first().attr('dockerreponame', $dockerrepoListInput.val());
                                }
@@ -1419,6 +1428,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
            } else if (index == 3) {
+               console.log('in 3');
 
                var $selectedTemplateArea = $('.selectedTemplateArea');
                var $selectedItem = $selectedTemplateArea.find('.productdiv2');
@@ -1453,7 +1463,10 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
                reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
                reqBody.instanceType = $('select.instanceType').val();
-               reqBody.instanceOS = $('#instanceOS').val();
+               var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
+               reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
+               reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
+               reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
                console.log(reqBody);
 
 
@@ -1473,7 +1486,15 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
                console.log("instanceType ==>", $('select.instanceType').val());
                reqBody.instanceType = $('select.instanceType').val();
-               reqBody.instanceOS = $('#instanceOS').val();
+               console.log( reqBody.instanceType);
+               var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
+               console.log($('#instanceOS').val());
+               console.log($instanceOsoptionsSelected);
+               reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
+               reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
+               reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
+              
+               
                reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
                reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
                reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
@@ -1606,26 +1627,11 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                var $cookbookShow = $('.cookbookShow').empty();
                $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-
+                var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
+               console.log('tcb==>',tcb); 
                var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
-                   //To do additional selections
-                   //alert('finished adding');
-                   var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
-                   for (var key in tcb) {
-                       //alert(tcb[key]);
-                       //   var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
-
-                       // $cookbooksList.append($optiontcb);
-                       //  checkarray.push(tcb[key]);
-                       if (tcb[key].indexOf('recipe') >= 0)
-                           $('.deploymentsCookbookList li input[value="' + tcb[key] + '"]').first().trigger('click');
-                       else
-                           $('.deploymentRoleList li input[value="' + tcb[key] + '"]').first().trigger('click');
-
-                   }
-                   $('.btnItemAdd').first().trigger('click');
-                   //alert('finished clicking');
-               });
+                   
+               },tcb);
                $cookbookShow.empty();
                $cookbookShow.append($ccrs);
 
