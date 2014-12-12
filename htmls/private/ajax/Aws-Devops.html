@@ -824,181 +824,201 @@
 </div>
 
 
-                                                                    <!--<div class="row glowBox" style="margin:0px">
-                                                                        <div class="temp col-sm-3"></div>
-                                                                    </div>-->
-
-
 
                                                                 </div>
-                                                                <div class="tab-pane" id="tab3" style="padding-bottom:20px;overflow-y: auto;">
-                                                                    <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
-                                                                    </div>
+                                                            <div class="tab-pane" id="tab3" style="padding-bottom:20px;">
 
-                                                                    <hr>
-                                                                    <br>
+        <div class="row">
+          <div class="col-sm-2 col-xs-6">
+             <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
+             </div>
+          </div>
+          <div class="col-sm-10 col-xs-12">
+            <div class="panel-group smart-accordion-default" id="accordion-Design">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigureproviderParameter"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Provider Parameters</a>
+                      </h4>
+                  </div>
+                  <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                       <div class="widget-body no-padding">
+                            <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
 
-                                                                    <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                                <div class="row " style="margin:0px;">
+                                    
+                                   <section class="col col-6">
+                                    <label for="">Choose Operating System <span style="color:red">*</span>
+                                    </label>
+                                    <label class="select">
 
-                                                                        <div class="row " style="margin:0px;">
-                                                                            <section class="col col-6" style="float:right;">
-                                                                                <label for="">Choose Organization <span style="color:red">*</span>
-                                                                                </label>
-                                                                                <label class="select"> 
-                                                                                   <select id="orgnameSelect" class="chooseOrgselect2 width-100">
-                                                                                   </select>
-                                                                               </label> 
-                                                                               <div class="cookbookShow">
+                                       <select id="instanceOS" class="chooseOS width-100">
+                                            <option value="linux">Cent OS</option>
+                                            
+                                      </select>
 
-                                                                               </div>
-                                                                           </section>
+                                    </label>                                          
+                                </section>
+                                <section class="col col-6">
+                                    <label for="category">Choose Security Group <span style="color:red">*</span>
+                                    </label>
+                                    <label class="select"> 
+                                        <select class="chooseSecurity width-100">
+                                            <option value="0">default-d4d</option>
+                                            <!--<option value="1">default-d4d</option>-->
+                                            <option value="2">Vpc-1</option>
+                                            <option value="3">Vpc-2</option>
+                                            <option value="4">Default VPC</option>
 
+                                        </select>
+                                    </label>
+                                
+                            </section>
+                            <section class="col col-6">
+                                <label for="category">Choose Instance Size <span style="color:red">*</span>
+                                </label>
+                                <label class="select"> 
+                                    <select class="instanceType chooseInstance width-100">
+                                        <option value="t1.micro">t1.micro</option>
+                                        
+                                        <option value="m1.small">m1.small</option>
+                                        <option value="m1.medium">m1.medium</option>
+                                        <option value="m1.large">m1.large</option>
+                                        <option value="m1.xlarge">m1.xlarge</option>
+                                    </select>
+                                </label> 
 
+                            </section>
+                            <!--To add the Swipe Functionality-->                            
+                            </div>
+                            </div>
+                        </div> 
+                    </div>
+                  </div>
+              </div>
 
-                                                                           <section class="col col-6">
-                                                                            <label for="">Choose Operating System <span style="color:red">*</span>
-                                                                            </label>
-                                                                            <label class="select">
+              <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigurechefRunlist" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Chef Runlist</a>
+                          </h4>
+                      </div>
+                      <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
+                          <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                                <div class="row " style="margin:0px;">
+                                    <section class="col col-6">
+                                        <label for="">Choose Organization <span style="color:red">*</span>
+                                        </label>
+                                        <label class="select"> 
+                                           <select id="orgnameSelect" class="chooseOrgselect2 width-100">
+                                           </select>
+                                       </label> 
+                                    </section>
+                                    <section class="col col-12">
+                                       <div class="cookbookShow">
 
-                                                                               <select id="instanceOS" class="chooseOS width-100">
-                                                                                    <option value="linux">Cent OS</option>
-                                                                                    
-                                                                              </select>
-
-                                                                            </label>                                          
-                                                                        </section>
-                                                                        <section class="col col-6">
-                                                                            <label for="category">Choose Security Group <span style="color:red">*</span>
-                                                                            </label>
-                                                                            <label class="select"> 
-                                                                                <select class="chooseSecurity width-100">
-                                                                                    <option value="0">default-d4d</option>
-                                                                                    <!--<option value="1">default-d4d</option>-->
-                                                                                    <option value="2">Vpc-1</option>
-                                                                                    <option value="3">Vpc-2</option>
-                                                                                    <option value="4">Default VPC</option>
-
-                                                                                </select>
-                                                                            </label>
-                                                                        
-                                                                    </section>
-                                                                    <section class="col col-6">
-                                                                        <label for="category">Choose Instance Size <span style="color:red">*</span>
-                                                                        </label>
-                                                                        <label class="select"> 
-                                                                            <select class="instanceType chooseInstance width-100">
-                                                                                <option value="t1.micro">t1.micro</option>
-                                                                                
-                                                                                <option value="m1.small">m1.small</option>
-                                                                                <option value="m1.medium">m1.medium</option>
-                                                                                <option value="m1.large">m1.large</option>
-                                                                                <option value="m1.xlarge">m1.xlarge</option>
-                                                                            </select>
-                                                                        </label> 
-
-                                                                    </section>
-                                                                    <!--To add the Swipe Functionality-->                            
-                                                                </div>
-                                                            </div>
-
-
-                                                        </div>
-
-                                                        <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
-
-
-                                                            <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
-
-                                                                <div class="row " style="margin:0px;">
-
-                                                                    <section class="col col-sm-6">
-                                                                        <label for="category">Blueprint Name <span style="color:red">*</span>
-                                                                        </label>
-                                                                        <label class="input">
-                                                                            <!-- <i class="icon-append fa fa-building"></i>  -->
-                                                                            <input type="text" id="blueprintNameInput"/>
-                                                                        </label>                                          
-                                                                    </section>
-
-                                                                    <section class="col col-sm-6">
-                                                                        <label for="category">Business Group <span style="color:red">*</span>
-                                                                        </label>
-                                                                        <label class="select"> 
-                                                                            <select id="bgListInput" class="chooseBG width-100">
-
-                                                                            </select>
-                                                                        </label>   
-                                                                    </section>
-                                                                </div>
-                                                            <div class="row " style="margin:0px;">
-                                                               <section class="col col-sm-6">
-                                                                <label class="label">Assign Users  <span style="color:red">*</span></label>
-                                                                <label class="select select-multiple">
-                                                                    <div class="userListLoadingContainer">
-                                                                        
-                                                                    </div>
-                                                                        <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
-
-                                                                        </select> 
-                                                                </label>
-                                                                </section> 
-
-                                                          
-                                                              <section class="col col-sm-6">
-                                                                        <label for="category">Project <span style="color:red">*</span>
-                                                                        </label>
-                                                                        <label class="select"> 
-                                                                          <select id="projectListInput" class="chooseProject width-100">
-
-                                                                          </select>
-                                                                      </label>   
-                                                                  </label>
-                                                              </section>
-                                                              <section class="col col-sm-6 offset6" style="">
-                                                                <label for="category">Environment <span style="color:red">*</span>
-                                                                </label>
-                                                                <label class="select"> 
-                                                                    <select  id="envList" class="chooseEnv width-100">
-
-                                                                    </select>
-                                                                </label>
-                                                                </label>
-                                                              </section>
-                                                            </div>
+                                       </div>
+                                   </section>
                                    
-                                                           <section class="col col-6 fordocker">
-                                                                        <label for="category">Select Docker Container <span style="color:red">*</span>
-                                                                        </label>
-                                                                        <label class="select"> 
-                                                                            <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
+                                </div>
+                            </div>
+                      </div>
+              </div>
 
-                                                                            </select>
-                                                                        </label>   
-                                                            </section>
-                                                            <section class="col col-6 fordocker">
-                                                                <label for="category">Available Repo Tags <span style="color:red">*</span>
-                                                                </label>                 
-                                                                <div id="dockerrepotagsdiv">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditorgParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Edit Organization Parameters</a>
+                      </h4>
+                  </div>
+                  <div id="CollapseEditorgParam" class="panel-collapse collapse">
+                      <div class="panel-body">
+                            <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
 
-                                                                </div>       
-                                                            </section>
-                                                       </div>
-                                            </div>                   
+                                <div class="row " style="margin:0px;">
 
+                                    <section class="col col-sm-6">
+                                        <label for="category">Blueprint Name <span style="color:red">*</span>
+                                        </label>
+                                        <label class="input">
+                                            <!-- <i class="icon-append fa fa-building"></i>  -->
+                                            <input type="text" id="blueprintNameInput"/>
+                                        </label>                                          
+                                    </section>
 
+                                    <section class="col col-sm-6">
+                                        <label for="category">Business Group <span style="color:red">*</span>
+                                        </label>
+                                        <label class="select"> 
+                                            <select id="bgListInput" class="chooseBG width-100">
 
-                                        <div class="tab-pane" id="tab5" style="padding-bottom:20px;overflow-y: auto;">
+                                            </select>
+                                        </label>   
+                                    </section>
+                                </div>
+                            <div class="row " style="margin:0px;">
+                               <section class="col col-sm-6">
+                                <label class="label">Assign Users  <span style="color:red">*</span></label>
+                                <label class="select select-multiple">
+                                    <div class="userListLoadingContainer">
+                                        
+                                    </div>
+                                        <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
 
-                                            <h3 style="text-align:center"><strong>Blueprint Saved</strong></h3>
+                                        </select> 
+                                </label>
+                                </section> 
 
+                          
+                              <section class="col col-sm-6">
+                                        <label for="category">Project <span style="color:red">*</span>
+                                        </label>
+                                        <label class="select"> 
+                                          <select id="projectListInput" class="chooseProject width-100">
 
-                                            <div class="">
-                                                <h3 class="alert alert-success">Blueprint Saved.</h3>
-                                            </div>
+                                          </select>
+                                      </label>   
+                                  </label>
+                              </section>
+                              <section class="col col-sm-6 offset6" style="">
+                                <label for="category">Environment <span style="color:red">*</span>
+                                </label>
+                                <label class="select"> 
+                                    <select  id="envList" class="chooseEnv width-100">
 
+                                    </select>
+                                </label>
+                                </label>
+                              </section>
+                            </div>
+   
+                           <section class="col col-6 fordocker">
+                                <label for="category">Select Docker Container <span style="color:red">*</span>
+                                </label>
+                                <label class="select"> 
+                                    <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
 
+                                    </select>
+                                </label>   
+                            </section>
+                            <section class="col col-6 fordocker">
+                                <label for="category">Available Repo Tags <span style="color:red">*</span>
+                                </label>                 
+                                <div id="dockerrepotagsdiv">
 
-                                        </div>
+                                </div>       
+                            </section>
+                            </div>            
+                       </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+                                                            </div>
+
 
                                     <div class="row">
                                         <div style="bottom:0px;position:fixed;padding-left:0px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
