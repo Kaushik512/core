@@ -15,8 +15,8 @@ mkdirp.sync(homeDirectory + '/catalyst/temp/');
 
 
 module.exports = {
-    "app_run_port": 3000,
-    "settingsDir": homeDirectory + '/catalyst/',
+	"app_run_port" : 3000,
+	"settingsDir":homeDirectory+'/catalyst/',
     "instancePemFilesDir": homeDirectory + "/catalyst/instance-pemfiles/",
     "tempDir": homeDirectory + "/catalyst/temp/",
     "app_run_secure_port": 443,
