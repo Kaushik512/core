@@ -707,7 +707,7 @@
 </div><!-- /.modal -->
 
 <div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
-    <div class="modal-dialog">
+    <div class="modal-dialog"  style="width:60%">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
@@ -720,7 +720,9 @@
             <div class="modal-body no-padding">
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
                     <fieldset style="padding-top:7px !important;">
-                        <section><iframe src="http://www.google.com" id="cAdvisorPageFrame"></iframe>
+                        <section><div id="cAdvisorPageFrame">
+
+                        </div>
                             
                         </section>   
                     </fieldset>
@@ -3172,7 +3174,8 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
     /*$cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
-        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080');
+        //$('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
+        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
         e.preventDefault();
         return(false);
     });*/

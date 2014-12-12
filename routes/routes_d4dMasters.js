@@ -45,6 +45,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		configmgmtDao.getMasterRow(18,'dockerreponame',req.params.dockerreponame,function(err,data){
 			if(!err)
 				{
+					
 					var dockerRepo = JSON.parse(data);
 					console.log('Docker Repo ->', JSON.stringify(dockerRepo));
 					var cmd = '';
