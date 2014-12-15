@@ -9,7 +9,7 @@ var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 var Docker = require('../classes/docker.js');
 var SSH = require('../classes/utils/sshexec');
 var appConfig = require('../config/app_config.js');
-var Cryptography = require('../classes/utils/cryptography')
+var credentialCryptography = require('../classes/credentialcryptography')
 var fileIo = require('../classes/utils/fileio');
 var uuid = require('node-uuid');
 
@@ -292,34 +292,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
 
                     //decrypting pem file
-                    function decryptCredentials(credentials, callback) {
-
-                        var decryptedCredentials = {};
-                        decryptedCredentials.username = credentials.username;
-                        var cryptoConfig = appConfig.cryptoSettings;
-                        var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-
-                        if (credentials.pemFileLocation) {
-
-                            var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
-
-                            cryptography.decryptFile(credentials.pemFileLocation, cryptoConfig.inputEncoding, tempUncryptedPemFileLoc, cryptoConfig.outputEncoding, function(err) {
-                                if (err) {
-                                    console.log(err);
-                                    callback(err, null);
-
-                                }
-                                decryptedCredentials.pemFileLocation = tempUncryptedPemFileLoc;
-                                callback(null, decryptedCredentials);
-                            });
-
-                        } else {
-                            decryptedCredentials.password = cryptography.decryptText(credentials.password, cryptoConfig.inputEncoding, cryptoConfig.outputEncoding);
-                            callback(null, decryptedCredentials);
-                        }
-                    }
-
-                    decryptCredentials(instance.credentials, function(err, decryptedCredentials) {
+                    credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                         if (err) {
                             logsDao.insertLog({
                                 referenceId: instance.id,
@@ -346,7 +319,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             port: 22,
                             runlist: req.body.runlist
                         }
-                        console.log('decryptCredentials ==>',decryptedCredentials);
+                        console.log('decryptCredentials ==>', decryptedCredentials);
                         if (decryptedCredentials.pemFileLocation) {
                             chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
                         } else {

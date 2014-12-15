@@ -10,27 +10,29 @@ function Cryptography(algorithm, password) {
 
    
 
-    var encrypt = function(text, inputEncoding, outputEncoding) {
+    var encrypt = function(text, encryptionEncoding, decryptionEncoding) {
+        console.log(encryptionEncoding ," == ",decryptionEncoding);
         var encryptedText;
         var cipher = crypto.createCipher(algorithm, password);
-        encryptedText = cipher.update(text, 'ascii', 'base64');
-        encryptedText += cipher.final('base64');
+        encryptedText = cipher.update(text, encryptionEncoding, decryptionEncoding);
+        encryptedText += cipher.final(decryptionEncoding);
         return encryptedText;
     }
 
-    var decrypt = function(text, inputEncoding, outputEncoding) {
+    var decrypt = function(text, decryptionEncoding, encryptionEncoding) {
+        console.log(decryptionEncoding ," == ",encryptionEncoding);
         var decryptedText;
         var decipher = crypto.createDecipher(algorithm, password);
-        decryptedText = decipher.update(text, 'base64', 'ascii');
-        decryptedText += decipher.final('ascii');
+        decryptedText = decipher.update(text, decryptionEncoding, encryptionEncoding);
+        decryptedText += decipher.final(encryptionEncoding);
         return decryptedText;
     }
 
-    this.encryptText = function(text, inputEncoding, outputEncoding) {
-        return encrypt(text, inputEncoding, outputEncoding);
+    this.encryptText = function(text, encryptionEncoding, decryptionEncoding) {
+        return encrypt(text, encryptionEncoding, decryptionEncoding);
     }
 
-    this.encryptFile = function(inputFilePath, inputEncoding, outputFilepath, outputEncoding, callback) {
+    this.encryptFile = function(inputFilePath, encryptionEncoding, outputFilepath, decryptionEncoding, callback) {
         fs.readFile(inputFilePath, {
             encoding: 'ascii'
         }, function(err, fileData) {
@@ -40,7 +42,7 @@ function Cryptography(algorithm, password) {
                 return;
             }
             //console.log('pemfile == before ==>',fileData);
-            var encryptedData = encrypt(fileData, inputEncoding, outputEncoding);
+            var encryptedData = encrypt(fileData, encryptionEncoding, decryptionEncoding);
             //console.log('pemfile == after ==>',encryptedData);
             fs.writeFile(outputFilepath, encryptedData, {
                 //encoding: outputEncoding
@@ -56,12 +58,13 @@ function Cryptography(algorithm, password) {
 
     };
 
-    this.decryptText = function(text, inputEncoding, outputEncoding) {
-        return decrypt(text, inputEncoding, outputEncoding);
+    this.decryptText = function(text, decryptionEncoding, encryptionEncoding) {
+        return decrypt(text, decryptionEncoding, encryptionEncoding);
 
     };
 
-    this.decryptFile = function(inputFilePath, inputEncoding, outputFilepath, outputEncoding, callback) {
+    this.decryptFile = function(inputFilePath, decryptionEncoding, outputFilepath, encryptionEncoding, callback) {
+        
         fs.readFile(inputFilePath, {
             encoding: 'ascii'
         }, function(err, fileData) {
@@ -70,7 +73,7 @@ function Cryptography(algorithm, password) {
                 callback(err);
                 return;
             }
-            var decryptData = decrypt(fileData, inputEncoding, outputEncoding);
+            var decryptData = decrypt(fileData, decryptionEncoding, encryptionEncoding);
              console.log('decrypted pemfile == after ==>',decryptData);
             fs.writeFile(outputFilepath, decryptData, {
                 //encoding: outputEncoding

@@ -132,7 +132,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         var cryptoConfig = appConfig.cryptoSettings;
                         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
                         var encryptedPemFileLocation = settings.instancePemFilesDir + uuid.v4();
-                        cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.inputEncoding, encryptedPemFileLocation, cryptoConfig.outputEncoding, function(err) {
+                        cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                             if (err) {
                                 console.log(err);
                                 res.send(500);
@@ -239,7 +239,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         //decrypting pem file
                                         var cryptoConfig = appConfig.cryptoSettings;
                                         var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
-                                        cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.inputEncoding, tempUncryptedPemFileLoc, cryptoConfig.outputEncoding, function(err) {
+                                        cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
                                             if (err) {
                                                 instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                                     if (err) {
