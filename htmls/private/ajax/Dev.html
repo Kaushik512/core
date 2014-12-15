@@ -54,10 +54,9 @@
                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <!-- <h4 class="panel-title" style="display: inline-flex;"> -->
-                                <h4 class="panel-title">
+                                <h4 class="panel-title" style="display: inline-flex;">
                                     <a data-toggle="collapse">Instance</a>
-                                    <!-- <input type="text" class="searchInstances form-control" style="margin-left: 10px; margin-top: 6px;height:32px !important"> -->
+                                    <input type="text" class="searchInstances form-control" style="margin-left: 10px; margin-top: 6px;height:32px !important">
                                 </h4>
 
                                 <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
@@ -712,7 +711,7 @@
 </div><!-- /.modal -->
 
 <div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
-    <div class="modal-dialog"  style="width:60%">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
@@ -725,9 +724,7 @@
             <div class="modal-body no-padding">
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
                     <fieldset style="padding-top:7px !important;">
-                        <section><div id="cAdvisorPageFrame">
-
-                        </div>
+                        <section><iframe src="http://www.google.com" id="cAdvisorPageFrame"></iframe>
                             
                         </section>   
                     </fieldset>
@@ -1651,6 +1648,24 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
+<script type="text/javascript">
+    $('.searchInstances').keyup(function(e){
+        var searchText = $(this).val();
+        //alert(searchText);
+        $allListElements = $('#divinstancescardview ul li .domain-roles-heading .cardHeadingTextoverflow');
+        //alert($allListElements.length);
+        $matchingListElements = $allListElements.filter(function(i,el){
+            //alert(el);
+            return $(el).text().indexOf(searchText) !== -1;
+        });
+        // $allListElements.parents().eq(6).hide();
+        // $matchingListElements.parents().eq(6).show();
+        $allListElements.parents(".domain-role-thumbnail").hide();
+        $matchingListElements.parents(".domain-role-thumbnail").show();
+        // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
+        // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
+     });
+</script>
 <script type="text/javascript">
 
 // $(document.body).on('click', '.card', function () {
@@ -3179,8 +3194,7 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
     /*$cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
-        //$('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
-        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
+        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080');
         e.preventDefault();
         return(false);
     });*/
