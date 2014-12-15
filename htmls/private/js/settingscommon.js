@@ -1305,9 +1305,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     var $div1 = $("<div></div>").addClass('col col-9');
     var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
     var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
+    var $inputtypetextCookbooks = $('<input type="text">').addClass('searchoptionforCookbooks');
     var $hr1 = $("<hr>");
     $ul1.append($label2);
-    console.log(" selected runinlhkb,jhvbjhvj ",selectedRunlist);
+    $ul1.append($inputtypetextCookbooks);
     $.get('../organizations/' + catorgname + '/cookbooks', function(data) {
         console.log("Cookbooks Query:" + data);
 
@@ -1328,14 +1329,17 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
         }
         getRolesFunction();
     });
+    
     $ul1.append($hr1);
 
     $div1.append($ul1);
     var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
     var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
+    var $inputtypetextRoles = $('<input type="text">').addClass('searchoptionforRoles');
     var $hr2 = $("<hr>");
     $ul2.append($label3);
     $ul2.append($hr2);
+    $ul2.append($inputtypetextRoles);
     var getRolesFunction = function() {
         $.get('../organizations/' + catorgname + '/roles', function(data) {
             console.log("Runlist Query:" + data);
@@ -1522,6 +1526,25 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
         e.preventDefault();
         return(false);
     });
+     $chefItemdiv.find('.searchoptionforCookbooks').keyup(function(e){
+        var searchText = $(this).val();
+        $allListElements = $chefItemdiv.find('.deploymentsCookbookList > li');
+        $matchingListElements = $allListElements.filter(function(i,el){
+            return $(el).text().indexOf(searchText) !== -1;
+        });
+        $allListElements.hide();
+        $matchingListElements.show();
+     });
+
+     $chefItemdiv.find('.searchoptionforRoles').keyup(function(e){
+        var searchText = $(this).val();
+        $allListElements = $chefItemdiv.find('.deploymentRoleList > li');
+        $matchingListElements = $allListElements.filter(function(i,el){
+            return $(el).text().indexOf(searchText) !== -1;
+        });
+        $allListElements.hide();
+        $matchingListElements.show();
+     });
     $chefItemdiv.find('.btnItemRemove').click(function(e) {
         var $deploymentSelectedList = $('.deploymentSelectedRunList');
         $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
