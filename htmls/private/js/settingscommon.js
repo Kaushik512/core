@@ -390,6 +390,7 @@ function readform(formID) {
             if (k == "values") {
                 if (inputC) {
                     $.each(v, function(k1, v1) {
+
                         if (inputC.getType().toLowerCase() == "text") {
                             //  alert(inputC.attr("datavalues"));
                             if (inputC.attr("datavalues")) {
@@ -433,6 +434,7 @@ function readform(formID) {
                             var divselect1 = v[k1].split(',');
                             for (var j = 0; j < divselect1.length; j++) {
                                 if (ctype == 'list' && csource != '') {
+
                                     addToTargetList($('#' + csource).clone().val(divselect1[j]));
                                 }
                                 if (ctype == '')

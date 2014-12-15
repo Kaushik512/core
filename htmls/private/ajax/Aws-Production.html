@@ -1334,7 +1334,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                //     return false;
 
                // }
-               //alert('kickin 2');
+               
 
                //If a docker type of template selected then select the Org 
                var $selectedItem = $('.role-Selected');
@@ -1346,14 +1346,15 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
                if ($('.productdiv2.role-Selected').length > 0) {
+
                    //Setting controls connected to docker to hidden
                    $('.fordocker').hide();
                    if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker") {
                        //When docker stepping to 4th tab
 
-                       $('#orgnameSelect').trigger('change');
-                       $('a[href="#tab3"]').first().trigger('click');
-
+                      //$('#orgnameSelect').trigger('change');
+                      $('a[href="#tab3"]').first().trigger('click');
+                       //alert('kickin 2');
                        //populating the docker repo titles
                        var $dockerrepotitles = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle').split(',');
                        var $dockerrepopaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths').split(',');
@@ -1406,6 +1407,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                        return (true);
                    }
                }
+              // alert('orgslected');
                var $clone = $selectedItem.clone().removeClass('role-Selected');
                var selectedText = $clone.attr("data-templateType");
                if ($selectedItem.attr('data-templateType') == 'desktopProvisoning') {

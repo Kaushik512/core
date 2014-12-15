@@ -706,28 +706,26 @@
 </div><!-- /.modal -->
 
 <div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
-    <div class="modal-dialog"  style="width:60%">
-        <div class="modal-content">
+    <div class="modal-dialog"  style="width:80%;">
+        <div class="modal-content" style="height:500px">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
                     ×
                 </button>
                 <h4 class="modal-title">
-                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;cAdvisor
+                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;Monitoring Container
                 </h4>
             </div>
-            <div class="modal-body no-padding">
+            <div class="modal-body no-padding"  style="height:480px">
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
-                    <fieldset style="padding-top:7px !important;">
-                        <section><div id="cAdvisorPageFrame">
+                    <fieldset style="padding-top:7px !important;height:366px;">
+                        <iframe id="cAdvisorPageFrame"  style="width:100%;height:100%;border:0px;">
 
-                        </div>
+                        </iframe>
                             
-                        </section>   
+                         
                     </fieldset>
-                    <div>
                     
-                    </div>
                     <footer>
                         <button class="btn btn-primary" type="submit" data-dismiss="modal">
                             <i class="fa fa-undo fa-1x"></i>&nbsp;Close
@@ -3168,13 +3166,13 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     $cadvisor.append('<i class="fa fa-line-chart fa-lg " style="margin-top:9px"></i>').attr('href','http://' + instanceip + ':8080');
 
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
-    /*$cadvisor.click(function(e){
+    $cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
-        //$('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
-        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
+        $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
+        //$('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
         e.preventDefault();
         return(false);
-    });*/
+    });
 
     $docctr.attr('instanceid',instanceid);
     $docctr.attr('containerid',dockerContainerItem.Id.substring(0,12));
