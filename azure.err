@@ -1,5 +1,0 @@
-Fri Oct 03 2014 22:32:26 GMT-0700 (PDT):
-{ [Error: getaddrinfo EADDRINFO] code: 'EADDRINFO', errno: 'EADDRINFO', syscall: 'getaddrinfo' }
-Error: getaddrinfo EADDRINFO
-    at errnoException (dns.js:37:11)
-    at Object.onanswer [as oncomplete] (dns.js:124:16)

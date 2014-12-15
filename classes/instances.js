@@ -47,7 +47,7 @@ var InstanceSchema = new Schema({
     credentials: {
         username: String,
         password: String,
-        pemFileLocation: String,
+        pemFileLocation: String
     },
     blueprintData: {
         blueprintId: String,
@@ -57,7 +57,7 @@ var InstanceSchema = new Schema({
         templateComponents: [String],
         iconPath: String,
     },
-    docker:{
+    docker: {
         dockerEngineStatus: String,
         dockerEngineUrl: String
     },
@@ -86,9 +86,9 @@ var InstancesDao = function() {
 
     this.getInstances = function(instanceIds, callback) {
         var queryObj = {};
-        if(instanceIds && instanceIds.length) {
+        if (instanceIds && instanceIds.length) {
             queryObj._id = {
-                $in:instanceIds
+                $in: instanceIds
             }
         }
 
@@ -178,7 +178,7 @@ var InstancesDao = function() {
 
     };
 
-    this.updateInstanceDockerStatus = function(instanceId, dockerstatus,dockerapiurl, callback) {
+    this.updateInstanceDockerStatus = function(instanceId, dockerstatus, dockerapiurl, callback) {
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -236,14 +236,16 @@ var InstancesDao = function() {
         });
     };
 
-    this.removeInstancebyId= function(instanceId,callback){
-        Instances.remove({"_id":ObjectId(instanceId)},function(err,data){
-            if(err){
+    this.removeInstancebyId = function(instanceId, callback) {
+        Instances.remove({
+            "_id": ObjectId(instanceId)
+        }, function(err, data) {
+            if (err) {
                 console.log(err);
-                callback(err,null);
+                callback(err, null);
                 return;
             }
-            callback(null,data);
+            callback(null, data);
         });
     }
 

@@ -9,6 +9,7 @@ var fileIo = require('../classes/utils/fileio');
 var appConfig = require('../config/app_config');
 var uuid = require('node-uuid');
 var taskStatusModule = require('../classes/taskstatus');
+var credentialCryptography = require('../classes/credentialcryptography');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -144,89 +145,114 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 runlist = [];
             }
 
-            if(hardwareData.platform === 'windows') {
-               hardwareData.os = "windows"; 
+            if (hardwareData.platform === 'windows') {
+                hardwareData.os = "windows";
             }
 
+            function getCredentialsFromReq(callback) {
+                var credentials = {};
 
-            settingsController.getAwsSettings(function(settings) {
-                var instanceCredentials = {};
-                if (reqBody.credentials) {
-                    instanceCredentials.username = reqBody.credentials.username;
-                    console.log("credentials ==>", reqBody.credentials);
-                    if (reqBody.credentials.password) {
-                        instanceCredentials.password = reqBody.credentials.password;
-                    } else {
-                        if (reqBody.credentials.pemFileLocation) {
-                            instanceCredentials.pemFileLocation = reqBody.credentials.pemFileLocation;
-                        } else {
-                            instanceCredentials.pemFileLocation = settings.pemFileLocation + settings.pemFile;
+                if (reqBody.credentials && reqBody.credentials.pemFileData) {
+                    credentials = reqBody.credentials;
+                    credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
+                    fileIo.writeFile(credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
+                        if (err) {
+                            console.log('unable to create pem file ', err);
+                            callback(err, null);
+                            return;
                         }
-                    }
+                        callback(null, credentials);
+                    });
+
                 } else {
-                    instanceCredentials = {
-                        username: settings.instanceUserName,
-                        pemFileLocation: settings.pemFileLocation + settings.pemFile,
+
+                    if (!reqBody.credentials) {
+                        var tempPemFileLocation = appConfig.tempDir + uuid.v4();
+                        fileIo.copyFile(appConfig.aws.pemFileLocation + appConfig.aws.pemFile, tempPemFileLocation, function() {
+                            if (err) {
+                                console.log('unable to copy pem file ', err);
+                                callback(err, null);
+                                return;
+                            }
+                            credentials = {
+                                username: appConfig.aws.instanceUserName,
+                                pemFileLocation: tempPemFileLocation
+                            }
+                            callback(null, credentials);
+                        });
+                    } else {
+                        callback(null, reqBody.credentials);
                     }
                 }
+            }
 
-                console.log('nodeip ==> ', nodeIp);
-
-                var instance = {
-                    orgId: orgId,
-                    projectId: projectId,
-                    envId: node.chef_environment,
-                    chefNodeName: node.name,
-                    runlist: runlist,
-                    platformId: platformId,
-                    instanceIP: nodeIp,
-                    instanceState: 'unknown',
-                    bootStrapStatus: 'success',
-                    hardware: hardwareData,
-                    credentials: instanceCredentials,
-                    users: users,
-                    chef: {
-                        serverId: req.params.serverId,
-                        chefNodeName: node.name
-                    },
-                    blueprintData: {
-                        blueprintName: node.name,
-                        templateId: "chef_import",
-                        iconPath:"../private/img/templateicons/chef_import.png"
-                    }
+            getCredentialsFromReq(function(err, credentials) {
+                if (err) {
+                    console.log("unable to get credetials from request ", err);
+                    return;
                 }
-
-                instancesDao.createInstance(instance, function(err, data) {
+                credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                     if (err) {
-                        console.log(err, 'occured in inserting node in mongo');
+                        console.log("unable to encrypt credentials == >", err);
                         return;
                     }
-                    logsDao.insertLog({
-                        referenceId: data._id,
-                        err: false,
-                        log: "Node Imported",
-                        timestamp: new Date().getTime()
+
+                    console.log('nodeip ==> ', nodeIp);
+
+                    var instance = {
+                        orgId: orgId,
+                        projectId: projectId,
+                        envId: node.chef_environment,
+                        chefNodeName: node.name,
+                        runlist: runlist,
+                        platformId: platformId,
+                        instanceIP: nodeIp,
+                        instanceState: 'unknown',
+                        bootStrapStatus: 'success',
+                        hardware: hardwareData,
+                        credentials: encryptedCredentials,
+                        users: users,
+                        chef: {
+                            serverId: req.params.serverId,
+                            chefNodeName: node.name
+                        },
+                        blueprintData: {
+                            blueprintName: node.name,
+                            templateId: "chef_import",
+                            iconPath: "../private/img/templateicons/chef_import.png"
+                        }
+                    }
+
+                    instancesDao.createInstance(instance, function(err, data) {
+                        if (err) {
+                            console.log(err, 'occured in inserting node in mongo');
+                            return;
+                        }
+                        logsDao.insertLog({
+                            referenceId: data._id,
+                            err: false,
+                            log: "Node Imported",
+                            timestamp: new Date().getTime()
+                        });
+
                     });
 
                 });
-
-
-
             });
 
         }
 
-        function updateTaskStatusNode(nodeName, msg, err,i) {
+        function updateTaskStatusNode(nodeName, msg, err, i) {
             var status = {};
             status.nodeName = nodeName;
             status.message = msg;
             status.err = err;
-            
+
             console.log('taskstatus updated');
 
-            if(i==reqBody.selectedNodes.length) {
+            if (i == reqBody.selectedNodes.length) {
                 console.log('setting complete');
-               taskstatus.endTaskStatus(true,status);
+                taskstatus.endTaskStatus(true, status);
             } else {
                 console.log('setting task status');
                 taskstatus.updateTaskStatus(status);
@@ -243,38 +269,38 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 taskstatus = obj;
                 for (var i = 0; i < nodeList.length; i++) {
 
-                 (function(nodeName){
-                    chef.getNode(nodeName, function(err, node) {
-                        if (err) {
-                            count++;
-                            console.log(err);
-                            updateTaskStatusNode(nodeName,"Unable to import node "+nodeName,true,count);
-                            return;
-                        } else {
-
-                            console.log('creating env ==>', node.chef_environment);
-                            console.log('orgId ==>', orgId);
-                            environmentsDao.createEnv(node.chef_environment, orgId, function(err, data) {
-                                if (err) {
-                                    count++;
-                                    console.log(err, 'occured in creating environment in mongo');
-                                    updateTaskStatusNode(nodeName,"Unable to import node : "+nodeName,true,count);
-                                    return;
-                                }
+                    (function(nodeName) {
+                        chef.getNode(nodeName, function(err, node) {
+                            if (err) {
                                 count++;
-                                insertNodeInMongo(node);
-                                console.log('importing node '+node.name);
-                                updateTaskStatusNode(nodeName,"Node Imported : "+nodeName,false,count);
+                                console.log(err);
+                                updateTaskStatusNode(nodeName, "Unable to import node " + nodeName, true, count);
+                                return;
+                            } else {
 
-                            });
-                        }
-                    });
+                                console.log('creating env ==>', node.chef_environment);
+                                console.log('orgId ==>', orgId);
+                                environmentsDao.createEnv(node.chef_environment, orgId, function(err, data) {
+                                    if (err) {
+                                        count++;
+                                        console.log(err, 'occured in creating environment in mongo');
+                                        updateTaskStatusNode(nodeName, "Unable to import node : " + nodeName, true, count);
+                                        return;
+                                    }
+                                    count++;
+                                    insertNodeInMongo(node);
+                                    console.log('importing node ' + node.name);
+                                    updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
 
-                  })(nodeList[i]);
+                                });
+                            }
+                        });
+
+                    })(nodeList[i]);
                 }
 
-                res.send(200,{
-                    taskId : taskstatus.getTaskId()
+                res.send(200, {
+                    taskId: taskstatus.getTaskId()
                 });
             });
 
@@ -297,21 +323,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hostedChefUrl: chefDetails.url,
             });
             if (reqBody.selectedNodes.length) {
+                importNodes(reqBody.selectedNodes);
 
-                if (reqBody.credentials && reqBody.credentials.pemFileData) {
-                    reqBody.credentials.pemFileLocation = appConfig.instancePemFilesDir + uuid.v4();
-                    fileIo.writeFile(reqBody.credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
-                        if (err) {
-                            console.log('unable to create pem file ', err);
-                            res.send(500);
-                            return;
-                        }
-                        importNodes(reqBody.selectedNodes);
-                    });
-
-                } else {
-                    importNodes(reqBody.selectedNodes);
-                }
             } else {
                 res.send(400);
             }
@@ -389,7 +402,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hostedChefUrl: chefDetails.url,
             });
 
-            chef.getCookbook(req.params.cookbookName,function(err, cookbooks) {
+            chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
                 console.log(err);
                 if (err) {
                     res.send(500);

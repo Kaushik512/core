@@ -6,6 +6,8 @@ var settingsController = require('../controller/settings');
 var instancesDao = require('../classes/instances');
 var tasksDao = require('../classes/tasks');
 var logsDao = require('../classes/dao/logsdao.js');
+var credentialCryptography = require('../classes/credentialcryptography')
+var fileIo = require('../classes/utils/fileio');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -31,7 +33,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            
+
             console.log(instanceIds);
 
             instancesDao.getInstances(instanceIds, function(err, instances) {
@@ -53,66 +55,88 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (!chefDetails) {
                                 return;
                             }
-                            var chef = new Chef({
-                                userChefRepoLocation: chefDetails.chefRepoLocation,
-                                chefUserName: chefDetails.loginname,
-                                chefUserPemFile: chefDetails.userpemfile,
-                                chefValidationPemFile: chefDetails.validatorpemfile,
-                                hostedChefUrl: chefDetails.url,
-                            });
-                            console.log('instance IP ==>', instance.instanceIP);
-                            var chefClientOptions = {
-                                privateKey: instance.credentials.pemFileLocation,
-                                username: instance.credentials.username,
-                                host: instance.instanceIP,
-                                instanceOS: instance.hardware.os,
-                                port: 22,
-                                runlist: task.runlist, // runing service runlist
-                                updateRunlist: true
-                            }
-                            if (instance.credentials.pemFileLocation) {
-                                chefClientOptions.privateKey = instance.credentials.pemFileLocation;
-                            } else {
-                                chefClientOptions.password = instance.credentials.password;
-                            }
-                            console.log('running chef client');
-                            chef.runChefClient(chefClientOptions, function(err, retCode) {
+                            //decrypting pem file
+                            credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                                 if (err) {
                                     logsDao.insertLog({
-                                        referenceId: instance._id,
+                                        referenceId: instance.id,
                                         err: true,
-                                        log: 'Unable to run chef-client',
+                                        log: "Unable to decrypt pem file. Chef run failed",
                                         timestamp: new Date().getTime()
                                     });
                                     return;
                                 }
-                                console.log("knife ret code", retCode);
-                                if (retCode == 0) {
+                                var chef = new Chef({
+                                    userChefRepoLocation: chefDetails.chefRepoLocation,
+                                    chefUserName: chefDetails.loginname,
+                                    chefUserPemFile: chefDetails.userpemfile,
+                                    chefValidationPemFile: chefDetails.validatorpemfile,
+                                    hostedChefUrl: chefDetails.url,
+                                });
+                                console.log('instance IP ==>', instance.instanceIP);
+                                var chefClientOptions = {
+                                    privateKey: decryptedCredentials.pemFileLocation,
+                                    username: decryptedCredentials.username,
+                                    host: instance.instanceIP,
+                                    instanceOS: instance.hardware.os,
+                                    port: 22,
+                                    runlist: task.runlist, // runing service runlist
+                                    updateRunlist: true
+                                }
+                                if (decryptedCredentials.pemFileLocation) {
+                                    chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                                } else {
+                                    chefClientOptions.password = decryptedCredentials.password;
+                                }
+                                console.log('running chef client');
+                                chef.runChefClient(chefClientOptions, function(err, retCode) {
+                                    if (decryptedCredentials.pemFileLocation) {
+                                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                            if (err) {
+                                                console.log("Unable to delete temp pem file =>", err);
+                                            } else {
+                                                console.log("temp pem file deleted =>", err);
+                                            }
+                                        });
+                                    }
+                                    if (err) {
+                                        logsDao.insertLog({
+                                            referenceId: instance._id,
+                                            err: true,
+                                            log: 'Unable to run chef-client',
+                                            timestamp: new Date().getTime()
+                                        });
+                                        return;
+                                    }
+                                    console.log("knife ret code", retCode);
+                                    if (retCode == 0) {
+                                        logsDao.insertLog({
+                                            referenceId: instance._id,
+                                            err: false,
+                                            log: 'instance runlist updated',
+                                            timestamp: new Date().getTime()
+                                        });
+                                    } else {
+                                        return;
+                                    }
+                                }, function(stdOutData) {
                                     logsDao.insertLog({
                                         referenceId: instance._id,
                                         err: false,
-                                        log: 'instance runlist updated',
+                                        log: stdOutData.toString('ascii'),
                                         timestamp: new Date().getTime()
                                     });
-                                } else {
-                                    return;
-                                }
-                            }, function(stdOutData) {
-                                logsDao.insertLog({
-                                    referenceId: instance._id,
-                                    err: false,
-                                    log: stdOutData.toString('ascii'),
-                                    timestamp: new Date().getTime()
-                                });
 
-                            }, function(stdOutErr) {
-                                logsDao.insertLog({
-                                    referenceId: instance._id,
-                                    err: true,
-                                    log: stdOutErr.toString('ascii'),
-                                    timestamp: new Date().getTime()
+                                }, function(stdOutErr) {
+                                    logsDao.insertLog({
+                                        referenceId: instance._id,
+                                        err: true,
+                                        log: stdOutErr.toString('ascii'),
+                                        timestamp: new Date().getTime()
+                                    });
                                 });
                             });
+
 
                         });
 
@@ -120,10 +144,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     })(instances[i]);
                 }
                 //setting last run timestamp
-                tasksDao.updateLastRunTimeStamp(req.params.taskId,new Date().getTime(), function(err, data) {
-                    if(err) {
+                tasksDao.updateLastRunTimeStamp(req.params.taskId, new Date().getTime(), function(err, data) {
+                    if (err) {
                         console.log(err);
-                    } 
+                    }
                 });
 
                 res.send(instances);

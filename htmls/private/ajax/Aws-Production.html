@@ -861,7 +861,7 @@
                                                                             <label class="select">
 
                                                                                <select id="instanceOS" class="chooseOS width-100">
-                                                                                    <option data-amiid="ami-1064f120" data-amiid-username="ec2-user" data-instanceOS="linux" value="CentOS">Cent OS</option>
+                                                                                    <option data-amiid="ami-b6bdde86" data-amiid-username="root" data-instanceOS="linux" value="CentOS">Cent OS</option>
                                                                                      <option data-amiid="ami-37501207" data-amiid-username="ubuntu" data-instanceOS="linux" value="ubuntu">ubuntu</option>
                                                                                     
                                                                               </select>
@@ -1232,6 +1232,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                            dockercontainerpathstitle = '';
                            dockercontainerpaths = '';
                            dockerreponame = '';
+                           console.log('here START');
                            for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
                                if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
                                    getImage = data.masterjson.rows.row[z].field[x].values.value;
@@ -1268,6 +1269,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                }
 
                            }
+                           console.log('here end');
 
 
                            if (selectedrow) {
@@ -1383,6 +1385,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                    var dockerrepotags = [];
                                    tagJson.forEach(function(k, v) {
                                        //<p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>CentOS</p>
+                                       console.log('here again start');
                                        if (v < 3) {
                                            $('#dockerrepotagsdiv').append('<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' + tagJson[v].name + '</p></div>');
                                            if (dockerrepotags == '')
@@ -1390,8 +1393,13 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                            else
                                                dockerrepotags += ',' + tagJson[v].name;
                                        }
+                                       
+                                       
+                                       
+                                       console.log('here again ends');
                                        //limiting the number to the top 5
                                    });
+
                                    $('.productdiv2.role-Selected').first().attr('dockerrepotags', dockerrepotags);
                                    $('.productdiv2.role-Selected').first().attr('dockerreponame', $dockerrepoListInput.val());
                                }
@@ -1422,6 +1430,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
            } else if (index == 3) {
+               console.log('in 3');
 
                var $selectedTemplateArea = $('.selectedTemplateArea');
                var $selectedItem = $selectedTemplateArea.find('.productdiv2');

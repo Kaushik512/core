@@ -46,9 +46,9 @@
         <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 
             <div>
-                <div class="jarviswidget-editbox">
+               <!-- <div class="jarviswidget-editbox">
 
-                </div>
+                </div>--> <!--Not Required -->
                 <div class="widget-body no-padding">
 
                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
@@ -63,7 +63,7 @@
                                 <div class="panel-body" style="padding:0px !important;">
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
-                                            <div class="widget-main" style="min-height:300px"> 
+                                            <div class="widget-main " style="min-height:300px"> 
                                                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
                                                     <div class="table-responsive table-div tableinstanceviewouter" >
 
@@ -92,7 +92,7 @@
                                                         </table>
                                                         
                                                     </div>
-                                                    <table id="tableinstanceviewtemplate" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                    <table id="tableinstanceviewtemplate" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important;text-align:center";>
                                                                 <thead>
                                                                     <tr class="rowCustomStyle" style="font-weight:bold;">
                                                                         <td>S.No.</td>
@@ -141,8 +141,9 @@
                 </div>
             </div>
         </div>
+        
         <div class="row">
-            <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
+            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
                 <div class="clearfix form-actions" style="text-align:center;">
                     <div class="btn-group">
                         
@@ -164,7 +165,7 @@
             </div>
         </div><!--Launch div ends here-->
 
-    </div>
+    </div> <!--tab-pane l1 gets over-->
 
                     <div class="tab-pane" id="l2">
                         <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
@@ -172,10 +173,10 @@
                             <div>
 
 
-                                <div class="jarviswidget-editbox">
+                               <!-- <div class="jarviswidget-editbox">
 
 
-                                </div>
+                                </div> -->
                                 <div class="widget-body no-padding">
 
                                     <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
@@ -235,7 +236,7 @@
 
 
                         </div>
-                        <div class="row">
+                        <div class="row"> 
                             <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
                                 <div class="clearfix form-actions" style="text-align:center">
                                     <div class="btn-group">
@@ -243,16 +244,16 @@
                                             <i class="ace-icon fa fa-pencil  bigger-110"></i>
                                             Edit
                                         </button>-->                                       
-                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px">
+                                         <button class="btn pull-left btn-primary launchBtn" style="margin-left:5px;">
                                             <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
                                             Launch
                                         </button>
                                     </div>
-                                     <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
+                                     <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()"> <i class="fa fa-trash-o"></i></button>
                                 </div>
                             </div>
                         </div><!--Launch div ends here-->
-                    </div>
+                    </div> <!--tab-pane l2 gets over -->
 
                     <!-- <div class="tab-pane" id="l3">
                         
@@ -371,7 +372,7 @@
                                                       <thead>
                                                           <tr class="rowCustomStyle">    
                                                               <td>Name</td>
-                                                              <td>Assigned Node</td>
+                                                              <td>Assigned Nodes</td>
                                                               <td>Assigned Runlists</td>
                                                               <td>Execute</td>
                                                               <td>Last Run</td>
@@ -2128,7 +2129,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'"><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'" style="margin-left:22px";><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
         $tdOptions.find('.btnDeleteTask').click(function(e){
             var taskId = $(this).attr('data-taskId');
           var that = this;
@@ -3073,6 +3074,9 @@ function addInstanceToDOM(data) {
     pageSetUp();
     if (data.instanceState == 'stopped'){
       $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
+      $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
+    }
+    if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
 }

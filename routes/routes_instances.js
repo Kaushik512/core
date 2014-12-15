@@ -8,7 +8,10 @@ var logsDao = require('../classes/dao/logsdao.js');
 var configmgmtDao = require('../classes/d4dmasters/configmgmt');
 var Docker = require('../classes/docker.js');
 var SSH = require('../classes/utils/sshexec');
-
+var appConfig = require('../config/app_config.js');
+var credentialCryptography = require('../classes/credentialcryptography')
+var fileIo = require('../classes/utils/fileio');
+var uuid = require('node-uuid');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -287,32 +290,53 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         res.send(500);
                         return;
                     }
-                    var chef = new Chef({
-                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                        chefUserName: chefDetails.loginname,
-                        chefUserPemFile: chefDetails.userpemfile,
-                        chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
-                    });
 
+                    //decrypting pem file
+                    credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                        if (err) {
+                            logsDao.insertLog({
+                                referenceId: instance.id,
+                                err: true,
+                                log: "Unable to decrypt pem file. Chef run failed",
+                                timestamp: new Date().getTime()
+                            });
+                            return;
+                        }
 
-                    settingsController.getSettings(function(settings) {
+                        var chef = new Chef({
+                            userChefRepoLocation: chefDetails.chefRepoLocation,
+                            chefUserName: chefDetails.loginname,
+                            chefUserPemFile: chefDetails.userpemfile,
+                            chefValidationPemFile: chefDetails.validatorpemfile,
+                            hostedChefUrl: chefDetails.url,
+                        });
 
                         var chefClientOptions = {
-                            privateKey: instance.credentials.pemFileLocation,
-                            username: instance.credentials.username,
+                            privateKey: decryptedCredentials.pemFileLocation,
+                            username: decryptedCredentials.username,
                             host: instance.instanceIP,
                             instanceOS: instance.hardware.os,
                             port: 22,
                             runlist: req.body.runlist
                         }
-                        if (instance.credentials.pemFileLocation) {
-                            chefClientOptions.privateKey = instance.credentials.pemFileLocation;
+                        console.log('decryptCredentials ==>', decryptedCredentials);
+                        if (decryptedCredentials.pemFileLocation) {
+                            chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
                         } else {
-                            chefClientOptions.password = instance.credentials.password;
+                            chefClientOptions.password = decryptedCredentials.password;
                         }
 
                         chef.runChefClient(chefClientOptions, function(err, retCode) {
+                            if (decryptedCredentials.pemFileLocation) {
+                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                    if (err) {
+                                        console.log("Unable to delete temp pem file =>", err);
+                                    } else {
+                                        console.log("temp pem file deleted =>", err);
+                                    }
+                                });
+                            }
+
                             if (err) {
                                 logsDao.insertLog({
                                     referenceId: req.params.instanceId,
@@ -356,8 +380,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             });
                         });
                         res.send(200);
-                    });
 
+                    });
                 });
             } else {
                 res.send(404);

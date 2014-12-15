@@ -554,6 +554,7 @@
 
 $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
     var $deploymentSelectedList = $('.deploymentSelectedRunList');
+    
     $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
         var value = $(this).find('input').val();
         var selector = 'input[name=checkboxRoles][value="' + value + '"]';
