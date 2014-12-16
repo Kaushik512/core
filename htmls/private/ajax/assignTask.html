@@ -341,8 +341,8 @@ $.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
     var keys = Object.keys(cookbooks);
     //alert(keys);
     keys.sort(function(a,b){
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-            });
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
     //alert(keys);
     var $deploymentCookbookList = $('.deploymentCookbookList');//.empty();;
     for (i = 0; i < keys.length; i++) {
@@ -356,8 +356,8 @@ $.get('../organizations/' + urlParams.org + '/roles', function(data) {
     var roles = data.roles;
     var keys = Object.keys(roles);
     keys.sort(function(a,b){
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-            });
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
     var $deploymentRolesList = $('.deploymentRolesList');//.empty();
     for (i = 0; i < keys.length; i++) {
         $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
