@@ -46,8 +46,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			if(!err)
 				{
 					
-					var dockerRepo = JSON.parse(data);
-					console.log('Docker Repo ->', JSON.stringify(dockerRepo));
+				//	var dockerRepo = JSON.parse(data);
+				//	console.log('Docker Repo ->', JSON.stringify(dockerRepo));
 					var cmd = '';
 					//Below is for public repository
 					cmd = 'curl -v -H "Accept: application/json" -X GET https://index.docker.io/v1/repositories/' + req.params.repopath +  '/tags';

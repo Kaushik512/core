@@ -486,14 +486,14 @@
                                                   </div>
                                                     <div class="container1" style="display:inline-block;margin-left:4px">
                                                       <div id="card2">
-                                                          <div class="card2 front2 flipper hidden pause"  title="Pause" >
+                                                          <div class="card2 front2  hidden pause"  title="Pause" >
                                                              <div id="flip3" style="margin-top:5px;">
                                                               <div class="">
                                                                   <a href="javascript:void(0);" data-original-title="Pause"  dockercontaineraction="4"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-pause fa-16px txt-color-white" ></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card2 front2 flipper unpause">
+                                                          <div class="card2 front2  unpause">
                                                               <div id="flip3" style="margin-top:5px;"  title="UnPause" >
                                                                   <div class="">
                                                                       <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
@@ -504,7 +504,7 @@
                                                   </div>
                                                   
                                                 </td>
-                                                <td class="dockercontainerstatus"></td>
+                                                <td class=""><span class="dockercontainerstatus"></span></td>
                                                 <td  class="dockercontainerstartedon"></td>
                                                 <td  class="dockercontainername"></td>
                                                 <td  class="dockercontainerhostip"></td>
@@ -712,26 +712,24 @@
 </div><!-- /.modal -->
 
 <div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
+
+    <div class="modal-dialog"  style="width:80%;">
+        <div class="modal-content" style="height:500px">
+
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
                     ×
                 </button>
                 <h4 class="modal-title">
-                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;cAdvisor
+                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;Monitoring Container
                 </h4>
             </div>
-            <div class="modal-body no-padding">
+            <div class="modal-body no-padding"  style="height:480px">
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
-                    <fieldset style="padding-top:7px !important;">
-                        <section><iframe src="http://www.google.com" id="cAdvisorPageFrame"></iframe>
-                            
-                        </section>   
+                    <fieldset style="padding-top:7px !important;height:366px;">
+                        <iframe id="cAdvisorPageFrame"  style="width:100%;height:100%;border:0px;">
+                        </iframe>
                     </fieldset>
-                    <div>
-                    
-                    </div>
                     <footer>
                         <button class="btn btn-primary" type="submit" data-dismiss="modal">
                             <i class="fa fa-undo fa-1x"></i>&nbsp;Close
@@ -3133,24 +3131,69 @@ function loadContainersTable(){
                     $('.dockeractionbutton').click(function(){
                        // alert('test' + $(this).attr('dockercontaineraction'));
                        //append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                       $(this).closest('tr').fadeTo('slow',0.5);
                        var $progressicon = $(this).closest('tr').find('.dockercontainerprogress').first();
                        var $thistr = $(this);
                        $progressicon.removeClass('hidden');
                         var action =  $(this).attr('dockercontaineraction');
                         var instanceid =  $(this).closest('tr').attr('instanceid');
                         var containerid =  $(this).closest('tr').attr('containerid');
+                        var $contextRow = $(this).closest('tr');
                        // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
                         if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
                             $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
                              // alert(data);
                               if(data == 'OK'){
                                 //$(this).parents('.flip-toggle').toggleClass('flip1');
-                               // alert('ok');
-                               // $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
+                               //alert('ok');
+                              //  $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
                                //alert($thistr.closest('.dockercontainertabletemplatetr').html());
-                               $thistr.closest('.container1').find('.flipper').toggleClass('hidden')
-                                $progressicon.addClass('hidden');
+                               
+                                $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
+                                    var dockerContainerData = JSON.parse(data);
+                                    //alert(JSON.stringify(dockerContainerData));
+                                    //Updating More Info dialog
+                                    // $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
+                                    //     console.log("dockerContainerData." +  $(this).attr('containerdata'));
+                                    //      if($(this).attr('containerdata') != '')
+                                    //         $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
+                                    // });
+                                    // // updating row.
+                                    // $contextRow.find('dockercontainerstatus').html(dockerContainerData);
+                                    $.each(dockerContainerData,function(i,item){
+                                        //alert(item.Id.substring(0,12) + ':' + containerid);
+                                        if(item.Id.substring(0,12) == containerid){
+                                         //   alert('found constructing ' + item.toString())
+                                            var $updatedContainerRow = createdockercontainerrow(item,instanceid);
+                                            //Do not bind any action buttons
+                                            $updatedContainerRow.find('td').each(function(i,k){
+                                                //alert(i + ':' + k);
+                                                if(i > 0 && i < 7){
+                                                    $contextRow.find('td:eq(' + i + ')').html('').append($(k).html());
+                                                }
+
+                                            });
+                                            $thistr.closest('.container1').find('.flipper').toggleClass('hidden');
+                                            //Managing the pause and unpause buttons
+                                            if(item.Status.indexOf('Exited') >= 0){
+                                                alert('in');
+                                                $thistr.closest('.container1').find('.pause').addClass('hidden');
+                                                $thistr.closest('.container1').find('.unpause').addClass('hidden');
+                                            }
+                                            
+                                       }
+                                    });
+                                    
+                                    
+
+                                    $thistr.closest('tr').fadeTo('slow',1);
+                                    $progressicon.addClass('hidden');
+                               });
+
+
                               }
+                              else
+                                $progressicon.addClass('hidden');
                                     
                             });
                         }
@@ -3181,7 +3224,7 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
 
 
     var $docctr = $('#dockercontainertabletemplatetr').clone().removeClass('hidden');
-    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status).append($cadvisor);
+    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status).parent().append($cadvisor);
     var docdate = new Date(1000*dockerContainerItem.Created);
     $docctr.find('.dockercontainerstartedon').html(docdate.toLocaleString());
     $docctr.find('.dockercontainername').html(dockerContainerItem.Names[0]);
@@ -3193,9 +3236,10 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     $cadvisor.append('<i class="fa fa-line-chart fa-lg " style="margin-top:9px"></i>').attr('href','http://' + instanceip + ':8080');
 
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
-    /*$cadvisor.click(function(e){
+   /* $cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
-        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080');
+        $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
+        //$('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
         e.preventDefault();
         return(false);
     });*/
@@ -3228,10 +3272,23 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
 
         $docctr.find('.stop').removeClass('hidden');
         $docctr.find('.start').addClass('hidden');
+
+        
+        if(dockerContainerItem.Status.indexOf('Paused') >= 0){
+            $docctr.find('.pause').addClass('hidden');
+            $docctr.find('.unpause').removeClass('hidden');
+        }else
+        {
+            $docctr.find('.unpause').addClass('hidden');
+            $docctr.find('.pause').removeClass('hidden');
+        }
+
     }
     else if(dockerContainerItem.Status.indexOf('Exited') >= 0){
         $docctr.find('.stop').addClass('hidden');
         $docctr.find('.start').removeClass('hidden');
+        $docctr.find('.pause').addClass('hidden');
+        $docctr.find('.unpause').addClass('hidden');
     }
     else if(dockerContainerItem.Status.indexOf('Paused') >= 0){
         $docctr.find('.pause').addClass('hidden');

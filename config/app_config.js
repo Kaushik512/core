@@ -15,8 +15,8 @@ mkdirp.sync(homeDirectory + '/catalyst/temp/');
 
 
 module.exports = {
-	"app_run_port" : 3000,
-	"settingsDir":homeDirectory+'/catalyst/',
+    "app_run_port": 3000,
+    "settingsDir": homeDirectory + '/catalyst/',
     "instancePemFilesDir": homeDirectory + "/catalyst/instance-pemfiles/",
     "tempDir": homeDirectory + "/catalyst/temp/",
     "app_run_secure_port": 443,
@@ -35,7 +35,18 @@ module.exports = {
         securityGroupId: "sg-c00ee1a5",
         pemFileLocation: currentDirectory + '/',
         pemFile: "catalyst.pem",
-        instanceUserName: "root"
+        instanceUserName: "root",
+        os: [{
+            amiid: 'ami-b6bdde86',
+            username: 'root',
+            osType: 'linux',
+            name: 'Cent OS'
+        }, {
+            amiid: 'ami-b5a7ea85',
+            username: 'ubuntu',
+            osType: 'linux',
+            name: 'ubuntu'
+        }]
     }
 
 }

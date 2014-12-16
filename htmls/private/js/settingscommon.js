@@ -390,6 +390,7 @@ function readform(formID) {
             if (k == "values") {
                 if (inputC) {
                     $.each(v, function(k1, v1) {
+
                         if (inputC.getType().toLowerCase() == "text") {
                             //  alert(inputC.attr("datavalues"));
                             if (inputC.attr("datavalues")) {
@@ -433,6 +434,7 @@ function readform(formID) {
                             var divselect1 = v[k1].split(',');
                             for (var j = 0; j < divselect1.length; j++) {
                                 if (ctype == 'list' && csource != '') {
+
                                     addToTargetList($('#' + csource).clone().val(divselect1[j]));
                                 }
                                 if (ctype == '')
@@ -1283,7 +1285,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     // $divpanel.append($select);
     // $section.append($divpanel);  
     //alert('in' + catorgname);
-    $loadingContainer = $('<div></div>').addClass('loadingContainer');
+    $loadingContainer = $('<div></div>').addClass('loadingContainer').addClass('hidden');
     var $imgerrorContainer = $("<img />").attr('src', 'img/loading.gif').addClass('center-block chefItemwithoutOrgloadingContainerCSS');
     $loadingContainer.append($imgerrorContainer);
     $section.append($loadingContainer);
@@ -1483,7 +1485,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
 
     $errorContainer = $('<div></div>').addClass('errorContainer').addClass('hidden').text('This is Error Cointainer div');
     $chefItemdiv.append($errorContainer);
-    $loadingContainer.detach();
+   
+   // if($loadingContainer)
+    //    $loadingContainer.detach(); //commented to handle a javascript error, to be reverted.
     // $("#toAdd").click(function(e){
     //    $("#toaddbtn").append($form);
     // });
