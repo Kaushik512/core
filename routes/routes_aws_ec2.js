@@ -1,5 +1,6 @@
 var EC2 = require('../controller/ec2.js');
 var settingsController = require('../controller/settings');
+var appConfig = require('../config/app_config');
 
 module.exports.setRoutes = function(app, verifySession) {
 
@@ -21,6 +22,10 @@ module.exports.setRoutes = function(app, verifySession) {
             });
 
 		});
+	});
+
+	app.get('/aws/ec2/amiids',function(req,res){
+		res.send(appConfig.aws.os);
 	});
 
 }
