@@ -1336,7 +1336,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                //     return false;
 
                // }
-               
+          //     alert('reached start');
 
                //If a docker type of template selected then select the Org 
                var $selectedItem = $('.role-Selected');
@@ -1356,7 +1356,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
                       //$('#orgnameSelect').trigger('change');
                       $('a[href="#tab3"]').first().trigger('click');
-                       //alert('kickin 2');
+          //             alert('kickin 2');
                        //populating the docker repo titles
                        var $dockerrepotitles = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle').split(',');
                        var $dockerrepopaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths').split(',');
@@ -1406,13 +1406,15 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                            });
                        });
                        //dockerrepotagsul
+                 //     alert('finished repo list');
                        $dockerrepoListInput.trigger('change');
 
                        //End Setting appropriate tags
                        //polulate the docker tags
                        var $dockerrepotagsul = $('#dockerrepotagsul');
                        $('.fordocker').show();
-                       return (true);
+                      // $('#orgnameSelect').trigger('change');
+                      // return (true);
                    }
                }
               // alert('orgslected');
@@ -1427,6 +1429,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                }
                //force clicking orgnameSelect
                $('#orgnameSelect').trigger('change');
+            //   alert('reached end');
 
 
            } else if (index == 3) {
