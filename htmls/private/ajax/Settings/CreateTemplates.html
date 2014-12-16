@@ -488,6 +488,9 @@
             console.log(data);
             var cookbooks = data.cookbooks;
             var keys = Object.keys(cookbooks);
+            keys.sort(function(a,b){
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+            });
             var $deploymentCookbookList = $('.deploymentCookbookList').empty();
             for (i = 0; i < keys.length; i++) {
                 $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
