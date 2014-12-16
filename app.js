@@ -19,7 +19,7 @@ var mongoDbConnect = require('./controller/mongodb');
 mongoDbConnect({
     host: process.env.DB_PORT_27017_TCP_ADDR,
     port: process.env.DB_PORT_27017_TCP_PORT,
-    dbName: 'devops_backup_12_16'
+    dbName: 'devops_new'
 }, function(err) {
     if (err) {
         throw new Error(err);
@@ -44,7 +44,7 @@ var store = new express.session.MemoryStore;
 app.use(express.session({
     secret: 'sessionSekret',
     store: new mongoStore({
-        db: 'devops_backup_12_16',
+        db: 'devops_new',
         host: process.env.DB_PORT_27017_TCP_ADDR,
         port: process.env.DB_PORT_27017_TCP_PORT
     })
