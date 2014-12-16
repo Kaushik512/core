@@ -1,5 +1,5 @@
 /*
-This is a temproray class. these methods will me moved to model once mvc comes into picture
+This is a temproray class. these methods will me moved to model once mvc comes into pictured
 */
 var Cryptography = require('./utils/cryptography');
 var appConfig = require('../config/app_config');
