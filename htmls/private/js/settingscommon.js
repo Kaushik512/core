@@ -82,6 +82,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
     //To Do SAve...
     // var d4djson = $.parseJSON(d4ddata);
     // alert(d4ddata.sections.section[0].name);
+    //alert('run');
     var formData = null;
     readMasterJson(formID);
 
@@ -108,6 +109,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             var inputC = null;
             var editButton = null;
             var setOrgname = false;
+            var imageTD = null;
             $.each(item, function(k, v) {
                 if (k == "name") {
                     // alert(v);
@@ -210,7 +212,7 @@ var forceEdit = false; //variable used to force save one record ex. Authenticati
 
 function readform(formID) {
     var formData = null;
-    //  alert("force edit:" + forceEdit);
+//    alert("force edit:" + forceEdit);
     //Prefilling dropdowns
     $('select').each(function() {
 
