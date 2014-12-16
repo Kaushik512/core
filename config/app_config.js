@@ -40,13 +40,20 @@ module.exports = {
             amiid: 'ami-b6bdde86',
             username: 'root',
             osType: 'linux',
-            name: 'Cent OS'
+            name: 'Cent OS',
+            supportedInstanceType:['t1.micro','m1.small','m1.medium','m1.large','m1.xlarge']
         }, {
-            amiid: 'ami-b5a7ea85',
+            amiid: 'ami-3d50120d',
             username: 'ubuntu',
             osType: 'linux',
-            name: 'ubuntu'
+            name: 'ubuntu',
+            supportedInstanceType:['t2.micro']
         }]
+    },
+    db: {
+        dbName:'devops_new',
+        hostname:'localhost',
+        port:'27017'
     }
 
 }
