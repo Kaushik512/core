@@ -61,13 +61,13 @@ var EC2 = function(awsSettings) {
             "MaxCount": 1,
             "KeyName": awsSettings.keyPairName,
             SecurityGroupIds: [securityGroupId], // [awsSettings.securityGroupId],
-            BlockDeviceMappings: [{
+            /*BlockDeviceMappings: [{
                 DeviceName: "/dev/sda",
                 Ebs: {
                     DeleteOnTermination: true,
                     "VolumeSize": 10
                 }
-            }]
+            }]*/
         }, function(err, data) {
             if (err) {
                 console.log("error occured while launching instance");
