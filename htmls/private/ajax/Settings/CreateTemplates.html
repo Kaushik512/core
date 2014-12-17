@@ -371,7 +371,8 @@
     $(document).ready(function() {
     $(".choosetemplateType").select2();
     $(".choosedockerRepo").select2();
-    $(".choosechefserver").select2();
+    $(".choosechefserver").trigger('change').select2();
+
     });
     function cancelClicked() {
         $("#popupSelectProvider").modal('hide');
@@ -515,7 +516,6 @@
                     
                 });
                 $('#btnDeploymentAddSelectedCookbook').trigger('click');
-
             });
 
         });
@@ -572,5 +572,10 @@ $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
     });
 
 });
-   loadChefServerObjects($('#configname').val());
+
+   //loadChefServerObjects($('#configname').val());
+   //Fix for default first item selection and cookbook load. - Vinood CAT-88
+   $('#configname').trigger('change');
+   $('#templatetypename').trigger('change');
+   
 </script>
