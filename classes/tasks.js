@@ -97,6 +97,29 @@ var TaskDao = function() {
 
     };
 
+    this.updateTaskData = function(taskId, taskData, callback) {
+        Tasks.update({
+            "_id": new ObjectId(taskId)
+        }, {
+            $set: {
+                name: taskData.name,
+                nodesIdList: taskData.nodesIdList,
+                runlist: taskData.runlist,
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            //console.log('data ==>', data);
+            callback(null, updateCount);
+
+        });
+
+    };
+
 }
 
 module.exports = new TaskDao();

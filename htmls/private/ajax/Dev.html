@@ -384,39 +384,7 @@
                                                           </tr>
                                                       </thead>
                                                       <tbody class="taskListArea">
-                                                          <tr>
-                                                              <td>Restart_Apache_servers</td>
-                                                              <td>
-                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedNode" data-toggle="modal">
-                                                                      <i class="ace-icon fa fa-sitemap fa-14x"></i>
-                                                                  </a>
-                                                                  <!-- <select id="multiassign1" title="Node" multiple="multiple" name="Node" size="5">
-                                                                  </select> -->
-                                                              </td>
-                                                              <td>
-                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedRunlist" data-toggle="modal">
-                                                                      <i class="ace-icon fa fa-list-ul bigger-120"></i>
-                                                                  </a>
-                                                              </td>
-                                                              <td>
-                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedExecute" data-toggle="modal">
-                                                                      <i class="ace-icon fa fa-play bigger-120"></i>
-                                                                  </a>
-                                                              </td>
-                                                              <td>
-                                                                  2014-09-25&nbsp;&nbsp;19:52:31
-                                                              </td>
-                                                              <td>
-                                                                  <div class="btn-group tableactionWidth">
-                                                                      <a class="btn btn-danger pull-left btn-sg tableactionbutton" data-original-title="Delete" data-placement="top" rel="tooltip">
-                                                                          <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                      </a>
-                                                                      <a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip">
-                                                                          <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                                      </a>
-                                                                  </div>
-                                                              </td>
-                                                          </tr>
+                                                          
                                                       </tbody>
                                                   </table>
                                               </div>
@@ -1873,11 +1841,8 @@ $('.Containers').click(function(e){
 
 });
 
-
-
-
-$('.createTaskLink').click(function(e){
-  localStorage.setItem("SelectedClass","Orchestration");
+function setBreadCrumbAndViewOrchestration() {
+    localStorage.setItem("SelectedClass","Orchestration");
 
   //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
@@ -1908,6 +1873,12 @@ $('.createTaskLink').click(function(e){
     var myTabContent3 = $('#myTabContent3').find('tab-pane.active').innerHTML;
     //alert(myTabContent3);
   }
+}
+
+
+
+$('.createTaskLink').click(function(e){
+    setBreadCrumbAndViewOrchestration();
   
     window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
 });
@@ -2149,9 +2120,9 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'" style="margin-left:22px";><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId',data[i]._id);
         $tdOptions.find('.btnDeleteTask').click(function(e){
-            var taskId = $(this).attr('data-taskId');
+            var taskId = $(this).parents('td').attr('data-taskId');
           var that = this;
           $.ajax({
             url:'../tasks/'+taskId,
@@ -2160,6 +2131,14 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
               $(that).parents('tr').remove();
             }
           })
+        });
+         $tdOptions.find('.btnEditTask').click(function(e){
+            setBreadCrumbAndViewOrchestration();
+  
+           var taskId = $(this).parents('td').attr('data-taskId');
+         
+           window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid']+'&taskId='+taskId;
+           
         });
         $tr.append($tdOptions);
 
