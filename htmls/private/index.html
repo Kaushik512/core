@@ -68,14 +68,18 @@
 		
 		<!-- projects dropdown -->
 		<div id="project-context" style="padding-top:15px;">
+		  <ul style="list-style-type: none;">
 			<li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
 				<a class="active" href="#ajax/Dev.html" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
 			</li>
+		  </ul>
 		</div>
 		<div id="project-context" style="padding-top:15px;">
-			<li class="left-projects-links hidden" data-target="#blueprints"  navigation="blueprints">
-				<a href="#ajax/Aws-Production.html" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
-			</li>
+			<ul style="list-style-type: none;">
+				<li class="left-projects-links hidden" data-target="#blueprints"  navigation="blueprints">
+					<a href="#ajax/Aws-Production.html" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
+				</li>
+			</ul>
 		</div>
 		
 		
@@ -92,20 +96,26 @@
 				<span> <a href="../auth/signout" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
-				<li class="left-projects-links active" id="liuserinfo" style="color:white" >
-					
-				</li>
+				<ul style="list-style-type: none;">
+					<li class="left-projects-links active" id="liuserinfo" style="color:white" >
+						
+					</li>
+				</ul>
 			</div>
 			<!-- end logout button -->
 			<div id="project-context" style="padding-top:15px;">
-				<li class="left-projects-links hidden" data-target="#Track"  navigation="Track">
-					<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
-				</li>
+				<ul style="list-style-type: none;">
+					<li class="left-projects-links hidden" data-target="#Track"  navigation="Track">
+						<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+					</li>
+				</ul>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
-				<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
-					<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-				</li>
+				<ul style="list-style-type: none;">
+					<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
+						<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<!-- end pulled right: nav area -->

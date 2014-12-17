@@ -80,13 +80,16 @@ $(document).ready(function() {
 	//TODO: was moved from window.load due to IE not firing consist
 	nav_page_height()
 
+
+	// closedSign : '<em class="fa fa-expand-o"></em>',
+	// openedSign : '<em class="fa fa-collapse-o"></em>'
 	// INITIALIZE LEFT NAV
 	if (!null) {
 		$('nav ul').jarvismenu({
 			accordion : true,
 			speed : $.menu_speed,
-			closedSign : '<em class="fa fa-expand-o"></em>',
-			openedSign : '<em class="fa fa-collapse-o"></em>'
+			closedSign : '<em class="fa fa-plus-square-o"></em>',
+			openedSign : '<em class="fa fa-minus-square-o"></em>'
 		});
 	} else {
 		alert("Error - menu anchor does not exist");

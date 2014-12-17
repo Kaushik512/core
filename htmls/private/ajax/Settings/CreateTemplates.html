@@ -500,6 +500,9 @@
                 console.log(data);
                 var roles = data.roles;
                 var keys = Object.keys(roles);
+                keys.sort(function(a,b){
+                return a.toLowerCase().localeCompare(b.toLowerCase());
+                });
                 var $deploymentRolesList = $('.deploymentRolesList').empty();
                 for (i = 0; i < keys.length; i++) {
                     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
