@@ -1849,7 +1849,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tr = $('<tr></tr>');
         var $tdName = $('<td></td>').append(data[i].name);
         $tr.append($tdName);
-        var $tdNodeList = $('<td></td>').append('<a data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
+        var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
         $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
             $.post('../instances/', {
                 instanceIds: $(this).data('nodeList')
@@ -1875,7 +1875,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         });
         $tr.append($tdNodeList);
 
-        var $tdRunlist = $('<td></td>').append('<a data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
+        var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
         $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
             var $taskRunListContainer = $('.taskRunListContainer').empty();
             var runlist = $(this).data('taskRunlist');
@@ -1891,7 +1891,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         });
         $tr.append($tdRunlist);
 
-        var $tdExecute = $('<td></td>').append('<a data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+        var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
         $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
             var taskId = $(this).data('taskId');
             var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
