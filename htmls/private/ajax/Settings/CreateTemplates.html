@@ -159,23 +159,21 @@
                                                                             <label for=""  class="notforDocker">
                                                                                 Chef Server Objects List
                                                                             </label>
-                                                                            <span class="pull-right notforDocker">
-                                                                                Template Run List
-                                                                            </span>
+                                                                            
                                                                             <div class="row notforDocker">
                                                                                 <div class="col col-5">
-                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;" class="deploymentCookbookList">
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;" class="deploymentCookbookList">
                                                                                         <label class="label" style="text-align:center;">Select Cookbooks</label>
                                                                                         <hr>
                                                                                     </ul>
-                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:100px;overflow-y:auto;"  class="deploymentRolesList">
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;"  class="deploymentRolesList">
                                                                                         
                                                                                         <label class="label" style="text-align:center;">Select Roles</label>
                                                                                         <hr>
                                                                                         
                                                                                     </ul>
                                                                                 </div>
-                                                                                <div style="margin-top: 60px;" class="col col-2">
+                                                                                <div style="margin-top: 100px;" class="col col-2">
                                                                                     <div class="input-group">
                                                                                         <div style="padding-bottom: 10px;" class="btn-group">
                                                                                             <button id="btnDeploymentAddSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
@@ -187,8 +185,11 @@
                                                                                     </div>
                                                                                 </div>
                                                                                
-                                                                                <div class="col col-5">
-                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;" class="deploymentSelectedRunList" id="templatescookbooks" cdata="catalyst">
+                                                                                <div class="col col-5" style="margin-top:-20px;">
+                                                                                    <span class="notforDocker">
+                                                                                        Template Run List
+                                                                                    </span>
+                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedRunList" id="templatescookbooks" cdata="catalyst">
                                                                                         
                                                                                     </ul>
                                                                                 </div>
@@ -493,9 +494,22 @@
             return a.toLowerCase().localeCompare(b.toLowerCase());
             });
             var $deploymentCookbookList = $('.deploymentCookbookList').empty();
+            $deploymentCookbookList.append('<label class="label" style="text-align:center;">Select Cookbooks</label>');
+            var $inputtypetextCookbooks = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Cookbooks">').addClass('searchoptionforCookbooks form-control padding0');
+            $deploymentCookbookList.append($inputtypetextCookbooks);
             for (i = 0; i < keys.length; i++) {
                 $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
             }
+            $('.searchoptionforCookbooks').keyup(function(e){
+                //alert('asdfgh');
+                var searchText = $(this).val();
+                $allListElements = $('.deploymentCookbookList > li');
+                $matchingListElements = $allListElements.filter(function(i,el){
+                    return $(el).text().indexOf(searchText) !== -1;
+                });
+                $allListElements.hide();
+                $matchingListElements.show();
+             });
 
             $.get('/d4dMasters/' + chefServer + '/roles', function(data) {
                 console.log(data);
@@ -505,9 +519,22 @@
                 return a.toLowerCase().localeCompare(b.toLowerCase());
                 });
                 var $deploymentRolesList = $('.deploymentRolesList').empty();
+                $deploymentRolesList.append('<li><label class="label" style="text-align:center;">Select Roles</label></li>');
+                var $inputtypetextRoles = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Roles">').addClass('searchoptionforRoles form-control padding0');
+                $deploymentRolesList.append($inputtypetextRoles);
                 for (i = 0; i < keys.length; i++) {
                     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
                 }
+                $('.searchoptionforRoles').keyup(function(e){
+                    //alert('dsfvb');
+                    var searchText = $(this).val();
+                    $allListElements = $('.deploymentRolesList > li');
+                    $matchingListElements = $allListElements.filter(function(i,el){
+                        return $(el).text().indexOf(searchText) !== -1;
+                    });
+                    $allListElements.hide();
+                    $matchingListElements.show();
+                 });
                 var itms = $('#templatescookbooks').attr('defaultvalues').split(',');
                 //alert(itms.length);
                 $.each(itms,function(k,v){
@@ -577,5 +604,25 @@ $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
    //Fix for default first item selection and cookbook load. - Vinood CAT-88
    $('#configname').trigger('change');
    $('#templatetypename').trigger('change');
+
+   // $chefItemdiv.find('.searchoptionforCookbooks').keyup(function(e){
+   //      var searchText = $(this).val();
+   //      $allListElements = $chefItemdiv.find('.deploymentsCookbookList > li');
+   //      $matchingListElements = $allListElements.filter(function(i,el){
+   //          return $(el).text().indexOf(searchText) !== -1;
+   //      });
+   //      $allListElements.hide();
+   //      $matchingListElements.show();
+   //   });
+
+   //   $chefItemdiv.find('.searchoptionforRoles').keyup(function(e){
+   //      var searchText = $(this).val();
+   //      $allListElements = $chefItemdiv.find('.deploymentRoleList > li');
+   //      $matchingListElements = $allListElements.filter(function(i,el){
+   //          return $(el).text().indexOf(searchText) !== -1;
+   //      });
+   //      $allListElements.hide();
+   //      $matchingListElements.show();
+   //   });
    
 </script>
