@@ -139,6 +139,32 @@ var Chef = function(settings) {
         });
     };
 
+    //Included a query to get receipes for cookbook - for service masters - Vinod
+    this.getReceipesForCookbook = function(cookbookName,callback) {
+
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            console.log('REceipe query:' + cookbookName);
+            chefClient.get('/cookbooks/'+cookbookName+'/_latest', function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                console.log("chef status ", chefRes.statusCode);
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefResBody.recipes);
+                } else {
+                    callback(true, null);
+                }
+
+            });
+
+        });
+    };
+
     this.getCookbook = function(cookbookName, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
