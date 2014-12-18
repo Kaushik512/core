@@ -82,6 +82,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
     //To Do SAve...
     // var d4djson = $.parseJSON(d4ddata);
     // alert(d4ddata.sections.section[0].name);
+    //alert('run');
     var formData = null;
     readMasterJson(formID);
 
@@ -108,6 +109,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             var inputC = null;
             var editButton = null;
             var setOrgname = false;
+            var imageTD = null;
             $.each(item, function(k, v) {
                 if (k == "name") {
                     // alert(v);
@@ -210,7 +212,7 @@ var forceEdit = false; //variable used to force save one record ex. Authenticati
 
 function readform(formID) {
     var formData = null;
-    //  alert("force edit:" + forceEdit);
+//    alert("force edit:" + forceEdit);
     //Prefilling dropdowns
     $('select').each(function() {
 
@@ -1307,7 +1309,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     var $div1 = $("<div></div>").addClass('col col-9');
     var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
     var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
-    var $inputtypetextCookbooks = $('<input type="text">').addClass('searchoptionforCookbooks');
+    var $inputtypetextCookbooks = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Cookbooks">').addClass('searchoptionforCookbooks form-control padding0');
     var $hr1 = $("<hr>");
     $ul1.append($label2);
     $ul1.append($inputtypetextCookbooks);
@@ -1332,12 +1334,12 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
         getRolesFunction();
     });
     
-    $ul1.append($hr1);
+    //$ul1.append($hr1);
 
     $div1.append($ul1);
     var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
     var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
-    var $inputtypetextRoles = $('<input type="text">').addClass('searchoptionforRoles');
+    var $inputtypetextRoles = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Roles">').addClass('searchoptionforRoles form-control padding0');
     var $hr2 = $("<hr>");
     $ul2.append($label3);
     $ul2.append($hr2);

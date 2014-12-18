@@ -371,7 +371,8 @@
     $(document).ready(function() {
     $(".choosetemplateType").select2();
     $(".choosedockerRepo").select2();
-    $(".choosechefserver").select2();
+    $(".choosechefserver").trigger('change').select2();
+
     });
     function cancelClicked() {
         $("#popupSelectProvider").modal('hide');
@@ -500,6 +501,9 @@
                 console.log(data);
                 var roles = data.roles;
                 var keys = Object.keys(roles);
+                keys.sort(function(a,b){
+                return a.toLowerCase().localeCompare(b.toLowerCase());
+                });
                 var $deploymentRolesList = $('.deploymentRolesList').empty();
                 for (i = 0; i < keys.length; i++) {
                     $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
@@ -512,7 +516,6 @@
                     
                 });
                 $('#btnDeploymentAddSelectedCookbook').trigger('click');
-
             });
 
         });
@@ -569,5 +572,10 @@ $('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
     });
 
 });
-   loadChefServerObjects($('#configname').val());
+
+   //loadChefServerObjects($('#configname').val());
+   //Fix for default first item selection and cookbook load. - Vinood CAT-88
+   $('#configname').trigger('change');
+   $('#templatetypename').trigger('change');
+   
 </script>

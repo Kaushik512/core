@@ -54,7 +54,12 @@
                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
+                                <!-- <h4 class="panel-title" style="display: inline-flex;"> -->
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse">Instance</a>
+                                    <!-- <input type="text" class="searchInstances form-control" style="margin-left: 10px; margin-top: 6px;height:32px !important"> -->
+                                </h4>
+
                                 <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                 <!-- <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
                                 <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span> -->
@@ -380,39 +385,7 @@
                                                           </tr>
                                                       </thead>
                                                       <tbody class="taskListArea">
-                                                          <tr>
-                                                              <td>Restart_Apache_servers</td>
-                                                              <td>
-                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedNode" data-toggle="modal">
-                                                                      <i class="ace-icon fa fa-sitemap fa-14x"></i>
-                                                                  </a>
-                                                                  <!-- <select id="multiassign1" title="Node" multiple="multiple" name="Node" size="5">
-                                                                  </select> -->
-                                                              </td>
-                                                              <td>
-                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedRunlist" data-toggle="modal">
-                                                                      <i class="ace-icon fa fa-list-ul bigger-120"></i>
-                                                                  </a>
-                                                              </td>
-                                                              <td>
-                                                                  <a class="btn btn-primary btn-sg tableactionbutton" href="#assignedExecute" data-toggle="modal">
-                                                                      <i class="ace-icon fa fa-play bigger-120"></i>
-                                                                  </a>
-                                                              </td>
-                                                              <td>
-                                                                  2014-09-25&nbsp;&nbsp;19:52:31
-                                                              </td>
-                                                              <td>
-                                                                  <div class="btn-group tableactionWidth">
-                                                                      <a class="btn btn-danger pull-left btn-sg tableactionbutton" data-original-title="Delete" data-placement="top" rel="tooltip">
-                                                                          <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                      </a>
-                                                                      <a class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip">
-                                                                          <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                                      </a>
-                                                                  </div>
-                                                              </td>
-                                                          </tr>
+                                                          
                                                       </tbody>
                                                   </table>
                                               </div>
@@ -481,14 +454,14 @@
                                                   </div>
                                                     <div class="container1" style="display:inline-block;margin-left:4px">
                                                       <div id="card2">
-                                                          <div class="card2 front2 flipper hidden pause"  title="Pause" >
+                                                          <div class="card2 front2  hidden pause"  title="Pause" >
                                                              <div id="flip3" style="margin-top:5px;">
                                                               <div class="">
                                                                   <a href="javascript:void(0);" data-original-title="Pause"  dockercontaineraction="4"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-pause fa-16px txt-color-white" ></i></a>
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card2 front2 flipper unpause">
+                                                          <div class="card2 front2  unpause">
                                                               <div id="flip3" style="margin-top:5px;"  title="UnPause" >
                                                                   <div class="">
                                                                       <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
@@ -499,7 +472,7 @@
                                                   </div>
                                                   
                                                 </td>
-                                                <td class="dockercontainerstatus"></td>
+                                                <td class="" width="150px"><span class="dockercontainerstatus"></span></td>
                                                 <td  class="dockercontainerstartedon"></td>
                                                 <td  class="dockercontainername"></td>
                                                 <td  class="dockercontainerhostip"></td>
@@ -707,26 +680,24 @@
 </div><!-- /.modal -->
 
 <div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
+
+    <div class="modal-dialog"  style="width:80%;">
+        <div class="modal-content" style="height:500px">
+
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
                     ×
                 </button>
                 <h4 class="modal-title">
-                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;cAdvisor
+                    <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;Monitoring Container
                 </h4>
             </div>
-            <div class="modal-body no-padding">
+            <div class="modal-body no-padding"  style="height:480px">
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
-                    <fieldset style="padding-top:7px !important;">
-                        <section><iframe src="http://www.google.com" id="cAdvisorPageFrame"></iframe>
-                            
-                        </section>   
+                    <fieldset style="padding-top:7px !important;height:366px;">
+                        <iframe id="cAdvisorPageFrame"  style="width:100%;height:100%;border:0px;">
+                        </iframe>
                     </fieldset>
-                    <div>
-                    
-                    </div>
                     <footer>
                         <button class="btn btn-primary" type="submit" data-dismiss="modal">
                             <i class="fa fa-undo fa-1x"></i>&nbsp;Close
@@ -1645,6 +1616,25 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
 <script type="text/javascript">
+    $('.searchInstances').keyup(function(e){
+        var searchText = $(this).val();
+        //alert(searchText);
+        $allListElements = $('#divinstancescardview ul li .domain-roles-heading .cardHeadingTextoverflow');
+        //alert($allListElements.length);
+        $matchingListElements = $allListElements.filter(function(i,el){
+            //alert(el);
+            return $(el).text().indexOf(searchText) !== -1;
+        });
+        // $allListElements.parents().eq(6).hide();
+        // $matchingListElements.parents().eq(6).show();
+        $allListElements.parents(".domain-role-thumbnail").hide();
+        $matchingListElements.parents(".domain-role-thumbnail").show();
+        // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
+        // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
+     });
+    
+</script>
+<script type="text/javascript">
 
 // $(document.body).on('click', '.card', function () {
       
@@ -1853,11 +1843,8 @@ $('.Containers').click(function(e){
 
 });
 
-
-
-
-$('.createTaskLink').click(function(e){
-  localStorage.setItem("SelectedClass","Orchestration");
+function setBreadCrumbAndViewOrchestration() {
+    localStorage.setItem("SelectedClass","Orchestration");
 
   //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
@@ -1888,6 +1875,12 @@ $('.createTaskLink').click(function(e){
     var myTabContent3 = $('#myTabContent3').find('tab-pane.active').innerHTML;
     //alert(myTabContent3);
   }
+}
+
+
+
+$('.createTaskLink').click(function(e){
+    setBreadCrumbAndViewOrchestration();
   
     window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
 });
@@ -2005,6 +1998,13 @@ $('.dockerinstancestart').click(function(e){
                 $td.find('.dockerspinner').detach();
                 $td.find('.dockermessage').detach();
                 $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                //Updating instance card to show the docker icon.
+                $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                //find the instance card - to do instance table view update
+                var $instancecard = $('div[data-instanceid="' + instid + '"]');
+                    if($instancecard.find('.dockerenabledinstacne').length <= 0){
+                        $instancecard.find('.componentlistContainer').first().append($dockericon);
+                    }
                 }
                 else
                 {
@@ -2025,7 +2025,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tr = $('<tr></tr>');
         var $tdName = $('<td></td>').append(data[i].name);
         $tr.append($tdName);
-        var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
+        var $tdNodeList = $('<td></td>').append('<a data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
         $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
             $.post('../instances/', {
                 instanceIds: $(this).data('nodeList')
@@ -2051,7 +2051,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         });
         $tr.append($tdNodeList);
 
-        var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
+        var $tdRunlist = $('<td></td>').append('<a data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
         $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
             var $taskRunListContainer = $('.taskRunListContainer').empty();
             var runlist = $(this).data('taskRunlist');
@@ -2067,7 +2067,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         });
         $tr.append($tdRunlist);
 
-        var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+        var $tdExecute = $('<td></td>').append('<a data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
         $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
             var taskId = $(this).data('taskId');
             var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
@@ -2129,9 +2129,9 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tdTime = $('<td></td>').append(timestamp);
         $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask" data-taskId="'+data[i]._id+'" style="margin-left:22px";><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>');
+        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId',data[i]._id);
         $tdOptions.find('.btnDeleteTask').click(function(e){
-            var taskId = $(this).attr('data-taskId');
+            var taskId = $(this).parents('td').attr('data-taskId');
           var that = this;
           $.ajax({
             url:'../tasks/'+taskId,
@@ -2140,6 +2140,14 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
               $(that).parents('tr').remove();
             }
           })
+        });
+         $tdOptions.find('.btnEditTask').click(function(e){
+            setBreadCrumbAndViewOrchestration();
+  
+           var taskId = $(this).parents('td').attr('data-taskId');
+         
+           window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid']+'&taskId='+taskId;
+           
         });
         $tr.append($tdOptions);
 
@@ -3107,27 +3115,80 @@ function loadContainersTable(){
                    {
                    // alert('in' + i);
                     $('.dockeractionbutton').unbind("click");
+                    $('.cadvisorenablebase').each(function(j,itm){
+                        if($(this).attr('cadvisorip')){
+                            var cadip = $(this).attr('cadvisorip');
+                             $('a[cadvisorip="' + cadip +'"]').removeClass('hidden');
+                        }
+                            
+                     });
+
                     $('.dockeractionbutton').click(function(){
                        // alert('test' + $(this).attr('dockercontaineraction'));
                        //append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                       $(this).closest('tr').fadeTo('slow',0.5);
                        var $progressicon = $(this).closest('tr').find('.dockercontainerprogress').first();
                        var $thistr = $(this);
                        $progressicon.removeClass('hidden');
                         var action =  $(this).attr('dockercontaineraction');
                         var instanceid =  $(this).closest('tr').attr('instanceid');
                         var containerid =  $(this).closest('tr').attr('containerid');
+                        var $contextRow = $(this).closest('tr');
                        // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
                         if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
                             $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
                              // alert(data);
                               if(data == 'OK'){
                                 //$(this).parents('.flip-toggle').toggleClass('flip1');
-                               // alert('ok');
-                               // $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
+                               //alert('ok');
+                              //  $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
                                //alert($thistr.closest('.dockercontainertabletemplatetr').html());
-                               $thistr.closest('.container1').find('.flipper').toggleClass('hidden')
-                                $progressicon.addClass('hidden');
+                               
+                                $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
+                                    var dockerContainerData = JSON.parse(data);
+                                    //alert(JSON.stringify(dockerContainerData));
+                                    //Updating More Info dialog
+                                    // $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
+                                    //     console.log("dockerContainerData." +  $(this).attr('containerdata'));
+                                    //      if($(this).attr('containerdata') != '')
+                                    //         $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
+                                    // });
+                                    // // updating row.
+                                    // $contextRow.find('dockercontainerstatus').html(dockerContainerData);
+                                    $.each(dockerContainerData,function(i,item){
+                                        //alert(item.Id.substring(0,12) + ':' + containerid);
+                                        if(item.Id.substring(0,12) == containerid){
+                                         //   alert('found constructing ' + item.toString())
+                                            var $updatedContainerRow = createdockercontainerrow(item,instanceid);
+                                            //Do not bind any action buttons
+                                            $updatedContainerRow.find('td').each(function(i,k){
+                                                //alert(i + ':' + k);
+                                                if(i > 0 && i < 7){
+                                                    $contextRow.find('td:eq(' + i + ')').html('').append($(k).html());
+                                                }
+
+                                            });
+                                            $thistr.closest('.container1').find('.flipper').toggleClass('hidden');
+                                            //Managing the pause and unpause buttons
+                                            if(item.Status.indexOf('Exited') >= 0){
+                                              //  alert('in');
+                                                $thistr.closest('.container1').find('.pause').addClass('hidden');
+                                                $thistr.closest('.container1').find('.unpause').addClass('hidden');
+                                            }
+                                            
+                                       }
+                                    });
+                                    
+                                    
+
+                                    $thistr.closest('tr').fadeTo('slow',1);
+                                    $progressicon.addClass('hidden');
+                               });
+
+
                               }
+                              else
+                                $progressicon.addClass('hidden');
                                     
                             });
                         }
@@ -3140,7 +3201,7 @@ function loadContainersTable(){
       }
     });
     //dockercontaineraction
-
+   
     
 }
 
@@ -3158,7 +3219,7 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
 
 
     var $docctr = $('#dockercontainertabletemplatetr').clone().removeClass('hidden');
-    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status).append($cadvisor);
+    $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status).parent().append($cadvisor);
     var docdate = new Date(1000*dockerContainerItem.Created);
     $docctr.find('.dockercontainerstartedon').html(docdate.toLocaleString());
     $docctr.find('.dockercontainername').html(dockerContainerItem.Names[0]);
@@ -3167,12 +3228,15 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     var instanceip = $('.domain-roles-caption[data-instanceid="' + instanceid + '"]').first().find('.instanceip').text();
 
     //Building the cadvisor href
-    $cadvisor.append('<i class="fa fa-line-chart fa-lg " style="margin-top:9px"></i>').attr('href','http://' + instanceip + ':8080');
+    $cadvisor.append('<i class="fa fa-line-chart fa-lg " style="margin-top:9px"></i>').attr('href','http://' + instanceip + ':8080/docker/' + dockerContainerItem.Id);
+    $cadvisor.attr('cadvisorip',instanceip); //
+    $cadvisor.attr('dockercontainerid',dockerContainerItem.Id );
 
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
-    /*$cadvisor.click(function(e){
+   /* $cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
-        $('#cAdvisorPageFrame').load('http://' + instanceip + ':8080');
+        $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
+        //$('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
         e.preventDefault();
         return(false);
     });*/
@@ -3200,15 +3264,30 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     {
         //Show Stop
         //If the container is of type cadvisor show the link
-        if(dockerContainerItem.Image.indexOf('cadvisor') >= 0)
+        if(dockerContainerItem.Image.indexOf('cadvisor') >= 0){
             $cadvisor.removeClass('hidden');
+            $cadvisor.addClass('cadvisorenablebase');
+        }
 
         $docctr.find('.stop').removeClass('hidden');
         $docctr.find('.start').addClass('hidden');
+
+        
+        if(dockerContainerItem.Status.indexOf('Paused') >= 0){
+            $docctr.find('.pause').addClass('hidden');
+            $docctr.find('.unpause').removeClass('hidden');
+        }else
+        {
+            $docctr.find('.unpause').addClass('hidden');
+            $docctr.find('.pause').removeClass('hidden');
+        }
+
     }
     else if(dockerContainerItem.Status.indexOf('Exited') >= 0){
         $docctr.find('.stop').addClass('hidden');
         $docctr.find('.start').removeClass('hidden');
+        $docctr.find('.pause').addClass('hidden');
+        $docctr.find('.unpause').addClass('hidden');
     }
     else if(dockerContainerItem.Status.indexOf('Paused') >= 0){
         $docctr.find('.pause').addClass('hidden');
@@ -3408,7 +3487,7 @@ $('.launchBtn').click(function(e) {
         
 
         $launchDockerInstanceSelector.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr></thead>");
+          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
           var $newinstancetbody = $('<tbody></tbody>');
           $newinstancetable.append($newinstancetbody);
           var $instancetable = $('#tableinstanceview').clone();
@@ -3427,7 +3506,7 @@ $('.launchBtn').click(function(e) {
               if(k > 3 )
                   $(this).detach();
             });
-           $('#dockerintsancestab thead tr').append('<td title="Select to add a docker engine">Add Engine</td>');
+           $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
             $('#dockerintsancestab tbody tr').each(function(k,v){
 
               $(this).removeClass('rowcustomselected');
@@ -3443,7 +3522,7 @@ $('.launchBtn').click(function(e) {
                     $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                 }
               });
-             $(this).append('<td><input type="checkbox"></td>');
+             $(this).append('<td  class="hidden"><input type="checkbox"></td>');
 
             });
             $('.launchdockerinstance').click(function(){
@@ -3453,7 +3532,7 @@ $('.launchBtn').click(function(e) {
             });
             $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
             $launchDockerInstanceSelector.modal('show');
-            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Add Docker Engine</td></tr>');
+            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td  class="hidden">Add Docker Engine</td></tr>');
             $('#dockerintsancestab').dataTable({
                 "bPaginate": false
             });

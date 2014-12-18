@@ -34,8 +34,8 @@
 
 <!-- Tab panes -->
 <div  class="tab-content nodeListContainer">
-  <div  class="tab-pane active tabContent" id="organiz" style="display:none">
-    <table class="table table-hover">
+  <div  class="tab-pane active tabContent table-responsive" id="organiz" style="display:none">
+    <table class="table table-hover table-bordered" style="font-size:13px;padding-bottom:20px;";>
     
     <thead>
       <tr>
@@ -55,8 +55,16 @@
 
     </tbody>
   </table>
-   
-  <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div>
+   <div class="row">
+    <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
+      <div style="text-align:center" class="clearfix form-actions">
+        <div>
+            <input type="button" value="Import Nodes" class="btn btn-primary showChefImportNodesModalBtn">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div> -->
 
 </div>
 
@@ -71,13 +79,13 @@
       </div>
       <div class="modal-body">
          <form role="form" class="smart-form1">
-          <fieldset>
+          <fieldset style="padding-top:0px;">
           <div class="">
           <section class="col col-12">
             <div class="form-group">
               <label for="exampleInputEmail1">Orgs</label>
               <div class="">
-                <select id="chefImportOrgSelect"  class="form-control" disabled>
+                <select id="chefImportOrgSelect"  class="width-100" disabled>
                   
                 </select>
               </div>
@@ -85,7 +93,7 @@
             <div class="form-group">
               <label for="exampleInputEmail1">Business Groups</label>
               <div class="">
-              <select id="chefImportBgSelect"  class="form-control" >
+              <select id="chefImportBgSelect"  class="width-100" >
                 
               </select>
             </div>
@@ -94,7 +102,7 @@
           <div class="form-group">
           <label for="exampleInputEmail1">Project</label>
           <div class="">
-          <select id="chefImportProjectSelect"  class="form-control" >
+          <select id="chefImportProjectSelect"  class="width-100" >
                 
           </select>
         </div>
@@ -115,7 +123,7 @@
         <div class="form-group">
           <label for="exampleInputEmail1">Username</label>
           <div class="">
-          <input type="text" id="importUsernameInput" />
+          <input type="text" class="form-control" id="importUsernameInput" value="root" />
         </div>
         </div>
       </section>
@@ -123,7 +131,7 @@
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
           <div class="">
-          <input type="password" id="importPasswordInput" />
+          <input type="password" class="form-control" id="importPasswordInput" />
         </div>
         </div>
       </section>
@@ -131,12 +139,15 @@
         <div class="form-group">
           <label for="exampleInputEmail1">Pem File</label>
           <div class="">
-          <input type="checkbox" id="pemFileCheckbox" />&nbsp;<input type="file" id="importPemfileInput" style="display:inline" disabled/>
+            <label class="checkbox" style="display:inline;padding-top:4px;">
+                <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
+            </label>
+            <input type="file" id="importPemfileInput" style="display:inline" disabled/>
         </div>
         </div>
       </section>
       <section class="col col-12">
-          <label class="label">Assign Users</label>
+          <label class="">Assign Users</label>
           <label class="select select-multiple">
               <div class="userListLoadingContainer"></div>
               <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
@@ -177,7 +188,9 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
-
+$('#chefImportOrgSelect').select2();
+$('#chefImportBgSelect').select2();
+$('#chefImportProjectSelect').select2();
 
 
 drawBreadCrumb1();
@@ -275,8 +288,12 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
        $tr.append($('<td></td>').addClass('chef-uptime').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
     
        $tr.append($('<td></td>').addClass('chef-env').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-      
-       $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
+       $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
+       $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/><i></i>');
+       $nodecheckboxlabel.append($nodecheckboxinput);
+
+       // $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
+       $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel)); 
        $tableBody.append($tr);  
 
        $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeList[i],function(node){

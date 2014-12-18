@@ -177,4 +177,42 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.get('/tasks/:taskId', function(req, res) {
+        tasksDao.getTaskById(req.params.taskId, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            console.log('task data');
+            if (data && data.length) {
+                res.send(data[0]);
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+    app.post('/tasks/:taskId/update', function(req, res) {
+        var taskData = req.body.taskData;
+        if (!taskData.runlist || !taskData.runlist.length) {
+            res.send(400);
+        }
+        if (!taskData.nodesIdList || !taskData.nodesIdList.length) {
+            res.send(400);
+        }
+        tasksDao.updateTaskData(req.params.taskId, taskData, function(err, updateCount) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (updateCount) {
+                res.send({
+                    updateCount: updateCount
+                });
+            } else {
+                res.send(400);
+            }
+        });
+    });
+
 };

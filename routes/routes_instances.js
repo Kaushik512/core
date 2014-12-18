@@ -69,6 +69,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.end('OK');
         });
     });
+    //updateInstanceIp
+    app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
+        instancesDao.updateInstanceIp(req.params.instanceId,req.params.ipaddress, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.end('OK');
+        });
+    });
 
     app.get('/instances/dockercontainerdetails/:instanceid', function(req, res) {
         //res.send(200);
@@ -215,7 +225,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var stdmessages = '';
-        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename);
+        if(req.params.tagname != null){
+            cmd += ':' + req.params.tagname;
+        }
+        cmd += ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+        console.log('Docker command executed : ' + cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
                 if (err) {
