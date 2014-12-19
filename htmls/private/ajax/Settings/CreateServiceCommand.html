@@ -38,7 +38,7 @@
                                                                   <div class="row">
                                                                       <div class="col col-10">
                                                                           <label class="select"> 
-                                                                              <select class="form-control chooseActiontype width-100">
+                                                                              <select class="form-control chooseActiontype width-100" id="commandtype" cdata="catalyst">
                                                                                   <option id="ChefCookbook" value="Receipe">Chef Cookbook/Recepie</option>
                                                                                   <option id="CustomScript" value="Customs">Service Command</option>
                                                                               </select>
@@ -53,9 +53,7 @@
                                                                   <div class="row">
                                                                       <div class="col col-10">
                                                                           <label class="select"> 
-                                                                              <select class="form-control chooseChefServerdropdown width-100">
-                                                                                  <option id="ChefCookbook" value="Receipe">PhoenixInc</option>
-                                                                                  <option id="CustomScript" value="Customs">RL-India</option>
+                                                                              <select class="form-control chooseChefServerdropdown width-100" cdata="catalyst"  id="configname"  sourcepath="10" datapath="masterjson.rows.row">
                                                                               </select>
                                                                           </label>
                                                                       </div>  
@@ -66,24 +64,22 @@
                                                             <section class="col col-5 ServiceName">
                                                                 <label for="">Service Name</label>
                                                                 <label class="input"> 
-                                                                    <input type="text">
+                                                                    <input type="text" id="servicename"  cdata="catalyst">
                                                                 </label>                                        
                                                             </section>
                                                             <section class="col col-5 CommandName" style="padding-top:10px;">
                                                                 <label for="">Command Name</label>
                                                                 <label class="input"> 
-                                                                    <input type="text">
+                                                                    <input type="text"  id="commandname"  cdata="catalyst">
                                                                 </label>                                        
                                                             </section>
                                                             <section class="col col-5 CommandName" style="padding-top:10px;">
                                                               <label class="">Choose Operating System</label>
                                                               <div class="inline-group">
-                                                                <label class="radio">
-                                                                  <input type="radio" checked="checked" name="radio-inline">
-                                                                  <i></i>Linux</label>
-                                                                <label class="radio">
-                                                                  <input type="radio" name="radio-inline">
-                                                                  <i></i>Windows</label>
+                                                                <select class="form-control chooseActiontype width-100" id="operatingsystem" cdata="catalyst">
+                                                                                  <option value="linux">Linux</option>
+                                                                                  <option value="windows">Windows</option>
+                                                                 </select>
                                                               </div>
                                                             </section>
                                                             <section class="col col-6 ServiceCookbooks padding-left-10percent">
@@ -93,10 +89,8 @@
                                                                   <div class="">
                                                                       <div>
                                                                           <label class="select"> 
-                                                                              <select class="form-control chooseServiceCookbooks width-100">
-                                                                                  <option id="Service_Apache" value="Service_Apache">Service_Apache</option>
-                                                                                  <option id="Service_Mysql" value="Service_Mysql">Service_Mysql</option>
-                                                                                  <option id="Service_JBoss" value="Service_JBoss">Service_JBoss</option>
+                                                                              <select class="form-control chooseServiceCookbooks width-100" id="servicecookbook" cdata="catalyst">
+                                                                                 
                                                                               </select>
                                                                           </label>
                                                                       </div>  
@@ -122,29 +116,14 @@
                                       <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
                                         <div style="display: none;" class="loadingChefRecipeContainer"><img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"></div> 
                                         <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestart" cdata="catalyst">
+                                                <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
                                                 <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
                                                 <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option>
+                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
                                             </select>
                                         </label>
-                                        <label class="select Service_Mysql"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[service_mysql::kill]">Service_Mysql_kill</option>
-                                                <option value="recipe[service_mysql::restart]">Service_Mysql_restart</option>
-                                                <option value="recipe[service_mysql::start]">Service_Mysql_start</option>
-                                                <option value="recipe[service_mysql::stop]">Service_Mysql_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_JBoss"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_JBoss::kill]">Service_JBoss_kill</option>
-                                                <option value="recipe[Service_JBoss::restart]">Service_JBoss_restart</option>
-                                                <option value="recipe[Service_JBoss::start]">Service_JBoss_start</option>
-                                                <option value="recipe[Service_JBoss::stop]">Service_JBoss_stop</option>
-                                            </select>
-                                        </label>
+                                       
                                       </div>
                                   </div>
                                   <div class="col col-sm-6">
@@ -158,29 +137,14 @@
                                       <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
                                         <div style="display: none;" class="loadingChefRecipeContainer"><img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"></div> 
                                         <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestop" cdata="catalyst">
+                                                <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
                                                 <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
                                                 <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option>
+                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
                                             </select>
                                         </label>
-                                        <label class="select Service_Mysql"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[service_mysql::kill]">Service_Mysql_kill</option>
-                                                <option value="recipe[service_mysql::restart]">Service_Mysql_restart</option>
-                                                <option value="recipe[service_mysql::start]">Service_Mysql_start</option>
-                                                <option value="recipe[service_mysql::stop]">Service_Mysql_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_JBoss"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_JBoss::kill]">Service_JBoss_kill</option>
-                                                <option value="recipe[Service_JBoss::restart]">Service_JBoss_restart</option>
-                                                <option value="recipe[Service_JBoss::start]">Service_JBoss_start</option>
-                                                <option value="recipe[Service_JBoss::stop]">Service_JBoss_stop</option>
-                                            </select>
-                                        </label>
+                                       
                                       </div>
                                     </div>
                                 </div>
@@ -197,27 +161,11 @@
                                       <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
                                         <div style="display: none;" class="loadingChefRecipeContainer"><img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"></div> 
                                         <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicerestart" cdata="catalyst">
+                                               <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
                                                 <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
                                                 <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_Mysql"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[service_mysql::kill]">Service_Mysql_kill</option>
-                                                <option value="recipe[service_mysql::restart]">Service_Mysql_restart</option>
-                                                <option value="recipe[service_mysql::start]">Service_Mysql_start</option>
-                                                <option value="recipe[service_mysql::stop]">Service_Mysql_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_JBoss"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_JBoss::kill]">Service_JBoss_kill</option>
-                                                <option value="recipe[Service_JBoss::restart]">Service_JBoss_restart</option>
-                                                <option value="recipe[Service_JBoss::start]">Service_JBoss_start</option>
-                                                <option value="recipe[Service_JBoss::stop]">Service_JBoss_stop</option>
+                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
                                             </select>
                                         </label>
                                       </div>
@@ -233,27 +181,11 @@
                                       <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
                                         <div style="display: none;" class="loadingChefRecipeContainer"><img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"></div> 
                                         <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicekill" cdata="catalyst">
+                                               <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
                                                 <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
                                                 <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_Mysql"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[service_mysql::kill]">Service_Mysql_kill</option>
-                                                <option value="recipe[service_mysql::restart]">Service_Mysql_restart</option>
-                                                <option value="recipe[service_mysql::start]">Service_Mysql_start</option>
-                                                <option value="recipe[service_mysql::stop]">Service_Mysql_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_JBoss"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_JBoss::kill]">Service_JBoss_kill</option>
-                                                <option value="recipe[Service_JBoss::restart]">Service_JBoss_restart</option>
-                                                <option value="recipe[Service_JBoss::start]">Service_JBoss_start</option>
-                                                <option value="recipe[Service_JBoss::stop]">Service_JBoss_stop</option>
+                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
                                             </select>
                                         </label>
                                       </div>
@@ -272,47 +204,17 @@
                                       <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
                                         <div style="display: none;" class="loadingChefRecipeContainer"><img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"></div> 
                                         <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestatus" cdata="catalyst">
+                                                <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
                                                 <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
                                                 <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option>
+                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
                                             </select>
                                         </label>
-                                        <label class="select Service_Mysql"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[service_mysql::kill]">Service_Mysql_kill</option>
-                                                <option value="recipe[service_mysql::restart]">Service_Mysql_restart</option>
-                                                <option value="recipe[service_mysql::start]">Service_Mysql_start</option>
-                                                <option value="recipe[service_mysql::stop]">Service_Mysql_stop</option>
-                                            </select>
-                                        </label>
-                                        <label class="select Service_JBoss"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100">
-                                                <option value="recipe[Service_JBoss::kill]">Service_JBoss_kill</option>
-                                                <option value="recipe[Service_JBoss::restart]">Service_JBoss_restart</option>
-                                                <option value="recipe[Service_JBoss::start]">Service_JBoss_start</option>
-                                                <option value="recipe[Service_JBoss::stop]">Service_JBoss_stop</option>
-                                            </select>
-                                        </label>
+                                       
                                       </div>
                                   </div>
-                                    <!-- <section class="col col-5 AssignUsers">
-                                        <label class="label">Assign Users <span style="color:red">*</span>
-                                        </label>
-                                        <label class="select select-multiple">
-                                            <div class="userListLoadingContainer" style="display: none;">
-                                              <img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block">
-                                            </div>
-                                            <select style="" id="userListSelect" multiple="" class="custom-scroll">
-                                              <option value="Administrator">Administrator</option>
-                                              <option value="Designer">Designer</option>
-                                              <option value="consumer1">consumer1</option>
-                                              <option value="designer1">designer1</option>
-                                              <option value="sd1">sd1</option>
-                                            </select>
-                                        </label>
-                                    </section> -->
+                                   
                                 </div>
                               </div>
                               <div id="customScript-dropdown">
@@ -326,35 +228,35 @@
                                 <section class="col col-5" style="padding-top:10px;">
                                     <label>Command</label>
                                     <label class="input"> 
-                                        <input type="text">
+                                        <input type="text" id="command" cdata="catalyst">
                                     </label>                                        
                                 </section>
                               <section class="col col-12" style="padding-top:10px;">
                                 <label class="">Select Action</label>
-                                <div class="row">
+                                <div class="row" cdata="catalyst" ctype="checkbox">
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
+                                      <input type="checkbox" name="checkbox"  id="checkbox_start" >
                                       <i></i>Start</label>
                                   </div>
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
+                                      <input type="checkbox" name="checkbox"  id="checkbox_stop" >
                                       <i></i>Stop</label>
                                   </div>
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
+                                      <input type="checkbox" name="checkbox"  id="checkbox_restart" >
                                       <i></i>Restart</label>
                                   </div>
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
+                                      <input type="checkbox" name="checkbox" id="checkbox_kill" >
                                       <i></i>Kill</label>
                                   </div>
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox">
+                                      <input type="checkbox" name="checkbox"  id="checkbox_status">
                                       <i></i>Status</label>
                                   </div>
                                 </div>
@@ -529,6 +431,7 @@
         //});
 
         //Force opening the left navigation menu
+        $('select[cdata="catalyst"]').trigger('change'); //used for selecting
         if ($('#navSettings').is(":visible") == false) {
             $('#navSettings').css("display", '');
             $('#navSettings > ul > li').first().addClass('open');
@@ -536,8 +439,10 @@
             $('#navSettings > ul > li > ul').first().css("display", "block");
         }
         //redrawing the breadcrumb and selecting the tree
-        $('#ulsettingstree > li').removeClass('active');
-        $('#ulsettingstree > li').each(function () {
+        //redrawing the breadcrumb and selecting the tree
+        $('#Settings li').removeClass('active');
+        $('#Settings li').each(function () {
+            //alert($(this).text().trim());
             if ($(this).text().trim() == "Service Commands")
                 $(this).addClass('active');
         });
