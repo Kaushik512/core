@@ -214,7 +214,7 @@ function readform(formID) {
     var formData = null;
     //    alert("force edit:" + forceEdit);
     //Prefilling dropdowns
-    $('select').each(function() {
+    $('select[cdata="catalyst"]').each(function() {
 
         if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
 
@@ -266,7 +266,7 @@ function readform(formID) {
         //alert("Reading" + JSON.stringify(temp));
     });
 
-    $('input[sourcepath]').each(function() {
+    $('input[sourcepath][cdata="catalyst"]').each(function() {
         //debugger;
         if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
             var tempJSON = JSON.parse(readMasterJson($(this).attr('sourcepath')));
@@ -314,7 +314,7 @@ function readform(formID) {
 
     // alert("before d4d" + JSON.stringify(d4ddata));
     readMasterJson(formID);
-    //   alert("after d4d" + JSON.stringify(d4ddata));
+    //alert("after d4d" + JSON.stringify(d4ddata));
 
     /* $.each(d4ddata.sections.section, function (i, item) {
          if (item.name == formName) {
@@ -383,14 +383,13 @@ function readform(formID) {
                 if (v.indexOf("_filename") > 0) {
                     v = v.replace('_filename', '');
                 }
-                inputC = $("#" + v);
+                inputC = $('#' + v);
             }
 
         });
-        // alert($(inputC).attr("id"));
         $.each(item, function(k, v) {
             if (k == "values") {
-                if (inputC) {
+                if (inputC && $(inputC).attr("id") != undefined) {
                     $.each(v, function(k1, v1) {
 
                         if (inputC.getType().toLowerCase() == "text") {
