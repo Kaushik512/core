@@ -27753,7 +27753,8 @@ tr.highlight td, tr.unread.highlight td {
     position: relative;
     border: 1px solid #ccc;
     white-space: nowrap;
-    line-height: 32px;
+    /*srikant changed 32 to 30*/
+    line-height: 30px;
     color: #444;
     text-decoration: none;
     -webkit-background-clip: padding-box;
