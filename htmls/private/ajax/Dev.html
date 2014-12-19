@@ -273,10 +273,10 @@
                                           </h5>
                                           <div class="widget-toolbar no-border">
                                               <div>     
-                                                  <a class="btn btn-minier btn-primary createTaskLink" href="javascript:void(0)">
+                                                  <button class="btn btn-minier btn-primary createTaskLink" href="javascript:void(0)">
                                                       <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                                       Create Task
-                                                  </a>                                                
+                                                  </button>                                                
                                               </div>
                                           </div>
                                                                   
@@ -1787,7 +1787,21 @@ function setBreadCrumbAndViewOrchestration() {
   }
 }
 
+//event for orchatration tab show 
+$(function() {
+     var $createTaskBtn = $('.createTaskLink');
+    // var $instanceList = $('.instancesList');
+    $('a[data-toggle="tab"][href="#l3"]').on('show.bs.tab', function() {
+        var cardCount = $('.instancesList').children().length;
+       
+        if (cardCount === 0) {
+            $createTaskBtn[0].disabled = true;
+        } else {
+            $createTaskBtn[0].disabled = false;
+        }
+    });
 
+});
 
 $('.createTaskLink').click(function(e){
     setBreadCrumbAndViewOrchestration();
@@ -1841,6 +1855,9 @@ $('.dockerinstancestart').click(function(e){
       }
     });
 });
+
+
+
 
 
 $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' + envId + '/tasks', function(data) {
@@ -1962,6 +1979,8 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
             method:'DELETE',
             success:function(data){
               $(that).parents('tr').remove();
+              var totalTask = $taskListArea.children('tr').length;
+              $('.taskListFooter').text('Showing '+totalTask+' of '+totalTask+' entries');
             }
           })
         });
