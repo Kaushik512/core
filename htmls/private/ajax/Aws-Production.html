@@ -1429,7 +1429,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                $('.deploymentSelectedRunList input').each(function() {
                    cbs.push($(this).val());
                });
-               reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+               reqBody.runlist = cbs; //$('#cookbookSelect').val();
                //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
                reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
                console.log("instanceType ==>", $('select.instanceType').val());

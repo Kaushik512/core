@@ -260,96 +260,7 @@
                         </div><!--Launch div ends here-->
                     </div> <!--tab-pane l2 gets over -->
 
-                    <!-- <div class="tab-pane" id="l3">
-                        
-
-                        <form class="smart-form" action="">
- 
-
-                            <fieldset>
-                               
-                                <section class="col col-4">
-                                    <label class="label">
-                                        <img src="img/templateicons/Select-nodes---deployment.png">
-                                        <strong>Select Nodes</strong>
-                                    </label>
-                                    <div class="row">
-                                        <div class="col col-10">
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentNodeList">
-                                               
-                                            </ul>
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                </section>
-                                <section class="col col-4">
-                                    <label class="label">
-                                        <img src="img/templateicons/Create-run-list---deployment.png">
-                                        <strong>Create Runlist</strong>
-                                    </label>
-                                    <div class="row">
-                                        <div class="col col-10">
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;" class="deploymentCookbookList">
-                                                <label class="label" style="text-align:center;">Select Cookbooks</label>
-                                                <hr>
-                                                
-                                            </ul>
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;"  class="deploymentRolesList">
-                                                
-                                                <label class="label" style="text-align:center;">Select Roles</label>
-                                                <hr>
-                                                
-                                            </ul>
-                                        </div>
-                                        <div style="margin-top: 122px;" class="col col-2">
-                                            <div class="input-group">
-                                                <div style="padding-bottom: 10px;" class="btn-group">
-                                                    <button id="btnDeploymentAddSelectedCookbook" data-original-title="Add" data-placement="top" rel="tooltip" data-html="true" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-right"></i></button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div class="btn-group">
-                                                    <button id="btnDeploymentRemoveSelectedCookbook" class="btn btn-default btn-primary" style="width:30px;height:27px;" type="button"><i style="font-size:20px;" class="fa fa-angle-double-left"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </section>
-                                <section class="col col-4">
-                                    <label class="label">
-                                        <img src="img/templateicons/Order-run-list---deployment.png">
-                                        <strong>Order RunList</strong>
-                                    </label>
-                                    <div class="row">
-                                        <div class="col col-10">
-                                            <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedRunList">
-                                                
-                                            </ul>
-                                        </div>
-                                       
-                                    </div>
-                                </section>
-
-                            
-                            </fieldset>
-
-                        </form>
-                        <div class="row">
-                            <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
-                                <div class="clearfix form-actions" style="text-align:center">
-                                    <div class="btn-group">
-                                        <button class="btn pull-left btn-primary editBtn deploymentChefRunBtn" style="margin-left:5px">
-                                            <i class="ace-icon fa fa-pencil  bigger-110"></i>
-                                            Execute Chef Run
-                                        </button>                                       
-                                         
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </div> -->
+            
                                         <div class="tab-pane" id="l3">
                         <div class="row">
                           <div class="col-md-12">
@@ -391,8 +302,7 @@
                                               </div>
                                           </div>
                                           <div class="widget-toolbox padding-8 clearfix">
-                                             <div id="tableFooterLeft" class="pull-left">Showing 1 to 4 of 4 entries</div>
-                                             <div id="tableFooterRight" class="pull-right">1</div>
+                                             <div class="pull-left taskListFooter"></div>
                                           </div>
                                       </div>
                                   </div>
@@ -1888,93 +1798,7 @@ $('.createTaskLink').click(function(e){
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
 
-$.get('../organizations/' + urlParams.org + '/cookbooks', function(data) {
-    console.log(data);
-    var cookbooks = data.cookbooks;
-    var keys = Object.keys(cookbooks);
-    var $deploymentCookbookList = $('.deploymentCookbookList');
-    for (i = 0; i < keys.length; i++) {
-        $deploymentCookbookList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbooks" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
-    }
-});
 
-$.get('../organizations/' + urlParams.org + '/roles', function(data) {
-    console.log(data);
-    var roles = data.roles;
-    var keys = Object.keys(roles);
-    var $deploymentRolesList = $('.deploymentRolesList');
-    for (i = 0; i < keys.length; i++) {
-        $deploymentRolesList.append($('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRoles" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>'));
-    }
-});
-
-$('#btnDeploymentAddSelectedCookbook').click(function(e) {
-    var $deploymentSelectedList = $('.deploymentSelectedRunList');
-    var $selectedCookbooks = $("input[name=checkboxCookbooks]:checked");
-    $selectedCookbooks.each(function(idx) {
-        var $this = $(this);
-        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName') + '</label></li>').on('click', function(e) {
-            if ($(this).hasClass('deploymentCookbookSelected')) {
-                $(this).removeClass('deploymentCookbookSelected');
-            } else {
-                $(this).addClass('deploymentCookbookSelected');
-            }
-        }));
-        $this.attr('checked', false);
-        $this.parents('li').hide();
-    });
-
-    var $selectedRoles = $("input[name=checkboxRoles]:checked");
-    $selectedRoles.each(function(idx) {
-        var $this = $(this);
-        $deploymentSelectedList.append($('<li><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName') + '</label></li>').on('click', function(e) {
-            if ($(this).hasClass('deploymentCookbookSelected')) {
-                $(this).removeClass('deploymentCookbookSelected');
-            } else {
-                $(this).addClass('deploymentCookbookSelected');
-            }
-        }));
-        $this.attr('checked', false);
-        $this.parents('li').hide();
-    });
-
-    $deploymentSelectedList.sortable({
-        cursor: "move"
-    });
-});
-
-$('#btnDeploymentRemoveSelectedCookbook').click(function(e) {
-    var $deploymentSelectedList = $('.deploymentSelectedRunList');
-    $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
-        var value = $(this).find('input').val();
-        var selector = 'input[name=checkboxRoles][value="' + value + '"]';
-        console.log(selector);
-        $('input[name=checkboxRoles][value="' + value + '"]').parents('li').show();
-        $('input[name=checkboxCookbooks][value="' + value + '"]').parents('li').show();
-        $(this).remove();
-    });
-});
-
-
-
-
-$('.deploymentChefRunBtn').click(function(e) {
-
-    var $selectedNodes = $('input[name=deploymentNodesCheckBox]:checked');
-    var $runlistInput = $('.deploymentSelectedRunList input');
-    var runlist = [];
-    $runlistInput.each(function() {
-        runlist.push($(this).val());
-    });
-    console.log(runlist);
-    $selectedNodes.each(function(e) {
-        $.post('../instances/' + $(this).val() + '/updateRunlist', {
-            runlist: runlist
-        }, function(data) {
-            console.log('instance runlist updated');
-        });
-    })
-});
 
 
 $('.dockerinstancestart').click(function(e){
@@ -2025,7 +1849,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         var $tr = $('<tr></tr>');
         var $tdName = $('<td></td>').append(data[i].name);
         $tr.append($tdName);
-        var $tdNodeList = $('<td></td>').append('<a data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
+        var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
         $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
             $.post('../instances/', {
                 instanceIds: $(this).data('nodeList')
@@ -2051,7 +1875,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         });
         $tr.append($tdNodeList);
 
-        var $tdRunlist = $('<td></td>').append('<a data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
+        var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
         $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
             var $taskRunListContainer = $('.taskRunListContainer').empty();
             var runlist = $(this).data('taskRunlist');
@@ -2067,7 +1891,7 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
         });
         $tr.append($tdRunlist);
 
-        var $tdExecute = $('<td></td>').append('<a data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+        var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
         $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
             var taskId = $(this).data('taskId');
             var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
@@ -2218,6 +2042,9 @@ $.get('../organizations/' + orgId + '/projects/' + projectId + '/environments/' 
             });
         }, delay);
     }
+
+    //updating footer 
+    $('.taskListFooter').text('Showing '+data.length+' of '+data.length+' entries');
 
 
 });
@@ -2378,16 +2205,7 @@ $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + en
                                 $.get('../blueprints/' + blueprintId + '/versions/' + version, function(versionData) {
                                     console.log('blueprint data',versionData);
                                 var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
-                                    // //To do additional selections
-                                    // var $deploymentsCookbookList = $ccrs.find('.deploymentsCookbookList');
-                                    // var $deploymentsRoleList = $ccrs.find('.deploymentRoleList');
-                                    // console.log(versionData.runlist);
-                                    // for (var i = 0; i < versionData.runlist.length; i++) {
-                                    //     $deploymentsCookbookList.find('li input[value="' + versionData.runlist[i] + '"]').first().click();
-                                    //     $deploymentsRoleList.find('li input[value="' + versionData.runlist[i] + '"]').first().click();
-
-                                    // }
-                                    // $('.btnItemAdd').first().trigger('click');
+                                   
                                 },versionData.runlist);
                                 $ccrs.find('.deploymentSelectedRunList').attr('data-blueprintId', blueprintId);
                                 $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs); 

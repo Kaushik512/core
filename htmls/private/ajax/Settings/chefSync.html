@@ -188,7 +188,7 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
-$('#chefImportOrgSelect').select2();
+
 $('#chefImportBgSelect').select2();
 $('#chefImportProjectSelect').select2();
 
@@ -229,7 +229,8 @@ $('.nodeListContainer').append('<img class="center-block" style="height:50px;wid
 
 $.get('../chef/servers/'+urlParams.chefId,function(data){
    console.log('chefServer ==>',data);
-   $orgListInput.append($('<option></option>').val(data.orgname).html(data.orgname));
+   $orgListInput.append($('<option></option>').val(data.orgname).html(data.orgname).attr('selected','selected'));
+   $orgListInput.select2();
     var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
     var $providerlist = $('#chefImportProviderSelect');
     $providerlist.append($('<option></option>').val('choose').html('Choose'));

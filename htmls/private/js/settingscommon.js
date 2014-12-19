@@ -1368,7 +1368,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
             if ($('.deploymentRoleList li').length <= 0)
                 $('.deploymentRoleList').append($('<span class="label text-align-center">[ None Found ]</span>'));
             $('.cookbookspinner').detach();
-            callback('done'); //callback to handle any read operations.
+            if(typeof callback === 'function') {
+             callback('done');    
+            }
         });
     }
 
