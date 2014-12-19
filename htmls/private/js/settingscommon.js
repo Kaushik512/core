@@ -1070,7 +1070,8 @@ function isFormValid() {
                     var str = currCtrl.val();
                     if (/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false) {
                         isValid = false;
-                        errormessageforInput(currCtrl.attr('id'), "not a valid email address");
+                        //updating error message
+                        errormessageforInput(currCtrl.attr('id'), "Email address is required");
                         currCtrl.focus();
                     }
                     break;
