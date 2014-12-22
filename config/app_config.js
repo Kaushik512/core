@@ -52,7 +52,7 @@ module.exports = {
     },
     db: {
         dbName:'devops_new',
-        hostname:'localhost',
+        host:'localhost',
         port:'27017'
     }
 
