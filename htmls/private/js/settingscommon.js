@@ -226,9 +226,18 @@ function readform(formID) {
                 $.each(eval('tempJSON.' + curSelect.attr('datapath')), function(i, item) {
                     //     alert(item.field[0].values.value);
                     // debugger;
+                    //Loop to get rowid 
+                    var _rowid = 0;
+                    for (var k = 0; k < item.field.length; k++) {
+                        if (item.field[k].name == "rowid") {
+                            //curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                            // alert("Added:" + item.field[i].values.value);
+                            _rowid = item.field[k].values.value;
+                        }
+                    }
                     for (var k = 0; k < item.field.length; k++) {
                         if (item.field[k].name == curSelect.attr("id")) {
-                            curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                            curSelect.append('<option value="' + item.field[k].values.value + '" rowid = "' + _rowid + '">' + item.field[k].values.value + '</option>');
                             // alert("Added:" + item.field[i].values.value);
                         }
                     }
@@ -412,9 +421,11 @@ function readform(formID) {
                             $(inputC).val(v[k1]);
                             $(inputC).attr('savedvalue', v[k1]);
                             //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
+
                             $(inputC).select2();
                         }
                         if (inputC.getType().toLowerCase() == "ul") {
+                          //  alert('in ul');
                             if (v[k1].indexOf(',') >= 0) {
                                 var itms = v[k1].split(',');
                                 $(inputC).attr('defaultvalues', v[k1]);
@@ -425,6 +436,7 @@ function readform(formID) {
                             }
                         }
                         if (inputC.getType().toLowerCase() == "div") {
+                            
                             $(inputC).attr('savedvalue', v[k1])
                             //Set saved values to div.
                             var ctype = '';
@@ -433,7 +445,8 @@ function readform(formID) {
                                 ctype = $(inputC).attr('ctype');
                             if ($(inputC).attr('csource'))
                                 csource = $(inputC).attr('csource');
-                            var divselect1 = v[k1].split(',');
+                            var divselect1 = v[k1].toString().split(',');
+                          //  alert(v[k1]);
                             for (var j = 0; j < divselect1.length; j++) {
                                 if (ctype == 'list' && csource != '') {
 
@@ -441,6 +454,9 @@ function readform(formID) {
                                 }
                                 if (ctype == '')
                                     inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                                if(ctype == 'checkbox'){
+                                    inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                                }
                             }
                         }
                     });
@@ -519,6 +535,7 @@ function saveform(formID) {
         var v = [];
         var k = '';
         k = $(this).attr("id");
+       // alert('id:' + k);
         $(this).find("input").each(function() {
             // alert($(this).prop("type"));
             if ($(this).is(":checked")) {
@@ -882,6 +899,90 @@ function addToTargetList(inputctrl, inputctrl1) {
             }
         }
     }
+}
+function loadcookbooksinto(cookbookctrl,chefserverid){
+  //  alert( ' yep1 ' + cookbookctrl);
+  var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
+    //alert(csid);
+    var $servicecookbookspinner = $('.' + cookbookctrl + 'spinner');
+    $servicecookbookspinner.removeClass('hidden');
+    $.get('/chef/servers/' + csid + '/cookbooks',function(data){
+      
+      if(data){
+        var $servicecookbook = $('#' + cookbookctrl);
+        
+        $servicecookbook.empty();
+        $.each(data,function(k,v){
+          $servicecookbook.append('<option value="' + k + '">' + k + '</option>');
+     
+        });
+        //Autoselecting the first item.
+        $servicecookbook.val($servicecookbook.find('option:first').val());
+
+        // Loading the saved value back
+        if($servicecookbook.attr('savedvalue')){
+            $servicecookbook.val($servicecookbook.attr('savedvalue'));
+        }
+        $servicecookbook.trigger('change');
+      }
+      $servicecookbookspinner.addClass('hidden');
+
+
+    });
+
+
+}
+function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
+    if(cookbook){
+   
+    var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
+    $('.receipelistspinner').removeClass('hidden'); 
+                   
+    $.get('/chef/servers/' + csid + '/receipeforcookbooks/' + cookbook,function(data){
+      //  alert('/chef/servers/' + csid + '/receipeforcookbooks/' + cookbook);
+      if(data){
+         $.each(receipectrls,function(k1,v1){
+                var $servicecookbook = $('#' + v1);
+                $servicecookbook.html('');
+                $servicecookbook.append('<option value="none">None</option>');
+                $.each(data,function(k,v){
+                    var recp = data[k].name.substring(0,data[k].name.length-3);
+                 //   console.log(k + ":" + recp);
+                  $servicecookbook.append('<option value="' +cookbook + '::' + recp + '">' + recp + '</option>');
+             
+                });
+                //Autoselecting the first item.
+                $servicecookbook.val($servicecookbook.find('option:first').val());
+
+                // Loading the saved value back
+                if($servicecookbook.attr('savedvalue')){
+                    $servicecookbook.val($servicecookbook.attr('savedvalue'));
+                }
+                
+                $servicecookbook.trigger('change');
+                
+        });
+      }
+      $('.receipelistspinner').addClass('hidden');
+      //eval(finalfunction + '([' + receipectrls.toString() +'])');
+    });
+  }
+
+}
+
+function loadactioncheckboxes(receipectrls){
+     $.each(receipectrls,function(k1,v1){
+            var $servicecookbook = $('#' + v1);
+            var $servicecookbookcheckbox = $('#' + v1 +'checkbox');
+            if($servicecookbook && $servicecookbookcheckbox){
+                if($servicecookbook.val() == 'none')
+                {
+                    $servicecookbookcheckbox.removeAttr('checked');
+                }
+                else
+                    $servicecookbookcheckbox.attr('checked','checked');
+            }
+     });
 }
 
 function removeFromCodeList(btn, div2) {
