@@ -409,6 +409,7 @@ function readform(formID) {
                             $(inputC).closest('div').next().val(v[k1]);
                         }
                         if (inputC.getType().toLowerCase() == "select") {
+                          //alert(v[k1]);
                             $(inputC).val(v[k1]);
                             $(inputC).attr('savedvalue', v[k1]);
                             //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
