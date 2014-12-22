@@ -2070,6 +2070,7 @@ $(function() {
 
         //updating footer 
         $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
+         pageSetUp();
     };
 
 
@@ -2300,10 +2301,101 @@ $(function() {
 
     };
 
+    function initializeInstanceArea(data) {
+
+        //var $instancesList = $('.instancesList').empty();
+        if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
+            //alert('loading table');
+            tableinstanceview = $('#tableinstanceview').DataTable({
+                "pagingType": "full_numbers",
+                "aoColumns": [
+                    null, {
+                        "bSortable": false
+                    },
+                    null,
+                    null, {
+                        "bSortable": false
+                    }, {
+                        "bSortable": false
+                    }, {
+                        "bSortable": false
+                    }, {
+                        "bSortable": false
+                    }, {
+                        "bSortable": false,
+                        "sWidth": "20%"
+                    }
+                ]
+
+            });
+        }
+        
+
+        for (var i = 0; i < data.length; i++) {
+
+            addInstanceToDOM(data[i]);
+
+        }
+        
+
+        
+        $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
+
+        function tableupdownRow(evt) {
+            evt = evt || window.event;
+            var key = evt.keyCode;
+            switch (key) {
+                case 38: // UP arrow
+                    var $selectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected");
+                    if ($('#tableinstanceview tbody').find(".rowcustomselected").prev().length == 1) {
+                        var $newSelectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected").prev();
+                        $newSelectedRowPre.addClass('rowcustomselected');
+                        $selectedRowPre.removeClass('rowcustomselected');
+                        break;
+                    }
+                    break;
+                case 40: // DOWN arrow
+                    var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
+                    if ($('#tableinstanceview tbody').find(".rowcustomselected").next().length == 1) {
+                        var $newSelectedRow = $('#tableinstanceview tbody').find(".rowcustomselected").next();
+                        $newSelectedRow.addClass('rowcustomselected');
+                        $selectedRow.removeClass('rowcustomselected');
+                        break;
+                    }
+                    break;
+            }
+        }
+        document.onkeydown = tableupdownRow;
+        $('#tableinstanceview tbody').on('click', 'tr', function() {
+            if ($(this).hasClass('rowcustomselected')) {
+                $(this).removeClass('rowcustomselected');
+            } else {
+                tableinstanceview.$('tr').removeClass('rowcustomselected');
+                $(this).addClass('rowcustomselected');
+            }
+
+        });
+
+        
+
+        var $divinstancescardview = $('#divinstancescardview');
+        if ($divinstancescardview.find('li').length > 0) {
+            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+        }
+        $divinstancescardview.find('.item').first().addClass('active');
+
+
+        loadContainersTable();
+
+        $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
+
+    }
+
     $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
 
         initializeBlueprintArea(data.blueprints);
         initializeTaskArea(data.tasks);
+        initializeInstanceArea(data.instances);
 
 
     });
@@ -2367,12 +2459,12 @@ function removeSelectedInstance(){
             $.get('/instances/delete/' + instanceid,function(data){
             //  alert(data);
               if(data == 'OK'){
-                //$('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
+                $('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
+                var table = $('#tableinstanceview').DataTable();
+                console.log();
+                table.row('[data-instanceid='+instanceid+']').remove().draw( false );
 
-                $('.container.role-Selectedcard').parent().detach();
-                              $('#divinstancescardview .carousel-inner').empty();
-                tableinstanceviewload();
-                loadcarousel();
+               
               }
               else
                 alert(data);
@@ -2656,9 +2748,7 @@ function addInstanceToDOM(data) {
         }
     }
   
-    var $deploymentNodeList = $('.deploymentNodeList');
-
-    $deploymentNodeList.append($('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data._id + '"><i></i>' + data.chefNodeName + '</label></li>'));
+   
 
     var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
 
@@ -2705,21 +2795,6 @@ function addInstanceToDOM(data) {
 
     $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
 
-    /*for(var j=0;j<data.runlist.length;j++) { 
-          var $divComponentItem;
-           if(j == 0) {
-          
-            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
-
-           } else {
-            $divComponentItem = $('<span title="'+data.runlist[j]+'" style="overflow:hidden;text-overflow:ellipsis;width:62px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
-           }
-           $divComponentList.append($divComponentItem);
-            if(j==2) {
-                break;
-            }
-        }*/
-    //var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
     $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'ViewAllRunlist').addClass('instance-bootstrap-list-faimage'));
 
     $divComponentItem.click(function(e) {
@@ -2906,16 +2981,20 @@ function addInstanceToDOM(data) {
     //For Table View
     //$divComponentListImage
     $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');
-    $rowContainter.append('<td>' + $('<div></div>').append($divActionBtnContainer.clone()).html() + '</td>');
+    var $tableActionBtnContainer = $divActionBtnContainer.clone();
+    $tableActionBtnContainer.find('.instance-bootstrap-ActionChefRun').remove();
+    $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + '</td>');
 
     //alert($rowContainter.html());
-    $("#tableinstanceview").find('tbody').append($rowContainter);
+    //$("#tableinstanceview").find('tbody').append($rowContainter);
+    var dataTable = $('#tableinstanceview').DataTable();
+    dataTable.row.add($rowContainter).draw();
 
 
 
 
     if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
-      //  pollInstanceState(data._id, data.instanceState, 2000);
+        pollInstanceState(data._id, data.instanceState, 2000);
       // To be removed from comment later - Vinod
     }
 
@@ -3166,163 +3245,7 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
 //End Containers table build
 var tableinstanceview = null;
 
-function tableinstanceviewload(){
-//Clearing the instance view div
-//$('divinstancescardview
-$.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/instances', function(data) {
-    
-    //var $instancesList = $('.instancesList').empty();
-    var $deploymentNodeList = $('.deploymentNodeList').empty();
 
-    //alert(data.length);
-    $('.tableinstanceviewouter').first().empty();
-    $('#tableFooterLeft').html('');
-    $('#tableFooterRight').html('');
-    var $tiv = $('#tableinstanceviewtemplate').clone();
-    $tiv.attr('id','tableinstanceview').removeClass('hidden');
-    $('.tableinstanceviewouter').first().append($tiv);
-    if(tableinstanceview != null){
-       // alert('destroy');
-        tableinstanceview.destroy();
-    }
-
-    for (var i = 0; i < data.length; i++) {
-
-        addInstanceToDOM(data[i]);
-
-    }
-    //for table view
-    //Clearing the additional chef client run from action.
-    $('#tableinstanceview').find('.instance-bootstrap-ActionChefRun').detach();
-
-
-    if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
-        //alert('loading table');
-        tableinstanceview = $('#tableinstanceview').DataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [null,
-                {
-                    "bSortable": false
-                },
-                null,
-                null,
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false,
-                    "sWidth": "20%"
-                }
-            ]
-        });
-    }
-    $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
-    function tableupdownRow(evt) {
-      evt = evt || window.event;
-      var key = evt.keyCode;
-      switch (key) {
-        case 38: // UP arrow
-          var $selectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected");
-          if($('#tableinstanceview tbody').find(".rowcustomselected").prev().length == 1){
-          var $newSelectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected").prev();
-          $newSelectedRowPre.addClass('rowcustomselected');
-          $selectedRowPre.removeClass('rowcustomselected'); 
-          break;
-        }
-        break;
-        case 40: // DOWN arrow
-          var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
-          if($('#tableinstanceview tbody').find(".rowcustomselected").next().length == 1){
-            var $newSelectedRow = $('#tableinstanceview tbody').find(".rowcustomselected").next();
-            $newSelectedRow.addClass('rowcustomselected');
-            $selectedRow.removeClass('rowcustomselected');
-            break;
-          }
-        break;
-      }
-    }
-  document.onkeydown = tableupdownRow;
-    $('#tableinstanceview tbody').on('click','tr',function(){
-        if($(this).hasClass('rowcustomselected')){
-            $(this).removeClass('rowcustomselected');
-        }
-        else{
-            tableinstanceview.$('tr').removeClass('rowcustomselected');
-            $(this).addClass('rowcustomselected');
-        }
-
-    });
-
-    console.log('loading table');
-    $('#tableinstanceview' + '_info').detach().appendTo('#tableFooterLeft');
-    $('#tableinstanceview' + '_paginate').detach().appendTo('#tableFooterRight');
-    $('input[type="search"]').css('margin-left','5px'); //providing a space between search and input box
-    //$('#tableinstanceview' + '_filter').detach().appendTo('#envtable_tools1');
-    // $('#tableinstanceview' + '_length').detach().appendTo('#envtable_tools2');
-
-    //handling instance action btn
-    //default selecting first card in Instance and Blueprints
-
-    var $divinstancescardview =$('#divinstancescardview');
-    if($divinstancescardview.find('li').length > 0) {
-            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');   
-    }
-    $divinstancescardview.find('.item').first().addClass('active');
-
-
-    loadContainersTable();
-
-    $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
-
-});
-
-}
-tableinstanceviewload();
-
-$('#bootstrap-wizard-1').bootstrapWizard({
-    'tabClass': 'form-wizard',
-    'onNext': function(tab, navigation, index) {
-        console.log(typeof index, index)
-        if (index === 1) {
-            console.log('in here')
-            var $selectedItem = $('.role-Selected');
-            if (!$selectedItem.length) {
-                alert('please choose a role')
-                return false;
-            }
-            var $clone = $selectedItem.clone().removeClass('role-Selected');
-            $('#tab' + (index + 1)).find('.temp').empty().append($clone);
-        } else {
-
-        }
-        $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
-            'complete');
-        $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
-            .html('<i class="fa fa-check"></i>');
-        //$('#tab'+(index)).removeClass('active');
-        //$('#tab'+(index+1)).addClass('active');
-        //return true;
-
-
-    },
-    'onPrevious': function(tab, navigation, index) {
-        //console.log(index);
-        $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
-            'complete');
-        $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
-            .html(index + 2);
-
-    }
-});
 $('.launchBtn').click(function(e) {
     var $selectedItems = $('.role-Selected1');
     if(!$selectedItems.length) {
@@ -3481,15 +3404,12 @@ $('.launchBtn').click(function(e) {
             }
             pollLogs(lastTimestamp, 0, true);
 
-            /* //Commented to accomodate tableview dynamic row addition fix - Vinod
             $.get('../instances/' + data.id, function(data) {
                 addInstanceToDOM(data);
 
-            }); */
+            });
 
-             $('#divinstancescardview .carousel-inner').empty();
-             tableinstanceviewload();
-             loadcarousel();
+             
                 
 
         }).error(function() {
