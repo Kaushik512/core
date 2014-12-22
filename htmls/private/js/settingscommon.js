@@ -387,7 +387,6 @@ function readform(formID) {
             }
 
         });
-       // alert($(inputC).attr("id"));
         $.each(item, function(k, v) {
             if (k == "values") {
                 if (inputC && $(inputC).attr("id") != undefined) {
