@@ -964,6 +964,7 @@ function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
         });
       }
       $('.receipelistspinner').addClass('hidden');
+      loadactioncheckboxes(receipectrls);
       //eval(finalfunction + '([' + receipectrls.toString() +'])');
     });
   }

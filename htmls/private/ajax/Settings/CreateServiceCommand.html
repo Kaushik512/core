@@ -419,7 +419,9 @@
             $(this).select();
             $("#msgOrgName").hide()
         });
-        readform(19);
+        if(readform(19) == false){
+          $('select[cdata="catalyst"]').select2();
+        }
         $('#content').css("opacity", "1 !important");
         //$('#iconpicker').iconpicker({
         //    iconset: 'fontawesome',
