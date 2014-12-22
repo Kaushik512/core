@@ -15,7 +15,7 @@ mkdirp.sync(homeDirectory + '/catalyst/temp/');
 
 
 module.exports = {
-    "app_run_port": 3000,
+    "app_run_port": 3001,
     "settingsDir": homeDirectory + '/catalyst/',
     "instancePemFilesDir": homeDirectory + "/catalyst/instance-pemfiles/",
     "tempDir": homeDirectory + "/catalyst/temp/",
@@ -52,7 +52,7 @@ module.exports = {
     },
     db: {
         dbName:'devops_new',
-        hostname:'localhost',
+        host:'localhost',
         port:'27017'
     }
 
