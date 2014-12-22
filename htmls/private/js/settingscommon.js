@@ -212,7 +212,7 @@ var forceEdit = false; //variable used to force save one record ex. Authenticati
 
 function readform(formID) {
     var formData = null;
-//    alert("force edit:" + forceEdit);
+    //    alert("force edit:" + forceEdit);
     //Prefilling dropdowns
     $('select[cdata="catalyst"]').each(function() {
 
@@ -854,14 +854,13 @@ function addToCodeList(txtVal, inp) {
 }
 
 function addToTargetList(inputctrl, inputctrl1) {
-    if(inputctrl && inputctrl1)
-    {
-            if(inputctrl.val() == '' || inputctrl1.val() == '') //validating if both the controls have values
-            {
-                alert('Ensure you have a title and valid path before adding.');
-                inputctrl.focus();
-                return;
-            }
+    if (inputctrl && inputctrl1) {
+        if (inputctrl.val() == '' || inputctrl1.val() == '') //validating if both the controls have values
+        {
+            alert('Ensure you have a title and valid path before adding.');
+            inputctrl.focus();
+            return;
+        }
     }
     if (inputctrl.attr('targetelement')) {
         var imgCheck = "<i class=\'ace-icon fa fa-check\' style=\'padding-left:10px;padding-right:10px\'></i>";
@@ -996,7 +995,7 @@ function removeFromCodeList(btn, div2) {
         } else
             closestDiv.detach();
     }
-    return(false);
+    return (false);
 }
 
 function validateForm() {
@@ -1174,7 +1173,8 @@ function isFormValid() {
                     var str = currCtrl.val();
                     if (/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false) {
                         isValid = false;
-                        errormessageforInput(currCtrl.attr('id'), "not a valid email address");
+                        //updating error message
+                        errormessageforInput(currCtrl.attr('id'), "Email address is required");
                         currCtrl.focus();
                     }
                     break;
@@ -1368,9 +1368,9 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
 }
 
 //ChefItem added below
-var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
-    if(!selectedRunlist) {
-      selectedRunlist = []; 
+var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) {
+    if (!selectedRunlist) {
+        selectedRunlist = [];
     }
     var $chefItemdiv = $("<div></div>").addClass('smart-form');
 
@@ -1415,27 +1415,50 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     var $hr1 = $("<hr>");
     $ul1.append($label2);
     $ul1.append($inputtypetextCookbooks);
-    $.get('../organizations/' + catorgname + '/cookbooks', function(data) {
+    $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
         console.log("Cookbooks Query:" + data);
 
         var cookbooks = data.cookbooks;
         var keys = Object.keys(cookbooks);
         //alert(keys);
-        keys.sort(function(a,b){
+        keys.sort(function(a, b) {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
 
         var $deploymentCookbookList = $('.deploymentsCookbookList');
         for (i = 0; i < keys.length; i++) {
             var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
-            if(selectedRunlist.indexOf('recipe[' + keys[i] + ']')!== -1) {
-              $li.hide();
+            if (selectedRunlist.indexOf('recipe[' + keys[i] + ']') !== -1) {
+                $li.hide().data('itemSelected', true);
             }
             $deploymentCookbookList.append($li);
         }
-        getRolesFunction();
+        var roles = data.roles;
+        var keys = Object.keys(roles);
+        keys.sort(function(a, b) {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+        //alert("ServerID:" + data.serverId);
+        $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
+
+        var $deploymentRolesList = $('.deploymentRoleList');
+        for (i = 0; i < keys.length; i++) {
+            var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
+            if (selectedRunlist.indexOf('role[' + keys[i] + ']') !== -1) {
+                $li.hide().data('itemSelected', true);
+            }
+            $deploymentRolesList.append($li);
+        }
+        if ($('.deploymentsCookbookList li').length <= 0)
+            $('.deploymentsCookbookList').append($('<span class="label text-align-center">[ None Found ]</span>'));
+        if ($('.deploymentRoleList li').length <= 0)
+            $('.deploymentRoleList').append($('<span class="label text-align-center">[ None Found ]</span>'));
+        $('.cookbookspinner').detach();
+        if (typeof callback === 'function') {
+            callback('done');
+        }
     });
-    
+
     //$ul1.append($hr1);
 
     $div1.append($ul1);
@@ -1446,35 +1469,6 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     $ul2.append($label3);
     $ul2.append($hr2);
     $ul2.append($inputtypetextRoles);
-    var getRolesFunction = function() {
-        $.get('../organizations/' + catorgname + '/roles', function(data) {
-            console.log("Runlist Query:" + data);
-            var roles = data.roles;
-            var keys = Object.keys(roles);
-            keys.sort(function(a,b){
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-            });
-            //alert("ServerID:" + data.serverId);
-            $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
-
-            var $deploymentRolesList = $('.deploymentRoleList');
-            for (i = 0; i < keys.length; i++) {
-                var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
-                if(selectedRunlist.indexOf('role[' + keys[i] + ']')!== -1) {
-                    $li.hide();
-                }
-                $deploymentRolesList.append($li);
-            }
-            if ($('.deploymentsCookbookList li').length <= 0)
-                $('.deploymentsCookbookList').append($('<span class="label text-align-center">[ None Found ]</span>'));
-            if ($('.deploymentRoleList li').length <= 0)
-                $('.deploymentRoleList').append($('<span class="label text-align-center">[ None Found ]</span>'));
-            $('.cookbookspinner').detach();
-            if(typeof callback === 'function') {
-             callback('done');    
-            }
-        });
-    }
 
     $div1.append($ul2);
     $row1.append($div1);
@@ -1519,15 +1513,15 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
     var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
     //alert('here ==>');
     //alert(selectedRunlist); 
-    for(var i=0;i<selectedRunlist.length;i++) {
-        var name ='';
-        var item  = selectedRunlist[i];
+    for (var i = 0; i < selectedRunlist.length; i++) {
+        var name = '';
+        var item = selectedRunlist[i];
         var indexOfBracketOpen = item.indexOf('[');
-        if(indexOfBracketOpen!=-1) {
+        if (indexOfBracketOpen != -1) {
             var indexOfBracketClose = item.indexOf(']');
-            if(indexOfBracketClose != -1) {
-              name = item.substring(indexOfBracketOpen+1,indexOfBracketClose);   
-            } 
+            if (indexOfBracketClose != -1) {
+                name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+            }
         }
         if (name) {
             if (item.indexOf('recipe') === 0) {
@@ -1548,7 +1542,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
                 }));
             }
         }
-            
+
 
     }
 
@@ -1591,13 +1585,13 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
 
     $errorContainer = $('<div></div>').addClass('errorContainer').addClass('hidden').text('This is Error Cointainer div');
     $chefItemdiv.append($errorContainer);
-   
-   // if($loadingContainer)
+
+    // if($loadingContainer)
     //    $loadingContainer.detach(); //commented to handle a javascript error, to be reverted.
     // $("#toAdd").click(function(e){
     //    $("#toaddbtn").append($form);
     // });
-     
+
     $chefItemdiv.find('.btnItemAdd').click(function(e) {
         var $deploymentSelectedList = $('.deploymentSelectedRunList');
         var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");
@@ -1612,7 +1606,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
                 }
             }));
             $this.attr('checked', false);
-            $this.parents('li').hide();
+            $this.parents('li').hide().data('itemSelected', true);
         });
         var $selectedRoles = $("input[name=checkboxRole]:checked");
         $selectedRoles.each(function(idx) {
@@ -1626,7 +1620,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
                 }
             }));
             $this.attr('checked', false);
-            $this.parents('li').hide();
+            $this.parents('li').hide().data('itemSelected', true);
         });
         // $deploymentSelectedList.sortable({
         // cursor: "move"
@@ -1634,58 +1628,64 @@ var $chefCookbookRoleSelector = function(catorgname, callback,selectedRunlist) {
 
         //chrome fix - Page refresh - Vinod 
         e.preventDefault();
-        return(false);
+        return (false);
     });
-     $chefItemdiv.find('.searchoptionforCookbooks').keyup(function(e){
+    $inputtypetextCookbooks.keyup(function(e) {
         var searchText = $(this).val();
         $allListElements = $chefItemdiv.find('.deploymentsCookbookList > li');
-        $matchingListElements = $allListElements.filter(function(i,el){
+        $matchingListElements = $allListElements.filter(function(i, el) {
+            if ($(el).data('itemSelected')) {
+                return false;
+            }
             return $(el).text().indexOf(searchText) !== -1;
         });
         $allListElements.hide();
         $matchingListElements.show();
-     });
+    });
 
-     $chefItemdiv.find('.searchoptionforRoles').keyup(function(e){
+    $inputtypetextRoles.keyup(function(e) {
         var searchText = $(this).val();
         $allListElements = $chefItemdiv.find('.deploymentRoleList > li');
-        $matchingListElements = $allListElements.filter(function(i,el){
+        $matchingListElements = $allListElements.filter(function(i, el) {
+            if ($(el).data('itemSelected')) {
+                return false;
+            }
             return $(el).text().indexOf(searchText) !== -1;
         });
         $allListElements.hide();
         $matchingListElements.show();
-     });
+    });
     $chefItemdiv.find('.btnItemRemove').click(function(e) {
         var $deploymentSelectedList = $('.deploymentSelectedRunList');
         $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
             var value = $(this).find('input').val();
             var selector = 'input[name=checkboxRole][value="' + value + '"]';
             console.log(selector);
-            $('input[name=checkboxRole][value="' + value + '"]').parents('li').show();
-            $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show();
+            $('input[name=checkboxRole][value="' + value + '"]').parents('li').show().data('itemSelected', false);
+            $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show().data('itemSelected', false);
             $(this).remove();
         });
-         //chrome fix - Page refresh - Vinod 
+        //chrome fix - Page refresh - Vinod 
         e.preventDefault();
-        return(false);
+        return (false);
     });
 
     $chefItemdiv.find(".btnItemUp").on('click', function(e) {
         var $selectedRunlist = $('.deploymentCookbookSelected');
 
         $selectedRunlist.insertBefore($selectedRunlist.first().prev());
-         //chrome fix - Page refresh - Vinod 
+        //chrome fix - Page refresh - Vinod 
         e.preventDefault();
-        return(false);
+        return (false);
     });
 
     $chefItemdiv.find(".btnItemDown").on('click', function(e) {
         var $selectedRunlistDown = $('.deploymentCookbookSelected');
 
         $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
-         //chrome fix - Page refresh - Vinod 
+        //chrome fix - Page refresh - Vinod 
         e.preventDefault();
-        return(false);
+        return (false);
     });
 
     // $chefItemdiv.find(".chooseCheforgType").on('click', function () {

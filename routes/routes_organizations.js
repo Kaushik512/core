@@ -162,7 +162,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/organizations/:orgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
-        blueprintsDao.getBlueprintsByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
+        blueprintsDao.getBlueprintsByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -185,7 +185,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             return;
         }
         console.log(blueprintData);
-        
+
         blueprintsDao.createBlueprint(blueprintData, function(err, data) {
             if (err) {
                 res.send(500);
@@ -196,7 +196,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgId/projects/:projectId/environments/:envId/instances', function(req, res) {
-        instancesDao.getInstancesByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
+        instancesDao.getInstancesByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -206,12 +206,40 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
-        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId,req.params.projectId, req.params.envId,function(err, data) {
+        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
             }
             res.send(data);
+        });
+    });
+
+    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/', function(req, res) {
+        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, function(err, tasksData) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            instancesDao.getInstancesByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                blueprintsDao.getBlueprintsByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    res.send({
+                        tasks:tasksData,
+                        instances:instancesData,
+                        blueprints:blueprintsData
+                    });
+                });
+
+            });
+
         });
     });
 
@@ -223,7 +251,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         if (!taskData.runlist) {
             taskData.runlist = [];
         }
-      
+
         tasksDao.createTask(taskData, function(err, data) {
             if (err) {
                 res.send(500);
@@ -299,6 +327,51 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     res.send({
                         serverId: chefDetails.rowid,
                         roles: roles
+                    });
+                }
+            });
+
+        });
+
+    });
+
+    app.get('/organizations/:orgname/chefRunlist', function(req, res) {
+        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            console.log("chefdata", chefDetails);
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
+            chef.getCookbooksList(function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    chef.getRolesList(function(err, roles) {
+                        console.log(err);
+                        if (err) {
+                            res.send(500);
+                            return;
+                        } else {
+                            res.send({
+                                serverId: chefDetails.rowid,
+                                roles: roles,
+                                cookbooks: cookbooks
+                            });
+                        }
                     });
                 }
             });
