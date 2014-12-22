@@ -43,11 +43,11 @@
                                         <td datafield="servicename"></td>
                                         <td datafield="commandtype"></td>
                                         <td>
-                                            <div class="hidden" style="" datafield="servicestart"></div>
-                                            <div class="hidden" style="" datafield="servicestop"></div>
-                                            <div class="hidden" style="" datafield="servicestatus"></div>
-                                            <div class="hidden" style="" datafield="servicerestart"></div>
-                                            <div class="hidden" style="" datafield="servicekill"></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontGreen"><div  style="display:none" datafield="servicestart"></div><i class="fa fa-play fa-1x txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRed"><div  style="display:none" datafield="servicestop"></div><i class="fa fa-power-off fa-1x txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRed"><div style="display:none" datafield="servicestatus"></div> <i class="fa fa-bell-o fa-1x txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRestart"><div  style="display:none" datafield="servicerestart"></div><i class="fa fa-undo fa-16px txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontKill"><div style="display:none" datafield="servicekill"></div><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
                                         </td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
@@ -88,6 +88,13 @@
                                         });*/
                                        // CreateTableFromJson(2);
                                        CreateTableFromJson(19,'servicename' , 'CreateServiceCommand.html'); //3 is for 
+                                       $('.serviceactionicon').each(function(){
+
+                                            if($(this).text() != 'none'){
+                                                console.log('removed' + $(this).text());
+                                                $(this).parent().removeClass('hidden');
+                                            }
+                                       });
                                         var tab = 'envtable';
                                         $('#' + tab).dataTable({
                                             "pagingType": "full_numbers"

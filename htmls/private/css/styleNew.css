@@ -2414,3 +2414,35 @@ transform: rotate(90deg);
 .lasttdactionbtn{
     margin-left: 10px !important;
 }
+
+.cardGreenRedYellowBlack{
+display: block;
+height: 30px;
+width: 30px;
+/*line-height: 260px;*/
+border-radius: 15px;
+color: white;
+text-align: center;
+font-weight: bold;
+font-size: 14px;
+position: absolute;
+transition: all 0.5s linear;
+backface-visibility: hidden;
+padding-left:3px;
+padding-top:5px;
+}
+.frontGreen{
+    background: green;
+}
+.frontRed{
+    background: #B80000;
+}
+.frontRestart{
+    background: #FFCC00;
+}
+.frontKill{
+    background: #363636;
+}
+.frontStatus{
+    background: #3366CC;
+}

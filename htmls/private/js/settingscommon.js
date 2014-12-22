@@ -901,7 +901,9 @@ function addToTargetList(inputctrl, inputctrl1) {
 }
 function loadcookbooksinto(cookbookctrl,chefserverid){
   //  alert( ' yep1 ' + cookbookctrl);
+
   var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
+  $('#chefserverid').val(csid);
     //alert(csid);
     var $servicecookbookspinner = $('.' + cookbookctrl + 'spinner');
     $servicecookbookspinner.removeClass('hidden');
