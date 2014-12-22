@@ -416,8 +416,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
 
     });
+    
+    
 
     app.get('/chef/servers/:serverId/receipeforcookbooks/:cookbookName', function(req, res) {
+
+
+
 
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
