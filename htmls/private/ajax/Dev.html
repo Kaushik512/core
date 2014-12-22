@@ -306,6 +306,35 @@
                                              <div class="pull-left taskListFooter"></div>
                                           </div>
                                       </div>
+                                      <!-- <div class="widget-body">
+                                        <div class="widget-main" style="min-height:300px"> 
+                                            <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
+
+                                              <div class="table-responsive table-div" >
+
+                                                <table id="tableOrchestration" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
+                                                    <thead>
+                                                        <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                          <th>Name</th>
+                                                          <th>Assigned Node</th>
+                                                          <th>Assigned Runlists</th>
+                                                          <th>Execute</th>
+                                                          <th>Last Run</th>
+                                                          <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="taskListArea">
+
+                                                    </tbody>
+                                                </table>
+                                              </div>
+                                           </div>
+                                        </div> 
+                                      </div>
+                                      <div class="widget-toolbox padding-8 clearfix">
+                                         <div id="tableFooterLeft1" class="pull-left"></div>
+                                         <div id="tableFooterRight1" class="pull-right"></div>
+                                      </div> -->
                                   </div>
                               </div>
                           </div>
@@ -1893,8 +1922,6 @@ $(function() {
                     }
                     $('#assignedNode').modal('show');
                 });
-
-
             });
             $tr.append($tdNodeList);
 
@@ -3748,4 +3775,37 @@ function loadcarousel() {
 
 }
 loadcarousel();
+</script>
+
+<script type="text/javascript">
+    if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
+        var tableOrchestration = $('#tableOrchestration').dataTable({
+            "pagingType": "full_numbers",
+            "aoColumns": [
+                {
+                    "bSortable": true,
+                    "sSelector": "#renderingEngineFilter",
+                    "type":"select"
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": true
+                },
+                {
+                    "bSortable": false
+                }
+            ]
+        });
+    }
+    $('#tableOrchestration' + '_info').detach().appendTo('#tableFooterLeft1');
+    $('#tableOrchestration' + '_paginate').detach().appendTo('#tableFooterRight1');
+    $('input[type="search"]').css('margin-left','5px');
 </script>
