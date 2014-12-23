@@ -87,14 +87,16 @@
                                         "search": false
                                         });*/
                                        // CreateTableFromJson(2);
-                                       CreateTableFromJson(19,'servicename' , 'CreateServiceCommand.html'); //3 is for 
-                                       $('.serviceactionicon').each(function(){
-
-                                            if($(this).text() != 'none'){
+                                       CreateTableFromJson(19,'servicename' , 'CreateServiceCommand.html');
+                                        $('.serviceactionicon').each(function(){
+                                            //alert($(this).text() + ($(this).text().trim() != "none"));
+                                            if($(this).text().trim() != "none"){
                                                 console.log('removed' + $(this).text());
-                                                $(this).parent().removeClass('hidden');
+                                                $(this).removeClass('hidden');
                                             }
-                                       });
+
+                                       }); //3 is for 
+                                      
                                         var tab = 'envtable';
                                         $('#' + tab).dataTable({
                                             "pagingType": "full_numbers"

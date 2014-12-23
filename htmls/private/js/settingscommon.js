@@ -202,9 +202,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         sRow.removeClass("hidden");
         sRow.removeClass("rowtemplate");
         $('#envtable').append(sRow);
+        
     });
 
     $(".savespinner").hide();
+
 }
 
 var forceEdit = false; //variable used to force save one record ex. Authentication
