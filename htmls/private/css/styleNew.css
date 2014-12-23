@@ -2378,19 +2378,34 @@ backface-visibility: hidden;
 }
 
 
+
+.turn90deg{
+    -webkit-transform: rotate(90deg);   
+-moz-transform: rotate(90deg);
+-ms-transform: rotate(90deg);
+-o-transform: rotate(90deg);
+transform: rotate(90deg);
+}
+.lasttdactionbtn{
+    margin-left: 10px !important;
+}
+
 .cardGreenRedYellowBlack{
-display: block;
-height: 100%;
-width: 100%;
+display: inline-block;
+height: 30px;
+width: 30px;
 /*line-height: 260px;*/
 border-radius: 15px;
 color: white;
 text-align: center;
 font-weight: bold;
 font-size: 14px;
-position: absolute;
+/*position: absolute;*/
 transition: all 0.5s linear;
 backface-visibility: hidden;
+/*padding-left:3px;*/
+padding-top:5px;
+
 }
 .frontGreen{
     background: green;
@@ -2404,13 +2419,6 @@ backface-visibility: hidden;
 .frontKill{
     background: #363636;
 }
-.turn90deg{
-    -webkit-transform: rotate(90deg);   
--moz-transform: rotate(90deg);
--ms-transform: rotate(90deg);
--o-transform: rotate(90deg);
-transform: rotate(90deg);
-}
-.lasttdactionbtn{
-    margin-left: 10px !important;
+.frontStatus{
+    background: #3366CC;
 }

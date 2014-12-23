@@ -202,9 +202,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         sRow.removeClass("hidden");
         sRow.removeClass("rowtemplate");
         $('#envtable').append(sRow);
+        
     });
 
     $(".savespinner").hide();
+
 }
 
 var forceEdit = false; //variable used to force save one record ex. Authentication
@@ -901,7 +903,9 @@ function addToTargetList(inputctrl, inputctrl1) {
 }
 function loadcookbooksinto(cookbookctrl,chefserverid){
   //  alert( ' yep1 ' + cookbookctrl);
+
   var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
+  $('#chefserverid').val(csid);
     //alert(csid);
     var $servicecookbookspinner = $('.' + cookbookctrl + 'spinner');
     $servicecookbookspinner.removeClass('hidden');
