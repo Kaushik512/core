@@ -636,6 +636,67 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		return("200");
 	}
 
+	app.post('/d4dMasters/getrows/:masterid', function(req, res) {
+		console.log('received request ' + req.params.id);
+		d4dModel.findOne({ id: req.params.masterid }, function (err, d4dMasterJson) {
+			if (err) {
+	            console.log("Hit and error:" + err);
+	        }
+	        if (d4dMasterJson) {
+	        	var bodyJson = JSON.parse(JSON.stringify(req.body));
+
+	        	if(bodyJson["serviceids"] != null){ 
+	        		var root = '';
+	        		bodyJson["serviceids"].forEach(function(serviceid,servicecount){
+	        			console.log(serviceid + '::' + servicecount);
+
+						d4dMasterJson.masterjson.rows.row.forEach(function (itm, i) {
+		                console.log("found" + itm.field.length);
+		                 
+
+			              		var configmgmt ='';
+				                for (var j = 0; j < itm.field.length; j++) {
+				                    if (itm.field[j]["name"] == 'rowid') {
+				                        if (itm.field[j]["values"].value == serviceid) {
+				                            console.log("found: " + i + " -- "  + itm.field[j]["values"].value);
+				                            hasOrg = true;
+				                            //Re-construct the json with the item found
+				                          
+				                            
+				                            for (var k = 0; k < itm.field.length; k++) {
+				                            			if(configmgmt == '')
+				                            				configmgmt += "\"" + itm.field[k]["name"] + "\":\"" +  itm.field[k]["values"].value + "\"";
+				                            			else
+				                            				configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" +  itm.field[k]["values"].value + "\"";
+				                            }
+				                           // configmgmt = "{" + configmgmt + "}";
+				                           // console.log(JSON.stringify(configmgmt));
+				                           // res.end(configmgmt);
+				                        }
+				                    }
+				                }
+				                if(configmgmt != ''){
+				                	 if(root != '')
+						                  root += ",{" + configmgmt + "}";
+						              else
+						              	  root += "{" + configmgmt + "}";;
+							                	
+				                }
+				               		
+		            	}); // rows loop
+						
+
+	        		});
+				root = '[' + root + ']';
+				console.log(JSON.stringify(root));
+				res.end(root);
+	        	}
+	        	
+	        }
+
+	     });
+	});
+
 	app.post('/d4dMasters/savemasterjsonfull/:id', function(req, res) {
 		console.log('received request ' + req.params.id);
 		d4dModel.findOne({ id: req.params.id }, function (err, d4dMasterJson) {
