@@ -386,28 +386,40 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			if (d4dMasterJson) {
 				var chefRepoPath = '';
 					var hasOrg = false;
+					var root = '';
 					d4dMasterJson.masterjson.rows.row.forEach(function (itm, i) {
 	                console.log("found" + itm.field.length);
-		                for (var j = 0; j < itm.field.length; j++) {
-		                    if (itm.field[j]["name"] == req.params.filtercolumnname) {
-		                        if (itm.field[j]["values"].value == req.params.filtercolumnvalue) {
-		                            console.log("found: " + i + " -- "  + itm.field[j]["values"].value);
-		                            hasOrg = true;
-		                            //Re-construct the json with the item found
-		                            var configmgmt ='';
-		                            for (var k = 0; k < itm.field.length; k++) {
-		                            			if(configmgmt == '')
-		                            				configmgmt += "\"" + itm.field[k]["name"] + "\":\"" +  itm.field[k]["values"].value + "\"";
-		                            			else
-		                            				configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" +  itm.field[k]["values"].value + "\"";
-		                            }
-		                            configmgmt = "{" + configmgmt + "}";
-		                            console.log(JSON.stringify(configmgmt));
-		                            res.end(configmgmt)
-		                        }
-		                    }
-		                }
+	                  if(root != '')
+		                  root += ",{";
+		              else
+		              	  root += "{";
+
+		              		var configmgmt ='';
+			                for (var j = 0; j < itm.field.length; j++) {
+			                    if (itm.field[j]["name"] == req.params.filtercolumnname) {
+			                        if (itm.field[j]["values"].value == req.params.filtercolumnvalue) {
+			                            console.log("found: " + i + " -- "  + itm.field[j]["values"].value);
+			                            hasOrg = true;
+			                            //Re-construct the json with the item found
+			                          
+			                            
+			                            for (var k = 0; k < itm.field.length; k++) {
+			                            			if(configmgmt == '')
+			                            				configmgmt += "\"" + itm.field[k]["name"] + "\":\"" +  itm.field[k]["values"].value + "\"";
+			                            			else
+			                            				configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" +  itm.field[k]["values"].value + "\"";
+			                            }
+			                           // configmgmt = "{" + configmgmt + "}";
+			                           // console.log(JSON.stringify(configmgmt));
+			                           // res.end(configmgmt);
+			                        }
+			                    }
+			                }
+			               root += configmgmt + "}";
 	            	}); // rows loop
+				root = '[' + root + ']';
+				console.log(JSON.stringify(root));
+				res.end(root);
 			}
 		});
 	});
