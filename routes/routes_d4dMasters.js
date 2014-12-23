@@ -822,8 +822,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 							console.log(thisVal);
 							var item;
 
-							if(thisVal.indexOf('[') >= 0) //used to check if its an array
-								item = "{\"values\" : {\"value\" : "  + thisVal + "},\"name\" : \"" + itm + "\"}";
+							if(thisVal.indexOf('[') >= 0 && itm != "templatescookbooks"){//used to check if its an array
+									item = "{\"values\" : {\"value\" : "  + thisVal + "},\"name\" : \"" + itm + "\"}";
+							} 
 							else
 								item = "{\"values\" : {\"value\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"},\"name\" : \"" + itm + "\"}";
 							
