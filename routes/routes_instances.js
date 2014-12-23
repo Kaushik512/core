@@ -71,7 +71,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     //updateInstanceIp
     app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
-        instancesDao.updateInstanceIp(req.params.instanceId,req.params.ipaddress, function(err, data) {
+        instancesDao.updateInstanceIp(req.params.instanceId, req.params.ipaddress, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -226,7 +226,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var _docker = new Docker();
         var stdmessages = '';
         var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename);
-        if(req.params.tagname != null){
+        if (req.params.tagname != null) {
             cmd += ':' + req.params.tagname;
         }
         cmd += ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
@@ -593,21 +593,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
 
-    app.post('/instances/:instanceId/services/create', function(req, res) {
-        console.log(req.body);
-        instancesDao.createService(req.params.instanceId, req.body.serviceData, function(err, service) {
+    app.post('/instances/:instanceId/services/add', function(req, res) {
+        console.log('serviceIds ==>', req.body.serviceIds, req.body.serviceIds.length);
+        instancesDao.addService(req.params.instanceId, req.body.serviceIds, function(err, updateCount) {
             if (err) {
                 console.log(err)
                 res.send(500);
                 return;
             }
-            console.log(service);
-            res.send(200, service);
+            console.log(updateCount);
+            if (updateCount > 0) {
+                res.send(200, req.body.serviceIds);
+            } else {
+                res.send(200, []);
+            }
+
         });
     });
 
     app.delete('/instances/:instanceId/services/:serviceId', function(req, res) {
-        instancesDao.deleteService(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
+        instancesDao.deleteSetrvice(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
             if (err) {
                 console.log(err)
                 res.send(500);
@@ -627,57 +632,30 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.post('/instances/:instanceId/services/:serviceId/actions/create', function(req, res) {
-        console.log(req.body);
-        instancesDao.createServiceAction(req.params.instanceId, req.params.serviceId, req.body.actionData, function(err, action) {
+    app.get('/instances/:instanceId/services/:serviceId/:actionType', function(req, res) {
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
-                console.log(err)
                 res.send(500);
                 return;
             }
-            console.log(action);
-            res.send(200, action);
-        });
-    });
-
-    app.get('/instances/:instanceId/services/:serviceId/actions/:actionId/execute', function(req, res) {
-        console.log(req.body);
-
-        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-            if (err) {
-                console.log(err);
-                res.send(500);
-                return;
-            }
-            if (!data.length) {
+            if (!instances.length) {
                 res.send(400);
                 return;
             }
-            data = data[0];
-            if (data && data.services && data.services.length) {
-                var action;
-                for (var i = 0; i < data.services.length; i++) {
-                    var service = data.services[i];
-                    if (service._id == req.params.serviceId) {
-                        if (service.actions && service.actions.length) {
-                            for (j = 0; j < service.actions.length; j++) {
-                                if (service.actions[j]._id == req.params.actionId) {
-                                    action = service.actions[j];
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (action) {
-                        break;
-                    }
-                }
-
-                if (!action) {
-                    res.send(400);
+            var instance = instances[0];
+            configmgmtDao.getServiceFromId(req.params.serviceId, function(err, services) {
+                if (err) {
+                    console.log(err);
+                    res.send(500);
                     return;
                 }
-                var instance = data;
+                if (!services.length) {
+                    res.send(404);
+                    return;
+                }
+
+                var serviceData = services[0];
+                console.log(serviceData);
 
                 function onComplete(err, retCode) {
                     if (err) {
@@ -689,7 +667,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         return;
                     }
-                    console.log("knife ret code", retCode);
+                    console.log("ret code", retCode);
                     if (retCode == 0) {
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
@@ -698,7 +676,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             timestamp: new Date().getTime()
                         });
                     } else {
-                        return;
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: true,
+                            log: 'Unable to run services',
+                            timestamp: new Date().getTime()
+                        });
                     }
                 }
 
@@ -719,71 +702,115 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         timestamp: new Date().getTime()
                     });
                 }
+                credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                    if (serviceData.commandtype === "Chef Cookbook/Recepie") {
+                        configmgmtDao.getChefServerDetails(serviceData.chefserverid, function(err, chefDetails) {
+                            if (err) {
+                                res.send(500);
+                                return;
+                            }
+                            if (!chefDetails) {
+                                res.send(500);
+                                return;
+                            }
+                            //decrypting pem file
+                            if (err) {
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: true,
+                                    log: "Unable to decrypt pem file. Chef run failed",
+                                    timestamp: new Date().getTime()
+                                });
+                                return;
+                            }
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url,
+                            });
+                            console.log('instance IP ==>', instance.instanceIP);
+                            var actionType = req.params.actionType;
+                            var runlist = [];
+                            if (actionType == 'start' && (serviceData.servicestart && serviceData.servicestart != 'none')) {
+                                runlist.push('recipe[' + serviceData.servicestart + ']');
+                            } else if (actionType == 'stop' && (serviceData.servicestop && serviceData.servicestop != 'none')) {
+                                runlist.push('recipe[' + serviceData.servicestop + ']');
+                            } else if (actionType == 'restart' && (serviceData.servicerestart && serviceData.servicerestart != 'none')) {
+                                runlist.push('recipe[' + serviceData.servicerestart + ']');
+                            } else if (actionType == 'kill' && (serviceData.servicekill && serviceData.servicekill != 'none')) {
+                                runlist.push('recipe[' + serviceData.servicekill + ']');
+                            } else if (actionType == 'status' && (serviceData.servicestatus && serviceData.servicestatus != 'none')) {
+                                runlist.push('recipe[' + serviceData.servicestatus + ']');
+                            }
+                            var chefClientOptions = {
+                                privateKey: instance.credentials.pemFileLocation,
+                                username: instance.credentials.username,
+                                host: instance.instanceIP,
+                                instanceOS: instance.hardware.os,
+                                port: 22,
+                                runlist: runlist, // runing service runlist
+                                updateRunlist: false
+                            }
+                            if (decryptedCredentials.pemFileLocation) {
+                                chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                            } else {
+                                chefClientOptions.password = decryptedCredentials.password;
+                            }
+                            console.log('running chef client');
+                            chef.runChefClient(chefClientOptions, function(err, ret) {
+                                if (decryptedCredentials.pemFileLocation) {
+                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                        if (err) {
+                                            console.log("Unable to delete temp pem file =>", err);
+                                        } else {
+                                            console.log("temp pem file deleted =>", err);
+                                        }
+                                    });
+                                }
+                                onComplete(err, ret);
+                            }, onStdOut, onStdErr);
+                            res.send(200);
 
-                if (action.serviceRunlist && action.serviceRunlist.length) {
-
-                    configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
-                        if (err) {
-                            res.send(500);
-                            return;
-                        }
-                        if (!chefDetails) {
-                            res.send(500);
-                            return;
-                        }
-                        var chef = new Chef({
-                            userChefRepoLocation: chefDetails.chefRepoLocation,
-                            chefUserName: chefDetails.loginname,
-                            chefUserPemFile: chefDetails.userpemfile,
-                            chefValidationPemFile: chefDetails.validatorpemfile,
-                            hostedChefUrl: chefDetails.url,
                         });
-                        console.log('instance IP ==>', instance.instanceIP);
-                        var chefClientOptions = {
-                            privateKey: instance.credentials.pemFileLocation,
-                            username: instance.credentials.username,
-                            host: instance.instanceIP,
-                            instanceOS: instance.hardware.os,
-                            port: 22,
-                            runlist: action.serviceRunlist, // runing service runlist
-                            updateRunlist: true
-                        }
-                        if (instance.credentials.pemFileLocation) {
-                            chefClientOptions.privateKey = instance.credentials.pemFileLocation;
-                        } else {
-                            chefClientOptions.password = instance.credentials.password;
-                        }
-                        console.log('running chef client');
-                        chef.runChefClient(chefClientOptions, onComplete, onStdOut, onStdErr);
-                        res.send(200);
-                    });
-                } else {
-                    //running command
-                    var sshParamObj = {
-                        host: instance.instanceIP,
-                        port: 22,
-                        username: instance.credentials.username,
-                    };
-                    var sudoCmd;
-                    if (instance.credentials.pemFileLocation) {
-                        sshParamObj.privateKey = instance.credentials.pemFileLocation;
+
                     } else {
-                        sshParamObj.password = nstance.credentials.password;
+                        //running command
+                        var sshParamObj = {
+                            host: instance.instanceIP,
+                            port: 22,
+                            username: instance.credentials.username,
+                        };
+                        var sudoCmd;
+                        if (decryptedCredentials.pemFileLocation) {
+                            sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                        } else {
+                            sshParamObj.password = decryptedCredentials.password;
+                        }
+                        var sshConnection = new SSH(sshParamObj);
+
+                        sshConnection.exec("service " + serviceData.command + " " + req.params.actionType, function(err, ret) {
+                            if (decryptedCredentials.pemFileLocation) {
+                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                    if (err) {
+                                        console.log("Unable to delete temp pem file =>", err);
+                                    } else {
+                                        console.log("temp pem file deleted =>", err);
+                                    }
+                                });
+                            }
+                            onComplete(err, ret);
+                        }, onStdOut, onStdErr);
+                        res.send(200);
                     }
-                    var sshConnection = new SSH(sshParamObj);
+                });
 
-                    sshConnection.exec(action.command, onComplete, onStdOut, onStdErr);
 
-                }
-            } else {
-                res.send(400);
-            }
+            });
         });
+
     });
-
-
-
-
 
     app.get('/instances/:instanceId/bootstrap', function(req, res) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {

@@ -4,22 +4,24 @@ var mkdirp = require('mkdirp');
 var homeDirectory = pathExtra.homedir();
 var currentDirectory = __dirname;
 
+var catalysHomeDirName = "catalyst";
+
 console.log('homeDirectory ==>', homeDirectory);
 
 
 //creating path
 
-mkdirp.sync(homeDirectory + '/catalyst/');
-mkdirp.sync(homeDirectory + '/catalyst/instance-pemfiles/');
-mkdirp.sync(homeDirectory + '/catalyst/temp/');
+mkdirp.sync(homeDirectory + '/'+catalysHomeDirName+'/');
+mkdirp.sync(homeDirectory + '/'+catalysHomeDirName+'/instance-pemfiles/');
+mkdirp.sync(homeDirectory + '/'+catalysHomeDirName+'/temp/');
 
 
-module.exports = {
-    "app_run_port": 3001,
-    "settingsDir": homeDirectory + '/catalyst/',
-    "instancePemFilesDir": homeDirectory + "/catalyst/instance-pemfiles/",
-    "tempDir": homeDirectory + "/catalyst/temp/",
-    "app_run_secure_port": 443,
+var config = {
+    app_run_port: 3001,
+    settingsDir: homeDirectory + '/'+catalysHomeDirName+'/',
+    instancePemFilesDir: homeDirectory + "/"+catalysHomeDirName+"/instance-pemfiles/",
+    tempDir: homeDirectory + "/"+catalysHomeDirName+"/temp/",
+    app_run_secure_port: 443,
     cryptoSettings: {
         algorithm: "aes192",
         password: "pass@!@#",
@@ -41,19 +43,22 @@ module.exports = {
             username: 'root',
             osType: 'linux',
             name: 'Cent OS',
-            supportedInstanceType:['t1.micro','m1.small','m1.medium','m1.large','m1.xlarge']
+            supportedInstanceType: ['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
         }, {
             amiid: 'ami-3d50120d',
             username: 'ubuntu',
             osType: 'linux',
             name: 'ubuntu',
-            supportedInstanceType:['t2.micro']
+            supportedInstanceType: ['t2.micro']
         }]
     },
     db: {
-        dbName:'devops_new',
-        host:'localhost',
-        port:'27017'
+        dbName: 'devops_new',
+        host: 'localhost',
+        port: '27017'
     }
 
-}
+};
+
+
+module.exports = config;

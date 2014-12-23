@@ -182,90 +182,6 @@
                             </thead>
                             <tbody>
                                 <tbody class="servicesTbody">
-  <tr>
-    <td>
-      Restart_Apache_servers
-    </td>
-    <td>
-      <div style="display:inline-block" class="container1">
-        <div>
-          <div class="cardGreenRedYellowBlack frontGreen">
-            <div style="margin-top:5px;">
-              <div class="">
-                <a href="javascript:void(0)" data-original-title="Start" data-placement="top" rel="tooltip">
-                  <i class="fa fa-play fa-1x txt-color-white">
-                  </i>
-                </a>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      <div style="display:inline-block" class="container1">
-        <div>
-          <div class="cardGreenRedYellowBlack frontRed">
-            <div style="margin-top:5px;">
-              <div class="">
-                <a href="javascript:void(0)" data-original-title="Stop" data-placement="top" rel="tooltip">
-                  <i class="fa fa-power-off fa-1x txt-color-white">
-                  </i>
-                </a>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      <div style="display:inline-block" class="container1">
-        <div>
-          <div class="cardGreenRedYellowBlack frontRestart">
-            <div style="margin-top:5px;">
-              <div class="">
-                <a href="javascript:void(0)" data-original-title="Restart" data-placement="top" rel="tooltip">
-                  <i class="fa fa-undo fa-16px txt-color-white">
-                  </i>
-                </a>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      <div style="display:inline-block" class="container1">
-        <div>
-          <div class="cardGreenRedYellowBlack frontKill">
-            <div style="margin-top:5px;">
-              <div class="">
-                <a href="javascript:void(0)" data-original-title="Kill" data-placement="top" rel="tooltip">
-                  <i class="fa fa-times-circle fa-16px txt-color-white">
-                  </i>
-                </a>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      
-    </td>
-    <td>
-      <div class="btn-group tableactionWidth">
-        <button data-original-title="Delete" data-placement="top" rel="tooltip" class="btn btn-danger pull-left btn-sg tableactionbutton">
-          <i class="ace-icon fa fa-trash-o bigger-120">
-          </i>
-        </button>
-        <a data-original-title="Edit" data-placement="top" rel="tooltip" class="btn btn-info pull-left tableactionbutton tableactionbuttonpadding btn-sg">
-          <i class="ace-icon fa fa-pencil bigger-120">
-          </i>
-        </a>
-      </div>
-      
-    </td>
-  </tr>
-  
-  
-
   
 </tbody>
                                 
@@ -288,204 +204,15 @@
                     <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
                   </div>
                   <div class="modal-body">
-                    <div class="modal-body no-padding">
-                      <form id="servicesForm" novalidate="novalidate" class="smart-form" action="">
-                        <div style="margin:0px;" class="row ">
-                          <fieldset style="padding:0px;">                         
-                            <section class="col col-6">
-                                <label class="newSeviceNameContainer" >
-                                <label for="">Service Name <a href="javascript:void(0)" class="existingServiceLink">Existing Services</a></label>
-                                <label class="input "> 
-                                    <input type="text" id="serviceNameText">
-                                     
-                                </label>
-                                </label>
-                                <label class="serviceNameListContainer" style="display:none">
-                                <label class="">Select Available Services  <a href="javascript:void(0)" class="createNewServiceLink">Create New</a></label>
-                                <label class="select select-multiple">
-                                    <select size="5" class="custom-scroll serviceNameList">
-                                     
-                                    </select> 
-                                </label> 
-                                </label>                                        
-                            </section>
-                            <section class="col col-6">
-                                <label class="">Assign Users</label>
-                                <label class="select select-multiple">
-                                    <select multiple="" class="custom-scroll instanceUserList" size="5">
-                                      <option value="sd1">Consumer</option>
-                                      <option value="sc1">Designer</option>  
-                                      <option value="sd2">User1</option>
-                                      <option value="sd2">User2</option>
-                                    </select> 
-                                </label>
-                            </section>
-                          </fieldset> 
-                          
-
-                           <fieldset style="padding:0px;">
-                            <section class="col col-6">
-                              <label class="">
-                                  Assign Action
-                              </label>
-                              <div class="row">
-                                  <div class="col col-10">
-                                      <label class="select"> 
-                                          <select class="form-control chooseActiontype width-100">
-                                              <option id="ChefCookbook" value="Receipe">Chef Cookbook/Recepie</option>
-                                              <option id="CustomScript" value="Customs">Custom Script</option>
-                                          </select>
-                                      </label>
-                                  </div>  
-                              </div>
-                          </section>
-                          <section class="col col-6">
-                              <div id="chefCookbook-dropdown">
-                                    <div id="collapseDataBag1">
-                                      <div class="">
-                                        <div id="servicebox1">
-                                          <div id="data_bag_div1" class="serviceBox1 col col-10">
-                                            <!-- <div style="width:100px;">
-                                              <span style="font-size:13px;">
-                                                <b><u>Cookbooks</u></b>
-                                              </span>
-                                            </div> -->
-                                            <label class="" style="margin-left:-13px;">Cookbooks</label>
-                                            <div class="row">
-                                              <div>
-                                                <label class="select"> 
-                                                  <select class="form-control servicesCookBookList width-100">
-                                                   
-                                                        
-                                                  </select> 
-                                                </label>
-                                              </div>
-                                            </div>
-                                            <!-- <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
-                                            <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:140px">
-                                                
-                                            </select> -->
-                                          </div>
-                                      </div>
-                                    </div>
-                                </div>
-                              </div>
-                              <div id="customScript-dropdown" style="display:none">
-                                <section class="col col-10" style="padding-left: 0px;">
-                                  <label>Command</label>
-                                  <label class="select">             
-                                      <select class="form-control commandsList width-100">
-
-                                      </select>  
-                                  </label>
-                                  
-                                </section>
-                              </div>
-                          </section>
-                          </fieldset>
-
-                          <fieldset style="padding:0px;">
-                              <section class="">
-                                <label class="col col-10">Select Actions</label>
-                                <!-- <div class="inline-group">
-                                  <label class="radio actionTypeContainer">
-                                    <input type="radio" checked="checked" name="radio-inline" value="start">
-                                    <i></i>Start</label>
-                                  <label class="radio actionTypeContainer">
-                                    <input type="radio" name="radio-inline" value="stop">
-                                    <i></i>Stop</label>
-                                  <label class="radio actionTypeContainer">
-                                    <input type="radio" name="radio-inline" value="restart">
-                                    <i></i>Restart</label>
-                                  <label class="radio actionTypeContainer">
-                                    <input type="radio" name="radio-inline" value="kill">
-                                    <i></i>Kill</label>
-                                </div> -->
-                                <div class="row" style="margin: 0px;">
-                                  <div class="col col-6">
-                                    <label class="checkbox actionTypeContainer">
-                                      <input type="checkbox" name="checkbox" value="start">
-                                      <i></i>Start
-                                    </label>
-                                  </div>
-
-                                  <div class="col col-6">
-                                    <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
-                                    <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:100%">
-                                        
-                                    </select>
-                                  </div>
-                                </div>
-                                <br />
-                                <div class="row" style="margin: 0px;">
-                                  <div class="col col-6">
-                                    <label class="checkbox actionTypeContainer">
-                                      <input type="checkbox" name="checkbox" value="start">
-                                      <i></i>Stop
-                                    </label>
-                                  </div>
-
-                                  <div class="col col-6">
-                                    <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
-                                    <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:100%">
-                                        
-                                    </select>
-                                  </div>
-                                </div>
-                                <br />
-                                <div class="row" style="margin: 0px;">
-                                  <div class="col col-6">
-                                    <label class="checkbox actionTypeContainer">
-                                      <input type="checkbox" name="checkbox" value="start">
-                                      <i></i>Restart
-                                    </label>
-                                  </div>
-
-                                  <div class="col col-6">
-                                    <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
-                                    <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:100%">
-                                        
-                                    </select>
-                                  </div>
-                                </div>
-                                <br />
-                                <div class="row" style="margin: 0px;">
-                                  <div class="col col-6">
-                                    <label class="checkbox actionTypeContainer">
-                                      <input type="checkbox" name="checkbox" value="start">
-                                      <i></i>Kill
-                                    </label>
-                                  </div>
-
-                                  <div class="col col-6">
-                                    <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
-                                    <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:100%">
-                                        
-                                    </select>
-                                  </div>
-                                </div>
-                                <br />
-                                <div class="row" style="margin: 0px;">
-                                  <div class="col col-6">
-                                    <label class="checkbox actionTypeContainer">
-                                      <input type="checkbox" name="checkbox" value="start">
-                                      <i></i>Status
-                                    </label>
-                                  </div>
-
-                                  <div class="col col-6">
-                                    <div class="loadingChefRecipeContainer" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div> 
-                                    <select multiple="" class="custom-scroll servicesCookBookRecipeList" style="display:none;width:100%">
-                                        
-                                    </select>
-                                  </div>
-                                </div>
-                              </section>
-                          </fieldset>
-                        </div>
-                    </form>
-                  </div>
-
+                    <div class="smart-form">
+                      <fieldset>
+                      <section>
+                      <label class="select select-multiple">
+                    <select id="serviceList" class="col col-6" multiple></select></label>
+                    </section>
+                    </fieldset>
+                    </div>
+                    
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
@@ -842,58 +569,9 @@ var urlParams ={};
      
 })();
 
-$(document).ready(function() {
-  $('.chooseActiontype').select2();
-  //$('.servicesCookBookList').select2();
-});
 
-$('.chooseActiontype').change(function(e){
-  if($(this).val() == 'Receipe') {
-    $('#customScript-dropdown').hide();
-    $('#chefCookbook-dropdown').show();
-    $('.servicesCookBookList').select2();
-  } else {
-    $('#customScript-dropdown').show();
-    $('#chefCookbook-dropdown').hide();
-    $('.servicesCookBookRecipeList').hide();
-    $('.commandsList').select2();
-  }
-});
-
-$('.createNewServiceLink').click(function(){
-   $('.serviceNameListContainer').hide();
-   $('.newSeviceNameContainer').show();
-    $('.actionTypeContainer').show();
-    $('.instanceUserList').parents('section').show();
-});
-
-$('.existingServiceLink').click(function(){
-   $('.serviceNameListContainer').show();
-   $('.newSeviceNameContainer').hide();
-   $('.actionTypeContainer').hide();
-   $('.instanceUserList').parents('section').hide();
-});
-
-$('.serviceNameList').change(function(e){
-  $this = $(this);
-  var $selectedOption = $this.find('option:selected');
-  var actions =  $selectedOption.data('actions');
-  $('.actionTypeContainer').show();
-  for(var i=0;i<actions.length;i++) {
-    console.log(actions[i].actionType);
-   $('input[name=radio-inline][value='+actions[i].actionType+']').parent().hide();
-  }
-
-});
-
-$('.addServiceBtn').click(function(e){
-  $('#servicesForm')[0].reset();
-  $('.serviceNameListContainer').hide();
-  $('.newSeviceNameContainer').show();
-  $('.actionTypeContainer').show();
-  $('.servicesCookBookRecipeList').hide();
-});
-
+var logTimeout;
+   var stateTimeout;
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
@@ -918,70 +596,44 @@ $.get('../instances/'+urlParams.id,function(data){
        $usersList.append('<option value="'+data.users[i]+'">'+data.users[i]+'</option>'); 
     }
 
-   // fetching cookbooks  for service menu
-   $.get('../chef/servers/' + data.chef.serverId + '/cookbooks', function(data) {
-        var keys = Object.keys(data);
-        console.log(data);
-        var $servicesCookbookList = $('.servicesCookBookList').empty();
-         $servicesCookbookList.append('<option value="choose">Choose</option>');
-        for(var i=0;i<keys.length;i++) {
-          if(keys[i].indexOf('service_')==0) {
-            $servicesCookbookList.append('<option data-cookbook-url="'+data[keys[i]].url+'" value="'+keys[i]+'">'+keys[i]+'</option>');
-          }
-        }
-   });
+    //fetching services list
 
-    $.get('/d4dMasters/getlist/19/command/params', function(data) {
-        if (data) {
-            var ei = JSON.parse(data);
-            //alert(ei);
-            var $selectCommandList = $('.commandsList');
-            $.each(ei, function(k, v) {
-                var $option = $('<option></option>').val(v.command + " " + v.params).html(v.command + " " + v.params); 
-                $selectCommandList.append($option);
-            });
+    $.get('/d4dMasters/19/chefserverid/'+data.chef.serverId,function(services){
+      //console.log('hi ==>',serviceList);
+      var $serviceList = $('#serviceList');
+      console.log(services,"length==>",services.length);
+      var serviceIds = [];
+      if(data.serviceIds && data.serviceIds.length) {
+        serviceIds = data.serviceIds
+      }
+
+      for(var i=0;i<services.length;i++){
+        if(serviceIds.indexOf(services[i].rowid) !== -1) {
+          continue;
+        }
+        var name = services[i].servicename;
+        if(!name) {
+           name = services[i].commandname;
+        } 
+        var $option = $('<option></option>').val(services[i].rowid).html(name).data('serviceData',services[i]);
+        $serviceList.append($option);
+      }
+
+    });
+    console.log(data.serviceIds,"  ---  ",data.serviceIds.length);
+    $.post('/d4dMasters/getrows/19', {
+        serviceids: data.serviceIds
+    }, function(services) {
+        console.log(services);
+        for (var i = 0; i < services.length; i++) {
+            addServiceToDom(services[i]);
         }
     });
 
-   //handling cookbookOnchangeEvent
-   $('.servicesCookBookList').change(function(e){
-     var val = $(this).val();
-     if(val==='choose') {
-      return;
-     }
-     var $loadingContainer = $('.loadingChefRecipeContainer').show();
-    var $recipesList = $('.servicesCookBookRecipeList').hide().empty();
+    
+    
 
-     $('.servicesCookBookRecipeList')
-     $.get('../chef/servers/' + data.chef.serverId + '/cookbooks/'+$(this).val(), function(data) {
-      $loadingContainer.hide();
-      $recipesList.show();
-      
-      for(var i=0;i<data.recipes.length;i++) {
-        var recipe = data.recipes[i];
-        var recipeName;
-        var indexOfExtension = recipe.name.indexOf('.rb');
-        recipeName = recipe.name.substring(0,indexOfExtension);
-        $recipesList.append('<option value="recipe['+data.cookbook_name+'::'+recipeName+']">'+recipeName+'</option>').addClass('font-size-12');
-      }
-      $recipesList.show();
-
-
-     });
-
-   });
-
-
-   //adding services to table 
-   $('.servicesTbody').empty();
-   var $modalServiceList = $('.serviceNameList');
-   for(var i=0;i<data.services.length;i++) {
-     var service = data.services[i];
-     var $option = $('<option value="'+data.services[i]._id+'">'+data.services[i].serviceName+'</option>');
-     $option.data('actions',data.services[i].actions); 
-     $modalServiceList.append($option);
-     addServiceToDom(service);
-   }
+   
 
     
   
@@ -1019,14 +671,13 @@ $.get('../instances/'+urlParams.id,function(data){
   }
   pageSetUp();
 
-  var timeout;
+  
   
   var displayLog = function(e){
          var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
-         var timeout;
          
-         if(timeout) {
-                clearTimeout(timeout);
+         if(logTimeout) {
+                clearTimeout(logTimeout);
           }
          var $logTabBtn = $('#controlPanelLogTab');
          $('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -1038,7 +689,7 @@ $.get('../instances/'+urlParams.id,function(data){
             url = url + '?timestamp='+timestamp;
          }
          
-         timeout = setTimeout(function(){
+         logTimeout = setTimeout(function(){
          $.get(url,function(data){
             var $modalBody = $('.logsArea');
             if(clearData) {
@@ -1151,7 +802,7 @@ $.get('../instances/'+urlParams.id,function(data){
             $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
             
             function pollInstanceState(state,delay) {
-                var timeout = setTimeout(function() {
+                stateTimeout = setTimeout(function() {
                     $.get('../instances/'+instanceId,function(data){
                         if(data) {
                             if(data.instanceState === state) {
@@ -1262,39 +913,107 @@ function getActionBtnClass(actionType) {
     case 'start' : 
       return {
         bg : 'frontGreen',
-        icon:'fa-play'
+        icon:'fa-play',
+        actionType:'start'
       }
     case 'stop' : 
       return {
         bg : 'frontRed',
-        icon:'fa-power-off'
+        icon:'fa-power-off',
+        actionType:'stop'
       }
     case 'restart' : 
       return {
         bg : 'frontRestart',
-        icon:'fa-undo'
+        icon:'fa-undo',
+         actionType:'restart'
       }
     case 'kill' : 
       return {
         bg : 'frontKill',
-        icon:'fa-times-circle'
+        icon:'fa-times-circle',
+        actionType:'kill'
       }
+    case 'status' : 
+      return {
+        bg : 'frontKill',
+        icon:'fa-times-circle',
+        actionType:'status'
+      }
+    default: 
+     return {
+     }
 
 
    }
 }
 
+function getCommandActionHtml(serviceId,serviceData) {
+  var commandActions = serviceData.commandaction.split(',');
+  var html ='';
+  for(var i=0;i<commandActions.length;i++) {
+    var actionBtnClass = getActionBtnClass(commandActions[i]);
+    console.log(actionBtnClass);
+     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="'+commandActions[i]+'" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+
+  }
+  return html;
+
+}
+
+function getCookbookActionHtml(serviceId,serviceData) {
+  var html = '';
+  if(serviceData.servicestart && serviceData.servicestart !== 'none') {
+    var actionBtnClass = getActionBtnClass('start');
+    console.log(actionBtnClass);
+     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="start" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+  }
+  if(serviceData.servicestop && serviceData.servicestop !== 'none') {
+    var actionBtnClass = getActionBtnClass('stop');
+    console.log(actionBtnClass);
+     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="stop" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+  }
+
+  if(serviceData.servicerestart && serviceData.servicerestart !== 'none') {
+    var actionBtnClass = getActionBtnClass('restart');
+    console.log(actionBtnClass);
+     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="restart" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+  }
+  if(serviceData.servicekill && serviceData.servicekill !== 'none') {
+    var actionBtnClass = getActionBtnClass('kill');
+    console.log(actionBtnClass);
+     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="kill" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+  }
+  if(serviceData.servicestatus && serviceData.servicestatus !== 'none') {
+    var actionBtnClass = getActionBtnClass('status');
+    console.log(actionBtnClass);
+     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="status" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+  }
+
+  return html;
+
+}
+
 var $serviceTableBody = $('.servicesTbody');
 
-function addActionToServiceDom(serviceId,actionData) {
+function addActionToServiceDom(serviceId,serviceData) {
     $td = $serviceTableBody.find('td[data-serviceId='+serviceId+']');
-    var actionBtnClass = getActionBtnClass(actionData.actionType);
-    console.log(actionBtnClass);
-    var html = '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div style="margin-top:5px;"><div class=""><a rel="tooltip" data-placement="top" data-original-title="'+actionData.actionType+'" data-action-id="' + actionData._id + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>'
+    var commandType = serviceData.commandtype;
+    if(commandType === 'Chef Cookbook/Recepie') {
+      var html =  getCookbookActionHtml(serviceId,serviceData);
+
+    } else {
+       var html =  getCommandActionHtml(serviceId,serviceData);
+    }
+    
+    
     $td.append(html);
     $td.find('a').click(function(e) {
-        var actionId = $(this).attr('data-action-id');
-        $.get('../instances/' + urlParams.id + '/services/' + serviceId + '/actions/' + actionId + '/execute', function(data) {
+        var actionType = $(this).attr('data-action-type');
+        $.get('../instances/' + urlParams.id + '/services/' + serviceId +'/' + actionType, function(data) {
+            var $parent = $('.domain-roles-caption[data-instanceId="' + urlParams.id + '"]');
+            console.log($parent.length,$parent.find('.moreInfo').length);
+            $parent.find('.moreInfo').trigger('click');
 
         });
     });
@@ -1302,25 +1021,27 @@ function addActionToServiceDom(serviceId,actionData) {
 }
 
 function addServiceToDom(serviceData) {
-  var $tr = $('<tr></tr>').attr('data-serviceId',serviceData._id);
+  var $tr = $('<tr></tr>').attr('data-serviceId',serviceData.rowid);
   $('.servicesTbody').append($tr);
-  var $tdName = $('<td></td>').append(serviceData.serviceName);
-  $tr.append($tdName);
-  $tr.append($('<td></td>').attr('data-serviceId',serviceData._id))
-  for(var i=0;i<serviceData.actions.length;i++) {
-    addActionToServiceDom(serviceData._id,serviceData.actions[i]);
-   
-
+  var name = serviceData.servicename;
+  if(!name) {
+    name = serviceData.commandname;
   }
+  var $tdName = $('<td></td>').append(name);
+  $tr.append($tdName);
+  $tr.append($('<td></td>').attr('data-serviceId',serviceData.rowid))
+  
+  addActionToServiceDom(serviceData.rowid,serviceData);
+  
     var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
     $tdOption.find('.deleteServiceBtn').click(function(e) {
         $.ajax({
-            url: '../instances/' + urlParams.id + '/services/' + serviceData._id,
+            url: '../instances/' + urlParams.id + '/services/' + serviceData.rowid,
             type: 'DELETE',
             success: function() {
               console.log($tr);
               var $modalServiceList = $('.serviceNameList');
-              var $option = $modalServiceList.find('option[value='+serviceData._id+']');
+              var $option = $modalServiceList.find('option[value='+serviceData.rowid+']');
               $tr.remove();
               $option.remove();
             }
@@ -1334,61 +1055,26 @@ function addServiceToDom(serviceData) {
 }
 
 $('.btnSaveService').click(function(e) {
-
-    if ($('.newSeviceNameContainer').is(':visible')) {
-
-        var reqBody = {};
-        reqBody.serviceData = {};
-        reqBody.serviceData.name = $('#serviceNameText').val();
-        reqBody.serviceData.users = $('.instanceUserList').val();
-        reqBody.serviceData.actions = [];
-        reqBody.serviceData.actions[0] = {};
-        reqBody.serviceData.actions[0].actionType = $('input[name=radio-inline]:checked').val();
-
-        if ($('.servicesCookBookList').is(':visible')) {
-            reqBody.serviceData.actions[0].runlist = $('.servicesCookBookRecipeList').val();
-
-        } else {
-            reqBody.serviceData.actions[0].command = $('.commandsList').val();
-        }
-
-        console.log(reqBody);
-        $.post('../instances/' + urlParams.id + '/services/create', reqBody, function(data) {
-            console.log(data);
-            addServiceToDom(data);
-            var $modalServiceList = $('.serviceNameList');
-            var $option = $('<option value="'+data._id+'">'+data.serviceName+'</option>');
-            $option.data('actions',data.actions); 
-            $modalServiceList.append($option);
-             
-
-            $('#serviceModalContainer').modal('hide');
-
-        });
-    } else {
-      var serviceId = $('.serviceNameList').val();
-       var reqBody = {};
-       reqBody.actionData = {};
-       reqBody.actionData.actionType = $('input[name=radio-inline]:checked').val();
-       if ($('.servicesCookBookList').is(':visible')) {
-          reqBody.actionData.runlist = $('.servicesCookBookRecipeList').val();
-       } else {
-          reqBody.actionData.command = $('.commandsList').val();
-       }
-       console.log(reqBody);
-       $.post('../instances/' + urlParams.id + '/services/'+serviceId+'/actions/create', reqBody, function(data) {
-            console.log(data);
-            var $modalServiceList = $('.serviceNameList');
-            var $option = $modalServiceList.find('option[value='+serviceId+']');
-            var actions = $option.data('actions');
-            actions.push(data);
-            $option.data('actions',actions); 
-
-
-            addActionToServiceDom(serviceId,data);
-             $('#serviceModalContainer').modal('hide');
-       });
+   var $serviceList = $('#serviceList');
+   var serviceIds = $serviceList.val();
+   console.log('serviceIds ==>',serviceIds);
+   if(!serviceIds.length) {
+    alert('please choose a service');
+    return;
+   }
+   $.post('../instances/'+urlParams.id+'/services/add',{
+    serviceIds:serviceIds
+   },function(data){
+    
+    for(var i=0;i<data.length;i++) {
+       var $option = $serviceList.find('option[value='+data[i]+']');
+       var serviceData = $option.data('serviceData');
+       addServiceToDom(serviceData);
     }
+    $('#serviceModalContainer').modal('hide');
+
+   });
+ 
 });
 
 
@@ -1422,6 +1108,12 @@ $('.btnSaveService').click(function(e) {
   });
 
   function getInfoLi(){
+    if(logTimeout) {
+      clearTimeout(logTimeout);
+    }
+    if(stateTimeout) {
+      clearTimeout(stateTimeout);
+    }
    var getURL = localStorage.getItem("dataEx");
     var x= location.href;
     var z= x.lastIndexOf("=");

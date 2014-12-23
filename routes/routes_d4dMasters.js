@@ -418,8 +418,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			               root += configmgmt + "}";
 	            	}); // rows loop
 				root = '[' + root + ']';
-				console.log(JSON.stringify(root));
-				res.end(root);
+				//console.log(JSON.stringify(root));
+				res.send(JSON.parse(root));
 			}
 		});
 	});
@@ -688,8 +688,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 	        		});
 				root = '[' + root + ']';
-				console.log(JSON.stringify(root));
-				res.end(root);
+
+				//console.log(JSON.stringify(root));
+				res.send(JSON.parse(root));
+
 	        	}
 	        	
 	        }
