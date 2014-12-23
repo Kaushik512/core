@@ -61,7 +61,7 @@ var InstanceSchema = new Schema({
         dockerEngineStatus: String,
         dockerEngineUrl: String
     },
-    services: [ServiceSchema]
+    serviceIds: [String]
 
 });
 
@@ -317,31 +317,16 @@ var InstancesDao = function() {
 
 
 
-    this.createService = function(instanceId, serviceData, callback) {
-
-        var service = new Service({
-            serviceName: serviceData.name,
-            serviceUsers: serviceData.users
-        });
-
-        if (serviceData.actions && serviceData.actions.length) {
-            for (var i = 0; i < serviceData.actions.length; i++) {
-                console.log('action ==>', serviceData.actions[i]);
-                var serviceAction = new ServiceAction({
-                    actionType: serviceData.actions[i].actionType,
-                    serviceRunlist: serviceData.actions[i].runlist,
-                    command: serviceData.actions[i].command,
-                });
-
-                service.actions.push(serviceAction);
-            }
-        }
+    this.addService = function(instanceId, serviceIds, callback) {
+        console.log('length ==>', serviceIds.length);
 
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $push: {
-                "services": service
+                "serviceIds": {
+                    $each: serviceIds
+                }
             }
         }, {
             upsert: false
@@ -350,24 +335,18 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            if (updateCount > 0) {
-                callback(null, service);
-            } else {
-                callback(null, null);
-            }
+            callback(null, updateCount);
+
         });
 
     };
 
     this.deleteService = function(instanceId, serviceId, callback) {
-
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $pull: {
-                "services": {
-                    "_id": new ObjectId(serviceId)
-                }
+                "serviceIds": serviceId
             }
         }, {
             upsert: false,
