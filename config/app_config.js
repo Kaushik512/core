@@ -11,16 +11,16 @@ console.log('homeDirectory ==>', homeDirectory);
 
 //creating path
 
-mkdirp.sync(homeDirectory + '/'+catalysHomeDirName+'/');
-mkdirp.sync(homeDirectory + '/'+catalysHomeDirName+'/instance-pemfiles/');
-mkdirp.sync(homeDirectory + '/'+catalysHomeDirName+'/temp/');
+mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/');
+mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/instance-pemfiles/');
+mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/temp/');
 
 
 var config = {
     app_run_port: 3001,
-    settingsDir: homeDirectory + '/'+catalysHomeDirName+'/',
-    instancePemFilesDir: homeDirectory + "/"+catalysHomeDirName+"/instance-pemfiles/",
-    tempDir: homeDirectory + "/"+catalysHomeDirName+"/temp/",
+    settingsDir: homeDirectory + '/' + catalysHomeDirName + '/',
+    instancePemFilesDir: homeDirectory + "/" + catalysHomeDirName + "/instance-pemfiles/",
+    tempDir: homeDirectory + "/" + catalysHomeDirName + "/temp/",
     app_run_secure_port: 443,
     cryptoSettings: {
         algorithm: "aes192",
@@ -56,6 +56,11 @@ var config = {
         dbName: 'devops_new',
         host: 'localhost',
         port: '27017'
+    },
+    ldap: {
+        host: '54.187.120.22',
+        port: 389
+
     }
 
 };
