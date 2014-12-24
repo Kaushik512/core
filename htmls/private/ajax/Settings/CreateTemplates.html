@@ -93,7 +93,7 @@
                                                                         <!-- <select id="templatetypename" class="form-control" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); }else {$('.forDocker').hide();}">
                                                                             
                                                                         </select> -->
-                                                                        <select id="configname" class="form-control choosechefserver width-100" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadChefServerObjects($(this).val());">
+                                                                        <select id="configname" class="form-control choosechefserver width-100" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadCookbookSelectorControl('configname');" >
                                                                                 
                                                                         </select>
                                                                     </label>
@@ -159,14 +159,10 @@
                                                                             <label for=""  class="notforDocker">
                                                                                 Chef Server Objects List
                                                                             </label>
-                                                                            <div class="row notforDocker">
-                                                                                <div class="col col-5" id="cookbookwrapper">
-                                                                                    
-                                                                                </div>
-                                                                            </div>
-                                                                           <!--  <div class="row notforDocker">
-                                                                                <div class="col col-5">
-                                                                                    <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;" class="deploymentCookbookList">
+                                                                           
+                                                                           <div class="row notforDocker">
+                                                                                <div class="" id="templatescookbooks" cdata='catalyst'>
+                                                                                   <!--  <ul style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;" class="deploymentCookbookList">
                                                                                         <label class="label" style="text-align:center;">Select Cookbooks</label>
                                                                                         <hr>
                                                                                     </ul>
@@ -195,10 +191,10 @@
                                                                                     </span>
                                                                                     <ul style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;" class="deploymentSelectedRunList" id="templatescookbooks" cdata="catalyst">
                                                                                         
-                                                                                    </ul>
-                                                                                </div>
+                                                                                    </ul>-->
+                                                                                </div> 
                                                                                 
-                                                                            </div> -->
+                                                                            </div>
                                                                 </section>
                                                                 
                                                                 <section class="col col-10 forDocker">
@@ -387,6 +383,29 @@
     //function removeRow(curBtn) {
     //  $(curBtn).closest('tr').detach();
     //}
+
+    function loadCookbookSelectorControl(chefserverid){
+        var csid = $('#' + chefserverid + ' option:selected').attr('rowid');
+       
+        if(csid != undefined){
+             //alert(csid);
+        
+        var $cookbookselectorcontrol = $chefCookbookRoleSelector('usechefserver/' + csid,function(data){
+                var itms = $('#templatescookbooks').attr('savedvalue').split(',');
+                //Adding previously saved items
+                $.each(itms,function(i,v){
+                  console.log(i + ' ' + v.replace(/"/g, "") );
+                  $('.deploymentsCookbookList input[value="' + v.replace(/"/g, "") + '"],.deploymentRoleList input[value="' + v.replace(/"/g, "")  + '"]').attr('checked','checked');
+                  $('.btnItemAdd').trigger('click');
+                });
+               
+                    
+        });
+         $('#templatescookbooks').append($cookbookselectorcontrol);
+
+        }
+    }
+
     function inLineReady() {
         //alert('in');
 
@@ -413,8 +432,8 @@
             $('#navSettings > ul > li > ul').first().css("display", "block");
         }
         //redrawing the breadcrumb and selecting the tree
-        $('#ulsettingstree > li').removeClass('active');
-        $('#ulsettingstree > li').each(function () {
+        $('#settings li').removeClass('active');
+        $('#settings li').each(function () {
             if ($(this).text().trim() == "Templates")
                 $(this).addClass('active');
         });

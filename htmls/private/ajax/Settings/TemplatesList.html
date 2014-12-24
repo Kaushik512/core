@@ -48,7 +48,7 @@
                                         <td datafield="templatetypename"></td>
                                         <!--<td datafield="templateproviderpath"></td>-->
                                         <!--<td datafield="Templateschefserver"></td>-->
-                                        <td datafield="templatescookbooks"></td>
+                                        <td datafield="templatescookbooks" cleanquotes="yes"></td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -95,6 +95,9 @@
                                         $("#addnewitem").attr('data-toggle', 'modal');
 
                                         CreateTableFromJson(17,'templatename' , 'CreateTemplates.html'); //7 is for users
+                                        $('td[cleanquotes="yes"]').each(function(){
+                                            $(this).text($(this).text().replace(/"/g, ""));
+                                        });
                                         var tab = 'envtable';
                                         $('#' + tab).dataTable({
                                             "pagingType": "full_numbers"

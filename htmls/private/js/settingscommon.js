@@ -13,7 +13,8 @@ function deleteItem(docid, key, value, button) {
                 // debugger;
                 //d4ddata = JSON.parse(data);
                 // $('#refreshpage').click();
-                $(button).closest('tr').detach();
+                $(button).closest('tr').fadeOut("slow");
+                $(button).closest('tr').addClass('hidden').remove();
 
                 var tab = 'envtable';
                 $('#' + tab).dataTable();
@@ -163,15 +164,17 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                                 }
 
                             }
+                            if(editButton){
                             editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
                             editButton.addClass("tableactionbutton tableactionbuttonpadding");
                             editButton.removeClass('btn-xs');
                             editButton.addClass('btn-sg');
+                            }
                             //importbutton will be present for config management screen.
                             var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
                             // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
                             //&& tdorgname.length > 0
-                            if (importbutton.length > 0) {
+                            if (importbutton && importbutton.length > 0) {
                                 importbutton.attr("href", "#ajax/Settings/chefSync.html?" + tv);
                                 importbutton.removeClass('btn-xs');
                                 importbutton.addClass('btn-sg');
@@ -555,6 +558,17 @@ function saveform(formID) {
             v.push($(this).val());
           }*/
         });
+
+        //for chef cookbook selections
+        if($(this).find('.deploymentSelectedRunList').length > 0)
+        {
+            var v2 = [];
+            $(this).find('input[type="hidden"]').each(function(){
+                v2.push("\"" + $(this).val() + "\"");
+            });
+            //alert('hit on run list' + v2.join(','));
+            v.push(v2.join(','));
+        }
         if (k != '') {
             //data1.append(k,"[" + v.toString() + "]");
             data1.append(k, v);

@@ -379,6 +379,51 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
 
     });
+app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
+    console.log('hit received');
+        configmgmtDao.getChefServerDetails(req.params.chefserverid, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            console.log("chefdata", chefDetails);
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
+            chef.getCookbooksList(function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    chef.getRolesList(function(err, roles) {
+                        console.log(err);
+                        if (err) {
+                            res.send(500);
+                            return;
+                        } else {
+                            res.send({
+                                serverId: chefDetails.rowid,
+                                roles: roles,
+                                cookbooks: cookbooks
+                            });
+                        }
+                    });
+                }
+            });
+
+        });
+
+    });
 
 
 }

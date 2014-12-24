@@ -40,14 +40,21 @@
                                 </thead>
                                 <tbody>
                                     <tr class="hidden rowtemplate">
-                                        <td datafield="servicename"></td>
+                                        <td><div datafield="servicename"></div><div datafield="commandname"></div></td>
                                         <td datafield="commandtype"></td>
                                         <td>
-                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontGreen"><div  style="display:none" datafield="servicestart"></div><i class="fa fa-play fa-1x txt-color-white"></i></div>
-                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRed"><div  style="display:none" datafield="servicestop"></div><i class="fa fa-power-off fa-1x txt-color-white"></i></div>
-                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRed"><div style="display:none" datafield="servicestatus"></div> <i class="fa fa-bell-o fa-1x txt-color-white"></i></div>
-                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRestart"><div  style="display:none" datafield="servicerestart"></div><i class="fa fa-undo fa-16px txt-color-white"></i></div>
-                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontKill"><div style="display:none" datafield="servicekill"></div><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontGreen" title="Start"><div  style="display:none" datafield="servicestart"></div><i class="fa fa-play fa-1x txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRed"  title="Stop"><div  style="display:none" datafield="servicestop"></div><i class="fa fa-power-off fa-1x txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRed"  title="Status"><div style="display:none" datafield="servicestatus"></div> <i class="fa fa-bell-o fa-1x txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRestart"  title="ReStart"><div  style="display:none" datafield="servicerestart"></div><i class="fa fa-undo fa-16px txt-color-white"></i></div>
+                                            <div class="hidden serviceactionicon cardGreenRedYellowBlack frontKill"  title="Kill"><div style="display:none" datafield="servicekill"></div><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
+                                            <div datafield="commandaction" class="commandactionicons hidden"></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontGreen" title="Start"><i class="fa fa-play fa-1x txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRed"  title="Stop"><i class="fa fa-power-off fa-1x txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRed"  title="Status"> <i class="fa fa-bell-o fa-1x txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRestart"  title="ReStart"><i class="fa fa-undo fa-16px txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontKill"  title="Kill"><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
+                                            
                                         </td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
@@ -95,7 +102,20 @@
                                                 $(this).removeClass('hidden');
                                             }
 
-                                       }); //3 is for 
+                                       }); 
+                                        $('.commandactionicons').each(function(){
+                                            //alert($(this).text() + ($(this).text().trim() != "none"));
+                                           var cmdact = $(this).text().split(',');
+                                           //alert('in');
+                                           var $currTd = $(this).parent();
+                                           $.each(cmdact,function(v2,k2){
+                                               console.log(v2 + '----' + k2);
+                                               $currTd.find('.commandactionicon[title="' + k2 + '"]').removeClass('hidden');
+                                           });
+
+                                       }); 
+
+                                       //3 is for 
                                       
                                         var tab = 'envtable';
                                         $('#' + tab).dataTable({

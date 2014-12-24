@@ -1189,6 +1189,8 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                                }
                                if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
                                    gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
+                                   //clearing additional double quotes
+                                   gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
                                }
 
                                if (data.masterjson.rows.row[z].field[x].name == "templatename") {
