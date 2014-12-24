@@ -13,7 +13,8 @@ function deleteItem(docid, key, value, button) {
                 // debugger;
                 //d4ddata = JSON.parse(data);
                 // $('#refreshpage').click();
-                $(button).closest('tr').detach();
+                $(button).closest('tr').fadeOut("slow");
+                $(button).closest('tr').addClass('hidden').remove();
 
                 var tab = 'envtable';
                 $('#' + tab).dataTable();
