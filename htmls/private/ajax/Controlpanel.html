@@ -204,15 +204,22 @@
                     <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
                   </div>
                   <div class="modal-body">
-                    <div class="smart-form">
-                      <fieldset>
-                      <section>
-                      <label class="select select-multiple">
-                    <select id="serviceList" class="col col-6" multiple></select></label>
-                    </section>
-                    </fieldset>
-                    </div>
                     
+                    <!--<select id="serviceList" class="col col-6" multiple></select>-->
+                      <table class="table table-hover">
+                       <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Actions</th>
+                          <th>Select</th>
+                        </tr>
+                       </thead>
+                       <tbody id="serviceList">
+                            
+
+                       </tbody>
+                      </table>
+
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
@@ -604,19 +611,36 @@ $.get('../instances/'+urlParams.id,function(data){
       console.log(services,"length==>",services.length);
       var serviceIds = [];
       if(data.serviceIds && data.serviceIds.length) {
-        serviceIds = data.serviceIds
+        serviceIds = data.serviceIds;
       }
 
       for(var i=0;i<services.length;i++){
-        if(serviceIds.indexOf(services[i].rowid) !== -1) {
-          continue;
-        }
+        
         var name = services[i].servicename;
         if(!name) {
            name = services[i].commandname;
-        } 
-        var $option = $('<option></option>').val(services[i].rowid).html(name).data('serviceData',services[i]);
-        $serviceList.append($option);
+        }
+        var $tr = $('<tr></tr>').attr('data-listServiceId',services[i].rowid);
+        var $tdName = $('<td></td>').append(name);
+        $tr.append($tdName);
+        console.log(services[i]);
+        var commandType = services[i].commandtype;
+        if(commandType === 'Chef Cookbook/Recepie') {
+          var html =  getCookbookActionHtml(services[i].rowid,services[i]);
+        } else {
+           var html =  getCommandActionHtml(services[i].rowid,services[i]);
+        }
+        console.log('here');
+        var $tdActions = $('<td></td>').append(html);
+        $tr.append($tdActions);
+        var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData',services[i]);
+        var $tdCheckBox = $('<td></td>').append($checkBox);
+        $tr.append($tdCheckBox);
+        if(serviceIds.indexOf(services[i].rowid) !== -1) {
+          $tr.hide();
+        }
+        
+        $serviceList.append($tr);
       }
 
     });
@@ -637,7 +661,7 @@ $.get('../instances/'+urlParams.id,function(data){
 
     
   
-   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist).data('orgId',data.orgId);
+   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
@@ -1044,6 +1068,12 @@ function addServiceToDom(serviceData) {
               var $option = $modalServiceList.find('option[value='+serviceData.rowid+']');
               $tr.remove();
               $option.remove();
+               var $serviceList = $('#serviceList');
+                var $input = $serviceList.find('input[value=' +serviceData.rowid + ']');
+                if ($input.length) {
+                    $input.get(0).checked = false;
+                    $input.parents('tr').show();
+                }
             }
         });
     });
@@ -1055,28 +1085,37 @@ function addServiceToDom(serviceData) {
 }
 
 $('.btnSaveService').click(function(e) {
-   var $serviceList = $('#serviceList');
-   var serviceIds = $serviceList.val();
-   console.log('serviceIds ==>',serviceIds);
-   if(!serviceIds.length) {
-    alert('please choose a service');
-    return;
-   }
-   $.post('../instances/'+urlParams.id+'/services/add',{
-    serviceIds:serviceIds
-   },function(data){
-    
-    for(var i=0;i<data.length;i++) {
-       var $option = $serviceList.find('option[value='+data[i]+']');
-       var serviceData = $option.data('serviceData');
-       addServiceToDom(serviceData);
+    var $serviceList = $('#serviceList');
+    var $checkbox = $serviceList.find('input[type="checkbox"]:checked');
+    var serviceIds = [];
+    $checkbox.each(function() {
+        serviceIds.push($(this).val());
+    })
+    console.log('serviceIds ==>', serviceIds);
+    if (!serviceIds.length) {
+        alert('please choose a service');
+        return;
     }
-    $('#serviceModalContainer').modal('hide');
+    $.post('../instances/' + urlParams.id + '/services/add', {
+        serviceIds: serviceIds
+    }, function(data) {
 
-   });
- 
+        for (var i = 0; i < data.length; i++) {
+
+            var $input = $serviceList.find('input[value=' + data[i] + ']');
+            if ($input.length) {
+                var serviceData = $input.data('serviceData');
+                $input.get(0).checked = false;
+                $input.parents('tr').hide();
+                addServiceToDom(serviceData);
+
+            }
+        }
+        $('#serviceModalContainer').modal('hide');
+
+    });
+
 });
-
 
 
 </script>

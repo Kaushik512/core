@@ -612,7 +612,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.delete('/instances/:instanceId/services/:serviceId', function(req, res) {
-        instancesDao.deleteSetrvice(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
+        instancesDao.deleteService(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
             if (err) {
                 console.log(err)
                 res.send(500);
