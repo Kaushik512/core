@@ -32,7 +32,7 @@
                             <table id="tempalteTable" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>Service Name</td>
+                                        <td>Name</td>
                                         <td>Action Type</td>
                                         <td>Service Action</td>
                                         <td class="">Actions</td>
@@ -40,7 +40,7 @@
                                 </thead>
                                 <tbody>
                                     <tr class="hidden rowtemplate">
-                                        <td><div datafield="servicename"></div><div datafield="commandname"></div></td>
+                                        <td datafield="servicename"></td>
                                         <td datafield="commandtype"></td>
                                         <td>
                                             <div class="hidden serviceactionicon cardGreenRedYellowBlack frontGreen" title="Start"><div  style="display:none" datafield="servicestart"></div><i class="fa fa-play fa-1x txt-color-white"></i></div>
@@ -49,12 +49,11 @@
                                             <div class="hidden serviceactionicon cardGreenRedYellowBlack frontRestart"  title="ReStart"><div  style="display:none" datafield="servicerestart"></div><i class="fa fa-undo fa-16px txt-color-white"></i></div>
                                             <div class="hidden serviceactionicon cardGreenRedYellowBlack frontKill"  title="Kill"><div style="display:none" datafield="servicekill"></div><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
                                             <div datafield="commandaction" class="commandactionicons hidden"></div>
-                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontGreen" title="Start"><i class="fa fa-play fa-1x txt-color-white"></i></div>
-                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRed"  title="Stop"><i class="fa fa-power-off fa-1x txt-color-white"></i></div>
-                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRed"  title="Status"> <i class="fa fa-bell-o fa-1x txt-color-white"></i></div>
-                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRestart"  title="ReStart"><i class="fa fa-undo fa-16px txt-color-white"></i></div>
-                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontKill"  title="Kill"><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
-                                            
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontGreen" title="Start" icondata="start"><i class="fa fa-play fa-1x txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRed"  title="Stop" icondata="stop"><i class="fa fa-power-off fa-1x txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRed"  title="Status" icondata="status"> <i class="fa fa-bell-o fa-1x txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontRestart"  title="ReStart" icondata="restart"><i class="fa fa-undo fa-16px txt-color-white"></i></div>
+                                                <div class="hidden commandactionicon cardGreenRedYellowBlack frontKill"  title="Kill" icondata="kill"><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
                                         </td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
@@ -73,7 +72,7 @@
                                 <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                     <thead>
                                         <tr class="rowCustomStyle">
-                                            <td>Service Name</td>
+                                            <td>Name</td>
                                             <td>Action Type</td>
                                             <td>Service Action</td>
                                             <td class="">Action</td>
@@ -110,7 +109,7 @@
                                            var $currTd = $(this).parent();
                                            $.each(cmdact,function(v2,k2){
                                                console.log(v2 + '----' + k2);
-                                               $currTd.find('.commandactionicon[title="' + k2 + '"]').removeClass('hidden');
+                                               $currTd.find('.commandactionicon[icondata="' + k2 + '"]').removeClass('hidden');
                                            });
 
                                        }); 

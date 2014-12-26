@@ -522,7 +522,7 @@ function saveform(formID) {
                 // alert('in' + $(this).attr('fixedname'));
                 data1.append($(this).prop("id"), $(this).get(0).files[0]);
                 if ($(this).attr("fixedname")) {
-                    alert('in' + $(this).attr('fixedname'));
+                   // alert('in' + $(this).attr('fixedname'));
                     data1.append($(this).prop("id") + "_filename", $(this).attr("fixedname"));
                 } else
                     data1.append($(this).prop("id") + "_filename", $(this).get(0).files[0].name);
@@ -542,7 +542,7 @@ function saveform(formID) {
         k = $(this).attr("id");
        // alert('id:' + k);
         $(this).find("input").each(function() {
-            // alert($(this).prop("type"));
+           // alert($(this).val());
             if ($(this).is(":checked")) {
                 //    v.push("\"" + $(this).val() + "\"");
                 v.push($(this).val());
@@ -571,6 +571,7 @@ function saveform(formID) {
         }
         if (k != '') {
             //data1.append(k,"[" + v.toString() + "]");
+           // alert(v);
             data1.append(k, v);
         }
     });
@@ -961,7 +962,7 @@ function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
          $.each(receipectrls,function(k1,v1){
                 var $servicecookbook = $('#' + v1);
                 $servicecookbook.html('');
-                $servicecookbook.append('<option value="none">None</option>');
+               // $servicecookbook.append('<option value="none">None</option>');
                 $.each(data,function(k,v){
                     var recp = data[k].name.substring(0,data[k].name.length-3);
                  //   console.log(k + ":" + recp);
@@ -972,7 +973,7 @@ function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
                 $servicecookbook.val($servicecookbook.find('option:first').val());
 
                 // Loading the saved value back
-                if($servicecookbook.attr('savedvalue')){
+                if($servicecookbook.attr('savedvalue') && $servicecookbook.attr('savedvalue').trim() != '' && $servicecookbook.attr('savedvalue').trim() != 'none'){
                     $servicecookbook.val($servicecookbook.attr('savedvalue'));
                 }
                 
@@ -993,7 +994,7 @@ function loadactioncheckboxes(receipectrls){
             var $servicecookbook = $('#' + v1);
             var $servicecookbookcheckbox = $('#' + v1 +'checkbox');
             if($servicecookbook && $servicecookbookcheckbox){
-                if($servicecookbook.val() == 'none')
+                if($servicecookbook.attr('savedvalue').trim() == 'none' || $servicecookbook.attr('savedvalue').trim() == '')
                 {
                     $servicecookbookcheckbox.removeAttr('checked');
                 }
