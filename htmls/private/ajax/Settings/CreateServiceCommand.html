@@ -31,6 +31,18 @@
 
                                                         <div class="row " style="margin:0px;">
                                                             <fieldset style="padding:0px;">
+                                                              <section class="col col-5">
+                                                                <label for="">Name <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                <label class="input"> 
+                                                                    <input type="text" id="servicename"  cdata="catalyst" cat-validation="required,nospecial,max15" unique="true">
+                                                                </label>                                        
+                                                              </section>
+                                                              <section class="col col-5 CommandName hidden" style="padding-top:10px;">
+                                                                <label for="">Command Name</label>
+                                                                <label class="input"> 
+                                                                    <input type="text"  id="commandname"  cdata="catalyst">
+                                                                </label>                                        
+                                                              </section>
                                                                 <section class="col col-6">
                                                                   <label class="">
                                                                       Service Command Type
@@ -46,9 +58,13 @@
                                                                       </div>  
                                                                   </div>
                                                               </section>
-                                                              <section class="col col-6 chooseChefServer">
+                                                              
+                                                          </fieldset>
+                                                          <fieldset style="padding:0px;">                   
+                                                            
+                                                            <section class="col col-6 chooseChefServer">
                                                                   <label class="">
-                                                                      Select Chefserver
+                                                                      Select Chefserver<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                                   </label>
                                                                   <div class="row">
                                                                       <div class="col col-10">
@@ -60,20 +76,7 @@
                                                                       </div>  
                                                                   </div>
                                                               </section>
-                                                          </fieldset>
-                                                          <fieldset style="padding:0px;">                   
-                                                            <section class="col col-5 ServiceName">
-                                                                <label for="">Service Name</label>
-                                                                <label class="input"> 
-                                                                    <input type="text" id="servicename"  cdata="catalyst">
-                                                                </label>                                        
-                                                            </section>
-                                                            <section class="col col-5 CommandName" style="padding-top:10px;">
-                                                                <label for="">Command Name</label>
-                                                                <label class="input"> 
-                                                                    <input type="text"  id="commandname"  cdata="catalyst">
-                                                                </label>                                        
-                                                            </section>
+                                                            
                                                             <section class="col col-5 CommandName" style="padding-top:10px;">
                                                               <label class="">Choose Operating System</label>
                                                               <div class="inline-group">
@@ -85,7 +88,7 @@
                                                             </section>
                                                             <section class="col col-6 ServiceCookbooks padding-left-10percent">
                                                                   <label class="">
-                                                                      Service Cookbooks <img class="servicecookbookspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif"></img>
+                                                                      Service Cookbooks <span style="color:Red;" class="control-label">&nbsp;*</span> <img class="servicecookbookspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif"></img>
                                                                   </label>
                                                                   <div class="">
                                                                       <div>
@@ -170,28 +173,6 @@
                                         </label>
                                       </div>
                                   </div>
-                                  <div class="col col-sm-6">
-                                      <div class="col col-sm-3" style="padding-left: 0px;">
-                                        <label class="checkbox actionTypeContainer">
-                                          <input type="checkbox" value="start" name="checkbox"  id="servicekillcheckbox">
-                                          <i></i>Kill
-                                        </label>
-                                      </div>
-
-                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
-                                       
-                                        <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicekill" cdata="catalyst">
-                                               <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
-                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
-                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
-                                            </select>
-                                        </label>
-                                      </div>
-                                  </div>
-                                </div>
-                                <br>
                                 <div style="margin: 0px;" class="row">
                                     <div class="col col-sm-6">
                                       <div class="col col-sm-3" style="padding-left: 0px;">
@@ -216,6 +197,28 @@
                                   </div>
                                    
                                 </div>
+                                <br/>
+                                <div class="col col-sm-6 hidden">
+                                      <div class="col col-sm-3" style="padding-left: 0px;">
+                                        <label class="checkbox actionTypeContainer">
+                                          <input type="checkbox" value="start" name="checkbox"  id="servicekillcheckbox">
+                                          <i></i>Kill
+                                        </label>
+                                      </div>
+
+                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
+                                       
+                                        <label class="select Service_Apache"> 
+                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicekill" cdata="catalyst">
+                                               <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
+                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
+                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
+                                            </select>
+                                        </label>
+                                      </div>
+                                  </div>
+                                </div>
                               </div>
                               <div id="customScript-dropdown">
                                 <!-- <section class="col col-5" >
@@ -226,7 +229,7 @@
                                   
                                 </section> -->
                                 <section class="col col-5" style="padding-top:10px;">                                                                                                                                 
-                                    <label>Command</label>
+                                    <label>Command<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                     <label class="input"> 
                                         <input type="text" id="command" cdata="catalyst">
                                     </label>                                        
@@ -236,29 +239,31 @@
                                 <div class="row" cdata="catalyst" ctype="checkbox" id="commandaction">
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_Start" value="start" >
+                                      <input type="checkbox" name="checkbox"  id="checkbox_start" value="start" >
                                       <i></i>Start</label>
                                   </div>
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_Stop" value="stop" >
+                                      <input type="checkbox" name="checkbox"  id="checkbox_stop" value="stop" >
                                       <i></i>Stop</label>
                                   </div>
-                                  <div class="col col-2">
+                                 
+                                  <div class="col col-2 hidden">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_Restart"  value="restart" >
+                                      <input type="checkbox" name="checkbox" id="checkbox_kill"  value="kill" >
+                                      <i></i>Kill</label>
+                                  </div>
+                                  <div class="col col-2" style="width:70px">
+                                    <label class="checkbox">
+                                      <input type="checkbox" name="checkbox"  id="checkbox_restart"  value="restart" >
                                       <i></i>Restart</label>
                                   </div>
                                   <div class="col col-2">
                                     <label class="checkbox">
-                                      <input type="checkbox" name="checkbox" id="checkbox_Kill"  value="kill" >
-                                      <i></i>Kill</label>
-                                  </div>
-                                  <div class="col col-2">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_Status"  value="status">
+                                      <input type="checkbox" name="checkbox"  id="checkbox_status"  value="status">
                                       <i></i>Status</label>
                                   </div>
+
                                 </div>
                               </section>
                                 <!-- <section class="col col-5 AssignUsers padding-left-10percent">
@@ -309,7 +314,7 @@
                 <div class="widget-toolbox clearfix">
                     <div class="btn-group pull-right">
                         <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()) saveform(19);">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()){ preprocess();saveform(19);}">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                             Save
                         </button>
@@ -413,12 +418,25 @@
 
 <script>
     //Form Name
-
+    //preprocess() -> will set the dropdown values to "none" if checkbox is not selected.
+    function preprocess(){
+      $('#commandname').val($('#servicename').val());
+      $('select.chooseservicesCookBookRecipeList').each(function(){
+        var cb = $('#' + $(this).attr('id') + 'checkbox');
+        //console.log(cb.val());
+        var $sel = $(this);
+        if(!cb.is(":checked")){
+          $sel.append('<option value="none"></option>');
+          $sel.val('none');
+        }
+         
+      });
+    }
 
     function inLineReady() {
         $("input[type='text']").on("click", function () {
             $(this).select();
-            $("#msgOrgName").hide()
+            $("#msgOrgName").hide();
         });
         if(readform(19) == false){
           $('select[cdata="catalyst"]').select2();
@@ -449,6 +467,7 @@
                 $(this).addClass('active');
         });
         drawBreadCrumb1();
+        enableUniqueCheckingForInputs(19);
     }
 
    
