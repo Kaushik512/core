@@ -1,36 +1,153 @@
 var java = require('java');
-
-//java.classpath.push(['/home/anshul/eclipse-workspace/catalyst-ssh/bin', '../java/lib']);
-//java.classpath.push(['../java/classes', '../java/lib']);
+var Tail = require('tail').Tail;
+var appConfig = require('../config/app_config');
+var nodeExtend = require('node.extend');
+var uuid = require('node-uuid');
+var fs = require('fs');
 
 java.classpath.push('../java/lib/jsch-0.1.51.jar');
 java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
 
 
-/*
-var javaSSH = java.import('com.relevancelab.catalyst.security.ssh.SSH');
-javaSSH.testMethodStaticSync();
-*/
+var defaults = {
+    port: 22,
+    tempDir: appConfig.tempDir
+};
 
 
-//Creating new instance of JAVA SSH
-console.log('Initializing class');
-java.newInstance('com.relevancelab.catalyst.security.ssh.SSH', '54.69.140.241', 22, 'root', null, '/WORK/D4D/config/catalyst.pem', function(err, javaSSH) {
-    console.log('in callback');
-    if (err) {
-        console.log(err);
-        return;
+
+function LogFileTail(logFile, onChangeCallback) {
+    var tail = new Tail("fileToTail");
+
+    tail.on("line", function(data) {
+        onChangeCallback(data);
+    });
+
+    this.stopTailing = function() {
+        tail.unwatch();
     }
-    java.callMethod(javaSSH,'execChefClient', 'recipe[server_time]',true, function(err,retCode){
-       if(err) {
-       	console.log("error in runnnig method");
-       	console.log(err);
-       	return;
-       }
-       console.log("success in runnnig method");
-       console.log(retCode);
+};
 
-    })
-    //console.log('success');
-});
 
+function JavaSSH(javaSSHInstance, options) {
+
+    this.execChefClient = function(runlist, overrideRunlist, onComplete, onStdOut, onStdErr) {
+        var stdOutLogFile = options.tempDir + uuid.v4();
+        var stdErrLogFile = options.tempDir + uuid.v4();
+        var tailStdOut = null;
+        var tailStdErr = null;
+        fs.open(stdOutLogFile, 'w', function(err, fd1) {
+            if (err) {
+                if (typeof onComplete === 'function') {
+                    onComplete(err, null);
+                }
+                return;
+            }
+            fs.close(fd1);
+            fs.open(stdErrLogFile, 'w', function(err, fd2) {
+                if (err) {
+                    if (typeof onComplete === 'function') {
+                        onComplete(err, null);
+                    }
+                    return;
+                }
+                fs.close(fd2);
+                if (typeof onStdOut === 'function') {
+                    tailStdOut = new LogFileTail(stdOutLogFile, onStdOut);
+                }
+                if (typeof onStdErr === 'function') {
+                    tailStdErr = new LogFileTail(stdErrLogFile, onStdErr);
+                }
+
+                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, stdOutLogFile, stdErrLogFile, function(err, retCode) {
+                    // deleting log files
+                    fs.unlink(stdOutLogFile);
+                    fs.unlink(stdErrLogFile);
+                    if (err) {
+                        console.log("error in runnnig method");
+                        console.log(err);
+                        if (typeof onComplete === 'function') {
+                            onComplete(err, null);
+                        }
+                        return;
+                    }
+                    if (typeof onComplete === 'function') {
+                        onComplete(err, null);
+                    }
+                });
+            });
+
+        });
+
+    };
+
+    this.runServiceCmd = function(serviceName, servicAction, onComplete, onStdOut, onStdErr) {
+        var stdOutLogFile = options.tempDir + uuid.v4();
+        var stdErrLogFile = options.tempDir + uuid.v4();
+        var tailStdOut = null;
+        var tailStdErr = null;
+        fs.open(stdOutLogFile, 'w', function(err, fd1) {
+            if (err) {
+                if (typeof onComplete === 'function') {
+                    onComplete(err, null);
+                }
+                return;
+            }
+            fs.close(fd1);
+            fs.open(stdErrLogFile, 'w', function(err, fd2) {
+                if (err) {
+                    if (typeof onComplete === 'function') {
+                        onComplete(err, null);
+                    }
+                    return;
+                }
+                fs.close(fd2);
+                if (typeof onStdOut === 'function') {
+                    tailStdOut = new LogFileTail(stdOutLogFile, onStdOut);
+                }
+                if (typeof onStdErr === 'function') {
+                    tailStdErr = new LogFileTail(stdErrLogFile, onStdErr);
+                }
+
+                java.callMethod(javaSSHInstance, 'execServiceCmd', serviceName, servicAction, stdOutLogFile, stdErrLogFile, function(err, retCode) {
+                    // deleting log files
+                    fs.unlink(stdOutLogFile);
+                    fs.unlink(stdErrLogFile);
+                    if (err) {
+                        console.log("error in runnnig method");
+                        console.log(err);
+                        if (typeof onComplete === 'function') {
+                            onComplete(err, null);
+                        }
+                        return;
+                    }
+                    if (typeof onComplete === 'function') {
+                        onComplete(err, null);
+                    }
+                });
+            });
+
+        });
+    };
+}
+
+
+module.exports.getNewInstance = function(options, callback) {
+    options = nodeExtend(defaults, options);
+    if (options.password) {
+        options.pemFilePath = null;
+    } else {
+        options.password = null;
+    }
+
+    java.newInstance('com.relevancelab.catalyst.security.ssh.SSH', options.host, options.port, options.username, options.password, options.pemFilePath, function(err, javaSSHInstance) {
+        if (err) {
+            console.log(err);
+            callback(err, null);
+            return;
+        }
+        var javaSSH = new JavaSSH(javaSSHInstance, options);
+        callback(null, JavaSSH);
+    });
+
+}
