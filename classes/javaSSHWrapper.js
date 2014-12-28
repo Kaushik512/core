@@ -5,7 +5,7 @@ var nodeExtend = require('node.extend');
 var uuid = require('node-uuid');
 var fs = require('fs');
 
-java.classpath.push('../java/lib/jsch-0.1.51.jar');
+java.classpath.push('/WORK/D4D/java/lib/jsch-0.1.51.jar');
 java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
 
 
@@ -17,14 +17,22 @@ var defaults = {
 
 
 function LogFileTail(logFile, onChangeCallback) {
-    var tail = new Tail("fileToTail");
+    //var tail = new Tail('/home/anshul/test');
+    var tail = new Tail(logFile);
 
     tail.on("line", function(data) {
+        console.log("FileData ==>", data);
         onChangeCallback(data);
+    });
+    tail.on("error", function(error) {
+        console.log('ERROR: ', error);
     });
 
     this.stopTailing = function() {
         tail.unwatch();
+    }
+    this.startTailing = function() {
+        tail.watch();
     }
 };
 
@@ -54,15 +62,23 @@ function JavaSSH(javaSSHInstance, options) {
                 fs.close(fd2);
                 if (typeof onStdOut === 'function') {
                     tailStdOut = new LogFileTail(stdOutLogFile, onStdOut);
+                    tailStdOut.startTailing();
                 }
                 if (typeof onStdErr === 'function') {
                     tailStdErr = new LogFileTail(stdErrLogFile, onStdErr);
+                    tailStdErr.startTailing();
                 }
 
                 java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, stdOutLogFile, stdErrLogFile, function(err, retCode) {
                     // deleting log files
-                    fs.unlink(stdOutLogFile);
-                    fs.unlink(stdErrLogFile);
+                    if (tailStdOut) {
+                        tailStdOut.stopTailing();
+                        fs.unlink(stdOutLogFile);
+                    }
+                    if (tailStdErr) {
+                        tailStdErr.stopTailing();
+                        fs.unlink(stdErrLogFile);
+                    }
                     if (err) {
                         console.log("error in runnnig method");
                         console.log(err);
@@ -104,15 +120,23 @@ function JavaSSH(javaSSHInstance, options) {
                 fs.close(fd2);
                 if (typeof onStdOut === 'function') {
                     tailStdOut = new LogFileTail(stdOutLogFile, onStdOut);
+                    tailStdOut.startTailing();
                 }
                 if (typeof onStdErr === 'function') {
                     tailStdErr = new LogFileTail(stdErrLogFile, onStdErr);
+                    tailStdErr.startTailing();
                 }
 
                 java.callMethod(javaSSHInstance, 'execServiceCmd', serviceName, servicAction, stdOutLogFile, stdErrLogFile, function(err, retCode) {
                     // deleting log files
-                    fs.unlink(stdOutLogFile);
-                    fs.unlink(stdErrLogFile);
+                    if (tailStdOut) {
+                        tailStdOut.stopTailing();
+                        fs.unlink(stdOutLogFile);
+                    }
+                    if (tailStdErr) {
+                        tailStdErr.stopTailing();
+                        fs.unlink(stdErrLogFile);
+                    }
                     if (err) {
                         console.log("error in runnnig method");
                         console.log(err);
@@ -139,15 +163,16 @@ module.exports.getNewInstance = function(options, callback) {
     } else {
         options.password = null;
     }
-
+    console.log('Initializing class');
     java.newInstance('com.relevancelab.catalyst.security.ssh.SSH', options.host, options.port, options.username, options.password, options.pemFilePath, function(err, javaSSHInstance) {
+
         if (err) {
             console.log(err);
             callback(err, null);
             return;
         }
         var javaSSH = new JavaSSH(javaSSHInstance, options);
-        callback(null, JavaSSH);
+        callback(null, javaSSH);
     });
 
 }
