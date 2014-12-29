@@ -10,6 +10,8 @@ var Chef = function(settings) {
     var chefClient = null;
     var that = this;
 
+    var bootstrapattemptcount = 0;
+
     function initializeChefClient(callback) {
         if (!chefClient) {
             fileIo.readFile(settings.chefUserPemFile, function(err, key) {
@@ -306,14 +308,32 @@ var Chef = function(settings) {
             }
         };
         if (typeof callbackOnStdOut === 'function') {
+
             options.onStdOut = function(data) {
+                console.log('Process out :' + data);
                 callbackOnStdOut(data);
             }
         }
 
         if (typeof callbackOnStdErr === 'function') {
+            
             options.onStdErr = function(data) {
-                callbackOnStdErr(data);
+                if(bootstrapattemptcount < 4){
+                    //retrying bootstrap .... needed for windows
+                    if(data.toString().indexOf('No response received from remote node after') >= 0){
+                    callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount +1) + '/4 ...');
+                    that.bootstrapInstance(params,callback,callbackOnStdOut, callbackOnStdErr);
+                    bootstrapattemptcount++;
+                    }
+                    else{
+                        console.log('Hit an error :' + data);
+                        callbackOnStdErr(data);
+                    }
+                }
+                else{
+                    console.log('Hit an error :' + data);
+                    callbackOnStdErr(data);
+                }
             }
         }
         if ((!(params.runlist) || !params.runlist.length)) {
@@ -338,6 +358,11 @@ var Chef = function(settings) {
         } else {
             credentialArg = '-P' + params.instancePassword;
         }
+        //If windows box then credetial to be updated to stored password
+        if (params.instanceOS == 'windows') {
+            credentialArg = '-P\'Zaq!2wsx\'';
+        }
+
         argList.push(credentialArg);
 
         if (params.instanceOS == 'windows') {
