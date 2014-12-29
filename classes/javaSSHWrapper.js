@@ -5,8 +5,16 @@ var nodeExtend = require('node.extend');
 var uuid = require('node-uuid');
 var fs = require('fs');
 
-java.classpath.push('/WORK/D4D/java/lib/jsch-0.1.51.jar');
-java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
+var currentDirectory = __dirname;
+
+var indexOfD4D = currentDirectory.indexOf("D4D");
+var D4DfolderPath = currentDirectory.substring(0,indexOfD4D+4);
+
+
+
+console.log(D4DfolderPath);
+java.classpath.push(D4DfolderPath+'java/lib/jsch-0.1.51.jar');
+java.classpath.push(D4DfolderPath+'/java/classes');
 
 
 var defaults = {
@@ -38,7 +46,10 @@ function LogFileTail(logFile, onChangeCallback) {
 
 
 function JavaSSH(javaSSHInstance, options) {
-
+    
+    /**
+    * @param: runlist, chef runlist
+    */ 
     this.execChefClient = function(runlist, overrideRunlist, onComplete, onStdOut, onStdErr) {
         var stdOutLogFile = options.tempDir + uuid.v4();
         var stdErrLogFile = options.tempDir + uuid.v4();
@@ -88,7 +99,7 @@ function JavaSSH(javaSSHInstance, options) {
                         return;
                     }
                     if (typeof onComplete === 'function') {
-                        onComplete(err, null);
+                        onComplete(err,retCode );
                     }
                 });
             });
@@ -146,7 +157,7 @@ function JavaSSH(javaSSHInstance, options) {
                         return;
                     }
                     if (typeof onComplete === 'function') {
-                        onComplete(err, null);
+                        onComplete(err, retCode);
                     }
                 });
             });

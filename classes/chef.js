@@ -367,8 +367,8 @@ var Chef = function(settings) {
 
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
-        var overrideRunlist = true;
-        if (options.updateRunlist) {
+        var overrideRunlist = false;
+        if (options.overrideRunlist) {
             overrideRunlist = true;
         }
         if (!runlist) {

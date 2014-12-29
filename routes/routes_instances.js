@@ -332,7 +332,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             host: instance.instanceIP,
                             instanceOS: instance.hardware.os,
                             port: 22,
-                            runlist: req.body.runlist
+                            runlist: req.body.runlist,
+                            overrideRunlist: false
                         }
                         console.log('decryptCredentials ==>', decryptedCredentials);
                         if (decryptedCredentials.pemFileLocation) {
@@ -729,6 +730,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 chefUserPemFile: chefDetails.userpemfile,
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
+
                             });
                             console.log('instance IP ==>', instance.instanceIP);
                             var actionType = req.params.actionType;
@@ -751,7 +753,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 instanceOS: instance.hardware.os,
                                 port: 22,
                                 runlist: runlist, // runing service runlist
-                                updateRunlist: false
+                                overrideRunlist: true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;

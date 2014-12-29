@@ -86,6 +86,7 @@ public class SSH {
 			//run stuff
 			channel = (ChannelExec)session.openChannel("exec");
 			channel.setCommand(sudoCmd+" "+cmd);
+			channel.setPty(true);
 
 			channel.setInputStream(null);
 			System.out.println("Getting stream");
