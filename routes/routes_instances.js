@@ -12,6 +12,7 @@ var appConfig = require('../config/app_config.js');
 var credentialCryptography = require('../classes/credentialcryptography')
 var fileIo = require('../classes/utils/fileio');
 var uuid = require('node-uuid');
+var javaSSHWrapper = require('../classes/javaSSHWrapper.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -786,29 +787,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         };
                         var sudoCmd;
                         if (decryptedCredentials.pemFileLocation) {
-                            sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                            sshParamObj.pemFilePath = decryptedCredentials.pemFileLocation;
                         } else {
                             sshParamObj.password = decryptedCredentials.password;
                         }
-                        var sshConnection = new SSH(sshParamObj);
+                        //var sshConnection = new SSH(sshParamObj);
 
-                        sshConnection.exec("service " + serviceData.command + " " + req.params.actionType, function(err, ret) {
-                            if (decryptedCredentials.pemFileLocation) {
-                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                    if (err) {
-                                        console.log("Unable to delete temp pem file =>", err);
-                                    } else {
-                                        console.log("temp pem file deleted =>", err);
-                                    }
-                                });
+                        javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
+                            if (err) {
+                                callback(err, null);
+                                return;
                             }
-                            onComplete(err, ret);
-                        }, onStdOut, onStdErr);
-                        res.send(200);
+                            javaSSh.runServiceCmd(serviceData.command, req.params.actionType, function(err, ret) {
+                                if (decryptedCredentials.pemFileLocation) {
+                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                        if (err) {
+                                            console.log("Unable to delete temp pem file =>", err);
+                                        } else {
+                                            console.log("temp pem file deleted =>", err);
+                                        }
+                                    });
+                                }
+                                onComplete(err, ret);
+                            }, onStdOut, onStdErr);
+                            res.send(200);
+                        });
                     }
                 });
-
-
             });
         });
 

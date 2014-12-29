@@ -748,8 +748,9 @@ $.get('../instances/'+urlParams.id,function(data){
             }
            
             
-            console.log('polling again');
+            
             if($logTabBtn.parent('li').hasClass('active')) {
+                   console.log('polling again');
                    pollLogs(lastTimestamp,1000,false);
             } else {
                  console.log('not polling again');
@@ -1147,10 +1148,13 @@ $('.btnSaveService').click(function(e) {
   });
 
   function getInfoLi(){
+    $('#controlPanelLogTab').parent('li').removeClass('active');
     if(logTimeout) {
+      console.log('clearint log timeout');
       clearTimeout(logTimeout);
     }
     if(stateTimeout) {
+       console.log('clearint log state timeout');
       clearTimeout(stateTimeout);
     }
    var getURL = localStorage.getItem("dataEx");
