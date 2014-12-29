@@ -77,12 +77,12 @@
 		<!-- projects dropdown -->
 		<div id="project-context" style="padding-top:15px;">
 			<li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-				<a class="active" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
+				<a class="active" id="workZoneNew" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
 			</li>
 		</div>
 		<div id="project-context" style="padding-top:15px;">
 			<li class="left-projects-links hidden" data-target="#blueprints"  navigation="blueprints">
-				<a href="#ajax/Aws-Production.html" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
+				<a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
 			</li>
 		</div>
 		
@@ -359,14 +359,17 @@
 						<li>
 							<a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a>
 						</li>
-						<li>
+						<!-- <li>
 							<a href="ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-DevOps</span></a>
+						</li> -->
+						<li>
+							<a href="ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/desktop.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Desktop</span></a>
 						</li>
 						<li>
 							<a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure-DevOps</span></a>
 						</li>
 						<li>
-							<a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;RL-DevOps</span></a>
+							<a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Data Centre	</span></a>
 						</li>
 						<li>
 							<a href="ajax/ManagedDomains.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
@@ -717,6 +720,23 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 
 </script>-->
 
+<script>
+var hash = location.hash;
+
+setInterval(function()
+{
+    if (location.hash != hash)
+    {
+    	if(location.hash=="#ajax/Dev.html?org=PhoenixInc&projid=Ecommerce&envid=default")
+    	{
+    		$(".left-projects-links a").removeClass('active');
+    		$("#workZoneNew").addClass('active');
+    	}
+        console.log("Changed from " + hash + " to " + location.hash);
+        hash = location.hash;
+    }
+}, 100);
+</script>
 </body>
 <!--for checkbox with dropdown -->
 	<script type"text/javascript" src="js/bootstrap-dropdown-checkbox.js">

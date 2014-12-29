@@ -8,7 +8,6 @@
         height: 60px;
       
     }
-
 </style>
 <script src="/private/js/settingscommon.js"></script>
 <div class="row">
@@ -61,11 +60,13 @@
 
                                                             <div class="row">
                                                                 <section class="col col-6">
+                                                                    <div class="smart-forms">
                                                                     <label for="">Logo</label>
-                                                                    <label for="file" class="input input-file">
-                                                                    <div class="imgdiv" value="1"></div>
-                                                                    <div class="button"><input id="organizationLogoFileInput" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                    <label class="field file" for="organizationLogoFileInput">
+                                                            <span class="button btn-primary"> Browse </span>
+                                                            <input type="file" onchange="this.nextSibling.value = this.value;" id="organizationLogoFileInput"  class="gui-file"><input type="text" readonly=""  class="gui-input">
                                                                     </label>
+                                                                </div>
                                                                  </section>
                                                                 <section class="col col-6">
                                                                     <div class="form-group">
