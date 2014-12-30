@@ -48,10 +48,7 @@ var Process = function(appPath, argList, options) {
 
 	this.start = function() {
 
-		if(argList.indexOf('winrm') >= 0)
-			proc = spawn(appPath, '[' +  argList.join(',') + ']', options);
-		else
-			proc = spawn(appPath, argList, options);
+		proc = spawn(appPath, argList, options);
 		
 		processRunning = true;
 		if (typeof onStdOut === 'function') {
