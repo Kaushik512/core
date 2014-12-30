@@ -13,8 +13,20 @@ function deleteItem(docid, key, value, button) {
                 // debugger;
                 //d4ddata = JSON.parse(data);
                 // $('#refreshpage').click();
-                $(button).closest('tr').fadeOut("slow");
-                $(button).closest('tr').addClass('hidden').remove();
+                var $tr = $(button).closest('tr');
+               
+                //$tr.addClass('hidden').remove();
+                var $table = $tr.parents('table');
+               
+                if ( $.fn.DataTable.isDataTable( $table ) ) {
+                   var $dataTable = $table.DataTable();
+                   $dataTable.row($tr).remove().draw( false );
+                } else {
+                    
+                    $tr.fadeOut("slow");
+                    $tr.addClass('hidden').remove();
+                }
+                 
 
                 var tab = 'envtable';
                 $('#' + tab).dataTable();
