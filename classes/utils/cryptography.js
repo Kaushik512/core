@@ -74,7 +74,6 @@ function Cryptography(algorithm, password) {
                 return;
             }
             var decryptData = decrypt(fileData, decryptionEncoding, encryptionEncoding);
-             console.log('decrypted pemfile == after ==>',decryptData);
             fs.writeFile(outputFilepath, decryptData, {
                 //encoding: outputEncoding
             }, function(err) {

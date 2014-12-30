@@ -2573,54 +2573,6 @@ var startStopInstanceHandler = function(e) {
 }
 
 
-$("#btnaddInstanceCookbooks").on('click', function () {
-
-        var $options = $('#instanceCookbookList option:selected');
-        var $selectedList = $("#instanceCookbookSelectedList");
-        $options.each(function(){
-            var $this = $(this);
-            $selectedList.append($this.clone());
-            $this.hide();
-        });
-        
-    });
-    $("#btnremoveinstanceCoookbooks").on('click', function () {
-        var $instanceCookbookList = $('#instanceCookbookList');
-
-        $("#instanceCookbookSelectedList option:selected").each(function(){
-           var $this = $(this);
-           var value = $this.val();
-           $this.remove();
-           $instanceCookbookList.find('option[value="'+value+'"]').show();
-
-        });
-    });
-
-    $("#btninstanceCookbookUp").on('click', function () {
-        $("#instanceCookbookSelectedList option:selected").each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#instanceCookbookSelectedList option").index(listItem) + 1;
-
-            if (listItemPosition == 1) return false;
-
-            listItem.insertBefore(listItem.prev());
-        });
-
-    });
-
-    $("#btninstanceCookbookDown").on('click', function () {
-        var itemsCount = $("#instanceCookbookSelectedList option").length;
-
-        $($("#instanceCookbookSelectedList option:selected").get().reverse()).each(function () {
-            var listItem = $(this);
-            var listItemPosition = $("#instanceCookbookSelectedList option").index(listItem) + 1;
-
-            if (listItemPosition == itemsCount) return false;
-
-            listItem.insertAfter(listItem.next());
-
-        });
-    });
 
 
 var instanceUpdateRunlistHandler = function(e) {
@@ -2635,20 +2587,7 @@ var instanceUpdateRunlistHandler = function(e) {
     var  $chefRunModalContainer = $('#chefRunModalContainer');
 
     var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
-        //To do additional selections
-        // var $deploymentsCookbookList =  $ccrs.find('.deploymentsCookbookList');
-        // var $deploymentsRoleList = $ccrs.find('.deploymentRoleList');
-        // console.log(runlist);
-        // for(var i=0;i<runlist.length;i++) {
-
-        //     console.log('trigger for ==>'+runlist[i]);
-        //   $deploymentsCookbookList.find('li input[value="' + runlist[i] + '"]').first().click();
-        //   $deploymentsRoleList.find('li input[value="' + runlist[i] + '"]').first().click();
-
-        // }
-
-        
-        // $ccrs.find('.btnItemAdd').first().trigger('click');
+     
     },runlist);
     $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid',instanceId);
     
