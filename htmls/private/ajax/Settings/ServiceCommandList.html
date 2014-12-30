@@ -117,13 +117,16 @@
                                        //3 is for 
                                       
                                         var tab = 'envtable';
-                                        $('#' + tab).dataTable({
+                                        $('#envtable').dataTable({
+                                            "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
                                             "pagingType": "full_numbers"
                                         });
-                                        $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
+                                        $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
+                                        $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
+                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
                                         
 
                                         //Force opening the left navigation menu
@@ -276,7 +279,7 @@
                         </div>
                         
                     </div>
-                    <div class="widget-toolbox padding-8 clearfix">
+                    <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
                        <div id="tableFooterLeft" class="pull-left"></div>
                        <div id="tableFooterRight" class="pull-right"></div>
                     </div>
