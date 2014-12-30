@@ -7,13 +7,16 @@ var fs = require('fs');
 
 var currentDirectory = __dirname;
 
-var indexOfD4D = currentDirectory.indexOf("D4D");
-var D4DfolderPath = currentDirectory.substring(0,indexOfD4D+4);
+var indexOfSlash = currentDirectory.lastIndexOf("/");
+if(indexOfSlash === -1) {
+    indexOfSlash = currentDirectory.lastIndexOf("\\");
+}
+var D4DfolderPath = currentDirectory.substring(0,indexOfSlash+1);
 
 
 
 console.log(D4DfolderPath);
-java.classpath.push(D4DfolderPath+'java/lib/jsch-0.1.51.jar');
+java.classpath.push(D4DfolderPath+'/java/lib/jsch-0.1.51.jar');
 java.classpath.push(D4DfolderPath+'/java/classes');
 
 
@@ -29,7 +32,7 @@ function LogFileTail(logFile, onChangeCallback) {
     var tail = new Tail(logFile);
 
     tail.on("line", function(data) {
-        console.log("FileData ==>", data);
+        //console.log("FileData ==>", data);
         onChangeCallback(data);
     });
     tail.on("error", function(error) {
