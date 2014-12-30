@@ -189,6 +189,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         iconPath: blueprint.iconpath
                                     }
                                 }
+                                
+
                                 instancesDao.createInstance(instance, function(err, data) {
                                     if (err) {
                                         console.log(err);
@@ -258,7 +260,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     log: "Unable to decrpt pem file. Bootstrap failed",
                                                     timestamp: new Date().getTime()
                                                 });
-                                                return;
+                                                if(instance.hardware.os != 'windows')
+                                                    return;
                                             }
                                             chef.bootstrapInstance({
                                                 instanceIp: instance.instanceIP,

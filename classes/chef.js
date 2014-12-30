@@ -321,7 +321,7 @@ var Chef = function(settings) {
             options.onStdErr = function(data) {
                 if(bootstrapattemptcount < 4){
                     //retrying bootstrap .... needed for windows
-                    if(data.toString().indexOf('No response received from remote node after') >= 0){
+                    if(data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0 ){
                     callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount +1) + '/4 ...');
                     that.bootstrapInstance(params,callback,callbackOnStdOut, callbackOnStdErr);
                     bootstrapattemptcount++;
@@ -448,7 +448,8 @@ var Chef = function(settings) {
 
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
             console.log('host name ==>', options.host);
-            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' +  ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
             proc.start();
 
         }
