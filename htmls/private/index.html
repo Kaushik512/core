@@ -44,6 +44,7 @@
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 		<!-- multiselect stylesheet -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet"> 
 		<!--for checkbox in dropdown -->
 		<!-- <link rel="stylesheet" type="text/css" href="css/jquery.multiselect.css">
 		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
@@ -91,9 +92,10 @@
 		<!-- pulled right: nav area -->
 		<div class="pull-right">
 			<!-- collapse menu button -->
-			<div id="hide-menu1" class="btn-header pull-right">
+			<!--Removed from Srikanth . Make it Available for Mobile View -->
+			<!-- <div id="hide-menu1" class="btn-header pull-right">
 				<span> <a id="show-main-collapse" href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
-			</div>
+			</div> -->
 			<!-- end collapse menu -->
 			<!-- logout button -->
 			<div id="logout" class="btn-header transparent pull-right">
@@ -106,13 +108,13 @@
 			</div>
 			<!-- end logout button -->
 			<div id="project-context" style="padding-top:15px;">
-				<li class="left-projects-links hidden" data-target="#Track"  navigation="Track">
-					<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html"   onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+				<li class="left-projects-links hidden" data-target="#Track" navigation="Track">
+					<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
 				</li>
 			</div>
 			<div id="project-context" style="padding-top:15px;">
 				<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
-					<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html"  onclick="setleftnavigation(this,'Setting');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+					<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Setting');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
 				</li>
 			</div>
 		</div>
@@ -357,7 +359,7 @@
 					</a>
 					<ul style="display:block">
 						<li>
-							<a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Production</span></a>
+							<a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS</span></a>
 						</li>
 						<!-- <li>
 							<a href="ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-DevOps</span></a>
@@ -366,14 +368,14 @@
 							<a href="ajax/Aws-Devops.html" class="devops_providers"><img src="img/DevOps/desktop.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Desktop</span></a>
 						</li>
 						<li>
-							<a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure-DevOps</span></a>
+							<a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure</span></a>
 						</li>
 						<li>
-							<a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Data Centre	</span></a>
+							<a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Data Centre</span></a>
 						</li>
-						<li>
+						<!-- <li>
 							<a href="ajax/ManagedDomains.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
-						</li>
+						</li> -->
 						<li>
 							<a href="ajax/OpenStack.html" class="devops_providers"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;&nbsp;Open Stack</span></a>
 						</li>
@@ -509,6 +511,7 @@
 	<!-- Demo purpose only *** Removed as issue fix to avoid user changing theme ***
 	<script src="js/demo.js"></script>-->
 	<script src="/private/js/jquery.dataTables.js"></script>
+	<script src="js/jquery.tablesorter.js"></script>
 
 	
 
@@ -705,21 +708,9 @@ $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 //$('li[navigation*="Workspace"]').addClass('open');
 </script>
 <script src="js/app.js"></script>
-<!-- Your GOOGLE ANALYTICS CODE Below -->
-<!--<script type="text/javascript">
+<script src="/private/js/settingscommon.js"></script> 
 
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-</script>-->
-
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
 <script>
 var hash = location.hash;
 
@@ -731,6 +722,21 @@ setInterval(function()
     	{
     		$(".left-projects-links a").removeClass('active');
     		$("#workZoneNew").addClass('active');
+    	}
+    	else if(location.hash=="#ajax/Aws-Production.html")
+    	{
+    		$(".left-projects-links a").removeClass('active');
+    		$("#designNew").addClass('active');
+    	}
+    	else if(location.hash=="#ajax/Settings/TrackerDashboard.html")
+    	{
+    		$(".left-projects-links a").removeClass('active');
+    		$("#trackNew").addClass('active');
+    	}
+    	else if(location.hash=="#ajax/Settings/Dashboard.html")
+    	{
+    		$(".left-projects-links a").removeClass('active');
+    		$("#settingsNew").addClass('active');
     	}
         console.log("Changed from " + hash + " to " + location.hash);
         hash = location.hash;

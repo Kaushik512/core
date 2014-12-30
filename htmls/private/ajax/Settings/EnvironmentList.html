@@ -1,8 +1,8 @@
-<script src="/ajax/Data/d4d.js"></script>
+
 <script>
     $(".login-info").hide();
 </script>
-<script src="/private/js/settingscommon.js"></script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -81,13 +81,13 @@
                                         var tab = 'envtable';
                                         //CreateTableFromJson(3); //3 is for environment
                                         CreateTableFromJson(3,'environmentname' , 'CreateEnvironment.html'); //3 is for 
-                                        $('#' + tab).dataTable({
+                                        $('#envtable').dataTable({
                                             "pagingType": "full_numbers"
                                         });
-                                        $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
+                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
                                         
                                         $('#content').css("opacity", "1 !important");
 

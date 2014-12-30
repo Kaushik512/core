@@ -3,7 +3,7 @@
     $(".login-info").hide();
  //   $(".breadcrumb").hide();
 </script>
-<script src="/private/js/settingscommon.js"></script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -97,13 +97,13 @@
                                       //  CreateTableFromJson("Organization");
                                         CreateTableFromJson(1,'orgname' , 'CreateOrg.html'); //1 is for Org
                                         var tab = 'envtable';
-                                        $('#' + tab).dataTable({
+                                        $('#envtable').dataTable({
                                             "pagingType": "full_numbers"
                                         });
-                                        $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
+                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
 
                                         //Force opening the left navigation menu
                                         if ($('#navSettings').is(":visible") == false)

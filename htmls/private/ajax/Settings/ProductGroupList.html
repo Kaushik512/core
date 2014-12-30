@@ -3,7 +3,7 @@
 <script>
     $(".login-info").hide();
 </script>
-<script src="/private/js/settingscommon.js"></script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -84,13 +84,13 @@
                                        // CreateTableFromJson(2);
                                        CreateTableFromJson(2,'productgroupname' , 'CreateProductGroup.html'); //3 is for 
                                         var tab = 'envtable';
-                                        $('#' + tab).dataTable({
+                                        $('#envtable').dataTable({
                                             "pagingType": "full_numbers"
                                         });
-                                        $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
+                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
                                         
 
                                         //Force opening the left navigation menu
