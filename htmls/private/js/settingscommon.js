@@ -431,7 +431,7 @@ function readform(formID) {
 
                         if (inputC.getType().toLowerCase() == "file") {
                             //  v[k1]
-                            $(inputC).closest('div').next().val(v[k1]);
+                            $(inputC).closest('input').next().val(v[k1]);
                         }
                         if (inputC.getType().toLowerCase() == "select") {
                           //alert(v[k1]);
