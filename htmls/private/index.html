@@ -716,36 +716,41 @@ $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
 <script>
-var hash = location.hash;
+//var $ul = $('#left-panel nav ul');
+ $(window).on('hashchange', function() {
 
-setInterval(function()
-{
-    if (location.hash != hash)
-    {
-    	if(location.hash=="#ajax/Dev.html?org=PhoenixInc&projid=Ecommerce&envid=default")
-    	{
-    		$(".left-projects-links a").removeClass('active');
-    		$("#workZoneNew").addClass('active');
-    	}
-    	else if(location.hash=="#ajax/Aws-Production.html")
-    	{
-    		$(".left-projects-links a").removeClass('active');
-    		$("#designNew").addClass('active');
-    	}
-    	else if(location.hash=="#ajax/Settings/TrackerDashboard.html")
-    	{
-    		$(".left-projects-links a").removeClass('active');
-    		$("#trackNew").addClass('active');
-    	}
-    	else if(location.hash=="#ajax/Settings/Dashboard.html")
-    	{
-    		$(".left-projects-links a").removeClass('active');
-    		$("#settingsNew").addClass('active');
-    	}
-        console.log("Changed from " + hash + " to " + location.hash);
-        hash = location.hash;
-    }
-}, 100);
+     var hash = location.hash;
+     console.log("hashChange", hash);
+     console.log("pos ==>", location.hash.indexOf("#ajax/Dev.html?"));
+
+
+     if (location.hash.indexOf("#ajax/Dev.html?") === 0) {
+         $(".left-projects-links a").removeClass('active');
+         console.log("pos if ==>", location.hash.indexOf("#ajax/Dev.html?"));
+         $("#workZoneNew").addClass('active');
+        // $ul.hide();
+        // $('#Workspace').show();
+
+     } else if (location.hash == "#ajax/Aws-Production.html") {
+         $(".left-projects-links a").removeClass('active');
+         $("#designNew").addClass('active');
+      //   $ul.hide();
+       //  $('#blueprints').show();
+     } else if (location.hash == "#ajax/Settings/TrackerDashboard.html") {
+         $(".left-projects-links a").removeClass('active');
+         $("#trackNew").addClass('active');
+        // $ul.hide();
+        // $('#Track').show();
+     } else if (location.hash.indexOf("#ajax/Settings/") === 0) {
+         $(".left-projects-links a").removeClass('active');
+         $("#settingsNew").addClass('active');
+      //   $ul.hide();
+       //  $('#Settings').show();
+     }
+
+ });
+    
+
 </script>
 </body>
 <!--for checkbox with dropdown -->
