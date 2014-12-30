@@ -81,7 +81,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     instanceOS: instance.hardware.os,
                                     port: 22,
                                     runlist: task.runlist, // runing service runlist
-                                    updateRunlist: true
+                                    overrideRunlist: true
                                 }
                                 if (decryptedCredentials.pemFileLocation) {
                                     chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -113,11 +113,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         logsDao.insertLog({
                                             referenceId: instance._id,
                                             err: false,
-                                            log: 'instance runlist updated',
+                                            log: 'Task execution success',
                                             timestamp: new Date().getTime()
                                         });
                                     } else {
-                                        return;
+                                        logsDao.insertLog({
+                                            referenceId: instance._id,
+                                            err: false,
+                                            log: 'Error in running chef-client',
+                                            timestamp: new Date().getTime()
+                                        });
                                     }
                                 }, function(stdOutData) {
                                     logsDao.insertLog({
@@ -144,13 +149,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     })(instances[i]);
                 }
                 //setting last run timestamp
+                var taskRunTimestamp = new Date().getTime();
                 tasksDao.updateLastRunTimeStamp(req.params.taskId, new Date().getTime(), function(err, data) {
                     if (err) {
                         console.log(err);
                     }
                 });
 
-                res.send(instances);
+                res.send({
+                    timestamp:taskRunTimestamp,
+                    instances:instances
+                });
 
             });
 

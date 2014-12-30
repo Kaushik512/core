@@ -685,7 +685,9 @@ window.selectedOrgName = orgName;
 
 $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 //sconsole.log('$li',$li.length);
+
 			}
+
 			},
 			failure: function (data) {
 			alert(data.toString());
@@ -702,6 +704,11 @@ $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 //$('li[navigation*="Workspace"]').addClass('open');
 </script>
 <script src="js/app.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	//$('#blueprints').find('li a').first().trigger('click');
+})
+</script>
 <!-- Your GOOGLE ANALYTICS CODE Below -->
 <!--<script type="text/javascript">
 

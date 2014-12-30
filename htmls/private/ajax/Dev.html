@@ -98,37 +98,12 @@
                                                         </table>
                                                         
                                                     </div>
-                                                    <table id="tableinstanceviewtemplate" class="table table-striped table-bordered table-hover dataTable hidden" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important;text-align:center";>
-                                                                <thead>
-                                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                        <td>S.No.</td>
-                                                                        <td>Logo</td>
-                                                                        <td>Name</td>
-                                                                        <td>IPAddress</td>
-                                                                        <td>Recipes</td>
-                                                                        <td>Status</td>
-                                                                        <td>Log Info</td>
-                                                                        <td>Chef Run</td>
-                                                                        <td class="widthAdjustment">Action</td>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    
-                                                                   
-                                                                </tbody>
-                                                                
-                                                               
-                                                            </tbody>
-                                                            
-                                                        </table>
+                                                  
                                                </div>
                                             </div> 
                                             
                                         </div>
-                                        <div class="widget-toolbox padding-8 clearfix">
-                                               <div id="tableFooterLeft" class="pull-left"></div>
-                                               <div id="tableFooterRight" class="pull-right"></div>
-                                            </div>
+                                        
                                     </div>
                                     
                                 <div id="divinstancescardview" class="carousel slide">
@@ -286,7 +261,7 @@
                                       <div class="widget-body">
                                           <div class="widget-main" style="min-height:300px">
                                               <div class="col-md-12 table-responsive">
-                                                  <table id="sorttableheader" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                  <table id="tableOrchestration" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
                                                       <thead>
                                                           <tr class="rowCustomStyle">    
                                                               <td>Name</td>
@@ -307,35 +282,7 @@
                                              <div class="pull-left taskListFooter"></div>
                                           </div>
                                       </div>
-                                      <!-- <div class="widget-body">
-                                        <div class="widget-main" style="min-height:300px"> 
-                                            <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
-
-                                              <div class="table-responsive table-div" >
-
-                                                <table id="tableOrchestration" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
-                                                    <thead>
-                                                        <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                          <th>Name</th>
-                                                          <th>Assigned Node</th>
-                                                          <th>Assigned Runlists</th>
-                                                          <th>Execute</th>
-                                                          <th>Last Run</th>
-                                                          <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="taskListArea">
-
-                                                    </tbody>
-                                                </table>
-                                              </div>
-                                           </div>
-                                        </div> 
-                                      </div>
-                                      <div class="widget-toolbox padding-8 clearfix">
-                                         <div id="tableFooterLeft1" class="pull-left"></div>
-                                         <div id="tableFooterRight1" class="pull-right"></div>
-                                      </div> -->
+                                      
                                   </div>
                               </div>
                           </div>
@@ -1897,46 +1844,29 @@ $('.dockerinstancestart').click(function(e){
 $(function() {
 
     function initializeTaskArea(data) {
-        var $taskListArea = $('.taskListArea').empty();
+        //var $taskListArea = $('.taskListArea').empty();
+           $taskDatatable =  $('#tableOrchestration').DataTable({
+                "pagingType": "full_numbers",
+                "aoColumns": [
+                    null,{
+                        "bSortable": false
+                    },
+                    {
+                        "bSortable": false
+                    },
+                    {
+                        "bSortable": false
+                    }, null,
+                     {
+                        "bSortable": false
+                    }
+                ]
 
-       //  $("#tableOrchestration").DataTable(
-       // {
-       //  "sDom" : "<'dt-top-row'Tlf>r<'dt-wrapper't><'dt-row dt-bottom-row'<'row'<'col-sm-6'i><'col-sm-6 text-right'p>>",
-       //  "bProcessing" : true,
-       //  "bLengthChange" : true,
-       //  "bSort" : true,
-       //  "bInfo" : true,
-       //  "bJQueryUI" : false,
-       //  "scrollX" : true,
-       //  "aaData" : data,
-       //  "oTableTools" : {
-       //   "aButtons" : [ {
-       //    "sExtends" : "collection",
-       //    "sButtonText" : 'Export <span class="caret" />',
-       //    "aButtons" : [ "csv", "pdf" ]
-       //   } ],
-       //   "sSwfPath" : "js/plugin/datatables/media/swf/copy_csv_xls_pdf.swf"
-       //  },
-       //  "bDestroy" : true,
-       //  "processing" : true,
-       //  "aoColumns" : [ {
+            });
 
-       //   "mData" : "name",
-       //   "sDefaultContent" : ""
-       //  },
-       //  {
-       //   "mData" : "lastRunTimestamp",
-       //   "sDefaultContent" :"",
-       //   "mRender" : function(data, type,
-       //     full) {
-       //    return data
-       //   }
-       //  }]
-       // });
 
-       //  console.log(data);
         for (var i = 0; i < data.length; i++) {
-            var $tr = $('<tr></tr>');
+            var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
             var $tdName = $('<td></td>').append(data[i].name);
             $tr.append($tdName);
             var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
@@ -1984,8 +1914,11 @@ $(function() {
                 var taskId = $(this).data('taskId');
                 var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                 var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                $.get('../tasks/' + taskId + '/run', function(instances) {
-
+                $.get('../tasks/' + taskId + '/run', function(data) {
+                    var instances = data.instances;
+                     var date = new Date().setTime(data.timestamp);
+                      var taskTimestamp = new Date(date).toUTCString(); //converts to human readable strings
+                    $('tr[data-taskId="'+taskId+'"] .taskrunTimestamp').html(taskTimestamp);
                     for (var i = 0; i < instances.length; i++) {
                         var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
                         if (i === 4) {
@@ -2009,10 +1942,10 @@ $(function() {
 
 
 
-                    $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-                        $(e.target).attr('data-taskPolling', 'true');
-                        $(e.target).attr('data-taskPollLastTimestamp', new Date().getTime());
-                        var tabId = $(e.target).attr('href')
+                    $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each( function(e) {
+                        $(this).attr('data-taskPolling', 'true');
+                        $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
+                        var tabId = $(this).attr('href')
                         pollTaskLogs($(this), $(tabId), null, 0, false);
                         //e.relatedTarget // previous active tab
                     });
@@ -2038,7 +1971,7 @@ $(function() {
                 timestamp = new Date(date).toUTCString(); //converts to human readable strings
             }
 
-            var $tdTime = $('<td></td>').append(timestamp);
+            var $tdTime = $('<td></td>').append(timestamp).addClass('taskrunTimestamp');
             $tr.append($tdTime);
 
             var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
@@ -2049,9 +1982,10 @@ $(function() {
                     url: '../tasks/' + taskId,
                     method: 'DELETE',
                     success: function(data) {
-                        $(that).parents('tr').remove();
-                        var totalTask = $taskListArea.children('tr').length;
-                        $('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
+                        //$(that).parents('tr').remove();
+                        //var totalTask = $taskListArea.children('tr').length;
+                        //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
+                          $taskDatatable.row($(that).parents('tr')).remove().draw( false );
                     }
                 })
             });
@@ -2064,8 +1998,9 @@ $(function() {
 
             });
             $tr.append($tdOptions);
-
-            $taskListArea.append($tr);
+             
+            $taskDatatable.row.add($tr).draw(); 
+            //$taskListArea.append($tr);
 
             //aaaa
             if($("#sorttableheader").length){
@@ -2793,6 +2728,8 @@ var instanceLogsHandler = function(e) {
 
 
 function addInstanceToDOM(data) {
+     //var dataTable = $('#tableinstanceview').DataTable();
+     var $instanceDataTable = $("#tableinstanceview");
     var $divinstancescardview = $('#divinstancescardview .carousel-inner');
     var $carouselItemContainers = $divinstancescardview.find('.item');
     var $instancesList = null;
@@ -2889,8 +2826,9 @@ function addInstanceToDOM(data) {
    
 
     //For Table View
-
-    var numberOfRows = $("#tableinstanceview").find('tbody tr').length;
+     var dataTableCount = $instanceDataTable.dataTable();
+    var numberOfRows = dataTableCount.fnGetData().length;
+    console.log('rows ==>',dataTableCount.fnGetData().length);
 
     $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
     $rowContainter.append('<td><img src="'+data.blueprintData.iconPath+'" style="width:auto;height:30px;" /></td>');
@@ -3055,7 +2993,7 @@ function addInstanceToDOM(data) {
 
     //alert($rowContainter.html());
     //$("#tableinstanceview").find('tbody').append($rowContainter);
-    var dataTable = $('#tableinstanceview').DataTable();
+    var dataTable = $instanceDataTable.DataTable();
     dataTable.row.add($rowContainter).draw();
 
 

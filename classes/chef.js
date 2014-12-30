@@ -3,6 +3,7 @@ var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var SSH = require('./utils/sshexec');
 var chefDefaults = require('../config/chef_config');
+var javaSSHWrapper = require('./javaSSHWrapper.js');
 
 var Chef = function(settings) {
 
@@ -39,8 +40,8 @@ var Chef = function(settings) {
                     callback(err, null);
                     return console.log(err);
                 }
-                console.log("chef status",chefRes.statusCode);
-                if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201 ) {
+                console.log("chef status", chefRes.statusCode);
+                if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201) {
                     callback(true, null);
                     return;
                 }
@@ -142,7 +143,7 @@ var Chef = function(settings) {
     };
 
     //Included a query to get receipes for cookbook - for service masters - Vinod
-    this.getReceipesForCookbook = function(cookbookName,callback) {
+    this.getReceipesForCookbook = function(cookbookName, callback) {
 
         initializeChefClient(function(err, chefClient) {
             if (err) {
@@ -150,7 +151,7 @@ var Chef = function(settings) {
                 return;
             }
             console.log('REceipe query:' + cookbookName);
-            chefClient.get('/cookbooks/'+cookbookName+'/_latest', function(err, chefRes, chefResBody) {
+            chefClient.get('/cookbooks/' + cookbookName + '/_latest', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
                     return;
@@ -173,7 +174,7 @@ var Chef = function(settings) {
                 callback(err, null);
                 return;
             }
-            chefClient.get('/cookbooks/'+cookbookName+'/_latest', function(err, chefRes, chefResBody) {
+            chefClient.get('/cookbooks/' + cookbookName + '/_latest', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
                     return;
@@ -371,17 +372,17 @@ var Chef = function(settings) {
         } else {
             argList.push('--sudo');
         }
-    
-        
-        console.log('runlist to length==>',runlist.length);
-        console.log('runlist ==>',runlist);
-        if(runlist.length) {
-          console.log('runlist join ==>','-r "'+runlist.join()+'"', 'length==?' ,runlist.join().length);  
-          argList.push("-r"+runlist.join()+"");
+
+
+        console.log('runlist to length==>', runlist.length);
+        console.log('runlist ==>', runlist);
+        if (runlist.length) {
+            console.log('runlist join ==>', '-r "' + runlist.join() + '"', 'length==?', runlist.join().length);
+            argList.push("-r" + runlist.join() + "");
         }
 
         argList = argList.concat(['-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
-        console.log('argList ==>',argList.join(" ")); 
+        console.log('argList ==>', argList.join(" "));
         console.log('bootstrap arglist ==>', argList);
 
         var proc = new Process('knife', argList, options);
@@ -391,9 +392,9 @@ var Chef = function(settings) {
 
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
-        var chefRunParamOveright = '-o';
-        if (options.updateRunlist) {
-            chefRunParamOveright = '-r';
+        var overrideRunlist = false;
+        if (options.overrideRunlist) {
+            overrideRunlist = true;
         }
         if (!runlist) {
             runlist = [];
@@ -406,19 +407,22 @@ var Chef = function(settings) {
             };
             var sudoCmd;
             if (options.privateKey) {
-                sshParamObj.privateKey = options.privateKey;
+                sshParamObj.pemFilePath = options.privateKey;
                 if (options.passphrase) {
                     sshParamObj.passphrase = options.passphrase;
                 }
-                sudoCmd = "sudo";
             } else {
                 sshParamObj.password = options.password;
-                sudoCmd = 'echo "'+options.password+'" | sudo -S';
             }
-            var sshConnection = new SSH(sshParamObj);
-            
-            sshConnection.exec(sudoCmd+' chef-client ' + chefRunParamOveright + ' ' + runlist.join(), callback, callbackOnStdOut, callbackOnStdErr);
 
+            javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                javaSSh.execChefClient(runlist.join(), overrideRunlist, callback, callbackOnStdOut, callbackOnStdErr);
+            });
+     
         } else {
 
             var processOptions = {
