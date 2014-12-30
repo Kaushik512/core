@@ -47,7 +47,12 @@ var Process = function(appPath, argList, options) {
 	}
 
 	this.start = function() {
-		proc = spawn(appPath, argList, options);
+
+		if(argList.indexOf('winrm') >= 0)
+			proc = spawn(appPath, '[' +  argList.join(',') + ']', options);
+		else
+			proc = spawn(appPath, argList, options);
+		
 		processRunning = true;
 		if (typeof onStdOut === 'function') {
 			proc.stdout.on('data', function(data) {
@@ -88,5 +93,7 @@ var Process = function(appPath, argList, options) {
 	}
 
 }
+
+
 
 module.exports = Process;

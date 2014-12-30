@@ -384,9 +384,9 @@ var Chef = function(settings) {
         console.log('argList ==>',argList.join(" ")); 
         console.log('bootstrap arglist ==>', argList);
 
-
         var proc = new Process('knife', argList, options);
         proc.start();
+        
     };
 
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
