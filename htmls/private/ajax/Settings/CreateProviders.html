@@ -2,7 +2,7 @@
     $(".login-info").hide();
    
 </script>
-<script src="/private/js/settingscommon.js"></script>
+
 <div class="row" id="createproviderbody">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -136,11 +136,12 @@
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-6">
+                                                                    <div class="smart-forms">
                                                                     <label for="">Account PEM File</label>
-                                                                    <label for="file" class="input input-file">
-                                                                        <div class="imgdiv" value="1"></div>
-                                                                        <div class="button"><input id="accountpemfile" keyfield="accountpemfile" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst">Browse</div><input type="text" readonly="" style="padding-left:40px;">
+                                                                    <label for="accountpemfile" class="field file"><div class="imgdiv" value="1"></div>
+                                                                        <span class="button btn-primary">Browse</span><input id="accountpemfile" keyfield="accountpemfile" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                                     </label>
+                                                                </div>
                                                                 </section>
                                                                 
                                                             </div>

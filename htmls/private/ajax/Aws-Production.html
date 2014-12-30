@@ -9,7 +9,7 @@
                     <a href="#l1" data-toggle="tab">Domains</a>
                 </li>-->
                 <li class="pull-left active">
-                   <a href="#l2" data-toggle="tab">Create Blueprint</a>
+                   <a href="#l2" id="xyz" data-toggle="tab">Choose Template Type</a>
                 </li>
                 <!--<li class="pull-left">
                     <a href="#l3" data-toggle="tab">App Factory</a>
@@ -1130,7 +1130,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
            console.log(navigation, index)
            if (index === 1) {
-
+            $("#xyz").html('Choose Templates');
                var $selectedItem = $('.role-Selected');
                if (!$selectedItem.length) {
                    alert('please choose a blueprint design');
@@ -1273,6 +1273,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                $('.' + $selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
 
            } else if (index == 2) {
+            $("#xyz").html('Choose Template');
                //   var $selectedTemplateArea = $('.selectedTemplateArea')
                //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
                //   console.log($selectedItem.length);
@@ -1378,6 +1379,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
 
 
            } else if (index == 3) {
+                $("#xyz").html('Create Blueprint');
                console.log('in 3');
 
                var $selectedTemplateArea = $('.selectedTemplateArea');
@@ -1505,6 +1507,18 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
        },
        'onPrevious': function(tab, navigation, index) {
            //console.log(index);
+           if (index === 0) {
+            $("#xyz").html('Choose Template Type');
+        }
+        else if (index === 1) {
+            $("#xyz").html('Choose Templates');
+        }
+        else if (index === 2) {
+            $("#xyz").html('Choose Template');
+        }
+        else if (index === 3) {
+            $("#xyz").html('Create Blueprint');
+        }
            $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
                'complete');
            $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')

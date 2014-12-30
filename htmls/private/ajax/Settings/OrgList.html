@@ -3,7 +3,7 @@
     $(".login-info").hide();
  //   $(".breadcrumb").hide();
 </script>
-<script src="/private/js/settingscommon.js"></script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -28,13 +28,13 @@
                 </div>
                 <div class="widget-body">
                     <div class="widget-main" style="min-height:300px">
-                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;padding-top:40px;">
                             <table id="tabletemplate" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
                                     <tr class="rowCustomStyle">
                                         <td>Name</td>
                                         <td>Domain</td>
-                                        <td>Logo</td>
+                                        <!-- <td>Logo</td> -->
                                         <td>Cost Code</td>
                                         <td>Action</td>
                                     </tr>
@@ -44,15 +44,15 @@
                                         
                                         <td datafield="orgname"></td>
                                         <td datafield="domainname"></td>
-                                        <td>
+                                        <!-- <td>
                                             <div class="input-icon-left" style="height:30px" title="Preview">
-                                                <p class="logoPreview" style="padding:2px; text-align:center;">
+                                                <p class="logoPreview" style="padding:2px; text-align:center;"> -->
                                                     <!--<img src="" height="28px" width="28px" datafield="logo" />-->
-                                                    <i class="fa fa-lg fa-fw fa-building"></i>
+                                                    <!-- <i class="fa fa-lg fa-fw fa-building"></i>
                                                 </p>
                                             </div>
 
-                                        </td>
+                                        </td> -->
                                         <td datafield="costcode"></td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
@@ -74,7 +74,7 @@
                                             
                                             <td>Name</td>
                                             <td>Domain</td>
-                                            <td>Logo</td>
+                                            <!-- <td>Logo</td> -->
                                             <td>Cost Code</td>
                                             <td class="">Action</td>
                                         </tr>
@@ -97,13 +97,13 @@
                                       //  CreateTableFromJson("Organization");
                                         CreateTableFromJson(1,'orgname' , 'CreateOrg.html'); //1 is for Org
                                         var tab = 'envtable';
-                                        $('#' + tab).dataTable({
+                                        $('#envtable').dataTable({
                                             "pagingType": "full_numbers"
                                         });
-                                        $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
+                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
 
                                         //Force opening the left navigation menu
                                         if ($('#navSettings').is(":visible") == false)

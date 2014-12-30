@@ -2,7 +2,7 @@
   $(".login-info").hide();
 
 </script>
-<script src="/private/js/settingscommon.js"></script> 
+
 <!-- <h4 style="color:black;">Tracker</h4> -->
 
 
@@ -293,7 +293,9 @@ function loadTrackContent(filters){ //filter[] => "org","businessgroup","project
   });
 
 
-  $('#tabletrackerinstancedisplay').dataTable(function(){});
+  $('#tabletrackerinstancedisplay').dataTable({
+    "pagingType": "full_numbers"
+  });
   $('#tabletrackerinstancedisplay').removeClass('hidden');
   
   //Add Count to tiles
@@ -302,9 +304,9 @@ function loadTrackContent(filters){ //filter[] => "org","businessgroup","project
   $('.projectcount').find('span').html($('.tcproj').length);
   $('.envcount').find('span').html($('.tcproj').first().find('.tcenv').length);
 
-  $('#tableFooterLeft , #tableFooterRight , #envtable_tools1 , #envtable_tools2').html('');
-  $('#tabletrackerinstancedisplay_info').detach().appendTo('#tableFooterLeft');
-  $('#tabletrackerinstancedisplay_paginate').detach().appendTo('#tableFooterRight');
+  // $('#tableFooterLeft , #tableFooterRight , #envtable_tools1 , #envtable_tools2').html('');
+  // $('#tabletrackerinstancedisplay_info').detach().appendTo('#tableFooterLeft');
+  // $('#tabletrackerinstancedisplay_paginate').detach().appendTo('#tableFooterRight');
  /* $('#tabletrackerinstancedisplay_filter').detach().appendTo('#envtable_tools1');
   $('#tabletrackerinstancedisplay_length').detach().appendTo('#envtable_tools2'); */
 

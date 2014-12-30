@@ -9,7 +9,7 @@
                     <a href="#l1" data-toggle="tab">Domains</a>
                 </li>-->
                 <li class="pull-left active">
-                    <a href="#l2" data-toggle="tab">Create Blueprint</a>
+                    <a href="#l2" id="dockerNew" data-toggle="tab">Choose Template Types</a>
                 </li>
                 <!--<li class="pull-left">
                     <a href="#l3" data-toggle="tab">App Factory</a>
@@ -88,11 +88,11 @@
                                                                 <div class="clearfix"></div>
                                                             </div>
                                                             <div class="tab-content">
-                                                                <div class="tab-pane active" id="tab1" style="height: 450px;overflow-y: auto;">
+                                                                <div class="tab-pane active" id="tab1" style="height: 250px;overflow-y: auto;">
                                                                    
                                                                     <div class="row " style="margin:0px;min-height:200px;">
                                                                         <!--App Factory -->
-                                                                        <div class="" style="width:222px;float:left">
+                                                                        <!-- <div class="" style="width:222px;float:left">
 
                                                                             <div class="blueprintdiv appfactory role-Selected" data-templateType="templatesAppfactory">
                                                                                <div style="">
@@ -104,7 +104,7 @@
                                                                                 </div>
 
                                                                             </div>
-                                                                        </div>
+                                                                        </div> -->
                                                                          <!--Cloud Formation 
                                                                         <div class="" style="width:222px;float:left">
 
@@ -119,7 +119,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <!--Devops Roles-->
-                                                                        <div class="" style="width:222px;float:left">
+                                                                        <!-- <div class="" style="width:222px;float:left">
 
                                                                             <div class="blueprintdiv devopsrole" data-templateType="templatesdevopsrole">
                                                                                 <div>
@@ -129,11 +129,11 @@
                                                                                 <div style="padding-top:10px;padding-left:20px;"><img alt="DevOps Role" src="img/app-store-icons/DevopsRoles.png"></div>
 
                                                                             </div>
-                                                                        </div>
+                                                                        </div> -->
                                                                          <!--Docker-->
                                                                         <div class="" style="width:222px;float:left">
 
-                                                                            <div class="blueprintdiv docker" data-templateType="templatesdocker">
+                                                                            <div class="blueprintdiv docker role-Selected" data-templateType="templatesdocker">
                                                                                <div>
                                                                                   <img style="height:25px;padding:2px;" alt="Logoheader" src="img/app-store-icons/Logoheader.png">
                                                                                   <span style="padding-top:4px;position:absolute;padding-left: 4px;"><b>Docker</b></span> 
@@ -142,7 +142,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <!--Desktop provisioning-->
-                                                                        <div class="" style="width:222px;float:left">
+                                                                        <!-- <div class="" style="width:222px;float:left">
 
                                                                             <div class="blueprintdiv desktoppositioning" data-templateType="templatesdesktoppositioning">
                                                                                <div>
@@ -153,9 +153,9 @@
                                                                                     <img style="" alt="Desktopprovisioning" src="img/app-store-icons/Desktop Provisining.png">
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+                                                                        </div> -->
                                                                         <!--Environment-->
-                                                                        <div class="" style="width:222px;float:left">
+                                                                    <!--     <div class="" style="width:222px;float:left">
 
                                                                             <div class="blueprintdiv environment" data-templateType="templatesEnvironment">
                                                                                <div>
@@ -167,7 +167,7 @@
                                                                                 </div>
                                                                                 
                                                                             </div>
-                                                                        </div>
+                                                                        </div> -->
                                                                         
                                                                         
                                                                         
@@ -930,38 +930,31 @@
                                                                    
 
                                                                 </div>
+                                                                <div class="col-lg-7">
+                                                                    <h3>Support for this provider will be available in the next release...</h3>
+                                                                </div>
 
                                                                 
                                                                 
-                                                                <div class="row" style="position: static;">
-                                                                <div class="col-md-12">
-                                                                    <div class="clearfix form-actions" style="text-align:center">
+                                    <!-- <div class="row">
+                                        <div style="bottom:0px;position:fixed;padding-left:0px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div style="text-align:center;padding-right:20%;" class="clearfix form-actions">
 
-                                                                        <div class="btn-group">
-                                                                            <ul class="pager wizard no-margin">
+                                                <div class="btn-group">
+                                                    <ul class="pager wizard no-margin">
 
-                                                                                <li class="previous disabled">
-                                                                                    <a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px"> Previous </a>
-                                                                                </li>
+                                                        <li class="previous disabled">
+                                                            <a style="border-radius:0px" class="btn btn-primary" href="javascript:void(0);"> Previous </a>
+                                                        </li>
 
-                                                                                <li class="next">
-                                                                                    <a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;" > Next </a>
-                                                                                </li>
-                                                                            </ul>
-                                                                            
-                                                                            <!--<button class="btn btn-primary pull-left" type="button">
-                                                                                
-                                                                                Previous
-                                                                            </button>
-                                                                            
-                                                                            <button class="btn pull-left btn-primary" type="reset" style="margin-left:5px">
-                                                                                
-                                                                                Next
-                                                                            </button>-->
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                </div>
+                                                        <li class="next" id="nextSpecificValue">
+                                                            <a style="border-radius:0px;margin-left:5px;" class="btn btn-primary" href="javascript:void(0);"> Next </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
                                                                
 
 
@@ -1026,6 +1019,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
     'onNext': function (tab, navigation, index) {
         console.log(navigation,index)
         if (index === 1) {
+            $("#dockerNew").html('Choose Template Types');
             //console.log('in here')
 
             var $selectedItem = $('.role-Selected');
@@ -1037,6 +1031,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
             $('#tab' + (index + 1)).find('.temp').empty().append($clone);
 
         } else if(index == 2){
+            $("#dockerNew").html('Choose Templates');
             var $selectedTemplateArea = $('.selectedTemplateArea')
             var $selectedItem = $selectedTemplateArea.find('.productdiv2');
             console.log($selectedItem.length);
@@ -1047,6 +1042,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
            
 
         } else if(index == 3){
+            $("#dockerNew").html('Choose Template');
             var $selectedTemplateArea = $('.selectedTemplateArea')
             var $selectedItem = $selectedTemplateArea.find('.productdiv2');
             console.log($selectedItem.length);
@@ -1072,6 +1068,7 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 
 
         } else if(index == 4){
+            $("#dockerNew").html('Create Blueprint');
             reqBody.projectId = $('#projectListInput').val();
             reqBody.envId = $('#envList').val();
             reqBody.name =$('#blueprintNameInput').val();
@@ -1112,6 +1109,19 @@ $('#bootstrap-wizard-1').bootstrapWizard({
 
         },
         'onPrevious': function (tab, navigation, index) {
+            if(index==0){
+              $("#dockerNew").html('Choose Template Types');    
+            }
+            else if(index==1){
+              $("#dockerNew").html('Choose Templates');    
+            }
+            else if(index==2){
+              $("#dockerNew").html('Choose Template');    
+            }
+            else if(index==3){
+              $("#dockerNew").html('Create Blueprint');    
+            }
+            
             //console.log(index);
             $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
                 'complete');

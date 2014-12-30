@@ -1,8 +1,8 @@
-<script src="/ajax/Data/d4d.js"></script>
+
 <script>
     $(".login-info").hide();
 </script>
-<script src="/private/js/settingscommon.js"></script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="widget-body">
                     <div class="widget-main" style="min-height:300px">
-                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;padding-top:40px;">
                             <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
                                     <tr class="rowCustomStyle">
@@ -100,13 +100,13 @@
 
                                         CreateTableFromJson(4,'projectname' , 'CreateProject.html'); //1 is for Org
                                         var tab = 'envtable';
-                                        $('#' + tab).dataTable({
+                                        $('#envtable').dataTable({
                                             "pagingType": "full_numbers"
                                         });
-                                        $('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
+                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');
+                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
 
                                         //Force opening the left navigation menu
                                         if ($('#navSettings').is(":visible") == false) {
