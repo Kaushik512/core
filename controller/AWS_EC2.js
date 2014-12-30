@@ -61,7 +61,7 @@ module.exports.launchInstance = function(image_id,awsSettings,schedTerminate,cal
 
   //ami-eb6b0182
   //m1.medium
-  console.log('m1.medium');
+  console.log('in launching instance securityGroupId : ' + awsSettings.securityGroupId);
   ec.runInstances({"ImageId" : "ami-b3bf2f83","InstanceType":"m1.medium", "MinCount" : 1, "MaxCount" : 1,"KeyName":awsSettings.keyPairName,SecurityGroupIds:[awsSettings.securityGroupId],BlockDeviceMappings:[{DeviceName:"/dev/sda",Ebs:{DeleteOnTermination:true}}]}, function(err, data){
 		if(err) {
 			console.log("error occured while launching instance");

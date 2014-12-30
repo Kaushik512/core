@@ -75,6 +75,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+   
+
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
 
@@ -187,6 +189,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         iconPath: blueprint.iconpath
                                     }
                                 }
+                                
+
                                 instancesDao.createInstance(instance, function(err, data) {
                                     if (err) {
                                         console.log(err);
@@ -207,6 +211,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         }
                                         console.log('log updated');
                                     });
+                                    //For windows instance handle another check..
+
 
                                     ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
                                         if (err) {
@@ -254,7 +260,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     log: "Unable to decrpt pem file. Bootstrap failed",
                                                     timestamp: new Date().getTime()
                                                 });
-                                                return;
+                                                if(instance.hardware.os != 'windows')
+                                                    return;
                                             }
                                             chef.bootstrapInstance({
                                                 instanceIp: instance.instanceIP,
@@ -286,7 +293,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if (code == 0) {
                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                             if (err) {
-                                                                console.log("Unable to set instance bootstarp status");
+                                                                console.log("Unable to set instance bootstarp status. code 0");
                                                             } else {
                                                                 console.log("Instance bootstrap status set to success");
                                                             }
@@ -310,7 +317,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                                 if (err) {
                                                                     console.log(err);
-                                                                    console.log("Unable to set instance hardware details");
+                                                                    console.log("Unable to set instance hardware details  code (setHardwareDetails)");
                                                                 } else {
                                                                     console.log("Instance hardware details set successessfully");
                                                                 }
@@ -320,7 +327,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     } else {
                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                                             if (err) {
-                                                                console.log("Unable to set instance bootstarp status");
+                                                                console.log("Unable to set instance bootstarp status code != 0");
                                                             } else {
                                                                 console.log("Instance bootstrap status set to failed");
                                                             }
@@ -339,6 +346,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 });
 
                                             }, function(stdErrData) {
+
+                                                //retrying 4 times before giving up.
+
 
                                                 logsDao.insertLog({
                                                     referenceId: instance.id,

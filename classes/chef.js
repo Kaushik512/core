@@ -11,6 +11,8 @@ var Chef = function(settings) {
     var chefClient = null;
     var that = this;
 
+    var bootstrapattemptcount = 0;
+
     function initializeChefClient(callback) {
         if (!chefClient) {
             fileIo.readFile(settings.chefUserPemFile, function(err, key) {
@@ -307,14 +309,32 @@ var Chef = function(settings) {
             }
         };
         if (typeof callbackOnStdOut === 'function') {
+
             options.onStdOut = function(data) {
+                console.log('Process out :' + data);
                 callbackOnStdOut(data);
             }
         }
 
         if (typeof callbackOnStdErr === 'function') {
+            
             options.onStdErr = function(data) {
-                callbackOnStdErr(data);
+                if(bootstrapattemptcount < 4){
+                    //retrying bootstrap .... needed for windows
+                    if(data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0 ){
+                    callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount +1) + '/4 ...');
+                    that.bootstrapInstance(params,callback,callbackOnStdOut, callbackOnStdErr);
+                    bootstrapattemptcount++;
+                    }
+                    else{
+                        console.log('Hit an error :' + data);
+                        callbackOnStdErr(data);
+                    }
+                }
+                else{
+                    console.log('Hit an error :' + data);
+                    callbackOnStdErr(data);
+                }
             }
         }
         if ((!(params.runlist) || !params.runlist.length)) {
@@ -339,6 +359,11 @@ var Chef = function(settings) {
         } else {
             credentialArg = '-P' + params.instancePassword;
         }
+        //If windows box then credetial to be updated to stored password
+        if (params.instanceOS == 'windows') {
+            credentialArg = '-P\'Zaq!2wsx\'';
+        }
+
         argList.push(credentialArg);
 
         if (params.instanceOS == 'windows') {
@@ -360,9 +385,9 @@ var Chef = function(settings) {
         console.log('argList ==>', argList.join(" "));
         console.log('bootstrap arglist ==>', argList);
 
-
         var proc = new Process('knife', argList, options);
         proc.start();
+        
     };
 
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
@@ -423,7 +448,8 @@ var Chef = function(settings) {
 
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
             console.log('host name ==>', options.host);
-            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' +  ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
             proc.start();
 
         }

@@ -45,6 +45,12 @@ var config = {
             name: 'Cent OS',
             supportedInstanceType: ['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
         }, {
+            amiid: 'ami-21732111',
+            username: 'administrator',
+            osType: 'windows',
+            name: 'Windows 2008',
+            supportedInstanceType: ['t2.micro','m1.small']
+        }, {
             amiid: 'ami-3d50120d',
             username: 'ubuntu',
             osType: 'linux',
