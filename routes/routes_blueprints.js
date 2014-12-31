@@ -309,8 +309,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             hardwareData.platform = nodeData.automatic.platform;
                                                             hardwareData.platformVersion = nodeData.automatic.platform_version;
                                                             hardwareData.memory = {};
-                                                            hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                            hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                            if(nodeData.automatic.memory)
+                                                            { 
+                                                                hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                            }
                                                             hardwareData.os = instance.hardware.os;
                                                             //console.log(instance);
                                                             //console.log(hardwareData,'==',instance.hardware.os);
