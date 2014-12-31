@@ -2550,13 +2550,13 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     $cadvisor.attr('dockercontainerid',dockerContainerItem.Id );
 
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
-   /* $cadvisor.click(function(e){
+    $cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
         $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
         //$('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
         e.preventDefault();
         return(false);
-    });*/
+    });
 
     $docctr.attr('instanceid',instanceid);
     $docctr.attr('containerid',dockerContainerItem.Id.substring(0,12));
