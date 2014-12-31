@@ -1,6 +1,6 @@
 var ping = require('net-ping');
 var aws = require('aws-sdk');
-var proxyAgent = require('proxy-agent');
+
 
 if (process.env.http_proxy) {
     aws.config.update({
