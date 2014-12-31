@@ -5,7 +5,7 @@ var proxyAgent = require('proxy-agent');
 if (process.env.http_proxy) {
     aws.config.update({
         httpOptions: {
-            agent: proxy(process.env.http_proxy)
+            proxy:process.env.http_proxy
         }
     });
 }
