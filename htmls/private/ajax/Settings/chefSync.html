@@ -55,15 +55,13 @@
 
     </tbody>
   </table>
-   <div class="row">
-    <div class="col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
+   <footer class="footer">
       <div style="text-align:center" class="clearfix form-actions">
         <div>
-            <input type="button" value="Import Nodes" class="btn btn-primary showChefImportNodesModalBtn">
+            <input type="button" style="margin-left:200px;" value="Import Nodes" class="btn btn-primary showChefImportNodesModalBtn">
         </div>
       </div>
-    </div>
-  </div>
+    </footer>
   <!-- <div style="text-align:center"> <input type="button" class="btn btn-primary showChefImportNodesModalBtn" value="Import Nodes"/> </div> -->
 
 </div>
@@ -83,20 +81,20 @@
           <div class="">
           <section class="col col-12">
             <div class="form-group">
-              <label for="exampleInputEmail1">Orgs</label>
+              <label for="exampleInputEmail1">Organization</label>
                 <select id="chefImportOrgSelect"  class="width-100 aaa" disabled>
                   
                 </select>
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Business Groups</label>
+              <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
               <select id="chefImportBgSelect"  class="width-100 aaaaa" >
                 
               </select>
             </div>
           
           <div class="form-group">
-          <label for="exampleInputEmail1">Project</label>
+          <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
           <div class="">
           <select id="chefImportProjectSelect"  class="width-100" >
                 
@@ -143,7 +141,7 @@
         </div>
       </section>
       <section class="col col-12">
-          <label class="">Assign Users</label>
+          <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
           <label class="select select-multiple">
               <div class="userListLoadingContainer"></div>
               <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
@@ -427,7 +425,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
          alert('please enter username');
          return;
        } if(!reqBody.credentials.password) {
-         alert('please enter password');
+         alert('please enter password or choose a pem file');
          return;
        }
        console.log(reqBody);
