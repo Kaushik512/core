@@ -17,14 +17,15 @@
         "ldapjs": "0.7.1",
         "connect-redis": "1.4.x",
         "node-uuid": "*",
-        "chef": "0.2.1",
+        "chef": "0.3.0",
         "ssh2": "*",
         "path-extra": "0.3.0",
         "mkdirp": "0.5.0",
         "connect-mongo": "0.4.1",
         "fs-extra": "0.13.0",
         "java": "0.4.4",
-        "tail": "0.4.0"
+        "tail": "0.4.0",
+        "proxy-agent": "1.1.0"
     },
     "devDependencies": {},
     "scripts": {
