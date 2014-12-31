@@ -1,5 +1,14 @@
 var ping = require('net-ping');
 var aws = require('aws-sdk');
+var proxyAgent = require('proxy-agent');
+
+if (process.env.http_proxy) {
+    aws.config.update({
+        httpOptions: {
+            agent: proxy(process.env.http_proxy)
+        }
+    });
+}
 
 var instanceStateList = {
     RUNNING: 'running',
@@ -43,7 +52,7 @@ var EC2 = function(awsSettings) {
                 console.log("instance state ==> " + instanceState);
                 callback(null, instanceState);
             } else {
-            	callback(true, null);
+                callback(true, null);
             }
 
         });
@@ -55,7 +64,7 @@ var EC2 = function(awsSettings) {
 
         var that = this; //"m1.small"
         ec.runInstances({
-            "ImageId": image_id,//"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
+            "ImageId": image_id, //"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
             "InstanceType": intanceType, //"m1.medium",
             "MinCount": 1,
             "MaxCount": 1,
