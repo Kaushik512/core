@@ -243,6 +243,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 		});
 	});
+
+	app.get('/d4dMasters/getdashboardvalues/:items',function(req,res){
+		console.log('received request ' + req.params.items);
+		var masts = [];
+		masts = req.params.items.split(',');
+		console.log('---Length--' + masts.length);
+		
+	});
 	
 	app.get('/d4dMasters/qmasterjson/:id/:name', function(req, res) {
 
