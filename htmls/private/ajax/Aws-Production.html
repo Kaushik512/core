@@ -884,13 +884,23 @@
                                                             </div>
                                    
                                                            <section class="col col-6 fordocker">
-                                                                        <label for="category">Select Docker Container <span style="color:red">*</span>
+                                                                        <label for="category">Select Docker Image <span style="color:red">*</span>
                                                                         </label>
                                                                         <label class="select"> 
                                                                             <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
 
                                                                             </select>
                                                                         </label>   
+                                                            </section>
+                                                            <section class="col col-sm-6 fordocker" >
+                                                                        <label for="category">Image Start Parameters 
+                                                                        </label>
+                                                                        <label class="input">
+                                                                            <!-- <i class="icon-append fa fa-building"></i>  -->
+                                                                            <input type="text" id="imagestartcommand"/>
+                                                                        </label>  
+                                                                        <label for="category" style="font-size:8pt"><b>Implementation:</b> docker run -t -d -i {Image Start Paramerters} &lt;repopath/image:tag&gt; 
+                                                                        </label>                                        
                                                             </section>
                                                             <section class="col col-6 fordocker">
                                                                 <label for="category">Available Repo Tags <span style="color:red">*</span>
@@ -899,6 +909,20 @@
 
                                                                 </div>       
                                                             </section>
+                                                            <!-- <div class="row pull-left" style="margin:0px;">
+                                                                <section class="col col-6 fordocker">
+                                                                <label for="category">Image Start Parameters <span style="color:red">*</span>
+                                                                </label>                 
+                                                                
+                                                                    <label class="input">
+                                                                    <input type="text" id="imagestartcommand"/>
+                                                                    </label>
+                                                                     
+                                                            </section>
+                                                            </div> --><br/>
+                                                            
+                                                            
+                                                            
                                                        </div>
                                             </div>                   
 
@@ -1402,6 +1426,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
                reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
+
                /*if(!$('.deploymentsCookbookList').length) {
       alert('Please wait while we are fetching cookbooks.');
       return false;
@@ -1454,7 +1479,7 @@ $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
                reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
                reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
                reqBody.dockerreponame = $('#dockerrepoListInput').val();
-
+               reqBody.dockercontainerstartcommand = $('#imagestartcommand').val();
 
                reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
                reqBody.orgId = $('#orgnameSelect').val();

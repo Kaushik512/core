@@ -1241,7 +1241,8 @@ $('.dockerinstancestart').click(function(e){
             $td.attr('title','Pulling in Images');
             var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
-          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag,function(data){
+            var dockercontainerstartcommand = $('.productdiv1.role-Selected1').first().attr('dockercontainerstartcommand');
+          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockercontainerstartcommand),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -1641,6 +1642,7 @@ $(function() {
                             $itemBody.attr('dockerreponame', data[i].dockerreponame);
                             $itemBody.attr('dockerrepotags', data[i].dockerrepotags);
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
+                            $itemBody.attr('dockercontainerstartcommand', data[i].dockercontainerstartcommand);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {

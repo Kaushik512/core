@@ -220,17 +220,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname', function(req, res) {
+    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname/:runcommand', function(req, res) {
 
         console.log('reached here a');
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var stdmessages = '';
-        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename);
-        if (req.params.tagname != null) {
-            cmd += ':' + req.params.tagname;
+        var runcmd = '';
+        var tagname = '';
+        
+        if (req.params.tagname != 'undefined') {
+            tagname += ':' + req.params.tagname;
         }
-        cmd += ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+
+        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + tagname;
+
+        if (req.params.runcommand != 'undefined') {
+            runcmd = decodeURIComponent(req.params.runcommand) + ' ';
+        }
+        cmd += ' && sudo docker run -i -t -d ' + runcmd +  decodeURIComponent(req.params.imagename) + tagname + ' /bin/bash';
         console.log('Docker command executed : ' + cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
