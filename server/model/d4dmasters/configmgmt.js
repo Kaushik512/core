@@ -1,4 +1,5 @@
 var d4dModel = require('./d4dmastersmodel.js');
+var d4dModelNew = require('./d4dmastersmodelnew.js');
 var settingsController = require('../settings');
 var codelist = require('../../codelist.json');
 

@@ -1,4 +1,6 @@
 var d4dModel = require('../model/d4dmasters/d4dmastersmodel.js');
+var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
+
 var settingsController = require('../model/settings');
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
@@ -223,6 +225,37 @@ module.exports.setRoutes = function(app, sessionVerification) {
 				console.log("Hit and error:" + err);
 			}
 			if (d4dMasterJson) {
+				// res.send(200, d4dMasterJson);
+				//  res.writeHead(200, { 'Content-Type': 'text/plain' });
+				res.writeHead(200, {
+					'Content-Type': 'application/json'
+				});
+				// res.json(d4dMasterJson);
+				//res.setHeader('Content-Type', 'application/json');
+				res.end(JSON.stringify(d4dMasterJson));
+				console.log("sent response" + JSON.stringify(d4dMasterJson));
+				//res.end();
+			} else {
+				res.send(400, {
+					"error": err
+				});
+				console.log("none found");
+			}
+
+
+		});
+	});
+
+	app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
+		console.log('received new request ' + req.params.id);
+		d4dModelNew.d4dModelMastersOrg.find({
+			id: req.params.id
+		}, function(err, d4dMasterJson) {
+			if (err) {
+				console.log("Hit and error:" + err);
+			}
+			if (d4dMasterJson) {
+				//
 				// res.send(200, d4dMasterJson);
 				//  res.writeHead(200, { 'Content-Type': 'text/plain' });
 				res.writeHead(200, {

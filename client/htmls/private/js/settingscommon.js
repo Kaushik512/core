@@ -67,6 +67,29 @@ function validatedockeruser(usernameInput, passwordInput) {
 
 function readMasterJson(id) {
     // debugger;
+   // alert(url);
+if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
+{
+    //alert('in 1');
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonnew/" + id,
+        success: function(data) {
+                 alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
+else{
+    
     $.ajax({
         type: "get",
         dataType: "text",
@@ -84,6 +107,7 @@ function readMasterJson(id) {
         }
     });
     return (d4ddata);
+    }
 }
 
 $.fn.getType = function() {
@@ -223,6 +247,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
     $(".savespinner").hide();
 
 }
+// function CreateTableFromJson(formID, idFieldName, createFileName) {
+//     CreateTableFromJsonNew(formID, idFieldName, createFileName);
+// }
+
+
 
 var forceEdit = false; //variable used to force save one record ex. Authentication
 //Create & Edit form functions
@@ -511,6 +540,412 @@ function readform(formID) {
     });
     return (true);
 }
+
+
+    function readformnew(formID) {
+        var formData = null;
+        //    alert("force edit:" + forceEdit);
+        //Prefilling dropdowns
+        $('select[cdata="catalyst"]').each(function() {
+
+            if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+
+                if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
+
+                    var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    var curSelect = $(this);
+                    //    alert(JSON.stringify(tempJSON));
+                    $.each(eval('tempJSON.' + curSelect.attr('datapath')), function(i, item) {
+                        //     alert(item.field[0].values.value);
+                        // debugger;
+                        //Loop to get rowid 
+                        var _rowid = 0;
+                        for (var k = 0; k < item.field.length; k++) {
+                            if (item.field[k].name == "rowid") {
+                                //curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                                // alert("Added:" + item.field[i].values.value);
+                                _rowid = item.field[k].values.value;
+                            }
+                        }
+                        for (var k = 0; k < item.field.length; k++) {
+                            if (item.field[k].name == curSelect.attr("id")) {
+                                curSelect.append('<option value="' + item.field[k].values.value + '" rowid = "' + _rowid + '">' + item.field[k].values.value + '</option>');
+                                // alert("Added:" + item.field[i].values.value);
+                            }
+                        }
+                    });
+                }
+                // debugger;
+                if ($(this).attr('linkedfields')) {
+
+                    $(this).change(function() {
+                        //  debugger;
+                        $('#content').attr('style', "opacity:1;")
+
+                        var curCtrl = $(this);
+                        $.each(eval($(this).attr('linkedfields')), function(i, item) {
+                            var targetCtrl = $('#' + item);
+                            targetCtrl.html('');
+                            var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+                            $.each(eval(opts), function(j, itm) {
+                                if (targetCtrl.attr('multiselect'))
+                                    addToSelectList(itm, targetCtrl);
+                                else
+                                    targetCtrl.append('<option value="' + itm + '">' + itm + '</option>');
+
+                            });
+                            //fix for select2 control - Vinod 
+                            if (targetCtrl.attr('multiselect') == null)
+                                targetCtrl.select2();
+
+                        });
+                    });
+
+                }
+            }
+
+            //alert("Reading" + JSON.stringify(temp));
+        });
+
+        $('input[sourcepath][cdata="catalyst"]').each(function() {
+            //debugger;
+            if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+                var tempJSON = JSON.parse(readMasterJson($(this).attr('sourcepath')));
+                var curInput = $(this);
+                //   alert(JSON.stringify(tempJSON));
+                $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
+                    //     alert(item.field[0].values.value);
+                    // debugger;
+                    for (var k = 0; k < item.field.length; k++) {
+                        if (item.field[k].name == curInput.attr("id")) {
+                            // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                            // alert("Added:" + item.field[i].values.value);
+                            addToCodeList(item.field[k].values.value, curInput);
+                        }
+                    }
+                });
+            }
+        });
+
+        $('div[datatype="select"]').each(function() {
+            //debugger;
+            if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
+                if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+                    var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    var curInput = $(this);
+                    //  alert('div select ' + curInput.attr("id"));
+                    $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
+                        //     alert(item.field[0].values.value);
+                        // debugger;
+                        for (var k = 0; k < item.field.length; k++) {
+                            if (item.field[k].name == curInput.attr("id")) {
+                                // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                                // alert("Added:" + item.field[i].values.value);
+                                addToSelectList(item.field[k].values.value, curInput);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        // End Prefilling dropdowns
+
+
+
+        // alert("before d4d" + JSON.stringify(d4ddata));
+        readMasterJson(formID);
+        //alert("after d4d" + JSON.stringify(d4ddata));
+
+        /* $.each(d4ddata.sections.section, function (i, item) {
+             if (item.name == formName) {
+                 formData = item;
+             }
+         });*/
+
+
+        //Reading row to get schema
+        var formSchema = null;
+        var orgName = url.substr(url.indexOf("?") + 1);
+        //  alert(orgName);
+        var editMode = false;
+
+        formData = d4ddata;
+
+        //alert("here " + JSON.stringify(formData) + ":" + orgName);
+
+        $.each(formData.rows.row, function(i, item) {
+            //  alert(item.field.length);
+            for (i = 0; i < item.field.length; i++) {
+                //  alert(typeof item.field[i].values.value);
+                //    alert('Expanded field ' + JSON.stringify(item.field.length) + ":" + orgName.toLowerCase());
+                if (typeof item.field[i].values.value == "string") {
+                    if (item.field[i].values.value.toLowerCase() == orgName.toLowerCase()) {
+                        formSchema = item.field;
+                        editMode = true;
+                        return (false);
+                    }
+                }
+            }
+            formSchema = item.field;
+        });
+        //  alert('Edit Mode:' + editMode);
+        if (forceEdit == true) {
+            editMode = true;
+            formSchema = formData.rows.row[0].field;
+        }
+        if (editMode == false) {
+            return (false);
+        }
+
+        //Setting the header of the form to Edit if shown as Create
+        var head = $('.widget-header').html().replace('Create', 'Edit').replace('New', 'Edit');
+        $('.widget-header').html(head);
+
+
+        //  debugger;
+        //  alert('came here');
+        //Read current form values with the field names
+        var formSchemaNew = formSchema;
+
+
+
+        //Since this section is executed only in edit mode. The rowid field is injected with the rowid
+        $('button[onclick*="saveform"]').attr("rowid", orgName);
+
+
+        //   alert(JSON.stringify(formData.rows.row[0].field));
+
+        $.each(formSchemaNew, function(i, item) {
+            var inputC = null;
+            $.each(item, function(k, v) {
+                // alert("k & v:" + k + ":" + v);
+                if (k == "name" && v != "rowid") {
+                    if (v.indexOf("_filename") > 0) {
+                        v = v.replace('_filename', '');
+                    }
+                    inputC = $('#' + v);
+                }
+
+            });
+            $.each(item, function(k, v) {
+                if (k == "values") {
+                    if (inputC && $(inputC).attr("id") != undefined) {
+                        $.each(v, function(k1, v1) {
+
+                            if (inputC.getType().toLowerCase() == "text") {
+                                //  alert(inputC.attr("datavalues"));
+                                if (inputC.attr("datavalues")) {
+                                    //var array = v[k1].split(",");
+                                    $.each(v[k1], function(i) {
+                                        addToCodeList(v[k1][i]);
+                                    });
+                                } else
+                                    inputC.val(v[k1]);
+                            }
+
+                            if (inputC.getType().toLowerCase() == "file") {
+                                //  v[k1]
+                                $(inputC).closest('input').next().val(v[k1]);
+                            }
+                            if (inputC.getType().toLowerCase() == "select") {
+                              //alert(v[k1]);
+                                $(inputC).val(v[k1]);
+                                $(inputC).attr('savedvalue', v[k1]);
+                                //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
+
+                                $(inputC).select2();
+                            }
+                            if (inputC.getType().toLowerCase() == "ul") {
+                              //  alert('in ul');
+                                if (v[k1].indexOf(',') >= 0) {
+                                    var itms = v[k1].split(',');
+                                    $(inputC).attr('defaultvalues', v[k1]);
+
+                                    /* for(var j = 0; j < itms.length; j++){
+                                       $(inputC).append('<li><label style="margin: 5px;"><input type="hidden" value="recipe[' + itms[j] + '"]">' + itms[j] + '</label></li>');
+                                    } */
+                                }
+                            }
+                            if (inputC.getType().toLowerCase() == "div") {
+                                
+                                $(inputC).attr('savedvalue', v[k1])
+                                //Set saved values to div.
+                                var ctype = '';
+                                var csource = '';
+                                if ($(inputC).attr('ctype'))
+                                    ctype = $(inputC).attr('ctype');
+                                if ($(inputC).attr('csource'))
+                                    csource = $(inputC).attr('csource');
+                                var divselect1 = v[k1].toString().split(',');
+                              //  alert(v[k1]);
+                                for (var j = 0; j < divselect1.length; j++) {
+                                    if (ctype == 'list' && csource != '') {
+
+                                        addToTargetList($('#' + csource).clone().val(divselect1[j]));
+                                    }
+                                    if (ctype == '')
+                                        inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                                    if(ctype == 'checkbox'){
+                                        inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    inputC = null;
+                }
+            });
+        });
+        //Force clicking on selects that has dependent controls
+        $('[linkedfields]').each(function() {
+            $(this).trigger('change');
+            var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
+            for (var i = 0; i < ctrls.length; i++) {
+                var ctrl = $("#" + ctrls[i]);
+                if (ctrl.getType() == "select") {
+                    ctrl.val(ctrl.attr('savedvalue'));
+                }
+                if (ctrl.getType() == "div") {
+                    var divselect = ctrl.attr('savedvalue').split(',');
+                    // alert(divselect.length);
+                    for (var j = 0; j < divselect.length; j++) {
+                        ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
+                    }
+                }
+            }
+        });
+
+
+        //  alert('almost exiting');
+        //Setting the unique field with current value
+        $('input[unique="true"]').each(function() {
+            // alert($(this).val());
+            $(this).attr('initialvalue', $(this).val());
+            // alert($(this).attr('initialvalue'));
+        });
+        return (true);
+    }
+
+    function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
+
+        //To Do SAve...
+        // var d4djson = $.parseJSON(d4ddata);
+        // alert(d4ddata.sections.section[0].name);
+        //alert('run');
+        var formData = null;
+        readMasterJson(formID);
+
+        /*$.each(d4ddata.sections.section, function (i, item) {
+            if (item.name == formName) {
+                formData = item;
+            }
+        });*/
+
+        //force setting the idFieldName to "rowid"
+        idFieldName = "rowid";
+
+        // alert(JSON.stringify(formData));
+        //Reading row to get schema
+        formData = d4ddata;
+
+        var formSchema = null;
+        $.each(d4ddata, function(i, item) { 
+            console.log("Top:" + JSON.stringify(item)); //rows
+            var editButton = null;
+            var idFieldValue = null;
+            var imageTD = null;
+            $.each(item,function(k,v){ //columns
+                // var inputC = null;
+                console.log('k:' + k + ' v :' + JSON.stringify(v));
+                if(k == idFieldName){
+                        idFieldValue = v;
+                }
+                inputC = $('.rowtemplate').find("[datafield='" + k + "']");
+                if(inputC){
+                    inputC.html(v);
+                }
+            });
+
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            // $('#envtable').append(sRow);
+            imageTD = $('.rowtemplate').find("[datatype='image']");
+
+            editButton = $('.rowtemplate').find("[title='Update']");
+
+            if(idFieldValue){
+                if (imageTD) {
+                    if (imageTD.length > 0) {
+                        console.log("Template Icon:" + idFieldValue);
+                        var imgpath = 'img/blank.png';
+                        if (imageTD.html().indexOf('<img') >= 0) {
+                            imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                        } else
+                            imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+
+                        imageTD.html('');
+                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+
+                    }
+
+                }
+                if(editButton){
+                    editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
+                    editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                    editButton.removeClass('btn-xs');
+                    editButton.addClass('btn-sg');
+                }
+                //importbutton will be present for config management screen.
+                var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
+                // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                //&& tdorgname.length > 0
+                if (importbutton && importbutton.length > 0) {
+                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                    importbutton.removeClass('btn-xs');
+                    importbutton.addClass('btn-sg');
+                    importbutton.addClass('tableactionbutton');
+                }
+
+
+
+                //setting the delete button
+
+                var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                if (deletebutton) {
+                    deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                    deletebutton.removeClass('btn-xs');
+                    deletebutton.addClass('btn-sg');
+                    deletebutton.addClass('tableactionbutton');
+                }
+            }
+
+
+            console.log('-----------');
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            $('#envtable').append(sRow);
+
+        });
+      //  $.each(formData.data.fields, function(i, item) { //row iteration
+
+            // var templateRow = $(".rowtemplate").clone();
+            // $.each(item,function(k, v) {
+            //     console.log('k:' + k + ',v:' + v);
+            // });
+            // var sRow = $(".rowtemplate").clone();
+            // sRow.removeClass("hidden");
+            // sRow.removeClass("rowtemplate");
+            // $('#envtable').append(sRow);
+            
+     //   });
+
+        $(".savespinner").hide();
+
+    }
+
 
 
 function saveform(formID) {
