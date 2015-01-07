@@ -246,6 +246,46 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		});
 	});
 
+	app.get('/d4dMasters/readmasterjsonrecord/:id/:rowid', function(req, res) {
+		console.log('received request ' + req.params.id + ' rowid: ' + req.params.rowid);
+		configmgmtDao.getDBModelFromID(req.params.id,function(err,dbtype){
+			if (err) {
+				console.log("Hit and error:" + err);
+			}
+			if(dbtype){
+				console.log("Master Type: " + dbtype)
+				eval('d4dModelNew.'+ dbtype).findOne({
+				rowid: req.params.rowid
+				}, function(err, d4dMasterJson) {
+					if (err) {
+						console.log("Hit and error:" + err);
+					}
+					if (d4dMasterJson) {
+						// res.send(200, d4dMasterJson);
+						//  res.writeHead(200, { 'Content-Type': 'text/plain' });
+						res.writeHead(200, {
+							'Content-Type': 'application/json'
+						});
+						// res.json(d4dMasterJson);
+						//res.setHeader('Content-Type', 'application/json');
+						res.end(JSON.stringify(d4dMasterJson));
+						console.log("sent response" + JSON.stringify(d4dMasterJson));
+						//res.end();
+					} else {
+						res.send(400, {
+							"error": err
+						});
+						console.log("none found");
+					}
+
+
+				});
+			}
+		});
+
+		
+	});
+
 	app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
 		console.log('received new request ' + req.params.id);
 		d4dModelNew.d4dModelMastersOrg.find({
@@ -929,6 +969,121 @@ module.exports.setRoutes = function(app, sessionVerification) {
 										  });
 			}
 		});								
+	});
+
+	app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
+    	console.log('received new save request ' + req.params.id);
+    	var bodyJson = JSON.parse(JSON.stringify(req.body));
+    	//pushing the rowid field
+		
+		var editMode = false; //to identify if in edit mode.
+		var rowtoedit = null;
+		if(bodyJson["rowid"] != null){
+			editMode = true;
+		}
+		else{
+			editMode = false;
+			bodyJson["rowid"] = uuid.v4();
+		}
+    	configmgmtDao.getDBModelFromID(req.params.id,function(err,dbtype){
+			if (err) {
+				console.log("Hit and error:" + err);
+			}
+			if(dbtype){
+				console.log("Master Type: " + dbtype);
+
+				eval('d4dModelNew.'+ dbtype).findOne({rowid: bodyJson["rowid"]}, function (err, d4dMasterJson) {
+					if (err) {
+			            console.log("Hit and error:" + err);
+			        }
+					if (d4dMasterJson) {
+						rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
+						console.log('<<<<< Reached here >>>>' + (rowtoedit == null));
+					}
+					// if(!rowtoedit)
+					// 	console.log("Edited Row:" + rowtoedit);
+
+					var frmkeys = Object.keys(bodyJson);
+
+					//var frmvals = Object.keys(bodyJson);
+					var rowFLD = [];
+				//	var filesNames = Object.keys(req.files);
+					var folderpath = ''; //will hold the folderpath field to create the path in the system
+
+					console.log(JSON.stringify(bodyJson));
+					frmkeys.forEach(function(itm){
+						console.log("Each item:" + itm);
+						if(!editMode){
+							var thisVal = bodyJson[itm];
+							console.log(thisVal);
+							var item = null;
+							if(thisVal.indexOf('[') >= 0 && itm != "templatescookbooks"){//used to check if its an array
+									item = "\""  + itm  + "\" : \"" + thisVal+ "\"";
+							} 
+							else //
+								item = "\""  + itm  + "\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"";
+							rowFLD.push(JSON.parse(item));
+						}
+						else{
+							if(rowtoedit != null){
+								uuid1 = bodyJson["rowid"];
+								console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+								console.log('rowtoedit :' + rowtoedit);
+								if( bodyJson["folderpath"] == undefined) //folderpath issue fix
+									folderpath = ''
+								else
+									folderpath = bodyJson["folderpath"];
+								for(var myval in rowtoedit){
+									//console.log("key:"+myval+", value:"+rowtoedit[myval]);
+									rowtoedit[myval] = bodyJson[myval];
+
+								}
+								console.log(JSON.stringify(rowtoedit));
+							}
+
+						}
+
+					});
+					// frmkeys.forEach(function(itm){
+					// 	if(!editMode){
+					// 		var thisVal = bodyJson[itm];
+					// 		//console.log(thisVal.replace(/\"/g,'\\"'));
+					// 		console.log(thisVal);
+					// 		var item;
+					// 		if(thisVal.indexOf('[') >= 0 && itm != "templatescookbooks"){//used to check if its an array
+					// 					item = "\""  + itm  + "\" : \"" + thisVal+ "\"";
+					// 			} 
+					// 			else //
+					// 				item = "\""  + itm  + "\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"";
+					// 		rowFLD.push(JSON.parse(item));
+
+					// 	}
+					// 	else{ //in edit mode
+					// 		if(rowtoedit){
+					// 			uuid1 = bodyJson["rowid"];
+					// 			console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+					// 			if( bodyJson["folderpath"] == undefined) //folderpath issue fix
+					// 				folderpath = ''
+					// 			else
+					// 				folderpath = bodyJson["folderpath"];
+					// 			rowtoedit.forEach(function(k,v){
+					// 				console.log('k: ' + k + ' v: ' + v);
+					// 			});
+					// 			// for(var j = 0; j < rowtoedit.length; j++){
+					// 			// 	if(bodyJson[rowtoedit[j].name] != null){
+					// 			// 		rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
+					// 			// 		console.log('Entered Edit' + rowtoedit.field[j].values.value);
+					// 			// 	}
+					// 			// }
+					// 		}
+					// 	}
+					// });
+				}); //end findone
+				//console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
+				
+			}
+		}); //end getdbmodelfromid
+									
 	});
 
 	app.post('/d4dMasters/testingupload/:suffix/:fileinputs',function(req,res){

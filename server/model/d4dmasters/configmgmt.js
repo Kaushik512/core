@@ -4,7 +4,23 @@ var settingsController = require('../settings');
 var codelist = require('../../codelist.json');
 
 function Configmgmt() {
-
+    this.getDBModelFromID = function(id,callback){
+        switch(id){
+            case "1":
+                callback(null,'d4dModelMastersOrg');
+                break;
+            case "2":
+                callback(null,'d4dModelMastersProductGroup');
+                break;
+            case "3":
+                callback(null,'d4dModelMastersProductGroup');
+                break;
+            case "4":
+                callback(null,'d4dModelMastersProductGroup');
+                break;
+            
+        }
+    };
     this.getChefServerDetails = function(rowid, callback) {
         d4dModel.findOne({
             id: '10'

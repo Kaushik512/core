@@ -65,6 +65,27 @@ function validatedockeruser(usernameInput, passwordInput) {
     return (retval);
 }
 
+//Reading a unique record from master data
+function readMasterRecord(id,rowid){
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonrecord/" + id +'/' + rowid,
+        success: function(data) {
+                 alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
+
+
 function readMasterJson(id) {
     // debugger;
    // alert(url);
@@ -77,7 +98,7 @@ if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
         async: false,
         url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
-                 alert(data.toString());  
+                // alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
         },
@@ -650,11 +671,14 @@ function readform(formID) {
         });
 
         // End Prefilling dropdowns
-
+        var formSchema = null;
+        var rowid = url.substr(url.indexOf("?") + 1);
+        //  alert(orgName);
+        var editMode = false;
 
 
         // alert("before d4d" + JSON.stringify(d4ddata));
-        readMasterJson(formID);
+        readMasterRecord(formID,rowid);
         //alert("after d4d" + JSON.stringify(d4ddata));
 
         /* $.each(d4ddata.sections.section, function (i, item) {
@@ -662,37 +686,44 @@ function readform(formID) {
                  formData = item;
              }
          });*/
+        
+        //get Unique record into d4ddata.
+
 
 
         //Reading row to get schema
-        var formSchema = null;
-        var orgName = url.substr(url.indexOf("?") + 1);
-        //  alert(orgName);
-        var editMode = false;
+        // var formSchema = null;
+        // var orgName = url.substr(url.indexOf("?") + 1);
+        // //  alert(orgName);
+        // var editMode = false;
 
         formData = d4ddata;
 
         //alert("here " + JSON.stringify(formData) + ":" + orgName);
 
-        $.each(formData.rows.row, function(i, item) {
-            //  alert(item.field.length);
-            for (i = 0; i < item.field.length; i++) {
-                //  alert(typeof item.field[i].values.value);
-                //    alert('Expanded field ' + JSON.stringify(item.field.length) + ":" + orgName.toLowerCase());
-                if (typeof item.field[i].values.value == "string") {
-                    if (item.field[i].values.value.toLowerCase() == orgName.toLowerCase()) {
-                        formSchema = item.field;
-                        editMode = true;
-                        return (false);
-                    }
-                }
-            }
-            formSchema = item.field;
-        });
+        // $.each(formData.rows.row, function(i, item) {
+        //     //  alert(item.field.length);
+        //     for (i = 0; i < item.field.length; i++) {
+        //         //  alert(typeof item.field[i].values.value);
+        //         //    alert('Expanded field ' + JSON.stringify(item.field.length) + ":" + orgName.toLowerCase());
+        //         if (typeof item.field[i].values.value == "string") {
+        //             if (item.field[i].values.value.toLowerCase() == orgName.toLowerCase()) {
+        //                 formSchema = item.field;
+        //                 editMode = true;
+        //                 return (false);
+        //             }
+        //         }
+        //     }
+        //     formSchema = item.field;
+        // });
         //  alert('Edit Mode:' + editMode);
+        
+        if(typeof(formData.rowid) != 'undefined'){
+            editMode = true;
+        }
         if (forceEdit == true) {
             editMode = true;
-            formSchema = formData.rows.row[0].field;
+            formSchema = formData;
         }
         if (editMode == false) {
             return (false);
@@ -711,110 +742,97 @@ function readform(formID) {
 
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
-        $('button[onclick*="saveform"]').attr("rowid", orgName);
+        $('button[onclick*="saveform"]').attr("rowid", rowid);
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
 
-        $.each(formSchemaNew, function(i, item) {
+        $.each(formData, function(k,v) {
             var inputC = null;
-            $.each(item, function(k, v) {
-                // alert("k & v:" + k + ":" + v);
-                if (k == "name" && v != "rowid") {
-                    if (v.indexOf("_filename") > 0) {
-                        v = v.replace('_filename', '');
-                    }
-                    inputC = $('#' + v);
-                }
-
-            });
-            $.each(item, function(k, v) {
-                if (k == "values") {
-                    if (inputC && $(inputC).attr("id") != undefined) {
-                        $.each(v, function(k1, v1) {
-
-                            if (inputC.getType().toLowerCase() == "text") {
-                                //  alert(inputC.attr("datavalues"));
-                                if (inputC.attr("datavalues")) {
-                                    //var array = v[k1].split(",");
-                                    $.each(v[k1], function(i) {
-                                        addToCodeList(v[k1][i]);
-                                    });
-                                } else
-                                    inputC.val(v[k1]);
-                            }
-
-                            if (inputC.getType().toLowerCase() == "file") {
-                                //  v[k1]
-                                $(inputC).closest('input').next().val(v[k1]);
-                            }
-                            if (inputC.getType().toLowerCase() == "select") {
-                              //alert(v[k1]);
-                                $(inputC).val(v[k1]);
-                                $(inputC).attr('savedvalue', v[k1]);
-                                //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
-
-                                $(inputC).select2();
-                            }
-                            if (inputC.getType().toLowerCase() == "ul") {
-                              //  alert('in ul');
-                                if (v[k1].indexOf(',') >= 0) {
-                                    var itms = v[k1].split(',');
-                                    $(inputC).attr('defaultvalues', v[k1]);
-
-                                    /* for(var j = 0; j < itms.length; j++){
-                                       $(inputC).append('<li><label style="margin: 5px;"><input type="hidden" value="recipe[' + itms[j] + '"]">' + itms[j] + '</label></li>');
-                                    } */
-                                }
-                            }
-                            if (inputC.getType().toLowerCase() == "div") {
-                                
-                                $(inputC).attr('savedvalue', v[k1])
-                                //Set saved values to div.
-                                var ctype = '';
-                                var csource = '';
-                                if ($(inputC).attr('ctype'))
-                                    ctype = $(inputC).attr('ctype');
-                                if ($(inputC).attr('csource'))
-                                    csource = $(inputC).attr('csource');
-                                var divselect1 = v[k1].toString().split(',');
-                              //  alert(v[k1]);
-                                for (var j = 0; j < divselect1.length; j++) {
-                                    if (ctype == 'list' && csource != '') {
-
-                                        addToTargetList($('#' + csource).clone().val(divselect1[j]));
-                                    }
-                                    if (ctype == '')
-                                        inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
-                                    if(ctype == 'checkbox'){
-                                        inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
-                                    }
-                                }
-                            }
+            console.log('k:' + k + ' v:' + v);
+            //Finding the input control to bind.
+            if(k.indexOf('id') < 0){ //ensuring that you do not find an id field
+                inputC = $('#' + k);
+            }
+            if (inputC && $(inputC).attr("id") != undefined) {
+                if (inputC.getType().toLowerCase() == "text") {
+                    //  alert(inputC.attr("datavalues"));
+                    if (inputC.attr("datavalues")) {
+                        //var array = v[k1].split(",");
+                        $.each(v, function(i) {
+                            addToCodeList(v[i]);
                         });
-                    }
-                    inputC = null;
+                    } else
+                        inputC.val(v);
                 }
-            });
+                if (inputC.getType().toLowerCase() == "file") {
+                                //  v[k1]
+                   $(inputC).closest('input').next().val(v);
+                }
+                if (inputC.getType().toLowerCase() == "select") {
+                  //alert(v[k1]);
+                    $(inputC).val(v);
+                    $(inputC).attr('savedvalue', v);
+                    //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
+                    $(inputC).select2();
+                }
+                if (inputC.getType().toLowerCase() == "ul") {
+                  //  alert('in ul');
+                    if (v.indexOf(',') >= 0) {
+                        var itms = v.split(',');
+                        $(inputC).attr('defaultvalues', v);
+                        /* for(var j = 0; j < itms.length; j++){
+                           $(inputC).append('<li><label style="margin: 5px;"><input type="hidden" value="recipe[' + itms[j] + '"]">' + itms[j] + '</label></li>');
+                        } */
+                    }
+                }
+                if (inputC.getType().toLowerCase() == "div") {
+                                
+                    $(inputC).attr('savedvalue', v)
+                    //Set saved values to div.
+                    var ctype = '';
+                    var csource = '';
+                    if ($(inputC).attr('ctype'))
+                        ctype = $(inputC).attr('ctype');
+                    if ($(inputC).attr('csource'))
+                        csource = $(inputC).attr('csource');
+                    var divselect1 = v.toString().split(',');
+                  //  alert(v[k1]);
+                    for (var j = 0; j < divselect1.length; j++) {
+                        if (ctype == 'list' && csource != '') {
+
+                            addToTargetList($('#' + csource).clone().val(divselect1[j]));
+                        }
+                        if (ctype == '')
+                            inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                        if(ctype == 'checkbox'){
+                            inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                        }
+                    }
+                }
+                inputC = null;
+
+            }
+            
         });
         //Force clicking on selects that has dependent controls
-        $('[linkedfields]').each(function() {
-            $(this).trigger('change');
-            var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
-            for (var i = 0; i < ctrls.length; i++) {
-                var ctrl = $("#" + ctrls[i]);
-                if (ctrl.getType() == "select") {
-                    ctrl.val(ctrl.attr('savedvalue'));
-                }
-                if (ctrl.getType() == "div") {
-                    var divselect = ctrl.attr('savedvalue').split(',');
-                    // alert(divselect.length);
-                    for (var j = 0; j < divselect.length; j++) {
-                        ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
-                    }
-                }
-            }
-        });
+        // $('[linkedfields]').each(function() {
+        //     $(this).trigger('change');
+        //     var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
+        //     for (var i = 0; i < ctrls.length; i++) {
+        //         var ctrl = $("#" + ctrls[i]);
+        //         if (ctrl.getType() == "select") {
+        //             ctrl.val(ctrl.attr('savedvalue'));
+        //         }
+        //         if (ctrl.getType() == "div") {
+        //             var divselect = ctrl.attr('savedvalue').split(',');
+        //             // alert(divselect.length);
+        //             for (var j = 0; j < divselect.length; j++) {
+        //                 ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
+        //             }
+        //         }
+        //     }
+        // });
 
 
         //  alert('almost exiting');
@@ -957,6 +975,7 @@ function saveform(formID) {
     var data1 = new FormData();
     var fileNames = '';
     orgName = $('#orgname').val();
+    
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
     $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function() {
@@ -1061,7 +1080,9 @@ function saveform(formID) {
     if ($('button[onclick*="saveform"]').attr("rowid") != null) {
         // alert("in edit");
         data1.append("rowid", $('button[onclick*="saveform"]').attr("rowid"));
+        
     }
+   
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
@@ -1070,7 +1091,7 @@ function saveform(formID) {
     //console.log(data1);
     //  alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
-        url: serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName,
+        url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgname,
         data: data1,
         processData: false,
         contentType: false,
