@@ -9,7 +9,7 @@
                     <a href="#l1" data-toggle="tab">Domains</a>
                 </li>-->
                 <li class="pull-left active">
-                    <a href="#l2" id="tabheader" data-toggle="tab">Choose Template Type</a>
+                   <a href="#l2" id="xyz" data-toggle="tab">Choose Template Type</a>
                 </li>
                 <!--<li class="pull-left">
                     <a href="#l3" data-toggle="tab">App Factory</a>
@@ -78,219 +78,187 @@
                                                                         <span class="step">4</span>  <span class="title"><b></b></span> 
                                                                     </a>
                                                                 </li>
-                                                                <!-- <li data-target="#step5">
+                                                                <li data-target="#step5">
                                                                     <a href="#tab5" data-toggle="tab">
                                                                         <span class="step">4</span>  <span class="title"><b></b></span> 
                                                                     </a>
-                                                                </li> -->
+                                                                </li>
 
                                                             </ul>
                                                             <div class="clearfix"></div>
                                                         </div>
                                                         <div class="tab-content">
-                    <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
+                                                            <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
 
-                        <div id="templateContent" class="row " style="margin:0px;min-height:200px;">
-                        
-                        </div>
-                    </div>
+                                                                <div id="templateContent" class="row " style="margin:0px;min-height:200px;">
+                                                                    
+                                                                </div>
+                                                            </div>
+
                     <div class="tab-pane" id="tab2" style="padding-bottom:20px;overflow-y: auto;">
                         <div class="row " style="margin:0px">
                             <div id="individualTemplateNameGrid" class="templatesAppfactory templates">
 
                             </div>
-                            <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
 
+                            <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
+                                
                             </div>
+
                             <div class="templatesCloudformation templates" style="display:none">
 
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="tab3" style="padding-bottom:20px;">
 
-                        <div class="row">
-                          <div class="col-sm-2 col-xs-6">
-                             <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
-                             </div>
-                          </div>
-                          <div class="col-sm-10 col-xs-12">
-                            <div class="panel-group smart-accordion-default" id="accordion-Design">
-                              <div class="panel panel-default divconfigureparameterrunlist">
-                                  <div class="panel-heading">
-                                      <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigureproviderParameter"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Provider Parameters</a>
-                                      </h4>
-                                  </div>
-                                  <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
-                                    <div class="panel-body">
-                                       <div class="widget-body no-padding">
-                                            <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                    <div class="tab-pane" id="tab3" style="padding-bottom:20px;overflow-y: auto;">
+                        <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
+                        </div>
 
-                                                <div class="row " style="margin:0px;">
-                                                    
-                                                   <section class="col col-6">
-                                                    <label for="">Choose Operating System <span style="color:red">*</span>
-                                                    </label>
-                                                    <label class="select">
+                        <hr>
+                        <br>
 
-                                                       <select id="instanceOS" class="chooseOS width-100">
-                                                          
-                                                            
-                                                      </select>
+                        <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
 
-                                                    </label>                                          
-                                                </section>
-                                                <section class="col col-6">
-                                                    <label for="category">Choose Security Group <span style="color:red">*</span>
-                                                    </label>
-                                                    <label class="select"> 
-                                                        <select class="chooseSecurity width-100">
-                                                            <option value="0">default-d4d</option>
-                                                            <!--<option value="1">default-d4d</option>-->
-                                                            <option value="2">Vpc-1</option>
-                                                            <option value="3">Vpc-2</option>
-                                                            <option value="4">Default VPC</option>
+                            <div class="row " style="margin:0px;">
+                                <section class="col col-6" style="float:right;">
+                                    <label for="">Choose Organization <span style="color:red">*</span>
+                                    </label>
+                                    <label class="select"> 
+                                       <select id="orgnameSelect" class="chooseOrgselect2 width-100">
+                                       </select>
+                                   </label> 
+                                   <div class="cookbookShow">
 
-                                                        </select>
-                                                    </label>
-                                                
-                                            </section>
-                                            <section class="col col-6">
-                                                <label for="category">Choose Instance Size <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
-                                                  <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
-                                                  </select>
-                                                </label> 
-                                            </section>
-                                            <!--To add the Swipe Functionality-->                            
-                                            </div>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                  </div>
-                              </div>
+                                   </div>
+                               </section>
 
-                              <div class="panel panel-default divchefrunlist">
-                                      <div class="panel-heading">
-                                          <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigurechefRunlist" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Chef Runlist</a>
-                                          </h4>
-                                      </div>
-                                      <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
-                                          <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
-                                                <div class="row " style="margin:0px;">
-                                                    <section class="col col-6">
-                                                        <label for="">Choose Organization <span style="color:red">*</span>
-                                                        </label>
-                                                        <label class="select"> 
-                                                           <select id="orgnameSelect" class="chooseOrgselect2 width-100">
-                                                           </select>
-                                                       </label> 
-                                                    </section>
-                                                    <section class="col col-12">
-                                                       <div class="cookbookShow">
 
-                                                       </div>
-                                                   </section>
-                                                   
-                                                </div>
-                                            </div>
-                                      </div>
-                              </div>
 
-                              <div class="panel panel-default divOrganizationParameter">
-                                  <div class="panel-heading">
-                                      <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditorgParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Edit Organization Parameters</a>
-                                      </h4>
-                                  </div>
-                                  <div id="CollapseEditorgParam" class="panel-collapse collapse">
-                                      <div class="panel-body">
-                                            <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
+                               <section class="col col-6">
+                                <label for="">Choose Operating System <span style="color:red">*</span>
+                                </label>
+                                <label class="select">
 
-                                                <div class="row " style="margin:0px;">
+                                   <select id="instanceOS" class="chooseOS width-100">
+                                       
+                                        
+                                  </select>
 
-                                                    <section class="col col-sm-6">
-                                                        <label for="category">Blueprint Name <span style="color:red">*</span>
-                                                        </label>
-                                                        <label class="input">
-                                                            <!-- <i class="icon-append fa fa-building"></i>  -->
-                                                            <input type="text" id="blueprintNameInput"/>
-                                                        </label>                                          
-                                                    </section>
+                                </label>                                          
+                            </section>
+                            <section class="col col-6">
+                                <label for="category">Choose Security Group <span style="color:red">*</span>
+                                </label>
+                                <label class="select"> 
+                                    <select class="chooseSecurity width-100">
+                                        <option value="0">default-d4d</option>
+                                        <!--<option value="1">default-d4d</option>-->
+                                        <option value="2">Vpc-1</option>
+                                        <option value="3">Vpc-2</option>
+                                        <option value="4">Default VPC</option>
 
-                                                    <section class="col col-sm-6">
-                                                        <label for="category">Business Group <span style="color:red">*</span>
-                                                        </label>
-                                                        <label class="select"> 
-                                                            <select id="bgListInput" class="chooseBG width-100">
+                                    </select>
+                                </label>
+                            
+                        </section>
+                        <section class="col col-6">
+                            <label for="category">Choose Instance Size <span style="color:red">*</span>
+                            </label>
+                            <label class="select"> 
+                                <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
+                                </select>
+                            </label> 
 
-                                                            </select>
-                                                        </label>   
-                                                    </section>
-                                                </div>
-                                            <div class="row " style="margin:0px;">
-                                               <section class="col col-sm-6">
-                                                <label class="label">Assign Users  <span style="color:red">*</span></label>
-                                                <label class="select select-multiple">
-                                                    <div class="userListLoadingContainer">
-                                                        
-                                                    </div>
-                                                        <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
-
-                                                        </select> 
-                                                </label>
-                                                </section> 
-
-                                          
-                                              <section class="col col-sm-6">
-                                                <label for="category">Project <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
-                                                  <select id="projectListInput" class="chooseProject width-100">
-
-                                                  </select>
-                                              </label>   
-                                              </section>
-                                              <section class="col col-sm-6 offset6" style="">
-                                                <label for="category">Environment <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
-                                                    <select  id="envList" class="chooseEnv width-100">
-
-                                                    </select>
-                                                </label>
-                                                </label>
-                                              </section>
-                                            </div>
-                   
-                                           <section class="col col-6 fordocker">
-                                                <label for="category">Select Docker Container <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
-                                                    <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
-
-                                                    </select>
-                                                </label>   
-                                            </section>
-                                            <section class="col col-6 fordocker">
-                                                <label for="category">Available Repo Tags <span style="color:red">*</span>
-                                                </label>                 
-                                                <div id="dockerrepotagsdiv">
-
-                                                </div>       
-                                            </section>
-                                            </div>            
-                                       </div>
-                                  </div>
-                              </div>
-                            </div>
-                          </div>
+                        </section>
+                        <!--To add the Swipe Functionality-->                            
+                        </div>
                         </div>
                     </div>
-                     <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
+
+                    <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
+
+
+                        <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
+
+                            <div class="row " style="margin:0px;">
+
+                                <section class="col col-sm-6">
+                                    <label for="category">Blueprint Name <span style="color:red">*</span>
+                                    </label>
+                                    <label class="input">
+                                        <!-- <i class="icon-append fa fa-building"></i>  -->
+                                        <input type="text" id="blueprintNameInput"/>
+                                    </label>                                          
+                                </section>
+
+                                <section class="col col-sm-6">
+                                    <label for="category">Business Group <span style="color:red">*</span>
+                                    </label>
+                                    <label class="select"> 
+                                        <select id="bgListInput" class="chooseBG width-100">
+
+                                        </select>
+                                    </label>   
+                                </section>
+                            </div>
+                        <div class="row " style="margin:0px;">
+                           <section class="col col-sm-6">
+                            <label class="label">Assign Users  <span style="color:red">*</span></label>
+                            <label class="select select-multiple">
+                                <div class="userListLoadingContainer">
+                                    
+                                </div>
+                                    <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
+
+                                    </select> 
+                            </label>
+                            </section> 
+
+                      
+                          <section class="col col-sm-6">
+                                    <label for="category">Project <span style="color:red">*</span>
+                                    </label>
+                                    <label class="select"> 
+                                      <select id="projectListInput" class="chooseProject width-100">
+
+                                      </select>
+                                  </label>   
+                              </label>
+                          </section>
+                          <section class="col col-sm-6 offset6" style="">
+                            <label for="category">Environment <span style="color:red">*</span>
+                            </label>
+                            <label class="select"> 
+                                <select  id="envList" class="chooseEnv width-100">
+
+                                </select>
+                            </label>
+                            </label>
+                          </section>
+                        </div>
+
+                       <section class="col col-6 fordocker">
+                                    <label for="category">Select Docker Container <span style="color:red">*</span>
+                                    </label>
+                                    <label class="select"> 
+                                        <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
+
+                                        </select>
+                                    </label>   
+                        </section>
+                        <section class="col col-6 fordocker">
+                            <label for="category">Available Repo Tags <span style="color:red">*</span>
+                            </label>                 
+                            <div id="dockerrepotagsdiv">
+
+                            </div>       
+                        </section>
+                        </div>
+                    </div>                   
+
+
+                    <div class="tab-pane" id="tab5" style="padding-bottom:20px;overflow-y: auto;">
 
                         <h3 style="text-align:center"><strong>Blueprint Saved</strong></h3>
 
@@ -299,26 +267,28 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div style="bottom:0px;position:fixed;padding-left:0px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div style="text-align:center;padding-right:20%;" class="clearfix form-actions">
 
-                                    <div class="row">
-                                        <div style="bottom:0px;position:fixed;padding-left:0px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <div style="text-align:center;padding-right:20%;" class="clearfix form-actions">
+                                <div class="btn-group">
+                                    <ul class="pager wizard no-margin">
 
-                                                <div class="btn-group">
-                                                    <ul class="pager wizard no-margin">
+                                        <li class="previous disabled">
+                                            <a style="border-radius:0px" class="btn btn-primary" href="javascript:void(0);"> Previous </a>
+                                        </li>
 
-                                                        <li class="previous disabled">
-                                                            <a style="border-radius:0px" class="btn btn-primary" href="javascript:void(0);"> Previous </a>
-                                                        </li>
+                                        <li class="next" id="nextSpecificValue">
+                                            <a style="border-radius:0px;margin-left:5px;" class="btn btn-primary" href="javascript:void(0);"> Next </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                                        <li class="next" id="nextSpecificValue">
-                                                            <a style="border-radius:0px;margin-left:5px;" class="btn btn-primary" href="javascript:void(0);"> Next </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
 
                                                         </div>
                                                     </div>
@@ -383,7 +353,6 @@ $(document).ready(function(){
     }); 
 
     $(".chooseOrgselect2").select2();
-    $(".chooseOS").select2();
     $(".chooseSecurity").select2();
     $(".chooseInstance").select2();
     $(".chooseBG").select2();
@@ -435,34 +404,44 @@ $(document).ready(function(){
 
          $("#templateContent").append(containerTemp);   
          $("#templateContent #grid0").addClass("role-Selected");
-        }
-      });
+    }
 
-      $('#templateContent').on("click",'.blueprintdiv', function () {
-          $('#templateContent .role-Selected').removeClass('role-Selected');
-              $(this).addClass('role-Selected');
-          
-          });
-      $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
-        console.log(this);
-          $('#individualTemplateNameGrid .role-Selected').removeClass('role-Selected');
-              $(this).addClass('role-Selected');
-          
-          });
+
 });
+
+// $("#nextSpecificValue").on("click", function(){
+    
+   
+// });
+//var $rolesCards = $('.blueprintdiv')
+
+$('#templateContent').on("click",'.blueprintdiv', function () {
+    $('#templateContent .role-Selected').removeClass('role-Selected');
+        $(this).addClass('role-Selected');
+    
+    });
+$('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
+    $('#individualTemplateNameGrid .role-Selected').removeClass('role-Selected');
+        $(this).addClass('role-Selected');
+    
+    });
+});
+
+
+
 
 </script>
 
 
 <script type="text/javascript">
    var reqBody;
-   var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
+   var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
        'tabClass': 'form-wizard',
        'onNext': function(tab, navigation, index) {
 
            console.log(navigation, index)
            if (index === 1) {
-              $("#tabheader").html('Choose Templates');
+            $("#xyz").html('Choose Templates');
                var $selectedItem = $('.role-Selected');
                if (!$selectedItem.length) {
                    alert('please choose a blueprint design');
@@ -507,6 +486,7 @@ $(document).ready(function(){
                            dockercontainerpathstitle = '';
                            dockercontainerpaths = '';
                            dockerreponame = '';
+                           console.log('here START');
                            for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
                                if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
                                    getImage = data.masterjson.rows.row[z].field[x].values.value;
@@ -546,6 +526,7 @@ $(document).ready(function(){
 
                            }
                            console.log('here end');
+
 
                            if (selectedrow) {
                                getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
@@ -603,7 +584,7 @@ $(document).ready(function(){
                $('.' + $selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
 
            } else if (index == 2) {
-            $("#tabheader").html('Choose Template');
+            $("#xyz").html('Choose Template');
                //   var $selectedTemplateArea = $('.selectedTemplateArea')
                //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
                //   console.log($selectedItem.length);
@@ -612,7 +593,6 @@ $(document).ready(function(){
                //     return false;
 
                // }
-               //alert('kickin 2');
 
                //If a docker type of template selected then select the Org 
                var $selectedItem = $('.role-Selected');
@@ -623,26 +603,16 @@ $(document).ready(function(){
                }
 
                $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
-               console.log('role-Selected before ==> ',$('#tab2 .role-Selected').length);
                if ($('.productdiv2.role-Selected').length > 0) {
+
                    //Setting controls connected to docker to hidden
                    $('.fordocker').hide();
-
-                   $('.divconfigureparameterrunlist').show();
-                   $('.divchefrunlist').show();
-
                    if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker") {
-                      //Checking if docker then only Edit organization paramerters are to be shown
-                        if(!$('#CollapseEditorgParam').hasClass('in')){
-                          $('a[href="#CollapseEditorgParam"]').click();
-                        }
-                      $('.divconfigureparameterrunlist').hide();
-                      $('.divchefrunlist').hide();
                        //When docker stepping to 4th tab
 
-                       $('#orgnameSelect').trigger('change');
-                       //$('a[href="#tab3"]').first().trigger('click');
-
+                      //$('#orgnameSelect').trigger('change');
+                      $('a[href="#tab3"]').first().trigger('click');
+                        //alert('kickin 2');
                        //populating the docker repo titles
                        var $dockerrepotitles = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle').split(',');
                        var $dockerrepopaths = $('.productdiv2.role-Selected').attr('dockercontainerpaths').split(',');
@@ -663,7 +633,6 @@ $(document).ready(function(){
                            $.get('/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame, function(data) {
                                //Sample json given below
                                //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
-
                                if (data) {
                                    var tagJson = JSON.parse(data);
                                    var $dockerrepotagsdiv = $('#dockerrepotagsdiv');
@@ -672,6 +641,7 @@ $(document).ready(function(){
                                    var dockerrepotags = [];
                                    tagJson.forEach(function(k, v) {
                                        //<p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>CentOS</p>
+                                       console.log('here again start');
                                        if (v < 3) {
                                            $('#dockerrepotagsdiv').append('<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' + tagJson[v].name + '</p></div>');
                                            if (dockerrepotags == '')
@@ -679,31 +649,28 @@ $(document).ready(function(){
                                            else
                                                dockerrepotags += ',' + tagJson[v].name;
                                        }
+                                       console.log('here again ends');
                                        //limiting the number to the top 5
                                    });
+
                                    $('.productdiv2.role-Selected').first().attr('dockerrepotags', dockerrepotags);
                                    $('.productdiv2.role-Selected').first().attr('dockerreponame', $dockerrepoListInput.val());
                                }
                            });
                        });
                        //dockerrepotagsul
+                 //     alert('finished repo list');
                        $dockerrepoListInput.trigger('change');
 
                        //End Setting appropriate tags
                        //polulate the docker tags
                        var $dockerrepotagsul = $('#dockerrepotagsul');
                        $('.fordocker').show();
-                       //return (true);
-                     } else {
-                     
-                        if(!$('#CollapseConfigureproviderParameter').hasClass('in')){
-                          $('a[href="#CollapseConfigureproviderParameter"]').click();
-                        }
-                     }
-                  }
-
-               console.log('role-Selected after ==> ',$('#tab2 .role-Selected').length);
-               
+                      // $('#orgnameSelect').trigger('change');
+                      // return (true);
+                   }
+               }
+              // alert('orgslected');
                var $clone = $selectedItem.clone().removeClass('role-Selected');
                var selectedText = $clone.attr("data-templateType");
                if ($selectedItem.attr('data-templateType') == 'desktopProvisoning') {
@@ -711,15 +678,17 @@ $(document).ready(function(){
                    return false;
                }
                if ($('#tab2 .role-Selected').length > 0) {
-                   console.log('cloning');
                    $('#tab3 .selectedTemplateArea').empty().append($('#tab2 .role-Selected').clone());
                }
                //force clicking orgnameSelect
                $('#orgnameSelect').trigger('change');
+            //   alert('reached end');
 
 
            } else if (index == 3) {
-              $("#tabheader").html('Create Blueprint');
+                $("#xyz").html('Create Blueprint');
+               console.log('in 3');
+
                var $selectedTemplateArea = $('.selectedTemplateArea');
                var $selectedItem = $selectedTemplateArea.find('.productdiv2');
                console.log($selectedItem.length);
@@ -741,9 +710,9 @@ $(document).ready(function(){
                reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
                /*if(!$('.deploymentsCookbookList').length) {
-                alert('Please wait while we are fetching cookbooks.');
-                return false;
-              }*/
+      alert('Please wait while we are fetching cookbooks.');
+      return false;
+    }*/
                //Get all the runlist 
                var cbs = [];
                $('.deploymentSelectedRunList input').each(function() {
@@ -753,10 +722,14 @@ $(document).ready(function(){
                //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
                reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
                reqBody.instanceType = $('select.instanceType').val();
-               reqBody.instanceOS = $('#instanceOS').val();
+               var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
+               reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
+               reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
+               reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
                console.log(reqBody);
 
 
+           } else if (index == 4) {
                console.log("reqBody ==>", reqBody);
                if (!reqBody || reqBody == "undefined") {
                    console.log('resetting');
@@ -772,18 +745,18 @@ $(document).ready(function(){
                reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
                console.log("instanceType ==>", $('select.instanceType').val());
                reqBody.instanceType = $('select.instanceType').val();
-
+               console.log( reqBody.instanceType);
                var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
                console.log($('#instanceOS').val());
                console.log($instanceOsoptionsSelected);
                reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
                reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
                reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
-               // reqBody.instanceOS = $('#instanceOS').val();
+              
+               
                reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
                reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
                reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-
                //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
                reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
@@ -794,7 +767,6 @@ $(document).ready(function(){
                reqBody.orgId = $('#orgnameSelect').val();
                reqBody.projectId = $('#projectListInput').val();
                reqBody.envId = $('#envList').val();
-
                reqBody.name = $('#blueprintNameInput').val();
                //alert('in');
                if (!reqBody.name) {
@@ -825,17 +797,15 @@ $(document).ready(function(){
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);
-                   var wizard = $wizard.data('bootstrapWizard');
-                    wizard.disablePreviouBtn();
                });
                console.log('final', reqBody);
-
-           } 
-
+           }
 
 
-
-       
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
+               'complete');
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
+               .html('<i class="fa fa-check"></i>');
            //$('#tab'+(index)).removeClass('active');
            //$('#tab'+(index+1)).addClass('active');
            //return true;
@@ -843,20 +813,24 @@ $(document).ready(function(){
 
        },
        'onPrevious': function(tab, navigation, index) {
-        //console.log(index);
-       if (index === 0) {
-        $("#tabheader").html('Choose Template Type');
+           //console.log(index);
+           if (index === 0) {
+            $("#xyz").html('Choose Template Type');
         }
         else if (index === 1) {
-            $("#tabheader").html('Choose Templates');
+            $("#xyz").html('Choose Templates');
         }
         else if (index === 2) {
-            $("#tabheader").html('Choose Template');
+            $("#xyz").html('Choose Template');
         }
         else if (index === 3) {
-            $("#tabheader").html('Create Blueprint');
+            $("#xyz").html('Create Blueprint');
         }
-      
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
+               'complete');
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
+               .html(index + 2);
+
        }
    });
 
@@ -879,7 +853,7 @@ $(document).ready(function(){
 
    var $selectedTemplate = $('.productdiv2').click(function(e) {
        $selectedTemplate.removeClass('role-Selected');
-       console.log("this ==> ",this); 
+
        var $this = $(this);
        $('.selectedTemplateArea').empty().append($this.clone(false).css({
            'cursor': 'auto'
@@ -918,33 +892,17 @@ $(document).ready(function(){
 
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
-               $envList.append($('<option></option>').val('choose').html('Choose'))
                for (var i = 0; i < getEnv.length; i++) {
                    $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                }
 
                var $cookbookShow = $('.cookbookShow').empty();
                $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-
+                var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
+               console.log('tcb==>',tcb); 
                var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
-                   //To do additional selections
-                   //alert('finished adding');
-                   var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');
-                   for (var key in tcb) {
-                       //alert(tcb[key]);
-                       //   var $optiontcb =  $('<option selected></option>').append(tcb[key]).val(tcb[key]);
-
-                       // $cookbooksList.append($optiontcb);
-                       //  checkarray.push(tcb[key]);
-                       if (tcb[key].indexOf('recipe') >= 0)
-                           $('.deploymentsCookbookList li input[value="' + tcb[key] + '"]').first().trigger('click');
-                       else
-                           $('.deploymentRoleList li input[value="' + tcb[key] + '"]').first().trigger('click');
-
-                   }
-                   $('.btnItemAdd').first().trigger('click');
-                   //alert('finished clicking');
-               });
+                   
+               },tcb);
                $cookbookShow.empty();
                $cookbookShow.append($ccrs);
 
