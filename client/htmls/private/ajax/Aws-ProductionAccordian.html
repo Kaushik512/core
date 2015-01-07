@@ -290,6 +290,14 @@
                           </div>
                         </div>
                     </div>
+                     <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
+
+                        <h3 style="text-align:center"><strong>Blueprint Saved</strong></h3>
+
+                        <div class="">
+                            <h3 class="alert alert-success">Blueprint Saved.</h3>
+                        </div>
+                    </div>
 
 
                                     <div class="row">
@@ -448,7 +456,7 @@ $(document).ready(function(){
 
 <script type="text/javascript">
    var reqBody;
-   var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
+   var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
        'tabClass': 'form-wizard',
        'onNext': function(tab, navigation, index) {
 
@@ -786,6 +794,7 @@ $(document).ready(function(){
                reqBody.orgId = $('#orgnameSelect').val();
                reqBody.projectId = $('#projectListInput').val();
                reqBody.envId = $('#envList').val();
+
                reqBody.name = $('#blueprintNameInput').val();
                //alert('in');
                if (!reqBody.name) {
@@ -816,16 +825,17 @@ $(document).ready(function(){
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);
+                   var wizard = $wizard.data('bootstrapWizard');
+                    wizard.disablePreviouBtn();
                });
                console.log('final', reqBody);
 
            } 
 
 
-           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
-               'complete');
-           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
-               .html('<i class="fa fa-check"></i>');
+
+
+       
            //$('#tab'+(index)).removeClass('active');
            //$('#tab'+(index+1)).addClass('active');
            //return true;
@@ -846,10 +856,7 @@ $(document).ready(function(){
         else if (index === 3) {
             $("#xyz").html('Create Blueprint');
         }
-       $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
-           'complete');
-       $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
-           .html(index + 2);
+      
        }
    });
 
@@ -911,6 +918,7 @@ $(document).ready(function(){
 
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
+               $envList.append($('<option></option>').val('choose').html('Choose'))
                for (var i = 0; i < getEnv.length; i++) {
                    $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                }
