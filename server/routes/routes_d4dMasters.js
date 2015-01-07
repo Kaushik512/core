@@ -985,6 +985,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			editMode = false;
 			bodyJson["rowid"] = uuid.v4();
 		}
+		bodyJson["id"] = req.params.id; //storing the form id.
     	configmgmtDao.getDBModelFromID(req.params.id,function(err,dbtype){
 			if (err) {
 				console.log("Hit and error:" + err);
@@ -1022,10 +1023,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 							} 
 							else //
 								item = "\""  + itm  + "\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"";
-							rowFLD.push(JSON.parse(item));
+							rowFLD.push(item);
 						}
 						else{
-							if(rowtoedit != null){
+							if(d4dMasterJson != null){
 								uuid1 = bodyJson["rowid"];
 								console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
 								console.log('rowtoedit :' + rowtoedit);
@@ -1034,50 +1035,55 @@ module.exports.setRoutes = function(app, sessionVerification) {
 								else
 									folderpath = bodyJson["folderpath"];
 								for(var myval in rowtoedit){
-									//console.log("key:"+myval+", value:"+rowtoedit[myval]);
-									rowtoedit[myval] = bodyJson[myval];
-
+									if(itm == myval)
+										rowtoedit[myval] = bodyJson[myval];
+									console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
 								}
-								console.log(JSON.stringify(rowtoedit));
+								// for(var myval in d4dMasterJson){
+								//  	console.log("key:"+myval+", value:");
+								// // 	d4dMasterJson[myval] = bodyJson[myval];
+
+								// }
+								//console.log(JSON.stringify(d4dMasterJson));
 							}
-
 						}
-
 					});
-					// frmkeys.forEach(function(itm){
-					// 	if(!editMode){
-					// 		var thisVal = bodyJson[itm];
-					// 		//console.log(thisVal.replace(/\"/g,'\\"'));
-					// 		console.log(thisVal);
-					// 		var item;
-					// 		if(thisVal.indexOf('[') >= 0 && itm != "templatescookbooks"){//used to check if its an array
-					// 					item = "\""  + itm  + "\" : \"" + thisVal+ "\"";
-					// 			} 
-					// 			else //
-					// 				item = "\""  + itm  + "\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"";
-					// 		rowFLD.push(JSON.parse(item));
+					var FLD = JSON.stringify(rowFLD);
+					if(!editMode){ //push new values only when not in edit mode
+						//dMasterJson = JSON.parse(FLD);
+						eval('var mastersrdb =  new d4dModelNew.'+ dbtype + '({' + JSON.parse(FLD) + '})');
+						mastersrdb.save(function(err,data){
+							if(err){
+								console.log('Hit Save error' + err);
+								res.send(500);
+								return;
 
-					// 	}
-					// 	else{ //in edit mode
-					// 		if(rowtoedit){
-					// 			uuid1 = bodyJson["rowid"];
-					// 			console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
-					// 			if( bodyJson["folderpath"] == undefined) //folderpath issue fix
-					// 				folderpath = ''
-					// 			else
-					// 				folderpath = bodyJson["folderpath"];
-					// 			rowtoedit.forEach(function(k,v){
-					// 				console.log('k: ' + k + ' v: ' + v);
-					// 			});
-					// 			// for(var j = 0; j < rowtoedit.length; j++){
-					// 			// 	if(bodyJson[rowtoedit[j].name] != null){
-					// 			// 		rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
-					// 			// 		console.log('Entered Edit' + rowtoedit.field[j].values.value);
-					// 			// 	}
-					// 			// }
-					// 		}
-					// 	}
-					// });
+							}
+							console.log('New Master Saved');
+							res.send(200);
+							return;
+						});
+					}
+					else{
+						console.log("Rowid: " + bodyJson["rowid"]);
+
+						eval('d4dModelNew.'+ dbtype).update({rowid : bodyJson["rowid"]},{$set:rowtoedit},{upsert:false},function(err,saveddata){
+							if(err){
+								console.log('Hit Save error' + err);
+								res.send(500);
+								return;
+							}
+							console.log('Master Data Updated: ' + saveddata);
+							res.send(200);
+							return;
+						});
+					}
+						//dMasterJson = rowtoedit;
+
+					//console.log(JSON.stringify(d4dMasterJson));
+					
+					
+					
 				}); //end findone
 				//console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
 				
