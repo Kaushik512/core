@@ -1203,7 +1203,7 @@ $(function() {
      var $createTaskBtn = $('.createTaskLink');
     // var $instanceList = $('.instancesList');
     $('a[data-toggle="tab"][href="#l3"]').on('show.bs.tab', function() {
-        var cardCount = $('.instancesList').children().length;
+        var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
        
         if (cardCount === 0) {
             $createTaskBtn[0].disabled = true;
@@ -1891,7 +1891,10 @@ function removeSelectedInstance(){
     var instanceid = $('.container.role-Selectedcard').find('[data-instanceid]').attr('data-instanceid');
     if(instanceid){
         //found now delete
-        if(confirm('Are you sure you would like to remove this instance?\nNote:\nThis will not terminate the instance from the provider.') == true){
+         bootbox.confirm("Are you sure you would like to remove this instance?\nNote:\nThis will not terminate the instance from the provider.", function(result) {
+            if (!result) {
+                return;
+            }
             $.get('/instances/delete/' + instanceid,function(data){
             //  alert(data);
               if(data == 'OK'){
@@ -1905,8 +1908,7 @@ function removeSelectedInstance(){
               else
                 alert(data);
             });
-        }
-        
+        });
     }
     else
     {
@@ -1915,30 +1917,30 @@ function removeSelectedInstance(){
 }
 
 
-function removeSelectedBlueprint(){
+function removeSelectedBlueprint() {
     var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-    if(blueprintId){
+    if (blueprintId) {
         //found now delete
-        if(confirm('Are you sure you would like to remove this blueprint?') == true){
-            $.get('/blueprints/delete/' + blueprintId,function(data){
-            //  alert(data);
-              if(data == 'OK'){
-                var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
-                $('.productdiv1.role-Selected1').parent().detach();
-                //Check if the closest bluprintcontainer is empty, if empty then hide it.
-               // alert($bcc.find('.panel-body').children().length);
-                if($bcc.find('.panel-body').children().length <= 0){
-                    $bcc.addClass('hidden');
-                }
-              }
-              else
-                alert(data);
+        bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+            if (!result) {
+                return;
+            }
+            $.get('/blueprints/delete/' + blueprintId, function(data) {
+                //  alert(data);
+                if (data == 'OK') {
+                    var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                    $('.productdiv1.role-Selected1').parent().detach();
+                    //Check if the closest bluprintcontainer is empty, if empty then hide it.
+                    // alert($bcc.find('.panel-body').children().length);
+                    if ($bcc.find('.panel-body').children().length <= 0) {
+                        $bcc.addClass('hidden');
+                    }
+                } else
+                    alert(data);
             });
-        }
-        
-    }
-    else
-    {
+        });
+
+    } else {
         alert('Please select a blueprint to remove.');
     }
 }
@@ -1973,36 +1975,42 @@ function pollInstanceState(instanceId, state, delay) {
     }, delay);
 }
 
-
 var startStopInstanceHandler = function(e) {
     var $this = $(this);
     var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
     var type = $this.attr('data-actionType');
-    url = '../instances/' + instanceId + '/startInstance';
-    if (type === 'stop') {
-        url = '../instances/' + instanceId + '/stopInstance'
-    }
-    var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-    $parent.find('.moreInfo').trigger('click');
-    $.get(url, function(data) {
 
-        console.log($parent.length, $parent);
+    bootbox.confirm(type + " instance?", function(result) {
+        if (!result) {
+            return;
+        }
+        url = '../instances/' + instanceId + '/startInstance';
+        if (type === 'Stop') {
+            url = '../instances/' + instanceId + '/stopInstance'
+        }
+        var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+        $parent.find('.moreInfo').trigger('click');
+        $.get(url, function(data) {
+
+            console.log($parent.length, $parent);
+            var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
+
+            var oldState = data.instanceCurrentState;
 
 
+            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
 
-        var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
+            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
 
-        var oldState = data.instanceCurrentState;
+            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
 
+            pollInstanceState(instanceId, oldState, 2000);
+        });
 
-        $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-
-        $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
-
-        $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-
-        pollInstanceState(instanceId, oldState, 2000);
     });
+
+
+
 }
 
 
@@ -2292,7 +2300,7 @@ function addInstanceToDOM(data) {
     }
     // var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
     // $divActionBtnContainer.append($divActionReStartContainer);
-    var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Shutdown'));
+    var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
     $divActionBtnContainer.append($divActionShutdownContainer);
     var $back = $('<div></div>').addClass('back card-backflip');
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
@@ -2925,30 +2933,37 @@ $('.blueprintUpdateBtn').click(function(e) {
 });
 
 $('.btnUpdateInstanceRunlist').click(function(e) {
-    $chefRunModalContainer = $('#chefRunModalContainer');
-    var $selectedRunlist =  $chefRunModalContainer.find('.deploymentSelectedRunList');
-    var instanceId = $selectedRunlist.attr('data-instanceId');
-    
-    var runlist = [];
-    var $inputs = $selectedRunlist.find('input');
-    $inputs.each(function(){
-        runlist.push($(this).val());
-    }); 
-  
+    bootbox.confirm("Update runlist?", function(result) {
+        if (!result) {
+            return;
+        }
+        $chefRunModalContainer = $('#chefRunModalContainer');
+        var $selectedRunlist = $chefRunModalContainer.find('.deploymentSelectedRunList');
+        var instanceId = $selectedRunlist.attr('data-instanceId');
 
-    console.log(runlist);
-    $.post('../instances/' + instanceId + '/updateRunlist', {
-        runlist: runlist
-    }, function(data) {
-        $chefRunModalContainer.modal('hide');
-        var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-        var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
-        console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'),$parent.find('.instance-bootstrap-list-image'));
-        $parent.find('.instance-bootstrap-list-image').data('runlist',runlist);
-        $parentTr.find('.instance-bootstrap-list-image').data('runlist',runlist);
-        $parent.find('.moreInfo').trigger('click');
-        console.log(data);
+        var runlist = [];
+        var $inputs = $selectedRunlist.find('input');
+        $inputs.each(function() {
+            runlist.push($(this).val());
+        });
+
+
+        console.log(runlist);
+        $.post('../instances/' + instanceId + '/updateRunlist', {
+            runlist: runlist
+        }, function(data) {
+            $chefRunModalContainer.modal('hide');
+            var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+            var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
+            console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
+            $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+            $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
+            $parent.find('.moreInfo').trigger('click');
+            console.log(data);
+        });
     });
+
+
 });
 
 $('.actionControlPanel').click(function(e) {
