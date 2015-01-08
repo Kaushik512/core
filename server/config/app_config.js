@@ -15,6 +15,9 @@ mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/');
 mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/instance-pemfiles/');
 mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/temp/');
 
+var chefRepoLocation = mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/chef-repos/');
+console.log(chefRepoLocation);
+
 
 var config = {
     app_run_port: 3001,
@@ -29,6 +32,10 @@ var config = {
         decryptionEncoding: "base64",
 
     },
+    chef: {
+        chefReposLocation: chefRepoLocation,
+        defaultChefCookbooks: []
+    }
     aws: {
         access_key: "AKIAI6TVFFD23LMBJUPA",
         secret_key: "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",
@@ -49,7 +56,7 @@ var config = {
             username: 'administrator',
             osType: 'windows',
             name: 'Windows 2008',
-            supportedInstanceType: ['t2.micro','m1.small']
+            supportedInstanceType: ['t2.micro', 'm1.small']
         }, {
             amiid: 'ami-3d50120d',
             username: 'ubuntu',

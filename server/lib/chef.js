@@ -2,7 +2,7 @@ var Process = require("./utils/process");
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var SSH = require('./utils/sshexec');
-var chefDefaults = require('../config/chef_config');
+var chefDefaults = require('../config/app_config').chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 
 var Chef = function(settings) {
@@ -384,7 +384,7 @@ var Chef = function(settings) {
         argList = argList.concat(['-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
         console.log('argList ==>', argList.join(" "));
         console.log('bootstrap arglist ==>', argList);
-
+        argList.push('--hint ec2');
         var proc = new Process('knife', argList, options);
         proc.start();
         
