@@ -9,7 +9,7 @@
                     <a href="#l1" data-toggle="tab">Domains</a>
                 </li>-->
                 <li class="pull-left active">
-                    <a href="#l2" id="xyz" data-toggle="tab">Choose Template Type</a>
+                    <a href="#l2" data-toggle="tab">Create Blueprint</a>
                 </li>
                 <!--<li class="pull-left">
                     <a href="#l3" data-toggle="tab">App Factory</a>
@@ -98,11 +98,10 @@
                         <div class="row " style="margin:0px">
                             <div id="individualTemplateNameGrid" class="templatesAppfactory templates">
 
-                            </div>
-                            <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
 
                             </div>
-                            <div class="templatesCloudformation templates" style="display:none">
+
+                            <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
 
                             </div>
                         </div>
@@ -135,7 +134,7 @@
                                                     <label class="select">
 
                                                        <select id="instanceOS" class="chooseOS width-100">
-                                                          
+                                                            <option value="linux">Cent OS</option>
                                                             
                                                       </select>
 
@@ -160,9 +159,16 @@
                                                 <label for="category">Choose Instance Size <span style="color:red">*</span>
                                                 </label>
                                                 <label class="select"> 
-                                                  <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
-                                                  </select>
+                                                    <select class="instanceType chooseInstance width-100">
+                                                        <option value="t1.micro">t1.micro</option>
+                                                        
+                                                        <option value="m1.small">m1.small</option>
+                                                        <option value="m1.medium">m1.medium</option>
+                                                        <option value="m1.large">m1.large</option>
+                                                        <option value="m1.xlarge">m1.xlarge</option>
+                                                    </select>
                                                 </label> 
+
                                             </section>
                                             <!--To add the Swipe Functionality-->                            
                                             </div>
@@ -246,13 +252,14 @@
 
                                           
                                               <section class="col col-sm-6">
-                                                <label for="category">Project <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
-                                                  <select id="projectListInput" class="chooseProject width-100">
+                                                        <label for="category">Project <span style="color:red">*</span>
+                                                        </label>
+                                                        <label class="select"> 
+                                                          <select id="projectListInput" class="chooseProject width-100">
 
-                                                  </select>
-                                              </label>   
+                                                          </select>
+                                                      </label>   
+                                                  </label>
                                               </section>
                                               <section class="col col-sm-6 offset6" style="">
                                                 <label for="category">Environment <span style="color:red">*</span>
@@ -288,14 +295,6 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                    </div>
-                     <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
-
-                        <h3 style="text-align:center"><strong>Blueprint Saved</strong></h3>
-
-                        <div class="">
-                            <h3 class="alert alert-success">Blueprint Saved.</h3>
                         </div>
                     </div>
 
@@ -354,34 +353,6 @@
 
    
 $(document).ready(function(){
-
-    $.get('../aws/ec2/amiids',function(data){
-       var $instanceOS = $('#instanceOS');
-       for(var i=0;i<data.length;i++) {
-          $option = $('<option data-amiid="'+data[i].amiid+'" data-amiid-username="'+data[i].username+'" data-instanceOS="'+data[i].osType+'" value="'+data[i].name+'">'+data[i].name+'</option>');
-          $option.data('supportedInstanceType',data[i].supportedInstanceType);
-          $instanceOS.append($option);
-       }
-        var $instanceType = $('#intanceTypeControl');
-       $instanceOS.change(function(e){
-         $instanceType.empty();
-       
-        $selectedOption = $(this).find('option:selected');
-        var supportedInstanceType = $selectedOption.data('supportedInstanceType');
-        console.log(supportedInstanceType);
-        for(var i=0;i<supportedInstanceType.length;i++) {
-            var $option = $('<option></option>').val(supportedInstanceType[i]).html(supportedInstanceType[i]);
-            $instanceType.append($option);
-        }
-        $instanceType.select2(); 
-      
-
-       });
-       $instanceOS.select2();
-       $instanceOS.trigger('change');
-       
-    }); 
-
     $(".chooseOrgselect2").select2();
     $(".chooseOS").select2();
     $(".chooseSecurity").select2();
@@ -435,34 +406,45 @@ $(document).ready(function(){
 
          $("#templateContent").append(containerTemp);   
          $("#templateContent #grid0").addClass("role-Selected");
-        }
-      });
+    }
 
-      $('#templateContent').on("click",'.blueprintdiv', function () {
-          $('#templateContent .role-Selected').removeClass('role-Selected');
-              $(this).addClass('role-Selected');
-          
-          });
-      $('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
-        console.log(this);
-          $('#individualTemplateNameGrid .role-Selected').removeClass('role-Selected');
-              $(this).addClass('role-Selected');
-          
-          });
+
 });
+
+// $("#nextSpecificValue").on("click", function(){
+    
+   
+// });
+//var $rolesCards = $('.blueprintdiv')
+
+$('#templateContent').on("click",'.blueprintdiv', function () {
+    $('#templateContent .role-Selected').removeClass('role-Selected');
+        $(this).addClass('role-Selected');
+    
+    });
+$('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
+  console.log(this);
+    $('#individualTemplateNameGrid .role-Selected').removeClass('role-Selected');
+        $(this).addClass('role-Selected');
+    
+    });
+});
+
+
+
 
 </script>
 
 
 <script type="text/javascript">
    var reqBody;
-   var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
+   var wizard = $('#bootstrap-wizard-1').bootstrapWizard({
        'tabClass': 'form-wizard',
        'onNext': function(tab, navigation, index) {
 
            console.log(navigation, index)
            if (index === 1) {
-              $("#xyz").html('Choose Templates');
+
                var $selectedItem = $('.role-Selected');
                if (!$selectedItem.length) {
                    alert('please choose a blueprint design');
@@ -520,8 +502,6 @@ $(document).ready(function(){
                                }
                                if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
                                    gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
-                                   //clearing additional double quotes
-                                   gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
                                }
 
                                if (data.masterjson.rows.row[z].field[x].name == "templatename") {
@@ -545,7 +525,7 @@ $(document).ready(function(){
                                }
 
                            }
-                           console.log('here end');
+
 
                            if (selectedrow) {
                                getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
@@ -600,10 +580,10 @@ $(document).ready(function(){
                // }
                // var $clone = $selectedItem.clone().removeClass('role-Selected');
                $('#tab' + (index + 1)).find('.temp').empty().append($clone);
+               console.log('triggering');
                $('.' + $selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
 
            } else if (index == 2) {
-            $("#xyz").html('Choose Template');
                //   var $selectedTemplateArea = $('.selectedTemplateArea')
                //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
                //   console.log($selectedItem.length);
@@ -719,7 +699,7 @@ $(document).ready(function(){
 
 
            } else if (index == 3) {
-              $("#xyz").html('Create Blueprint');
+
                var $selectedTemplateArea = $('.selectedTemplateArea');
                var $selectedItem = $selectedTemplateArea.find('.productdiv2');
                console.log($selectedItem.length);
@@ -772,18 +752,10 @@ $(document).ready(function(){
                reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
                console.log("instanceType ==>", $('select.instanceType').val());
                reqBody.instanceType = $('select.instanceType').val();
-
-               var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
-               console.log($('#instanceOS').val());
-               console.log($instanceOsoptionsSelected);
-               reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
-               reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
-               reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
-               // reqBody.instanceOS = $('#instanceOS').val();
+               reqBody.instanceOS = $('#instanceOS').val();
                reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
                reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
                reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-
                //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
                reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
@@ -794,7 +766,6 @@ $(document).ready(function(){
                reqBody.orgId = $('#orgnameSelect').val();
                reqBody.projectId = $('#projectListInput').val();
                reqBody.envId = $('#envList').val();
-
                reqBody.name = $('#blueprintNameInput').val();
                //alert('in');
                if (!reqBody.name) {
@@ -825,17 +796,16 @@ $(document).ready(function(){
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);
-                   var wizard = $wizard.data('bootstrapWizard');
-                    wizard.disablePreviouBtn();
                });
                console.log('final', reqBody);
 
            } 
 
 
-
-
-       
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass(
+               'complete');
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step')
+               .html('<i class="fa fa-check"></i>');
            //$('#tab'+(index)).removeClass('active');
            //$('#tab'+(index+1)).addClass('active');
            //return true;
@@ -843,20 +813,12 @@ $(document).ready(function(){
 
        },
        'onPrevious': function(tab, navigation, index) {
-        //console.log(index);
-       if (index === 0) {
-        $("#xyz").html('Choose Template Type');
-        }
-        else if (index === 1) {
-            $("#xyz").html('Choose Templates');
-        }
-        else if (index === 2) {
-            $("#xyz").html('Choose Template');
-        }
-        else if (index === 3) {
-            $("#xyz").html('Create Blueprint');
-        }
-      
+           //console.log(index);
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).removeClass(
+               'complete');
+           $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index + 1).find('.step')
+               .html(index + 2);
+
        }
    });
 
@@ -918,7 +880,6 @@ $(document).ready(function(){
 
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
-               $envList.append($('<option></option>').val('choose').html('Choose'))
                for (var i = 0; i < getEnv.length; i++) {
                    $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                }

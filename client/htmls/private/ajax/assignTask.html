@@ -236,18 +236,20 @@ $(document).ready(function() {
         $.get('../organizations/' + urlParams.org + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
-                var checked = false; 
-                if(taskData && taskData.nodesIdList && taskData.nodesIdList.length) {
-                    if(taskData.nodesIdList.indexOf(data[i]._id) !== -1) {
-                        checked = true;
+                if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' ||  data[i].instanceState == 'unknown') {
+                    var checked = false;
+                    if (taskData && taskData.nodesIdList && taskData.nodesIdList.length) {
+                        if (taskData.nodesIdList.indexOf(data[i]._id) !== -1) {
+                            checked = true;
+                        }
                     }
-                } 
-                var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id+'"><i></i>' + data[i].chefNodeName + '</label></li>');
-                if(checked) {
-                     $li.find('input')[0].checked = true;
-                    //$li.find('label').click();
+                    var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + data[i].chefNodeName + '</label></li>');
+                    if (checked) {
+                        $li.find('input')[0].checked = true;
+                        //$li.find('label').click();
+                    }
+                    $deploymentNodeList.append($li);
                 }
-                $deploymentNodeList.append($li);
             }
         });
         var runlist = null;

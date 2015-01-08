@@ -15,7 +15,7 @@ public class SSH {
 	String username;
 	String password;
 	String pemFilePath; 
-	
+
 
 
 	/**
@@ -85,6 +85,7 @@ public class SSH {
 			System.out.println("Session Connected");
 			//run stuff
 			channel = (ChannelExec)session.openChannel("exec");
+			System.out.println(cmd);
 			channel.setCommand(sudoCmd+" "+cmd);
 			channel.setPty(true);
 
@@ -163,6 +164,33 @@ public class SSH {
 		try {
 			String cmd = "service "+serviceName + " " + serviceAction;
 			return doSSh(cmd,stdOutLogFile,stdErrLogFile);
+		} catch (JSchException | IOException e) {
+			e.printStackTrace();
+			return -1001; /// need to think about it
+		}
+	}
+
+	public int executeListOfCmds(String[] cmdArray,String stdOutLogFile,String stdErrLogFile) {
+		if(cmdArray == null || cmdArray.length == 0) {
+			return -1002; //Need to think about the return codes
+		}
+		try {
+			StringBuilder cmdStringBuilder = new StringBuilder();
+			for (int i = 0;i<cmdArray.length;i++) {
+				String cmd = cmdArray[i];
+				if(cmd !=null && !cmd.isEmpty()) {
+					cmdStringBuilder.append(" ").append(cmd);
+					if(i < cmdArray.length -1) {
+						cmdStringBuilder.append(" &&");
+					}
+				}
+			}
+			String cmdString = cmdStringBuilder.toString();
+			if(cmdString.endsWith(" &&")) {
+				cmdString = cmdString.substring(0, cmdString.length()-4);
+			}
+			
+			return doSSh(cmdString,stdOutLogFile,stdErrLogFile);
 		} catch (JSchException | IOException e) {
 			e.printStackTrace();
 			return -1001; /// need to think about it
