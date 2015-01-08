@@ -13,12 +13,38 @@ function Configmgmt() {
                 callback(null,'d4dModelMastersProductGroup');
                 break;
             case "3":
-                callback(null,'d4dModelMastersProductGroup');
+                callback(null,'d4dModelMastersEnvironments');
                 break;
             case "4":
-                callback(null,'d4dModelMastersProductGroup');
+                callback(null,'d4dModelMastersProjects');
                 break;
-            
+            case "5":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "6":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "7":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "8":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "9":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "10":
+                callback(null,'d4dModelMastersConfigManagement');
+                break;
+            case "16":
+                callback(null,'d4dModelMastersDesignTemplateTypes');
+                break;
+            case "17":
+                callback(null,'d4dModelMastersTemplatesList');
+                break;
+            case "18":
+                callback(null,'d4dModelMastersDockerConfig');
+                break;
         }
     };
     this.getChefServerDetails = function(rowid, callback) {

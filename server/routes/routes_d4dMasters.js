@@ -135,70 +135,101 @@ module.exports.setRoutes = function(app, sessionVerification) {
 	app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
 		
 		console.log('received request ' + req.params.id);
-		d4dModel.findOne({
-			id: req.params.id
-		}, function(err, d4dMasterJson) {
+		configmgmtDao.getDBModelFromID(req.params.id,function(err,dbtype){
 			if (err) {
 				console.log("Hit and error:" + err);
 			}
-			if (d4dMasterJson) {
-				/*res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(d4dMasterJson));*/
-				console.log("Before splice" + JSON.stringify(d4dMasterJson));
-				d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-					//console.log("found" + itm.field.length);
-					for (var j = 0; j < itm.field.length; j++) {
-						if (itm.field[j]["name"] == req.params.fieldname) {
-							//console.log("found:" + itm.field[j]["values"].value);
-							if (itm.field[j]["values"].value == req.params.fieldvalue) {
-								console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-								d4dMasterJson.masterjson.rows.row.splice(i, 1);
-								// d4dMasterJson.masterjson.changed = true;
-
-								return;
-							}
-						}
-
-						// console.log();
-					}
-					/*JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
-                    console.log(" Innner: " + JSON.stringify(itmjson));
-                });*/
-
-				});
-
-				// d4dMasterJson.content = JSON.stringify(d4dMasterJson);
-
-				d4dMasterJson.markModified('masterjson');
-
-				d4dMasterJson.save(function(err, d4dMasterJson) {
-					if (err) {
-						console.log("Hit and error:" + err)
+			if(dbtype){
+				//Currently rowid is hardcoded since variable declaration was working
+				var item = '\"' +req.params.fieldname + '\"';
+				console.log("Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
+				eval('d4dModelNew.'+ dbtype).remove({
+					rowid : req.params.fieldvalue
+				},function(err){
+					if(err){
+						console.log('Hit an errror on delete : ' + err);
 						res.send(500);
-					};
-					console.log('saved');
-				});
-
-				//  console.log("After splice" + JSON.stringify(d4dMasterJson));
-				/*d4dMasterJson.save(function (err, d4dMasterJson) {
-                if (err) {
-                    console.log("Hit and error:" + err)
-                    res.send(500);
-                };
-                console.log('saved');
-            });*/
-				res.end(JSON.stringify(d4dMasterJson));
-				console.log("sent response" + JSON.stringify(d4dMasterJson));
-
-			} else {
-				res.send(400, {
-					"error": err
-				});
-				console.log("none found");
+						return;
+					}
+					else{
+						console.log('Document deleted : ' + req.params.fieldvalue);
+						res.send(200);
+						return;
+					}
+				}); //end findOne
 			}
+		}); //end configmgmtDao
 
 
-		});
+
+
+		// d4dModel.findOne({
+		// 	id: req.params.id
+		// }, function(err, d4dMasterJson) {
+		// 	if (err) {
+		// 		console.log("Hit and error:" + err);
+		// 	}
+		// 	if (d4dMasterJson) {
+		// 		/*res.writeHead(200, { 'Content-Type': 'application/json' });
+  //           res.end(JSON.stringify(d4dMasterJson));*/
+		// 		console.log("Before splice" + JSON.stringify(d4dMasterJson));
+		// 		d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
+		// 			//console.log("found" + itm.field.length);
+		// 			for (var j = 0; j < itm.field.length; j++) {
+		// 				if (itm.field[j]["name"] == req.params.fieldname) {
+		// 					//console.log("found:" + itm.field[j]["values"].value);
+		// 					if (itm.field[j]["values"].value == req.params.fieldvalue) {
+		// 						console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+		// 						d4dMasterJson.masterjson.rows.row.splice(i, 1);
+		// 						// d4dMasterJson.masterjson.changed = true;
+
+		// 						return;
+		// 					}
+		// 				}
+
+		// 				// console.log();
+		// 			}
+		// 			JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
+  //                   console.log(" Innner: " + JSON.stringify(itmjson));
+  //               });
+
+		// 		});
+
+		// 		// d4dMasterJson.content = JSON.stringify(d4dMasterJson);
+
+		// 		d4dMasterJson.markModified('masterjson');
+
+		// 		d4dMasterJson.save(function(err, d4dMasterJson) {
+		// 			if (err) {
+		// 				console.log("Hit and error:" + err)
+		// 				res.send(500);
+		// 			};
+		// 			console.log('saved');
+		// 		});
+
+		// 		//  console.log("After splice" + JSON.stringify(d4dMasterJson));
+		// 		/*d4dMasterJson.save(function (err, d4dMasterJson) {
+  //               if (err) {
+  //                   console.log("Hit and error:" + err)
+  //                   res.send(500);
+  //               };
+  //               console.log('saved');
+  //           });*/
+		// 		res.end(JSON.stringify(d4dMasterJson));
+		// 		console.log("sent response" + JSON.stringify(d4dMasterJson));
+
+		// 	} else {
+		// 		res.send(400, {
+		// 			"error": err
+		// 		});
+		// 		console.log("none found");
+		// 	}
+
+
+		// });
+
+
+
 	});
 	
 	//Reading a icon file saved
