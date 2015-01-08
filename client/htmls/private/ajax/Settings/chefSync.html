@@ -115,18 +115,23 @@
       </section>
       <section class="col col-12 credentialSection">
         <div class="form-group">
-          <label for="exampleInputEmail1">Username</label>
-          <div class="">
-          <input type="text" class="form-control" id="importUsernameInput" value="root" />
-        </div>
+          <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+          <label class="input">
+          <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput">
+
+                    <b class="tooltip tooltip-top-right">
+                    <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+          </label>
         </div>
       </section>
       <section class="col col-12 credentialSection" >
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
-          <div class="">
+          <label class="input">
           <input type="password" class="form-control" id="importPasswordInput" />
-        </div>
+                    <b class="tooltip tooltip-top-right">
+                    <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
+          </label>
         </div>
       </section>
       <section class="col col-12 credentialSection" >
@@ -422,10 +427,10 @@ $('.showChefImportNodesModalBtn').click(function(e){
      if(!$pemFileCheckBox.is(':checked')) {
        reqBody.credentials.password = $('#importPasswordInput').val();
        if(!reqBody.credentials.username){
-         alert('please enter username');
+         alert('Please Enter Username');
          return;
        } if(!reqBody.credentials.password) {
-         alert('please enter password or choose a pem file');
+         alert('Please Enter Password or Choose a Pem file');
          return;
        }
        console.log(reqBody);
@@ -433,11 +438,11 @@ $('.showChefImportNodesModalBtn').click(function(e){
      } else {
        var pemFileInput = $('#importPemfileInput').get(0);
        if(!reqBody.credentials.username){
-          alert('please enter username');
+          alert('Please Enter Username');
           return;
        }
        if(!pemFileInput.files.length) {
-         alert('Please choose a pem file');
+         alert('Please Choose a Pem file');
          return;
        }
        var reader = new FileReader();
