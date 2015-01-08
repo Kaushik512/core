@@ -10,7 +10,7 @@ var io = require('socket.io');
 
 
 var appConfig = require('./config/app_config');
-var settingsController = require('./model/settings');
+
 var RedisStore = require('connect-redis')(express);
 var mongoStore = require('connect-mongo')(express.session);
 

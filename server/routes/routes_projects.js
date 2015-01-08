@@ -1,5 +1,5 @@
 var blueprintsDao = require('../model/blueprints');
-var settingsController = require('../model/settings');
+
 var instancesDao = require('../model/instances');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {

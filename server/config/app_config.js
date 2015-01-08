@@ -1,29 +1,15 @@
 var pathExtra = require('path-extra');
 var mkdirp = require('mkdirp');
 
-var homeDirectory = pathExtra.homedir();
 var currentDirectory = __dirname;
-
-var catalysHomeDirName = "catalyst";
-
-console.log('homeDirectory ==>', homeDirectory);
-
-
-//creating path
-
-mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/');
-mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/instance-pemfiles/');
-mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/temp/');
-
-var chefRepoLocation = mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/chef-repos/');
-console.log(chefRepoLocation);
 
 
 var config = {
     app_run_port: 3001,
-    settingsDir: homeDirectory + '/' + catalysHomeDirName + '/',
-    instancePemFilesDir: homeDirectory + "/" + catalysHomeDirName + "/instance-pemfiles/",
-    tempDir: homeDirectory + "/" + catalysHomeDirName + "/temp/",
+    userHomeDir: pathExtra.homedir(),
+    catalysHomeDirName: 'catalyst',
+    instancePemFilesDirName: 'instance-pemfiles',
+    tempDirName: 'temp',
     app_run_secure_port: 443,
     cryptoSettings: {
         algorithm: "aes192",
@@ -33,9 +19,15 @@ var config = {
 
     },
     chef: {
-        chefReposLocation: chefRepoLocation,
-        defaultChefCookbooks: []
-    }
+        chefReposDirName: 'chef-repos',
+        defaultChefCookbooks: [],
+        ohaiHints: ['ec2'],
+
+        // getter methods
+        get chefReposLocation() {
+            return config.catalystHome + this.chefReposDirName + '/';
+        }
+    },
     aws: {
         access_key: "AKIAI6TVFFD23LMBJUPA",
         secret_key: "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",
@@ -74,9 +66,34 @@ var config = {
         host: '54.187.120.22',
         port: 389
 
+    },
+
+    //getter methods
+    get catalystHome() {
+        return this.userHomeDir + '/' + this.catalysHomeDirName + '/';
+    },
+
+    get instancePemFilesDir() {
+        return this.catalystHome + this.instancePemFilesDirName + "/";
+    },
+    get tempDir() {
+        return this.catalystHome + this.tempDirName + "/";
     }
 
 };
+
+
+
+//creating path
+
+mkdirp.sync(config.catalystHome);
+mkdirp.sync(config.instancePemFilesDir);
+mkdirp.sync(config.tempDir);
+
+var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
+console.log('chef repo location ==>',config.chef.chefReposLocation);
+
+
 
 
 module.exports = config;

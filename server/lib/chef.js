@@ -45,6 +45,7 @@ var Chef = function(settings) {
                     callback(true, null);
                     return;
                 }
+                
                 var nodeNames = Object.keys(chefResBody);
                 callback(null, nodeNames);
             });
@@ -351,7 +352,7 @@ var Chef = function(settings) {
         argList.push(params.instanceIp);
 
         var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
-        var runlist = params.runlist
+        
         var credentialArg;
         if (params.pemFilePath) {
             credentialArg = '-i' + params.pemFilePath;
