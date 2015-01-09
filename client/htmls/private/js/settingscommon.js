@@ -73,7 +73,7 @@ function readMasterRecord(id,rowid){
         async: false,
         url: serviceURL + "readmasterjsonrecord/" + id +'/' + rowid,
         success: function(data) {
-                 alert(data.toString());  
+              //   alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
         },
