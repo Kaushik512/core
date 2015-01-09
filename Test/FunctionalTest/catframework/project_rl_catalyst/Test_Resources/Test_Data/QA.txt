@@ -1,0 +1,64 @@
+*** Settings ***
+Documentation     A resource file with test data input by the user
+...
+...               This file is part of a prototype automated test suite designed to
+...               test web application products built on top of the SLZ platform.
+...
+...
+Resource           catalyst.txt
+
+
+*** Variables ***
+${BROWSER TYPE}                   firefox                           #internetexplorer               #phantomjs
+${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/public/login.html
+${ENV}                 QA.txt
+${VALID USER}             sd1
+${VALID PASSWORD}         sd1-phoenix
+${ORGANIZATION NAME}         PhoenixInc
+${ORGANIZATION DOMAIN NAME}          www.TestAutomation.com
+${ORGANIZATION COST CODE}            test Cost Code
+${BUSINESS GROUP NAME}           Phoenix International
+${PROJECT NAME}                  Ecommerce
+${PROJECT DESCRIPTION}           New Test Automation Project Description
+${ENVIRONMENT NAME}              QA
+${CONFIG MANAGEMENT NAME}             PhoenixChef
+${CONFIG MANAGEMENT USER NAME}         pcjoshi9
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/pjlab
+${PROVIDER}             Data Center
+${ASSIGN USERS}         Designer
+${ASSIGN USERS1}         sd1
+${ASSIGN USERS2}         Consumer
+${ASSIGN USERS PASSWORD}         Designer
+${INSTANCE STARTED}        Instance Started
+${INSTANCE STOPPED}        Instance Stopped
+${RUNNING}            running
+${EXPECTED OS}       centos
+
+${MACHINE}         x86_64
+${TOTAL MEMORY}     604680kB
+${FREE MEMORY}      298024kB
+
+
+${APACHE WEBSERVER STACK}         Apache WebServer
+${CENTOS STACK}          CentOS
+${LAMP STACK}       LAMP
+${TOMCAT STACK}      Tomcat
+
+${JAVA COOKBOOK}            java
+${APACHE COOKBOOK}            apache
+${GIT COOKBOOK}            git
+${SERVER TIME COOKBOOK}            server_time
+
+${CENT OS}            Cent OS
+${UBUNTU OS}            ubuntu
+
+${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
+${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
+
+${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce without Cookbook CENTOS
+${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
+${TASK NAME}          Test Task
+
+${USERPEMFILE}              ${CATALYST ROOT}/Chef/Catalyst/pcjoshi9.pem
+{VALIDATORPEMFILE}      ${CATALYST ROOT}/Chef/pjlab-validator.pem
+${KNIFERBFILE}                ${CATALYST ROOT}/Chef/Catalyst/knife.rb

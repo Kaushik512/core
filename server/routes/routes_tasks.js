@@ -2,7 +2,7 @@ var masterjsonDao = require('../model/d4dmasters/masterjson.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 var blueprintsDao = require('../model/blueprints');
-var settingsController = require('../model/settings');
+
 var instancesDao = require('../model/instances');
 var tasksDao = require('../model/tasks');
 var logsDao = require('../model/dao/logsdao.js');
