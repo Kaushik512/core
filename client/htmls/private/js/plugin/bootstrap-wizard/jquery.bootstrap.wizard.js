@@ -21,6 +21,8 @@ var bootstrapWizardCreate = function(element, options) {
 	var $settings = $.extend({}, $.fn.bootstrapWizard.defaults, options);
 	var $activeTab = null;
 	var $navigation = null;
+	var previousBtnDisabled = false;
+	var nextBtnDisabled = false;
 	
 	this.rebindClick = function(selector, fn)
 	{
@@ -51,7 +53,10 @@ var bootstrapWizardCreate = function(element, options) {
 	};
 
 	this.next = function(e) {
-
+        //checking next btn diabled
+        if(nextBtnDisabled) {
+           return false;
+        } 
 		// If we clicked the last then dont activate this
 		if(element.hasClass('last')) {
 			return false;
@@ -70,7 +75,11 @@ var bootstrapWizardCreate = function(element, options) {
 	};
 
 	this.previous = function(e) {
-
+         
+        //checking previous btn diabled
+        if(previousBtnDisabled) {
+           return false;
+        }  
 		// If we clicked the first then dont activate this
 		if(element.hasClass('first')) {
 			return false;
@@ -172,6 +181,27 @@ var bootstrapWizardCreate = function(element, options) {
 		// Remove menu item
 		$item.remove();
 	};
+
+	this.disablePreviouBtn = function() {
+		previousBtnDisabled = true;
+		$($settings.previousSelector, element).addClass('disabled');
+
+	};
+	this.disableNextBtn = function() {
+		nextBtnDisabled = true;
+		$($settings.nextSelector, element).addClass('disabled');
+	};
+	this.enableNextBtn = function() {
+		nextBtnDisabled = false;
+		$($settings.nextSelector, element).removeClass('disabled');
+	};
+
+	this.enablePreviouBtn = function() {
+		previousBtnDisabled = false;
+		$($settings.previousSelector, element).removeClass('disabled');
+
+	};
+
 
 	$navigation = element.find('ul:first', element);
 	$activeTab = $navigation.find(baseItemSelector + '.active', element);
