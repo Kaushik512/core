@@ -1,5 +1,4 @@
 var blueprintsDao = require('../model/blueprints');
-var settingsController = require('../model/settings');
 var instancesDao = require('../model/instances');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');

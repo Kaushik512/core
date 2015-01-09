@@ -1,12 +1,14 @@
 var d4dModel = require('../model/d4dmasters/d4dmastersmodel.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 
-var settingsController = require('../model/settings');
+
+
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Chef = require('../lib/chef');
 var Curl = require('../lib/utils/curl.js');
+var appConfig = require('../config/app_config');
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -234,16 +236,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
 	
 	//Reading a icon file saved
 	app.get('/d4dMasters/image/:imagename', function(req, res) {
-		settingsController.getChefSettings(function(settings) {
-			var chefRepoPath = settings.chefReposLocation;
-			fs.readFile(chefRepoPath  + 'catalyst_files/' +req.params.imagename,function(err,data){
-				if(err){
-					res.end(404);
-				}
-				res.writeHead(200,{'Content-Type': 'image/gif' });
-				res.end(data, 'binary');
+		var settings = appConfig.chef;
+		var chefRepoPath = settings.chefReposLocation;
+		fs.readFile(chefRepoPath + 'catalyst_files/' + req.params.imagename, function(err, data) {
+			if (err) {
+				res.end(404);
+			}
+			res.writeHead(200, {
+				'Content-Type': 'image/gif'
 			});
-			
+			res.end(data, 'binary');
 		});
 	});
 

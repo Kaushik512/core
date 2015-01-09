@@ -1,0 +1,52 @@
+*** Settings ***
+Documentation     Organization_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Test Cases ***
+Catalyst new Config management setup
+    [Tags]       Sanity
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+#    Catalyst Login
+    Create New Config Management
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst import chef server nodes by provider
+    [Tags]       Regression
+#    Catalyst Login
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst import chef server nodes by provider
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+Catalyst import chef server nodes
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Chef server nodes import
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+Access catalyst as Designer and password as Designer
+    [Tags]       Sanity      Smoke1
+    Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
+    Verify the Workzone and Design
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Access catalyst as Designer User and password
+    [Tags]       Sanity      test
+    Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
+    Verify the Workzone Instances
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+

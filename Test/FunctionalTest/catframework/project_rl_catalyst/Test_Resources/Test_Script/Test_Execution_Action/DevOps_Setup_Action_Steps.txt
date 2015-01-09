@@ -1,0 +1,409 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+
+*** Variables ***
+
+*** Keywords ***
+Create New Config Management
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Clicks on New button to Create New Config Management
+    Enters config management name
+    Enters config management user name
+    Select organization for config management
+    Enters config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Environment detail
+
+#Catalyst Logout
+#    Clicks on LogOut link
+
+
+
+
+
+#Clicks on Settings
+##    Wait Until Element Is Visible      xpath=//a[contains(text(),'SETTINGS')]      1 seconds
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'SETTINGS')]
+#    Click Element    xpath=//a[contains(text(),'SETTINGS')]
+
+Clicks on DevOps Setup menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[contains(text(),'DevOps Setup')]
+    Click Element    xpath=//span[contains(text(),'DevOps Setup')]
+
+Clicks on Config Management menu
+    Click Element    xpath=//span[contains(text(),'Config Management')]
+
+Clicks on New button to Create New Config Management
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+
+Enters config management name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=configname
+    Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
+
+Enters config management user name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=loginname
+    Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
+
+Select organization for config management
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Enters config management URL
+    Input Text     id=url      ${CONFIG MANAGEMENT URL}
+
+
+Upload user Pem File
+    Choose File     xpath=.//*[@id='userpemfile']         ${USERPEMFILE}         #D:/Desktop26122014/Catalyst/pcjoshi9.pem
+
+Upload Validator Pem File
+    Choose File     xpath=.//*[@id='validatorpemfile']          ${VALIDATORPEMFILE}         #D:/Desktop26122014/Catalyst/pjlab-validator.pem
+
+Upload Validator Knife File
+    Choose File     xpath=.//*[@id='kniferbfile']          ${KNIFERBFILE}         #D:/Desktop26122014/Catalyst/knife.rb
+
+
+Clicks on Save button to save the Environment detail
+    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]
+
+#Clicks on LogOut link
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+#    Click Element    xpath=.//*[@id='logout']/span/a/i
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='bot2-Msg1']
+#    Click Element     xpath=.//*[@id='bot2-Msg1']
+
+
+
+
+
+
+
+test test
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more book name exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more book name exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+#    \       ${book exist} =       Run Keyword and Return Status     Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+    \       ${extracted book name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+#    \       Run Keyword If    ${extracted book name}     ${ORGANIZATION NAME}     Log       Search keyword "${ORGANIZATION NAME}" exist in search result book name "${extracted book name}"
+#    \       Log       Search keyword "${ORGANIZATION NAME}" exist in search result book name "${extracted book name}"
+#    \       ${answer present} =       Run Keyword and Return Status     Evaluate         ${extracted book name} = ${ORGANIZATION NAME}
+#    \       ${answer present} =       Run Keyword and Return Status     ${extracted book name} == ${ORGANIZATION NAME}
+    \       Run Keyword If    '${extracted book name}' == '${ORGANIZATION NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+    \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+    \       Log         xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+    \       Exit For Loop If     '${extracted book name}' == '${ORGANIZATION NAME}'
+
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/input
+    Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/input
+    Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/input
+    Click Element      xpath=.//*[@id='organiz']/div/input
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       id=chefImportBgSelect
+    Select From List     id=chefImportBgSelect      ${BUSINESS GROUP NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=chefImportProjectSelect      ${PROJECT NAME}
+    Select From List     id=chefImportProjectSelect      ${PROJECT NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=chefImportProviderSelect      ${PROVIDER}
+    Select From List     id=chefImportProviderSelect      ${PROVIDER}
+    Input Text     id=importUsernameInput      ${VALID USER}
+    Input Text     id=importPasswordInput      ${VALID PASSWORD}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=userListSelect      ${ASSIGN USERS}
+    Select From List     id=userListSelect      ${ASSIGN USERS}
+    Click Element      xpath=//button[./text()='Import']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+
+Catalyst import chef server nodes by provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Select chef server and click on the last icon namely import nodes under Action
+    Select the nodes namely MySql_Server and WebServer
+    Click on Import nodes button on the bottom of the page
+    Select the Business Group from dropdown list
+    Select the Project from dropdown list
+    Select the Provider from dropdown list
+    Select Assign User
+    Click on Import button
+
+
+Chef server nodes import
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Select chef server and click on the last icon namely import nodes under Action
+    Select the nodes namely MySql_Server and WebServer
+    Click on Import nodes button on the bottom of the page
+    Select the Business Group from dropdown list
+    Select the Project from dropdown list
+    Import User Name and Password
+    Select Multiple Assign User
+    Click on Import button
+
+Verify the Workzone and Design
+#    Wait Until Page Contains      WORKZONE     1 seconds
+    Look for the list of links for the logged in user
+    Click on Workzone
+    Verify if there is an environment by name _default
+    Verify the list of instances
+    Verify the availability of Start play icon on the instance card
+    Verify the availabity of the Chef run icon on the instance card
+#    Select any of the cookbooks andn click on >> button
+    Add cookbook    ${GIT COOKBOOK}
+    Click on update button
+    Click on start icon on the instance card
+    Wait for few minutes and click on close button
+    Verify the start status of the instance
+    Click on stop icon on the instance card
+    Wait for few minutes and click on close button
+    Verify the stop status of the instance
+
+Verify the Workzone Instances
+#    Wait For Condition  Page Should Contain Link      xpath=//header[@id='header']/div[2]/li/a      WORKZONE
+    Look for the list of links for the logged in user
+    Click on Workzone
+    Verify if there is an environment by name _default
+    Click on instances table view
+    Select instance from the list and verify the instance status
+
+Select chef server and click on the last icon namely import nodes under Action
+#        ${maxloop} =        Set Variable     200
+#    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+#    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+#    \       Exit For Loop If     ${no more chef server exists}
+#    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+#    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+#    \       Run Keyword If    '${extracted chef server name}' == '${ORGANIZATION NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+#    \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+#    \       Exit For Loop If     '${extracted chef server name}' == '${ORGANIZATION NAME}'
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[1]/td[1]
+                ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[4]
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Run Keyword If    '${extracted chef server name}' == '${ORGANIZATION NAME}'     Exit For Loop
+#    \       Exit For Loop If     '${extracted chef server name}' == '${ORGANIZATION NAME}'
+    Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${last index}]/td[5]/div/a[3]
+
+
+
+Select the nodes namely MySql_Server and WebServer
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/input
+#    Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/input
+#    Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/input
+    Wait Until Keyword Succeeds    1 minute     10 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/label[1]/i      #//input[@data-nodename='MySql_Server']
+    Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/label[1]/i     #//input[@data-nodename='MySql_Server']
+    Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/label[1]/i    #//input[@data-nodename='Web_Server']
+
+
+Click on Import nodes button on the bottom of the page
+    Wait Until Keyword Succeeds    1 minute     10 seconds       Element Should Be Visible       xpath=//input[@value='Import Nodes']
+    Click Element      xpath=//input[@value='Import Nodes']    #xpath=.//*[@id='organiz']/div/input
+
+Select the Business Group from dropdown list
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       id=chefImportBgSelect
+    Select From List     id=chefImportBgSelect      ${BUSINESS GROUP NAME}
+#    Click Element    xpath=//div[./text()='${BUSINESS GROUP NAME}']
+
+Select the Project from dropdown list
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=chefImportProjectSelect      ${PROJECT NAME}
+    Select From List     id=chefImportProjectSelect      ${PROJECT NAME}
+#    Click Element    xpath=//div[./text()='${PROJECT NAME}']
+
+Select the Provider from dropdown list
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=chefImportProviderSelect      ${PROVIDER}
+    Select From List     id=chefImportProviderSelect      ${PROVIDER}
+
+Select Assign User
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=userListSelect      ${ASSIGN USERS}
+    Select From List     id=userListSelect      ${ASSIGN USERS}
+
+Select Multiple Assign User
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=userListSelect      ${ASSIGN USERS}
+#    Select From List     id=userListSelect      ${ASSIGN USERS}
+#    Select From List     id=userListSelect      ${ASSIGN USERS1}
+#   Select From List     id=userListSelect      ${ASSIGN USERS2}
+    Select From List By Value     id=userListSelect      ${ASSIGN USERS}
+    Select From List By Value    id=userListSelect      ${ASSIGN USERS1}
+    Select From List By Value     id=userListSelect      ${ASSIGN USERS2}
+
+
+Click on Import button
+    Click Element      xpath=//button[./text()='Import']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+
+Look for the list of links for the logged in user
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=//header[@id='header']/div[1]
+    Page Should Contain Link      xpath=//header[@id='header']/div[2]/li/a      WORKZONE
+    Page Should Contain Link      xpath=//header[@id='header']/div[3]/li/a      DESIGN
+
+Click on Workzone
+    Click Element      xpath=//header[@id='header']/div[2]/li/a
+
+Verify if there is an environment by name _default
+    Click Element      xpath=//a[@title='_default']
+
+Verify the list of instances
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@class='card']
+
+Verify the availability of Start play icon on the instance card
+    Page Should Contain Link          xpath=//a[@class='actionbuttonStart instanceActionBtn']
+
+Click on stop icon on the instance card
+    Click Link         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[4]/div[3]/a
+
+Wait for few minutes and click on close button
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+
+Verify the stop status of the instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span         stopped
+#    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span       stopped
+
+Click on start icon on the instance card
+    Click Link         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[4]/div[2]/a
+
+Verify the start status of the instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span       running
+#    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span       running
+
+Verify the availabity of the Chef run icon on the instance card
+#    Page Should Contain Image     xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[1]/span[1]/img
+    Element Should Be Visible        xpath=.//*[@id='divinstancescardview']/div/div/ul/li[1]/div/div/div[1]/div/div/div[4]/div[1]/a/img
+    Click Element        xpath=.//*[@id='divinstancescardview']/div/div/ul/li[1]/div/div/div[1]/div/div/div[4]/div[1]/a/img
+
+Select any of the cookbooks andn click on >> button
+    Select Checkbox       xpath=.//*[@id='chefRunModalContainer']/div/div/div[2]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[1]/label/i
+    Click Element      xpath=.//*[@id='chefRunModalContainer']/div/div/div[2]/div/div/fieldset/section[1]/div/div[2]/div/div[1]/button
+
+Click on update button
+    Click Element     xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element     xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+Import User Name and Password
+    Input Text     id=importUsernameInput      ${VALID USER}
+    Input Text     id=importPasswordInput      ${VALID PASSWORD}
+
+Click on control panel
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//button[@class='btn btn-primary actionControlPanel']
+    Click Element     xpath=//button[@class='btn btn-primary actionControlPanel']
+
+Click on instances table view
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       id=instanceview
+    Click Element      id=instanceview
+
+Select instance from the list and verify the instance status
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=.//*[@id='tableinstanceview']/tbody/tr[${INDEX}]
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${no more chef server exists}
+    Verify start status of the instance        ${last index}
+    run chef        ${last index}
+    Verify stop status of the instance         ${last index}
+
+Verify start status of the instance
+    [Arguments]    ${last index}
+#    Get Element Attribute     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[1]/a
+#    Get Element Attribute     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[2]/a
+#    Get Element Attribute     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[8]/a/img
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[1]
+    Click Element     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[1]
+
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@class='logsArea']/div[2]/div/div[2]
+    Element Should Contain    xpath=//div[@class='logsArea']/div[2]/div/div[2]       ${INSTANCE STARTED}
+
+    Wait for few minutes and click on close button
+
+    Click on control panel
+
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain        xpath=//span[@class='instance-state instance-state-text-pending instance-state-text-started']         running
+
+    Element Should Contain        xpath=//span[@class='instance-state instance-state-text-pending instance-state-text-started']         running
+    Hardware details
+    Software details
+    Configuration management details
+
+    Click on back to instances
+
+run chef
+    [Arguments]    ${last index}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[8]/a
+    Click Element     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[8]/a
+
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='chefRunModalContainer']/div/div/div[2]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input
+    Add cookbook    ${GIT COOKBOOK}
+    Add cookbook    ${SERVER TIME COOKBOOK}
+    Click Element     xpath=//button[./text()='Update']
+    Wait for few minutes and click on close button
+
+Add cookbook
+    [Arguments]    ${recipe}
+    Input Text         xpath=.//*[@id='chefRunModalContainer']/div/div/div[2]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input      ${recipe}
+    Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=//label[./text()='${recipe}']
+    Click Element      xpath=//label[./text()='${recipe}']      #//Input[@value='recipe[${recipe}]']
+    Click Element      xpath=.//*[@id='chefRunModalContainer']/div/div/div[2]/div/div/fieldset/section[1]/div/div[2]/div/div[1]/button
+
+
+Verify stop status of the instance
+    [Arguments]    ${last index}
+    Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[2]
+    Click Element     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[2]
+    Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=//div[@class='logsArea']/div[2]/div/div[2]
+    Element Should Contain    xpath=//div[@class='logsArea']/div[2]/div/div[2]       ${INSTANCE STOPPED}
+    Wait for few minutes and click on close button
+    Click on control panel
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain         xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li/div/div/div[3]/div/span[2]/span         stopped
+    Element Should Contain        xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li/div/div/div[3]/div/span[2]/span         stopped
+    Hardware details
+    Software details
+    Configuration management details
+    Click on back to instances
+    Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Not Be Visible       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[8]/a/img
+
+
+
+Hardware details
+#    Element Should Contain      xpath=//div[@id='accordion-Hardware']/div[2]/div/table/tbody/tr[1]/td[3]      ${MACHINE}
+    ${Machine}         Get Text     xpath=//div[@id='accordion-Hardware']/div[2]/div/table/tbody/tr[1]/td[3]
+    Log      ${Machine}
+#    Element Should Contain      xpath=//div[@id='accordion-Hardware']/div[2]/div/table/tbody/tr[2]/td[3]      ${TOTAL MEMORY}
+    ${Total Memory}         Get Text     xpath=//div[@id='accordion-Hardware']/div[2]/div/table/tbody/tr[2]/td[3]
+    Log      ${Total Memory}
+#    Element Should Contain      xpath=//div[@id='accordion-Hardware']/div[2]/div/table/tbody/tr[3]/td[3]      ${FREE MEMORY}
+    ${Free Memory}         Get Text     xpath=//div[@id='accordion-Hardware']/div[2]/div/table/tbody/tr[3]/td[3]
+    Log        ${Free Memory}
+
+Software details
+    ${OS}         Get Text     xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]
+    Log      ${OS}
+#    Element Should Contain      xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]      ${EXPECTED OS}
+    ${Version}         Get Text     xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[2]/td[3]
+    Log        ${Version}
+
+Configuration management details
+    ${Environment}         Get Text     xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]
+    Log        ${Environment}
+    ${Chef Bootstrap}         Get Text     xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]
+    Log        ${Chef Bootstrap}
+    ${Runlist}         Get Text     xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[3]/td[3]
+    Log        ${Runlist}
+
+Click on back to instances
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       id=getViewAttr
+    Click Element       id=getViewAttr
