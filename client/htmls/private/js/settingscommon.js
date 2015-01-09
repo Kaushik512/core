@@ -88,7 +88,26 @@ function readMasterRecord(id,rowid){
 
 function readMasterJson(id) {
     // debugger;
-   // alert(url);
+   //alert(url);
+if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
+    // alert('in 1');
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonnew/" + id,
+        success: function(data) {
+                // alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
 if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
 {
     //alert('in 1');
@@ -575,26 +594,37 @@ function readform(formID) {
 
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                     var curSelect = $(this);
-                    //    alert(JSON.stringify(tempJSON));
-                    $.each(eval('tempJSON.' + curSelect.attr('datapath')), function(i, item) {
-                        //     alert(item.field[0].values.value);
-                        // debugger;
-                        //Loop to get rowid 
-                        var _rowid = 0;
-                        for (var k = 0; k < item.field.length; k++) {
-                            if (item.field[k].name == "rowid") {
-                                //curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
-                                // alert("Added:" + item.field[i].values.value);
-                                _rowid = item.field[k].values.value;
+                    alert(JSON.stringify(tempJSON));
+                    var _rowid = 0;
+                    $.each(tempJSON, function(i, item) {
+                        _rowid = item['rowid'];
+
+                        $.each(item,function(k,v){ //columns
+                            console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
+                            if (k == curSelect.attr("id")) {
+                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                             }
-                        }
-                        for (var k = 0; k < item.field.length; k++) {
-                            if (item.field[k].name == curSelect.attr("id")) {
-                                curSelect.append('<option value="' + item.field[k].values.value + '" rowid = "' + _rowid + '">' + item.field[k].values.value + '</option>');
-                                // alert("Added:" + item.field[i].values.value);
-                            }
-                        }
+                        });
                     });
+                    // $.each(eval('tempJSON.' + curSelect.attr('datapath')), function(i, item) {
+                    //     //     alert(item.field[0].values.value);
+                    //     // debugger;
+                    //     //Loop to get rowid 
+                    //     var _rowid = 0;
+                    //     for (var k = 0; k < item.field.length; k++) {
+                    //         if (item.field[k].name == "rowid") {
+                    //             //curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                    //             // alert("Added:" + item.field[i].values.value);
+                    //             _rowid = item.field[k].values.value;
+                    //         }
+                    //     }
+                    //     for (var k = 0; k < item.field.length; k++) {
+                    //         if (item.field[k].name == curSelect.attr("id")) {
+                    //             curSelect.append('<option value="' + item.field[k].values.value + '" rowid = "' + _rowid + '">' + item.field[k].values.value + '</option>');
+                    //             // alert("Added:" + item.field[i].values.value);
+                    //         }
+                    //     }
+                    // });
                 }
                 // debugger;
                 if ($(this).attr('linkedfields')) {
@@ -634,17 +664,29 @@ function readform(formID) {
                 var tempJSON = JSON.parse(readMasterJson($(this).attr('sourcepath')));
                 var curInput = $(this);
                 //   alert(JSON.stringify(tempJSON));
-                $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
-                    //     alert(item.field[0].values.value);
-                    // debugger;
-                    for (var k = 0; k < item.field.length; k++) {
-                        if (item.field[k].name == curInput.attr("id")) {
-                            // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
-                            // alert("Added:" + item.field[i].values.value);
-                            addToCodeList(item.field[k].values.value, curInput);
-                        }
-                    }
+
+                // $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
+                //     //     alert(item.field[0].values.value);
+                //     // debugger;
+                //     for (var k = 0; k < item.field.length; k++) {
+                //         if (item.field[k].name == curInput.attr("id")) {
+                //             // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                //             // alert("Added:" + item.field[i].values.value);
+                //             addToCodeList(item.field[k].values.value, curInput);
+                //         }
+                //     }
+                // });
+                $.each(tempJSON, function(i, item) {
+                       // _rowid = item['rowid'];
+
+                        $.each(item,function(k,v){ //columns
+                            console.log('2 k:' + k + ' 2 v :' + JSON.stringify(v));
+                           if (k == curInput.attr("id")) {
+                                 addToCodeList(v, curInput);
+                            }
+                        });
                 });
+                
             }
         });
 
@@ -751,7 +793,10 @@ function readform(formID) {
             var inputC = null;
             console.log('k:' + k + ' v:' + v);
             //Finding the input control to bind.
-            if(k.indexOf('id') < 0){ //ensuring that you do not find an id field
+            if (k.indexOf("_filename") > 0) {
+                    k = k.replace('_filename', '');
+            }
+            if(k.indexOf('_id') < 0){ //ensuring that you do not find an id field
                 inputC = $('#' + k);
             }
             if (inputC && $(inputC).attr("id") != undefined) {
@@ -816,23 +861,24 @@ function readform(formID) {
             
         });
         //Force clicking on selects that has dependent controls
-        // $('[linkedfields]').each(function() {
-        //     $(this).trigger('change');
-        //     var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
-        //     for (var i = 0; i < ctrls.length; i++) {
-        //         var ctrl = $("#" + ctrls[i]);
-        //         if (ctrl.getType() == "select") {
-        //             ctrl.val(ctrl.attr('savedvalue'));
-        //         }
-        //         if (ctrl.getType() == "div") {
-        //             var divselect = ctrl.attr('savedvalue').split(',');
-        //             // alert(divselect.length);
-        //             for (var j = 0; j < divselect.length; j++) {
-        //                 ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
-        //             }
-        //         }
-        //     }
-        // });
+         $('[linkedfields]').each(function() {
+             $(this).trigger('change');
+             var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
+            // alert(ctrls.length);
+                for (var i = 0; i < ctrls.length; i++) {
+                    var ctrl = $("#" + ctrls[i]);
+                    if (ctrl.getType() == "select") {
+                        ctrl.val(ctrl.attr('savedvalue'));
+                    }
+                    if (ctrl.getType() == "div") {
+                        var divselect = ctrl.attr('savedvalue').split(',');
+                        // alert(divselect.length);
+                        for (var j = 0; j < divselect.length; j++) {
+                            ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
+                        }
+                    }
+                }
+        });
 
 
         //  alert('almost exiting');
@@ -1088,6 +1134,9 @@ function saveform(formID) {
     //setting filenames to null if empty
     if (fileNames == '')
         fileNames = 'null';
+    if(typeof(orgname) == 'undefined'){
+        orgname = '%2f';
+    }
     //console.log(data1);
     //  alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
@@ -1529,26 +1578,31 @@ function getCount(jsonID) {
 
 function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     readMasterJson(jsonID);
-    formData = d4ddata.masterjson;
+    formData = d4ddata;
     // var comparedField = "orgname";
     //  var filterByValue = "Scholastic";
     //  var outputField = "productgroupname";
     var result = [];
     //debugger;
-    $.each(eval(formData.rows.row), function(i, item) {
-        $.each(item.field, function(k, item1) {
+    // $.each(eval(formData.rows.row), function(i, item) {
+    //     $.each(item.field, function(k, item1) {
 
-            if (item1.name == comparedField && item1.values.value == filterByValue) {
-                // alert(item1.values.value);
-                //found the row, now get the next column
-                $.each(item.field, function(j, item2) {
-                    if (item2.name == outputField) {
-                        //  alert(item2.values.value);
-                        result.push(item2.values.value);
-                    }
-                });
-            }
-        });
+    //         if (item1.name == comparedField && item1.values.value == filterByValue) {
+    //             // alert(item1.values.value);
+    //             //found the row, now get the next column
+    //             $.each(item.field, function(j, item2) {
+    //                 if (item2.name == outputField) {
+    //                     //  alert(item2.values.value);
+    //                     result.push(item2.values.value);
+    //                 }
+    //             });
+    //         }
+    //     });
+    // });
+    $.each(d4ddata, function(i, item) { 
+        if(item[comparedField] == filterByValue){
+            result.push(item[outputField]);
+        }
     });
     return (result);
 }
