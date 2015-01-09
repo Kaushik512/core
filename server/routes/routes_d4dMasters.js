@@ -317,7 +317,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		
 	});
 
-	app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
+	app.get('/d4dMasters/readmasterjsonnew__/:id', function(req, res) {
 		console.log('received new request ' + req.params.id);
 		d4dModelNew.d4dModelMastersOrg.find({
 			id: req.params.id
@@ -345,6 +345,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
 			}
 
 
+		});
+	});
+
+	app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
+		console.log('received new request ' + req.params.id);
+		configmgmtDao.getDBModelFromID(req.params.id,function(err,dbtype){
+			if (err) {
+				console.log("Hit and error:" + err);
+			}
+			if(dbtype){
+				console.log("Master Type: " + dbtype);
+				eval('d4dModelNew.'+ dbtype).find({
+				id: req.params.id
+				}, function(err, d4dMasterJson) {
+					if (err) {
+						console.log("Hit and error:" + err);
+					}
+					res.end(JSON.stringify(d4dMasterJson));
+					console.log("sent response" + JSON.stringify(d4dMasterJson));
+				});
+			}
 		});
 	});
 

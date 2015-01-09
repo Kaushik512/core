@@ -113,6 +113,28 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 var d4dModelMastersTemplatesList = mongoose.model('d4dModelMastersTemplatesList',d4dMastersTemplatesList,'d4dmastersnew');
 
 
+var d4dMastersServicecommands = new mongoose.Schema(
+	{id: String,
+	name: String,
+	servicename: String,
+	commandname: String,
+	commandtype: String,
+	configname: String,
+	chefserverid: String,
+	operatingsystem: String,
+	servicecookbook: String,
+	servicestart: String,
+	servicestop: String,
+	servicerestart: String,
+	servicestatus: String,
+	servicekill: String,
+	command: String,
+	commandaction: String,
+	rowid:String},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersServicecommands = mongoose.model('d4dModelMastersServicecommands',d4dMastersServicecommands,'d4dmastersnew');
+
+
 
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
@@ -123,3 +145,4 @@ module.exports.d4dModelMastersConfigManagement = d4dModelMastersConfigManagement
 module.exports.d4dModelMastersDockerConfig  = d4dModelMastersDockerConfig;
 module.exports.d4dModelMastersDesignTemplateTypes  = d4dModelMastersDesignTemplateTypes;
 module.exports.d4dModelMastersTemplatesList  = d4dModelMastersTemplatesList;
+module.exports.d4dModelMastersServicecommands  = d4dModelMastersServicecommands;

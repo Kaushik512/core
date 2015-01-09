@@ -594,7 +594,7 @@ function readform(formID) {
 
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                     var curSelect = $(this);
-                    alert(JSON.stringify(tempJSON));
+                  //  alert(JSON.stringify(tempJSON));
                     var _rowid = 0;
                     $.each(tempJSON, function(i, item) {
                         _rowid = item['rowid'];
@@ -1548,7 +1548,6 @@ function validateForm() {
 
 function readURL(input) {
     if (input.files && input.files[0]) {
-        l
         var reader = new FileReader();
         reader.onload = function(e) {
             var imgLogoPreview = "<img src='" + e.target.result + "' style='border:0px;height:25px;width:28px'/>";
