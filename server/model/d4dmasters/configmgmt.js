@@ -1,12 +1,60 @@
 var d4dModel = require('./d4dmastersmodel.js');
 
+var d4dModelNew = require('./d4dmastersmodelnew.js');
+
+
 var codelist = require('../../codelist.json');
 var appConfig = require('../../config/app_config');
 var chefSettings = appConfig.chef;
 
 function Configmgmt() {
-
-    this.getChefServerDetails = function(rowid, callback) {
+    this.getDBModelFromID = function(id,callback){
+        switch(id){
+            case "1":
+                callback(null,'d4dModelMastersOrg');
+                break;
+            case "2":
+                callback(null,'d4dModelMastersProductGroup');
+                break;
+            case "3":
+                callback(null,'d4dModelMastersEnvironments');
+                break;
+            case "4":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "5":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "6":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "7":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "8":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "9":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "10":
+                callback(null,'d4dModelMastersConfigManagement');
+                break;
+            case "16":
+                callback(null,'d4dModelMastersDesignTemplateTypes');
+                break;
+            case "17":
+                callback(null,'d4dModelMastersTemplatesList');
+                break;
+            case "18":
+                callback(null,'d4dModelMastersDockerConfig');
+                break;
+            case "19":
+                callback(null,'d4dModelMastersServicecommands');
+                break;
+        }
+    };
+    this.getChefServerDetails_old = function(rowid, callback) {
         d4dModel.findOne({
             id: '10'
         }, function(err, d4dMasterJson) {
@@ -72,6 +120,73 @@ function Configmgmt() {
             }
         });
     };
+
+    this.getChefServerDetails = function(rowid, callback) {
+        this.getDBModelFromID("10",function(err,dbtype){
+            if (err) {
+                console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
+                callback(true, err);
+            }
+            if(dbtype){
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.'+ dbtype).findOne({
+                rowid: rowid
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error @ getChefServerDetails:" + err);
+                    }
+                    var chefRepoPath = '';
+                    var configmgmt = '';
+                    var settings = chefSettings;
+                    
+                            chefRepoPath = settings.chefReposLocation;
+                            console.log("Repopath:" + chefRepoPath);
+
+                            var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                            var keys = Object.keys(outJson);
+                            var orgname = '';
+                            var loginname = '';
+                            for (i = 0; i < keys.length; i++) {
+                                var k = keys[i];
+                                if (keys[i].indexOf("login") >= 0)
+                                    loginname = outJson[k] + "/";
+                                if (keys[i].indexOf("orgname") >= 0)
+                                    orgname = outJson[k] + "/";
+                            }
+                            if(loginname != '' && orgname != ''){
+                                for (i = 0; i < keys.length; i++) {
+                                    var k = keys[i];
+                                    if(keys[i].indexOf('_filename') > 0){
+                                     keys[i] = keys[i].replace('_filename','');
+                                      outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                                    }
+                                    if(configmgmt == '')
+                                        configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+                                    else
+                                        configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+
+                                    //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
+                                }
+                                if(configmgmt != ''){
+                                    configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
+                                }
+                            }
+                            console.log('configmgmt: ' + configmgmt);
+                            callback(null,JSON.parse('{' + configmgmt + '}'));
+                    
+                    // for (var j = 0; j < outJson.length; j++) {
+                    //     console.log('Out:' + outJson[j]);
+                    // }
+                    // for(var itm in d4dMasterJson){
+                    //     console.log(itm);
+                    // }
+                    
+                });
+            }
+        });
+    };
+
+
     this.getAccessFilesForRole = function(loginname, user, req, res, callback) {
         console.log("Received Role name: " + loginname);
         var accessibleFiles = [];
