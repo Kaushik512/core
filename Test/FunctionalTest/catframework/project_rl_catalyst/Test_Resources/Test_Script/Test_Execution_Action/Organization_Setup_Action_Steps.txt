@@ -1,0 +1,157 @@
+    *** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Variables ***
+
+*** Keywords ***
+
+Catalyst Login
+    Browser is opened to login catalyst
+    Enters catalyst User Name
+    Enters catalyst password
+    Clicks on Login button
+
+Create New Organization
+    Clicks on Settings
+    Clicks on Organization image
+    Clicks on New button to Create New Organization
+    Enters organization name
+    Enters organization domain name
+    Enters organization cost code
+    Clicks on Save button to save the Organization details
+
+
+Create New Business Group
+    Clicks on Organization setup menu
+    Clicks on Business Groups menu
+    Clicks on New button to create new Business Group
+    Enters new business group name
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+Create New Projects
+    Clicks on projects menu
+    Clicks on New button to create new project
+    Enters new Project name
+    Enters new Project Description
+    Select organization for project
+    Clicks on Save button to save the Project details
+
+Create New Environments
+    Clicks on Environments menu
+    Clicks on New button to create new Environment
+    Enters new Environment name
+    Select organization
+    Clicks on Save button to save the Environment details
+Catalyst Logout
+    Clicks on LogOut link
+
+#Browser is opened to login catalyst
+##    Open Browser    ${ENVIRONMENT SERVER}    ${BROWSER TYPE}
+#    Open Browser in Grid Node    ${ENVIRONMENT SERVER}
+#    Set Selenium Speed    ${DELAY}
+#    Set Selenium Timeout    ${DELAY SECONDS}
+#    Maximize Browser Window
+
+
+#Enters catalyst User Name
+#    Input Text     xpath=//input[@name='username']      ${VALID USER}
+#Enters catalyst password
+#    Input Text     xpath=//input[@name='pass']      ${VALID PASSWORD}
+#Clicks on Login button
+#    Click Element    xpath=.//*[@id='login-form']/footer/button
+
+Clicks on Settings
+#    Wait Until Element Is Visible      xpath=//a[contains(text(),'SETTINGS')]      1 seconds
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'SETTINGS')]
+    Click Element    xpath=//a[contains(text(),'SETTINGS')]
+
+Clicks on Organization image
+    Click Element    xpath=//a[contains(text(),'ORGANIZATIONS')]
+Clicks on New button to Create New Organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+Enters organization name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=orgname
+    Input Text     id=orgname      ${ORGANIZATION NAME}
+Enters organization domain name
+    Input Text     id=domainname      ${ORGANIZATION DOMAIN NAME}
+
+Enters organization cost code
+    Input Text     id=costcode      ${ORGANIZATION COST CODE}
+Clicks on Save button to save the Organization details
+    Click Element    xpath=//button[@onclick="if(validateForm())saveform('1');"]
+
+Clicks on Organization setup menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[./text()='Organization Setup']
+    Click Element    xpath=//span[./text()='Organization Setup']
+
+Clicks on Business Groups menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[./text()='Business Groups']
+    Click Element    xpath=//span[./text()='Business Groups']
+Clicks on New button to create new Business Group
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+Enters new business group name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${BUSINESS GROUP NAME}
+
+Select organization for business group
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Clicks on Save button to save the Business group details
+    Click Element    xpath=//button[@onclick='if (validateForm()) saveform(2);']
+
+Clicks on projects menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[./text()='Projects']
+    Click Element    xpath=//span[./text()='Projects']
+
+Clicks on New button to create new project
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+
+Enters new Project name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=projectname
+    Input Text     id=projectname      ${PROJECT NAME}
+
+Enters new Project Description
+    Input Text     id=description      ${PROJECT DESCRIPTION}
+
+Select organization for project
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+Clicks on Save button to save the Project details
+    Click Element    xpath=//button[@onclick='if(validateForm())saveform(4);']
+
+Clicks on Environments menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[./text()='Environments']
+    Click Element    xpath=//span[./text()='Environments']
+Clicks on New button to create new Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+
+Enters new Environment name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=environmentname
+    Input Text     id=environmentname      ${ENVIRONMENT NAME}
+Select organization
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Clicks on Save button to save the Environment details
+    Click Element    xpath=//button[@onclick='if (validateForm()) saveform(3);']
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Click Element    xpath=.//*[@id='logout']/span/a/i
