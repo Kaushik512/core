@@ -5,11 +5,105 @@ var blueprintsDao = require('../model/blueprints');
 
 var instancesDao = require('../model/instances');
 var tasksDao = require('../model/tasks');
-
+var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
 
+
+    app.get('/organizations/getTreeNew',function(req,res){
+       
+               
+                d4dModelNew.d4dModelMastersOrg.find({
+                id: '1'
+                }, function(err, d4dMasterJsonOrg) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                        res.send('500');
+                        return;
+                    }
+                    //res.end(JSON.stringify(d4dMasterJson));
+                    var orgJson = JSON.parse(JSON.stringify(d4dMasterJsonOrg));
+                    var orgkeys = Object.keys(orgJson);
+                    var orgTree = [];
+                    console.log("Filling Orgs :" + JSON.stringify(orgJson));
+                    for (i = 0; i < orgkeys.length; i++) { //Org Loop
+                        var k = orgkeys[i]; //index of the org
+                        var orgname = orgJson[i]['orgname'];
+                        console.log('orgname:' + orgname);
+                        //Business Group Loop
+                        d4dModelNew.d4dModelMastersProductGroup.find({
+                                    id: '2',
+                                    'orgname': orgname
+                            }, function(err, d4dMasterJsonBG) {
+                                if (err) {
+                                    console.log("Hit and error in d4dMasterJsonOrg:" + err);
+                                    res.send('500');
+                                    return;
+                                }
+                                else{
+                                    var bgJson = JSON.parse(JSON.stringify(d4dMasterJsonBG));
+                                    var bgkeys = Object.keys(bgJson);
+                                    var bgTree = [];
+                                    console.log("Filling BGs :" + JSON.stringify(bgJson));
+                                    for (_i = 0; _i < bgkeys.length; _i++) { //Bg Loop
+                                        var k = bgkeys[_i]; //index of the org
+                                        var bgname = bgJson[_i]['productgroupname'];
+                                        console.log('BGname:' + bgname + ' orgname:' + orgname);
+                                        //Project Loop
+                                        d4dModelNew.d4dModelMastersProjects.find({
+                                            id: '4',
+                                            'orgname': orgname,
+                                            'productgroupname': bgname,
+                                        }, function(err, d4dMasterJsonProjects) {
+                                            if (err) {
+                                                console.log("Hit and error in d4dModelMastersProjects:" + err);
+                                                res.send('500');
+                                                return;
+                                            }
+                                            else{
+                                                console.log('In projects:' + 'BGname:' + bgname + ' orgname:' + orgname);
+                                                var projJson = JSON.parse(JSON.stringify(d4dMasterJsonProjects));
+                                                console.log("Filling Projs :" + JSON.stringify(projJson));
+                                                var projkeys = Object.keys(projJson);
+                                                var projTree = [];
+                                             //   console.log("Filling Projs :" + JSON.stringify(projJson));
+                                                for (__i = 0; __i < projkeys.length; __i++) { //Bg Loop
+                                                    var k = projkeys[__i]; //index of the org
+                                                    var projname = projJson[__i]['projectname'];
+                                                    console.log('Projname:' + projname); 
+                                                    projTree.push(projname);
+                                                } //end of proj loop
+                                                bgTree[_i] = [];
+                                                bgTree[_i].push({'name' : bgname + ',projects:' +  projTree});
+                                                if(_i >= bgkeys.length){
+                                                    orgTree[i] = [];
+                                                    orgTree[i].push({'name': orgname + ',businessGroups:' + bgTree[_i]});
+                                                }
+                                                //Check if all the loops has been executed.
+                                                if(i >= orgkeys.length && _i >= bgkeys.length && __i >= projkeys.length){
+
+                                                    res.end(JSON.stringify(orgTree));
+                                                    return;
+                                                }
+
+
+                                            }
+                                        });
+
+                                    } //end of bg loop
+
+                                   
+                                    console.log(JSON.stringify(orgTree));
+                                }
+                        });
+
+                    } //end of org loop
+                    
+                    //res.send('200');
+                });
+            
+    });
 
     app.get('/organizations/getTree', function(req, res) {
         masterjsonDao.getMasterJson("1", function(err, orgsJson) {
