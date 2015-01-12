@@ -26,10 +26,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     var orgJson = JSON.parse(JSON.stringify(d4dMasterJsonOrg));
                     var orgkeys = Object.keys(orgJson);
                     var orgTree = [];
+
                     console.log("Filling Orgs :" + JSON.stringify(orgJson));
                     for (i = 0; i < orgkeys.length; i++) { //Org Loop
                         var k = orgkeys[i]; //index of the org
                         var orgname = orgJson[i]['orgname'];
+                        var orgObj = "name:" + orgname;
+                        orgTree.push(orgObj);
                         console.log('orgname:' + orgname);
                         //Business Group Loop
                         d4dModelNew.d4dModelMastersProductGroup.find({
@@ -44,12 +47,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 else{
                                     var bgJson = JSON.parse(JSON.stringify(d4dMasterJsonBG));
                                     var bgkeys = Object.keys(bgJson);
-                                    var bgTree = [];
-                                    console.log("Filling BGs :" + JSON.stringify(bgJson));
+                                    
+
+                                   // console.log("Filling BGs :" + JSON.stringify(bgJson));
                                     for (_i = 0; _i < bgkeys.length; _i++) { //Bg Loop
                                         var k = bgkeys[_i]; //index of the org
                                         var bgname = bgJson[_i]['productgroupname'];
                                         console.log('BGname:' + bgname + ' orgname:' + orgname);
+                                        var bgObj = "name:" + bgname;
+                                        orgObj += ",businessGroups:[{" + bgObj;
+
                                         //Project Loop
                                         d4dModelNew.d4dModelMastersProjects.find({
                                             id: '4',
@@ -64,25 +71,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             else{
                                                 console.log('In projects:' + 'BGname:' + bgname + ' orgname:' + orgname);
                                                 var projJson = JSON.parse(JSON.stringify(d4dMasterJsonProjects));
-                                                console.log("Filling Projs :" + JSON.stringify(projJson));
+                                               // console.log("Filling Projs :" + JSON.stringify(projJson));
                                                 var projkeys = Object.keys(projJson);
-                                                var projTree = [];
+                                               var projObj = [];
                                              //   console.log("Filling Projs :" + JSON.stringify(projJson));
                                                 for (__i = 0; __i < projkeys.length; __i++) { //Bg Loop
                                                     var k = projkeys[__i]; //index of the org
                                                     var projname = projJson[__i]['projectname'];
                                                     console.log('Projname:' + projname); 
-                                                    projTree.push(projname);
+                                                    projObj.push(projname);
+
                                                 } //end of proj loop
-                                                bgTree[_i] = [];
-                                                bgTree[_i].push({'name' : bgname + ',projects:' +  projTree});
+                                                bgObj += ",projects:["+ projObj.join(',') + ']}]';
+                                                
                                                 if(_i >= bgkeys.length){
-                                                    orgTree[i] = [];
-                                                    orgTree[i].push({'name': orgname + ',businessGroups:' + bgTree[_i]});
+                                                    orgObj += '}'
+                                                    orgTree.push(orgObj);
                                                 }
                                                 //Check if all the loops has been executed.
                                                 if(i >= orgkeys.length && _i >= bgkeys.length && __i >= projkeys.length){
-
+                                                    
                                                     res.end(JSON.stringify(orgTree));
                                                     return;
                                                 }
