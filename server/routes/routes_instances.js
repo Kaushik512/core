@@ -1,4 +1,5 @@
 var blueprintsDao = require('../model/blueprints');
+
 var instancesDao = require('../model/instances');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
@@ -219,25 +220,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname/:runcommand', function(req, res) {
+    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname', function(req, res) {
 
         console.log('reached here a');
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var stdmessages = '';
-        var runcmd = '';
-        var tagname = '';
-        
-        if (req.params.tagname != 'undefined') {
-            tagname += ':' + req.params.tagname;
+        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename);
+        if (req.params.tagname != null) {
+            cmd += ':' + req.params.tagname;
         }
-
-        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + tagname;
-
-        if (req.params.runcommand != 'undefined') {
-            runcmd = decodeURIComponent(req.params.runcommand) + ' ';
-        }
-        cmd += ' && sudo docker run -i -t -d ' + runcmd +  decodeURIComponent(req.params.imagename) + tagname + ' /bin/bash';
+        cmd += ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
         console.log('Docker command executed : ' + cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
@@ -428,65 +421,65 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
 
-                settingsController.getAwsSettings(function(settings) {
-                    var ec2 = new EC2(settings);
-                    ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
-                        if (err) {
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: true,
-                                log: "Unable to stop instance",
-                                timestamp: new Date().getTime()
-                            });
-                            res.send(500);
-                            return;
-                        }
-                        res.send(200, {
-                            instanceCurrentState: stoppingInstances[0].CurrentState.Name,
-                        });
-
-                        instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
-
-
-
-
-                    }, function(err, state) {
-                        if (err) {
-                            return;
-                        }
-                        instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
-
-
+                var settings = appConfig.aws;
+                var ec2 = new EC2(settings);
+                ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
+                    if (err) {
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
-                            err: false,
-                            log: "Instance Stopped",
+                            err: true,
+                            log: "Unable to stop instance",
                             timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update log');
-                                return;
-                            }
-                            console.log('log updated');
                         });
+                        res.send(500);
+                        return;
+                    }
+                    res.send(200, {
+                        instanceCurrentState: stoppingInstances[0].CurrentState.Name,
+                    });
+
+                    instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
 
 
+
+
+                }, function(err, state) {
+                    if (err) {
+                        return;
+                    }
+                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
+
+
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: false,
+                        log: "Instance Stopped",
+                        timestamp: new Date().getTime()
+                    }, function(err, data) {
+                        if (err) {
+                            console.log('unable to update log');
+                            return;
+                        }
+                        console.log('log updated');
                     });
 
 
                 });
+
+
+
             } else {
                 res.send(404);
                 return;
@@ -509,70 +502,70 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
 
-                settingsController.getAwsSettings(function(settings) {
-                    var ec2 = new EC2(settings);
-                    ec2.startInstance([data[0].platformId], function(err, startingInstances) {
-                        if (err) {
-
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: true,
-                                log: "Unable to start instance",
-                                timestamp: new Date().getTime()
-                            });
-                            res.send(500);
-                            return;
-                        }
-                        res.send(200, {
-                            instanceCurrentState: startingInstances[0].CurrentState.Name,
-                        });
-
-                        instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
-
-                    }, function(err, state) {
-                        if (err) {
-                            return;
-                        }
-                        instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
+                var settings = appConfig.aws;
+                var ec2 = new EC2(settings);
+                ec2.startInstance([data[0].platformId], function(err, startingInstances) {
+                    if (err) {
 
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
-                            err: false,
-                            log: "Instance Started",
+                            err: true,
+                            log: "Unable to start instance",
                             timestamp: new Date().getTime()
                         });
-
-                        ec2.describeInstances([data[0].platformId], function(err, data) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-                            if (data.Reservations.length && data.Reservations[0].Instances.length) {
-                                console.info("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
-                                instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
-                                    if (err) {
-                                        console.log("update instance ip err ==>", err);
-                                        return;
-                                    }
-                                    console.log('instance ip upadated');
-                                });
-                            }
-                        });
+                        res.send(500);
+                        return;
+                    }
+                    res.send(200, {
+                        instanceCurrentState: startingInstances[0].CurrentState.Name,
                     });
 
+                    instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
+
+                }, function(err, state) {
+                    if (err) {
+                        return;
+                    }
+                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
+
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: false,
+                        log: "Instance Started",
+                        timestamp: new Date().getTime()
+                    });
+
+                    ec2.describeInstances([data[0].platformId], function(err, data) {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        if (data.Reservations.length && data.Reservations[0].Instances.length) {
+                            console.info("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
+                            instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
+                                if (err) {
+                                    console.log("update instance ip err ==>", err);
+                                    return;
+                                }
+                                console.log('instance ip upadated');
+                            });
+                        }
+                    });
                 });
+
+
 
             } else {
                 res.send(404);
