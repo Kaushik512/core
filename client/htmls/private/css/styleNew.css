@@ -2433,7 +2433,8 @@ padding-top:5px;
     background: none repeat scroll 0 0 #fff;
     border: 1px solid #ccc;
     
-    height: 40px;
+    /*height: 40px;*/
+    height: 36px;
     outline: 0 none;
     position: relative;
     vertical-align: top;
@@ -2459,8 +2460,10 @@ padding-top:5px;
 }
 .smart-forms .file .button {
     float: none;
-    height: 34px;
-    line-height: 34px;
+    /*height: 34px;
+    line-height: 34px;*/
+    height: 30px;
+    line-height: 30px;
     padding: 0 16px;
     position: absolute;
     right: 4px;
@@ -2475,7 +2478,8 @@ padding-top:5px;
     cursor: pointer;
     display: inline-block;
     font-size: 15px;
-    height: 42px;
+    /*height: 42px;*/
+    height: 36px;
     line-height: 1;
     padding: 0 18px;
     text-align: center;
