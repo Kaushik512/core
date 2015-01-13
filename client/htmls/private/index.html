@@ -599,7 +599,9 @@
 				$track.append($TrackerOrgnameli); //orgname added to root
 				//End Track Setting
 				//<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
+				
 				for(var j=0;j<data[i].businessGroups.length;j++) {
+					//alert(data[i].businessGroups[j].name);
 					var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
 					console.log('here');
 								$workspace.append($liSideBar);
