@@ -562,7 +562,7 @@
 				type: "get",
 				dataType: "json",
 				async: false,
-				url: "../organizations/getTree",
+				url: "../organizations/getTreeNew",
 				success: function (data) {
 					console.log('ajax success');
 				// alert(data.toString());
@@ -625,11 +625,11 @@
 					var $paramsprj = [];
 					$paramsprj.push(data[i].name);
 					$paramsprj.push(data[i].businessGroups[j].name);
-					$paramsprj.push(data[i].businessGroups[j].projects[k]);
+					$paramsprj.push(data[i].businessGroups[j].projects[k].name);
 							//alert(data[i].businessGroups[j].projects[k]);
-					var liProject = $('<li class="referenceliClass"></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent Projtextoverflow" title="'+data[i].businessGroups[j].projects[k]+'" style="font-weight:bold">'+data[i].businessGroups[j].projects[k]+'</span></a>');
+					var liProject = $('<li class="referenceliClass"></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent Projtextoverflow" title="'+data[i].businessGroups[j].projects[k].name+'" style="font-weight:bold">'+data[i].businessGroups[j].projects[k].name+'</span></a>');
 					//Adding to Track Tree
-					var liTrackerProject = $('<li class="tcproj"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsprj).replace(/\"/g,'\'') + ');" bgname="' + data[i].businessGroups[j].projects[k] + '" href="#" orgname="' + data[i].name + '"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].businessGroups[j].projects[k]+'"  style="font-weight:bold">'+data[i].businessGroups[j].projects[k].substring(0,15) +'</span></a>');
+					var liTrackerProject = $('<li class="tcproj"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsprj).replace(/\"/g,'\'') + ');" bgname="' + data[i].businessGroups[j].projects[k].name + '" href="#" orgname="' + data[i].name + '"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].businessGroups[j].projects[k].name+'"  style="font-weight:bold">'+data[i].businessGroups[j].projects[k].name.substring(0,15) +'</span></a>');
 					//alert(liTrackerProject);
 					$TrackerProjUL.append(liTrackerProject);
 					$TrackerEnvUL = $('<ul></ul>');
@@ -639,18 +639,18 @@
 					var $envUl = $('<ul class="referenceulClass"></ul>');
 				liProject.append($envUl);
 				// <img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">
-					for(var l=0;l<data[i].environments.length;l++) {
-						var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name).attr('data-envName',data[i].environments[l]);
+					for(var l=0;l<data[i].businessGroups[j].projects[k].environments.length;l++) {
+						var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k].name+'&envid='+data[i].businessGroups[j].projects[k].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].businessGroups[j].projects[k].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].businessGroups[j].projects[k].environments[l]+'</a>').attr('data-OrgName',data[i].name).attr('data-envName',data[i].businessGroups[j].projects[k].environments[l]);
 						$envUl.append($liEnv);
 						//Adding to Track Tree
 						var $paramsenv = [];
 						$paramsenv.push(data[i].name);
 						$paramsenv.push(data[i].businessGroups[j].name);
-						$paramsenv.push(data[i].businessGroups[j].projects[k]);
-						$paramsenv.push(data[i].environments[l]);
+						$paramsenv.push(data[i].businessGroups[j].projects[k].name);
+						$paramsenv.push(data[i].businessGroups[j].projects[k].environments[l]);
 
 						
-						var $liTrackerEnv = $('<li  class="tcenv"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsenv).replace(/\"/g,'\'') + ');"  href="#" data-link="true" class="Envtextoverflow" title="'+data[i].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].environments[l]+'</a>').attr('data-OrgName',data[i].name);
+						var $liTrackerEnv = $('<li  class="tcenv"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsenv).replace(/\"/g,'\'') + ');"  href="#" data-link="true" class="Envtextoverflow" title="'+data[i].businessGroups[j].projects[k].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].businessGroups[j].projects[k].environments[l]+'</a>').attr('data-OrgName',data[i].name);
 						$TrackerEnvUL.append($liTrackerEnv);
 						//End Track Setting
 					$liEnv.click(function(e){
@@ -663,7 +663,7 @@
 						e.preventDefault();
 						e.stopPropagation();
 						return false;
-					}).attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].environments[l]+'')).addClass('org').addClass('org'+i);
+					}).attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k]+'&envid='+data[i].businessGroups[j].projects[k].environments[l]+'')).addClass('org').addClass('org'+i);
 						$liSideBar.data('addToTree',false);
 }
 					
