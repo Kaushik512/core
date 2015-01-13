@@ -5,6 +5,11 @@ var currentDirectory = __dirname;
 
 
 var config = {
+    express: {
+        port: 3001,
+        express_sid_key: 'express.sid',
+        sessionSecret: 'sessionSekret'
+    },
     app_run_port: 3001,
     userHomeDir: pathExtra.homedir(),
     catalysHomeDirName: 'catalyst',
@@ -91,7 +96,7 @@ mkdirp.sync(config.instancePemFilesDir);
 mkdirp.sync(config.tempDir);
 
 var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
-console.log('chef repo location ==>',config.chef.chefReposLocation);
+console.log('chef repo location ==>', config.chef.chefReposLocation);
 
 
 

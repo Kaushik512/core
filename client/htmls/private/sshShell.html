@@ -1,0 +1,87 @@
+<html>
+<head>
+	<script src="/socket.io/socket.io.js"></script>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+<textarea id="outputArea" style="height:200px;width:300px" readonly>
+</textarea>
+<br/>
+<input type="textbox" id="cmdInput" disabled/> <input id="submitCmdBtn" type="button" value="send" disabled/><input id="btnClose" type="button" value="close"/>
+<br/>
+
+<div id="errorArea" style="color:red">
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+var urlParams = {};
+(window.onpopstate = function() {
+    var url = window.location.href;
+    var indexOfQues = url.lastIndexOf("?");
+    if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+            var paramParts = params[i].split('=');
+            urlParams[paramParts[0]] = paramParts[1];
+        }
+    }
+
+})();
+
+
+var $textAreaOutput = $('#outputArea');
+var $errorArea = $('#errorArea');
+var $submitCmdBtn = $('#submitCmdBtn');
+var $cmdInput = $('#cmdInput');
+var $btnClose = $('#btnClose');
+
+var socket = io.connect('/sshShell');
+
+var sshOpened = false;
+
+socket.on('out',function(data){
+	console.log(data);
+  $textAreaOutput.val($textAreaOutput.val() + data.res+'\n');
+});
+
+
+socket.on('conErr',function(data){
+  $errorArea.append(data.message);
+});
+
+socket.on('opened',function(){
+	console.log('connected');
+ sshOpened = true;
+ $submitCmdBtn.get(0).disabled = false;
+ $cmdInput.get(0).disabled = false;
+
+});
+
+socket.emit('open',{
+	id : urlParams.id,
+	username:'catalyst-user',
+	password:'anshul'
+});
+
+$submitCmdBtn.click(function(){
+	var cmd = $cmdInput.val();
+	if(cmd) {
+		socket.emit('cmd',{cmd:cmd+'\n'});
+	}
+});
+
+$btnClose.click(function(){
+	socket.emit('close');
+});
+
+
+
+</script>
+</html>

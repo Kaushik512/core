@@ -203,7 +203,7 @@ module.exports.getNewInstance = function(options, callback) {
         options.password = null;
     }
     console.log('Initializing class');
-    java.newInstance('com.relevancelab.catalyst.security.ssh.SSH', options.host, options.port, options.username, options.password, options.pemFilePath, function(err, javaSSHInstance) {
+    java.newInstance('com.relevancelab.catalyst.security.ssh.SSHExec', options.host, options.port, options.username, options.password, options.pemFilePath, function(err, javaSSHInstance) {
 
         if (err) {
             console.log(err);

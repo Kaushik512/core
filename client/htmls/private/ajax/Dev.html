@@ -2301,7 +2301,10 @@ function addInstanceToDOM(data) {
     // var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
     // $divActionBtnContainer.append($divActionReStartContainer);
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
-    $divActionBtnContainer.append($divActionShutdownContainer);
+    $divActionBtnContainer.append($divActionShutdownContainer); 
+     var $divActionSSHContainer = $('<div class="sshContainer"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="sshShell.html?id='+data._id+'">SSH</a>').addClass('actionbuttonShutdown')); 
+    $divActionBtnContainer.append($divActionSSHContainer); 
+   
     var $back = $('<div></div>').addClass('back card-backflip');
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
