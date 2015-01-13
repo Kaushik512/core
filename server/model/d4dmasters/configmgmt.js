@@ -678,6 +678,10 @@ function Configmgmt() {
         });
     };
 
+    this.getListFilteredNew = function(mastername,fieldname,comparedfieldname,comparedfieldvalue){
+        
+    }
+
     this.getCodeList = function(name, callback) {
         if (codelist) {
             var count = 0;
