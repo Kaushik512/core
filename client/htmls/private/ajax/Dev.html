@@ -360,12 +360,23 @@
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card2 front2  unpause">
+                                                          <div class="card2 front2  terminate">
                                                               <div id="flip3" style="margin-top:5px;"  title="UnPause" >
                                                                   <div class="">
                                                                       <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
                                                                   </div>
                                                               </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card3">
+                                                          <div class="card3 front1"  title="Terminate" >
+                                                             <div style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0);" data-original-title="Terminate"  dockercontaineraction="6"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-sign-out fa-16px txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
                                                           </div>
                                                       </div>
                                                   </div>
@@ -1241,7 +1252,11 @@ $('.dockerinstancestart').click(function(e){
             $td.attr('title','Pulling in Images');
             var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
-          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag,function(data){
+            var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+            if(!dockerlaunchparameters)
+                dockerlaunchparameters = 'null';
+           // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
+          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -1641,6 +1656,9 @@ $(function() {
                             $itemBody.attr('dockerreponame', data[i].dockerreponame);
                             $itemBody.attr('dockerrepotags', data[i].dockerrepotags);
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
+                            
+                            if(data[i].dockerlaunchparameters)
+                                $itemBody.attr('dockerlaunchparameters', data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -2460,7 +2478,7 @@ function loadContainersTable(){
                         var containerid =  $(this).closest('tr').attr('containerid');
                         var $contextRow = $(this).closest('tr');
                        // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
-                        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
+                        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5' || action == '6'){
                             $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
                              // alert(data);
                               if(data == 'OK'){
@@ -2795,7 +2813,17 @@ $('.launchBtn').click(function(e) {
 
             });
 
-             
+            // //Check if docker has been added.
+            // $.get('/instances/dockercontainerdetails/' + data.id,function(data){
+            //     if(JSON.stringify(data) != ""){
+            //         $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+            //         //find the instance card - to do instance table view update
+            //         var $instancecard = $('div[data-instanceid="' + data.id + '"]');
+            //         if($instancecard.find('.dockerenabledinstacne').length <= 0){
+            //             $instancecard.find('.componentlistContainer').first().append($dockericon);
+            //         }
+            //      }
+            // });
                 
 
         }).error(function() {

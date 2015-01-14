@@ -177,11 +177,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             case "5":
                 action = 'unpause';
                 break;
+            case "6":
+                action = 'delete';
+                break;
         }
 
 
         //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+
         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
+        if(action == 'delete'){
+            cmd = 'sudo docker rm -f ' + req.params.containerid;
+        }
         console.log('cmd received: ' + cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
@@ -219,8 +226,37 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    app.get('/instances/checkfordocker/:instanceid',function(req,res){
 
-    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname', function(req, res) {
+         //Confirming if Docker has been installed on the box
+        var _docker = new Docker();
+        var cmd = "sudo docker ps";
+         console.log('Docker command executed : ' + cmd);
+        _docker.runDockerCommands(cmd, req.params.instanceid,
+            function(err, retCode) {
+                if (err) {
+                    console.log(err);
+                    res.send(500);
+                    return;
+                    //res.end('200');
+                        
+                    }
+                console.log('this ret:' + retCode);
+                if(retCode == '0'){
+                    instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
+                            console.log('Instance Docker Status set to Success');
+                            res.send('OK');
+                            return;
+                        });
+
+                }
+                else
+                    res.send('');
+            });
+
+
+    });
+    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname/:runparams', function(req, res) {
 
         console.log('reached here a');
         var instanceid = req.params.instanceid;
@@ -230,7 +266,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         if (req.params.tagname != null) {
             cmd += ':' + req.params.tagname;
         }
-        cmd += ' && sudo docker run -i -t -d ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+        var runparams = '';
+        if(req.params.runparams != 'null'){
+            runparams = decodeURIComponent(req.params.runparams);
+        }
+        cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
         console.log('Docker command executed : ' + cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
@@ -376,6 +416,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         log: 'instance runlist updated',
                                         timestamp: new Date().getTime()
                                     });
+                                    
+                                    //Checking docker status and updating
+                                    var _docker = new Docker();
+                                    _docker.checkDockerStatus(instance.id,
+                                        function(err, retCode) {
+                                            if (err) {
+                                                console.log(err);
+                                                res.send(500);
+                                                return;
+                                                //res.end('200');
+                                                    
+                                                }
+                                            console.log('Docker Check Returned:' + retCode);
+                                            if(retCode == '0'){
+                                                instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
+                                                        console.log('Instance Docker Status set to Success');
+                                                });
+                                            }
+                                        });
+
                                 });
                             } else {
                                 return;
