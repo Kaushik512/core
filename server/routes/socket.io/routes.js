@@ -12,7 +12,7 @@ module.exports.setRoutes = function(socketIo) {
 
     sshShell.on('connection', function(socket) {
         socketList.push[socket];
-
+        //console.log('socket ==>',socket);
         socket.on('open', function(instanceData) {
             instanceDao.getInstanceById(instanceData.id, function(err, instances) {
                 if (err) {
@@ -34,6 +34,7 @@ module.exports.setRoutes = function(socketIo) {
                     port: 22,
                     username: instanceData.username,
                     password: instanceData.password,
+                    pemFileData: instanceData.pemFileData
                 }, function(err, shell) {
                     if (err) {
                         socket.emit('conErr', {
@@ -45,7 +46,7 @@ module.exports.setRoutes = function(socketIo) {
                     //console.log(shell.on);
                     shell.on('out', function(outData) {
                         socket.emit('out', {
-                            res:outData
+                            res: outData
                         });
                     });
                     socket.emit('opened');
@@ -54,10 +55,10 @@ module.exports.setRoutes = function(socketIo) {
         });
 
         socket.on('cmd', function(data) {
-        	console.log("cmd Recieved",data);
+            console.log("cmd Recieved", data);
             if (socket.shellInstance) {
-            	console.log('writing');
-                socket.shellInstance.write(data.cmd);
+                console.log('writing');
+                socket.shellInstance.write(data);
             }
         });
 

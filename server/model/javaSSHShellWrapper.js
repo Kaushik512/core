@@ -1,11 +1,14 @@
 var java = require('java');
 var appConfig = require('../config/app_config');
 var nodeExtend = require('node.extend');
-var fs = require('fs');
+
 var net = require('net');
 var random_port = require('random-port');
 var events = require('events');
 var util = require("util");
+
+var fileIo = require('../lib/utils/fileio.js');
+var uuid = require('node-uuid');
 
 var currentDirectory = __dirname;
 
@@ -31,7 +34,7 @@ var defaults = {
 };
 
 
-function JavaSSHShell(javaSSHInstance, socketServer, callback) {
+function JavaSSHShell(options,javaSSHInstance, socketServer, callback) {
 
     var that = this;
     events.EventEmitter.call(this);
@@ -46,9 +49,9 @@ function JavaSSHShell(javaSSHInstance, socketServer, callback) {
         //listening to socket
         con.on('data', function(data) {
             console.log('got data ==>', data);
-            console.log('type of data ==>',typeof data);
+            //console.log('type of data ==>',typeof data);
             that.emit('out', data);
-            
+
         });
 
     });
@@ -80,6 +83,12 @@ function JavaSSHShell(javaSSHInstance, socketServer, callback) {
             }
             socketServer.close();
         });
+
+        if(options.pemFilePath) {
+            fileIo.removeFile(options.pemFilePath,function(){
+                console.log('pem file deleted');
+            });
+        }
     };
 
 }
@@ -87,16 +96,7 @@ function JavaSSHShell(javaSSHInstance, socketServer, callback) {
 util.inherits(JavaSSHShell, events.EventEmitter);
 
 
-
-
-
-module.exports.open = function(options, callback) {
-    options = nodeExtend(defaults, options);
-    if (options.password) {
-        options.pemFilePath = null;
-    } else {
-        options.password = null;
-    }
+function openSSH(options, callback) {
 
     random_port({
         from: 2000
@@ -113,9 +113,36 @@ module.exports.open = function(options, callback) {
                 callback(err, null);
                 return;
             }
-            var javaSSHSHell = new JavaSSHShell(javaSSHInstance, socketServer, callback);
+            var javaSSHSHell = new JavaSSHShell(options,javaSSHInstance, socketServer, callback);
         });
     });
 
+}
+
+
+
+module.exports.open = function(options, callback) {
+    options = nodeExtend(defaults, options);
+    if (options.password) {
+        options.pemFilePath = null;
+        openSSH(options,callback);
+    } else {
+        options.password = null;
+        if (options.pemFileData) {
+            var tempPemFileLocation = options.tempDir+'/'+uuid.v4();
+            fileIo.writeFile(tempPemFileLocation, options.pemFileData, null, function(err) {
+                if (err) {
+                    console.log('unable to create pem file ', err);
+                    callback(err, null);
+                    return;
+                }
+                options.pemFilePath = tempPemFileLocation;
+                openSSH(options,callback);
+            });
+
+        } else {
+            openSSH(options,callback);
+        }
+    }
 
 };
