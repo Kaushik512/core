@@ -128,6 +128,7 @@ var BlueprintsDao = function() {
             templateId: blueprintData.templateId,
             templateType: blueprintData.templateType,
 
+
             dockercontainerpathstitle: blueprintData.dockercontainerpathstitle,
             dockercontainerpaths: blueprintData.dockercontainerpaths,
             dockerrepotags: blueprintData.dockerrepotags,
