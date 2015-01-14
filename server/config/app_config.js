@@ -1,8 +1,8 @@
 var pathExtra = require('path-extra');
 var mkdirp = require('mkdirp');
-
+var fs = require('fs');
 var currentDirectory = __dirname;
-
+var logger = require('../lib/logger');
 
 var config = {
     app_run_port: 3001,
@@ -82,18 +82,12 @@ var config = {
 
 };
 
-
-
 //creating path
-
 mkdirp.sync(config.catalystHome);
 mkdirp.sync(config.instancePemFilesDir);
 mkdirp.sync(config.tempDir);
 
 var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
-console.log('chef repo location ==>',config.chef.chefReposLocation);
-
-
-
+logger.debug('chef repo location ==>',config.chef.chefReposLocation);
 
 module.exports = config;
