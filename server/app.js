@@ -7,24 +7,27 @@ var https = require("https");
 var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
+var logger = require('./lib/logger');
 
+logger.debug('Starting Catalyst');
+logger.debug('Logger Initialized');
 
 var appConfig = require('./config/app_config');
-
 var RedisStore = require('connect-redis')(express);
 var mongoStore = require('connect-mongo')(express.session);
 
-
 var mongoDbConnect = require('./lib/mongodb');
-mongoDbConnect({
+var dboptions = {
     host: appConfig.db.host,
     port: appConfig.db.port,
     dbName: appConfig.db.dbName
-}, function(err) {
+};
+mongoDbConnect(dboptions, function(err) {
     if (err) {
+        logger.error("Unable to connect to mongo db >>"+ err);
         throw new Error(err);
     } else {
-        console.log('connected to mongodb');
+        logger.debug('connected to mongodb - host = %s, port = %s, database = %s', dboptions.host, dboptions.port, dboptions.dbName);
     }
 });
 
@@ -35,12 +38,9 @@ app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.cookieParser());
-/*var store = new RedisStore({
-  host: 'localhost',
-  port: 6379
-});*/
-var store = new express.session.MemoryStore;
 
+logger.debug("Initializing Session store in mongo");
+var store = new express.session.MemoryStore;
 app.use(express.session({
     secret: 'sessionSekret',
     store: new mongoStore({
@@ -64,18 +64,15 @@ var options = {
     rejectUnauthorized: false
 }
 
+logger.debug('Setting up application routes');
 var routes = require('./routes/routes.js');
 routes.setRoutes(app);
 
 var server = http.createServer(app);
-/*var server = https.createServer(options,app).listen(app.get('sport'),function(){
-  console.log('Express server listening on https port ' + server.address().port);
-});*/
-
 io = io.listen(server, {
     log: false
 });
 
 server.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + app.get('port'));
+    logger.debug('Express server listening on port ' + app.get('port'));
 });
