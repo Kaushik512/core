@@ -10,54 +10,57 @@
 
                         <!--Card for Planning starts here-->
                         <li class="domain-role-thumbnail" style="padding-top:58px;">
-                            <div class="domain-roles">
-                              <div class="domain-roles-caption">
-                                <div class="domain-roles-heading">
-                                  <!-- <span contenteditable="false" class="domain-roles-icon">
-                                    <img style="height:20px;width:20px;margin-right:5px;" src="img/templateicons/chef_import.png">chef import
-                                  </span>
-                                  <span style="float: right;">
-                                    <a data-instanceid="53fed8535d3753774753ecb1" href="javascript:void(0)" class="moreInfo" title="More Info">
-                                    </a>
-                                  </span> -->
-                                </div>
-                                <hr>
-                                <div class="componentlistContainer started">
-                                  <!--<div class="instance-bootstrap-list">
-                                    <span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:18px;" title="View all runlist" class="instance-details-item">
-                                      <a class="btn fa fa-lg fa-fw fa-2x fa-list txt-color-blue instance-bootstrap-list-faimage" href="javascript:void"><i></i>
+                          <div class="flip-toggle container">
+                            <div class="card">
+                              <div class="front">
+                                <div class="domain-roles">
+                                  <div class="domain-roles-caption">
+                                    <div class="domain-roles-heading">
+                                      
+                                    </div>
+                                    <hr>
+                                    <div class="componentlistContainer">
+                                      <div class="instance-bootstrap-list">
+                                        <span style="overflow:hidden;text-overflow:ellipsis;width:62px;" class="instance-details-item">
+                                          <a class="btn instance-bootstrap-list-faimage" href="javascript:void;" rel="tooltip" data-placement="top" data-original-title="View All Runlist"><i class="fa fa-2x fa-exchange txt-color-blue"></i>
+                                          </a>
+                                        </span>
+                                      </div>
+                                      
+                                    </div>
+                                    <div>
+                                      <div class="instance-details-list">
+                                        <span class="instance-details-id instance-details-ip">IP : <strong></strong></span>
+                                        <span class="instance-details-id">status : 
+                                          <span class="instance-state instance-state-text-pending"></span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <hr>
+                                    <div style="width:140px !important;height:30px;margin-left:6px;" class="instanceActionBtnCtr">
+                                      <div class="instance-bootstrap-ActionChefRun">
+
+                                        <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a>
                                       </a>
-                                    </span>
-                                  </div>-->
-                                  <a class="btn instance-bootstrap-list-image instanceActionBtnUpdateRunlist" style="padding-top:36px;padding-left:36px;" >
-                                    <img rel="tooltip" data-placement="top" data-original-title="ChefClientRun" alt="Chefimport" src="img/galleryIcons/Chefimport.png">
-                                  </a>
-                                </div>
-                                <div>
-                                  <div class="instance-details-list">
-                                    <span class="instance-details-id instance-details-ip">IP : <strong>172.31.25.91</strong></span>
-                                    <span class="instance-details-id">status : 
-                                      <span class="instance-state instance-state-text-pending">Running</span>
-                                    </span>
-                                  </div>
-                                </div>
-                                <hr>
-                                <div style="width:140px !important;" class="instanceActionBtnCtr" data-instanceid="53fed8535d3753774753ecb1">
-                                  <div class="instance-bootstrap-ActionStart">
-                                    <a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Start">
-                                    </a>
-                                  </div>
-                                  <div class="instance-bootstrap-ActionRestart">
-                                    <a href="javascript:void(0)" class="actionbuttonRestart" rel="tooltip" data-placement="top" data-original-title="Restart">
-                                    </a>
-                                  </div>
-                                  <div class="instance-bootstrap-ActionShutdown">
-                                    <a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Shutdown">
-                                    </a>
+                                      </div>
+                                      <div class="actionbutton instance-bootstrap-ActionStart"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
+                                        
+                                      
+                                      <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Shutdown"></a></div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
+                              <div class="back card-backflip">
+                                <div class="cardBackRunlistContaner">
+                                  <span class="card-backflip-margin"></span>
+                                  <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
+                                    <a style="color:#333">Go Back</a>
+                                  </span>
+                                </div>
+                              </div>
                             </div>
+                          </div>
                       </li>
                       <!--Card for Planning ends here-->
 
@@ -1213,4 +1216,17 @@ $(document).ready(function() {
     }
 });
 
+</script>
+<script type="text/javascript">
+$('.instance-details-item').click(function(e) {
+        $(this).parents('.flip-toggle').toggleClass('flip');
+        $('.front').hide();
+        $('.back').show();
+    });
+
+$('.goback').click(function(e) {
+        $(this).parents('.flip-toggle').toggleClass('flip');
+        $('.front').show();
+        $('.back').hide();
+    });
 </script>
