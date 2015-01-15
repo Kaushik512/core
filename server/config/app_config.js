@@ -2,7 +2,8 @@ var pathExtra = require('path-extra');
 var mkdirp = require('mkdirp');
 var fs = require('fs');
 var currentDirectory = __dirname;
-var logger = require('../lib/logger');
+var path = require('path');
+var logger = require('../lib/logger')(module);
 
 var config = {
     app_run_port: 3001,
