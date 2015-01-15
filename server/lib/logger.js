@@ -18,7 +18,7 @@ winston.emitErrs = true;
 var logger = new winston.Logger({
     transports: [
         new winston.transports.DailyRotateFile({
-            level: 'info',
+            level: 'debug',
             datePattern: '.yyyy-MM-dd',
             filename: 'catalyst.log',
             dirname:log_folder,
@@ -33,7 +33,8 @@ var logger = new winston.Logger({
             level: 'debug',
             handleExceptions: true,
             json: false,
-            colorize: true
+            colorize: true,
+            name:'cat-console'
         })
     ],
     exitOnError: false
