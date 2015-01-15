@@ -1,3 +1,8 @@
+@media (min-width: 992px) {
+.modal-lg {
+width: 900px;
+}
+}
 .line-height-2{
     line-height: 2;
 }
