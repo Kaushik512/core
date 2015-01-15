@@ -65,6 +65,7 @@
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
+                                    <div id="tabInstanceStatus">No instance available</div>
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
                                             <div class="widget-main " style="min-height:300px"> 
@@ -1924,6 +1925,10 @@ $(function() {
 
     function initializeInstanceArea(data) {
 
+        if(data.length) {
+            $('#tabInstanceStatus').hide();
+        }
+
         //var $instancesList = $('.instancesList').empty();
         if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
             //alert('loading table');
@@ -2646,6 +2651,8 @@ function addInstanceToDOM(data) {
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
+
+
 }
 
 //Containers table build
@@ -3026,6 +3033,7 @@ $('.launchBtn').click(function(e) {
             pollLogs(lastTimestamp, 0, true);
 
             $.get('../instances/' + data.id, function(data) {
+                $('#tabInstanceStatus').hide();
                 addInstanceToDOM(data);
 
             });
