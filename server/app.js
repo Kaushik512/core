@@ -7,7 +7,7 @@ var https = require("https");
 var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
-var logger = require('./lib/logger');
+var logger = require('./lib/logger')(module);
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');

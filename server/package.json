@@ -5,7 +5,6 @@
     "main": "app.js",
     "dependencies": {
         "aws-sdk": "2.0.0-rc4",
-        "chef-api": "0.3.0",
         "connect": "2.12.0",
         "d3": "3.3.13",
         "ejs": "0.8.5",
@@ -28,7 +27,10 @@
         "extend": "2.0.0",
         "winston": "0.8.3"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "grunt": "0.4.5",
+        "grunt-contrib-jshint": "0.10.0"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
