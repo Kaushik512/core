@@ -18,6 +18,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             var orgTree = [];
+            
             if (orgsJson.masterjson && orgsJson.masterjson.rows && orgsJson.masterjson.rows.row) {
                 for (var i = 0; i < orgsJson.masterjson.rows.row.length; i++) {
                     for (var j = 0; j < orgsJson.masterjson.rows.row[i].field.length; j++) {

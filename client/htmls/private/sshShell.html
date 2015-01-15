@@ -1,0 +1,240 @@
+<html>
+<head>
+	<script src="/socket.io/socket.io.js"></script>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+     <script type="text/javascript" src="js/term.js"></script>
+
+<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
+<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+
+<script type="text/javascript">
+</script>
+</head>
+<body style="background:white">
+
+<div id="loadingContainer" style="height:100%;display:none" >
+<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
+</div>
+
+<form id="login-form" class="smart-form1" role="form">
+          <fieldset style="padding-top:0px;">
+          <div class="">
+      <section class="col col-12 credentialSection">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Username<span class="control-label" style="color:Red;">&nbsp;*</span></label>
+          <label class="input">
+         <input type="text" id="username" value="" autocomplete="off" class="form-control"/>
+
+                    <b class="tooltip tooltip-top-right">
+                    <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+          </label>
+        </div>
+      </section>
+      <section class="col col-12 credentialSection">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Password</label>
+          <label class="input">
+          <input type="password" id="password" value="" autocomplete="off" class="form-control">
+                    <b class="tooltip tooltip-top-right">
+                    <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
+          </label>
+        </div>
+      </section>
+      <section class="col col-12 credentialSection">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Pem File</label>
+          <div class="">
+            <label style="display:inline;padding-top:4px;" class="checkbox">
+                <input type="checkbox" class="smart-form" id="pemFileCheckbox"><i></i>&nbsp;
+            </label>
+            <input type="file" disabled="" style="display:inline" id="pemfileInput">
+        </div>
+        </div>
+      </section>
+        <div style="text-align:center">
+      <input type="submit" value="Submit" class="btn btn-primary">
+        <div>
+    </div>
+    </fieldset>
+</form>
+
+
+
+<div id="errorArea" style="color:red">
+</div>
+
+<div id="terminalContainer" style="display:none"></div>
+
+</body>
+<script type="text/javascript">
+var urlParams = {};
+(window.onpopstate = function() {
+    var url = window.location.href;
+    var indexOfQues = url.lastIndexOf("?");
+    if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+            var paramParts = params[i].split('=');
+            urlParams[paramParts[0]] = paramParts[1];
+        }
+    }
+
+})();
+
+
+$(function() {
+
+
+    var $pemFileCheckBox = $('#pemFileCheckbox').change(function() {
+
+        if ($(this).is(':checked')) {
+            $('#pemfileInput').attr('disabled', false);
+            $('#password').attr('disabled', true);
+        } else {
+            $('#pemfileInput').attr('disabled', true);
+            $('#password').attr('disabled', false);
+        }
+    });
+
+
+   
+    var $errorArea = $('#errorArea');
+    var $submitCmdBtn = $('#submitCmdBtn');
+    var $terminalContainer = $('#terminalContainer');
+    var $loadingContainer = $('#loadingContainer'); 
+    var $terminalContainer = $('#terminalContainer'); 
+    var $loginForm = $('#login-form');
+
+
+    var socket = io.connect('/sshShell');
+
+    var term;
+    var sshOpened = false;
+
+
+
+    socket.on('conErr', function(data) {
+        $errorArea.empty().append(data.message);
+         $errorArea.show();
+        $loginForm.show();
+        $terminalContainer.hide();
+        $loadingContainer.hide();
+     
+    });
+
+    socket.on('opened', function() {
+        console.log('connected');
+        $errorArea.hide();
+        $loginForm.hide();
+        $loadingContainer.hide();
+        $terminalContainer.show();
+        sshOpened = true;
+        term = new Terminal({
+            cols: 80,
+            rows: 24,
+            screenKeys: true,
+            cursorBlink: true,
+            useStyle: true
+        });
+
+        term.on('data', function(data) {
+            if (sshOpened) {
+                //socket.emit('data', data);
+                console.log('term data ==>', data);
+                socket.emit('cmd', data);
+            }
+        });
+
+        term.open($terminalContainer.get(0));
+
+
+
+    });
+
+
+    function openSSh(reqBody) {
+        console.log(reqBody);
+         $errorArea.hide();
+         $terminalContainer.hide();
+         $loginForm.hide();
+         $loadingContainer.show();
+         socket.emit('open', reqBody);
+    }
+
+    $loginForm.submit(function(e) {
+        var reqBody = {};
+        reqBody.id = urlParams.id;
+        reqBody.username = $('#username').val();
+
+        if (!$pemFileCheckBox.is(':checked')) {
+            reqBody.password = $('#password').val();
+            if (!reqBody.username) {
+                alert('Please Enter Username');
+                return;
+            }
+            if (!reqBody.password) {
+                alert('Please Enter Password or Choose a Pem file');
+                return;
+            }
+            console.log(reqBody);
+            openSSh(reqBody);
+        } else {
+            var pemFileInput = $('#pemfileInput').get(0);
+            if (!reqBody.username) {
+                alert('Please Enter Username');
+                return;
+            }
+            if (!pemFileInput.files.length) {
+                alert('Please Choose a Pem file');
+                return;
+            }
+            var reader = new FileReader();
+
+            // Closure to capture the file information.
+            reader.onload = function(e) {
+                // Render thumbnail.
+                reqBody.pemFileData = e.target.result;
+                openSSh(reqBody);
+
+            };
+            // Read in the image file as a data URL.
+            reader.readAsText(pemFileInput.files[0]);
+
+        }
+
+        return false;
+    });
+
+   
+    socket.on('out', function(data) {
+        if (term) {
+            term.write(data.res);
+        }
+    });
+
+    function destroyTerminal() {
+         if (term) {
+            term.destroy();
+        }
+        $terminalContainer.hide();
+        $loginForm.show();
+        $errorArea.hide();
+    }
+
+    socket.on('disconnect', function() {
+       destroyTerminal();
+    });
+    
+    socket.on('close', function() {
+        destroyTerminal()
+    }); 
+
+   
+});
+</script>
+</html>

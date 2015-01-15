@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var extend = require('node.extend');
+var extend = require('extend');
 
 var defaults = {
 	host: 'localhost',
@@ -8,7 +8,10 @@ var defaults = {
 };
 
 module.exports = function(options, callback) {
-	options = extend(defaults, options);
+	var def = extend({},defaults);
+	options = extend(def,options);
+	console.log(options);
+	console.log(defaults);
 	var connectionString = 'mongodb://';
 
 	connectionString += options.host;
