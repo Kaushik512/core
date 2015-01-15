@@ -186,7 +186,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
 
         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
-        if(action == 'delete'){
+        if (action == 'delete') {
             cmd = 'sudo docker rm -f ' + req.params.containerid;
         }
         console.log('cmd received: ' + cmd);
@@ -226,12 +226,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
-    app.get('/instances/checkfordocker/:instanceid',function(req,res){
+    app.get('/instances/checkfordocker/:instanceid', function(req, res) {
 
-         //Confirming if Docker has been installed on the box
+        //Confirming if Docker has been installed on the box
         var _docker = new Docker();
         var cmd = "sudo docker ps";
-         console.log('Docker command executed : ' + cmd);
+        console.log('Docker command executed : ' + cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
                 if (err) {
@@ -239,18 +239,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(500);
                     return;
                     //res.end('200');
-                        
-                    }
-                console.log('this ret:' + retCode);
-                if(retCode == '0'){
-                    instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
-                            console.log('Instance Docker Status set to Success');
-                            res.send('OK');
-                            return;
-                        });
 
                 }
-                else
+                console.log('this ret:' + retCode);
+                if (retCode == '0') {
+                    instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
+                        console.log('Instance Docker Status set to Success');
+                        res.send('OK');
+                        return;
+                    });
+
+                } else
                     res.send('');
             });
 
@@ -267,7 +266,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             cmd += ':' + req.params.tagname;
         }
         var runparams = '';
-        if(req.params.runparams != 'null'){
+        if (req.params.runparams != 'null') {
             runparams = decodeURIComponent(req.params.runparams);
         }
         cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
@@ -339,11 +338,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 var instance = data[0];
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
-                        res.send(500);
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: true,
+                            log: "Unable to get chef data. Chef run failed",
+                            timestamp: new Date().getTime()
+                        });
+                        res.send(200);
                         return;
                     }
                     if (!chefDetails) {
-                        res.send(500);
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: true,
+                            log: "Chef data in null. Chef run failed",
+                            timestamp: new Date().getTime()
+                        });
+                        res.send(200);
                         return;
                     }
 
@@ -416,7 +427,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         log: 'instance runlist updated',
                                         timestamp: new Date().getTime()
                                     });
-                                    
+
                                     //Checking docker status and updating
                                     var _docker = new Docker();
                                     _docker.checkDockerStatus(instance.id,
@@ -426,12 +437,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 res.send(500);
                                                 return;
                                                 //res.end('200');
-                                                    
-                                                }
+
+                                            }
                                             console.log('Docker Check Returned:' + retCode);
-                                            if(retCode == '0'){
+                                            if (retCode == '0') {
                                                 instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
-                                                        console.log('Instance Docker Status set to Success');
+                                                    console.log('Instance Docker Status set to Success');
                                                 });
                                             }
                                         });
