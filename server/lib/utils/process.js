@@ -1,6 +1,6 @@
 var childProcess = require('child_process');
 var util = require('util');
-var nodeExtend = require('node.extend');
+var extend = require('extend');
 
 var defaults = {
 	cwd: null,
@@ -19,7 +19,8 @@ var Process = function(appPath, argList, options) {
 
 
 	if (options) {
-		options = nodeExtend(defaults, options);
+		var def = extend({},defaults);
+		options = extend(def,options);
 	} else {
 		options = defaults;
 	}

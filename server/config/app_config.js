@@ -5,6 +5,11 @@ var currentDirectory = __dirname;
 var logger = require('../lib/logger');
 
 var config = {
+    express: {
+        port: 3001,
+        express_sid_key: 'express.sid',
+        sessionSecret: 'sessionSekret'
+    },
     app_run_port: 3001,
     userHomeDir: pathExtra.homedir(),
     catalysHomeDirName: 'catalyst',
@@ -89,5 +94,6 @@ mkdirp.sync(config.tempDir);
 
 var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
 logger.debug('chef repo location ==>',config.chef.chefReposLocation);
+
 
 module.exports = config;
