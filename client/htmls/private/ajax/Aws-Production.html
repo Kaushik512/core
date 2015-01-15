@@ -282,6 +282,15 @@
 
                                                 </div>       
                                             </section>
+                                            <section class="col col-6 fordocker">
+                                                <label for="category">Launch Parameters
+                                                </label>                 
+                                                 <label class="input">
+                                                    <input type="text" id="dockerlaunchparameters"/>
+                                                </label>
+                                                <label for="category" style="font-size:small">Ex: -v /:/rootfs:ro -p 8080:8080 -d  --name=xxxx
+                                                </label>    
+                                            </section>
                                             </div>            
                                        </div>
                                   </div>
@@ -740,6 +749,7 @@ $(document).ready(function(){
                reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
                reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
+               reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
                /*if(!$('.deploymentsCookbookList').length) {
                 alert('Please wait while we are fetching cookbooks.');
                 return false;
@@ -788,7 +798,7 @@ $(document).ready(function(){
                reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
                reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
                reqBody.dockerreponame = $('#dockerrepoListInput').val();
-
+               reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
 
                reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
                reqBody.orgId = $('#orgnameSelect').val();
