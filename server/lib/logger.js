@@ -6,7 +6,6 @@ var util = require('util');
 // init log folder now ...Will create if one does not exist already
 var log_folder = path.normalize(__dirname+"/../logs");
 mkdirp.sync(log_folder);
-
 var log_file=path.normalize(log_folder+"/catalyst.log");
 
 winston.emitErrs = true;
@@ -20,7 +19,7 @@ winston.emitErrs = true;
  */
 function create_logger(module){
     if(! module.filename ){
-        throw new Error("Expecting a vali module object.GOt this instead >> "+ module);
+        throw new Error("Expecting a valid module object.Got this instead >> "+ module);
     }
     var label = path.basename(module.filename);
 
