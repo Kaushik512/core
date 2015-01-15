@@ -78,7 +78,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            //console.log('data ==>', data);
+            console.log('data ==>', data);
             callback(null, data);
 
         });
