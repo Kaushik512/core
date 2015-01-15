@@ -411,7 +411,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="launchDockerInstanceSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="launchDockerInstanceSelector__" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width:750px">
     <div class="modal-content">
       <div class="modal-header">
@@ -430,7 +430,7 @@
 </div>
 
 
-<div class="modal fade bs-example-modal-lg" id="myModalLabelDockerContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade bs-example-modal-lg" id="launchDockerInstanceSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -452,7 +452,7 @@
                         <label class="control-label" for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
                         </label>
                         <label class="input controls">
-                            <input type="text" id="Containernamefield" name="namefield" class="required form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
+                            <input type="text" id="Containernamefield" name="namefield" class="form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
                         </label>
                     </section>
                     <section class="col col-6">
@@ -521,40 +521,18 @@
                 </div>
               </div>
               <div class="tab-pane" id="tab2">
+                <div id="dockerinstancesselctorview" style="margin-left: 8px;margin-top: 26px;width: 98%;">
                 <!-- <div class="control-group">
                   <label class="control-label" for="url">URL</label>
                   <div class="controls">
                     <input type="text" id="urlfield" name="urlfield" class="required url">
                   </div>
                 </div> -->
-                <div class="table-responsive table-div" >
-                  <table id="tabletable" class="table table-striped table-bordered table-hover dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important">
-                      <thead>
-                          <tr class="rowCustomStyle" style="font-weight:bold;">
-                              <td>Select Instance</td>
-                              <td>Logo</td>
-                              <td>Instance Name</td>
-                              <td>IP Address</td>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                            <td><input type="checkbox">1</td>
-                            <td><img src="img/app-store-icons/jboss-icon.png" style="height:27px;"></td>
-                            <td>SSHShellTest</td>
-                            <td>54.68.240.194</td>
-                          </tr>
-                          <tr>
-                            <td><input type="checkbox">2</td>
-                            <td><img src="img/app-store-icons/apache-tomcat1.jpg" style="height:27px;"></td>
-                            <td>ApacheBP</td>
-                            <td>54.149.10.235</td>
-                          </tr>
-                         
-                      </tbody>
-                  </tbody>
-              </table>
-          </div>
+                </div>
+                
+                <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+              
               </div>
               <br><hr>
             <ul class="pager wizard">
@@ -1405,7 +1383,9 @@ $('.dockerinstancestart').click(function(e){
             $td.attr('title','Pulling in Images');
             var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
-            var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+
+           // var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+           var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
            // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
@@ -1489,7 +1469,6 @@ $(function() {
                         $tr.append($tdInstanceName).append($tdInstanceIp);
                         $taskNodeListContainer.append($tr);
                     }
-                    $('#assignedNode').modal('show');
                 });
             });
             $tr.append($tdNodeList);
@@ -2012,8 +1991,44 @@ $(function() {
 
     });
 });
+function generateDockerLaunchParams(){
+  if($('#Containernamefield').val() == ''){
+    $('.dockerparamrequired').removeClass('hidden');
+    return('');
+  }
 
+    var launchparams = '';
+    $('[dockerparamkey]').each(function(){
+      if($(this).val() != ''){
+        var itms = $(this).val().split(',');
+        for(itm in itms)
+          launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+      }
+    });
+    return(launchparams);
+}
 
+function loadLaunchParams(){
+  var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+  if(lparam != ''){
+      $('[dockerparamkey]').val('');
+      var params = lparam.split(' -');
+      for(para in params){
+        var subparam = params[para].split(' ');
+        if(subparam.length > 0){
+          $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+          if($inp.val() != '')
+            $inp.val($inp.val() + ',' + subparam[1]);
+          else
+            $inp.val(subparam[1]);
+        }
+        //alert(params[para]);
+      }
+    }
+    else
+       $('[dockerparamkey]').val(''); 
+    $('#myModalLabelDockerContainer').modal('show');
+}
 
 
 $(document).ready(function(){
@@ -2021,7 +2036,17 @@ $(document).ready(function(){
     
    //alert($('#accordion-2').find('a').first().html());
    $('.dockerrepotagselect').parent().prepend('Tags&nbsp;');
-
+   
+   $('#rootwizard').bootstrapWizard({
+        'tabClass': 'nav nav-pills',
+        'onNext': function(tab, navigation, index) {
+          var $valid = $("#commentForm").valid();
+          if(!$valid) {
+            $validator.focusInvalid();
+            return false;
+          }
+        }
+      }); 
 });
 
 function getCssClassFromStatus(status) {
@@ -2818,6 +2843,7 @@ $('.launchBtn').click(function(e) {
        return;
     }
     if($selectedItems.attr('data-templateType') === 'Docker') {
+          loadLaunchParams();           
           var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
           var blueprintId = $selectedItems.attr('data-blueprintId');
           var dockerreponame = $selectedItems.attr('dockerreponame');
@@ -2826,7 +2852,7 @@ $('.launchBtn').click(function(e) {
 
         
 
-        $launchDockerInstanceSelector.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
+        $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
           var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
           var $newinstancetbody = $('<tbody></tbody>');
           $newinstancetable.append($newinstancetbody);
