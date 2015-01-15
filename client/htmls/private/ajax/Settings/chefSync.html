@@ -75,35 +75,34 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Import Nodes</h4>
       </div>
-      <div class="modal-body">
-         <form role="form" class="smart-form1">
-          <fieldset style="padding-top:0px;">
+      <div class="modal-body" style="padding:0px !important">
+         <form role="form" class="smart-form">
+          <fieldset style="padding-top:0px;margin-top:10px;">
           <div class="">
-          <section class="col col-12">
-            <div class="form-group">
+          <section class="col col-6">
+            <div class="form-group" style="margin-bottom:15px;">
               <label for="exampleInputEmail1">Organization</label>
                 <select id="chefImportOrgSelect"  class="width-100 aaa" disabled>
                   
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:15px;">
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
               <select id="chefImportBgSelect"  class="width-100 aaaaa" >
                 
               </select>
             </div>
-          
           <div class="form-group">
-          <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <div class="">
-          <select id="chefImportProjectSelect"  class="width-100" >
-                
-          </select>
-        </div>
-        </div>
-      </section>
+            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            <div class="">
+              <select id="chefImportProjectSelect"  class="width-100" >
+                    
+              </select>
+            </div>
+          </div>
+        </section>
       
-      <section class="col col-12" style="display:none">
+      <section class="col col-6" style="display:none">
         <div class="form-group">
           <label for="exampleInputEmail1">Provider</label>
           <div class="">
@@ -113,28 +112,27 @@
         </div>
         </div>
       </section>
-      <section class="col col-12 credentialSection">
+      <section class="col col-6 credentialSection" style="margin-bottom:10px;">
         <div class="form-group">
           <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
           <label class="input">
           <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput">
-
-                    <b class="tooltip tooltip-top-right">
-                    <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+            <b class="tooltip tooltip-top-right">
+            <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
           </label>
         </div>
       </section>
-      <section class="col col-12 credentialSection" >
+      <section class="col col-6 credentialSection" style="margin-bottom:12px;">
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
           <label class="input">
           <input type="password" class="form-control" id="importPasswordInput" />
-                    <b class="tooltip tooltip-top-right">
-                    <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
+            <b class="tooltip tooltip-top-right">
+            <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
           </label>
         </div>
       </section>
-      <section class="col col-12 credentialSection" >
+      <!-- <section class="col col-6 credentialSection" >
         <div class="form-group">
           <label for="exampleInputEmail1">Pem File</label>
           <div class="">
@@ -144,8 +142,22 @@
             <input type="file" id="importPemfileInput" style="display:inline" disabled/>
         </div>
         </div>
+      </section> -->
+      <section class="col col-6 credentialSection">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Certificate Key File</label>
+          <label class="checkbox" style="display:inline;padding-top:4px;">
+              <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
+          </label>
+          <label class="input input-file" for="file">
+              <div class="button">
+                <input type="file" id="importPemfileInput" style="display:inline" disabled>Browse
+              </div>
+              <input type="text" readonly="">
+          </label>
+        </div>
       </section>
-      <section class="col col-12">
+      <section class="col col-6">
           <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
           <label class="select select-multiple">
               <div class="userListLoadingContainer"></div>
