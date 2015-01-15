@@ -760,7 +760,7 @@
 
 <!-- Modal SSH Shell-->
 <div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-lg" style="">
+  <div class="modal-dialog " style="">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -2328,8 +2328,8 @@ function addInstanceToDOM(data) {
     $divDomainRolesCaption.append($('<hr>'));
 
 
-    //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="height:30px;width:140px;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    //data-placement="top" rel="tooltip" width:140px;margin-left:6px;
+    var $divActionBtnContainer = $('<div style="height:30px;width:152px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
     //alert($divComponentListImage.html());
 
     
@@ -2346,16 +2346,14 @@ function addInstanceToDOM(data) {
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
     $divActionBtnContainer.append($divActionShutdownContainer); 
      
-
-     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').click(function(e){
+    // <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
+     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH').click(function(e){
            var $sshModal = $('#modalSSHShellContainer');
            var instanceId = $(this).attr('data-instanceId');
            var $iframe = $('<iframe src="sshShell.html?id='+instanceId+'" height="100%" width="100%" frameBorder="0"></iframe>');
            $sshModal.find('.modal-body').empty().append($iframe);
            $sshModal.modal('show');
      })); 
-    
-
     $divActionBtnContainer.append($divActionSSHContainer); 
    
     var $back = $('<div></div>').addClass('back card-backflip');

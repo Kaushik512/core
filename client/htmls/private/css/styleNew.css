@@ -3,6 +3,7 @@
     width: 900px;
   }
 }
+
 .padding-right0{
     padding-right: 0px !important;
 }
@@ -1425,6 +1426,12 @@ hr.layout {
     text-align: center;*/
     float:left;
 }
+.instance-bootstrap-ActionSSH {
+    /*font-size: 10px;
+  
+    text-align: center;*/
+    float:left !important;
+}
 .instance-bootstrap-ActionShutdown {
     /*font-size: 10px;
   
@@ -1955,7 +1962,7 @@ background-image:url('../img/rsz_inactive.png');
 
 
 .actionbuttonStart{
-height:30%;width:30%;
+/*height:30%;width:30%;*/
 background-image:url('../img/galleryIcons/start_icon.png');
 background-repeat:no-repeat;
 float: left;
@@ -1964,17 +1971,25 @@ width: 100%;
 margin-top:0px;
 }
 .actionbuttonRestart{
-    height:30%;width:30%;background-image:url('../img/galleryIcons/restart.png');
+    /*height:30%;width:30%;*/
+    background-image:url('../img/galleryIcons/restart.png');
+    background-repeat:no-repeat;float: left;
+    height: 27px;margin-left: 0px;width: 100%;
+}
+.actionbuttonSSH{
+    /*height:30%;width:30%;*/
+    background-image:url('../img/galleryIcons/restart.png');
     background-repeat:no-repeat;float: left;
     height: 27px;margin-left: 0px;width: 100%;
 }
 .actionbuttonChefClientRun{
-    height:30%;width:30%;background-image:url('../img/galleryIcons/Chefimport.png');
+    /*height:30%;width:30%;*/
+    background-image:url('../img/galleryIcons/Chefimport.png');
     background-repeat:no-repeat;float: left;
     height: 27px;margin-left: 4px;width: 32%;
 }
 .actionbuttonShutdown{
-    height:30%;width:30%;
+    /*height:30%;width:30%;*/
     background-image:url('../img/galleryIcons/shut_down.png');
     background-repeat:no-repeat;float: left;height: 27px;width: 100%;
 }
@@ -2345,7 +2360,8 @@ margin-top:1px;
    /* width:30px;*/
     width:27px;
     /*margin-left:8px;*/
-    margin-left: 30px;
+    /*margin-left: 30px;*/
+    margin-left: 14px;
     margin-top:2px;
 }
 
