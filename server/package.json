@@ -13,7 +13,6 @@
         "mongoose": "*",
         "socket.io": "0.9.16",
         "net-ping": "1.1.9",
-        "node.extend": "*",
         "ldapjs": "0.7.1",
         "connect-redis": "1.4.x",
         "node-uuid": "*",
@@ -25,7 +24,8 @@
         "fs-extra": "0.13.0",
         "java": "0.4.4",
         "tail": "0.4.0",
-        "random-port": "0.1.0"
+        "random-port": "0.1.0",
+        "extend":"2.0.0"
     },
     "devDependencies": {},
     "scripts": {

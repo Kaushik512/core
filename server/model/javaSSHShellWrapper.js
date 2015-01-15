@@ -1,6 +1,6 @@
 var java = require('java');
 var appConfig = require('../config/app_config');
-var nodeExtend = require('node.extend');
+var extend = require('extend');
 
 var net = require('net');
 var random_port = require('random-port');
@@ -22,8 +22,8 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 
 console.log(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
-//java.classpath.push(D4DfolderPath + '/java/classes');
-java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
+java.classpath.push(D4DfolderPath + '/java/classes');
+//java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
 
 
 
@@ -34,7 +34,7 @@ var defaults = {
 };
 
 
-function JavaSSHShell(options,javaSSHInstance, socketServer, callback) {
+function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
 
     var that = this;
     events.EventEmitter.call(this);
@@ -48,10 +48,15 @@ function JavaSSHShell(options,javaSSHInstance, socketServer, callback) {
         con.setNoDelay(true);
         //listening to socket
         con.on('data', function(data) {
-            console.log('got data ==>', data);
+
             //console.log('type of data ==>',typeof data);
             that.emit('out', data);
 
+        });
+
+        con.on('close', function() {
+            that.close();
+            that.emit('close');
         });
 
     });
@@ -60,6 +65,7 @@ function JavaSSHShell(options,javaSSHInstance, socketServer, callback) {
     java.callMethod(javaSSHInstance, 'open', function(err, retCode) {
         if (err) {
             console.log(err);
+            that.close();
             callback(err, null);
             return;
         }
@@ -70,7 +76,6 @@ function JavaSSHShell(options,javaSSHInstance, socketServer, callback) {
 
     this.write = function(cmd) {
         if (con) {
-            console.log('writing to socket ==>', cmd);
             con.write(cmd);
         }
     };
@@ -81,11 +86,16 @@ function JavaSSHShell(options,javaSSHInstance, socketServer, callback) {
                 console.log(err);
                 //return;
             }
-            socketServer.close();
+            console.log('closing server');
+            try {
+                socketServer.close();
+            } catch (err) {
+                console.log('socket is closed');
+            }
         });
 
-        if(options.pemFilePath) {
-            fileIo.removeFile(options.pemFilePath,function(){
+        if (options.pemFilePath) {
+            fileIo.removeFile(options.pemFilePath, function() {
                 console.log('pem file deleted');
             });
         }
@@ -113,7 +123,7 @@ function openSSH(options, callback) {
                 callback(err, null);
                 return;
             }
-            var javaSSHSHell = new JavaSSHShell(options,javaSSHInstance, socketServer, callback);
+            var javaSSHSHell = new JavaSSHShell(options, javaSSHInstance, socketServer, callback);
         });
     });
 
@@ -122,14 +132,16 @@ function openSSH(options, callback) {
 
 
 module.exports.open = function(options, callback) {
-    options = nodeExtend(defaults, options);
+    var def = extend({},defaults);
+    options = extend(def,options);
+    
     if (options.password) {
         options.pemFilePath = null;
-        openSSH(options,callback);
+        openSSH(options, callback);
     } else {
         options.password = null;
         if (options.pemFileData) {
-            var tempPemFileLocation = options.tempDir+'/'+uuid.v4();
+            var tempPemFileLocation = options.tempDir + '/' + uuid.v4();
             fileIo.writeFile(tempPemFileLocation, options.pemFileData, null, function(err) {
                 if (err) {
                     console.log('unable to create pem file ', err);
@@ -137,11 +149,11 @@ module.exports.open = function(options, callback) {
                     return;
                 }
                 options.pemFilePath = tempPemFileLocation;
-                openSSH(options,callback);
+                openSSH(options, callback);
             });
 
         } else {
-            openSSH(options,callback);
+            openSSH(options, callback);
         }
     }
 

@@ -1,14 +1,14 @@
 var java = require('java');
 var Tail = require('tail').Tail;
 var appConfig = require('../config/app_config');
-var nodeExtend = require('node.extend');
+var extend = require('extend');
 var uuid = require('node-uuid');
 var fs = require('fs');
 
 var currentDirectory = __dirname;
 
 var indexOfSlash = currentDirectory.lastIndexOf("/");
-if(indexOfSlash === -1) {
+if (indexOfSlash === -1) {
     indexOfSlash = currentDirectory.lastIndexOf("\\");
 }
 var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
@@ -103,7 +103,7 @@ function JavaSSH(javaSSHInstance, options) {
                         return;
                     }
                     if (typeof onComplete === 'function') {
-                        onComplete(err,retCode );
+                        onComplete(err, retCode);
                     }
                 });
                 /*var cmdList = java.newArray("java.lang.String", ['ls','ps -ef','pwd']);
@@ -196,7 +196,8 @@ function JavaSSH(javaSSHInstance, options) {
 
 
 module.exports.getNewInstance = function(options, callback) {
-    options = nodeExtend(defaults, options);
+    var def = extend({}, defaults);
+    options = extend(def, options);
     if (options.password) {
         options.pemFilePath = null;
     } else {

@@ -746,6 +746,26 @@
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
 
+
+<!-- Modal SSH Shell-->
+<div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg" style="">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Terminal</h4>
+      </div>
+      <div class="modal-body" style="height:430px">
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Modal for Container tab started-->
 <div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -990,6 +1010,14 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
 $(document).ready(function() {
+   
+
+  //emptying ssh container 
+  $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
+      $('#modalSSHShellContainer').find('.modal-body').empty();
+  });
+
+
   if(localStorage.getItem("SelectedClass") == "Orchestration")
   {
       localStorage.removeItem("SelectedClass");
@@ -1968,6 +1996,7 @@ function pollInstanceState(instanceId, state, delay) {
                     if (data.instanceState == 'running'){
                       $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
                       $('.instancestatusindicator.started').parent().find('.chefClientRunlistImage').show();
+                    
                     }
                 }
             }
@@ -2302,7 +2331,17 @@ function addInstanceToDOM(data) {
     // $divActionBtnContainer.append($divActionReStartContainer);
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
     $divActionBtnContainer.append($divActionShutdownContainer); 
-     var $divActionSSHContainer = $('<div class="sshContainer"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="sshShell.html?id='+data._id+'">SSH</a>').addClass('actionbuttonShutdown')); 
+     
+
+     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').click(function(e){
+           var $sshModal = $('#modalSSHShellContainer');
+           var instanceId = $(this).attr('data-instanceId');
+           var $iframe = $('<iframe src="sshShell.html?id='+instanceId+'" height="100%" width="100%" frameBorder="0"></iframe>');
+           $sshModal.find('.modal-body').empty().append($iframe);
+           $sshModal.modal('show');
+     })); 
+    
+
     $divActionBtnContainer.append($divActionSSHContainer); 
    
     var $back = $('<div></div>').addClass('back card-backflip');

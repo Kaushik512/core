@@ -37,6 +37,7 @@ module.exports.setRoutes = function(socketIo) {
                     pemFileData: instanceData.pemFileData
                 }, function(err, shell) {
                     if (err) {
+                        console.log('here err');
                         socket.emit('conErr', {
                             message: "Unable to connect to instance"
                         });
@@ -49,15 +50,21 @@ module.exports.setRoutes = function(socketIo) {
                             res: outData
                         });
                     });
+
+                    shell.on('close', function() {
+                        socket.shellInstance = null;
+                        socket.emit('close');
+                    });
+
+
                     socket.emit('opened');
                 });
             });
         });
 
         socket.on('cmd', function(data) {
-            console.log("cmd Recieved", data);
+
             if (socket.shellInstance) {
-                console.log('writing');
                 socket.shellInstance.write(data);
             }
         });
