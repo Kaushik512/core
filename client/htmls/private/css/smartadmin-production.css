@@ -494,7 +494,7 @@
 body.nooverflow {
     overflow: hidden;
     position: fixed;
-    width: 100%}
+    width: 100%;}
 #jarviswidget-fullscreen-mode {
     width: 100%;
     height: 100%;
@@ -16572,12 +16572,15 @@ img.away {
 .display-inline.hidden-tablet, .hidden-tablet {
     display: none!important;
 }
-}@media (min-width:768px) and (max-width:979px) {
+}
+@media (min-width:767px) and (max-width:979px) {
     #main {
-    margin-left: 0;
+    margin-left: 220px;
 }
 #left-panel {
-    left: -220px;
+    left: 0px;
+    position:absolute;
+    width:220px;
 }
 .minified #left-panel {
     left: 0;
@@ -16614,14 +16617,25 @@ img.away {
 .header-search>input[type=text] {
     margin-top: 9px;
 }
+#header>div {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1px;
+    float: left;
+}
+#project-context {
+    display: inline-block;
+    padding: 7px 3px 0;
+    position: relative;
+}
+#project-context>:first-child
+{
+    font-size:13px;
+}
+
 }
 @media (min-width:768px) and (max-width:880px) {
-    #main {
-    margin-left: 0;
-}
-#left-panel {
-    left: -220px;
-}
+    
 .no-content-padding {
     margin: 0 -14px!important;
 }
@@ -16806,7 +16820,8 @@ img.away {
 #project-context {
     display: none;
 }
-}@media only screen and (min-width:0) and (max-width:679px) {
+}
+@media only screen and (min-width:0) and (max-width:679px) {
     #main {
     margin-left: 0;
 }
