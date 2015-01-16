@@ -1414,15 +1414,17 @@ $('.dockerinstancestart').click(function(e){
             $td.find('.dockermessage').detach();
             $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
             $td.attr('title','Pulling in Images');
-            var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
+            var imagename = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
+
+            var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
 
            // var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
            var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
            // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
-          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
+          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();

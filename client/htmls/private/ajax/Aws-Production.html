@@ -736,6 +736,7 @@ $(document).ready(function(){
                                    }
                                } else //when template type is docker
                                {
+                                 //  alert(dockerreponame);
                                    var cb = dockercontainerpathstitle.split(',');
                                    var cbpath = dockercontainerpaths.split(',');
                                    var licb = '';
@@ -848,7 +849,7 @@ $(document).ready(function(){
                                        //limiting the number to the top 5
                                    });
                                    $('.productdiv2.role-Selected').first().attr('dockerrepotags', dockerrepotags);
-                                   $('.productdiv2.role-Selected').first().attr('dockerreponame', $dockerrepoListInput.val());
+                                   $('.productdiv2.role-Selected').first().attr('dockerimagename', $dockerrepoListInput.val());
                                }
                            });
                        });
@@ -907,6 +908,8 @@ $(document).ready(function(){
                reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
                reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
+               reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+               //dockerreponame
                /*if(!$('.deploymentsCookbookList').length) {
                 alert('Please wait while we are fetching cookbooks.');
                 return false;
@@ -954,9 +957,10 @@ $(document).ready(function(){
                //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
                reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
                reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
-               reqBody.dockerreponame = $('#dockerrepoListInput').val();
+               reqBody.dockerimagename= $('#dockerrepoListInput').val();
                reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
-
+               reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+               alert(reqBody.dockerreponame);
                reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
                reqBody.orgId = $('#orgnameSelect').val();
                reqBody.projectId = $('#projectListInput').val();
@@ -977,7 +981,7 @@ $(document).ready(function(){
                    alert("Please choose an environment");
                    return false;
                }
-               reqBody.users = $('#userListSelect').val()
+               reqBody.users = $('#userListSelect').val();
 
                if (!reqBody.users) {
                    alert("Please choose users");

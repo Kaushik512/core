@@ -255,72 +255,90 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
-    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname/:runparams', function(req, res) {
+    app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams', function(req, res) {
 
         console.log('reached here a');
         var instanceid = req.params.instanceid;
-        var _docker = new Docker();
-        var stdmessages = '';
-        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename);
-        if (req.params.tagname != null) {
-            cmd += ':' + req.params.tagname;
-        }
-        var runparams = '';
-        if (req.params.runparams != 'null') {
-            runparams = decodeURIComponent(req.params.runparams);
-        }
-        cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
-        console.log('Docker command executed : ' + cmd);
-        _docker.runDockerCommands(cmd, req.params.instanceid,
-            function(err, retCode) {
-                if (err) {
-                    logsDao.insertLog({
-                        referenceId: instanceid,
-                        err: true,
-                        log: 'Unable to run chef-client',
-                        timestamp: new Date().getTime()
-                    });
-                    res.send(err);
-                    return;
+
+        configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
+            if (!err) {
+
+                //  var dockerRepo = JSON.parse(data);
+                console.log('Docker Repo ->', JSON.stringify(data));
+                 var dock = JSON.parse(data);
+               // var dockkeys = Object.keys(data);
+                console.log('username:' + dock.dockeruserid);
+
+                var _docker = new Docker();
+                var stdmessages = '';
+
+                var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+
+                cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                if (req.params.tagname != null) {
+                    cmd += ':' + req.params.tagname;
                 }
-
-                console.log("docker return ", retCode);
-                //if retCode == 0 //update docker status into instacne
-                instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
-                    console.log('Instance Docker Status set to Success');
-                });
-
-
-
-                res.send(200);
-
-            },
-            function(stdOutData) {
-                if (!stdOutData) {
-
-                    console.log("SSH Stdout :" + stdOutData.toString('ascii'));
-                    stdmessages += stdOutData.toString('ascii');
-                } else {
-                    logsDao.insertLog({
-                        referenceId: instanceid,
-                        err: false,
-                        log: stdOutData.toString('ascii'),
-                        timestamp: new Date().getTime()
-                    });
-                    console.log("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
-                    stdmessages += stdOutData.toString('ascii');
+                var runparams = '';
+                if (req.params.runparams != 'null') {
+                    runparams = decodeURIComponent(req.params.runparams);
                 }
-            }, function(stdOutErr) {
-                logsDao.insertLog({
-                    referenceId: instanceid,
-                    err: true,
-                    log: stdOutErr.toString('ascii'),
-                    timestamp: new Date().getTime()
-                });
-                console.log("docker return ", stdOutErr);
-                res.send(stdOutErr);
+                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+                console.log('Docker command executed : ' + cmd);
+                _docker.runDockerCommands(cmd, req.params.instanceid,
+                    function(err, retCode) {
+                        if (err) {
+                            logsDao.insertLog({
+                                referenceId: instanceid,
+                                err: true,
+                                log: 'Unable to run chef-client',
+                                timestamp: new Date().getTime()
+                            });
+                            res.send(err);
+                            return;
+                        }
 
-            });
+                        console.log("docker return ", retCode);
+                        //if retCode == 0 //update docker status into instacne
+                        instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                            console.log('Instance Docker Status set to Success');
+                        });
+
+
+
+                        res.send(200);
+
+                    },
+                    function(stdOutData) {
+                        if (!stdOutData) {
+
+                            console.log("SSH Stdout :" + stdOutData.toString('ascii'));
+                            stdmessages += stdOutData.toString('ascii');
+                        } else {
+                            logsDao.insertLog({
+                                referenceId: instanceid,
+                                err: false,
+                                log: stdOutData.toString('ascii'),
+                                timestamp: new Date().getTime()
+                            });
+                            console.log("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
+                            stdmessages += stdOutData.toString('ascii');
+                        }
+                    }, function(stdOutErr) {
+                        logsDao.insertLog({
+                            referenceId: instanceid,
+                            err: true,
+                            log: stdOutErr.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        });
+                        console.log("docker return ", stdOutErr);
+                        res.send(stdOutErr);
+
+                    });
+
+            }
+        });
+
+
     });
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {

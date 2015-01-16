@@ -3,7 +3,7 @@ var fileIo = require('./../lib/utils/fileio');
 var SSH = require('./../lib/utils/sshexec');
 var instancesDao = require('./instances.js');
 var credentialCrpto = require('./../lib/credentialcryptography.js');
-
+var configmgmtDao = require('../model/d4dmasters/configmgmt');
 
 var Docker = function(){
 	var that = this;
