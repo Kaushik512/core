@@ -65,6 +65,7 @@
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
+                                    <div id="tabInstanceStatus">No instance available</div>
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
                                             <div class="widget-main " style="min-height:300px"> 
@@ -423,7 +424,7 @@
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
+        <button type="button" class="btn btn-default btn-primary dockerinstancestartold" style="margin-right:5px;">Start</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -530,17 +531,19 @@
                   </div>
                 </div> -->
                 </div>
+                <div class="btn-group">
                 
-                <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-              
+                <a type="button" class="btn btn-default btn-primary hidden" data-dismiss="modal">Close</a>
+                </div>
               </div>
               <br><hr>
             <ul class="pager wizard">
               <!-- <li class="previous first" style="display:none;"><a href="#">First</a></li> -->
               <li class="previous disabled"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px">Previous</a></li>
               <!-- <li class="next last" style="display:none;"><a href="#">Last</a></li> -->
-                <li class="next"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;">Next</a></li>
+              <li class="next"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;">Next</a></li>
+              <button type="button" class="btn btn-primary nav nav-pills dockerinstancestart hidden" style="margin-right:5px;height:30px;width:80px">Start</button>
+                
             </ul>
           </div>  
         </div>
@@ -1924,6 +1927,10 @@ $(function() {
 
     function initializeInstanceArea(data) {
 
+        if(data.length) {
+            $('#tabInstanceStatus').hide();
+        }
+
         //var $instancesList = $('.instancesList').empty();
         if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
             //alert('loading table');
@@ -2070,12 +2077,18 @@ $(document).ready(function(){
    $('#rootwizard').bootstrapWizard({
         'tabClass': 'nav nav-pills',
         'onNext': function(tab, navigation, index) {
+            
+            $('.dockerinstancestart').first().removeClass('hidden');
           var $valid = $("#commentForm").valid();
           if(!$valid) {
             $validator.focusInvalid();
             return false;
           }
+        },
+        'onPrevious' : function(tab,navigation,index){
+            $('.dockerinstancestart').first().addClass('hidden');
         }
+
       }); 
 });
 
@@ -2646,6 +2659,8 @@ function addInstanceToDOM(data) {
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
+
+
 }
 
 //Containers table build
@@ -3026,6 +3041,7 @@ $('.launchBtn').click(function(e) {
             pollLogs(lastTimestamp, 0, true);
 
             $.get('../instances/' + data.id, function(data) {
+                $('#tabInstanceStatus').hide();
                 addInstanceToDOM(data);
 
             });
