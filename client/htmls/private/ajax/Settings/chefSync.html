@@ -35,7 +35,7 @@
 <!-- Tab panes -->
 <div  class="tab-content nodeListContainer">
   <div  class="tab-pane active tabContent table-responsive" id="organiz" style="display:none">
-    <table class="table table-hover table-bordered" style="font-size:13px;padding-bottom:20px;";>
+    <table class="table table-hover table-bordered" style="font-size:13px;margin-bottom:55px";>
     
     <thead>
       <tr>
@@ -251,7 +251,7 @@ $(function(){
 
  //drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
- $bgList = $('#chefImportBgSelect');
+var $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
 
 $('.nodeListContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -439,12 +439,13 @@ $('.showChefImportNodesModalBtn').click(function(e){
    var $checkBoxes = $('.nodeCheckBox:checked');
    var reqBody = {};
    reqBody.orgId = $orgListInput.val();
+   
    reqBody.projectId = $projectList.val();
-   reqBody.users = $('#userListSelect').val();
-   if(!reqBody.users || !reqBody.users.length) {
-     alert('Please Choose Users');
-     return;
+   if(!reqBody.projectId || !reqBody.projectId.length){
+    alert('Please Select Business Groups & Project');
+    return;
    }
+   
 
    reqBody.selectedNodes = [];
    $checkBoxes.each(function(){
@@ -462,6 +463,11 @@ $('.showChefImportNodesModalBtn').click(function(e){
        } if(!reqBody.credentials.password) {
          alert('Please Enter Password or Choose a Pem file');
          return;
+       }
+       reqBody.users = $('#userListSelect').val();
+        if(!reqBody.users || !reqBody.users.length) {
+        alert('Please Choose Users');
+        return;
        }
        console.log(reqBody);
        makeRequest();
@@ -545,7 +551,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
      pollTaskStatus(data.taskId,0);
 
    }).error(function(){
-    alert('Unable to import nodes. Please try again later');
+    alert('Please select Business Groups & Project');
    });
   }
 

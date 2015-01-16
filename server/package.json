@@ -25,7 +25,8 @@
         "tail": "0.4.0",
         "random-port": "0.1.0",
         "extend": "2.0.0",
-        "winston": "0.8.3"
+        "winston": "0.8.3",
+        "command-line-args": "0.5.3"
     },
     "devDependencies": {
         "grunt": "0.4.5",
