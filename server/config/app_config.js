@@ -94,7 +94,7 @@ mkdirp.sync(config.instancePemFilesDir);
 mkdirp.sync(config.tempDir);
 
 var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
-logger.debug('chef repo location ==>',config.chef.chefReposLocation);
+logger.debug('chef repo location ==>', config.chef.chefReposLocation);
 
 
 module.exports = config;

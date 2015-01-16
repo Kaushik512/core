@@ -65,6 +65,7 @@
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
+                                    <div id="tabInstanceStatus">No instance available</div>
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
                                             <div class="widget-main " style="min-height:300px"> 
@@ -411,7 +412,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="launchDockerInstanceSelector__" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="launchDockerInstanceSelector__" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+
   <div class="modal-dialog" style="width:750px">
     <div class="modal-content">
       <div class="modal-header">
@@ -557,7 +559,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -574,17 +577,17 @@
   </div>
 </div>
 
-<div class="modal fade" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding:0px !important">
         
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="margin-top:0px !important;">
 
         <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
@@ -594,14 +597,14 @@
 </div>
 
 
-<div class="modal fade" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade bs-example-modal-lg" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding:0px !important">
       
         
         <div class="chefRunlistContainer">
@@ -610,7 +613,7 @@
         
          
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="margin-top:0px !important;">
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
@@ -618,7 +621,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -640,7 +643,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalTableRunlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalTableRunlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -664,7 +667,7 @@
 </div><!-- /.modal -->
 
 <!-- Modal -->
-<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -717,7 +720,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
+<div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade" data-backdrop="static">
 
     <div class="modal-dialog"  style="width:80%;">
         <div class="modal-content" style="height:500px">
@@ -747,7 +750,7 @@
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedNode-->
 
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -792,7 +795,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedNode-->
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedRunlist" class="modal fade">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedRunlist" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -839,7 +842,7 @@
 
 
 
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -888,7 +891,7 @@
 
 <!-- Modal SSH Shell-->
 <div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-lg" style="">
+  <div class="modal-dialog " style="">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -906,7 +909,7 @@
 
 
 <!-- Modal for Container tab started-->
-<div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1924,6 +1927,10 @@ $(function() {
 
     function initializeInstanceArea(data) {
 
+        if(data.length) {
+            $('#tabInstanceStatus').hide();
+        }
+
         //var $instancesList = $('.instancesList').empty();
         if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
             //alert('loading table');
@@ -2239,11 +2246,7 @@ var startStopInstanceHandler = function(e) {
 
             pollInstanceState(instanceId, oldState, 2000);
         });
-
     });
-
-
-
 }
 
 
@@ -2518,8 +2521,8 @@ function addInstanceToDOM(data) {
     $divDomainRolesCaption.append($('<hr>'));
 
 
-    //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="height:30px;width:140px;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    //data-placement="top" rel="tooltip" width:140px;margin-left:6px;
+    var $divActionBtnContainer = $('<div style="height:30px;width:152px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
     //alert($divComponentListImage.html());
 
     
@@ -2536,16 +2539,14 @@ function addInstanceToDOM(data) {
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
     $divActionBtnContainer.append($divActionShutdownContainer); 
      
-
-     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').click(function(e){
+    // <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
+     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH').click(function(e){
            var $sshModal = $('#modalSSHShellContainer');
            var instanceId = $(this).attr('data-instanceId');
            var $iframe = $('<iframe src="sshShell.html?id='+instanceId+'" height="100%" width="100%" frameBorder="0"></iframe>');
            $sshModal.find('.modal-body').empty().append($iframe);
            $sshModal.modal('show');
      })); 
-    
-
     $divActionBtnContainer.append($divActionSSHContainer); 
    
     var $back = $('<div></div>').addClass('back card-backflip');
@@ -2658,6 +2659,8 @@ function addInstanceToDOM(data) {
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
+
+
 }
 
 //Containers table build
@@ -3038,6 +3041,7 @@ $('.launchBtn').click(function(e) {
             pollLogs(lastTimestamp, 0, true);
 
             $.get('../instances/' + data.id, function(data) {
+                $('#tabInstanceStatus').hide();
                 addInstanceToDOM(data);
 
             });

@@ -69,7 +69,7 @@ var BlueprintsDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log('data ==>', data);
+         
             callback(null, data);
 
         });
@@ -237,7 +237,7 @@ var BlueprintsDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log('data ==>', data);
+          
             if (data.length) {
                 callback(null, data[0].versionsList);
             } else {
