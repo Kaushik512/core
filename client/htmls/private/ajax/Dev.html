@@ -422,7 +422,7 @@
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
+        <button type="button" class="btn btn-default btn-primary dockerinstancestartold" style="margin-right:5px;">Start</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -529,17 +529,19 @@
                   </div>
                 </div> -->
                 </div>
+                <div class="btn-group">
                 
-                <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-              
+                <a type="button" class="btn btn-default btn-primary hidden" data-dismiss="modal">Close</a>
+                </div>
               </div>
               <br><hr>
             <ul class="pager wizard">
               <!-- <li class="previous first" style="display:none;"><a href="#">First</a></li> -->
               <li class="previous disabled"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px">Previous</a></li>
               <!-- <li class="next last" style="display:none;"><a href="#">Last</a></li> -->
-                <li class="next"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;">Next</a></li>
+              <li class="next"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;">Next</a></li>
+              <button type="button" class="btn btn-primary nav nav-pills dockerinstancestart hidden" style="margin-right:5px;height:30px;width:80px">Start</button>
+                
             </ul>
           </div>  
         </div>
@@ -2068,12 +2070,18 @@ $(document).ready(function(){
    $('#rootwizard').bootstrapWizard({
         'tabClass': 'nav nav-pills',
         'onNext': function(tab, navigation, index) {
+            
+            $('.dockerinstancestart').first().removeClass('hidden');
           var $valid = $("#commentForm").valid();
           if(!$valid) {
             $validator.focusInvalid();
             return false;
           }
+        },
+        'onPrevious' : function(tab,navigation,index){
+            $('.dockerinstancestart').first().addClass('hidden');
         }
+
       }); 
 });
 
