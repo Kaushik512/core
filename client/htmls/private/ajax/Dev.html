@@ -2341,7 +2341,13 @@ var instanceLogsHandler = function(e) {
     pollLogs(lastTimestamp, 0, true);
 };
 
-
+function showSSHModal() {
+    var $sshModal = $('#modalSSHShellContainer');
+    var instanceId = $(this).attr('data-instanceId');
+    var $iframe = $('<iframe src="sshShell.html?id=' + instanceId + '" height="100%" width="100%" frameBorder="0"></iframe>');
+    $sshModal.find('.modal-body').empty().append($iframe);
+    $sshModal.modal('show');
+}
 
 function addInstanceToDOM(data) {
      //var dataTable = $('#tableinstanceview').DataTable();
@@ -2540,13 +2546,7 @@ function addInstanceToDOM(data) {
     $divActionBtnContainer.append($divActionShutdownContainer); 
      
     // <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
-     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH').click(function(e){
-           var $sshModal = $('#modalSSHShellContainer');
-           var instanceId = $(this).attr('data-instanceId');
-           var $iframe = $('<iframe src="sshShell.html?id='+instanceId+'" height="100%" width="100%" frameBorder="0"></iframe>');
-           $sshModal.find('.modal-body').empty().append($iframe);
-           $sshModal.modal('show');
-     })); 
+     var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
     $divActionBtnContainer.append($divActionSSHContainer); 
    
     var $back = $('<div></div>').addClass('back card-backflip');
@@ -2641,6 +2641,9 @@ function addInstanceToDOM(data) {
 
     $rowContainter.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler).data('runlist',data.runlist);
     $li.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler).data('runlist',data.runlist);
+
+    $rowContainter.find('.sshBtnContainer a').click(showSSHModal);
+    $li.find('.sshBtnContainer a').click(showSSHModal);
 
 
     $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
