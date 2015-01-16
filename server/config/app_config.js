@@ -5,6 +5,17 @@ var currentDirectory = __dirname;
 var path = require('path');
 var logger = require('../lib/logger')(module);
 
+
+var configJson;
+try {
+    configJson = fs.readFileSync('./config/catalyst-config.json',{'encoding':'utf8'});
+} catch(err) {
+    console.log(err);
+    configJson = null;
+}
+
+
+
 var config = {
     express: {
         port: 3001,
@@ -95,6 +106,14 @@ mkdirp.sync(config.tempDir);
 
 var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
 logger.debug('chef repo location ==>', config.chef.chefReposLocation);
+
+
+if(configJson) {
+    config = JSON.parse(configJson);
+    //console.log(config);
+} else {
+    //console.log(configJson);
+}
 
 
 module.exports = config;
