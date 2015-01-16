@@ -243,6 +243,58 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
+      //  console.log('received request ' + req.params.id);
+      var ret = [];
+      var masts = ['1','2','3','4'];
+      // for(var i = 1; i < 4; i++){
+            d4dModel.find({
+                id: {$in:masts}
+            }, function(err, d4dMasterJson) {
+                if (err) {
+                    console.log("Hit and error:" + err);
+                }
+                if (d4dMasterJson) {
+                    // res.send(200, d4dMasterJson);
+                    //  res.writeHead(200, { 'Content-Type': 'text/plain' });
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json'
+                    });
+                    // res.json(d4dMasterJson);
+                    //res.setHeader('Content-Type', 'application/json');
+                   // res.end(JSON.stringify(d4dMasterJson));
+                  // ret.push(i + ':' + d4dMasterJson.masterjson.rows.row.length);
+
+                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                    console.log(d4dMasterJson.length);
+                    var i = 0;
+                    d4dMasterJson.forEach(function(itm){
+                        console.log(itm.id + ' ' + itm.masterjson.rows.row.length);
+                        ret.push('{"' + itm.id + '":"' + itm.masterjson.rows.row.length + '"}');
+                        i++;
+                        if(i >= d4dMasterJson.length)
+                        {res.end('[' + ret.join(',') + ']');
+                            return;
+                        }
+                    });
+
+                    //res.end();
+                } else {
+                    //res.send(400, {
+                        ret.push(i + ':' + '');
+                    //     "error": err
+                    // });
+                    console.log("none found");
+                }
+                // if(i >= 4){
+                //     res.end(JSON.stringify(ret));
+                //     return;
+                // }
+
+            });
+        // }
+    });
+
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
         console.log('received request ' + req.params.items);
         var masts = [];

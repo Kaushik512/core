@@ -37,7 +37,7 @@
                                       </div>
                                     </div>
                                     <hr>
-                                    <div style="width:140px !important;height:30px;margin-left:6px;" class="instanceActionBtnCtr">
+                                    <div style="width:152px !important;height:30px;" class="instanceActionBtnCtr">
                                       <div class="instance-bootstrap-ActionChefRun">
 
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a>
@@ -47,17 +47,33 @@
                                         
                                       
                                       <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Shutdown"></a></div>
+
+                                      <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
+                                        <a href="javascript:void(0)" data-instanceid="'+data._id+'" data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
+                                          <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
+                                        </a>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="back card-backflip">
-                                <div class="cardBackRunlistContaner">
-                                  <span class="card-backflip-margin"></span>
-                                  <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
-                                    <a style="color:#333">Go Back</a>
+                              <div class="back card-backflip">                            
+                                  <span class="card-backflip-margin">
+                                    <a style="color:#333;">
+                                      <i class="fa fa-lg fa-fw fa-book txt-color-blue"></i>
+                                      <span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333" class="menu-item-parent">Runlists</span>
+                                    </a>
                                   </span>
+                                  <hr>
+                                  <div class="cardBackRunlistContaner">
+                                  <span title="' + data.runlist[j] + '" class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
+                                  width:130px;color:#3a87ad"></span>
+                                  <!-- append(data.runlist[j]) -->
                                 </div>
+                                <hr>
+                                <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
+                                  <a style="color:#333">Go Back</a>
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -199,7 +215,7 @@
                 <!-- end widget div -->
 
             </div> <!-- Tab of Action ends here -->
-            <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                 <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -480,7 +496,7 @@
 </div>
 
 
-<div class="modal fade" id="controlPanelChefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="controlPanelChefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -500,7 +516,7 @@
 
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -561,6 +577,23 @@
   </div>
 </footer>
 
+<!-- Modal SSH Shell-->
+<div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog " style="">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Terminal</h4>
+      </div>
+      <div class="modal-body" style="height:430px">
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- div of Contant tab starts here -->
 
@@ -774,6 +807,10 @@ $.get('../instances/'+urlParams.id,function(data){
          },delay);
         }
         pollLogs(lastTimestamp,0,true);
+        // $.get('../instances/' + data.id, function(data) {
+        //     //$('#tabInstanceStatus').hide();
+        //     addInstanceToDOM(data);
+        // });
     };
 
   $('.moreInfo').click(displayLog);
@@ -1193,6 +1230,11 @@ $('.addServiceBtn').click(function(){
     location.href=getURL;
   }
 $(document).ready(function() {
+
+  //emptying ssh container 
+  $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
+      $('#modalSSHShellContainer').find('.modal-body').empty();
+  });
     var LocalBreadCrumb = localStorage.getItem("breadcrumb");
     var splitBread = null;
     if(LocalBreadCrumb != null && LocalBreadCrumb != 'undefined')

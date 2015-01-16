@@ -1439,7 +1439,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $label1.append($strong1);
     $section1.append($label1);
     var $row1 = $("<div></div>").addClass('row');
-    var $div1 = $("<div></div>").addClass('col col-9');
+    var $div1 = $("<div></div>").addClass('col col-10 padding-right0');
     var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
     var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
     var $inputtypetextCookbooks = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Cookbooks">').addClass('searchoptionforCookbooks form-control padding0');
@@ -1540,7 +1540,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $section2.append($label2);
 
     var $rowOrder1 = $("<div></div>").addClass('row');
-    var $divOrder1 = $("<div></div>").addClass('col col-9');
+    var $divOrder1 = $("<div></div>").addClass('col col-10 padding-right0');
     var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
     //alert('here ==>');
     //alert(selectedRunlist); 
@@ -1662,26 +1662,26 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
         return (false);
     });
     $inputtypetextCookbooks.keyup(function(e) {
-        var searchText = $(this).val();
+        var searchText = $(this).val().toUpperCase();
         $allListElements = $chefItemdiv.find('.deploymentsCookbookList > li');
         $matchingListElements = $allListElements.filter(function(i, el) {
             if ($(el).data('itemSelected')) {
                 return false;
             }
-            return $(el).text().indexOf(searchText) !== -1;
+            return $(el).text().toUpperCase().indexOf(searchText) !== -1;
         });
         $allListElements.hide();
         $matchingListElements.show();
     });
 
     $inputtypetextRoles.keyup(function(e) {
-        var searchText = $(this).val();
+        var searchText = $(this).val().toUpperCase();
         $allListElements = $chefItemdiv.find('.deploymentRoleList > li');
         $matchingListElements = $allListElements.filter(function(i, el) {
             if ($(el).data('itemSelected')) {
                 return false;
             }
-            return $(el).text().indexOf(searchText) !== -1;
+            return $(el).text().toUpperCase().indexOf(searchText) !== -1;
         });
         $allListElements.hide();
         $matchingListElements.show();

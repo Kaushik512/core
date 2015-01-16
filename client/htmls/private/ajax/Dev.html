@@ -65,6 +65,7 @@
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
+                                    <div id="tabInstanceStatus">No instance available</div>
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
                                             <div class="widget-main " style="min-height:300px"> 
@@ -360,12 +361,23 @@
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card2 front2  unpause">
+                                                          <div class="card2 front2  terminate">
                                                               <div id="flip3" style="margin-top:5px;"  title="UnPause" >
                                                                   <div class="">
                                                                       <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
                                                                   </div>
                                                               </div> 
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="container1" style="display:inline-block;margin-left:4px">
+                                                      <div id="card3">
+                                                          <div class="card3 front1"  title="Terminate" >
+                                                             <div style="margin-top:5px;">
+                                                              <div class="">
+                                                                  <a href="javascript:void(0);" data-original-title="Terminate"  dockercontaineraction="6"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-sign-out fa-16px txt-color-white"></i></a>
+                                                              </div>
+                                                             </div> 
                                                           </div>
                                                       </div>
                                                   </div>
@@ -400,7 +412,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="launchDockerInstanceSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="launchDockerInstanceSelector__" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+
   <div class="modal-dialog" style="width:750px">
     <div class="modal-content">
       <div class="modal-header">
@@ -411,14 +424,143 @@
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary dockerinstancestart" style="margin-right:5px;">Start</button>
+        <button type="button" class="btn btn-default btn-primary dockerinstancestartold" style="margin-right:5px;">Start</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+<div class="modal fade bs-example-modal-lg" id="launchDockerInstanceSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="DockerLaunch">Launch Parameters-Docker Blueprints</h4>
+      </div>
+      <div class="modal-body">
+      <section id="wizard">
+        <form id="commentForm" action="" class="smart-form">
+        <div id="rootwizard">
+          <ul style="display:none">
+            <li><a href="#tab1" data-toggle="tab">First</a></li>
+            <li><a href="#tab2" data-toggle="tab">Second</a></li>
+          </ul>
+          <div class="tab-content">
+              <div class="tab-pane" id="tab1">
+                 <div style="margin:0px;" class="row control-group">
+                    <section class="col col-6">
+                        <label class="control-label" for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
+                        </label>
+                        <label class="input controls">
+                            <input type="text" id="Containernamefield" name="namefield" class="form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
+                        </label>
+                    </section>
+                    <section class="col col-6">
+                        <label class="control-label" for="category">Port Mappings
+                        </label>
+                        <label class="input controls">
+                            <input type="text" id="Portmappingfield" name="Portmappingfield" class=" form-control" placeholder="Map host ports to container ports" dockerparamkey="-p">
+                        </label>
+                    </section>
+                    <section class="col col-6">
+                        <label class="control-label" for="category">Volumes
+                        </label>
+                        <label class="input controls">
+                            <input type="text" id="Volumesfield" name="Volumesfield" class=" form-control" placeholder="Map host folders to container folders"  dockerparamkey="-v">
+                        </label>
+                    </section>
+                    <section class="col col-6">
+                        <label class="control-label" for="category">Volumes-from
+                        </label>
+                        <label class="input controls">
+                            <input type="text" id="Volumes-fromfield" name="Volumes-fromfield" class=" form-control" placeholder="Comma separated container names" dockerparamkey="--volumes-from">
+                        </label>
+                    </section>
+                    <section class="col col-6">
+                        <label class="control-label" for="category">Linked Container
+                        </label>
+                        <label class="input controls">
+                            <input type="text" id="Linkedcontainerfield" name="Linkedcontainerfield" class=" form-control" placeholder="The name of a container this one links to"  dockerparamkey="--link">
+                        </label>
+                    </section>
+                    <section class="col col-6">
+                        <label class="control-label" for="category">Startup Command
+                        </label>
+                        <label class="input controls">
+                            <input type="text" id="Startupcommandfield" name="Startupcommandfield" class=" form-control" placeholder="Optional startup command for the container" dockerparamkey="-c">
+                        </label>
+                    </section>
+                    <section class="col col-6 hidden">
+                        <label class="control-label" for="category">Removed Linked Containers on Exit
+                        </label>
+                        <label class="select controls">
+                            <select class="chooseSelect width-100" id="Removelinkedcontainersonexitfield" placeholder="Should this & linked containers be removed on exit">
+                              <option>False</option>
+                              <option>True</option>
+                              
+                            </select>
+                        </label>
+                    </section>
+                    <section class="col col-6 hidden">
+                        <label class="control-label" for="category">Remove on Exit
+                        </label>
+                        <label class="select controls">
+                            <select class="chooseSelect width-100 " id="Removeonexitfield" placeholder="Should this container be removed when it exits">
+                              <option>False</option>
+                              <option>True</option>
+                              
+                            </select>
+                        </label>
+                    </section>
+                    <section class="col col-6 hidden">
+                      <label class="control-label" for="">Startup Script</label>
+                      <label class="input input-file" for="file">
+                        <div class="button"><input type="file" id="Startupscriptfield" name="Startupscriptfield">Browse</div><input type="text" readonly="">
+                      </label>
+                    </section> 
+                </div>
+              </div>
+              <div class="tab-pane" id="tab2">
+                <div id="dockerinstancesselctorview" style="margin-left: 8px;margin-top: 26px;width: 98%;">
+                <!-- <div class="control-group">
+                  <label class="control-label" for="url">URL</label>
+                  <div class="controls">
+                    <input type="text" id="urlfield" name="urlfield" class="required url">
+                  </div>
+                </div> -->
+                </div>
+                <div class="btn-group">
+                
+                <a type="button" class="btn btn-default btn-primary hidden" data-dismiss="modal">Close</a>
+                </div>
+              </div>
+              <br><hr>
+            <ul class="pager wizard">
+              <!-- <li class="previous first" style="display:none;"><a href="#">First</a></li> -->
+              <li class="previous disabled"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px">Previous</a></li>
+              <!-- <li class="next last" style="display:none;"><a href="#">Last</a></li> -->
+              <li class="next"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;">Next</a></li>
+              <button type="button" class="btn btn-primary nav nav-pills dockerinstancestart hidden" style="margin-right:5px;height:30px;width:80px">Start</button>
+                
+            </ul>
+          </div>  
+        </div>
+        </form>
+      </section>
+      </div>
+      <!-- <div class="modal-footer">
+        
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">
+          <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -435,17 +577,17 @@
   </div>
 </div>
 
-<div class="modal fade" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding:0px !important">
         
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="margin-top:0px !important;">
 
         <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
@@ -455,14 +597,14 @@
 </div>
 
 
-<div class="modal fade" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade bs-example-modal-lg" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding:0px !important">
       
         
         <div class="chefRunlistContainer">
@@ -471,7 +613,7 @@
         
          
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="margin-top:0px !important;">
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
@@ -479,7 +621,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -501,7 +643,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalTableRunlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalTableRunlist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -525,7 +667,7 @@
 </div><!-- /.modal -->
 
 <!-- Modal -->
-<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -578,7 +720,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade">
+<div aria-hidden="true" aria-labelledby="cadvisorpopup" role="dialog" tabindex="-1" id="cadvisorpopup" class="modal fade" data-backdrop="static">
 
     <div class="modal-dialog"  style="width:80%;">
         <div class="modal-content" style="height:500px">
@@ -608,7 +750,7 @@
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedNode-->
 
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -653,7 +795,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedNode-->
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedRunlist" class="modal fade">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedRunlist" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -700,7 +842,7 @@
 
 
 
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -746,8 +888,28 @@
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
 
+
+<!-- Modal SSH Shell-->
+<div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog " style="">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Terminal</h4>
+      </div>
+      <div class="modal-body" style="height:430px">
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Modal for Container tab started-->
-<div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalContainermoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -937,6 +1099,10 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
 <script type="text/javascript">
+
+
+</script>
+<script type="text/javascript">
     $('.searchInstances').keyup(function(e){
         var searchText = $(this).val();
         //alert(searchText);
@@ -990,6 +1156,14 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
 $(document).ready(function() {
+   
+
+  //emptying ssh container 
+  $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
+      $('#modalSSHShellContainer').find('.modal-body').empty();
+  });
+
+
   if(localStorage.getItem("SelectedClass") == "Orchestration")
   {
       localStorage.removeItem("SelectedClass");
@@ -999,6 +1173,7 @@ $(document).ready(function() {
       $('#myTabContent3').find('#l3').addClass('active'); 
       $('#myTab3').click();
   }
+  $('.chooseSelect').select2();
 });
 $('.Instances').click(function(e){
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
@@ -1241,7 +1416,13 @@ $('.dockerinstancestart').click(function(e){
             $td.attr('title','Pulling in Images');
             var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
-          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag,function(data){
+
+           // var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+           var dockerlaunchparameters = generateDockerLaunchParams();
+            if(!dockerlaunchparameters)
+                dockerlaunchparameters = 'null';
+           // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
+          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -1321,7 +1502,6 @@ $(function() {
                         $tr.append($tdInstanceName).append($tdInstanceIp);
                         $taskNodeListContainer.append($tr);
                     }
-                    $('#assignedNode').modal('show');
                 });
             });
             $tr.append($tdNodeList);
@@ -1641,6 +1821,9 @@ $(function() {
                             $itemBody.attr('dockerreponame', data[i].dockerreponame);
                             $itemBody.attr('dockerrepotags', data[i].dockerrepotags);
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
+                            
+                            if(data[i].dockerlaunchparameters)
+                                $itemBody.attr('dockerlaunchparameters', data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -1744,6 +1927,10 @@ $(function() {
 
     function initializeInstanceArea(data) {
 
+        if(data.length) {
+            $('#tabInstanceStatus').hide();
+        }
+
         //var $instancesList = $('.instancesList').empty();
         if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
             //alert('loading table');
@@ -1841,8 +2028,44 @@ $(function() {
 
     });
 });
+function generateDockerLaunchParams(){
+  if($('#Containernamefield').val() == ''){
+    $('.dockerparamrequired').removeClass('hidden');
+    return('');
+  }
 
+    var launchparams = '';
+    $('[dockerparamkey]').each(function(){
+      if($(this).val() != ''){
+        var itms = $(this).val().split(',');
+        for(itm in itms)
+          launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+      }
+    });
+    return(launchparams);
+}
 
+function loadLaunchParams(){
+  var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+  if(lparam != ''){
+      $('[dockerparamkey]').val('');
+      var params = lparam.split(' -');
+      for(para in params){
+        var subparam = params[para].split(' ');
+        if(subparam.length > 0){
+          $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+          if($inp.val() != '')
+            $inp.val($inp.val() + ',' + subparam[1]);
+          else
+            $inp.val(subparam[1]);
+        }
+        //alert(params[para]);
+      }
+    }
+    else
+       $('[dockerparamkey]').val(''); 
+    $('#myModalLabelDockerContainer').modal('show');
+}
 
 
 $(document).ready(function(){
@@ -1850,7 +2073,23 @@ $(document).ready(function(){
     
    //alert($('#accordion-2').find('a').first().html());
    $('.dockerrepotagselect').parent().prepend('Tags&nbsp;');
+   
+   $('#rootwizard').bootstrapWizard({
+        'tabClass': 'nav nav-pills',
+        'onNext': function(tab, navigation, index) {
+            
+            $('.dockerinstancestart').first().removeClass('hidden');
+          var $valid = $("#commentForm").valid();
+          if(!$valid) {
+            $validator.focusInvalid();
+            return false;
+          }
+        },
+        'onPrevious' : function(tab,navigation,index){
+            $('.dockerinstancestart').first().addClass('hidden');
+        }
 
+      }); 
 });
 
 function getCssClassFromStatus(status) {
@@ -1891,7 +2130,7 @@ function removeSelectedInstance(){
     var instanceid = $('.container.role-Selectedcard').find('[data-instanceid]').attr('data-instanceid');
     if(instanceid){
         //found now delete
-         bootbox.confirm("Are you sure you would like to remove this instance?\nNote:\nThis will not terminate the instance from the provider.", function(result) {
+         bootbox.confirm("Are you sure you would like to remove this instance?<br/>Note:<br/>This will not terminate the instance from the provider.", function(result) {
             if (!result) {
                 return;
             }
@@ -1968,6 +2207,7 @@ function pollInstanceState(instanceId, state, delay) {
                     if (data.instanceState == 'running'){
                       $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
                       $('.instancestatusindicator.started').parent().find('.chefClientRunlistImage').show();
+                    
                     }
                 }
             }
@@ -2006,11 +2246,7 @@ var startStopInstanceHandler = function(e) {
 
             pollInstanceState(instanceId, oldState, 2000);
         });
-
     });
-
-
-
 }
 
 
@@ -2285,8 +2521,8 @@ function addInstanceToDOM(data) {
     $divDomainRolesCaption.append($('<hr>'));
 
 
-    //data-original-title="Moreinfo" data-placement="top" rel="tooltip"
-    var $divActionBtnContainer = $('<div style="height:30px;width:140px;margin-left:6px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+    //data-placement="top" rel="tooltip" width:140px;margin-left:6px;
+    var $divActionBtnContainer = $('<div style="height:30px;width:152px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
     //alert($divComponentListImage.html());
 
     
@@ -2301,7 +2537,18 @@ function addInstanceToDOM(data) {
     // var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
     // $divActionBtnContainer.append($divActionReStartContainer);
     var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
-    $divActionBtnContainer.append($divActionShutdownContainer);
+    $divActionBtnContainer.append($divActionShutdownContainer); 
+     
+    // <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
+     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH').click(function(e){
+           var $sshModal = $('#modalSSHShellContainer');
+           var instanceId = $(this).attr('data-instanceId');
+           var $iframe = $('<iframe src="sshShell.html?id='+instanceId+'" height="100%" width="100%" frameBorder="0"></iframe>');
+           $sshModal.find('.modal-body').empty().append($iframe);
+           $sshModal.modal('show');
+     })); 
+    $divActionBtnContainer.append($divActionSSHContainer); 
+   
     var $back = $('<div></div>').addClass('back card-backflip');
     var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
@@ -2412,6 +2659,8 @@ function addInstanceToDOM(data) {
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
+
+
 }
 
 //Containers table build
@@ -2460,7 +2709,7 @@ function loadContainersTable(){
                         var containerid =  $(this).closest('tr').attr('containerid');
                         var $contextRow = $(this).closest('tr');
                        // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
-                        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5'){
+                        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5' || action == '6'){
                             $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
                              // alert(data);
                               if(data == 'OK'){
@@ -2647,6 +2896,7 @@ $('.launchBtn').click(function(e) {
        return;
     }
     if($selectedItems.attr('data-templateType') === 'Docker') {
+          loadLaunchParams();           
           var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
           var blueprintId = $selectedItems.attr('data-blueprintId');
           var dockerreponame = $selectedItems.attr('dockerreponame');
@@ -2655,7 +2905,7 @@ $('.launchBtn').click(function(e) {
 
         
 
-        $launchDockerInstanceSelector.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
+        $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
           var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
           var $newinstancetbody = $('<tbody></tbody>');
           $newinstancetable.append($newinstancetbody);
@@ -2791,11 +3041,22 @@ $('.launchBtn').click(function(e) {
             pollLogs(lastTimestamp, 0, true);
 
             $.get('../instances/' + data.id, function(data) {
+                $('#tabInstanceStatus').hide();
                 addInstanceToDOM(data);
 
             });
 
-             
+            // //Check if docker has been added.
+            // $.get('/instances/dockercontainerdetails/' + data.id,function(data){
+            //     if(JSON.stringify(data) != ""){
+            //         $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+            //         //find the instance card - to do instance table view update
+            //         var $instancecard = $('div[data-instanceid="' + data.id + '"]');
+            //         if($instancecard.find('.dockerenabledinstacne').length <= 0){
+            //             $instancecard.find('.componentlistContainer').first().append($dockericon);
+            //         }
+            //      }
+            // });
                 
 
         }).error(function() {
