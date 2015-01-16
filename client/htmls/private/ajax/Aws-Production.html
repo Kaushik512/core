@@ -267,7 +267,7 @@
                                             </div>
                    
                                            <section class="col col-6 fordocker">
-                                                <label for="category">Select Docker Container <span style="color:red">*</span>
+                                                <label for="category">Select Docker Image <span style="color:red">*</span>
                                                 </label>
                                                 <label class="select"> 
                                                     <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
@@ -666,6 +666,11 @@ $(document).ready(function(){
                            dockercontainerpathstitle = '';
                            dockercontainerpaths = '';
                            dockerreponame = '';
+                           //To be removed and converted to reference when the new master model is implemented.
+                           dockerusername = '';
+                           dockercred = '';
+                           dockeremail = '';
+
                            for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
                                if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
                                    getImage = data.masterjson.rows.row[z].field[x].values.value;
@@ -701,6 +706,8 @@ $(document).ready(function(){
                                }
                                if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
                                    dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
+                                   //
+
                                }
 
                            }
