@@ -1,4 +1,3 @@
-
 <div id="page-wrapper">
         <div class="row">
         <div class="col-lg-3">
@@ -97,10 +96,21 @@
          var serviceURL = "/d4dMasters/";
          window.selectedOrgName = 'Settings'; 
        	
-				$('[itemid]').each(function(){
-				    var count = getCount($(this).attr('itemid'));    
-				    $(this).html(count);
-				});
+				// $('[itemid]').each(function(){
+				//     var count = getCount($(this).attr('itemid'));    
+				//     $(this).html(count);
+				// });
+  function setcountontile(){
+    $.get('/d4dMasters/readmasterjsoncounts',function(data){
+      var mastcount = JSON.parse(JSON.stringify(data));
+      $.each(mastcount,function(k,v){
+        var ky = Object.keys(v);
+         //alert(k +' ' + ky +' ' + v[ky]);
+        $('[itemid="' + ky + '"]').html(v[ky]);
+      });
+    });
+  }
+  setcountontile();
 	</script>
 
  
