@@ -360,7 +360,7 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
             }
 
             $tr.find('.chef-env').empty().append('<span>'+environment+'</span>');
-            
+            $tr.find('.nodeCheckBox').data('node',node);
             
             
          });
@@ -537,6 +537,14 @@ $('.showChefImportNodesModalBtn').click(function(e){
                  } 
                } 
                $progressBar.val(reqBody.selectedNodes.length);
+               if(reqBody.selectedNodes.length) {
+
+                var nodeData= $($checkBoxes[0]).data('node');
+                if(nodeData && nodeData.chef_environment) {
+                  $chefResultModalContainer.modal('hide');
+                   //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
+                 }
+               }
             }
           })   
         },1000);
