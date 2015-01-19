@@ -1414,15 +1414,17 @@ $('.dockerinstancestart').click(function(e){
             $td.find('.dockermessage').detach();
             $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
             $td.attr('title','Pulling in Images');
-            var repopath = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
+            var imagename = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
+
+            var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
 
            // var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
            var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
            // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
-          $.get('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
+          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -2341,7 +2343,13 @@ var instanceLogsHandler = function(e) {
     pollLogs(lastTimestamp, 0, true);
 };
 
-
+function showSSHModal() {
+    var $sshModal = $('#modalSSHShellContainer');
+    var instanceId = $(this).attr('data-instanceId');
+    var $iframe = $('<iframe src="sshShell.html?id=' + instanceId + '" height="100%" width="100%" frameBorder="0"></iframe>');
+    $sshModal.find('.modal-body').empty().append($iframe);
+    $sshModal.modal('show');
+}
 
 function addInstanceToDOM(data) {
      //var dataTable = $('#tableinstanceview').DataTable();
@@ -2540,13 +2548,7 @@ function addInstanceToDOM(data) {
     $divActionBtnContainer.append($divActionShutdownContainer); 
      
     // <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
-     var $divActionSSHContainer = $('<div class="sshContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH').click(function(e){
-           var $sshModal = $('#modalSSHShellContainer');
-           var instanceId = $(this).attr('data-instanceId');
-           var $iframe = $('<iframe src="sshShell.html?id='+instanceId+'" height="100%" width="100%" frameBorder="0"></iframe>');
-           $sshModal.find('.modal-body').empty().append($iframe);
-           $sshModal.modal('show');
-     })); 
+     var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
     $divActionBtnContainer.append($divActionSSHContainer); 
    
     var $back = $('<div></div>').addClass('back card-backflip');
@@ -2641,6 +2643,9 @@ function addInstanceToDOM(data) {
 
     $rowContainter.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler).data('runlist',data.runlist);
     $li.find('.instance-bootstrap-list-image').click(instanceUpdateRunlistHandler).data('runlist',data.runlist);
+
+    $rowContainter.find('.sshBtnContainer a').click(showSSHModal);
+    $li.find('.sshBtnContainer a').click(showSSHModal);
 
 
     $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);

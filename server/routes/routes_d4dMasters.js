@@ -45,10 +45,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
             if (!err) {
 
                 //	var dockerRepo = JSON.parse(data);
-                //	console.log('Docker Repo ->', JSON.stringify(dockerRepo));
+                console.log('Docker Repo ->', JSON.stringify(data));
                 var cmd = '';
+                var dock = JSON.parse(data);
+               // var dockkeys = Object.keys(data);
+                console.log('username:' + dock.dockeruserid);
+                //
                 //Below is for public repository
-                cmd = 'curl -v -H "Accept: application/json" -X GET https://index.docker.io/v1/repositories/' + req.params.repopath + '/tags';
+                cmd = 'curl -v -H "Accept: application/json" -X GET https://' +  dock.dockeruserid  + ':' + encodeURIComponent(dock.dockerpassword) +  '@index.docker.io/v1/repositories/' + decodeURIComponent(req.params.repopath) + '/tags';
                 //Below is for private repository
                 //cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
                 console.log('executing - ', cmd);
