@@ -4,11 +4,11 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var Schema = mongoose.Schema;
 
 var BlueprintSchema = new Schema({
-    orgId: String,
-    projectId: String,
-    envId: String,
+    orgId: {type:String,required:true},
+    projectId: {type:String,required:true},
+    envId: {type:String,required:true},
     iconpath: String,
-    name: String,
+    name: {type:String,required:true},
     templateId: String,
     templateType: String,
     dockercontainerpathstitle: String,
@@ -19,11 +19,11 @@ var BlueprintSchema = new Schema({
     dockerimagename: String,
     templateComponents: [String],
     instanceType: String,
-    instanceOS: String,
-    instanceAmiid: String,
-    instanceUsername: String,
+    instanceOS: {type:String,required:true},
+    instanceAmiid: {type:String,required:true},
+    instanceUsername: {type:String,required:true},
     importInstance: Boolean,
-    chefServerId: String,
+    chefServerId: {type:String,required:true},
     users: [String],
     versionsList: [{
         ver: String,

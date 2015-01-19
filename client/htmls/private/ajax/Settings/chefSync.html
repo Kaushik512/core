@@ -481,6 +481,12 @@ $('.showChefImportNodesModalBtn').click(function(e){
          alert('Please Choose a Pem file');
          return;
        }
+
+      reqBody.users = $('#userListSelect').val();
+        if(!reqBody.users || !reqBody.users.length) {
+        alert('Please Choose Users');
+        return;
+       }
        var reader = new FileReader();
 
        // Closure to capture the file information.
@@ -500,6 +506,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
    }*/
 
       function makeRequest() {
+        console.log(reqBody);
    $.post('../chef/servers/'+urlParams.chefId+'/sync/nodes',reqBody,function(data){
     console.log(data);
     var $chefResultModalContainer = $('#chefImportNodesResultModal');
@@ -551,7 +558,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
      pollTaskStatus(data.taskId,0);
 
    }).error(function(){
-    alert('Please select Business Groups & Project');
+    alert('Unable to import instances. Please try again later');
    });
   }
 

@@ -3,26 +3,12 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var Schema = mongoose.Schema;
 
-var ServiceActionSchema = new Schema({
-    actionType: String,
-    serviceRunlist: [String],
-    command: String,
-});
 
-var ServiceAction = mongoose.model('ServiceActions', ServiceActionSchema);
-
-var ServiceSchema = new Schema({
-    serviceName: String,
-    serviceUsers: [String],
-    actions: [ServiceActionSchema]
-});
-
-var Service = mongoose.model('Services', ServiceSchema);
 
 var InstanceSchema = new Schema({
-    orgId: String,
-    projectId: String,
-    envId: String,
+    orgId: {type:String,required:true},
+    projectId: {type:String,required:true},
+    envId: {type:String,required:true},
     chefNodeName: String,
     runlist: [String],
     platformId: String,
@@ -41,11 +27,11 @@ var InstanceSchema = new Schema({
         os: String,
     },
     chef: {
-        serverId: String,
+        serverId: {type:String,required:true},
         chefNodeName: String
     },
     credentials: {
-        username: String,
+        username: {type:String,required:true},
         password: String,
         pemFileLocation: String
     },
