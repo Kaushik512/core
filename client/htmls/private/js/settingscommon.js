@@ -73,7 +73,7 @@ function readMasterRecord(id,rowid){
         async: false,
         url: serviceURL + "readmasterjsonrecord/" + id +'/' + rowid,
         success: function(data) {
-              //   alert(data.toString());  
+             //   alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
         },
@@ -811,21 +811,23 @@ function readform(formID) {
 
         $('div[datatype="select"]').each(function() {
             //debugger;
+        
             if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                 //   debugger;
                     var curInput = $(this);
-                    //  alert('div select ' + curInput.attr("id"));
-                    $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
+                    //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
+                    $.each(tempJSON, function(i, item) {
                         //     alert(item.field[0].values.value);
                         // debugger;
-                        for (var k = 0; k < item.field.length; k++) {
-                            if (item.field[k].name == curInput.attr("id")) {
+                        
+                          //  if (item.field[k].name == curInput.attr("id")) {
                                 // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
                                 // alert("Added:" + item.field[i].values.value);
-                                addToSelectList(item.field[k].values.value, curInput);
-                            }
-                        }
+                                addToSelectList(item[curInput.attr('datapath')], curInput);
+                         //   }
+                       
                     });
                 }
             }
@@ -857,7 +859,7 @@ function readform(formID) {
         // var orgName = url.substr(url.indexOf("?") + 1);
         // //  alert(orgName);
         // var editMode = false;
-
+      //  alert(d4ddata);
         formData = d4ddata;
 
         //alert("here " + JSON.stringify(formData) + ":" + orgName);
@@ -2051,24 +2053,24 @@ function getProjectsForOrg(orgname) {
     var tempJSON = JSON.parse(JSON.stringify(readMasterJson(1)));
     var getProj = null;
     //masterjson.rows.row
-    $.each(eval('tempJSON.masterjson.rows.row'), function(m, n) {
-        for (var o = 0; o < n.field.length; o++) {
-            if (n.field[o].values) {
-                if (n.field[o].values.value == orgname) {
-                    var getBG = getRelatedValues(2, "orgname", n.field[o].values.value, "productgroupname");
-                    $.each(getBG, function(i, k) {
-                        //alert(k);
-                        getProj = getRelatedValues(4, "productgroupname", k, "projectname");
-                        //$.each(getProj, function (j, l) {
-                        //    alert(n.field[o].values.value + ': ' + k + ":" + l);
-                        //});
+    // $.each(eval('tempJSON.masterjson.rows.row'), function(m, n) {
+    //     for (var o = 0; o < n.field.length; o++) {
+    //         if (n.field[o].values) {
+    //             if (n.field[o].values.value == orgname) {
+    //                 var getBG = getRelatedValues(2, "orgname", n.field[o].values.value, "productgroupname");
+    //                 $.each(getBG, function(i, k) {
+    //                     //alert(k);
+    //                     getProj = getRelatedValues(4, "productgroupname", k, "projectname");
+    //                     //$.each(getProj, function (j, l) {
+    //                     //    alert(n.field[o].values.value + ': ' + k + ":" + l);
+    //                     //});
 
-                    });
-                }
-            }
-        }
+    //                 });
+    //             }
+    //         }
+    //     }
 
-    });
+    // });
     return (getProj);
 }
 

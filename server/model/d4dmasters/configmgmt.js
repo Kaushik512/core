@@ -26,13 +26,13 @@ function Configmgmt() {
                 callback(null,'d4dModelMastersProjects');
                 break;
             case "6":
-                callback(null,'d4dModelMastersProjects');
+                callback(null,'d4dModelMastersUserroles');
                 break;
             case "7":
-                callback(null,'d4dModelMastersProjects');
+                callback(null,'d4dModelMastersUsers');
                 break;
             case "8":
-                callback(null,'d4dModelMastersProjects');
+                callback(null,'d4dModelMastersglobalaccess');
                 break;
             case "9":
                 callback(null,'d4dModelMastersProjects');
@@ -186,8 +186,11 @@ function Configmgmt() {
         });
     };
 
-
     this.getAccessFilesForRole = function(loginname, user, req, res, callback) {
+        
+    };
+
+    this.getAccessFilesForRole__ = function(loginname, user, req, res, callback) {
         console.log("Received Role name: " + loginname);
         var accessibleFiles = [];
         var mainRef = this;
