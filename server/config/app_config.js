@@ -17,7 +17,7 @@ mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/temp/');
 
 
 var config = {
-    app_run_port: 3001,
+    app_run_port: 3004,
     settingsDir: homeDirectory + '/' + catalysHomeDirName + '/',
     instancePemFilesDir: homeDirectory + "/" + catalysHomeDirName + "/instance-pemfiles/",
     tempDir: homeDirectory + "/" + catalysHomeDirName + "/temp/",

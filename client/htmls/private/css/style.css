@@ -37,16 +37,10 @@ body {
 {
     border-radius: 0px!important;
     margin-bottom: 0px!important;
-    min-height: 63px!important;
+    min-height: 50px!important;
     
 }
 
-.navbar-nav > li > a
-{
-    padding-top: 20px!important;
-    font-size: 15px;
-    color: buttonface!important;
-}
 
 nav ul
 {
@@ -57,11 +51,7 @@ nav ul
   list-style: none;
   position: relative;    
 }
-nav ul b
-{
-    float: right;
-font-size: 14px;
-}
+
 .breadcrumb1
 {
     border-radius: 4px;
