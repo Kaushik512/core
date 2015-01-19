@@ -107,11 +107,11 @@
 				</li>
 			</div>
 			<!-- end logout button -->
-			<div id="project-context" style="padding-top:15px;">
+			<!-- <div id="project-context" style="padding-top:15px;">
 				<li class="left-projects-links hidden" data-target="#Track" navigation="Track">
 					<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
 				</li>
-			</div>
+			</div> -->
 			<div id="project-context" style="padding-top:15px;">
 				<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
 					<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
@@ -208,12 +208,12 @@
 										</span>
 								</a>
 						</li> -->
-						<li>
+						<!-- <li>
 							<a href="ajax/Settings/ProvidersList.html"><i class="fa fa-lg fa-fw fa-sitemap"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Providers
 								</span>
 							</a>
-						</li>
+						</li> -->
 						<li>
 							<a href="ajax/Settings/ConfigManagementList.html"><i class="fa fa-lg fa-fw fa-random"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Config Management
@@ -226,7 +226,7 @@
 								</span>
 							</a>
 						</li>
-						<li>
+						<!-- <li>
 							<a href="ajax/Settings/BuildServerList.html"><i class="fa fa-lg fa-fw fa-inbox"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Build Servers
 								</span>
@@ -244,6 +244,13 @@
 								</span>
 							</a>
 						</li>
+
+						<li>
+							<a href="ajax/Settings/DockerRepositoryList.html"><i class="fa fa-lg fa-fw fa-ils"></i>
+								<span class="menu-item-parent" style="font-weight:bold">Docker Repository
+								</span>
+							</a>
+						</li> -->
 						
 						<!-- <li>
 							<a href="ajax/Testmanagement.html"><i class="fa fa-lg fa-fw fa-rss"></i>
@@ -277,11 +284,11 @@
 						<span class="menu-item-parent" style="font-weight:bold">Users Setup</span>
 					</a>
 					<ul>
-						<li>
+						<!-- <li>
 							<a href="ajax/Settings/CreateAuthentication.html"><i class="fa fa-lg fa-fw fa-key"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Authentication</span>
 							</a>
-						</li>
+						</li> -->
 						<li>
 							<a href="ajax/Settings/RolesList.html"><i class="fa fa-lg fa-fw fa-th-list"></i>
 								<span class="menu-item-parent" style="font-weight:bold">User Roles</span>
@@ -337,6 +344,11 @@
 						</li> -->
 					</ul>
 				</li>
+				<li>	
+				<a href="ajax/Settings/Catalyst-Guide.html" target="_blank"><i class="fa fa-book"></i>
+						<span class="menu-item-parent" style="font-weight:bold;padding-left:5px;">&nbsp;User Guide</span>
+					</a>
+				</li>
 				
 				<!-- <li>
 					<a href="ajax/Audittrail.html"><i class="fa fa-lg fa-fw fa-bug"></i>
@@ -364,9 +376,9 @@
 						<!--<li>
 							<a href="ajax/Aws-ProductionAccordian.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Demo</span></a>
 						</li>-->
-						<li>
+						<!-- <li>
 							<a href="ajax/Desktop.html" class="devops_providers"><img src="img/DevOps/desktop.png" style="height: 30px;padding-bottom: 4px;" alt="Desktop"><span class="menu-item-parent">&nbsp;&nbsp;Desktop</span></a>
-						</li>
+						</li> -->
 						<li>
 							<a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure</span></a>
 						</li>
@@ -504,8 +516,7 @@
 	<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 	<script type="text/javascript" src="js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
 	<script type="text/javascript" src="js/plugin/bootbox/bootbox.min.js"></script>
-	
-	<script type="text/javascript" src="js/jquery.multiselect.js"></script>
+
 	<script type="text/javascript" src="js/select2.min.js"></script>
 	<!--[if IE 7]>
 	<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
@@ -757,7 +768,4 @@ $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 
 </script>
 </body>
-<!--for checkbox with dropdown -->
-	<script type"text/javascript" src="js/bootstrap-dropdown-checkbox.js">
-	</script>
 </html>

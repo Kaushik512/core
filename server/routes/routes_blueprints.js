@@ -4,6 +4,7 @@ var instancesDao = require('../model/instances');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
 var logsDao = require('../model/dao/logsdao.js');
+var Docker = require('../model/docker.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
@@ -325,6 +326,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     console.log("Instance hardware details set successessfully");
                                                                 }
                                                             });
+                                                            //Checking docker status and updating
+                                                            var _docker = new Docker();
+                                                            _docker.checkDockerStatus(instance.id,
+                                                                function(err, retCode) {
+                                                                    if (err) {
+                                                                        console.log(err);
+                                                                        res.send(500);
+                                                                        return;
+                                                                        //res.end('200');
+                                                                            
+                                                                        }
+                                                                    console.log('Docker Check Returned:' + retCode);
+                                                                    if(retCode == '0'){
+                                                                        instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
+                                                                                console.log('Instance Docker Status set to Success');
+                                                                        });
+
+                                                                    }
+                                                                });
+
                                                         });
 
                                                     } else {

@@ -1,4 +1,5 @@
 var blueprintsDao = require('../model/blueprints');
+
 var instancesDao = require('../model/instances');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
@@ -176,11 +177,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             case "5":
                 action = 'unpause';
                 break;
+            case "6":
+                action = 'delete';
+                break;
         }
 
 
         //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+
         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
+        if (action == 'delete') {
+            cmd = 'sudo docker rm -f ' + req.params.containerid;
+        }
         console.log('cmd received: ' + cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
@@ -218,77 +226,119 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    app.get('/instances/checkfordocker/:instanceid', function(req, res) {
 
-    app.get('/instances/dockerimagepull/:instanceid/:imagename/:tagname/:runcommand', function(req, res) {
-
-        console.log('reached here a');
-        var instanceid = req.params.instanceid;
+        //Confirming if Docker has been installed on the box
         var _docker = new Docker();
-        var stdmessages = '';
-        var runcmd = '';
-        var tagname = '';
-        
-        if (req.params.tagname != 'undefined') {
-            tagname += ':' + req.params.tagname;
-        }
-
-        var cmd = 'sudo docker pull ' + decodeURIComponent(req.params.imagename) + tagname;
-
-        if (req.params.runcommand != 'undefined') {
-            runcmd = decodeURIComponent(req.params.runcommand) + ' ';
-        }
-        cmd += ' && sudo docker run -i -t -d ' + runcmd +  decodeURIComponent(req.params.imagename) + tagname + ' /bin/bash';
+        var cmd = "sudo docker ps";
         console.log('Docker command executed : ' + cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
                 if (err) {
-                    logsDao.insertLog({
-                        referenceId: instanceid,
-                        err: true,
-                        log: 'Unable to run chef-client',
-                        timestamp: new Date().getTime()
-                    });
-                    res.send(err);
+                    console.log(err);
+                    res.send(500);
                     return;
+                    //res.end('200');
+
                 }
-
-                console.log("docker return ", retCode);
-                //if retCode == 0 //update docker status into instacne
-                instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
-                    console.log('Instance Docker Status set to Success');
-                });
-
-
-
-                res.send(200);
-
-            },
-            function(stdOutData) {
-                if (!stdOutData) {
-
-                    console.log("SSH Stdout :" + stdOutData.toString('ascii'));
-                    stdmessages += stdOutData.toString('ascii');
-                } else {
-                    logsDao.insertLog({
-                        referenceId: instanceid,
-                        err: false,
-                        log: stdOutData.toString('ascii'),
-                        timestamp: new Date().getTime()
+                console.log('this ret:' + retCode);
+                if (retCode == '0') {
+                    instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
+                        console.log('Instance Docker Status set to Success');
+                        res.send('OK');
+                        return;
                     });
-                    console.log("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
-                    stdmessages += stdOutData.toString('ascii');
-                }
-            }, function(stdOutErr) {
-                logsDao.insertLog({
-                    referenceId: instanceid,
-                    err: true,
-                    log: stdOutErr.toString('ascii'),
-                    timestamp: new Date().getTime()
-                });
-                console.log("docker return ", stdOutErr);
-                res.send(stdOutErr);
 
+                } else
+                    res.send('');
             });
+
+
+    });
+    app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams', function(req, res) {
+
+        console.log('reached here a');
+        var instanceid = req.params.instanceid;
+
+        configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
+            if (!err) {
+
+                //  var dockerRepo = JSON.parse(data);
+                console.log('Docker Repo ->', JSON.stringify(data));
+                 var dock = JSON.parse(data);
+               // var dockkeys = Object.keys(data);
+                console.log('username:' + dock.dockeruserid);
+
+                var _docker = new Docker();
+                var stdmessages = '';
+
+                var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+
+                cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                if (req.params.tagname != null) {
+                    cmd += ':' + req.params.tagname;
+                }
+                var runparams = '';
+                if (req.params.runparams != 'null') {
+                    runparams = decodeURIComponent(req.params.runparams);
+                }
+                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+                console.log('Docker command executed : ' + cmd);
+                _docker.runDockerCommands(cmd, req.params.instanceid,
+                    function(err, retCode) {
+                        if (err) {
+                            logsDao.insertLog({
+                                referenceId: instanceid,
+                                err: true,
+                                log: 'Unable to run chef-client',
+                                timestamp: new Date().getTime()
+                            });
+                            res.send(err);
+                            return;
+                        }
+
+                        console.log("docker return ", retCode);
+                        //if retCode == 0 //update docker status into instacne
+                        instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                            console.log('Instance Docker Status set to Success');
+                        });
+
+
+
+                        res.send(200);
+
+                    },
+                    function(stdOutData) {
+                        if (!stdOutData) {
+
+                            console.log("SSH Stdout :" + stdOutData.toString('ascii'));
+                            stdmessages += stdOutData.toString('ascii');
+                        } else {
+                            logsDao.insertLog({
+                                referenceId: instanceid,
+                                err: false,
+                                log: stdOutData.toString('ascii'),
+                                timestamp: new Date().getTime()
+                            });
+                            console.log("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
+                            stdmessages += stdOutData.toString('ascii');
+                        }
+                    }, function(stdOutErr) {
+                        logsDao.insertLog({
+                            referenceId: instanceid,
+                            err: true,
+                            log: stdOutErr.toString('ascii'),
+                            timestamp: new Date().getTime()
+                        });
+                        console.log("docker return ", stdOutErr);
+                        res.send(stdOutErr);
+
+                    });
+
+            }
+        });
+
+
     });
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
@@ -306,11 +356,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 var instance = data[0];
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
-                        res.send(500);
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: true,
+                            log: "Unable to get chef data. Chef run failed",
+                            timestamp: new Date().getTime()
+                        });
+                        res.send(200);
                         return;
                     }
                     if (!chefDetails) {
-                        res.send(500);
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: true,
+                            log: "Chef data in null. Chef run failed",
+                            timestamp: new Date().getTime()
+                        });
+                        res.send(200);
                         return;
                     }
 
@@ -383,6 +445,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         log: 'instance runlist updated',
                                         timestamp: new Date().getTime()
                                     });
+
+                                    //Checking docker status and updating
+                                    var _docker = new Docker();
+                                    _docker.checkDockerStatus(instance.id,
+                                        function(err, retCode) {
+                                            if (err) {
+                                                console.log(err);
+                                                res.send(500);
+                                                return;
+                                                //res.end('200');
+
+                                            }
+                                            console.log('Docker Check Returned:' + retCode);
+                                            if (retCode == '0') {
+                                                instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
+                                                    console.log('Instance Docker Status set to Success');
+                                                });
+                                            }
+                                        });
+
                                 });
                             } else {
                                 return;
@@ -428,65 +510,65 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
 
-                settingsController.getAwsSettings(function(settings) {
-                    var ec2 = new EC2(settings);
-                    ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
-                        if (err) {
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: true,
-                                log: "Unable to stop instance",
-                                timestamp: new Date().getTime()
-                            });
-                            res.send(500);
-                            return;
-                        }
-                        res.send(200, {
-                            instanceCurrentState: stoppingInstances[0].CurrentState.Name,
-                        });
-
-                        instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
-
-
-
-
-                    }, function(err, state) {
-                        if (err) {
-                            return;
-                        }
-                        instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
-
-
+                var settings = appConfig.aws;
+                var ec2 = new EC2(settings);
+                ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
+                    if (err) {
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
-                            err: false,
-                            log: "Instance Stopped",
+                            err: true,
+                            log: "Unable to stop instance",
                             timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update log');
-                                return;
-                            }
-                            console.log('log updated');
                         });
+                        res.send(500);
+                        return;
+                    }
+                    res.send(200, {
+                        instanceCurrentState: stoppingInstances[0].CurrentState.Name,
+                    });
+
+                    instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
 
 
+
+
+                }, function(err, state) {
+                    if (err) {
+                        return;
+                    }
+                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
+
+
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: false,
+                        log: "Instance Stopped",
+                        timestamp: new Date().getTime()
+                    }, function(err, data) {
+                        if (err) {
+                            console.log('unable to update log');
+                            return;
+                        }
+                        console.log('log updated');
                     });
 
 
                 });
+
+
+
             } else {
                 res.send(404);
                 return;
@@ -509,70 +591,70 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
 
-                settingsController.getAwsSettings(function(settings) {
-                    var ec2 = new EC2(settings);
-                    ec2.startInstance([data[0].platformId], function(err, startingInstances) {
-                        if (err) {
-
-                            logsDao.insertLog({
-                                referenceId: req.params.instanceId,
-                                err: true,
-                                log: "Unable to start instance",
-                                timestamp: new Date().getTime()
-                            });
-                            res.send(500);
-                            return;
-                        }
-                        res.send(200, {
-                            instanceCurrentState: startingInstances[0].CurrentState.Name,
-                        });
-
-                        instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
-
-                    }, function(err, state) {
-                        if (err) {
-                            return;
-                        }
-                        instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-                            if (err) {
-                                console.log("update instance state err ==>", err);
-                                return;
-                            }
-                            console.log('instance state upadated');
-                        });
+                var settings = appConfig.aws;
+                var ec2 = new EC2(settings);
+                ec2.startInstance([data[0].platformId], function(err, startingInstances) {
+                    if (err) {
 
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
-                            err: false,
-                            log: "Instance Started",
+                            err: true,
+                            log: "Unable to start instance",
                             timestamp: new Date().getTime()
                         });
-
-                        ec2.describeInstances([data[0].platformId], function(err, data) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-                            if (data.Reservations.length && data.Reservations[0].Instances.length) {
-                                console.info("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
-                                instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
-                                    if (err) {
-                                        console.log("update instance ip err ==>", err);
-                                        return;
-                                    }
-                                    console.log('instance ip upadated');
-                                });
-                            }
-                        });
+                        res.send(500);
+                        return;
+                    }
+                    res.send(200, {
+                        instanceCurrentState: startingInstances[0].CurrentState.Name,
                     });
 
+                    instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
+
+                }, function(err, state) {
+                    if (err) {
+                        return;
+                    }
+                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                        if (err) {
+                            console.log("update instance state err ==>", err);
+                            return;
+                        }
+                        console.log('instance state upadated');
+                    });
+
+                    logsDao.insertLog({
+                        referenceId: req.params.instanceId,
+                        err: false,
+                        log: "Instance Started",
+                        timestamp: new Date().getTime()
+                    });
+
+                    ec2.describeInstances([data[0].platformId], function(err, data) {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        if (data.Reservations.length && data.Reservations[0].Instances.length) {
+                            console.info("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
+                            instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
+                                if (err) {
+                                    console.log("update instance ip err ==>", err);
+                                    return;
+                                }
+                                console.log('instance ip upadated');
+                            });
+                        }
+                    });
                 });
+
+
 
             } else {
                 res.send(404);

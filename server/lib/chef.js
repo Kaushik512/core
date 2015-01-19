@@ -1,7 +1,6 @@
 var Process = require("./utils/process");
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
-var SSH = require('./utils/sshexec');
 var chefDefaults = require('../config/app_config').chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 

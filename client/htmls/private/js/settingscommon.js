@@ -154,7 +154,7 @@ $.fn.getType = function() {
     return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
 }
 
-function CreateTableFromJson(formID, idFieldName, createFileName) {
+function CreateTableFromJson__(formID, idFieldName, createFileName) {
 
     //To Do SAve...
     // var d4djson = $.parseJSON(d4ddata);
@@ -287,6 +287,126 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
     $(".savespinner").hide();
 
 }
+
+
+function CreateTableFromJson(formID, idFieldName, createFileName) {
+
+        //To Do SAve...
+        // var d4djson = $.parseJSON(d4ddata);
+        // alert(d4ddata.sections.section[0].name);
+        //alert('run');
+        var formData = null;
+        readMasterJson(formID);
+
+        /*$.each(d4ddata.sections.section, function (i, item) {
+            if (item.name == formName) {
+                formData = item;
+            }
+        });*/
+
+        //force setting the idFieldName to "rowid"
+        idFieldName = "rowid";
+
+        // alert(JSON.stringify(formData));
+        //Reading row to get schema
+        formData = d4ddata;
+
+        var formSchema = null;
+        $.each(d4ddata, function(i, item) { 
+            console.log("Top:" + JSON.stringify(item)); //rows
+            var editButton = null;
+            var idFieldValue = null;
+            var imageTD = null;
+            $.each(item,function(k,v){ //columns
+                // var inputC = null;
+                console.log('k:' + k + ' v :' + JSON.stringify(v));
+                if(k == idFieldName){
+                        idFieldValue = v;
+                }
+                inputC = $('.rowtemplate').find("[datafield='" + k + "']");
+                if(inputC){
+                    inputC.html(v);
+                }
+            });
+
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            // $('#envtable').append(sRow);
+            imageTD = $('.rowtemplate').find("[datatype='image']");
+
+            editButton = $('.rowtemplate').find("[title='Update']");
+
+            if(idFieldValue){
+                if (imageTD) {
+                    if (imageTD.length > 0) {
+                        console.log("Template Icon:" + idFieldValue);
+                        var imgpath = 'img/blank.png';
+                        if (imageTD.html().indexOf('<img') >= 0) {
+                            imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                        } else
+                            imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+
+                        imageTD.html('');
+                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+
+                    }
+
+                }
+                if(editButton){
+                    editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
+                    editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                    editButton.removeClass('btn-xs');
+                    editButton.addClass('btn-sg');
+                }
+                //importbutton will be present for config management screen.
+                var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
+                // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                //&& tdorgname.length > 0
+                if (importbutton && importbutton.length > 0) {
+                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                    importbutton.removeClass('btn-xs');
+                    importbutton.addClass('btn-sg');
+                    importbutton.addClass('tableactionbutton');
+                }
+
+
+
+                //setting the delete button
+
+                var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                if (deletebutton) {
+                    deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                    deletebutton.removeClass('btn-xs');
+                    deletebutton.addClass('btn-sg');
+                    deletebutton.addClass('tableactionbutton');
+                }
+            }
+
+
+            console.log('-----------');
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            $('#envtable').append(sRow);
+
+        });
+      //  $.each(formData.data.fields, function(i, item) { //row iteration
+
+            // var templateRow = $(".rowtemplate").clone();
+            // $.each(item,function(k, v) {
+            //     console.log('k:' + k + ',v:' + v);
+            // });
+            // var sRow = $(".rowtemplate").clone();
+            // sRow.removeClass("hidden");
+            // sRow.removeClass("rowtemplate");
+            // $('#envtable').append(sRow);
+            
+     //   });
+
+        $(".savespinner").hide();
+
+    }
 // function CreateTableFromJson(formID, idFieldName, createFileName) {
 //     CreateTableFromJsonNew(formID, idFieldName, createFileName);
 // }
@@ -296,7 +416,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 var forceEdit = false; //variable used to force save one record ex. Authentication
 //Create & Edit form functions
 
-function readform(formID) {
+function readform__(formID) {
     var formData = null;
     //    alert("force edit:" + forceEdit);
     //Prefilling dropdowns
@@ -581,7 +701,314 @@ function readform(formID) {
     return (true);
 }
 
+function readform(formID) {
+        var formData = null;
+        //    alert("force edit:" + forceEdit);
+        //Prefilling dropdowns
+        $('select[cdata="catalyst"]').each(function() {
 
+            if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+
+                if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
+
+                    var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    var curSelect = $(this);
+                  //  alert(JSON.stringify(tempJSON));
+                    var _rowid = 0;
+                    $.each(tempJSON, function(i, item) {
+                        _rowid = item['rowid'];
+
+                        $.each(item,function(k,v){ //columns
+                            console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
+                            if (k == curSelect.attr("id")) {
+                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                            }
+                        });
+                    });
+                    // $.each(eval('tempJSON.' + curSelect.attr('datapath')), function(i, item) {
+                    //     //     alert(item.field[0].values.value);
+                    //     // debugger;
+                    //     //Loop to get rowid 
+                    //     var _rowid = 0;
+                    //     for (var k = 0; k < item.field.length; k++) {
+                    //         if (item.field[k].name == "rowid") {
+                    //             //curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                    //             // alert("Added:" + item.field[i].values.value);
+                    //             _rowid = item.field[k].values.value;
+                    //         }
+                    //     }
+                    //     for (var k = 0; k < item.field.length; k++) {
+                    //         if (item.field[k].name == curSelect.attr("id")) {
+                    //             curSelect.append('<option value="' + item.field[k].values.value + '" rowid = "' + _rowid + '">' + item.field[k].values.value + '</option>');
+                    //             // alert("Added:" + item.field[i].values.value);
+                    //         }
+                    //     }
+                    // });
+                }
+                // debugger;
+                if ($(this).attr('linkedfields')) {
+
+                    $(this).change(function() {
+                        //  debugger;
+                        $('#content').attr('style', "opacity:1;")
+
+                        var curCtrl = $(this);
+                        $.each(eval($(this).attr('linkedfields')), function(i, item) {
+                            var targetCtrl = $('#' + item);
+                            targetCtrl.html('');
+                            var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+                            $.each(eval(opts), function(j, itm) {
+                                if (targetCtrl.attr('multiselect'))
+                                    addToSelectList(itm, targetCtrl);
+                                else
+                                    targetCtrl.append('<option value="' + itm + '">' + itm + '</option>');
+
+                            });
+                            //fix for select2 control - Vinod 
+                            if (targetCtrl.attr('multiselect') == null)
+                                targetCtrl.select2();
+
+                        });
+                    });
+
+                }
+            }
+
+            //alert("Reading" + JSON.stringify(temp));
+        });
+
+        $('input[sourcepath][cdata="catalyst"]').each(function() {
+            //debugger;
+            if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+                var tempJSON = JSON.parse(readMasterJson($(this).attr('sourcepath')));
+                var curInput = $(this);
+                //   alert(JSON.stringify(tempJSON));
+
+                // $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
+                //     //     alert(item.field[0].values.value);
+                //     // debugger;
+                //     for (var k = 0; k < item.field.length; k++) {
+                //         if (item.field[k].name == curInput.attr("id")) {
+                //             // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                //             // alert("Added:" + item.field[i].values.value);
+                //             addToCodeList(item.field[k].values.value, curInput);
+                //         }
+                //     }
+                // });
+                $.each(tempJSON, function(i, item) {
+                       // _rowid = item['rowid'];
+
+                        $.each(item,function(k,v){ //columns
+                            console.log('2 k:' + k + ' 2 v :' + JSON.stringify(v));
+                           if (k == curInput.attr("id")) {
+                                 addToCodeList(v, curInput);
+                            }
+                        });
+                });
+                
+            }
+        });
+
+        $('div[datatype="select"]').each(function() {
+            //debugger;
+            if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
+                if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+                    var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    var curInput = $(this);
+                    //  alert('div select ' + curInput.attr("id"));
+                    $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
+                        //     alert(item.field[0].values.value);
+                        // debugger;
+                        for (var k = 0; k < item.field.length; k++) {
+                            if (item.field[k].name == curInput.attr("id")) {
+                                // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                                // alert("Added:" + item.field[i].values.value);
+                                addToSelectList(item.field[k].values.value, curInput);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        // End Prefilling dropdowns
+        var formSchema = null;
+        var rowid = url.substr(url.indexOf("?") + 1);
+        //  alert(orgName);
+        var editMode = false;
+
+
+        // alert("before d4d" + JSON.stringify(d4ddata));
+        readMasterRecord(formID,rowid);
+        //alert("after d4d" + JSON.stringify(d4ddata));
+
+        /* $.each(d4ddata.sections.section, function (i, item) {
+             if (item.name == formName) {
+                 formData = item;
+             }
+         });*/
+        
+        //get Unique record into d4ddata.
+
+
+
+        //Reading row to get schema
+        // var formSchema = null;
+        // var orgName = url.substr(url.indexOf("?") + 1);
+        // //  alert(orgName);
+        // var editMode = false;
+
+        formData = d4ddata;
+
+        //alert("here " + JSON.stringify(formData) + ":" + orgName);
+
+        // $.each(formData.rows.row, function(i, item) {
+        //     //  alert(item.field.length);
+        //     for (i = 0; i < item.field.length; i++) {
+        //         //  alert(typeof item.field[i].values.value);
+        //         //    alert('Expanded field ' + JSON.stringify(item.field.length) + ":" + orgName.toLowerCase());
+        //         if (typeof item.field[i].values.value == "string") {
+        //             if (item.field[i].values.value.toLowerCase() == orgName.toLowerCase()) {
+        //                 formSchema = item.field;
+        //                 editMode = true;
+        //                 return (false);
+        //             }
+        //         }
+        //     }
+        //     formSchema = item.field;
+        // });
+        //  alert('Edit Mode:' + editMode);
+        
+        if(typeof(formData.rowid) != 'undefined'){
+            editMode = true;
+        }
+        if (forceEdit == true) {
+            editMode = true;
+            formSchema = formData;
+        }
+        if (editMode == false) {
+            return (false);
+        }
+
+        //Setting the header of the form to Edit if shown as Create
+        var head = $('.widget-header').html().replace('Create', 'Edit').replace('New', 'Edit');
+        $('.widget-header').html(head);
+
+
+        //  debugger;
+        //  alert('came here');
+        //Read current form values with the field names
+        var formSchemaNew = formSchema;
+
+
+
+        //Since this section is executed only in edit mode. The rowid field is injected with the rowid
+        $('button[onclick*="saveform"]').attr("rowid", rowid);
+
+
+        //   alert(JSON.stringify(formData.rows.row[0].field));
+
+        $.each(formData, function(k,v) {
+            var inputC = null;
+            console.log('k:' + k + ' v:' + v);
+            //Finding the input control to bind.
+            if (k.indexOf("_filename") > 0) {
+                    k = k.replace('_filename', '');
+            }
+            if(k.indexOf('_id') < 0){ //ensuring that you do not find an id field
+                inputC = $('#' + k);
+            }
+            if (inputC && $(inputC).attr("id") != undefined) {
+                if (inputC.getType().toLowerCase() == "text") {
+                    //  alert(inputC.attr("datavalues"));
+                    if (inputC.attr("datavalues")) {
+                        //var array = v[k1].split(",");
+                        $.each(v, function(i) {
+                            addToCodeList(v[i]);
+                        });
+                    } else
+                        inputC.val(v);
+                }
+                if (inputC.getType().toLowerCase() == "file") {
+                                //  v[k1]
+                   $(inputC).closest('input').next().val(v);
+                }
+                if (inputC.getType().toLowerCase() == "select") {
+                  //alert(v[k1]);
+                    $(inputC).val(v);
+                    $(inputC).attr('savedvalue', v);
+                    //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
+                    $(inputC).select2();
+                }
+                if (inputC.getType().toLowerCase() == "ul") {
+                  //  alert('in ul');
+                    if (v.indexOf(',') >= 0) {
+                        var itms = v.split(',');
+                        $(inputC).attr('defaultvalues', v);
+                        /* for(var j = 0; j < itms.length; j++){
+                           $(inputC).append('<li><label style="margin: 5px;"><input type="hidden" value="recipe[' + itms[j] + '"]">' + itms[j] + '</label></li>');
+                        } */
+                    }
+                }
+                if (inputC.getType().toLowerCase() == "div") {
+                                
+                    $(inputC).attr('savedvalue', v)
+                    //Set saved values to div.
+                    var ctype = '';
+                    var csource = '';
+                    if ($(inputC).attr('ctype'))
+                        ctype = $(inputC).attr('ctype');
+                    if ($(inputC).attr('csource'))
+                        csource = $(inputC).attr('csource');
+                    var divselect1 = v.toString().split(',');
+                  //  alert(v[k1]);
+                    for (var j = 0; j < divselect1.length; j++) {
+                        if (ctype == 'list' && csource != '') {
+
+                            addToTargetList($('#' + csource).clone().val(divselect1[j]));
+                        }
+                        if (ctype == '')
+                            inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
+                        if(ctype == 'checkbox'){
+                            inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                        }
+                    }
+                }
+                inputC = null;
+
+            }
+            
+        });
+        //Force clicking on selects that has dependent controls
+         $('[linkedfields]').each(function() {
+             $(this).trigger('change');
+             var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
+            // alert(ctrls.length);
+                for (var i = 0; i < ctrls.length; i++) {
+                    var ctrl = $("#" + ctrls[i]);
+                    if (ctrl.getType() == "select") {
+                        ctrl.val(ctrl.attr('savedvalue'));
+                    }
+                    if (ctrl.getType() == "div") {
+                        var divselect = ctrl.attr('savedvalue').split(',');
+                        // alert(divselect.length);
+                        for (var j = 0; j < divselect.length; j++) {
+                            ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
+                        }
+                    }
+                }
+        });
+
+
+        //  alert('almost exiting');
+        //Setting the unique field with current value
+        $('input[unique="true"]').each(function() {
+            // alert($(this).val());
+            $(this).attr('initialvalue', $(this).val());
+            // alert($(this).attr('initialvalue'));
+        });
+        return (true);
+    }
     function readformnew(formID) {
         var formData = null;
         //    alert("force edit:" + forceEdit);
@@ -1948,7 +2375,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $label1.append($strong1);
     $section1.append($label1);
     var $row1 = $("<div></div>").addClass('row');
-    var $div1 = $("<div></div>").addClass('col col-9');
+    var $div1 = $("<div></div>").addClass('col col-10 padding-right0');
     var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
     var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
     var $inputtypetextCookbooks = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Cookbooks">').addClass('searchoptionforCookbooks form-control padding0');
@@ -2049,7 +2476,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $section2.append($label2);
 
     var $rowOrder1 = $("<div></div>").addClass('row');
-    var $divOrder1 = $("<div></div>").addClass('col col-9');
+    var $divOrder1 = $("<div></div>").addClass('col col-10 padding-right0');
     var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
     //alert('here ==>');
     //alert(selectedRunlist); 
@@ -2171,26 +2598,26 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
         return (false);
     });
     $inputtypetextCookbooks.keyup(function(e) {
-        var searchText = $(this).val();
+        var searchText = $(this).val().toUpperCase();
         $allListElements = $chefItemdiv.find('.deploymentsCookbookList > li');
         $matchingListElements = $allListElements.filter(function(i, el) {
             if ($(el).data('itemSelected')) {
                 return false;
             }
-            return $(el).text().indexOf(searchText) !== -1;
+            return $(el).text().toUpperCase().indexOf(searchText) !== -1;
         });
         $allListElements.hide();
         $matchingListElements.show();
     });
 
     $inputtypetextRoles.keyup(function(e) {
-        var searchText = $(this).val();
+        var searchText = $(this).val().toUpperCase();
         $allListElements = $chefItemdiv.find('.deploymentRoleList > li');
         $matchingListElements = $allListElements.filter(function(i, el) {
             if ($(el).data('itemSelected')) {
                 return false;
             }
-            return $(el).text().indexOf(searchText) !== -1;
+            return $(el).text().toUpperCase().indexOf(searchText) !== -1;
         });
         $allListElements.hide();
         $matchingListElements.show();
