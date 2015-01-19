@@ -1432,6 +1432,7 @@ hr.layout {
   
     text-align: center;*/
     float:left !important;
+    margin-top: 0px !important;
 }
 .instance-bootstrap-ActionShutdown {
     /*font-size: 10px;
