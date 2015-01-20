@@ -363,77 +363,9 @@ function Configmgmt() {
     };
 
     this.getChefServerDetailsByChefServer = function(paramconfigname, callback) {
-        d4dModel.findOne({
-            id: '10'
-        }, function(err, d4dMasterJson) {
-            if (err) {
-                console.log("Hit and error:" + err);
-            }
-            if (d4dMasterJson) {
-                var chefRepoPath = '';
-                var configmgmt = '';
-                var settings = chefSettings;
-                chefRepoPath = settings.chefReposLocation;
-                console.log("Repopath:" + chefRepoPath);
-                console.log("paramorgname :" + paramconfigname);
-                var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found by org" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == 'configname') {
-                            if (itm.field[j]["values"].value == paramconfigname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
-
-                                var orgname = '';
-                                var loginname = '';
-                                //looping to get the orgname , loginname
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("login") >= 0)
-                                        loginname = itm.field[k]["values"].value + "/";
-                                    if (itm.field[k]["name"].indexOf("orgname") >= 0)
-                                        orgname = itm.field[k]["values"].value + "/";
-                                }
-
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("filename") > 0) {
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-
-                                    } else {
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                    }
-                                }
-                                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
-
-                                configmgmt = "{" + configmgmt + "}";
-                                //console.log(">>>>>>" + JSON.stringify(configmgmt));
-                                configmgmt = JSON.parse(configmgmt);
-                                return;
-                            }
-                        }
-
-                        // console.log();
-                    }
-                }); // rows loop
-                callback(null, configmgmt);
-
-
-            } else {
-                callback(true, null);
-            }
-        });
-    }
-
-    this.getChefServerDetailsByOrgname = function(paramorgname, callback) {
-        d4dModel.findOne({
-            id: '10'
+         
+        d4dModelNew.d4dModelMastersConfigManagement.findOne({
+            configname: paramconfigname,id:10
         }, function(err, d4dMasterJson) {
             if (err) {
                 console.log("Hit and error:" + err);
@@ -446,58 +378,103 @@ function Configmgmt() {
                 console.log("Repopath:" + chefRepoPath);
                 console.log("paramorgname :" + paramorgname);
                 var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found by org" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == 'orgname') {
-                            if (itm.field[j]["values"].value == paramorgname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
+                //JSON.parse(d4dMasterJson).forEach(function(itm, i) 
 
-                                var orgname = '';
-                                var loginname = '';
-                                //looping to get the orgname , loginname
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("login") >= 0)
-                                        loginname = itm.field[k]["values"].value + "/";
-                                    if (itm.field[k]["name"].indexOf("orgname") >= 0)
-                                        orgname = itm.field[k]["values"].value + "/";
-                                }
+               // console.log("found by org " + itm);
+                var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                var keys = Object.keys(outJson);
+                var orgname = outJson['orgname'];
+                var loginname = outJson['loginname'];
+                for (i = 0; i < keys.length; i++) {
+                    var k = keys[i];
+                    
 
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("filename") > 0) {
-                                        // console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        //  console.log("configmgmt ==>  ",configmgmt);
-                                    } else {
-                                        //  console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
-
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                        // console.log("configmgmt ==>  ",configmgmt);
-                                    }
-                                }
-                                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
-
-                                configmgmt = "{" + configmgmt + "}";
-                                //console.log(JSON.stringify(configmgmt));
-                                console.log(configmgmt);
-                                configmgmt = JSON.parse(configmgmt);
-                                return;
-                            }
-                        }
-
-                        // console.log();
+                    if (keys[i].indexOf("_filename") >= 0)
+                    {
+                        //loginname = outJson[k] + "/";
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
                     }
-                }); // rows loop
-                callback(null, configmgmt);
+                    else{
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        // console.log("configmgmt ==>  ",configmgmt);
+                    }
+                   
+                }
+                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname +'/'+ loginname + "/\"";
 
+                configmgmt = "{" + configmgmt + "}";
+                console.log('Read Config:' + configmgmt);
+                callback(null, configmgmt);
+                return;
+               
+
+            } else {
+                callback(true, null);
+            }
+        });
+    }
+
+    this.getChefServerDetailsByOrgname = function(paramorgname, callback) {
+        
+
+
+        d4dModelNew.d4dModelMastersConfigManagement.findOne({
+            orgname: paramorgname,id:10
+        }, function(err, d4dMasterJson) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (d4dMasterJson) {
+                var chefRepoPath = '';
+                var configmgmt = '';
+                var settings = chefSettings;
+                chefRepoPath = settings.chefReposLocation;
+                console.log("Repopath:" + chefRepoPath);
+                console.log("paramorgname :" + paramorgname);
+                var hasOrg = false;
+                //JSON.parse(d4dMasterJson).forEach(function(itm, i) 
+
+               // console.log("found by org " + itm);
+                var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                var keys = Object.keys(outJson);
+                var orgname = outJson['orgname'];
+                var loginname = outJson['loginname'];
+                for (i = 0; i < keys.length; i++) {
+                    var k = keys[i];
+                    
+
+                    if (keys[i].indexOf("_filename") >= 0)
+                    {
+                        //loginname = outJson[k] + "/";
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
+                    }
+                    else{
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        // console.log("configmgmt ==>  ",configmgmt);
+                    }
+                   
+                }
+                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname +'/'+ loginname + "/\"";
+
+                configmgmt = "{" + configmgmt + "}";
+                console.log('Read Config:' + configmgmt);
+                callback(null, configmgmt);
+                return;
+               
 
             } else {
                 callback(true, null);

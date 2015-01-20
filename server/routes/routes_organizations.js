@@ -487,7 +487,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            console.log("chefdata for cookbooks", chefDetails.chefRepoLocation);
 
             if (!chefDetails) {
                 res.send(404);
@@ -525,7 +525,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            console.log("chefdata for roles", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -561,7 +561,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            console.log("chefdata for runlist", chefDetails);
+            chefDetails = JSON.parse(chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -606,7 +607,7 @@ app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, 
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            console.log("chefdata userchefserver", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
