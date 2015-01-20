@@ -1,26 +1,39 @@
 var pathExtra = require('path-extra');
 var mkdirp = require('mkdirp');
-
-var homeDirectory = pathExtra.homedir();
+var fs = require('fs');
 var currentDirectory = __dirname;
-
-var catalysHomeDirName = "catalyst";
-
-console.log('homeDirectory ==>', homeDirectory);
+var path = require('path');
+var logger = require('../lib/logger')(module);
 
 
-//creating path
+var configJson;
+try {
+    configJson = fs.readFileSync('./config/catalyst-config.json',{'encoding':'utf8'});
+} catch(err) {
+    console.log(err);
+    configJson = null;
+}
 
-mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/');
-mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/instance-pemfiles/');
-mkdirp.sync(homeDirectory + '/' + catalysHomeDirName + '/temp/');
 
 
 var config = {
+<<<<<<< HEAD
     app_run_port: 3004,
     settingsDir: homeDirectory + '/' + catalysHomeDirName + '/',
     instancePemFilesDir: homeDirectory + "/" + catalysHomeDirName + "/instance-pemfiles/",
     tempDir: homeDirectory + "/" + catalysHomeDirName + "/temp/",
+=======
+    express: {
+        port: 3001,
+        express_sid_key: 'express.sid',
+        sessionSecret: 'sessionSekret'
+    },
+    app_run_port: 3001,
+    userHomeDir: pathExtra.homedir(),
+    catalysHomeDirName: 'catalyst',
+    instancePemFilesDirName: 'instance-pemfiles',
+    tempDirName: 'temp',
+>>>>>>> origin/feature_engineered
     app_run_secure_port: 443,
     cryptoSettings: {
         algorithm: "aes192",
@@ -28,6 +41,16 @@ var config = {
         encryptionEncoding: "ascii",
         decryptionEncoding: "base64",
 
+    },
+    chef: {
+        chefReposDirName: 'chef-repos',
+        defaultChefCookbooks: [],
+        ohaiHints: ['ec2'],
+
+        // getter methods
+        get chefReposLocation() {
+            return config.catalystHome + this.chefReposDirName + '/';
+        }
     },
     aws: {
         access_key: "AKIAI6TVFFD23LMBJUPA",
@@ -49,7 +72,7 @@ var config = {
             username: 'administrator',
             osType: 'windows',
             name: 'Windows 2008',
-            supportedInstanceType: ['t2.micro','m1.small']
+            supportedInstanceType: ['t2.micro', 'm1.small']
         }, {
             amiid: 'ami-3d50120d',
             username: 'ubuntu',
@@ -67,9 +90,37 @@ var config = {
         host: '54.187.120.22',
         port: 389
 
+    },
+
+    //getter methods
+    get catalystHome() {
+        return this.userHomeDir + '/' + this.catalysHomeDirName + '/';
+    },
+
+    get instancePemFilesDir() {
+        return this.catalystHome + this.instancePemFilesDirName + "/";
+    },
+    get tempDir() {
+        return this.catalystHome + this.tempDirName + "/";
     }
 
 };
+
+//creating path
+mkdirp.sync(config.catalystHome);
+mkdirp.sync(config.instancePemFilesDir);
+mkdirp.sync(config.tempDir);
+
+var chefRepoLocation = mkdirp.sync(config.chef.chefReposLocation);
+logger.debug('chef repo location ==>', config.chef.chefReposLocation);
+
+
+if(configJson) {
+    config = JSON.parse(configJson);
+    //console.log(config);
+} else {
+    //console.log(configJson);
+}
 
 
 module.exports = config;

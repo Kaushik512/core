@@ -2,7 +2,7 @@ var masterjsonDao = require('../model/d4dmasters/masterjson.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 var blueprintsDao = require('../model/blueprints');
-var settingsController = require('../model/settings');
+
 var instancesDao = require('../model/instances');
 var tasksDao = require('../model/tasks');
 
@@ -18,6 +18,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             var orgTree = [];
+            
             if (orgsJson.masterjson && orgsJson.masterjson.rows && orgsJson.masterjson.rows.row) {
                 for (var i = 0; i < orgsJson.masterjson.rows.row.length; i++) {
                     for (var j = 0; j < orgsJson.masterjson.rows.row[i].field.length; j++) {

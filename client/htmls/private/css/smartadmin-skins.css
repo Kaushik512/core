@@ -61,29 +61,9 @@ body.smart-style-2 {
 	color:#9EA8B1 !important;
 }
 
-.smart-style-2 #project-context>:first-child {
+/*.smart-style-2 #project-context>:first-child {
 	text-shadow:none;
-}
-
-
-
-
-/*Arabinda added below lines*/
-.smart-style-2  .left-projects-links > a.active{
-	font-weight:bold;
-	text-decoration: underline;
-	/*background: none repeat scroll 0 0 rgba(255, 255, 255, 0.18);*/
-	border-color: #3a87ad rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.3);
-    border-image: none;
-    border-style: solid;
-    border-width: 3px 0px 0px;
-    padding:6px;
-    /*padding-top: 4px;*/
-    /*box-shadow: 0 0 15px rgba(255, 255, 255, 0.2) inset;*/
-    color: #000;
-    text-decoration: none;
-
-}
+}*/
 
 .smart-style-2 .breadcrumb > li + li:before{
 	color: white;
@@ -208,7 +188,7 @@ body.smart-style-2 {
 	width:35px;
 }
 
-.smart-style-2 nav ul li a {
+.smart-style-2 nav ul li a  {
 	color:#40baf1;
 	
 	font-size:12px !important;

@@ -1,7 +1,7 @@
 @font-face {
     font-family: FontAwesome;
-    src: url(../fonts/fontawesome-webfont.eot?v=4.0.0);
-    src: url(../fonts/fontawesome-webfont.eot?#iefix&v=4.0.0) format('embedded-opentype'), url(../fonts/fontawesome-webfont.woff?v=4.0.0) format('woff'), url(../fonts/fontawesome-webfont.ttf?v=4.0.0) format('truetype'), url(../fonts/fontawesome-webfont.svg?v=4.0.0#fontawesomeregular) format('svg');
+    src: url(../fonts/fontawesome-webfont.eot);
+    src: url(../fonts/fontawesome-webfont.woff) format('woff'), url(../fonts/fontawesome-webfont.eot) format('embedded-opentype'), url(../fonts/fontawesome-webfont.ttf) format('truetype'), url(../fonts/fontawesome-webfont.svg) format('svg');
     font-weight: 400;
     font-style: normal;
 }
@@ -19,10 +19,7 @@
 
 .fa-lock:before {
     content: "\f023"}
-.images {
-    width: 150px;
-    height: 150px;
-}
+
 .images-margin {
     margin-left: 30px;
 }
@@ -250,59 +247,6 @@ body {
     border-color: #3276B1;
 }
 
-.smart-form .checkbox input:checked+i, .smart-form .radio input:checked+i, .smart-form .toggle input:checked+i {
-    border-color: #3276B1;
-}
-.smart-form .rating input:checked~label {
-    color: #3276B1;
-}
-.smart-form .checkbox.state-error i, .smart-form .radio.state-error i, .smart-form .state-error input, .smart-form .state-error select, .smart-form .state-error textarea, .smart-form .toggle.state-error i {
-    background: #fff0f0;
-    border-color: #A90329;
-}
-.smart-form .toggle.state-error input:checked+i {
-    background: #fff0f0;
-}
-.smart-form .state-error+em {
-    display: block;
-    margin-top: 6px;
-    padding: 0 1px;
-    font-style: normal;
-    font-size: 11px;
-    line-height: 15px;
-    color: #D56161;
-}
-.smart-form .rating.state-error+em {
-    margin-top: -4px;
-    margin-bottom: 4px;
-}
-.smart-form .state-error select+i {
-    background: #FFF0F0;
-    -webkit-box-shadow: 0 0 0 9px #FFF0F0;
-    box-shadow: 0 0 0 9px #FFF0F0;
-}
-.state-error .icon-append, .state-error .icon-prepend {
-    color: #ed1c24;
-}
-.smart-form .checkbox.state-success i, .smart-form .radio.state-success i, .smart-form .state-success input, .smart-form .state-success select, .smart-form .state-success textarea, .smart-form .toggle.state-success i {
-    background: #f0fff0;
-    border-color: #7DC27D;
-}
-.smart-form .toggle.state-success input:checked+i {
-    background: #f0fff0;
-}
-.smart-form .note-success {
-    color: #6fb679;
-}
-.smart-form .state-success select+i {
-    background: #f0fff0;
-    -webkit-box-shadow: 0 0 0 9px #f0fff0;
-    box-shadow: 0 0 0 9px #f0fff0;
-}
-.smart-form .button.state-disabled, .smart-form .checkbox.state-disabled, .smart-form .input.state-disabled input, .smart-form .radio.state-disabled, .smart-form .select.state-disabled, .smart-form .textarea.state-disabled, .smart-form .toggle.state-disabled {
-    cursor: default!important;
-    opacity: .6!important;
-}
 .smart-form .checkbox.state-disabled:hover i, .smart-form .input.state-disabled:hover input, .smart-form .radio.state-disabled:hover i, .smart-form .select.state-disabled:hover select, .smart-form .textarea.state-disabled:hover textarea, .smart-form .toggle.state-disabled:hover i {
     border-color: #e5e5e5!important;
 }
@@ -906,4 +850,37 @@ legend {
 }
 }.txt-color-teal {
     color: #568a89!important;
+}
+.plan, .design, .workzone, .track, .Monitor{
+    background: url(../img/DevOps/sprites.png) no-repeat;
+}
+
+.plan{
+    background-position: 0 0;
+    width: 150px;
+    height: 150px;
+}
+
+.design{
+    background-position: -198px 0;
+    width: 150px;
+    height: 153px;
+}
+
+.workzone{
+    background-position: -399px 0;
+    width: 150px;
+    height: 150px;
+}
+
+.track{
+    background-position: -600px 0;
+    width: 150px;
+    height: 150px;
+}
+
+.Monitor{
+    background-position: -799px 0;
+    width: 150px;
+    height: 150px;
 }

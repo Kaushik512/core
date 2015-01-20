@@ -1,4 +1,4 @@
-var settingsController = require('../model/settings');
+
 var Chef = require('../lib/chef');
 var EC2 = require('../lib/ec2');
 var instancesDao = require('../model/instances');
@@ -336,17 +336,17 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.post('/chef/environments/create', function(req, res) {
 
-        settingsController.getChefSettings(function(settings) {
-            var chef = new Chef(settings);
-            chef.createEnvironment(req.body.envName, function(err, envName) {
-                if (err) {
-                    res.send(500);
-                    return;
-                } else {
-                    res.send(envName);
-                }
-            });
+        var settings = appConfig.chef;
+        var chef = new Chef(settings);
+        chef.createEnvironment(req.body.envName, function(err, envName) {
+            if (err) {
+                res.send(500);
+                return;
+            } else {
+                res.send(envName);
+            }
         });
+
     });
 
     app.get('/chef/servers/:serverId/cookbooks', function(req, res) {
@@ -416,8 +416,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
 
     });
-    
-    
+
+
 
     app.get('/chef/servers/:serverId/receipeforcookbooks/:cookbookName', function(req, res) {
 
@@ -455,7 +455,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
 
     });
-    
+
 
     app.get('/chef/servers/:serverId', function(req, res) {
         console.log(req.params.serverId);

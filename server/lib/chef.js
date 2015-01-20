@@ -1,8 +1,7 @@
 var Process = require("./utils/process");
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
-var SSH = require('./utils/sshexec');
-var chefDefaults = require('../config/chef_config');
+var chefDefaults = require('../config/app_config').chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 
 var Chef = function(settings) {
@@ -45,6 +44,7 @@ var Chef = function(settings) {
                     callback(true, null);
                     return;
                 }
+                
                 var nodeNames = Object.keys(chefResBody);
                 callback(null, nodeNames);
             });
@@ -351,7 +351,7 @@ var Chef = function(settings) {
         argList.push(params.instanceIp);
 
         var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
-        var runlist = params.runlist
+        
         var credentialArg;
         if (params.pemFilePath) {
             credentialArg = '-i' + params.pemFilePath;
@@ -384,7 +384,7 @@ var Chef = function(settings) {
         argList = argList.concat(['-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
         console.log('argList ==>', argList.join(" "));
         console.log('bootstrap arglist ==>', argList);
-
+        argList.push('--hint ec2');
         var proc = new Process('knife', argList, options);
         proc.start();
         

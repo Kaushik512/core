@@ -238,22 +238,6 @@ margin-top:15px;
     overflow-y: auto;
     width: 155px;
 }
-/*
- * HTML5 Boilerplate
- *
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- *
- * Detailed information about this CSS: h5bp.com/css
- *
- * ==|== normalize ==========================================================
- */
-
-
-/* =============================================================================
-   HTML5 display definitions
-   ========================================================================== */
 
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
 audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
@@ -261,14 +245,6 @@ audio:not([controls]) { display: none; }
 [hidden] { display: none; }
 
 
-/* =============================================================================
-   Base
-   ========================================================================== */
-
-/*
- * 1. Correct text resizing oddly in IE6/7 when body font-size is set using em units
- * 2. Prevent iOS text size adjust on device orientation change, without disabling user zoom: h5bp.com/g
- */
 hr{
     margin:2px !important;
 }
@@ -279,15 +255,6 @@ html
   -ms-text-size-adjust: 100%; 
   
 }
-/*@media only screen and (min-width: 768px) {
-  .table-div{
-    border: 1px solid #ddd;
-   
-    overflow-x: scroll;
-    overflow-y: hidden;
-    width: 100%;
-}
-}*/
 
 .smart-style-2 #main-collapse{
     background-color: #40baf1;
@@ -445,35 +412,7 @@ html
 .btn1:focus{outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}
 .btn1:hover,.btn1:focus{color:#333;text-decoration:none}
 .btn1:active,.btn1.active{outline:0;background-image:none;-webkit-box-shadow:inset 0 3px 5px rgba(0,0,0,0.125);box-shadow:inset 0 3px 5px rgba(0,0,0,0.125)}
-/*.btn1.disabled,.btn1[disabled],fieldset[disabled] .btn1{cursor:not-allowed;pointer-events:none;opacity:.65;filter:alpha(opacity=65);-webkit-box-shadow:none;box-shadow:none}.btn-default{color:#333;background-color:#fff;border-color:#ccc}.btn-default:hover,.btn-default:focus,.btn-default:active,.btn-default.active,.open .dropdown-toggle.btn-default{color:#333;background-color:#ebebeb;border-color:#adadad}.btn-default:active,.btn-default.active,.open .dropdown-toggle.btn-default{background-image:none}.btn-default.disabled,.btn-default[disabled],fieldset[disabled] .btn-default,.btn-default.disabled:hover,.btn-default[disabled]:hover,fieldset[disabled] .btn-default:hover,.btn-default.disabled:focus,.btn-default[disabled]:focus,fieldset[disabled] .btn-default:focus,.btn-default.disabled:active,.btn-default[disabled]:active,fieldset[disabled] .btn-default:active,.btn-default.disabled.active,.btn-default[disabled].active,fieldset[disabled] .btn-default.active{background-color:#fff;border-color:#ccc}.btn-default .badge{color:#fff;background-color:#fff}.btn-primary{color:#fff;background-color:#3276b1;border-color:#2c699d}.btn-primary:hover,.btn-primary:focus,.btn-primary:active,.btn-primary.active,.open .dropdown-toggle.btn-primary{color:#fff;background-color:#296191;border-color:#1f496d}.btn-primary:active,.btn-primary.active,.open .dropdown-toggle.btn-primary{background-image:none}.btn-primary.disabled,.btn-primary[disabled],fieldset[disabled] .btn-primary,.btn-primary.disabled:hover,.btn-primary[disabled]:hover,fieldset[disabled] .btn-primary:hover,.btn-primary.disabled:focus,.btn-primary[disabled]:focus,fieldset[disabled] .btn-primary:focus,.btn-primary.disabled:active,.btn-primary[disabled]:active,fieldset[disabled] .btn-primary:active,.btn-primary.disabled.active,.btn-primary[disabled].active,fieldset[disabled] .btn-primary.active{background-color:#3276b1;border-color:#2c699d}.btn-primary .badge{color:#3276b1;background-color:#fff}.btn-warning{color:#fff;background-color:#c79121;border-color:#b1811d}.btn-warning:hover,.btn-warning:focus,.btn-warning:active,.btn-warning.active,.open .dropdown-toggle.btn-warning{color:#fff;background-color:#a4781b;border-color:#7d5b15}.btn-warning:active,.btn-warning.active,.open .dropdown-toggle.btn-warning{background-image:none}.btn-warning.disabled,.btn-warning[disabled],fieldset[disabled] .btn-warning,.btn-warning.disabled:hover,.btn-warning[disabled]:hover,fieldset[disabled] .btn-warning:hover,.btn-warning.disabled:focus,.btn-warning[disabled]:focus,fieldset[disabled] .btn-warning:focus,.btn-warning.disabled:active,.btn-warning[disabled]:active,fieldset[disabled] .btn-warning:active,.btn-warning.disabled.active,.btn-warning[disabled].active,fieldset[disabled] 
-.btn1-warning.active{background-color:#c79121;border-color:#b1811d}
-/*.btn1{
-    -moz-user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 13px;
-    font-weight: normal;
-    line-height: 1.42857;
-    margin-bottom: 0;
-    padding: 6px 12px;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    }
-    .btn1{
 
-    }
-/*.fixed-footer{ 
-    bottom: 4px;
-    position: fixed;
-    right: 0;
-    z-index: 1004;
-    width:100%;
-}*/
-/*.fixed-footer #footer{position:fixed;width:100%;z-index:1003}.container.fixed-footer #footer{max-width:1164px}.fixed-footer #footer .ajax-dropdown{z-index:1000}.fixed-footer #shortcut{position:fixed}.fixed-footer #main{margin-top:49px}*/
 .orgSelected {
     background-color: #2C3742;
   }
@@ -707,107 +646,9 @@ body
  
 }
 
-
-.title{
-  color:#fff;
-  font-size: 16px;
-  padding: 3px;
-}
-
-/* new */
-.monitor-bell
-{
-    
-    color: rgb(255, 149, 0);
-    text-align: center;
-    margin-top:40px;
-}
-
-hr.layout {
-    border-bottom: 6px solid #FFFFFF;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
-    margin-top: 0;
-}
-
-.containerBox
-{
-    border: 2px solid black;
-    margin-left: 100px;
-    
-    background-color: black;
-    width: 850px;
-    margin-right: 755px;
-    
-}
-
-/*Ends*/
-
-
-.content
-{
-    float: right;
-    width: 82%;
-    }
-
-
-
-.page-title
-{
-    margin: 0px 0px;
-}
-
-.page-title > h2
-{
-    margin-bottom: 10px;
-    
-    font-size: 26px;
-}
-
-.page-title >small
-{
-    font-size: 18px;
-}
-
-
-/* Server Load */
-
-.tile
-{
-    
-    margin-bottom: 30px;
-    color: #fff;
-    padding: 15px;
-}
-
-.light
-{
-    
-    background-color:#16a085 ;/*#bdc3c7 #cf4435*/
-}
-
 .text-faded
 {
     color: rgba(255,255,255,0.7);
-}
-
-/*Flot Chart */
-
-.flot-chart
-{
-    display: block;
-    height: 200px;
-}
-
-.flot-chart-dashboard
-{
-    height: 240px;
-
-}
-
-.flot-chart-content
-{
-    width: 100%;
-    height: 100%;
 }
 
 /*Sidebar properties*/
@@ -985,362 +826,7 @@ hr.layout {
         }
 
 
-/*No Margin for row starts*/
-        .nolrmargin {
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-        }
 
-
-
-        #menu-toggle {
-            display: inline-block;
-        }
-
-        .inset {
-            padding: 15px;
-        }
-    
-    
-    
-
-    
-
-
-    /*Main Page*/   
-
-
-    
-/*Containers*/
-
-.source
-{
-    float:right;
-    margin-top: 20px;
-   margin-right: 0px;
-    width: 20%;
-    background-color:white;
-    display: inline;
- /*   border-width: 1px;
-    border-color: black;
-    border-style:solid;*/
-       }
-.source>h3
-{
-    margin-top: 5px;
-}
-
-.source>p
-{
-    margin-left: 40px;
-}
-
- .zabbix
-{
-    float:left;
-    margin-top: -10px;
-    width: 100%;  
-    background-color:white; 
-    height: 290px; 
-  /*  border-width: 1px;
-    border-color: black;
-    border-style:solid; */
-       
-} 
-
-.zabbixcont
-{
-   float:left;
-    margin-top: 0px;
-    margin-left: 0px;
-    width: 100%; /*78*/
-    background-color:rgba(0, 0, 0, 0.73); /*#858585 #54677a*/
-    height: 210px; /*240*/
-    border-width: 1px;
-    border-color: black;
-    border-style:solid; 
-    overflow: auto;
-    color: white;
-    font-size: 11.25px;
-}
-
-.newRelic
-
-    
-{
-    float:left;
-    margin-top: -20px;
-    width: 80%; /*78*/
-    background-color:white; /*#858585 #54677a*/
-    height: 290px; /*240*/
- /*   border-width: 1px;
-    border-color: black;
-    border-style:solid; */
-}
-
-
-.newreliccont
-{
-   float:left;
-    margin-top: 0px;
-    margin-left: 0px;
-    width: 100%; /*78*/
-    background-color:#2c3e50; /*#858585 #54677a*/
-    height: 210px; /*240*/
-    border-width: 1px;
-    border-color: black;
-    border-style:solid; 
-    overflow: auto;
-    color: white;
-    font-size: 11.25px;
-}
-
-.logstash
-{
-   
-    float:left;
-    margin-top: -20px;
-    width: 80%; /*78*/
-    background-color:white; /*#858585 #54677a*/
-    height: 290px; /*240*/
- /*  border-width: 1px;
-    border-color: black;
-    border-style:solid; */
-}
-
-
-
-.logstashcont
-{
-   float:left;
-    margin-top: 0px;
-    margin-left: 0px;
-    width: 100%; /*78*/
-    background-color:black; /*#858585 #54677a*/
-    height: 600px; /*240*/
-    border-width: 1px;
-    border-color: black;
-    border-style:solid; 
-    overflow: auto;
-    color: white;
-    font-size: 11.25px;
-}
-
-
-.containerIns
-{
-    float:left;
-    margin-top: 10px;
-    margin-left: 0px;
-    width: 78%;
-   /* background-color:black;*/
-    height: 240px;
-    border-width: 1px;
-    border-color: black;
-    border-style:solid; 
-    overflow: auto;
-    color: white;
-}
-
-.caret1 {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 2px; 
-  vertical-align: middle;
-  border-top: 4px solid;
-  border-right: 4px solid transparent;
-  border-left: 4px solid transparent;
-}
-
-
-
-/*Real Time Updates*/
-
-.demo-container {
-    box-sizing: border-box;
-    width: 650px;
-    height: 350px;
-    padding: 20px 15px 15px 15px;
-/*  margin: 10px auto 20px auto;*/
-    border: 1px solid #ddd;
-    background: #fff; 
-    background: linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-.demo-placeholder {
-    width: 100%;
-    height: 100%;
-    font-size: 14px;
-    
-}
-
-/* -- box-Tabs */
-
-
-.box-tile
-{
-    
-    height: 150px;
-    background-color:#ab3334;
-    font-size: 16px;
-    font-family: Calibri ;
-    margin-left: 5px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    }
-
-.box-tile-box
-{
-    text-align: center;
-    color: white;
-    
-}
-
-.box-tile-content 
-{
-    color: white; 
-  }
-
-.box-tile-footer
-{
-    text-align: center;
-    
-}
-
-
-
-
-
-/* Circle Tile Ends*/
-
-
-/* -- Background Helper Classes */
-
-/* Use these to cuztomize the background color of a div. These are used along with tiles, or any other div you want to customize. */
-
- .dark-red {
-    background-color:#ab3334 ; /*#266177*/ /*#34495e*/
-    
-      
-}
-
-.grey {
-    background-color: #54677a ; /*#54677a*/
-}
-
-.blue {
-    background-color: #517398 ; /*#558188*/
-}
-
-.orange {
-    background-color: #ab3334;
-    }
-
-
-.red {
-    background-color: #e74c3c;
-}
-
-.purple {
-    background-color: #8e44ad;
-}
-
-.dark-gray {
-    background-color: #7f8c8d;
-}
-
-.gray {
-    background-color: #95a5a6;
-}
-
-.light-gray {
-    background-color: #bdc3c7;
-}
-
-.yellow {
-    background-color: #f1c40f;
-}
-
-/* -- Text Color Helper Classes */
-
- .text-dark-blue {
-    color: #34495e;
-}
-
-.text-green {
-    color: #16a085;
-}
-
-.text-blue {
-    color: #2980b9;
-}
-
-.text-orange {
-    color: #f39c12;
-}
-
-.text-red {
-    color: #e74c3c;
-}
-
-.text-purple {
-    color: #8e44ad;
-}
-
-.text-faded {
-    color: rgba(255,255,255,0.7);
-}
-
-/* Helper Ends*/
-
-
-/*for ContentProject Page */
-
-/*
-.topbar{  
-    
-  list-style: none;
-  background-color: #138f77;
-  border-radius: 2px;
-  font-size: 16px;
-  
-  } */
-
-/*Jquery Top*/
-
-#back-top {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.75);
-    border-radius: 3px;
-    bottom: 20px;
-    cursor: pointer;
-    display: block;
-    font-size: 16px;
-    height: 45px;
-    line-height: 45px;
-    position: fixed;
-    right: 20px;
-    text-align: center;
-    width: 45px;
-    z-index: 9999;
-    
-}
-#back-top:hover {
-    background:/* none repeat scroll 0 0 rgba(255, 153, 0, 0.75)*/ #e74c3c;
-    text-decoration: none;
-}
-#back-top i {
-    color: #FFFFFF;
-}
 
 /*Domain role*/ /*Instances page Important*/
 
@@ -1534,42 +1020,7 @@ hr.layout {
             transition: all 0.4s ease 0s;
             font-size: 14px;
         }
-
-
-.content
-{
-    float: left;
-    width: 100%;
-    margin-top: 0px;
-    }
-      
 }
-
-
-
-
-
-::-moz-selection { background: grey; color: #fff; text-shadow: none; }
-::selection { background: grey; color: #fff; text-shadow: none; }
-
-
-
-
-/* ==|== media queries ======================================================
-   EXAMPLE Media Query for Responsive Design.
-   This example overrides the primary ('mobile first') styles
-   Modify as content requires.
-   ========================================================================== */
-
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */
-}
-
-
-
-/* ==|== non-semantic helper classes ========================================
-   Please define your styles before this section.
-   ========================================================================== */
 
 /* For image replacement */
 .ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
@@ -2575,6 +2026,23 @@ padding-top:5px;
 
 .navbar-brand
 {
-    padding:2px 8px!important;
+    padding:8px 12px!important;
 }
+
+.nav>li>a {
+    display:inline!important;
+}
+
+.smart-style-2  .left-projects-links > a.active{
+    font-weight:bold;
+    text-decoration: underline;
+    border-color: #3a87ad rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.3);
+    border-image: none;
+    border-style: solid;
+    border-width: 3px 0px 0px;
+    padding:6px;
+    color: #000;
+    text-decoration: none;
+}
+
 

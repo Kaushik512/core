@@ -2427,10 +2427,9 @@ aside {
     min-height: 100%}
 #header {
     display: block;
-    height: 49px;
+    height: 58px;
     position: relative;
     margin: 0;
-    padding: 0 13px 0 0;
     background-color: #f3f3f3;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3f3f3), to(#e2e2e2));
     background-image: -webkit-linear-gradient(top, #f3f3f3, #e2e2e2);
@@ -2490,12 +2489,9 @@ aside {
     cursor: pointer;
 }
 
-/*#header>:first-child, aside {
-    width: 220px;
-}*/
 #left-panel {
     position: absolute;
-    top: 54px;
+    top: 58px;
     left: 0;
     z-index: 1002;
     width:220px;
@@ -3290,7 +3286,7 @@ fieldset {
     border: 1px solid #bfbfbf;
     color: #6D6A69;
     font-size: 17px;
-    margin: 10px 0 0;
+    margin: -3px 0 0;
 }
 .MessageBoxContainer {
     top: 35%;

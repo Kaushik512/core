@@ -9,36 +9,11 @@ header
 
   
 }
-#wrapper {
-  padding-left: 0;
-}
-
-
-#page-wrapper {
-  /*width: 82%;
-  padding: 5px 15px;
-  float: right;*/
-}
-
-
-body {
-    background: url(../img/body.png);
-}
-.logotext {
-    position: relative;
-    top: 4px;
-    color: buttonface;
-    font-size: 22px;
-}
-
-
-
 .navbar
 {
     border-radius: 0px!important;
     margin-bottom: 0px!important;
-    min-height: 50px!important;
-    
+    min-height: 57px!important;
 }
 
 
@@ -77,35 +52,12 @@ nav ul
     display: inline-block;
 }
 
-.row .date-picker {
-    margin-top: -8px;
-    margin-right: -15px;
-}
-.row .date-range {
-display: none;
-}
-
-.btn-reportrange {
-    height: 36px;
-    padding-top: 8px;
-    border: none;
-}
-
-.btn-green {
-    border-color: #15987e;
-    color: #fff;
-    /*background-color: #16a085;*/
-    background-color: #40baf1;
-}
-
 /* -- Circle Tiles */
 
 .circle-tile {
     
     margin-bottom: 15px;
     text-align: center;
-    
-    
 }
 
 .circle-tile-heading {
@@ -184,93 +136,7 @@ display: none;
 /* Circle Tile Ends*/
 
 
-/* -- Background Helper Classes */
-
-/* Use these to cuztomize the background color of a div. These are used along with tiles, or any other div you want to customize. */
-
- .dark-blue {
-    background-color:#34495e ; /*#266177*/
-}
-
-.grey {
-    background-color: #54677a ; /*#54677a*/
-}
-
-.green
-{
-    background-color: #16a085;
-}
-
-.blue {
-    background-color: #517398 ; /*#558188*/
-}
-
-.orange {
-    background-color: #ab3334;
-    }
-
-
-.red {
-    background-color: #e74c3c;
-}
-
-.purple {
-    background-color: #8e44ad;
-}
-
-.dark-gray {
-    background-color: #7f8c8d;
-}
-
-.gray {
-    background-color: #95a5a6;
-}
-
-.light-gray {
-    background-color: #bdc3c7;
-}
-
-.yellow {
-    background-color: #f39c12;
-}
-
-/* -- Text Color Helper Classes */
-
- .text-dark-blue {
-    color: #34495e;
-}
-
-.text-green {
-    color: #16a085;
-}
-
-.text-blue {
-    color: #2980b9;
-}
-
-.text-orange {
-    color: #f39c12;
-}
-
-.text-red {
-    color: #e74c3c;
-}
-
-.text-purple {
-    color: #8e44ad;
-}
 
 .text-faded {
     color: rgba(255,255,255,0.7);
 }
-
-/* Helper Ends*/
-
-
-@media (min-width: 768px)
-{
-.row .date-range {
-display: inherit;
-    }
-}
-
