@@ -18,7 +18,10 @@
     width:96%;
 }
 .chefItemwithoutOrgloadingContainerCSS{
-    height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;
+    height:50px;
+    width:50px;
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
 .font-size-12{
     font-size: 12px;
@@ -38,9 +41,6 @@
     list-style:none outside none;
     height:150px;
     overflow-y:auto;
-}
-.text-align-center{
-    text-align: center;
 }
 .margin-5{
     margin: 5px;
