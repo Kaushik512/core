@@ -1,7 +1,7 @@
 var Process = require("./../lib/utils/process");
 var fileIo = require('./../lib/utils/fileio');
 var SSH = require('./../lib/utils/sshexec');
-var instancesDao = require('./instances.js');
+var instancesDao = require('./dao/instancesdao.js');
 var credentialCrpto = require('./../lib/credentialcryptography.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 

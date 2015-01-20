@@ -3,7 +3,7 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 var blueprintsDao = require('../model/blueprints');
 
-var instancesDao = require('../model/instances');
+var instancesDao = require('../model/dao/instancesdao');
 var tasksDao = require('../model/tasks');
 
 
