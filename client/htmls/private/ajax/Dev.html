@@ -59,7 +59,12 @@
                                     <!-- <input type="text" class="searchInstances form-control" style="margin-left: 10px; margin-top: 6px;height:32px !important"> -->
                                 </h4>
 
-                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                <span class="pull-right swap-view">
+                                    <a class="btn1" id="defaultViewButton1" href="#modalContainerSSHInfo" data-toggle="modal"> 
+                                        <i class="fa fa-laptop fa-2x txt-color-blue" title="SSH"/>
+                                    </a>&nbsp;
+                                    <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;
+                                    <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
                                 <!-- <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
                                 <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span> -->
                             </div>
@@ -1098,6 +1103,86 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
+
+<!-- Modal for Container tab started-->
+<div class="modal fade" id="modalContainerSSHInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;SSH Details to Enter
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form role="form" class="smart-form">
+                    <fieldset style="padding-top:0px;margin-top:10px;">
+                      <div class="">
+                        <section class="col col-6">
+                            <div class="form-group" style="margin-bottom:15px;">
+                              <label for="">IP Address</label>
+                              <label class="input">
+                              <input type="text" name="ipaddressInput" class="form-control" id="ipaddressInput">
+                                <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i>Please enter IP Address</b>
+                              </label>
+                            </div>
+                            <div class="form-group" style="margin-bottom:15px;">
+                              <label for="">O.S</label>
+                              <select id="osSelect"  class="width-100" >
+                                
+                              </select>
+                            </div>
+                        </section>
+                        <section class="col col-6 credentialSection" style="margin-bottom:12px;">
+                            <div class="form-group">
+                              <label for="">Username</span></label>
+                              <label class="input">
+                              <input type="text" name="usernameInput" class="form-control" id="usernameInput">
+                                <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+                              </label>
+                            </div>
+                        </section>
+                        <section class="col col-6 credentialSection" style="margin-bottom:18px;">
+                            <div class="form-group">
+                              <label for="">Password</label>
+                              <label class="input">
+                              <input type="password" class="form-control" id="passwordInput" />
+                                <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
+                              </label>
+                            </div>
+                        </section>
+                        <section class="col col-6 credentialSection" >
+                            <div class="form-group">
+                              <label for="">Pem File</label>
+                              <label class="checkbox" style="display:inline;padding-top:4px;">
+                                  <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
+                              </label>
+                              <div class="">  
+                                <input type="file" id="importPemfileInput" style="display:inline" disabled/>
+                              </div>
+                            </div>
+                        </section>
+                      </div>
+                    </fieldset>
+                </form>
+            </div>
+             <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">
+                   <i class="fa fa-upload fa-1x"></i>&nbsp;Upload
+                </button>
+                 <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                   <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                </button>
+             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal for Container tab ended-->
 <script type="text/javascript">
 
 
@@ -1119,7 +1204,14 @@
         // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
         // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
      });
-    
+
+    $('#pemFileCheckbox').change(function(){
+        if($(this).is(':checked')) {
+          $('#importPemfileInput').attr('disabled',false);
+        } else {
+          $('#importPemfileInput').attr('disabled',true);
+        } 
+  });
 </script>
 <script type="text/javascript">
 
@@ -1156,7 +1248,7 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
 $(document).ready(function() {
-   
+   $('#osSelect').select2();
 
   //emptying ssh container 
   $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
