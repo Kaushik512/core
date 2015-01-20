@@ -1449,7 +1449,7 @@ function saveform(formID) {
 
     var data1 = new FormData();
     var fileNames = '';
-    orgName = $('#orgname').val();
+    var orgName = $('#orgname').val();
     
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
@@ -1564,12 +1564,12 @@ function saveform(formID) {
     if (fileNames == '')
         fileNames = 'null';
     if(typeof(orgname) == 'undefined'){
-        orgname = '%2f';
+        orgName = '%2f';
     }
     //console.log(data1);
-    //  alert(serviceURL + "savemasterjsonrow/" + formID + "/" + fileNames + "/" + orgName );
+    alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
-        url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgname,
+        url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,
         data: data1,
         processData: false,
         contentType: false,

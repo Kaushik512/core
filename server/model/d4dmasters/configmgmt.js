@@ -128,7 +128,7 @@ function Configmgmt() {
                 callback(true, err);
             }
             if(dbtype){
-                console.log("Master Type: " + dbtype);
+                console.log("Master Type: " + dbtype + ' rowid : '+ rowid);
                 eval('d4dModelNew.'+ dbtype).findOne({
                 rowid: rowid
                 }, function(err, d4dMasterJson) {
@@ -143,6 +143,7 @@ function Configmgmt() {
                             console.log("Repopath:" + chefRepoPath);
 
                             var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                            console.log('outJson:' + JSON.stringify(d4dMasterJson));
                             var keys = Object.keys(outJson);
                             var orgname = '';
                             var loginname = '';

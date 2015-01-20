@@ -550,39 +550,41 @@ $(document).ready(function(){
     $(".chooseEnv").select2();
     $(".chooseDockerContainer").select2();
    $.ajax({
-    url: "/d4dMasters/readmasterjson/16",
+    url: "/d4dMasters/readmasterjsonnew/16",
     dataType: "json",
     type:"GET",
     cache: "true",
     success: function(data){
-        var rowLength = JSON.stringify(data.masterjson.rows.row.length);
+        var rowLength = JSON.stringify(data.length);
         var containerTemp = "";
         var selectedrow = false;
         var getDesignTypeImg; var getDesignTypeRowID;
+        //alert(JSON.stringify(data));
         for(var i=0; i<rowLength; i+=1){
-             getDesignTypeImg= "";
-             getDesignTypeRowID= "";
-            for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
+
+             getDesignTypeImg= data[i]['designtemplateicon_filename'];
+             getDesignTypeRowID= data[i]['rowid'];
+            // for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
                
 
-                if(data.masterjson.rows.row[i].field[x].name == "rowid"){
-                  getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
-                }
-             if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
-                  getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
+            //     if(data.masterjson.rows.row[i].field[x].name == "rowid"){
+            //       getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
+            //     }
+            //  if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
+            //       getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
                   
-                }
+            //     }
                     
 
-            }
+            // }
         containerTemp += '<div class="" style="width:222px;float:left">'+
                             ' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
-                            'templateType="'+data.masterjson.rows.row[i].field[0].values.value+'">'+
+                            'templateType="'+data[i]['templatetypename']+'">'+
                             '<div style="">'+
                             '<img  style="height:25px;padding:2px" alt="" src="img/app-store-'+
                             'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;'+
                             'padding-left: 4px;">'+
-                            '<b>'+data.masterjson.rows.row[i].field[0].values.value+'</b>'+
+                            '<b>'+data[i]['templatetypename']+'</b>'+
                             '</span></div>'+
                             '<div style="padding-top:10px;padding-left:27px;">'+
                              '<img alt="JBoss Stack" '+
@@ -645,75 +647,84 @@ $(document).ready(function(){
                //                   '</div></div></div><div cls=="clearfix"></div>';
 
                $.ajax({
-                   url: "/d4dMasters/readmasterjson/17",
+                   url: "/d4dMasters/readmasterjsonnew/17",
                    dataType: "json",
                    type: "GET",
                    cache: "true",
                    success: function(data) {
-                       var rowGridLength = (data.masterjson.rows.row.length);
+                       var rowGridLength = (data.length);
                        var getIndividualData = "";
                        var getTempName;
                        var getRowID, getImage;
+                       //alert(JSON.stringify(data));
                        for (var z = 0; z < rowGridLength; z += 1) {
                            //iterate thhrough columns to get correct column and value
                            var selectedrow = false;
                            var currField = null;
-                           getTempName = '';
-                           getRowID = '';
-                           getImage = '';
-                           getTemplateType = '';
-                           gettemplatescookbooks = '';
-                           dockercontainerpathstitle = '';
-                           dockercontainerpaths = '';
-                           dockerreponame = '';
+
+                           getTempName = data[z]['templatename'];
+
+
+                           getRowID = data[z]['rowid'];
+                           getImage = data[z]['templatesicon_filename'];
+                           getTemplateType = data[z]['templatetypename'];
+
+                           if(selectedText != getTemplateType)
+                              continue;
+
+                           gettemplatescookbooks = data[z]['templatescookbooks'].replace(/"/g, "");
+                           dockercontainerpathstitle = data[z]['dockercontainerpathstitle'];
+                           dockercontainerpaths = data[z]['dockercontainerpaths'];
+                           dockerreponame = data[z]['dockerreponame'];
                            //To be removed and converted to reference when the new master model is implemented.
                            dockerusername = '';
                            dockercred = '';
                            dockeremail = '';
+                          
+                           //alert(JSON.stringify(data));
+                           // for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
+                           //         getImage = data.masterjson.rows.row[z].field[x].values.value;
+                           //         //alert(getImage);
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "rowid") {
+                           //         getRowID = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
+                           //         getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
+                           //         gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
+                           //         //clearing additional double quotes
+                           //         gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
+                           //     }
 
-                           for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
-                               if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
-                                   getImage = data.masterjson.rows.row[z].field[x].values.value;
-                                   //alert(getImage);
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "rowid") {
-                                   getRowID = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-                                   getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
-                                   gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
-                                   //clearing additional double quotes
-                                   gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
-                               }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatename") {
+                           //         getTempName = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
+                           //         if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
+                           //             selectedrow = true;
+                           //         }
+                           //     }
 
-                               if (data.masterjson.rows.row[z].field[x].name == "templatename") {
-                                   getTempName = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-                                   if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
-                                       selectedrow = true;
-                                   }
-                               }
+                           //     //For docker 
+                           //     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
+                           //         dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
+                           //         dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
+                           //         dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
+                           //         //
 
-                               //For docker 
-                               if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
-                                   dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
-                                   dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
-                                   dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
-                                   //
+                           //     }
 
-                               }
-
-                           }
+                           // }
                            console.log('here end');
 
-                           if (selectedrow) {
+                           
                                getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
                                    '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
                                    'templateComponent="component' + z + '" ' +
@@ -748,7 +759,7 @@ $(document).ready(function(){
 
                                getIndividualData += licb + '</ul></div></div>';
 
-                           }
+                           
                        }
                        $("#individualTemplateNameGrid").html("");
                        //$("#individualTemplateNameGrid").append(getParent);

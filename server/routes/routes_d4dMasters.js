@@ -238,6 +238,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/image/:imagename', function(req, res) {
         var settings = appConfig.chef;
         var chefRepoPath = settings.chefReposLocation;
+        console.log(chefRepoPath);
         fs.readFile(chefRepoPath + 'catalyst_files/' + req.params.imagename, function(err, data) {
             if (err) {
                 res.end(404);
@@ -710,110 +711,113 @@ module.exports.setRoutes = function(app, sessionVerification) {
                       }
                     }
 
-    function saveuploadedfile(suffix,folderpath,req){
+    function saveuploadedfile(suffix, folderpath, req) {
         console.log(req.body);
         var fi;
-        if(req.params.fileinputs.indexOf(',') > 0)
+        if (req.params.fileinputs.indexOf(',') > 0)
             fi = req.params.fileinputs.split(',');
-        else{
+        else {
             fi = new Array();
             fi.push(req.params.fileinputs);
         }
         var bodyItems = Object.keys(req.body);
         var saveAsfileName = '';
-        for(var i = 0; i < bodyItems.length;i++){
-            if(bodyItems[i].indexOf("_filename") > 0)
+        for (var i = 0; i < bodyItems.length; i++) {
+            if (bodyItems[i].indexOf("_filename") > 0)
                 saveAsfileName = req.body[bodyItems[i]];
         }
 
 
         var filesNames = Object.keys(req.files);
         var count = filesNames.length;
-        console.log ('in' + count);
+        console.log('in' + count);
         filesNames.forEach(function(item) {
             console.log(item);
         });
+
+        var settings = appConfig.chef;
+
+        var chefRepoPath = settings.chefReposLocation;
+
+        console.log('Type of org : ' + typeof req.params.orgname);
         
+        console.log(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
+        console.log('Orgname : #' + req.params.orgname.toString() + '#' + (req.params.orgname == ''));
 
-        settingsController.getChefSettings(function(settings) {
-            var chefRepoPath = settings.chefReposLocation;
-            console.log(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1));
+        //Handling the exception to handle uploads without orgname
+        if(req.params.orgname){
+            if(req.params.orgname =='/')
+                req.params.orgname = '';
 
-            //Handling the exception to handle uploads without orgname
-            if(req.params.orgname == "undefined"){
+            if (req.params.orgname == '' || req.params.orgname == "undefined") {
                 req.params.orgname = "catalyst_files";
             }
-
-            var path = chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1);
-            
-            
-            
-            //fs.mkdirParent(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1),0777); //if path is not present create it.
-            parts = require('path').normalize(path).split('/');
-            console.log('Length of parts:' + parts.length);
-            for(var i = 1; i <= parts.length; i++){
-                var directory = parts.slice(0,i).join('/');
-                console.log(directory);
-                mkdirSync1(directory);
-                // fs.mkdirSync(directory,0777);
-                //mkdir_p1(directory,'0777');
-            }
+        }
+        var path = chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1);
 
 
 
+        //fs.mkdirParent(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1),0777); //if path is not present create it.
+        parts = require('path').normalize(path).split('/');
+        console.log('Length of parts:' + parts.length);
+        for (var i = 1; i <= parts.length; i++) {
+            var directory = parts.slice(0, i).join('/');
+            console.log(directory);
+            mkdirSync1(directory);
+            // fs.mkdirSync(directory,0777);
+            //mkdir_p1(directory,'0777');
+        }
 
-            //mkdir_p(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1)); ///if path is not present create it.
-            console.log("files:" + fi.length);
-            for(var i = 0; i <  fi.length; i++){
-                var controlName = fi[i];
-                var fil = eval('req.files.' + fi[i]);
-                if(typeof fil != 'undefined'){
-                    
-                    var data = fs.readFileSync(fil.path); //, function(err, data) { 
-                        //var getDirName = require("path").dirname;
-                        /*fileIo.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data, null, function(err) {
+
+
+
+        //mkdir_p(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1)); ///if path is not present create it.
+        console.log("files:" + fi.length);
+        for (var i = 0; i < fi.length; i++) {
+            var controlName = fi[i];
+            var fil = eval('req.files.' + fi[i]);
+            if (typeof fil != 'undefined') {
+
+                var data = fs.readFileSync(fil.path); //, function(err, data) { 
+                //var getDirName = require("path").dirname;
+                /*fileIo.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data, null, function(err) {
                                     console.log(err);
                                     count--;
                                     if (count === 0) { // all files uploaded
                                         return("200");
                                     }
                                 });*/
-                        if(folderpath == ''){
-                            console.log('this is where file gets saved as (no folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+                if (folderpath == '') {
+                    console.log('this is where file gets saved as (no folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+                    fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+                } else {
+                    if (folderpath.indexOf('.chef') > 0) { //identifying if its a chef config file
+                        console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
+                        fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+                    } else //not a a chef config file
+                    {
+                        console.log("Folderpath rcvd:" + folderpath);
+
+                        if (fil.name == saveAsfileName) {
+                            console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
-                        }
-                        else{
-                            if(folderpath.indexOf('.chef') > 0){ //identifying if its a chef config file
-                                console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
-                                fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
-                            }
-                            else //not a a chef config file
-                            {
-                                console.log("Folderpath rcvd:" + folderpath);
-                                
-                                if(fil.name == saveAsfileName)
-                                    {
-                                        console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
-                                        fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
-                                        
-                                }
-                                else
-                                    {
-                                        console.log('this is where file gets saved as (with folderpath) fixed name: ' + chefRepoPath + req.params.orgname  + folderpath + '/' + saveAsfileName);
-                                        //fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
-                                        fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
-                                    }
 
-                            }
+                        } else {
+                            console.log('this is where file gets saved as (with folderpath) fixed name: ' + chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName);
+                            //fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
+                            fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
                         }
 
-                        
+                    }
+                }
+
+
                 //  });
 
-                }
             }
-        });
-        return("200");
+        }
+
+        return ("200");
     }
 
     app.post('/d4dMasters/getrows/:masterid', function(req, res) {
@@ -1110,15 +1114,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 //  var filesNames = Object.keys(req.files);
                     var folderpath = ''; //will hold the folderpath field to create the path in the system
 
-                    console.log(JSON.stringify(bodyJson));
+             //       console.log('BodyJSON rowid:' + JSON.stringify(bodyJson));
+                    var newrowid = '';
                     frmkeys.forEach(function(itm){
-                        console.log("Each item:" + itm);
+                        console.log("Each item: itm" + itm + ' bodyJson[itm] ' + bodyJson[itm]);
+                        if(itm.trim() == 'rowid'){
+                            console.log('!!!! in rowid ' + bodyJson[itm]);
+                            newrowid = bodyJson[itm];
+                        }
                         if(!editMode){
                             var thisVal = bodyJson[itm];
                             console.log(thisVal);
                             var item = null;
                             if(thisVal.indexOf('[') >= 0 && itm != "templatescookbooks"){//used to check if its an array
-                                    item = "\""  + itm  + "\" : \"" + thisVal+ "\"";
+                                item = "\""  + itm  + "\" : \"" + thisVal+ "\"";
                             } 
                             else //
                                 item = "\""  + itm  + "\" : \"" + thisVal.replace(/\"/g,'\\"') + "\"";
@@ -1127,7 +1136,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         else{
                             if(d4dMasterJson != null){
                                 uuid1 = bodyJson["rowid"];
-                                console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+                            //    console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
                                 console.log('rowtoedit :' + rowtoedit);
                                 if( bodyJson["folderpath"] == undefined) //folderpath issue fix
                                     folderpath = ''
@@ -1150,6 +1159,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     var FLD = JSON.stringify(rowFLD);
                     if(!editMode){ //push new values only when not in edit mode
                         //dMasterJson = JSON.parse(FLD);
+                     //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
+
                         eval('var mastersrdb =  new d4dModelNew.'+ dbtype + '({' + JSON.parse(FLD) + '})');
                         mastersrdb.save(function(err,data){
                             if(err){
@@ -1159,21 +1170,45 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                             }
                             console.log('New Master Saved');
-                            res.send(200);
+
+                            console.log(req.params.fileinputs == 'null');
+                               console.log('New record folderpath:' + folderpath + ' rowid:' + newrowid);
+                               if( FLD["folderpath"] == undefined) //folderpath issue fix
+                                    folderpath = ''
+                                else
+                                    folderpath = rowFLD["folderpath"];
+
+                               if(req.params.fileinputs != 'null')
+                                    res.send(saveuploadedfile(newrowid + '__',folderpath,req));
+                               else
+                                    res.send(200);
+
                             return;
                         });
                     }
                     else{
                         console.log("Rowid: " + bodyJson["rowid"]);
-
+                        var currowid = bodyJson["rowid"];
                         eval('d4dModelNew.'+ dbtype).update({rowid : bodyJson["rowid"]},{$set:rowtoedit},{upsert:false},function(err,saveddata){
                             if(err){
                                 console.log('Hit Save error' + err);
                                 res.send(500);
                                 return;
                             }
+
+                            if( bodyJson["folderpath"] == undefined) //folderpath issue fix
+                                folderpath = ''
+                            else
+                                folderpath = bodyJson["folderpath"];
+
                             console.log('Master Data Updated: ' + saveddata);
-                            res.send(200);
+                            console.log(req.params.fileinputs == 'null');
+                            console.log('folderpath:' + folderpath + ' rowid:' + currowid);
+
+                               if(req.params.fileinputs != 'null')
+                                    res.send(saveuploadedfile(currowid + '__',folderpath,req));
+                               else
+                                    res.send(200);
                             return;
                         });
                     }
