@@ -1,9 +1,10 @@
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
+var readline = require('readline');
 
+var userHomeDir = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 
 function getDefaultsConfig() {
-    var pathExtra = require('path-extra');
     var config = {
         express: {
             port: 3001,
@@ -11,7 +12,7 @@ function getDefaultsConfig() {
             sessionSecret: 'sessionSekret'
         },
         app_run_port: 3001,
-        userHomeDir: pathExtra.homedir(),
+        userHomeDir: userHomeDir,
         catalysHomeDirName: 'catalyst',
         instancePemFilesDirName: 'instance-pemfiles',
         tempDirName: 'temp',
@@ -184,7 +185,7 @@ function installPackageJson() {
 
 
 console.log('Installing node packages required for installation');
-proc = spawn('npm', ['install', "command-line-args@0.5.3", 'path-extra@0.3.0', 'mkdirp@0.5.0', 'fs-extra@0.14.0']);
+proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.14.0', 'ldapjs@0.7.1']);
 proc.on('close', function(code) {
     if (code !== 0) {
         throw "Unable to install packages"
@@ -201,46 +202,91 @@ proc.on('close', function(code) {
             mkdirp.sync(config.tempDir);
             mkdirp.sync(config.chef.chefReposLocation);
 
-
-
-
             console.log('restoring mongodb');
-            
-            console.log(['--host ' + config.db.host, '--port ' + config.db.port, '--db ' + config.db.dbName, '/WORK/D4D/seed/mongodump/devops_new'].join(' '));
-            //var procMongoRestore = spawn('/WORK/Applications/mongodb-linux-x86_64-2.6.3/bin/mongorestore', ['--host',config.db.host, '--port',config.db.port, '--db',config.db.dbName, '/WORK/D4D/seed/mongodump/devops_new/']);
+
             var procMongoRestore = spawn('mongorestore', ['--host', config.db.host, '--port', config.db.port, '--db', config.db.dbName, '/WORK/D4D/seed/mongodump/devops_new/']);
             procMongoRestore.on('error', function(mongoRestoreError) {
                 console.log("mongorestore error ==> ", mongoRestoreError);
             });
             procMongoRestore.stdout.on('data', function(data) {
-                console.log("" + data);
+                //console.log("" + data);
             });
             procMongoRestore.stderr.on('data', function(data) {
-                console.log("" + data);
+                //console.log("" + data);
             });
             procMongoRestore.on('close', function(mongoRestoreCode) {
                 if (mongoRestoreCode === 0) {
                     console.log("Mongorestore Successfull.");
 
-                    fse = require('fs-extra');
-                    console.log('copying seed data');
-                    fse.copy('../seed/catalyst/chef-repos/catalyst_files', config.chef.chefReposLocation + '/catalyst_files', function(err) {
-                        console.log('here');
-                        if (err) {
-                            console.log(err);
-                            console.log('unable to copy seed data');
-                            return;
+                    var rl = readline.createInterface({
+                        input: process.stdin,
+                        output: process.stdout,
+                        terminal: true
+                    });
+                    rl.question("Ldap super user ? ", function(ldapUser) {
+                        rl.close();
+                        ldapUser = ldapUser.trim();
+                        if (!ldapUser) {
+                            throw 'Invalid ldap user input'
                         }
+                        console.log('Checking for ldap User : ' + ldapUser);
+                        var ldapjs = require('ldapjs');
+                        var client = ldapjs.createClient({
+                            url: 'ldap://' + config.ldap.host + ':' + config.ldap.port
+                        });
+                        var searchOpts = {
+                            // filter: '(cn=' + ldapUser+')',
+                            attrsOnly : true
+                        };
+
+                        client.search('cn=' + ldapUser + ',dc=d4d-ldap,dc=relevancelab,dc=com', searchOpts, function(err, res) {
+                            if (err) {
+                                console.log("Unable to preform search in ldap");
+                                throw err;
+                            }
+                            var userFound = false;
+
+                            res.on('searchEntry', function(entry) {
+                                console.log('entry: ' + JSON.stringify(entry.object));
+                                userFound = true;
+                            });
+                            res.on('searchReference', function(referral) {
+                                console.log('referral: ' + referral.uris.join());
+                            });
+                            res.on('error', function(err) {
+                                console.error('error: ' + err.message);
+                            });
+
+                            res.on('end', function(result) {
+                                console.log('status: ' + result.status);
+                                if (!userFound) {
+                                    console.log('Unable to find user ' + ldapUser);
+                                    process.exit(1);
+                                } else {
+
+                                    fse = require('fs-extra');
+                                    console.log('copying seed data');
+                                    fse.copy('../seed/catalyst/chef-repos/catalyst_files', config.chef.chefReposLocation + '/catalyst_files', function(err) {
+                                        console.log('here');
+                                        if (err) {
+                                            console.log(err);
+                                            console.log('unable to copy seed data');
+                                            return;
+                                        }
+
+                                    });
+                                    console.log('creating configuration json file');
+                                    configJson = JSON.stringify(config);
+                                    var fs = require('fs');
+                                    fs.writeFileSync('config/catalyst-config.json', configJson);
+                                    installPackageJson();
+
+                                }
+
+                            });
+                        });
 
                     });
-
-                    console.log('creating configuration json file');
-                    configJson = JSON.stringify(config);
-                    var fs = require('fs');
-                    fs.writeFileSync('config/catalyst-config.json', configJson);
-                   
-
-                    installPackageJson();
 
                 } else {
                     console.log("Error in restoring mongodb");
