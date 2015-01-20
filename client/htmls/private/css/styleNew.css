@@ -91,14 +91,14 @@
 .collapseActive{
     background-color: #2c3742 !important;
 }
-.ChefClientRunImage{
+/*.ChefClientRunImage{
     background-image:url('../img/galleryIcons/Flip-icon.png');
     background-size: contain;
     background-repeat: no-repeat;
     height:36px !important;
     width:28px !important;
     margin-left:14px !important;
-}
+}*/
 .panel-databag{
  line-height:2.1;
  color:#333;
@@ -1432,6 +1432,7 @@ hr.layout {
   
     text-align: center;*/
     float:left !important;
+    margin-top: 0px !important;
 }
 .instance-bootstrap-ActionShutdown {
     /*font-size: 10px;
@@ -1971,18 +1972,16 @@ height: 27px;
 width: 100%;
 margin-top:0px;
 }
-.actionbuttonRestart{
-    /*height:30%;width:30%;*/
+/*.actionbuttonRestart{
     background-image:url('../img/galleryIcons/restart.png');
     background-repeat:no-repeat;float: left;
     height: 27px;margin-left: 0px;width: 100%;
 }
 .actionbuttonSSH{
-    /*height:30%;width:30%;*/
     background-image:url('../img/galleryIcons/restart.png');
     background-repeat:no-repeat;float: left;
     height: 27px;margin-left: 0px;width: 100%;
-}
+}*/
 .actionbuttonChefClientRun{
     /*height:30%;width:30%;*/
     background-image:url('../img/galleryIcons/Chefimport.png');
