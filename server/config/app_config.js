@@ -17,23 +17,16 @@ try {
 
 
 var config = {
-<<<<<<< HEAD
-    app_run_port: 3004,
-    settingsDir: homeDirectory + '/' + catalysHomeDirName + '/',
-    instancePemFilesDir: homeDirectory + "/" + catalysHomeDirName + "/instance-pemfiles/",
-    tempDir: homeDirectory + "/" + catalysHomeDirName + "/temp/",
-=======
     express: {
-        port: 3001,
+        port: 3004,
         express_sid_key: 'express.sid',
         sessionSecret: 'sessionSekret'
     },
-    app_run_port: 3001,
+    app_run_port: 3004,
     userHomeDir: pathExtra.homedir(),
     catalysHomeDirName: 'catalyst',
     instancePemFilesDirName: 'instance-pemfiles',
     tempDirName: 'temp',
->>>>>>> origin/feature_engineered
     app_run_secure_port: 443,
     cryptoSettings: {
         algorithm: "aes192",

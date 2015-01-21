@@ -15,7 +15,7 @@
 
 		<!--Custom CSS-->
 		<link rel="stylesheet" href="css/style.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
+		<!--<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">-->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/styleNew.css">
 		<!-- FAVICONS -->
 		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
@@ -26,7 +26,7 @@
 		<!--<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">-->
 		<link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet"> 
 	</head>
-	<body class="desktop-detected smart-style-2">
+	<body class="custom-theme">
 		<script type="text/javascript">
 		//Refresh Issue Fix. This function will get executed when there is a refresh and the url is not of the home page.
 		function firstLoad(){
@@ -37,34 +37,34 @@
 		</script>
 		
 		<!-- HEADER -->
-		<header id="header">
+		<header>
 			
 			
 		<nav class="navbar navbar-default">
   
     
-    <div class="navbar-header" style="width:220px">
+    <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand"><img src="img/version2_22.png" style="width:125px;height:40px;" alt="DevOps"></a>
+      <a class="navbar-brand" style="width:220px;"><img src="img/version2_22.png" style="width:125px;height:40px;" alt="DevOps"></a>
     </div>
 
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav" style="margin-top:10px;">
+      <ul class="nav navbar-nav" style="margin-top:20px;">
         <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1"><a class="active" id="workZoneNew" style="font-size:14px!important" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a></li>
-        <li class="left-projects-links hidden" data-target="#blueprints"  navigation="blueprints">
+        <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
 				<a href="#ajax/Aws-Production.html" style="font-size:14px!important" id="designNew" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
 			</li>
         
       </ul>
       
-      <ul class="nav navbar-nav pull-right" style="font-size:14px!important;margin-top:10px">
-      	<li class="left-projects-links active" id="liuserinfo" style="color:white"></li>
+      <ul class="nav navbar-nav navbar-right" style="font-size:14px!important;margin-top:20px">
+      	<li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
         <li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
 					<a class="dropdown-toggle" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
 				</li>
@@ -291,40 +291,22 @@
 	</div>
 	
 	<script src="js/libs/jquery-2.0.2.min.js"></script>
+	<script src="js/bootstrap/bootstrap.min.js"></script>
 	<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
 	
 	<script src="js/libs/modernizr-2.5.3.min.js"></script>
 	<script src="js/plugins.js"></script>
-	<script src="js/dateRange.js"></script>
-	<!-- Page-Level Plugin Scripts - Dashboard -->
-	<script src="js/morris/morris.min.js"></script>
-	<script src="js/morris/morris.js"></script>
-	<!--daterange-->
-	<script src="js/daterange/moment.js"></script>
-	<script src="js/daterange/daterangepicker.js"></script>
-	<!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
-	<script src="js/flot/jquery.flot.cust.js"></script>
-	<script src="js/flot/jquery.flot.resize.js"></script>
-	<script src="js/flot/jquery.flot.fillbetween.min.js"></script>
-	<script src="js/flot/jquery.flot.orderBar.js"></script>
-	<script src="js/flot/jquery.flot.pie.js"></script>
-	<script src="js/flot/jquery.flot.tooltip.js"></script>
 	<!-- BOOTSTRAP JS -->
-	<script src="js/bootstrap/bootstrap.min.js"></script>
-	<!-- CUSTOM NOTIFICATION -->
-	<script src="js/notification/SmartNotification.min.js"></script>
+	
 	<!-- JARVIS WIDGETS -->
 	<script src="js/smartwidgets/jarvis.widget.min.js"></script>
-	
 	<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
 	
 	<!-- SmartClick: For mobile devices -->
-	<script src="js/plugin/smartclick/smartclick.js"></script>
+	
 	<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
-	<script type="text/javascript" src="js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
 	<script type="text/javascript" src="js/plugin/bootbox/bootbox.min.js"></script>
 	<script type="text/javascript" src="js/select2.min.js"></script>
-	
 	<script src="/private/js/jquery.dataTables.js"></script>
 	<script src="js/jquery.tablesorter.js"></script>
 

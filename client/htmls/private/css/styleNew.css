@@ -239,24 +239,18 @@ margin-top:15px;
     width: 155px;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
-audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
-audio:not([controls]) { display: none; }
-[hidden] { display: none; }
-
-
 hr{
     margin:2px !important;
 }
-html 
+/*html 
 { 
     font-size: 100%; -
   -webkit-text-size-adjust: 100%; 
   -ms-text-size-adjust: 100%; 
   
-}
+}*/
 
-.smart-style-2 #main-collapse{
+.custom-theme #main-collapse{
     background-color: #40baf1;
 }
 #main-collapse{
@@ -1021,6 +1015,12 @@ body
             transition: all 0.4s ease 0s;
             font-size: 14px;
         }
+}
+
+*::-moz-selection {
+    background: none repeat scroll 0 0 grey;
+    color: #fff;
+    text-shadow: none;
 }
 
 /* For image replacement */
@@ -1898,150 +1898,6 @@ padding-top:5px;
     background: #3366CC;
 }
 
-/*Smart-form for browse button*/
-.smart-forms, .smart-forms * {
-    box-sizing: border-box;
-}
 
-
-.smart-forms .select, .smart-forms .gui-input, .smart-forms .gui-textarea, .smart-forms .select > select, .smart-forms .select-multiple select {
-    background: none repeat scroll 0 0 #fff;
-    border: 1px solid #ccc;
-    
-    /*height: 40px;*/
-    height: 36px;
-    outline: 0 none;
-    position: relative;
-    vertical-align: top;
-    width: 100%;
-}
-
-
-
-.smart-forms .file {
-    display: block;
-    width: 100%;
-}
-.smart-forms .file .gui-file {
-    bottom: 0;
-    cursor: pointer;
-    height: 100%;
-    opacity: 0;
-    padding: 8px 10px;
-    position: absolute;
-    right: 0;
-    width: 100%;
-    z-index: 11;
-}
-.smart-forms .file .button {
-    float: none;
-    /*height: 34px;
-    line-height: 34px;*/
-    height: 30px;
-    line-height: 30px;
-    padding: 0 16px;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    z-index: 10;
-}
-
-.smart-forms .button {
-    background: none repeat scroll 0 0 #bdc3c7;
-    border: 0 none;
-    color: #243140;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 15px;
-    /*height: 42px;*/
-    height: 36px;
-    line-height: 1;
-    padding: 0 18px;
-    text-align: center;
-    text-shadow: 0 1px rgba(255, 255, 255, 0.2);
-    vertical-align: top;
-    margin:17px 14px 0 0px;
-}
-.smart-forms .button:hover {
-    background: none repeat scroll 0 0 #cacfd2;
-    color: #243140;
-}
-.smart-forms .button:active {
-    background: none repeat scroll 0 0 #a1a6a9;
-    color: #1d2938;
-}
-
-.smart-forms .btn-primary {
-    background-color: #1abc9c;
-}
-.smart-forms .btn-primary:hover, .smart-forms .btn-primary:focus {
-    background-color: #48c9b0;
-}
-.smart-forms .btn-primary:active {
-    background-color: #16a085;
-}
-.smart-forms .btn-primary, .smart-forms .btn-primary:hover, .smart-forms .btn-primary:focus, .smart-forms .btn-primary:active {
-    color: #fff;
-    text-shadow: 0 1px rgba(0, 0, 0, 0.08);
-}
-
-
-
-@keyframes sfprogress {
-0% {
-    background-position: 0 0;
-}
-100% {
-    background-position: -16px 0;
-}
-}
-@keyframes sfprogress {
-0% {
-    background-position: 0 0;
-}
-100% {
-    background-position: -16px 0;
-}
-}
-/*smart-forms over*/
-
-/*footer*/
-.footer {
-  background: none repeat scroll 0 0 white;
-  
-  bottom: 0;
-  left: 0;
-  
-  position: fixed;
-  right: 0;
-}
-.navbar{
-    border: none!important;
-}
-.navbar-default
-{
-    background-color: #2C3742!important;
-}
-
-.navbar-brand
-{
-    padding:8px 12px!important;
-}
-
-.nav>li>a {
-    display:inline!important;
-}
-
-.smart-style-2  .left-projects-links > a.active{
-    font-weight:bold;
-    text-decoration: underline;
-    border-color: #3a87ad rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.3);
-    border-image: none;
-    border-style: solid;
-    border-width: 3px 0px 0px;
-    padding:6px;
-    color: #000;
-    text-decoration: none;
-}
 
 
