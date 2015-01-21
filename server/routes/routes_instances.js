@@ -257,7 +257,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams', function(req, res) {
 
-        console.log('reached here a');
+        console.log('reached here b');
         var instanceid = req.params.instanceid;
 
         configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
@@ -274,7 +274,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
 
-                cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                //removing docker userID
+                cmd += ' && sudo docker pull ' + decodeURIComponent(req.params.imagename);
+                console.log('Intermediate cmd: ' + cmd);
                 if (req.params.tagname != null) {
                     cmd += ':' + req.params.tagname;
                 }
