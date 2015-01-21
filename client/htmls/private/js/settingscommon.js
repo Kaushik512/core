@@ -1567,7 +1567,7 @@ function saveform(formID) {
         orgName = '%2f';
     }
     //console.log(data1);
-    alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
+   // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,
         data: data1,

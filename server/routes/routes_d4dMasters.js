@@ -46,15 +46,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame',function(req,res){
         //fetch the username and password from 
         //Need to populate dockerrowid in template card. - done
+        console.log('hit getdockertags');
         configmgmtDao.getMasterRow(18,'dockerreponame',req.params.dockerreponame,function(err,data){
             if(!err)
                 {
                     
-                //  var dockerRepo = JSON.parse(data);
-                //  console.log('Docker Repo ->', JSON.stringify(dockerRepo));
+                  var dockerRepo = JSON.parse(data);
+                   console.log('Docker Repo ->', JSON.stringify(dockerRepo));
                     var cmd = '';
                     //Below is for public repository
-                    cmd = 'curl -v -H "Accept: application/json" -X GET https://index.docker.io/v1/repositories/' + req.params.repopath +  '/tags';
+                    cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid+':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath +  '/tags';
                     //Below is for private repository
                     //cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
                     console.log('executing - ',cmd);
@@ -79,8 +80,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }); 
                     
                 }
-            else
+            else{
+                console.log('Error:' + err);
                 res.end(err);
+                }
         });
         
     /*  */
@@ -740,7 +743,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var chefRepoPath = settings.chefReposLocation;
 
         console.log('Type of org : ' + typeof req.params.orgname);
-        
+
         console.log(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
         console.log('Orgname : #' + req.params.orgname.toString() + '#' + (req.params.orgname == ''));
 

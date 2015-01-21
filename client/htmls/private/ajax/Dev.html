@@ -2114,7 +2114,6 @@ $(function() {
     }
 
     $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
-
         initializeBlueprintArea(data.blueprints);
         initializeTaskArea(data.tasks);
         initializeInstanceArea(data.instances);

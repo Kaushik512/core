@@ -9,7 +9,8 @@ var chefSettings = appConfig.chef;
 
 function Configmgmt() {
     this.getDBModelFromID = function(id,callback){
-        switch(id){
+        console.log('in getDBModelFromID');
+        switch(id.toString()){
             case "1":
                 callback(null,'d4dModelMastersOrg');
                 break;
@@ -48,6 +49,7 @@ function Configmgmt() {
                 break;
             case "18":
                 callback(null,'d4dModelMastersDockerConfig');
+                console.log('returning d4dModelMastersDockerConfig');
                 break;
             case "19":
                 callback(null,'d4dModelMastersServicecommands');
@@ -363,7 +365,7 @@ function Configmgmt() {
     };
 
     this.getChefServerDetailsByChefServer = function(paramconfigname, callback) {
-         
+
         d4dModelNew.d4dModelMastersConfigManagement.findOne({
             configname: paramconfigname,id:10
         }, function(err, d4dMasterJson) {
@@ -526,46 +528,73 @@ function Configmgmt() {
 
     this.getMasterRow = function(masterid, fieldname, fieldvalue, callback) {
 
-        d4dModel.findOne({
-            id: masterid
-        }, function(err, d4dMasterJson) {
+        // d4dModel.findOne({
+        //     id: masterid
+        // }, function(err, d4dMasterJson) {
+        //     if (err) {
+        //         console.log("Hit and error:" + err);
+        //     }
+        //     if (d4dMasterJson) {
+        //         var configmgmt = '';
+        //         var chefRepoPath = '';
+        //         var hasOrg = false;
+        //         d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
+        //             console.log("found" + itm.field.length);
+        //             for (var j = 0; j < itm.field.length; j++) {
+        //                 if (itm.field[j]["name"] == fieldname) {
+        //                     if (itm.field[j]["values"].value == fieldvalue) {
+        //                         console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+        //                         hasOrg = true;
+        //                         //Re-construct the json with the item found
+        //                         var configmgmt = '';
+        //                         for (var k = 0; k < itm.field.length; k++) {
+
+        //                             if (configmgmt == '')
+        //                                 configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+        //                             else
+        //                                 configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+
+        //                         }
+        //                         configmgmt = "{" + configmgmt + "}";
+        //                         console.log('Before Call back ->' + JSON.stringify(configmgmt));
+        //                         //return(configmgmt);
+        //                         //return;
+        //                     }
+        //                 }
+        //             }
+        //             callback(null, configmgmt);
+
+        //         }); // rows loop
+
+        //     }
+        // }); //end find one
+        console.log('In getMasterRow : ' + masterid + ' ' + fieldname + ' ' + fieldvalue );
+        this.getDBModelFromID(masterid,function(err,dbtype){
             if (err) {
-                console.log("Hit and error:" + err);
+                console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
+                callback(true, err);
             }
-            if (d4dMasterJson) {
-                var configmgmt = '';
-                var chefRepoPath = '';
-                var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == fieldname) {
-                            if (itm.field[j]["values"].value == fieldvalue) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
-                                var configmgmt = '';
-                                for (var k = 0; k < itm.field.length; k++) {
-
-                                    if (configmgmt == '')
-                                        configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                    else
-                                        configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-
-                                }
-                                configmgmt = "{" + configmgmt + "}";
-                                console.log('Before Call back ->' + JSON.stringify(configmgmt));
-                                //return(configmgmt);
-                                //return;
-                            }
-                        }
+            if(dbtype){
+                console.log("Master Type: " + dbtype);
+                var query = {};
+                query[fieldname] = fieldvalue; //building the query 
+                query['id'] = masterid;
+                eval('d4dModelNew.'+ dbtype).findOne(query,function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error @ getChefServerDetails:" + err);
                     }
-                    callback(null, configmgmt);
+                    if(d4dMasterJson){
+                        console.log('Before callback' + JSON.stringify(d4dMasterJson));
+                        callback(null, JSON.stringify(d4dMasterJson));
+                    }
+                    else
+                        callback(null, '');   
 
-                }); // rows loop
+                });
+            }//end dbtype
+        });//end get dbmodel
 
-            }
-        });
+        
 
     };
 
