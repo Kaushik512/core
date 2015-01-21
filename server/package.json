@@ -14,9 +14,9 @@
         "net-ping": "1.1.9",
         "ldapjs": "0.7.1",
         "connect-redis": "1.4.x",
-        "node-uuid": "*",
+        "node-uuid": "1.4.2",
         "chef": "0.3.0",
-        "ssh2": "*",
+        "ssh2": "0.3.6",
         "path-extra": "0.3.0",
         "mkdirp": "0.5.0",
         "connect-mongo": "0.4.1",
@@ -27,7 +27,8 @@
         "extend": "2.0.0",
         "winston": "0.8.3",
         "command-line-args": "0.5.3",
-        "mongoose-unique-validator": "0.4.1"
+        "mongoose-unique-validator": "0.4.1",
+        "mongoose-validator": "1.0.3"
     },
     "devDependencies": {
         "grunt": "0.4.5",
