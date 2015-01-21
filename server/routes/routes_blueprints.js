@@ -1,6 +1,6 @@
 var blueprintsDao = require('../model/blueprints');
 
-var instancesDao = require('../model/instances');
+var instancesDao = require('../model/dao/instancesdao');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
 var logsDao = require('../model/dao/logsdao.js');

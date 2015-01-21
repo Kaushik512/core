@@ -4,10 +4,10 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var Schema = mongoose.Schema;
 
 var taskSchema = new Schema({
-    orgId: String,
-    projectId: String,
-    envId: String,
-    name: String,
+    orgId: {type:String,required:true},
+    projectId: {type:String,required:true},
+    envId: {type:String,required:true},
+    name: {type:String,required:true},
     nodesIdList: [String],
     runlist: [String],
     lastRunTimestamp: Number,
