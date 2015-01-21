@@ -1,14 +1,27 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 
+var uniqueValidator = require('mongoose-unique-validator');
+
 var Schema = mongoose.Schema;
 
 
-
 var InstanceSchema = new Schema({
-    orgId: {type:String,required:true},
-    projectId: {type:String,required:true},
-    envId: {type:String,required:true},
+    orgId: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    projectId: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    envId: {
+        type: String,
+        required: true,
+        trim: true
+    },
     chefNodeName: String,
     runlist: [String],
     platformId: String,
@@ -27,11 +40,17 @@ var InstanceSchema = new Schema({
         os: String,
     },
     chef: {
-        serverId: {type:String,required:true},
+        serverId: {
+            type: String,
+            required: true
+        },
         chefNodeName: String
     },
     credentials: {
-        username: {type:String,required:true},
+        username: {
+            type: String,
+            required: true
+        },
         password: String,
         pemFileLocation: String
     },
@@ -51,12 +70,14 @@ var InstanceSchema = new Schema({
 
 });
 
+InstanceSchema.plugin(uniqueValidator);
+
 var Instances = mongoose.model('instances', InstanceSchema);
 
 var InstancesDao = function() {
 
     this.getInstanceById = function(instanceId, callback) {
-       
+
         Instances.find({
             "_id": new ObjectId(instanceId)
         }, function(err, data) {
@@ -64,7 +85,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-           
+
             callback(null, data);
 
         });

@@ -22,7 +22,6 @@ function getDefaultsConfig() {
             password: "pass@!@#",
             encryptionEncoding: "ascii",
             decryptionEncoding: "base64",
-
         },
         chef: {
             chefReposDirName: 'chef-repos',
@@ -199,7 +198,7 @@ function installPackageJson() {
 }
 
 function restoreSeedData(config, callback) {
-    var procMongoRestore = spawn('mongorestore', ['--host', config.db.host, '--port', config.db.port, '--db', config.db.dbName, '../seed/mongodump/devops_new/']);
+    var procMongoRestore = spawn('mongorestore', ['--host', config.db.host, '--port', config.db.port, '--db', config.db.dbName, '--drop', '../seed/mongodump/devops_new/']);
     procMongoRestore.on('error', function(mongoRestoreError) {
         console.error("mongorestore error ==> ", mongoRestoreError);
     });
