@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 
-var schemaValidator = {};//require('./schema-validator');
+var schemaValidator = require('./schema-validator');
 
 var uniqueValidator = require('mongoose-unique-validator');
 
@@ -12,26 +12,26 @@ var InstanceSchema = new Schema({
     orgId: {
         type: String,
         required: true,
-   //     trim: true,
-   //     validate: schemaValidator.orgIdValidator
+        trim: true,
+        validate: schemaValidator.orgIdValidator
     },
     projectId: {
         type: String,
         required: true,
-    //    trim: true
-    //    validate: schemaValidator.projIdValidator
+        trim: true,
+        validate: schemaValidator.projIdValidator
     },
     envId: {
         type: String,
         required: true,
-      //  trim: true,
-      //  validate: schemaValidator.envIdValidator
+        trim: true,
+        validate: schemaValidator.envIdValidator
     },
     chefNodeName: String,
     runlist: [{
         type: String,
         trim: true,
-        //validate: schemaValidator.recipeValidator
+        validate: schemaValidator.recipeValidator
     }],
     platformId: String,
     instanceIP: {
@@ -44,7 +44,7 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true,
         required: true,
-        //validate: schemaValidator.catalystUsernameValidator
+        validate: schemaValidator.catalystUsernameValidator
     }],
     hardware: {
         platform: String,

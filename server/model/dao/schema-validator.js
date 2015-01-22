@@ -11,7 +11,7 @@ function getLengthValidator(min, max, message) {
 
 function getRegExValidator(regEx, message) {
     return validate({
-        validator: 'matches'
+        validator: 'matches',
         arguments: regEx,
         message: message
     });
