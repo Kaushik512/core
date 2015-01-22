@@ -17,7 +17,7 @@ Catalyst create CENT OS new blueprint without cookbook
 
 
 Catalyst create CENT OS new blueprint with cookbook
-    [Tags]       Sanity
+    [Tags]       Sanity1
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Create CENT OS New blueprint with cookbook
     Catalyst Logout

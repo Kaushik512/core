@@ -22,7 +22,7 @@ Catalyst import chef server nodes by provider
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst import chef server nodes by provider
-    Catalyst Logout
+#   Catalyst Logout
     [Teardown]     Close Browser
 
 Catalyst import chef server nodes
@@ -30,11 +30,11 @@ Catalyst import chef server nodes
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Chef server nodes import
-    Catalyst Logout
+ #   Catalyst Logout
     [Teardown]     Close Browser
 
 Access catalyst as Designer and password as Designer
-    [Tags]       Sanity      Smoke1
+    [Tags]       Sanity      Smoke
     Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
     Verify the Workzone and Design
     Catalyst Logout
@@ -42,7 +42,7 @@ Access catalyst as Designer and password as Designer
 
 
 Access catalyst as Designer User and password
-    [Tags]       Sanity      test
+    [Tags]       Sanity      Smoke
     Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
     Verify the Workzone Instances
     Catalyst Logout
