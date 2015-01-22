@@ -121,20 +121,38 @@ function Env() {
                         console.log('New Env Master Saved');
                         console.log('Need to update project with : o' + orgname + ' b' + bgname + ' e' + name + ' p' + projname);
                         //Step to add env to project.
-                        d4dModelNew.d4dModelMastersProjects.update({
+                        d4dModelNew.d4dModelMastersProjects.findOne({
                             orgname: orgname,
                             productgroupname: bgname,
                             projectname: projname,
                             id:'4'
-                        },{$push:{environmentname:name}},function(err,data1){
+                        },function(err,data2){
                             if(!err)
-                           { callback(null, data);
-                                                       return;}
-                            else{
+                            {
+                                var newenv = data2.environmentname + ',' + name;
+                                d4dModelNew.d4dModelMastersProjects.update({
+                                    orgname: orgname,
+                                    productgroupname: bgname,
+                                    projectname: projname,
+                                    id:'4'
+                                },{environmentname:newenv},function(err,data1){
+                                    if(!err)
+                                        { 
+                                            callback(null, data1);
+                                               return;
+                                        }
+                                    else{
+                                        callback(err,null);
+                                        return;
+                                    }
+    
+                                });
+                            }
+                            else
+                            {
                                 callback(err,null);
                                 return;
                             }
-
                         });
                         
                     });
