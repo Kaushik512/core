@@ -1,40 +1,62 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
+var validate = require('mongoose-validator');
+var logger  = require('../lib/logger')(module);
+
+var extend = require('mongoose-validator').extend;
+extend('isValidName', function (val) {
+    var pattern = /^[a-zA-Z0-9-_.\s]+$/;
+    return pattern.test(val);
+}, 'Name can contain alphabets, numbers,dash, underscore, dot or a space');
+
+var nameValidator = [
+  validate({
+    validator: 'isLength',
+    arguments: [3, 50],
+    message: 'Name should be between 3 and 50 characters'
+  }),
+  validate({
+    validator: 'isValidName',
+    passIfEmpty: true,
+    message: 'Name can contain alphabets, numbers,dash, underscore, dot or a space'
+  })
+];
+// Must add length validator
 
 var Schema = mongoose.Schema;
 
 var BlueprintSchema = new Schema({
-    orgId: {type:String,required:true},
-    projectId: {type:String,required:true},
-    envId: {type:String,required:true},
-    iconpath: String,
-    name: {type:String,required:true},
-    templateId: String,
-    templateType: String,
-    dockercontainerpathstitle: String,
-    dockercontainerpaths: String,
-    dockerrepotags: String,
-    dockerreponame: String,
-    dockerlaunchparameters: String,
-    dockerimagename: String,
-    templateComponents: [String],
-    instanceType: String,
+    orgId: {type:String,required:true, trim:true},
+    projectId: {type:String,required:true, trim:true},
+    envId: {type:String,required:true, trim:true},
+    iconpath: {type:String,trim:true},
+    name: {type:String,required:true, trim:true, validate:nameValidator},
+    templateId: {type:String,required:true, trim:true},
+    templateType: {type:String,required:true, trim:true},
+    dockercontainerpathstitle: {type:String,trim:true},
+    dockercontainerpaths: {type:String,trim:true},
+    dockerrepotags: {type:String,trim:true},
+    dockerreponame: {type:String,trim:true},
+    dockerlaunchparameters: {type:String,trim:true},
+    dockerimagename: {type:String,trim:true},
+    templateComponents: [{type:String,required:true}],
+    instanceType: {type:String,required:true},
     instanceOS: {type:String,required:true},
     instanceAmiid: {type:String,required:true},
     instanceUsername: {type:String,required:true},
-    importInstance: Boolean,
+    importInstance: {type:Boolean},
     chefServerId: {type:String,required:true},
-    users: [String],
+    users: [{type:String,required:true, trim:true}],
     versionsList: [{
-        ver: String,
-        runlist: [String],
-        expirationDays: Number,
+        ver: {type:String,required:true},
+        runlist: [{type:String,required:true}],
+        expirationDays: {type:Number},
     }],
-    latestVersion: String,
-    cloudFormationStackName: String,
+    latestVersion: {type:String,trim:true},
+    cloudFormationStackName: {type:String,trim:true},
     cloudFormationStackParameters: [{
-        ParameterKey: String,
-        ParameterValue: String
+        ParameterKey: {type:String,trim:true},
+        ParameterValue: {type:String,trim:true}
     }]
 
 });
@@ -42,7 +64,9 @@ var BlueprintSchema = new Schema({
 var Blueprint = mongoose.model('blueprints', BlueprintSchema);
 
 function generateBlueprintVersionNumber(prevVersion) {
+    logger.debug("Enter generateBlueprintVersionNumber()", prevVersion);
     if (!prevVersion) {
+        logger.warn("No prevVersion provided. Returning 0.1");
         return "0.1";
     }
 
@@ -55,28 +79,31 @@ function generateBlueprintVersionNumber(prevVersion) {
         major++;
         minor = 0;
     }
-
+    logger.debug("Exit generateBlueprintVersionNumber(%s) = %s.%s", prevVersion, major, minor);
     return major + '.' + minor;
 }
 
 var BlueprintsDao = function() {
 
     this.getBlueprintById = function(blueprintId, callback) {
-        console.log(blueprintId);
+        logger.debug("Enter getBlueprintById(%s)", blueprintId);
         Blueprint.find({
             "_id": new ObjectId(blueprintId)
         }, function(err, data) {
             if (err) {
+                logger.error("Failed getting Blueprint >> "+ blueprintId);
                 callback(err, null);
                 return;
             }
-         
+            logger.debug("Exit getBlueprintById (ID = %s)", blueprintId);
             callback(null, data);
 
         });
     };
 
     this.getBlueprintsByProjectAndEnvId = function(projectId, envId, blueprintType, userName, callback) {
+        logger.debug("Enter getBlueprintsByProjectAndEnvId (%s, %s, %s, %s)", projectId, envId, blueprintType, userName);
+        
         var queryObj = {
             projectId: projectId,
             envId: envId
@@ -89,14 +116,17 @@ var BlueprintsDao = function() {
         }
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
+                logger.warn("Error in getBlueprintsByProjectAndEnvId \n"+ JSON.stringify(err));
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit getBlueprintsByProjectAndEnvId");
             callback(null, data);
         });
     };
 
     this.getBlueprintsByOrgProjectAndEnvId = function(orgId, projectId, envId, blueprintType, userName, callback) {
+        logger.debug("Enter getBlueprintsByOrgProjectAndEnvId(%s,%s, %s, %s, %s)", orgId, projectId, envId, blueprintType, userName);
         var queryObj = {
             orgId: orgId,
             projectId: projectId,
@@ -108,18 +138,19 @@ var BlueprintsDao = function() {
         if (userName) {
             queryObj.users = userName;
         }
-        console.log('in here' + JSON.stringify(queryObj));
+        
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit getBlueprintsByOrgProjectAndEnvId(%s,%s, %s, %s, %s)", orgId, projectId, envId, blueprintType, userName);
             callback(null, data);
         });
     };
 
     this.createBlueprint = function(blueprintData, callback) {
-        console.log('Just before save ->', blueprintData);
+        logger.debug("Enter createBlueprint >> " + JSON.stringify(blueprintData));
         var blueprint = new Blueprint({
             orgId: blueprintData.orgId,
             projectId: blueprintData.projectId,
@@ -154,22 +185,28 @@ var BlueprintsDao = function() {
 
         blueprint.save(function(err, data) {
             if (err) {
+                logger.warn(" !!! Failed to create Blueprint !!!");
+                logger.warn("Error = "+ JSON.stringify(err));
+                logger.warn("Blueprint Data = "+JSON.stringify(blueprintData));
+
                 callback(err, null);
                 return;
             }
-            console.log("Blueprint Created >>>" + JSON.stringify(blueprint));
+            logger.debug("Blueprint Created " + JSON.stringify(blueprint));
             callback(null, data);
         });
     };
 
     this.updateBlueprint = function(blueprintId, updateData, callback) {
+        logger.debug("Enter updateBlueprint(%s, %s)", blueprintId, JSON.stringify(updateData));
         this.getBlueprintById(blueprintId, function(err, data) {
             if (err) {
+                logger.warn("Exit updateBlueprint because getBlueprintById failed ");
                 callback(err, null);
                 return;
             }
             if (data.length) {
-                console.log('updating');
+                logger.debug("updateBlueprint: Beginning Update ");
                 var latestVersion = data[0].latestVersion;
                 var newVersion = generateBlueprintVersionNumber(latestVersion);
                 Blueprint.update({
@@ -189,9 +226,12 @@ var BlueprintsDao = function() {
                     upsert: false
                 }, function(err, updatedData) {
                     if (err) {
+                        loggger.error(" updateBlueprint Failed - "+ JSON.stringify(err));
                         callback(err, null);
                         return;
                     }
+
+                    logger.debug("Exit updateBlueprint");
                     callback(null, {
                         version: newVersion,
                         cout: updatedData
@@ -204,19 +244,22 @@ var BlueprintsDao = function() {
     };
 
     this.removeBlueprintbyId = function(blueprintId, callback) {
+        logger.debug("Enter removeBlueprintbyId(%s)", blueprintId);
         Blueprint.remove({
             "_id": ObjectId(blueprintId)
         }, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.warn("removeBlueprintbyId Failed - "+ JSON.stringify(err));
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit removeBlueprintbyId(%s)", blueprintId);
             callback(null, data);
         });
     }
 
     this.getBlueprintVersionData = function(blueprintId, version, callback) {
+        logger.debug("Enter getBlueprintVersionData(%s, %s)", blueprintId, version);
         var queryObj = {
             "_id": new ObjectId(blueprintId)
         };
@@ -236,17 +279,18 @@ var BlueprintsDao = function() {
 
         Blueprint.find(queryObj, projectionObj, function(err, data) {
             if (err) {
+                logger.warn("getBlueprintVersionData Failed - "+ JSON.stringify(err));
                 callback(err, null);
                 return;
             }
           
             if (data.length) {
+                logger.debug("Exit getBlueprintVersionData");
                 callback(null, data[0].versionsList);
             } else {
+                logger.debug("Exit getBlueprintVersionData [] ");
                 callback(null, []);
             }
-
-
         });
     }
 }
