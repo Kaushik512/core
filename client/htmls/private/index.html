@@ -586,7 +586,8 @@
 				var $track = $('#Track').empty();
 				for(var i=0;i<data.length;i++) {
 					var classOrgSelected = '';
-					if(i==0) {
+				//	if(i==0) 
+					{
 				classOrgSelected = 'orgSelected';
 					}
 					var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+' open"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white" orname ><i class="fa fa-building "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);

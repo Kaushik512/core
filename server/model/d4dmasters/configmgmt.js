@@ -189,11 +189,11 @@ function Configmgmt() {
         });
     };
 
-    this.getAccessFilesForRole = function(loginname, user, req, res, callback) {
+    this.getAccessFilesForRole__ = function(loginname, user, req, res, callback) {
         
     };
 
-    this.getAccessFilesForRole__ = function(loginname, user, req, res, callback) {
+    this.getAccessFilesForRole = function(loginname, user, req, res, callback) {
         console.log("Received Role name: " + loginname);
         var accessibleFiles = [];
         var mainRef = this;

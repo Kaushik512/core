@@ -1,13 +1,16 @@
 var d4dModel = require('./d4dmastersmodel.js');
 var uuid = require('node-uuid');
+var d4dModelNew = require('./d4dmastersmodelnew.js');
+var logger = require('./../../lib/logger')(module);
 
 
 function Env() {
 
 
-    this.createEnv = function(name, orgname, callback) {
+    this.createEnv__ = function(name, orgname, callback) {
         var uuid1 = uuid.v4();
-        var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}},{\"name\":\"rowid\",\"values\":{\"value\":\"" + uuid1 + "\"}}]}";
+        //var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}},{\"name\":\"rowid\",\"values\":{\"value\":\"" + uuid1 + "\"}}]}";
+
         var tempObj = JSON.parse(envField);
         console.log('tempObj ==>', envField);
 
@@ -76,6 +79,70 @@ function Env() {
 
         });
 
+    }
+
+    this.createEnv = function(name, orgname,bgname,projname, callback) {
+        var uuid1 = uuid.v4();
+        //var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}},{\"name\":\"rowid\",\"values\":{\"value\":\"" + uuid1 + "\"}}]}";
+        var envField = [];
+        // envField.push("\"environmentname: \"" + name + "\"");
+        // envField.push("orgname : \"" +  orgname + "\"");
+        // envField.push("rowid : \"" + uuid1 + "\"");
+        // envField.push("id : \"3\"");
+        envField.push('\"environmentname\" : \"' + name + '\"');
+        envField.push('\"orgname\" : \"' + orgname + '\"');
+        envField.push('\"rowid\" : \"' + uuid1 + '\"');
+        envField.push('\"id\" : \"3\"');
+      //      var tempObj = JSON.parse(envField);
+        var FLD = JSON.parse('{' + envField + '}');
+
+        logger.debug('tempObj ==>', JSON.stringify(FLD));
+
+        // var query = {};
+        // query[fieldname] = fieldvalue; //building the query 
+        // query['id'] = masterid;
+       
+
+
+        d4dModelNew.d4dModelMastersEnvironments.findOne({
+            environmentname : name,
+            orgname: orgname,
+            id:'3'
+        },function(err,envdata){
+                if(!envdata)
+                {
+                    var mastersrdb =  new d4dModelNew.d4dModelMastersEnvironments(FLD);
+                    mastersrdb.save(function(err,data){
+                        if(err){
+                            console.log('Hit Save in createEnv error' + err);
+                            callback(err, null);
+                            return;
+                        }
+                        console.log('New Env Master Saved');
+                        console.log('Need to update project with : o' + orgname + ' b' + bgname + ' e' + name + ' p' + projname);
+                        //Step to add env to project.
+                        d4dModelNew.d4dModelMastersProjects.update({
+                            orgname: orgname,
+                            productgroupname: bgname,
+                            projectname: projname,
+                            id:'4'
+                        },{$push:{environmentname:name}},function(err,data1){
+                            if(!err)
+                           { callback(null, data);
+                                                       return;}
+                            else{
+                                callback(err,null);
+                                return;
+                            }
+
+                        });
+                        
+                    });
+                }
+                else{
+                    callback(null,name);
+                }
+        });
     }
 
 }
