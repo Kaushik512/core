@@ -44,13 +44,6 @@ body.custom-theme {
  			}
  		}
 
-
-/*.custom-theme #header, .custom-theme .inbox-footer, .custom-theme .superbox-show {
-	background-image:none;
-	background-color: #2C3742;
-	border-bottom:1px solid #cccccc;
-	width:100%;
-}*/
 .custom-theme .superbox-list.active:before {
 	color: #2C3742;
 }
@@ -58,10 +51,6 @@ body.custom-theme {
 .custom-theme .superbox-img-description  {
 	color:#9EA8B1 !important;
 }
-
-/*.custom-theme #project-context>:first-child {
-	text-shadow:none;
-}*/
 
 .custom-theme .breadcrumb > li + li:before{
 	color: white;
