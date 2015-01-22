@@ -20,11 +20,11 @@ ${DELAY}             1
 ${SHORT DELAY}       0
 ${DELAY SECONDS}       2 seconds
 
-${CATALYST ROOT}             D:/Test/Param/catframework/project_rl_catalyst
-${CATALYST SUITES}           D:/Test/Param/catframework/project_rl_catalyst/Test_Suites
+${ROOTPATH}             D:/Test/Param/catframework/project_rl_catalyst
+${CATALYST SUITES}           ${ROOTPATH}/Test_Suites
 
-${COMMON RESOURCES}            ${CATALYST ROOT}/Common_Resources
-${TEST RESOURCES}              ${CATALYST ROOT}/Test_Resources
+${COMMON RESOURCES}            ${ROOTPATH}/Common_Resources
+${TEST RESOURCES}              ${ROOTPATH}/Test_Resources
 ${CATALYST TESTCASES}          ${CATALYST SUITES}/CatalystSuites
 ${CATALYST ACTION}             ${TEST RESOURCES}/Test_Script/Test_Execution_Action
 ${CATALYST TEST DATA}          ${TEST RESOURCES}/Test_Data

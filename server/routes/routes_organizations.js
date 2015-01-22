@@ -5,6 +5,14 @@ var blueprintsDao = require('../model/blueprints');
 
 var instancesDao = require('../model/dao/instancesdao');
 var tasksDao = require('../model/tasks');
+var appConfig = require('../config/app_config');
+var logger = require('../lib/logger')(module);
+var uuid = require('node-uuid');
+var fileIo = require('../lib/utils/fileio');
+var logsDao = require('../model/dao/logsdao.js');
+
+
+var credentialCryptography = require('../lib/credentialcryptography');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -18,11 +26,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             var orgTree = [];
-            
+
             if (orgsJson.masterjson && orgsJson.masterjson.rows && orgsJson.masterjson.rows.row) {
                 for (var i = 0; i < orgsJson.masterjson.rows.row.length; i++) {
                     for (var j = 0; j < orgsJson.masterjson.rows.row[i].field.length; j++) {
-                        //console.log(orgsJson.masterjson.rows.row[i].field[j]);
                         if (orgsJson.masterjson.rows.row[i].field[j].name = "orgname") {
                             orgTree.push({
                                 name: orgsJson.masterjson.rows.row[i].field[j].values.value,
@@ -52,10 +59,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                     }
                                 }
-                                console.log(isFilterdRow);
                                 if (isFilterdRow) {
                                     for (var k = 0; k < buJson.masterjson.rows.row[j].field.length; k++) {
-                                        console.log(buJson.masterjson.rows.row[j].field[k].name);
                                         if (buJson.masterjson.rows.row[j].field[k].name == "productgroupname") {
                                             orgTree[i].businessGroups.push({
                                                 name: buJson.masterjson.rows.row[j].field[k].values.value,
@@ -91,7 +96,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                                 if (isFilterdRow) {
                                                     for (var l = 0; l < buJson.masterjson.rows.row[k].field.length; l++) {
-                                                        console.log(buJson.masterjson.rows.row[k].field[l].name);
                                                         if (buJson.masterjson.rows.row[k].field[l].name == "projectname") {
                                                             businessGroups[j].projects.push(buJson.masterjson.rows.row[k].field[l].values.value);
                                                             break;
@@ -125,7 +129,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                                 if (isFilterdRow) {
                                                     for (var k = 0; k < buJson.masterjson.rows.row[j].field.length; k++) {
-                                                        console.log(buJson.masterjson.rows.row[j].field[k].name);
                                                         if (buJson.masterjson.rows.row[j].field[k].name == "environmentname") {
                                                             orgTree[i].environments.push(buJson.masterjson.rows.row[j].field[k].values.value);
                                                             break;
@@ -168,7 +171,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("BluePrint >>>>>>" + JSON.stringify(data));
             res.send(data);
         });
     });
@@ -185,7 +187,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             res.send(400);
             return;
         }
-        console.log(blueprintData);
 
         blueprintsDao.createBlueprint(blueprintData, function(err, data) {
             if (err) {
@@ -233,9 +234,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         return;
                     }
                     res.send({
-                        tasks:tasksData,
-                        instances:instancesData,
-                        blueprints:blueprintsData
+                        tasks: tasksData,
+                        instances: instancesData,
+                        blueprints: blueprintsData
                     });
                 });
 
@@ -268,7 +269,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
 
             if (!chefDetails) {
                 res.send(404);
@@ -284,7 +285,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -306,7 +307,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -320,7 +321,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getRolesList(function(err, roles) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -342,7 +343,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -356,13 +357,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
                 } else {
                     chef.getRolesList(function(err, roles) {
-                        console.log(err);
+                        logger.error(err);
                         if (err) {
                             res.send(500);
                             return;
@@ -380,14 +381,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
 
     });
-app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
-    console.log('hit received');
+    app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.chefserverid, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -401,13 +401,13 @@ app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, 
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
                 } else {
                     chef.getRolesList(function(err, roles) {
-                        console.log(err);
+                        logger.error(err);
                         if (err) {
                             res.send(500);
                             return;
@@ -426,5 +426,219 @@ app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, 
 
     });
 
+
+    app.post('/organizations/:orgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
+
+        if (!(req.body.fqdn && req.body.os)) {
+            res.send(400);
+        }
+
+        if (req.body.credentials && req.body.credentials.username) {
+            if (!(req.body.credentials.password || req.body.credentials.pemFileData)) {
+                res.send(400);
+            }
+        } else {
+            res.send(400);
+        }
+
+        function getCredentialsFromReq(callback) {
+            var credentials = req.body.credentials;
+            if (req.body.credentials.pemFileData) {
+                credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
+                fileIo.writeFile(credentials.pemFileLocation, req.body.credentials.pemFileData, null, function(err) {
+                    if (err) {
+                        logger.error('unable to create pem file ', err);
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, credentials);
+                });
+            } else {
+                callback(null, credentials);
+            }
+        }
+
+        getCredentialsFromReq(function(err, credentials) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                logger.debug("chefdata", chefDetails);
+                if (!chefDetails) {
+                    res.send(500);
+                    return;
+                }
+
+                credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
+                    if (err) {
+                        logger.error("unable to encrypt credentials", err);
+                        res.send(500);
+                        return;
+                    }
+                    var instance = {
+                        orgId: req.params.orgId,
+                        projectId: req.params.projectId,
+                        envId: req.params.envId,
+                        instanceIP: req.body.fqdn,
+                        instanceState: 'unknown',
+                        bootStrapStatus: 'waiting',
+                        runlist: [],
+                        users: [req.session.user.cn], //need to change this
+                        hardware: {
+                            platform: 'unknown',
+                            platformVersion: 'unknown',
+                            architecture: 'unknown',
+                            memory: {
+                                total: 'unknown',
+                                free: 'unknown',
+                            },
+                            os: req.body.os
+                        },
+                        credentials: encryptedCredentials,
+                        chef: {
+                            serverId: chefDetails.rowid,
+                            chefNodeName: req.body.fqdn
+                        },
+                        blueprintData: {
+                            blueprintName: req.body.fqdn,
+                            templateId: "chef_import",
+                            iconPath: "../private/img/templateicons/chef_import.png"
+                        }
+                    }
+
+
+                    instancesDao.createInstance(instance, function(err, data) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500);
+                            return;
+                        }
+                        instance.id = data._id;
+
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: false,
+                            log: "Bootstrapping instance",
+                            timestamp: new Date().getTime()
+                        });
+
+                        credentialCryptography.decryptCredential(encryptedCredentials, function(err, decryptedCredentials) {
+                            if (err) {
+                                logger.error("unable to decrypt credentials", err);
+                                res.send(500);
+                                return;
+                            }
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url
+                            });
+
+                            chef.bootstrapInstance({
+                                instanceIp: instance.instanceIP,
+                                pemFilePath: decryptedCredentials.pemFileLocation,
+                                instancePassword: decryptedCredentials.password,
+                                instanceUsername: instance.credentials.username,
+                                nodeName: instance.chef.chefNodeName,
+                                environment: instance.envId,
+                                instanceOS: instance.hardware.os
+                            }, function(err, code) {
+                                if (decryptedCredentials.pemFilePath) {
+                                    fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
+                                        if (err) {
+                                            logger.error("Unable to delete temp pem file =>", err);
+                                        } else {
+                                            logger.debug("temp pem file deleted");
+                                        }
+                                    });
+                                }
+                                if (err) {
+                                    logger.error("knife launch err ==>", err);
+                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+
+                                    });
+
+                                } else {
+                                    if (code == 0) {
+                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                            if (err) {
+                                                logger.error("Unable to set instance bootstarp status. code 0");
+                                            } else {
+                                                logger.debug("Instance bootstrap status set to success");
+                                            }
+                                        });
+
+                                        chef.getNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                            if (err) {
+                                                console.log(err);
+                                                return;
+                                            }
+                                            var hardwareData = {};
+                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                            hardwareData.platform = nodeData.automatic.platform;
+                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                            hardwareData.memory = {};
+                                            if (nodeData.automatic.memory) {
+                                                hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                            }
+                                            hardwareData.os = instance.hardware.os;
+                                            //console.log(instance);
+                                            //console.log(hardwareData,'==',instance.hardware.os);
+                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                if (err) {
+                                                    logger.error(err);
+                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)");
+                                                } else {
+                                                    logger.debug("Instance hardware details set successessfully");
+                                                }
+                                            });
+                                            
+                                        });
+
+                                    } else {
+                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                            if (err) {
+                                                logger.error("Unable to set instance bootstarp status code != 0");
+                                            } else {
+                                                logger.debug("Instance bootstrap status set to failed");
+                                            }
+                                        });
+
+                                    }
+                                }
+
+                            }, function(stdOutData) {
+
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: false,
+                                    log: stdOutData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+
+                            }, function(stdErrData) {
+
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: true,
+                                    log: stdErrData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+                            });
+                            res.send(instance);
+                        });
+                    });
+                });
+            });
+        });
+    });
 
 }
