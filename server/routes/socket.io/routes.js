@@ -1,4 +1,4 @@
-var instanceDao = require('../../model/instances.js');
+var instanceDao = require('../../model/dao/instancesdao.js');
 var javaSSHShellwrapper = require('../../model/javaSSHShellWrapper.js');
 
 

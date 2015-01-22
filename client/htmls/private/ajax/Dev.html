@@ -2310,20 +2310,12 @@ function pollInstanceState(instanceId, state, delay) {
         })
     }, delay);
 }
-
 var startStopInstanceHandler = function(e) {
     var $this = $(this);
     var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
     var type = $this.attr('data-actionType');
 
-    bootbox.confirm(type + " instance?", function(result) {
-        if (!result) {
-            return;
-        }
-        url = '../instances/' + instanceId + '/startInstance';
-        if (type === 'Stop') {
-            url = '../instances/' + instanceId + '/stopInstance'
-        }
+    function makeRequest(url) {
         var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
         $parent.find('.moreInfo').trigger('click');
         $.get(url, function(data) {
@@ -2342,9 +2334,23 @@ var startStopInstanceHandler = function(e) {
 
             pollInstanceState(instanceId, oldState, 2000);
         });
-    });
-}
 
+    }
+    var url = '../instances/' + instanceId + '/startInstance';
+    if (type === 'Stop') {
+        url = '../instances/' + instanceId + '/stopInstance'
+    }
+    if (type === 'Stop') {
+        bootbox.confirm(type + " instance?", function(result) {
+            if (!result) {
+                return;
+            }
+            makeRequest(url);
+        });
+    } else {
+         makeRequest(url);
+    }
+}
 
 
 
