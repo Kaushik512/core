@@ -100,6 +100,8 @@ var InstancesDao = function() {
 
     this.getInstanceById = function(instanceId, callback) {
 
+        console.log(instanceId); 
+
         Instances.find({
             "_id": new ObjectId(instanceId)
         }, function(err, data) {
@@ -107,7 +109,6 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-
             callback(null, data);
 
         });

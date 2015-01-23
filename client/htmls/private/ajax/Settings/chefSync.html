@@ -378,14 +378,33 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
 });
 
   var serviceURL = "../d4dMasters/";
-
           function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
+                var result = [];
+                readMasterJson_Top(jsonID);
+                //formData = d4ddata.masterjson;
+                //alert('Top' + JSON.stringify(d4ddata));
+                if(d4ddata){
+                  $.each(d4ddata,function(k,v){
+                   // alert('k:' + k + ' v:' + v);
+                    if(v[comparedField] == filterByValue && v[outputField]){
+                      result.push(v[outputField]);
+                    }
+                  });
+
+                }
+                return (result);
+            }
+          
+
+          function getRelatedValues_Top__old(jsonID, comparedField, filterByValue, outputField) {
+                var result = [];
+
                 readMasterJson_Top(jsonID);
                 formData = d4ddata.masterjson;
                 // var comparedField = "orgname";
                 //  var filterByValue = "Scholastic";
                 //  var outputField = "productgroupname";
-                var result = [];
+                
                 //debugger;
                 $.each(eval(formData.rows.row), function (i, item) {
                     $.each(item.field, function (k, item1) {
@@ -403,7 +422,26 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
                         }
                     });
                 });
+                //alert(jsonID + ' ' + result.toString());
                 return (result);
+            }
+            function readMasterJson_Top_old(section) {
+
+                $.ajax({
+                    type: "get",
+                    dataType: "text",
+
+                    async: false,
+                    url: serviceURL + "readmasterjson/" + section,
+                    success: function (data) {
+                        // alert(data.toString());   
+                        d4ddata = JSON.parse(data);
+                    },
+                    failure: function (data) {
+                        alert(data.toString());
+                    }
+                });
+                return (d4ddata);
             }
 
             function readMasterJson_Top(section) {
@@ -413,7 +451,7 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
                     dataType: "text",
 
                     async: false,
-                    url: serviceURL + "readmasterjson/" + section,
+                    url: serviceURL + "readmasterjsonnew/" + section,
                     success: function (data) {
                         // alert(data.toString());   
                         d4ddata = JSON.parse(data);
@@ -439,7 +477,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
    var $checkBoxes = $('.nodeCheckBox:checked');
    var reqBody = {};
    reqBody.orgId = $orgListInput.val();
-   
+   reqBody.bgId = $bgList.val();
    reqBody.projectId = $projectList.val();
    if(!reqBody.projectId || !reqBody.projectId.length){
     alert('Please Select Business Groups & Project');

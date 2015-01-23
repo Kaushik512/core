@@ -366,7 +366,7 @@
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card2 front2  terminate">
+                                                          <div class="card2 front2  unpause">
                                                               <div id="flip3" style="margin-top:5px;"  title="UnPause" >
                                                                   <div class="">
                                                                       <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
@@ -2183,7 +2183,6 @@ $(function() {
     }
 
     $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
-
         initializeBlueprintArea(data.blueprints);
         initializeTaskArea(data.tasks);
         initializeInstanceArea(data.instances);
