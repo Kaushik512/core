@@ -1567,7 +1567,13 @@ $('#addInstanceBtn').click(function(e) {
 
     function makeRequest() {
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
+          $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
+          var $divinstancescardview = $('#divinstancescardview');
+          if ($divinstancescardview.find('li').length > 0) {
+            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+          }
+          $divinstancescardview.find('.item').first().addClass('active');
           $('#modalContainerSSHInfo').modal('hide');
 
       });
@@ -3425,6 +3431,7 @@ $('.actionControlPanel').click(function(e) {
     if ($('#divinstancescardview').is(':visible')) {
 
         var $selectedCard = $('.role-Selectedcard');
+        console.log($selectedCard.length);
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {

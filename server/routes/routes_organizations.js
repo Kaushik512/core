@@ -519,6 +519,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             return;
                         }
                         instance.id = data._id;
+                        instance._id = data._id;
 
                         logsDao.insertLog({
                             referenceId: instance.id,
