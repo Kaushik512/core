@@ -1,4 +1,4 @@
-var blueprintsDao = require('../model/blueprints');
+var blueprintsDao = require('../model/dao/blueprints');
 
 var instancesDao = require('../model/dao/instancesdao');
 var EC2 = require('../lib/ec2.js');
@@ -76,7 +76,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-   
+
 
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
@@ -143,7 +143,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
 
                             var ec2 = new EC2(settings.aws);
-                            ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, function(err, instanceData) {
+                            ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-'+blueprint.name, function(err, instanceData) {
                                 if (err) {
                                     console.log(err);
                                     res.send(500);
@@ -190,7 +190,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         iconPath: blueprint.iconpath
                                     }
                                 }
-                                
+
 
                                 instancesDao.createInstance(instance, function(err, data) {
                                     if (err) {
@@ -261,7 +261,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     log: "Unable to decrpt pem file. Bootstrap failed",
                                                     timestamp: new Date().getTime()
                                                 });
-                                                if(instance.hardware.os != 'windows')
+                                                if (instance.hardware.os != 'windows')
                                                     return;
                                             }
                                             chef.bootstrapInstance({
@@ -310,8 +310,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             hardwareData.platform = nodeData.automatic.platform;
                                                             hardwareData.platformVersion = nodeData.automatic.platform_version;
                                                             hardwareData.memory = {};
-                                                            if(nodeData.automatic.memory)
-                                                            { 
+                                                            if (nodeData.automatic.memory) {
                                                                 hardwareData.memory.total = nodeData.automatic.memory.total;
                                                                 hardwareData.memory.free = nodeData.automatic.memory.free;
                                                             }
@@ -335,12 +334,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         res.send(500);
                                                                         return;
                                                                         //res.end('200');
-                                                                            
-                                                                        }
+
+                                                                    }
                                                                     console.log('Docker Check Returned:' + retCode);
-                                                                    if(retCode == '0'){
+                                                                    if (retCode == '0') {
                                                                         instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
-                                                                                console.log('Instance Docker Status set to Success');
+                                                                            console.log('Instance Docker Status set to Success');
                                                                         });
 
                                                                     }
