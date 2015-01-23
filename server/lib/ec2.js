@@ -5,7 +5,7 @@ var aws = require('aws-sdk');
 if (process.env.http_proxy) {
     aws.config.update({
         httpOptions: {
-            proxy:process.env.http_proxy
+            proxy: process.env.http_proxy
         }
     });
 }
@@ -60,7 +60,7 @@ var EC2 = function(awsSettings) {
 
 
 
-    this.launchInstance = function(image_id, intanceType, securityGroupId, callback) {
+    this.launchInstance = function(image_id, intanceType, securityGroupId,instanceName, callback) {
 
         var that = this; //"m1.small"
         ec.runInstances({
@@ -84,7 +84,18 @@ var EC2 = function(awsSettings) {
                 callback(err, null);
                 return;
             }
+            var params = {
+                Resources: [data.Instances[0].InstanceId],
+                Tags: [{
+                    Key: 'Name',
+                    Value: instanceName
+                }]
+            };
+            ec.createTags(params, function(err) {
+                console.log("Tagging instance", err ? "failure" : "success");
+            });
             callback(null, data.Instances[0]);
+
         });
     };
 
