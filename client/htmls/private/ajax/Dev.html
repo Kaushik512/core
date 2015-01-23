@@ -1117,22 +1117,23 @@
                 </h4>
             </div>
             <div class="modal-body no-padding">
-                <form role="form" class="smart-form">
+                <form role="form" class="smart-form" id="addInstanceForm">
                     <fieldset style="padding-top:0px;margin-top:10px;">
                       <div class="">
                         <section class="col col-6">
                             <div class="form-group" style="margin-bottom:15px;">
                               <label for="">Enter IP Address</label>
                               <label class="input">
-                              <input type="text" name="ipaddressInput" class="form-control" id="ipaddressInput">
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN">
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address</b>
                               </label>
                             </div>
                             <div class="form-group" style="margin-bottom:15px;">
                               <label for="">Choose Operating System</label>
-                              <select id="osSelect"  class="width-100" >
-                                
+                              <select id="instanceOS"  class="width-100" >
+                                <option value="linux">linux</option>
+                                <option value="windows">windows</option>
                               </select>
                             </div>
                         </section>
@@ -1140,7 +1141,7 @@
                             <div class="form-group">
                               <label for="">Username</span></label>
                               <label class="input">
-                              <input type="text" name="usernameInput" class="form-control" id="usernameInput">
+                              <input type="text" name="usernameInput" class="form-control" id="instanceUsername">
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
                               </label>
@@ -1150,7 +1151,7 @@
                             <div class="form-group">
                               <label for="">Password</label>
                               <label class="input">
-                              <input type="password" class="form-control" id="passwordInput" />
+                              <input type="password" class="form-control" id="instancePassword" />
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
                               </label>
@@ -1172,7 +1173,7 @@
                 </form>
             </div>
              <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">
+                <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
                  <button class="btn btn-primary" type="submit" data-dismiss="modal">
@@ -1250,7 +1251,7 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
 $(document).ready(function() {
-   $('#osSelect').select2();
+   $('#instanceOS').select2();
 
   //emptying ssh container 
   $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
@@ -1517,8 +1518,16 @@ $('.dockerinstancestart').click(function(e){
            var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
-           // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
-          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
+           var lp = 'null'; //launch parameter
+           var sp = 'null'; //start parameter
+            if(dockerlaunchparameters)
+            {
+                lp = dockerlaunchparameters[0];
+                sp = dockerlaunchparameters[1];
+            }
+            alert(lp + ' ' + sp);
+        alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
+          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -1545,6 +1554,72 @@ $('.dockerinstancestart').click(function(e){
 });
 
 
+$('#addInstanceBtn').click(function(e) {
+    
+    var reqBody = {};
+    var $form = $('#addInstanceForm');
+    reqBody.fqdn = $form.find('#instanceFQDN').val();
+    reqBody.os = $form.find('#instanceOS').val();
+    reqBody.credentials = {
+        username: $form.find('#instanceUsername').val()
+    };
+
+    if(!reqBody.fqdn) {
+       alert('Please enter IP');
+       return;
+    }
+
+    if(!reqBody.os) {
+       alert('Please choose OS');
+    }
+
+    function makeRequest() {
+      $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
+          $('#tabInstanceStatus').hide();
+          addInstanceToDOM(data);
+          var $divinstancescardview = $('#divinstancescardview');
+          if ($divinstancescardview.find('li').length > 0) {
+            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+          }
+          $divinstancescardview.find('.item').first().addClass('active');
+          $('#modalContainerSSHInfo').modal('hide');
+
+      });
+    }
+
+    var $checkbox = $('#pemFileCheckbox');
+    if ($checkbox.is(':checked')) {
+        
+       var pemFileInput = $form.find('#importPemfileInput').get(0);
+       if(!reqBody.credentials.username){
+          alert('Please Enter Username');
+          return;
+       }
+       if(!pemFileInput.files.length) {
+         alert('Please Choose a Pem file');
+         return;
+       }
+       var reader = new FileReader();
+       // Closure to capture the file information.
+       reader.onload = function(e) {
+           // Render thumbnail.
+            reqBody.credentials.pemFileData = e.target.result;
+           
+            makeRequest();
+           
+       };
+       // Read in the image file as a data URL.
+       reader.readAsText(pemFileInput.files[0]);
+    } else {
+        reqBody.credentials.password = $form.find('#instancePassword').val();
+        if(!reqBody.credentials.password) {
+           alert("Please enter password");
+           return;
+        }
+        makeRequest();
+    }
+
+});
 
 
 /**
@@ -1919,7 +1994,7 @@ $(function() {
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
                             
                             if(data[i].dockerlaunchparameters)
-                                $itemBody.attr('dockerlaunchparameters', data[i].dockerlaunchparameters);
+                                $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -1967,9 +2042,13 @@ $(function() {
                         var $li = $('<li></li>').css({
                             "font-size": '10px'
                         }).append(tagLabel, $selectVer, $selectVerEdit);
-                        for (var j = 0; j < data[i].versionsList.length; j++) {
-                            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                            $selectVer.append($options);
+                        if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
+                        { 
+                            for (var j = 0; j < data[i].versionsList.length; j++) {
+                               var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                               
+                                   $selectVer.append($options);
+                           }
                         }
                         $selecteditBtnContainer.append($li);
                     }
@@ -2129,21 +2208,39 @@ function generateDockerLaunchParams(){
     return('');
   }
 
-    var launchparams = '';
+    var launchparams = [];
+    var preparams = '';
+    var startparams = '';
     $('[dockerparamkey]').each(function(){
       if($(this).val() != ''){
         var itms = $(this).val().split(',');
         for(itm in itms)
-          launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+          {
+            if($(this).attr('dockerparamkey') != '-c') //checking for start parameter
+                preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+            else
+                startparams += ' ' + itms[itm];
+          }
+          launchparams[0] = preparams;
+          launchparams[1] = startparams;
       }
     });
+    alert(launchparams.join('#'));
     return(launchparams);
 }
 
 function loadLaunchParams(){
   var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
   if(lparam != ''){
-      $('[dockerparamkey]').val('');
+      $('[dockerparamkey]').val(''); //clearing the popup input boxes
+      //split by -c to get startup and other parameters
+      var preparams = lparam.split('-c');
+      var cparams = ''; //this is the startup parameters
+      if(preparams.length > 1){
+        lparam = preparams[0];
+        cparams = preparams[1];
+      }
+      console.log(lparam + ' ' + cparams);
       var params = lparam.split(' -');
       for(para in params){
         var subparam = params[para].split(' ');
@@ -2156,6 +2253,8 @@ function loadLaunchParams(){
         }
         //alert(params[para]);
       }
+      //Updating the startup parameter
+      $('[dockerparamkey="-c"]').first().val(cparams);
     }
     else
        $('[dockerparamkey]').val(''); 
@@ -3363,6 +3462,7 @@ $('.actionControlPanel').click(function(e) {
     if ($('#divinstancescardview').is(':visible')) {
 
         var $selectedCard = $('.role-Selectedcard');
+        console.log($selectedCard.length);
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {
