@@ -24,7 +24,9 @@ Create CENT OS New blueprint without cookbook
     Select Stack from Standard Gallery     ${TOMCAT STACK}
     Click on Next Button
     Choose Operating System     ${CENT OS}
-    Click on Next Button
+#    Click Configure Chef Runlist link
+#    Click on Next Button
+    Edit Organization Parameters link
     Enter Blueprint Name       ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}
     Select Business Group
     Select Multiple Assign User
@@ -51,9 +53,12 @@ Create CENT OS New blueprint with cookbook
     Select Stack from Standard Gallery     ${LAMP STACK}
     Click on Next Button
     Choose Operating System       ${CENT OS}
+    Click Configure Chef Runlist link
     Select Apache cook books
     Select Java cook books
-    Click on Next Button
+    Click Configure Chef Runlist link
+#    Click on Next Button
+    Edit Organization Parameters link
     Enter Blueprint Name         ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}
     Select Business Group
     Select Multiple Assign User
@@ -81,7 +86,8 @@ Create ubuntu OS New blueprint without cookbook
     Select Stack from Standard Gallery     ${TOMCAT STACK}
     Click on Next Button
     Choose Operating System     ${UBUNTU OS}
-    Click on Next Button
+#    Click on Next Button
+    Edit Organization Parameters link
     Enter Blueprint Name         ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}
     Select Business Group
     Select Multiple Assign User
@@ -108,9 +114,12 @@ Create ubuntu OS New blueprint with cookbook
     Select Stack from Standard Gallery     ${LAMP STACK}
     Click on Next Button
     Choose Operating System      ${UBUNTU OS}
+    Click Configure Chef Runlist link
     Select Apache cook books
     Select server time cook books
-    Click on Next Button
+    Click Configure Chef Runlist link
+#    Click on Next Button
+    Edit Organization Parameters link
     Enter Blueprint Name          ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}
     Select Business Group
     Select Multiple Assign User
@@ -233,27 +242,27 @@ Select Java and Apache cook books
 #    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
 #    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
 #    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
-    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       java
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       java
     Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
-    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       apache
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       ${APACHE COOKBOOK}
     Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
 
 Select Apache cook books
-    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       apache
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='apache']
-    Click Element       xpath=//label[./text()='apache']       #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       ${APACHE COOKBOOK}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='${APACHE COOKBOOK}']
+    Click Element       xpath=//label[./text()='${APACHE COOKBOOK}']       #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
     Click on Move Arrow Button
 
 Select Java cook books
-    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       java
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='java']
-    Click Element       xpath=//label[./text()='java']     #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       ${JAVA COOKBOOK}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='${JAVA COOKBOOK}']
+    Click Element       xpath=//label[./text()='${JAVA COOKBOOK}']     #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
     Click on Move Arrow Button
 
 Select server time cook books
-    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       server_time
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='server_time']
-    Click Element       xpath=//label[./text()='server_time']    #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[81]/label
+    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       ${SERVER TIME COOKBOOK}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='${SERVER TIME COOKBOOK}']
+    Click Element       xpath=//label[./text()='${SERVER TIME COOKBOOK}']    #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[81]/label
     Click on Move Arrow Button
 
 Click on Move Arrow Button
@@ -345,6 +354,12 @@ Choose Operating System
     Click Element     xpath=.//*[@id='s2id_instanceOS']/a/span[2]
     Input Text       xpath=.//*[@id='select2-drop']/div/input       ${OPERATING SYSTEM}
     Select Value from the list
+
+Click Configure Chef Runlist link
+    Click Element     xpath=//a[./text()='Configure Chef Runlist']
+ 
+Edit Organization Parameters link
+    Wait Until Keyword Succeeds    1 minute     1 seconds         Click Link     xpath=//a[./text()='Edit Organization Parameters']
 
 Select Value from the list
     Click Element     xpath=.//*[@id='select2-drop']/ul/li/div

@@ -9,7 +9,7 @@ module.exports.setRoutes = function(app) {
 
 	app.post('/auth/signin', function(req, res) {
 
-		
+		console.log(req);
 
 		if (req.body && req.body.username && req.body.pass) {
 			var ldapClient = new LdapClient();

@@ -1,12 +1,62 @@
 var d4dModel = require('./d4dmastersmodel.js');
 
+var d4dModelNew = require('./d4dmastersmodelnew.js');
+
+
 var codelist = require('../../codelist.json');
 var appConfig = require('../../config/app_config');
 var chefSettings = appConfig.chef;
 
 function Configmgmt() {
-
-    this.getChefServerDetails = function(rowid, callback) {
+    this.getDBModelFromID = function(id,callback){
+        console.log('in getDBModelFromID');
+        switch(id.toString()){
+            case "1":
+                callback(null,'d4dModelMastersOrg');
+                break;
+            case "2":
+                callback(null,'d4dModelMastersProductGroup');
+                break;
+            case "3":
+                callback(null,'d4dModelMastersEnvironments');
+                break;
+            case "4":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "5":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "6":
+                callback(null,'d4dModelMastersUserroles');
+                break;
+            case "7":
+                callback(null,'d4dModelMastersUsers');
+                break;
+            case "8":
+                callback(null,'d4dModelMastersglobalaccess');
+                break;
+            case "9":
+                callback(null,'d4dModelMastersProjects');
+                break;
+            case "10":
+                callback(null,'d4dModelMastersConfigManagement');
+                break;
+            case "16":
+                callback(null,'d4dModelMastersDesignTemplateTypes');
+                break;
+            case "17":
+                callback(null,'d4dModelMastersTemplatesList');
+                break;
+            case "18":
+                callback(null,'d4dModelMastersDockerConfig');
+                console.log('returning d4dModelMastersDockerConfig');
+                break;
+            case "19":
+                callback(null,'d4dModelMastersServicecommands');
+                break;
+        }
+    };
+    this.getChefServerDetails_old = function(rowid, callback) {
         d4dModel.findOne({
             id: '10'
         }, function(err, d4dMasterJson) {
@@ -72,6 +122,77 @@ function Configmgmt() {
             }
         });
     };
+
+    this.getChefServerDetails = function(rowid, callback) {
+        this.getDBModelFromID("10",function(err,dbtype){
+            if (err) {
+                console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
+                callback(true, err);
+            }
+            if(dbtype){
+                console.log("Master Type: " + dbtype + ' rowid : '+ rowid);
+                eval('d4dModelNew.'+ dbtype).findOne({
+                rowid: rowid
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error @ getChefServerDetails:" + err);
+                    }
+                    var chefRepoPath = '';
+                    var configmgmt = '';
+                    var settings = chefSettings;
+                    
+                            chefRepoPath = settings.chefReposLocation;
+                            console.log("Repopath:" + chefRepoPath);
+
+                            var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                            console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                            var keys = Object.keys(outJson);
+                            var orgname = '';
+                            var loginname = '';
+                            for (i = 0; i < keys.length; i++) {
+                                var k = keys[i];
+                                if (keys[i].indexOf("login") >= 0)
+                                    loginname = outJson[k] + "/";
+                                if (keys[i].indexOf("orgname") >= 0)
+                                    orgname = outJson[k] + "/";
+                            }
+                            if(loginname != '' && orgname != ''){
+                                for (i = 0; i < keys.length; i++) {
+                                    var k = keys[i];
+                                    if(keys[i].indexOf('_filename') > 0){
+                                     keys[i] = keys[i].replace('_filename','');
+                                      outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                                    }
+                                    if(configmgmt == '')
+                                        configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+                                    else
+                                        configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+
+                                    //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
+                                }
+                                if(configmgmt != ''){
+                                    configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
+                                }
+                            }
+                            console.log('configmgmt: ' + configmgmt);
+                            callback(null,JSON.parse('{' + configmgmt + '}'));
+                    
+                    // for (var j = 0; j < outJson.length; j++) {
+                    //     console.log('Out:' + outJson[j]);
+                    // }
+                    // for(var itm in d4dMasterJson){
+                    //     console.log(itm);
+                    // }
+                    
+                });
+            }
+        });
+    };
+
+    this.getAccessFilesForRole__ = function(loginname, user, req, res, callback) {
+        
+    };
+
     this.getAccessFilesForRole = function(loginname, user, req, res, callback) {
         console.log("Received Role name: " + loginname);
         var accessibleFiles = [];
@@ -244,77 +365,9 @@ function Configmgmt() {
     };
 
     this.getChefServerDetailsByChefServer = function(paramconfigname, callback) {
-        d4dModel.findOne({
-            id: '10'
-        }, function(err, d4dMasterJson) {
-            if (err) {
-                console.log("Hit and error:" + err);
-            }
-            if (d4dMasterJson) {
-                var chefRepoPath = '';
-                var configmgmt = '';
-                var settings = chefSettings;
-                chefRepoPath = settings.chefReposLocation;
-                console.log("Repopath:" + chefRepoPath);
-                console.log("paramorgname :" + paramconfigname);
-                var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found by org" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == 'configname') {
-                            if (itm.field[j]["values"].value == paramconfigname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
 
-                                var orgname = '';
-                                var loginname = '';
-                                //looping to get the orgname , loginname
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("login") >= 0)
-                                        loginname = itm.field[k]["values"].value + "/";
-                                    if (itm.field[k]["name"].indexOf("orgname") >= 0)
-                                        orgname = itm.field[k]["values"].value + "/";
-                                }
-
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("filename") > 0) {
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-
-                                    } else {
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                    }
-                                }
-                                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
-
-                                configmgmt = "{" + configmgmt + "}";
-                                //console.log(">>>>>>" + JSON.stringify(configmgmt));
-                                configmgmt = JSON.parse(configmgmt);
-                                return;
-                            }
-                        }
-
-                        // console.log();
-                    }
-                }); // rows loop
-                callback(null, configmgmt);
-
-
-            } else {
-                callback(true, null);
-            }
-        });
-    }
-
-    this.getChefServerDetailsByOrgname = function(paramorgname, callback) {
-        d4dModel.findOne({
-            id: '10'
+        d4dModelNew.d4dModelMastersConfigManagement.findOne({
+            configname: paramconfigname,id:10
         }, function(err, d4dMasterJson) {
             if (err) {
                 console.log("Hit and error:" + err);
@@ -327,58 +380,103 @@ function Configmgmt() {
                 console.log("Repopath:" + chefRepoPath);
                 console.log("paramorgname :" + paramorgname);
                 var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found by org" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == 'orgname') {
-                            if (itm.field[j]["values"].value == paramorgname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
+                //JSON.parse(d4dMasterJson).forEach(function(itm, i) 
 
-                                var orgname = '';
-                                var loginname = '';
-                                //looping to get the orgname , loginname
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("login") >= 0)
-                                        loginname = itm.field[k]["values"].value + "/";
-                                    if (itm.field[k]["name"].indexOf("orgname") >= 0)
-                                        orgname = itm.field[k]["values"].value + "/";
-                                }
+               // console.log("found by org " + itm);
+                var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                var keys = Object.keys(outJson);
+                var orgname = outJson['orgname'];
+                var loginname = outJson['loginname'];
+                for (i = 0; i < keys.length; i++) {
+                    var k = keys[i];
+                    
 
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("filename") > 0) {
-                                        // console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        //  console.log("configmgmt ==>  ",configmgmt);
-                                    } else {
-                                        //  console.log(itm.field[k]["name"]," <===> ",itm.field[k]["values"].value);
-
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                        // console.log("configmgmt ==>  ",configmgmt);
-                                    }
-                                }
-                                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname + loginname + "\"";
-
-                                configmgmt = "{" + configmgmt + "}";
-                                //console.log(JSON.stringify(configmgmt));
-                                console.log(configmgmt);
-                                configmgmt = JSON.parse(configmgmt);
-                                return;
-                            }
-                        }
-
-                        // console.log();
+                    if (keys[i].indexOf("_filename") >= 0)
+                    {
+                        //loginname = outJson[k] + "/";
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
                     }
-                }); // rows loop
-                callback(null, configmgmt);
+                    else{
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        // console.log("configmgmt ==>  ",configmgmt);
+                    }
+                   
+                }
+                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname +'/'+ loginname + "/\"";
 
+                configmgmt = "{" + configmgmt + "}";
+                console.log('Read Config:' + configmgmt);
+                callback(null, configmgmt);
+                return;
+               
+
+            } else {
+                callback(true, null);
+            }
+        });
+    }
+
+    this.getChefServerDetailsByOrgname = function(paramorgname, callback) {
+        
+
+
+        d4dModelNew.d4dModelMastersConfigManagement.findOne({
+            orgname: paramorgname,id:10
+        }, function(err, d4dMasterJson) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (d4dMasterJson) {
+                var chefRepoPath = '';
+                var configmgmt = '';
+                var settings = chefSettings;
+                chefRepoPath = settings.chefReposLocation;
+                console.log("Repopath:" + chefRepoPath);
+                console.log("paramorgname :" + paramorgname);
+                var hasOrg = false;
+                //JSON.parse(d4dMasterJson).forEach(function(itm, i) 
+
+               // console.log("found by org " + itm);
+                var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                var keys = Object.keys(outJson);
+                var orgname = outJson['orgname'];
+                var loginname = outJson['loginname'];
+                for (i = 0; i < keys.length; i++) {
+                    var k = keys[i];
+                    
+
+                    if (keys[i].indexOf("_filename") >= 0)
+                    {
+                        //loginname = outJson[k] + "/";
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
+                    }
+                    else{
+                        if (configmgmt == '')
+                            configmgmt += "\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        else
+                            configmgmt += ",\"" + keys[i]+ "\":\"" + outJson[k] + "\"";
+                        // console.log("configmgmt ==>  ",configmgmt);
+                    }
+                   
+                }
+                configmgmt += ",\"chefRepoLocation\":\"" + chefRepoPath + orgname +'/'+ loginname + "/\"";
+
+                configmgmt = "{" + configmgmt + "}";
+                console.log('Read Config:' + configmgmt);
+                callback(null, JSON.parse(configmgmt));
+                return;
+               
 
             } else {
                 callback(true, null);
@@ -430,46 +528,73 @@ function Configmgmt() {
 
     this.getMasterRow = function(masterid, fieldname, fieldvalue, callback) {
 
-        d4dModel.findOne({
-            id: masterid
-        }, function(err, d4dMasterJson) {
+        // d4dModel.findOne({
+        //     id: masterid
+        // }, function(err, d4dMasterJson) {
+        //     if (err) {
+        //         console.log("Hit and error:" + err);
+        //     }
+        //     if (d4dMasterJson) {
+        //         var configmgmt = '';
+        //         var chefRepoPath = '';
+        //         var hasOrg = false;
+        //         d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
+        //             console.log("found" + itm.field.length);
+        //             for (var j = 0; j < itm.field.length; j++) {
+        //                 if (itm.field[j]["name"] == fieldname) {
+        //                     if (itm.field[j]["values"].value == fieldvalue) {
+        //                         console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+        //                         hasOrg = true;
+        //                         //Re-construct the json with the item found
+        //                         var configmgmt = '';
+        //                         for (var k = 0; k < itm.field.length; k++) {
+
+        //                             if (configmgmt == '')
+        //                                 configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+        //                             else
+        //                                 configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
+
+        //                         }
+        //                         configmgmt = "{" + configmgmt + "}";
+        //                         console.log('Before Call back ->' + JSON.stringify(configmgmt));
+        //                         //return(configmgmt);
+        //                         //return;
+        //                     }
+        //                 }
+        //             }
+        //             callback(null, configmgmt);
+
+        //         }); // rows loop
+
+        //     }
+        // }); //end find one
+        console.log('In getMasterRow : ' + masterid + ' ' + fieldname + ' ' + fieldvalue );
+        this.getDBModelFromID(masterid,function(err,dbtype){
             if (err) {
-                console.log("Hit and error:" + err);
+                console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
+                callback(true, err);
             }
-            if (d4dMasterJson) {
-                var configmgmt = '';
-                var chefRepoPath = '';
-                var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == fieldname) {
-                            if (itm.field[j]["values"].value == fieldvalue) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
-                                var configmgmt = '';
-                                for (var k = 0; k < itm.field.length; k++) {
-
-                                    if (configmgmt == '')
-                                        configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                    else
-                                        configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-
-                                }
-                                configmgmt = "{" + configmgmt + "}";
-                                console.log('Before Call back ->' + JSON.stringify(configmgmt));
-                                //return(configmgmt);
-                                //return;
-                            }
-                        }
+            if(dbtype){
+                console.log("Master Type: " + dbtype);
+                var query = {};
+                query[fieldname] = fieldvalue; //building the query 
+                query['id'] = masterid;
+                eval('d4dModelNew.'+ dbtype).findOne(query,function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error @ getChefServerDetails:" + err);
                     }
-                    callback(null, configmgmt);
+                    if(d4dMasterJson){
+                        console.log('Before callback' + JSON.stringify(d4dMasterJson));
+                        callback(null, JSON.stringify(d4dMasterJson));
+                    }
+                    else
+                        callback(null, '');   
 
-                }); // rows loop
+                });
+            }//end dbtype
+        });//end get dbmodel
 
-            }
-        });
+        
 
     };
 
@@ -562,6 +687,10 @@ function Configmgmt() {
             }
         });
     };
+
+    this.getListFilteredNew = function(mastername,fieldname,comparedfieldname,comparedfieldvalue){
+        
+    }
 
     this.getCodeList = function(name, callback) {
         if (codelist) {

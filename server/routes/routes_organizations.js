@@ -5,24 +5,252 @@ var blueprintsDao = require('../model/blueprints');
 
 var instancesDao = require('../model/dao/instancesdao');
 var tasksDao = require('../model/tasks');
+var appConfig = require('../config/app_config');
+var logger = require('../lib/logger')(module);
+var uuid = require('node-uuid');
+var fileIo = require('../lib/utils/fileio');
+var logsDao = require('../model/dao/logsdao.js');
+
+
+var credentialCryptography = require('../lib/credentialcryptography');
+
+var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
 
+    app.get('/organizations/getTreeNew',function(req,res){
+       d4dModelNew.d4dModelMastersOrg.find({id:1},function(err,docorgs){
+        var orgnames = docorgs.map(function(docorgs1){return docorgs1.orgname;});
 
-    app.get('/organizations/getTree', function(req, res) {
+        var orgTree = [];
+        var orgCount = 0;
+        orgnames.forEach(function(k,v){
+            //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
+            orgTree.push({
+                                name: k,
+                                businessGroups: [],
+                                environments: []
+                            });
+        });
+        orgCount++;
+            d4dModelNew.d4dModelMastersProductGroup.find({id:2,orgname: {$in:orgnames}},function(err,docbgs){
+                var counter = 0;
+                for(var k = 0; k < docbgs.length; k++){
+                    for (var i = 0; i < orgTree.length; i++) {
+                            if(orgTree[i]['name'] == docbgs[k]['orgname'] ){
+                              //  console.log('found' );
+                                orgTree[i]['businessGroups'].push({
+                                    name: docbgs[k]['productgroupname'],
+                                    projects: []
+                                });
+                                d4dModelNew.d4dModelMastersProjects.find({id:4,orgname:orgTree[i]['name'],productgroupname:docbgs[k]['productgroupname']},function(err,docprojs){
+                                   // console.log('Projects:' + docprojs);
+
+                                    var prjnames = docprojs.map(function(docprojs1){return docprojs1.projectname;});
+                                   
+                                    for (var _i = 0; _i < orgTree.length; _i++) {
+                                        console.log('Orgnames:' + orgTree[_i]['name']);
+                                        for(var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++){
+                                            console.log('businessGroups:' + orgTree[_i]['businessGroups'][__i]['name']); 
+                                            console.log('docprojs.length:' + docprojs.length);
+                                            for(var _bg =0; _bg < docprojs.length;_bg++){
+                                                
+                                                if(docprojs[_bg]['orgname'] == orgTree[_i]['name'] &&  docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']){
+                                                    console.log('hit');
+                                                    if(orgTree[_i]['businessGroups'][__i]['projects'].length <= 0){
+                                                        for(var _prj = 0; _prj < docprojs.length;_prj++){
+                                                            var envs = docprojs[_prj]['environmentname'].split(',');
+                                                            console.log("Env in:" + docprojs);
+                                                            orgTree[_i]['businessGroups'][__i]['projects'].push( {//
+                                                                     name: docprojs[_prj]['projectname'],
+                                                                     environments: envs
+                                                                });
+                                                        }
+                                                            
+                                                    }
+
+                                                 //   console.log("Env:" + docprojs[_bg]['environmentname']);
+                                                    // if(orgTree[_i]['environments'].length <=0){
+                                                    //     for(var envname in docprojs[_bg]['environmentname'])
+                                                    //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
+                                                    // }
+                                                }
+                                            }
+                                        }
+                                    }
+                                     console.log("OrgTree:" + JSON.stringify(orgTree));
+                                     if(counter >= docbgs.length - 1){
+                                        d4dModelNew.d4dModelMastersEnvironments.find({id:3,orgname: {$in:orgnames}},function(err,docenvs){
+                                            for (var _i = 0; _i < orgTree.length; _i++) {
+                                                for(var _env =0; _env < docenvs.length;_env++){
+                                                    if(orgTree[_i]['name'] == docenvs[_env]['orgname'] ){
+                                                        orgTree[_i]['environments'].push(docenvs[_env]['environmentname']);
+                                                    }
+                                                }
+                                                if(_i >= orgTree.length -1){
+                                                    res.send(orgTree);
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                        //res.send(orgTree);
+                                       // return;
+                                        
+                                     }
+                                     counter++;
+                                });
+                                
+                            }
+
+                    }
+                    
+                }
+                //finding the current bg
+                // orgTree.forEach(function(k1,v1){
+                    
+                //     // orgTree[v1].forEach(function(k2,v2){
+                //     //         console.log(orgTree[v1][v2]);
+                //     // });
+
+                // });
+                //     var orgj = JSON.parse(k1);
+                //     Object.keys(orgj).forEach(function(vals,keys){
+                //        console.log('key' + keys + ' ' + vals);
+
+                //    });
+                //    // console.log("orgTree:" + JSON.stringify(orgTree));
+                // });
+
+               // orgTree.businessGroups.push(docbgs.)
+            });
+        
+
+       });
+              
+            
+    });
+
+
+    app.get('/organizations/getTree',function(req,res){
+       d4dModelNew.d4dModelMastersOrg.find({id:1},function(err,docorgs){
+        var orgnames = docorgs.map(function(docorgs1){return docorgs1.orgname;});
+
+        var orgTree = [];
+        var orgCount = 0;
+        orgnames.forEach(function(k,v){
+            //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
+            orgTree.push({
+                                name: k,
+                                businessGroups: [],
+                                environments: []
+                            });
+        });
+        orgCount++;
+            d4dModelNew.d4dModelMastersProductGroup.find({id:2,orgname: {$in:orgnames}},function(err,docbgs){
+                var counter = 0;
+                for(var k = 0; k < docbgs.length; k++){
+                    for (var i = 0; i < orgTree.length; i++) {
+                            if(orgTree[i]['name'] == docbgs[k]['orgname'] ){
+                              //  console.log('found' );
+                                orgTree[i]['businessGroups'].push({
+                                    name: docbgs[k]['productgroupname'],
+                                    projects: []
+                                });
+                                d4dModelNew.d4dModelMastersProjects.find({id:4,orgname:orgTree[i]['name'],productgroupname:docbgs[k]['productgroupname']},function(err,docprojs){
+                                   // console.log('Projects:' + docprojs);
+
+                                    var prjnames = docprojs.map(function(docprojs1){return docprojs1.projectname;});
+                                   
+                                    for (var _i = 0; _i < orgTree.length; _i++) {
+                                        console.log('Orgnames:' + orgTree[_i]['name']);
+                                        for(var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++){
+                                            console.log('businessGroups:' + orgTree[_i]['businessGroups'][__i]['name']); 
+                                            console.log('docprojs.length:' + docprojs.length);
+                                            for(var _bg =0; _bg < docprojs.length;_bg++){
+                                                
+                                                if(docprojs[_bg]['orgname'] == orgTree[_i]['name'] &&  docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']){
+                                                    console.log('hit');
+                                                    if(orgTree[_i]['businessGroups'][__i]['projects'].length <= 0){
+                                                        for(var prjname in prjnames)
+                                                            orgTree[_i]['businessGroups'][__i]['projects'].push(prjnames[prjname]);
+                                                    }
+
+                                                    console.log("Env:" + docprojs[_bg]['environmentname']);
+                                                    // if(orgTree[_i]['environments'].length <=0){
+                                                    //     for(var envname in docprojs[_bg]['environmentname'])
+                                                    //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
+                                                    // }
+                                                }
+                                            }
+                                        }
+                                    }
+                                     console.log("OrgTree:" + JSON.stringify(orgTree));
+                                     if(counter >= docbgs.length - 1){
+                                        d4dModelNew.d4dModelMastersEnvironments.find({id:3,orgname: {$in:orgnames}},function(err,docenvs){
+                                            for (var _i = 0; _i < orgTree.length; _i++) {
+                                                for(var _env =0; _env < docenvs.length;_env++){
+                                                    if(orgTree[_i]['name'] == docenvs[_env]['orgname'] ){
+                                                        orgTree[_i]['environments'].push(docenvs[_env]['environmentname']);
+                                                    }
+                                                }
+                                                if(_i >= orgTree.length -1){
+                                                    res.send(orgTree);
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                        //res.send(orgTree);
+                                       // return;
+                                        
+                                     }
+                                     counter++;
+                                });
+                                
+                            }
+
+                    }
+                    
+                }
+                //finding the current bg
+                // orgTree.forEach(function(k1,v1){
+                    
+                //     // orgTree[v1].forEach(function(k2,v2){
+                //     //         console.log(orgTree[v1][v2]);
+                //     // });
+
+                // });
+                //     var orgj = JSON.parse(k1);
+                //     Object.keys(orgj).forEach(function(vals,keys){
+                //        console.log('key' + keys + ' ' + vals);
+
+                //    });
+                //    // console.log("orgTree:" + JSON.stringify(orgTree));
+                // });
+
+               // orgTree.businessGroups.push(docbgs.)
+            });
+        
+
+       });
+              
+            
+    });
+
+    app.get('/organizations/getTreeOld', function(req, res) {
         masterjsonDao.getMasterJson("1", function(err, orgsJson) {
             if (err) {
                 res.send(500);
                 return;
             }
             var orgTree = [];
-            
+
             if (orgsJson.masterjson && orgsJson.masterjson.rows && orgsJson.masterjson.rows.row) {
                 for (var i = 0; i < orgsJson.masterjson.rows.row.length; i++) {
                     for (var j = 0; j < orgsJson.masterjson.rows.row[i].field.length; j++) {
-                        //console.log(orgsJson.masterjson.rows.row[i].field[j]);
                         if (orgsJson.masterjson.rows.row[i].field[j].name = "orgname") {
                             orgTree.push({
                                 name: orgsJson.masterjson.rows.row[i].field[j].values.value,
@@ -52,10 +280,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                     }
                                 }
-                                console.log(isFilterdRow);
                                 if (isFilterdRow) {
                                     for (var k = 0; k < buJson.masterjson.rows.row[j].field.length; k++) {
-                                        console.log(buJson.masterjson.rows.row[j].field[k].name);
                                         if (buJson.masterjson.rows.row[j].field[k].name == "productgroupname") {
                                             orgTree[i].businessGroups.push({
                                                 name: buJson.masterjson.rows.row[j].field[k].values.value,
@@ -91,7 +317,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                                 if (isFilterdRow) {
                                                     for (var l = 0; l < buJson.masterjson.rows.row[k].field.length; l++) {
-                                                        console.log(buJson.masterjson.rows.row[k].field[l].name);
                                                         if (buJson.masterjson.rows.row[k].field[l].name == "projectname") {
                                                             businessGroups[j].projects.push(buJson.masterjson.rows.row[k].field[l].values.value);
                                                             break;
@@ -125,7 +350,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                                 if (isFilterdRow) {
                                                     for (var k = 0; k < buJson.masterjson.rows.row[j].field.length; k++) {
-                                                        console.log(buJson.masterjson.rows.row[j].field[k].name);
                                                         if (buJson.masterjson.rows.row[j].field[k].name == "environmentname") {
                                                             orgTree[i].environments.push(buJson.masterjson.rows.row[j].field[k].values.value);
                                                             break;
@@ -168,7 +392,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("BluePrint >>>>>>" + JSON.stringify(data));
             res.send(data);
         });
     });
@@ -185,7 +408,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             res.send(400);
             return;
         }
-        console.log(blueprintData);
 
         blueprintsDao.createBlueprint(blueprintData, function(err, data) {
             if (err) {
@@ -233,9 +455,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         return;
                     }
                     res.send({
-                        tasks:tasksData,
-                        instances:instancesData,
-                        blueprints:blueprintsData
+                        tasks: tasksData,
+                        instances: instancesData,
+                        blueprints: blueprintsData
                     });
                 });
 
@@ -268,7 +490,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
+
 
             if (!chefDetails) {
                 res.send(404);
@@ -284,7 +507,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -306,7 +529,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
+
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -320,7 +544,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getRolesList(function(err, roles) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -342,7 +566,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -356,13 +580,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
                 } else {
                     chef.getRolesList(function(err, roles) {
-                        console.log(err);
+                        logger.error(err);
                         if (err) {
                             res.send(500);
                             return;
@@ -380,14 +604,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
 
     });
-app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
-    console.log('hit received');
+    app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.chefserverid, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata", chefDetails);
+
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -401,13 +625,13 @@ app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, 
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
                 } else {
                     chef.getRolesList(function(err, roles) {
-                        console.log(err);
+                        logger.error(err);
                         if (err) {
                             res.send(500);
                             return;
@@ -426,5 +650,220 @@ app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, 
 
     });
 
+
+    app.post('/organizations/:orgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
+
+        if (!(req.body.fqdn && req.body.os)) {
+            res.send(400);
+        }
+
+        if (req.body.credentials && req.body.credentials.username) {
+            if (!(req.body.credentials.password || req.body.credentials.pemFileData)) {
+                res.send(400);
+            }
+        } else {
+            res.send(400);
+        }
+
+        function getCredentialsFromReq(callback) {
+            var credentials = req.body.credentials;
+            if (req.body.credentials.pemFileData) {
+                credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
+                fileIo.writeFile(credentials.pemFileLocation, req.body.credentials.pemFileData, null, function(err) {
+                    if (err) {
+                        logger.error('unable to create pem file ', err);
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, credentials);
+                });
+            } else {
+                callback(null, credentials);
+            }
+        }
+
+        getCredentialsFromReq(function(err, credentials) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                logger.debug("chefdata", chefDetails);
+                if (!chefDetails) {
+                    res.send(500);
+                    return;
+                }
+
+                credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
+                    if (err) {
+                        logger.error("unable to encrypt credentials", err);
+                        res.send(500);
+                        return;
+                    }
+                    var instance = {
+                        orgId: req.params.orgId,
+                        projectId: req.params.projectId,
+                        envId: req.params.envId,
+                        instanceIP: req.body.fqdn,
+                        instanceState: 'unknown',
+                        bootStrapStatus: 'waiting',
+                        runlist: [],
+                        users: [req.session.user.cn], //need to change this
+                        hardware: {
+                            platform: 'unknown',
+                            platformVersion: 'unknown',
+                            architecture: 'unknown',
+                            memory: {
+                                total: 'unknown',
+                                free: 'unknown',
+                            },
+                            os: req.body.os
+                        },
+                        credentials: encryptedCredentials,
+                        chef: {
+                            serverId: chefDetails.rowid,
+                            chefNodeName: req.body.fqdn
+                        },
+                        blueprintData: {
+                            blueprintName: req.body.fqdn,
+                            templateId: "chef_import",
+                            iconPath: "../private/img/templateicons/chef_import.png"
+                        }
+                    }
+
+
+                    instancesDao.createInstance(instance, function(err, data) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500);
+                            return;
+                        }
+                        instance.id = data._id;
+                        instance._id = data._id;
+
+                        logsDao.insertLog({
+                            referenceId: instance.id,
+                            err: false,
+                            log: "Bootstrapping instance",
+                            timestamp: new Date().getTime()
+                        });
+
+                        credentialCryptography.decryptCredential(encryptedCredentials, function(err, decryptedCredentials) {
+                            if (err) {
+                                logger.error("unable to decrypt credentials", err);
+                                res.send(500);
+                                return;
+                            }
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url
+                            });
+
+                            chef.bootstrapInstance({
+                                instanceIp: instance.instanceIP,
+                                pemFilePath: decryptedCredentials.pemFileLocation,
+                                instancePassword: decryptedCredentials.password,
+                                instanceUsername: instance.credentials.username,
+                                nodeName: instance.chef.chefNodeName,
+                                environment: instance.envId,
+                                instanceOS: instance.hardware.os
+                            }, function(err, code) {
+                                if (decryptedCredentials.pemFilePath) {
+                                    fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
+                                        if (err) {
+                                            logger.error("Unable to delete temp pem file =>", err);
+                                        } else {
+                                            logger.debug("temp pem file deleted");
+                                        }
+                                    });
+                                }
+                                if (err) {
+                                    logger.error("knife launch err ==>", err);
+                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+
+                                    });
+
+                                } else {
+                                    if (code == 0) {
+                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                            if (err) {
+                                                logger.error("Unable to set instance bootstarp status. code 0");
+                                            } else {
+                                                logger.debug("Instance bootstrap status set to success");
+                                            }
+                                        });
+
+                                        chef.getNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                            if (err) {
+                                                console.log(err);
+                                                return;
+                                            }
+                                            var hardwareData = {};
+                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                            hardwareData.platform = nodeData.automatic.platform;
+                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                            hardwareData.memory = {};
+                                            if (nodeData.automatic.memory) {
+                                                hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                            }
+                                            hardwareData.os = instance.hardware.os;
+                                            //console.log(instance);
+                                            //console.log(hardwareData,'==',instance.hardware.os);
+                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                if (err) {
+                                                    logger.error(err);
+                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)");
+                                                } else {
+                                                    logger.debug("Instance hardware details set successessfully");
+                                                }
+                                            });
+                                            
+                                        });
+
+                                    } else {
+                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                            if (err) {
+                                                logger.error("Unable to set instance bootstarp status code != 0");
+                                            } else {
+                                                logger.debug("Instance bootstrap status set to failed");
+                                            }
+                                        });
+
+                                    }
+                                }
+
+                            }, function(stdOutData) {
+
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: false,
+                                    log: stdOutData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+
+                            }, function(stdErrData) {
+
+                                logsDao.insertLog({
+                                    referenceId: instance.id,
+                                    err: true,
+                                    log: stdErrData.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+                            });
+                            res.send(instance);
+                        });
+                    });
+                });
+            });
+        });
+    });
 
 }

@@ -9,7 +9,7 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   firefox                           #internetexplorer               #phantomjs
+${BROWSER TYPE}                   chrome                           #internetexplorer               #phantomjs
 ${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/public/login.html
 ${ENV}                 QA.txt
 ${VALID USER}             sd1
@@ -23,7 +23,7 @@ ${PROJECT DESCRIPTION}           New Test Automation Project Description
 ${ENVIRONMENT NAME}              QA
 ${CONFIG MANAGEMENT NAME}             PhoenixChef
 ${CONFIG MANAGEMENT USER NAME}         pcjoshi9
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/pjlab
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
 ${ASSIGN USERS1}         sd1
@@ -33,21 +33,20 @@ ${INSTANCE STARTED}        Instance Started
 ${INSTANCE STOPPED}        Instance Stopped
 ${RUNNING}            running
 ${EXPECTED OS}       centos
-
 ${MACHINE}         x86_64
 ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 
 
-${APACHE WEBSERVER STACK}         Apache WebServer
+${APACHE WEBSERVER STACK}         Java
 ${CENTOS STACK}          CentOS
 ${LAMP STACK}       LAMP
-${TOMCAT STACK}      Tomcat
+${TOMCAT STACK}      Java
 
-${JAVA COOKBOOK}            java
-${APACHE COOKBOOK}            apache
-${GIT COOKBOOK}            git
-${SERVER TIME COOKBOOK}            server_time
+${JAVA COOKBOOK}                  java
+${APACHE COOKBOOK}            service_apache
+${GIT COOKBOOK}                     git
+${SERVER TIME COOKBOOK}            starter
 
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
@@ -59,6 +58,6 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${CATALYST ROOT}/Chef/Catalyst/pcjoshi9.pem
-{VALIDATORPEMFILE}      ${CATALYST ROOT}/Chef/pjlab-validator.pem
-${KNIFERBFILE}                ${CATALYST ROOT}/Chef/Catalyst/knife.rb
+${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem 
+${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/pjlab-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
