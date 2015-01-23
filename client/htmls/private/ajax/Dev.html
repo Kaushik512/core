@@ -1522,11 +1522,13 @@ $('.dockerinstancestart').click(function(e){
            var sp = 'null'; //start parameter
             if(dockerlaunchparameters)
             {
-                lp = dockerlaunchparameters[0];
+               if(dockerlaunchparameters[0])
+                     lp = dockerlaunchparameters[0];
+               if(dockerlaunchparameters[1])
                 sp = dockerlaunchparameters[1];
             }
-            alert(lp + ' ' + sp);
-        alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
+           // alert(lp + ' ' + sp);
+       // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
           $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
@@ -2225,7 +2227,7 @@ function generateDockerLaunchParams(){
           launchparams[1] = startparams;
       }
     });
-    alert(launchparams.join('#'));
+   // alert(launchparams.join('#'));
     return(launchparams);
 }
 

@@ -289,7 +289,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 if (req.params.startparams != 'null') {
                     startparams = decodeURIComponent(req.params.startparams);
                 }
-                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash ' + startparams;
+                else
+                    startparams = '/bin/bash';
+                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' ' + startparams;
                 console.log('Docker command executed : ' + cmd);
                 _docker.runDockerCommands(cmd, req.params.instanceid,
                     function(err, retCode) {
