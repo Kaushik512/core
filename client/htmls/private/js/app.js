@@ -9,7 +9,7 @@
 	$.menu_speed = 235;
 	
 	// Note: You will also need to change this variable in the "variable.less" file.
-	$.navbar_height = 49; 
+	/*$.navbar_height = 49; */
 
 /*
  * APP DOM REFERENCES
@@ -43,7 +43,7 @@
  */	
 
 /* so far this is covering most hand held devices */
-var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+/*var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
 
 	if (!ismobile) {
 		// Desktop
@@ -61,7 +61,7 @@ var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.tes
 			$('#hide-menu a').noClickDelay();
 		}
 	}
-
+*/
 /* ~ END: CHECK MOBILE DEVICE */
 
 /*
@@ -78,7 +78,7 @@ $(document).ready(function() {
 	}
 
 	//TODO: was moved from window.load due to IE not firing consist
-	nav_page_height()
+	/*nav_page_height()*/
 
 
 	// closedSign : '<em class="fa fa-expand-o"></em>',
@@ -418,7 +418,7 @@ $(document).ready(function() {
 */
 
 // Fix page and nav height
-function nav_page_height() {
+/*function nav_page_height() {
 	setHeight = $('#main').height();
 	menuHeight = $.left_panel.height();
 	windowHeight = $(window).height() - $.navbar_height;
@@ -441,7 +441,7 @@ $('#main').resize(function() {
 
 $('nav').resize(function() {
 	nav_page_height();
-})
+})*/
 
 function check_if_mobile_width() {
 	if ($(window).width() < 979) {
@@ -1406,7 +1406,7 @@ function pageSetUp() {
 		setup_widgets_desktop();
 	
 		//setup nav height (dynamic)
-		nav_page_height();
+		/*nav_page_height();*/
 	
 		// run form elements
 		runAllForms();
@@ -1430,7 +1430,7 @@ function pageSetUp() {
 		setup_widgets_mobile();
 	
 		//setup nav height (dynamic)
-		nav_page_height();
+		/*nav_page_height();*/
 	
 		// run form elements
 		runAllForms();

@@ -1,4 +1,4 @@
-.smart-form1 {
+/*.smart-form1 {
     margin: 0;
     outline: 0;
     color: #666;
@@ -51,11 +51,11 @@
     height: 31px;
 }
 /*Arabinda ended for textarea in smartform-1*/
-.smart-form1 .textarea-expandable textarea:focus {
+/*.smart-form1 .textarea-expandable textarea:focus {
     height: auto;
-}
+}*/
 /*Added by Arabinda above in the below for Smart-form1 upto media query*/
-.smart-form1 .checkbox, .smart-form1 .radio {
+/*.smart-form1 .checkbox, .smart-form1 .radio {
     margin-bottom: 4px;
     padding-left: 25px;
     line-height: 25px;
@@ -246,7 +246,7 @@
 
 .smart-form1.submited fieldset, .smart-form1.submited footer {
     display: none;
-}
+}*/
 
 .jarviswidget {
     margin: 0 0 30px;
@@ -282,7 +282,7 @@
 .widget-body.no-padding {
     margin: -13px -13px 0;
 }
-.widget-toolbar>.smart-form {
+/*.widget-toolbar>.smart-form {
     margin-top: 2px;
 }
 .widget-toolbar>.smart-form .toggle:last-child {
@@ -295,9 +295,9 @@
     margin-top: 1px;
     box-shadow: 0 1px 1px #FFF, 0 1px 1px #858585 inset;
     -webkit-box-shadow: 0 1px 1px #FFF, 0 1px 1px #858585 inset;
-}
+}*/
 
-.widget-footer.smart-form>label {
+/*.widget-footer.smart-form>label {
     margin-top: 4px;
     display: block;
 }
@@ -317,7 +317,7 @@
 .smart-form .widget-body-toolbar .inline-group, .widget-body-toolbar.smart-form .inline-group {
     float: left;
     margin-top: 4px;
-}
+}*/
 
 .jarviswidget>div {
     background-color: #fff!important;
@@ -353,7 +353,7 @@
     text-align: left;
 }
 
-.widget-toolbar .smart-form label.checkbox, .widget-toolbar .smart-form label.radio {
+./*widget-toolbar .smart-form label.checkbox, .widget-toolbar .smart-form label.radio {
     line-height: 29px;
 }
 
@@ -1095,7 +1095,7 @@
 .smart-form select.input-lg+i {
     height: 11px;
     top: 17px;
-}
+}*/
 .jarviswidget>div {
     float: left;
     width: 100%;
@@ -1120,7 +1120,7 @@
 .widget-toolbar.no-border {
     border-left: 0;
 }
-.widget-toolbar>.smart-form {
+/*.widget-toolbar>.smart-form {
     margin-top: 2px;
 }
 .widget-toolbar>.smart-form .toggle:last-child {
@@ -1134,12 +1134,30 @@
     box-shadow: 0 1px 1px #FFF, 0 1px 1px #858585 inset;
     -webkit-box-shadow: 0 1px 1px #FFF, 0 1px 1px #858585 inset;
 }
-
+*/
 .widget-footer.smart-form>label {
     margin-top: 4px;
     display: block;
 }
-.smart-form.widget-body-toolbar, .widget-body-toolbar {
+.clearfix:after, .inner-spacer:after, .jarviswidget-editbox:after, .jarviswidget:after, .jarviswidget>div:after {
+    clear: both;
+}
+.clearfix, .inner-spacer:after, .jarviswidget, .jarviswidget-editbox, .jarviswidget>div {
+    zoom: 1;
+}
+.widget-toolbar {
+    display: inline-block;
+    float: right;
+    width: auto;
+    height: 32px;
+    line-height: 32px;
+    position: relative;
+    border-left: 1px solid rgba(0, 0, 0, .09);
+    cursor: pointer;
+    padding: 0 8px;
+    text-align: center;
+}
+/*.smart-form.widget-body-toolbar, .widget-body-toolbar {
     display: block;
     padding: 8px 10px;
     margin: -13px -13px 13px;
@@ -1168,24 +1186,7 @@
     line-height: 0;
     visibility: hidden;
 }
-.clearfix:after, .inner-spacer:after, .jarviswidget-editbox:after, .jarviswidget:after, .jarviswidget>div:after {
-    clear: both;
-}
-.clearfix, .inner-spacer:after, .jarviswidget, .jarviswidget-editbox, .jarviswidget>div {
-    zoom: 1;
-}
-.widget-toolbar {
-    display: inline-block;
-    float: right;
-    width: auto;
-    height: 32px;
-    line-height: 32px;
-    position: relative;
-    border-left: 1px solid rgba(0, 0, 0, .09);
-    cursor: pointer;
-    padding: 0 8px;
-    text-align: center;
-}
+
 .widget-toolbar .smart-form label.checkbox, .widget-toolbar .smart-form label.radio {
     line-height: 29px;
 }
@@ -1604,8 +1605,8 @@
 .smart-form1 .col-9 {
     width: 75%}
 .smart-form1 .col-10 {
-    width: 83.33%}
-@media screen and (max-width:600px) {
+    width: 83.33%}*/
+/*@media screen and (max-width:600px) {
     .smart-form1 .col {
     float: none;
     width: 100%}
@@ -1926,7 +1927,7 @@
 .smart-form1 select.input-lg+i {
     height: 11px;
     top: 17px;
-}
+}*/
 
 
 
@@ -2413,7 +2414,7 @@ h6 {
 
 #left-panel {
     position: absolute;
-    left: 0;
+    /*left: 0;*/
     z-index: 1002;
     width:220px;
     display: block;
@@ -2422,13 +2423,12 @@ h6 {
     background: -webkit-linear-gradient(left,#2c3638 99%,#2c3638 100%);
     background: -webkit-gradient(linear,top left,top right,from(#2c3638),to(#2c3638));
     background: linear-gradient(to right,#2c3638 99%,#2c3638 100%);
-    min-height: 92%!important;
+    min-height: 91.5%!important;
+    float:left;
 }
 #main {
     display: block;
     margin-left: 220px;
-    padding: 0;
-    min-height: 500px;
 }
 #ribbon {
     min-height: 40px;
@@ -2469,7 +2469,7 @@ nav ul .active>a {
     position: relative;
 }
 nav ul li.active>a:before {
-    content: "\f0d9";
+    /*content: "\f0d9";*/
     font-family: FontAwesome;
     display: block;
     height: 27px;
@@ -2908,16 +2908,11 @@ fieldset {
     padding-left: 5px;
     padding-right: 5px;
 }
-#header {
-    padding-right: 5px;
-}
+
 #logo {
     margin-left: 4px;
 }
 
-#header {
-    background: #fff;
-}
 #ribbon {
     border-bottom: 1px solid #CFCFCF;
     border-top: 1px solid #E6E6E6;
@@ -2957,15 +2952,11 @@ fieldset {
     padding-left: 5px;
     padding-right: 5px;
 }
-#header {
-    padding-right: 5px;
-}
+
 #logo {
     margin-left: 4px;
 }
-#header {
-    background: #fff;
-}
+
 #ribbon {
     border-bottom: 1px solid #CFCFCF;
     border-top: 1px solid #E6E6E6;
@@ -4326,12 +4317,12 @@ hr{
     background-color: #2C3742;
   }
 /*Arabinda added for Tag input*/
-.smart-form .label{
+/*.smart-form .label{
     font-size: 13px;
     font-weight: 400;
     line-height: 15px;
     text-align: left;
-}
+}*/
 .bootstrap-tagsinput > span{
     background: none repeat scroll 0 0 #2c3742;
     border: 1px solid #2c3742;
@@ -4364,9 +4355,9 @@ hr{
     width: 100%;
 }
 /*Arabinda added imgdiv for */
-.smart-form .input-file .imgdiv{position:absolute;top:2px;float:left;height:28px;margin-left:5px;font-size:13px;line-height:28px}
+/*.smart-form .input-file .imgdiv{position:absolute;top:2px;float:left;height:28px;margin-left:5px;font-size:13px;line-height:28px}
 .smart-form .input-file .imgdiv:hover{-webkit-box-shadow:none;box-shadow:none}
-.smart-form .input-file .imgdiv input{position:absolute;top:0;right:0;padding:0;font-size:30px;cursor:pointer;opacity:0} 
+.smart-form .input-file .imgdiv input{position:absolute;top:0;right:0;padding:0;font-size:30px;cursor:pointer;opacity:0} */
 /*arabinda*/
 
 .widget-header {
@@ -5799,11 +5790,11 @@ padding-top:5px;
     background: #3366CC;
 }
 
-/*BAckup CSS*/
+/*Style CSS for header,navigation*/
 header
 {  
  border-bottom: 1px solid #CCCCCC;
- height:8%!important;
+ min-height:8%!important;
 }
 
 .menu-item-parentdemo li b{
@@ -6925,75 +6916,63 @@ table.dataTable td {
   }
 }
 
-.aws, .azure, .rl, .open, .cloudstack, .docker, .moreinfo, .Chefimport, .shut_down, .start_icon, .sshIcon{
+.aws, .azure, .rl, .openstack, .cloudstack, .dock, .logo{
     background: url(../img/sprites.png) no-repeat;
 }
 
 .aws{
-    background-position: -2px -5px ;
-    width: 45px;
-    height: 45px;
+    background-position: -156px -9px ;
+    width: 35px;
+    height: 35px;
 }
 
 .azure{
-    background-position: -101px -2px ;
-    width: 45px;
-    height: 45px;
+    background-position: -257px -10px ;
+    width: 35px;
+    height: 35px;
 }
 
 .rl{
-    background-position: -202px -4px ;
-    width: 45px;
-    height: 45px;
+    background-position: -355px -10px ;
+    width: 35px;
+    height: 35px;
 }
 
-.open{
-    background-position: -303px -2px ;
-    width: 45px;
-    height: 45px;
+.openstack{
+    background-position: -457px -9px ;
+    width: 35px;
+    height: 35px;
 }
 
 .cloudstack{
-    background-position: -403px -3px ;
-    width: 45px;
-    height: 45px;
+    background-position: -556px -10px ;
+    width: 35px;
+    height: 35px;
 }
 
-.docker{
-    background-position: -500px -2px ;
-    width: 45px;
-    height: 45px;
+.dock{
+    background-position: -653px -8px ;
+    width: 35px;
+    height: 35px;
 }
 
-.moreinfo{
-    background-position: -13px -100px ;
-    width: 25px;
-    height: 25px;
+.logo{
+    background-position: -8px -4px ;
+    width: 125px;
+    height: 40px;
 }
 
-.Chefimport{
-    background-position: -62px -98px ;
-    width: 28px;
-    height: 28px;
+.provider-images{
+    position: relative;
+    margin: 11px 40px!important; 
 }
 
-.shut_down{
-    background-position: -161px -101px ;
-    width: 26px;
-    height: 25px;
+.customfooter {
+       height: 60px;
 }
 
-.start_icon{
-    background-position: -111px -100px ;
-    width: 26px;
-    height: 25px;
-}
 
-.sshIcon{
-    background-position: -209px -98px ;
-    width: 34px;
-    height: 28px;
-}
+
 
 
 

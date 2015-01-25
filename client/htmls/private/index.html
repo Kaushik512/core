@@ -9,13 +9,13 @@
 
 		<!-- Basic Styles -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
-		<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">-->
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+		<!--<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">-->
 		<!--Custom CSS-->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/custom.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
 		<!-- FAVICONS -->
-		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="img/favicon/version2_4.png" type="image/x-icon">
+		<!--<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon/version2_4.png" type="image/x-icon">-->
 		<!--<link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet">-->
 	</head>
 	<body class="custom-theme">
@@ -38,7 +38,7 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-			      	<a class="navbar-brand" style="width:220px;"><img src="img/version2_22.png" style="width:125px;height:40px;" alt="DevOps"></a>
+			      	<a class="navbar-brand" style="width:220px;"><div class="logo"></div></a>
 			    </div>
 
     
@@ -54,7 +54,7 @@
 			      <!--right side navbar-->
 			      <ul class="nav navbar-nav navbar-right" style="font-size:14px!important;margin-top:20px">
 			      	<li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
-			        <li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
+			        <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
 								<a class="dropdown-toggle" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
 							</li>
 
@@ -194,24 +194,24 @@
 					</a>
 					<ul style="display:block">
 						<li>
-							<a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS</span></a>
+							<a href="ajax/Aws-Production.html" class="devops_providers"><div class="aws"><span class="menu-item-parent provider-images">&nbsp;&nbsp;AWS</span></div></a>
 						</li>
 						
 						<li>
-							<a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure</span></a>
+							<a href="ajax/Azure-DevOps.html" class="devops_providers"><div class="azure"><span class="menu-item-parent provider-images">&nbsp;&nbsp;Azure</span></div></a>
 						</li>
 						<li>
-							<a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Data Centre</span></a>
+							<a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl"><span class="menu-item-parent provider-images">&nbsp;Data Centre</span></div></a>
 						</li>
 						
 						<li>
-							<a href="ajax/OpenStack.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;Open Stack</span></a>
+							<a href="ajax/OpenStack.html" class="devops_providers"><div class="openstack"><span class="menu-item-parent provider-images">&nbsp;Open Stack</span></div></a>
 						</li>
 						<li>
-							<a href="ajax/cloudstack.html" class="devops_providers"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;Cloud Stack</span></a>
+							<a href="ajax/cloudstack.html" class="devops_providers"><div class="cloudstack"><span class="menu-item-parent provider-images">&nbsp;Cloud Stack</span></div></a>
 						</li>
 						<li>
-							<a href="ajax/Docker.html" class="devops_providers"><img src="img/DevOps/7.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;Docker</span></a>
+							<a href="ajax/Docker.html" class="devops_providers"><div class="dock"><span class="menu-item-parent provider-images">&nbsp;Docker</span></div></a>
 						</li>
 						
 					</ul>
@@ -282,16 +282,18 @@
 	<!-- BOOTSTRAP JS -->
 	
 	<!-- JARVIS WIDGETS -->
-	<script src="js/smartwidgets/jarvis.widget.min.js"></script>
-	<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+	<!--<script src="js/smartwidgets/jarvis.widget.min.js"></script>-->
+	<!--<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>-->
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/additional-methods.js"></script>
 	
 	<!-- SmartClick: For mobile devices -->
 	
 	<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 	<script type="text/javascript" src="js/plugin/bootbox/bootbox.min.js"></script>
 	<script type="text/javascript" src="js/select2.min.js"></script>
-	<script src="/private/js/jquery.dataTables.js"></script>
-	<script src="js/jquery.tablesorter.js"></script>
+	<script src="/private/js/jquery.dataTables.min.js"></script>
+	<script src="js/jquery.tablesorter.min.js"></script>
 
 	
 
@@ -476,11 +478,8 @@ $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 
 </script>
 <script src="js/app.js"></script>
-
 <script src="/private/js/settingscommon.js"></script> 
-
-
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
+<script src="js/bootstrap-toggle.min.js"></script>
 <script>
  $(window).on('hashchange', function() {
 

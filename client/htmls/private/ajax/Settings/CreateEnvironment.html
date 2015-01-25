@@ -24,50 +24,22 @@
                                             <div>
                                                 <!-- widget content -->
                                                 <div class="widget-body no-padding">
+                                                    <form id="myForm1" action="">
+                                                        <div class="col-lg-6">
+                    Environment Name:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                    <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
+                    <br>
+                    <input autofocus name="ctl00$MainContent$orgname" value="Default Environment" id="environmentname" class="form-control" cat-validation="required,nospecial,max15" type="text"  cdata="catalyst"><i class="icon-append fa fa-lg fa-fw fa-th"></i><!-- <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span> -->
+                    </div>
+                    <div class="col-lg-6">
+                    Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                    <br>
+                    <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required" cat-validation="required">
+                    <option value="">Select an Organization</option>
+                    </select>
+                    </div>        
+                        </form>
 
-                                                    <form action="" class="smart-form" novalidate="novalidate">
-
-                                                        <fieldset>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Environment Name <span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                                        
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <i class="icon-append fa fa-lg fa-fw fa-th"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Environment" id="environmentname" class="form-control" cat-validation="required,nospecial,max15" type="text"  cdata="catalyst">
-                                                                    </label>
-                                                                    
-                                                                </section>
-
-                                                            </div>
-                                                        </fieldset>
-                                                        <fieldset>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                                    <label class="input">
-                                                                        <select id="orgname" class="form-control chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required" cat-validation="required">
-                                                                            <option value="">Select an Organization</option>
-                                                                        </select>
-                                                                    </label>
-                                                                </section>
-                                                                <!-- <section class="col col-6">
-                                                                    <label for="category">Business Group</label>
-                                                                    <label class="input">
-                                                                        <select id="productgroupname" class="form-control" multiple="multiple" sourcepath="2" datapath="masterjson.rows.row" valuelinkfield="productgroupname">
-                                                                            <option value="">Select Business Group</option>
-
-                                                                        </select>
-                                                                        <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                                    </label>
-                                                                </section>-->
-                                                            </div>
-                                                           
-                                                        </fieldset>
-
-                                                    </form>
                                                 </div>
                                                 <!-- end widget content -->
 
@@ -480,3 +452,20 @@
 
     inLineReady();
 </script>
+
+<script>
+        $(document).ready(function () {
+
+            $('#myForm1').submit(function() {
+                $(this).validate();
+
+                if($(this).valid){
+                     alert('valid form submitted'); // for demo
+                    if(validateForm())saveform('1');
+                }else{
+                     alert('invalid valid form submitted'); // for demo
+                }
+                return false; // for demo
+            });
+        });
+            </script>
