@@ -1502,6 +1502,7 @@ $('#defaultViewButton').click(); //setting the detault view
 
 
 
+
 $('.dockerinstancestart').click(function(e){
     $('.instanceselectedfordocker').each(function(){
       if($(this).is(':checked')){
@@ -1524,8 +1525,18 @@ $('.dockerinstancestart').click(function(e){
            var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
-           // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
-          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
+           var lp = 'null'; //launch parameter
+           var sp = 'null'; //start parameter
+            if(dockerlaunchparameters)
+            {
+               if(dockerlaunchparameters[0])
+                     lp = dockerlaunchparameters[0];
+               if(dockerlaunchparameters[1])
+                sp = dockerlaunchparameters[1];
+            }
+           // alert(lp + ' ' + sp);
+       // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
+          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
