@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 
+var schemaValidator = require('./schema-validator');
+
 var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
@@ -10,25 +12,40 @@ var InstanceSchema = new Schema({
     orgId: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        validate: schemaValidator.orgIdValidator
     },
     projectId: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        validate: schemaValidator.projIdValidator
     },
     envId: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        validate: schemaValidator.envIdValidator
     },
     chefNodeName: String,
-    runlist: [String],
+    runlist: [{
+        type: String,
+        trim: true,
+        validate: schemaValidator.recipeValidator
+    }],
     platformId: String,
-    instanceIP: String,
+    instanceIP: {
+        type: String,
+        trim: true
+    },
     instanceState: String,
     bootStrapStatus: String,
-    users: [String],
+    users: [{
+        type: String,
+        trim: true,
+        required: true,
+        validate: schemaValidator.catalystUsernameValidator
+    }],
     hardware: {
         platform: String,
         platformVersion: String,
@@ -42,14 +59,16 @@ var InstanceSchema = new Schema({
     chef: {
         serverId: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         chefNodeName: String
     },
     credentials: {
         username: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         password: String,
         pemFileLocation: String
@@ -66,7 +85,10 @@ var InstanceSchema = new Schema({
         dockerEngineStatus: String,
         dockerEngineUrl: String
     },
-    serviceIds: [String]
+    serviceIds: [{
+        type: String,
+        trim: true
+    }]
 
 });
 

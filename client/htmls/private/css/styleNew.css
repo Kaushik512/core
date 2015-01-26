@@ -4,6 +4,10 @@
     width: 900px;
   }
 }
+.margin-right12{
+    margin-right: 12px;
+    border-radius: 50%;
+}
 
 .padding-right0{
     padding-right: 0px !important;

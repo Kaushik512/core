@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
-var logger  = require('../lib/logger')(module);
+var logger  = require('../../lib/logger')(module);
 
 var extend = require('mongoose-validator').extend;
 extend('isValidName', function (val) {
