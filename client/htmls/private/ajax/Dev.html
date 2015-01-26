@@ -1121,13 +1121,9 @@
                 </h4>
             </div>
             <div class="modal-body no-padding">
-<<<<<<< HEAD
-                <form role="form" class="smart-form" id="addInstanceForm">
-=======
                 
                 <form role="form" class="smart-form" id="addInstanceForm" autocomplete="off">
 
->>>>>>> origin/feature_engineered
                     <fieldset style="padding-top:0px;margin-top:10px;">
                       <div class="">
                         <section class="col col-6">
@@ -1528,18 +1524,8 @@ $('.dockerinstancestart').click(function(e){
            var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
-           var lp = 'null'; //launch parameter
-           var sp = 'null'; //start parameter
-            if(dockerlaunchparameters)
-            {
-               if(dockerlaunchparameters[0])
-                     lp = dockerlaunchparameters[0];
-               if(dockerlaunchparameters[1])
-                sp = dockerlaunchparameters[1];
-            }
-           // alert(lp + ' ' + sp);
-       // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
-          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp),function(data){
+           // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
+          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -1594,11 +1580,7 @@ $('#addInstanceBtn').click(function(e) {
             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
           }
           $divinstancescardview.find('.item').first().addClass('active');
-<<<<<<< HEAD
-          $('#modalContainerSSHInfo').modal('hide');
-=======
           $('#modalContainerimportInstance').modal('hide');
->>>>>>> origin/feature_engineered
 
       });
     }
@@ -2010,7 +1992,7 @@ $(function() {
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
                             
                             if(data[i].dockerlaunchparameters)
-                                $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
+                                $itemBody.attr('dockerlaunchparameters', data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -2058,13 +2040,9 @@ $(function() {
                         var $li = $('<li></li>').css({
                             "font-size": '10px'
                         }).append(tagLabel, $selectVer, $selectVerEdit);
-                        if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
-                        { 
-                            for (var j = 0; j < data[i].versionsList.length; j++) {
-                               var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                               
-                                   $selectVer.append($options);
-                           }
+                        for (var j = 0; j < data[i].versionsList.length; j++) {
+                            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                            $selectVer.append($options);
                         }
                         $selecteditBtnContainer.append($li);
                     }
@@ -2224,39 +2202,21 @@ function generateDockerLaunchParams(){
     return('');
   }
 
-    var launchparams = [];
-    var preparams = '';
-    var startparams = '';
+    var launchparams = '';
     $('[dockerparamkey]').each(function(){
       if($(this).val() != ''){
         var itms = $(this).val().split(',');
         for(itm in itms)
-          {
-            if($(this).attr('dockerparamkey') != '-c') //checking for start parameter
-                preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
-            else
-                startparams += ' ' + itms[itm];
-          }
-          launchparams[0] = preparams;
-          launchparams[1] = startparams;
+          launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
       }
     });
-   // alert(launchparams.join('#'));
     return(launchparams);
 }
 
 function loadLaunchParams(){
   var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
   if(lparam != ''){
-      $('[dockerparamkey]').val(''); //clearing the popup input boxes
-      //split by -c to get startup and other parameters
-      var preparams = lparam.split('-c');
-      var cparams = ''; //this is the startup parameters
-      if(preparams.length > 1){
-        lparam = preparams[0];
-        cparams = preparams[1];
-      }
-      console.log(lparam + ' ' + cparams);
+      $('[dockerparamkey]').val('');
       var params = lparam.split(' -');
       for(para in params){
         var subparam = params[para].split(' ');
@@ -2269,8 +2229,6 @@ function loadLaunchParams(){
         }
         //alert(params[para]);
       }
-      //Updating the startup parameter
-      $('[dockerparamkey="-c"]').first().val(cparams);
     }
     else
        $('[dockerparamkey]').val(''); 
