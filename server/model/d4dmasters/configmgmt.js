@@ -474,7 +474,7 @@ function Configmgmt() {
 
                 configmgmt = "{" + configmgmt + "}";
                 console.log('Read Config:' + configmgmt);
-                callback(null, configmgmt);
+                callback(null, JSON.parse(configmgmt));
                 return;
                
 
