@@ -561,7 +561,33 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             });
     });
+
+
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
+
+        configmgmtDao.getDBModelFromID(req.params.masterid,function(err,dbtype){
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if(dbtype){
+                var query = {};
+                query[req.params.filtercolumnname] = req.params.filtercolumnvalue; //building the query 
+                query['id'] = req.params.masterid;
+
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.'+ dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    res.end(JSON.stringify(d4dMasterJson));
+                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                });
+            }
+        });
+    });
+
+
+    app.get('/d4dMastersold/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
 
         d4dModel.findOne({ id: req.params.masterid }, function (err, d4dMasterJson) {
             if (err) {

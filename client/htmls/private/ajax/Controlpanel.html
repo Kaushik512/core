@@ -651,9 +651,11 @@ $.get('../instances/'+urlParams.id,function(data){
     }
 
     //fetching services list
-
+    //alert(data.chef.serverId);
     $.get('/d4dMasters/19/chefserverid/'+data.chef.serverId,function(services){
       //console.log('hi ==>',serviceList);
+      services = JSON.parse(services);
+      //alert('Out json :' + JSON.stringify(services)+ services.length);
       var $serviceList = $('#serviceList');
       console.log(services,"length==>",services.length);
       var serviceIds = [];
