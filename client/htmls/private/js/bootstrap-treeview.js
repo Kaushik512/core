@@ -141,11 +141,11 @@
 			else if (node) {
 
 				if (this._isSelectable(node)) {
-				//	alert('in');
+					//alert('in');
 					
 					this._setSelectedNode(node);
 					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : #2c3742 !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;"></i>');
-					//$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().trigger('click');
+					$(location).attr('href',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('href')) ;
 				} else {
 
 					this._toggleNodes(node);
