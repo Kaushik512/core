@@ -582,8 +582,8 @@
 				url: "../organizations/getTreeForbtv",
 				success: function (data1) {
 					console.log('ajax success');
-					alert('New Json' + JSON.stringify(data1));
-					$('#tree').treeview({data:data1});
+					//alert('New Json' + JSON.stringify(data1));
+					$('#tree').treeview({data:data1,enableLinks:true});
 				}
 			});
 	}

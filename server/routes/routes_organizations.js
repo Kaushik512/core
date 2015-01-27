@@ -145,6 +145,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 name: k,
                                 text: k,
                                 href:'',
+                                icon: 'fa fa-building ',
                                 nodes:[],
                                 businessGroups: [],
                                 environments: []
@@ -167,6 +168,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 orgTree[i]['nodes'].push({
                                     name: docbgs[k]['productgroupname'],
                                     text: docbgs[k]['productgroupname'],
+                                    icon: 'fa fa-fw fa-1x fa-group',
                                     href: '',
                                     nodes:[],
                                     projects: []
@@ -190,7 +192,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             var envs = docprojs[_prj]['environmentname'].split(',');
                                                             var envs_ = [];
                                                             for(var nt = 0; nt < envs.length;nt++){
-                                                                envs_.push({text:envs[nt]});
+                                                                envs_.push({text:envs[nt],
+                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    icon: 'fa fa-fw fa-1x fa-desktop'
+                                                                });
                                                             }
                                                             console.log("Env in:" + docprojs);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push( {//
@@ -200,7 +205,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             orgTree[_i]['nodes'][__i]['nodes'].push( {//
                                                                      name: docprojs[_prj]['projectname'],
                                                                      text: docprojs[_prj]['projectname'],
-                                                                     href: '',
+                                                                     icon: 'fa fa-fw fa-1x fa-tasks',
                                                                      nodes:envs_,
                                                                      environments: envs
                                                                 });
