@@ -144,9 +144,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
             orgTree.push({
                                 name: k,
                                 text: k,
-                                href:'',
+                                href: 'javascript:void(0)',
                                 icon: 'fa fa-building ',
                                 nodes:[],
+                                borderColor:'#000',
                                 businessGroups: [],
                                 environments: []
                             });
@@ -161,7 +162,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 orgTree[i]['businessGroups'].push({
                                     name: docbgs[k]['productgroupname'],
                                     text: docbgs[k]['productgroupname'],
-                                    href: '',
+                                    href: 'javascript:void(0)',
                                     nodes:[],
                                     projects: []
                                 });
@@ -169,7 +170,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     name: docbgs[k]['productgroupname'],
                                     text: docbgs[k]['productgroupname'],
                                     icon: 'fa fa-fw fa-1x fa-group',
-                                    href: '',
+                                    borderColor:'#000',
+                                    href: 'javascript:void(0)',
                                     nodes:[],
                                     projects: []
                                 });
@@ -207,6 +209,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                      text: docprojs[_prj]['projectname'],
                                                                      icon: 'fa fa-fw fa-1x fa-tasks',
                                                                      nodes:envs_,
+                                                                     borderColor:'#000',
+                                                                     href: 'javascript:void(0)',
                                                                      environments: envs
                                                                 });
 

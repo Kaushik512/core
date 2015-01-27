@@ -128,7 +128,7 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
-		<div id="tree">What</div>
+		<div id="tree" style="font-size:12px;display:none"></div>
 		<div class="login-info" id="Workspace1">
 			<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
 			
@@ -583,7 +583,26 @@
 				success: function (data1) {
 					console.log('ajax success');
 					//alert('New Json' + JSON.stringify(data1));
-					$('#tree').treeview({data:data1,enableLinks:true});
+					$('#tree').treeview({
+						data:data1,enableLinks:true,
+						collapseIcon:'fa fa-angle-down',
+						expandIcon:'fa fa-angle-right',
+						selectedBackColor:'#fff !important',
+						selectedColor: '#000 !important',
+						onNodeSelected: function(event, node) {
+							//alert('node' + node.href);
+							//debugger;
+							console.log('in here');
+							var $expcollp = $('li[data-nodeid="' + node.nodeId + '"]').first().find('span.expand-collapse').first();
+							if($expcollp)
+								$expcollp.trigger('click');
+							else
+							{
+
+							}
+						}
+					});
+
 				}
 			});
 	}
