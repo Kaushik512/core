@@ -1121,7 +1121,6 @@
                 </h4>
             </div>
             <div class="modal-body no-padding">
-                
                 <form role="form" class="smart-form" id="addInstanceForm" autocomplete="off">
 
                     <fieldset style="padding-top:0px;margin-top:10px;">
@@ -1592,7 +1591,6 @@ $('#addInstanceBtn').click(function(e) {
           }
           $divinstancescardview.find('.item').first().addClass('active');
           $('#modalContainerimportInstance').modal('hide');
-
       });
     }
 
@@ -2003,7 +2001,7 @@ $(function() {
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
                             
                             if(data[i].dockerlaunchparameters)
-                                $itemBody.attr('dockerlaunchparameters', data[i].dockerlaunchparameters);
+                                   $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -2051,9 +2049,12 @@ $(function() {
                         var $li = $('<li></li>').css({
                             "font-size": '10px'
                         }).append(tagLabel, $selectVer, $selectVerEdit);
-                        for (var j = 0; j < data[i].versionsList.length; j++) {
-                            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                            $selectVer.append($options);
+                        if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
+                        {
+                            for (var j = 0; j < data[i].versionsList.length; j++) {
+                                var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                                $selectVer.append($options);
+                            }
                         }
                         $selecteditBtnContainer.append($li);
                     }
@@ -2213,12 +2214,21 @@ function generateDockerLaunchParams(){
     return('');
   }
 
-    var launchparams = '';
+    var launchparams = [];
+    var preparams = '';
+    var startparams = '';
     $('[dockerparamkey]').each(function(){
       if($(this).val() != ''){
         var itms = $(this).val().split(',');
         for(itm in itms)
-          launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+          {
+            if($(this).attr('dockerparamkey') != '-c') //checking for start parameter
+                preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+            else
+                startparams += ' ' + itms[itm];
+          }
+          launchparams[0] = preparams;
+          launchparams[1] = startparams;
       }
     });
     return(launchparams);
@@ -2227,7 +2237,15 @@ function generateDockerLaunchParams(){
 function loadLaunchParams(){
   var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
   if(lparam != ''){
-      $('[dockerparamkey]').val('');
+      $('[dockerparamkey]').val(''); //clearing the popup input boxes
+      //split by -c to get startup and other parameters
+      var preparams = lparam.split('-c');
+      var cparams = ''; //this is the startup parameters
+      if(preparams.length > 1){
+        lparam = preparams[0];
+        cparams = preparams[1];
+      }
+      console.log(lparam + ' ' + cparams);
       var params = lparam.split(' -');
       for(para in params){
         var subparam = params[para].split(' ');
@@ -2240,6 +2258,8 @@ function loadLaunchParams(){
         }
         //alert(params[para]);
       }
+      //Updating the startup parameter
+      $('[dockerparamkey="-c"]').first().val(cparams);
     }
     else
        $('[dockerparamkey]').val(''); 

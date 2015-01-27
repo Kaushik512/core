@@ -45,6 +45,7 @@
 		<!-- multiselect stylesheet -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">
 		<link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet"> 
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-treeview.css">
 		<!--for checkbox in dropdown -->
 		<!-- <link rel="stylesheet" type="text/css" href="css/jquery.multiselect.css">
 		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
@@ -127,6 +128,7 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
+		<div id="tree" style="font-size:12px;display:none"></div>
 		<div class="login-info" id="Workspace1">
 			<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
 			
@@ -528,7 +530,7 @@
 	<script src="js/demo.js"></script>-->
 	<script src="/private/js/jquery.dataTables.js"></script>
 	<script src="js/jquery.tablesorter.js"></script>
-
+	<script type="text/javascript" src="js/bootstrap-treeview.js"></script>
 	<!-- <script id="settingscommonscript" type="text/javascript"  src="/private/js/settingscommon.js"></script> -->
 
 	<!-- MAIN APP JS FILE -->
@@ -572,6 +574,40 @@
 	var serviceURL = "../d4dMasters/";
 	window.selectedOrgName = $('.orgSelected').text().trim();
 	//alert('in');
+	var loadTreeFuncNew = function(){
+		$.ajax({
+				type: "get",
+				dataType: "json",
+				async: false,
+				url: "../organizations/getTreeForbtv",
+				success: function (data1) {
+					console.log('ajax success');
+					//alert('New Json' + JSON.stringify(data1));
+					$('#tree').treeview({
+						data:data1,enableLinks:true,
+						collapseIcon:'fa fa-angle-down',
+						expandIcon:'fa fa-angle-right',
+						selectedBackColor:'#fff !important',
+						selectedColor: '#000 !important',
+						onNodeSelected: function(event, node) {
+							//alert('node' + node.href);
+							//debugger;
+							console.log('in here');
+							var $expcollp = $('li[data-nodeid="' + node.nodeId + '"]').first().find('span.expand-collapse').first();
+							if($expcollp)
+								$expcollp.trigger('click');
+							else
+							{
+
+							}
+						}
+					});
+
+				}
+			});
+	}
+	loadTreeFuncNew();
+	var loadTreeFunc = function(){
 	$.ajax({
 				type: "get",
 				dataType: "json",
@@ -579,7 +615,7 @@
 				url: "../organizations/getTreeNew",
 				success: function (data) {
 					console.log('ajax success');
-				// alert(data.toString());
+				//alert(JSON.stringify(data));
 				
 				var $ulOrgList = $('.orgsList').empty();
 				var $workspace = $('#Workspace').empty();
@@ -695,20 +731,19 @@
 			console.log('indexOfhash =>',indexOfhash);
 			var $a;
 			if(indexOfhash!=-1) {
-var sub =  href.substring(indexOfhash+1);
-console.log('here',sub);
-$a = $('a[href="'+sub+'"]');
-var orgName = $a.parents('.org').data('orgName');
-window.selectedOrgName = orgName;
+				var sub =  href.substring(indexOfhash+1);
+				console.log('here',sub);
+				$a = $('a[href="'+sub+'"]');
+				var orgName = $a.parents('.org').data('orgName');
+				window.selectedOrgName = orgName;
 
-$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
-
+				$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 			} else {
-			$a = $workspace.find('li').find('a[data-link=true]');
-			var orgName = $($a.get(0)).parents('.org').data('orgName');
-window.selectedOrgName = orgName;
+				$a = $workspace.find('li').find('a[data-link=true]');
+				var orgName = $($a.get(0)).parents('.org').data('orgName');
+				window.selectedOrgName = orgName;
 
-$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
+				$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 //sconsole.log('$li',$li.length);
 
 			}
@@ -718,6 +753,9 @@ $ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
 			alert(data.toString());
 			}
 		});
+	} //function ends
+
+loadTreeFunc();
 		//Selecting the first provider in the list on load
 			
 
