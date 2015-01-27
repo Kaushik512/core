@@ -750,6 +750,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 }
                 if (!services.length) {
+                    console.log(services.length);
                     res.send(404);
                     return;
                 }
