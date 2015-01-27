@@ -139,9 +139,15 @@
 				this._render();
 			}
 			else if (node) {
+
 				if (this._isSelectable(node)) {
+				//	alert('in');
+					
 					this._setSelectedNode(node);
+					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : #2c3742 !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;"></i>');
+					//$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().trigger('click');
 				} else {
+
 					this._toggleNodes(node);
 					this._render();
 				}
@@ -296,6 +302,7 @@
 						.append($(self._template.expandCollapseIcon)
 							.addClass(self.options.emptyIcon)
 						);
+
 				}
 
 				// Add node icon
@@ -326,8 +333,11 @@
 							.append($(self._template.badge)
 								.append(tag)
 							);
+
+
 					});
 				}
+
 
 				// Add item to the tree
 				self.$wrapper.append(treeItem);
@@ -353,9 +363,11 @@
 			}
 
 			if (this.options.highlightSelected && (node === this.selectedNode)) {
+
 				style += 'background-color:' + this.options.selectedBackColor + ';';
 			}
 			else if (node.backColor) {
+				
 				style += 'background-color:' + node.backColor + ';';
 			}
 

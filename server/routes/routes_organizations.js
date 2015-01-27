@@ -149,6 +149,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 nodes:[],
                                 borderColor:'#000',
                                 businessGroups: [],
+                                selectable: false,
                                 environments: []
                             });
         });
@@ -173,6 +174,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     borderColor:'#000',
                                     href: 'javascript:void(0)',
                                     nodes:[],
+                                    selectable: false,
                                     projects: []
                                 });
                                 d4dModelNew.d4dModelMastersProjects.find({id:4,orgname:orgTree[i]['name'],productgroupname:docbgs[k]['productgroupname']},function(err,docprojs){
@@ -210,6 +212,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                      icon: 'fa fa-fw fa-1x fa-tasks',
                                                                      nodes:envs_,
                                                                      borderColor:'#000',
+                                                                     selectable: false,
                                                                      href: 'javascript:void(0)',
                                                                      environments: envs
                                                                 });

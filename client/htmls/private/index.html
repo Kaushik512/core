@@ -128,7 +128,7 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
-		<div id="tree" style="font-size:12px;display:none"></div>
+		<div id="tree" style="font-size:12px;"></div>
 		<div class="login-info" id="Workspace1">
 			<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
 			
@@ -587,22 +587,30 @@
 						data:data1,enableLinks:true,
 						collapseIcon:'fa fa-angle-down',
 						expandIcon:'fa fa-angle-right',
-						selectedBackColor:'#fff !important',
-						selectedColor: '#000 !important',
+						// selectedBackColor:'#40baf1  !important',
+						// selectedColor: '#fff !important',
 						onNodeSelected: function(event, node) {
-							//alert('node' + node.href);
+						//	alert('node' + node.nodeId);
 							//debugger;
-							console.log('in here');
-							var $expcollp = $('li[data-nodeid="' + node.nodeId + '"]').first().find('span.expand-collapse').first();
-							if($expcollp)
-								$expcollp.trigger('click');
-							else
-							{
+							// $('i[rightcarate="yes"]').detach();
+							// $('li[data-nodeid="3"]').first().attr('style','background-color : blue !important');
+							// $('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : blue !important').append('<i  class="fa fa-caret-left" rightcarate="yes"></i>');
+							
+							// alert('node' + node.nodeId);
 
-							}
+							// console.log('in here');
+							// var $expcollp = $('li[data-nodeid="' + node.nodeId + '"]').first().find('span.expand-collapse').first();
+							// if($expcollp)
+							// 	$expcollp.trigger('click');
+							// else
+							// {
+
+							// }
 						}
 					});
-
+					$('#tree ul').click(function(event,itm){
+					//	alert(itm);
+					});
 				}
 			});
 	}
