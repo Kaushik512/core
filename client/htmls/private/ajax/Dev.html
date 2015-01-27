@@ -1121,7 +1121,6 @@
                 </h4>
             </div>
             <div class="modal-body no-padding">
-               
                 <form role="form" class="smart-form" id="addInstanceForm" autocomplete="off">
 
                     <fieldset style="padding-top:0px;margin-top:10px;">
@@ -1498,6 +1497,7 @@ $('.createTaskLink').click(function(e){
 
 //for Table view
 $('#defaultViewButton').click(); //setting the detault view
+
 
 
 
@@ -2001,7 +2001,7 @@ $(function() {
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
                             
                             if(data[i].dockerlaunchparameters)
-                                $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
+                                   $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -2050,12 +2050,11 @@ $(function() {
                             "font-size": '10px'
                         }).append(tagLabel, $selectVer, $selectVerEdit);
                         if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
-                        { 
+                        {
                             for (var j = 0; j < data[i].versionsList.length; j++) {
-                               var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                               
-                                   $selectVer.append($options);
-                           }
+                                var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                                $selectVer.append($options);
+                            }
                         }
                         $selecteditBtnContainer.append($li);
                     }
@@ -2232,7 +2231,6 @@ function generateDockerLaunchParams(){
           launchparams[1] = startparams;
       }
     });
-   // alert(launchparams.join('#'));
     return(launchparams);
 }
 
