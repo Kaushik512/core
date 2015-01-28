@@ -1077,8 +1077,8 @@ $(document).ready(function(){
        async: false,
        url: "../organizations/getTreeNew",
        success: function(data) {
-          alert(JSON.stringify(data));
-          alert(typeof data);
+          //alert(JSON.stringify(data));
+          //alert(typeof data);
           console.log(data);
            data = JSON.parse(JSON.stringify(data));
            var $orgListInput = $('#orgnameSelect');
@@ -1101,16 +1101,18 @@ $(document).ready(function(){
                var $selectedOrgOption = $(this).find(":selected");
                $bgList.empty();
                $bgList.append($('<option></option>').val('choose').html('Choose'));
-               alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
+               //alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
 
                var getBGs = $selectedOrgOption.data('bglist');
+
                for (var i = 0; i < getBGs.length; i++) {
                    $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
                }
-               alert('out');
+               //alert('out');
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
-               $envList.append($('<option></option>').val('choose').html('Choose'))
+               $envList.append($('<option></option>').val('choose').html('Choose'));
+               //alert(getEnv.length);
                for (var i = 0; i < getEnv.length; i++) {
                    $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                }
@@ -1154,8 +1156,10 @@ $(document).ready(function(){
                $projectList.empty();
                $projectList.append($('<option></option>').val('choose').html('Choose'));
                var getProjs = $selectedOrgOption.data('projList');
+              // alert(getProjs.length);
                for (var i = 0; i < getProjs.length; i++) {
-                   $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+
+                   $projectList.append($('<option></option>').val(getProjs[i].name).html(getProjs[i].name));
                }
            });
 
