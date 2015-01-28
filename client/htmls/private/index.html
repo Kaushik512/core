@@ -128,17 +128,15 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
-		<div id="tree" style="font-size:12px;"></div>
-		<div class="login-info" id="Workspace1">
-			<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
+		
+		<div id="Workspace1">
 			
-			<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
-				<i class="fa fa-lg fa-fw fa-building"></i>
-				Organization
-				<i class="fa fa-chevron-right"></i>
-			</a>
-			
-			</span>
+			<div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
+				
+				<div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px">WORKZONE</div>
+				
+			</div>
+			<div id="tree" style="font-size:12px;"></div>
 		</div>
 		<!-- NAVIGATION :fa-angle-down  This navigation is also responsive
 		To make this navigation dynamic please make sure to link the node
@@ -763,7 +761,7 @@
 		});
 	} //function ends
 
-loadTreeFunc();
+//loadTreeFunc();
 		//Selecting the first provider in the list on load
 			
 
