@@ -132,7 +132,156 @@ module.exports.setRoutes = function(app, sessionVerification) {
               
             
     });
+    
+     app.get('/organizations/getTreeForbtv',function(req,res){
+       d4dModelNew.d4dModelMastersOrg.find({id:1},function(err,docorgs){
+        var orgnames = docorgs.map(function(docorgs1){return docorgs1.orgname;});
 
+        var orgTree = [];
+        var orgCount = 0;
+        orgnames.forEach(function(k,v){
+            //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
+            orgTree.push({
+                                name: k,
+                                text: k,
+                                href: 'javascript:void(0)',
+                                icon: 'fa fa-building ',
+                                nodes:[],
+                                borderColor:'#000',
+                                businessGroups: [],
+                                selectable: false,
+                                environments: []
+                            });
+        });
+        orgCount++;
+            d4dModelNew.d4dModelMastersProductGroup.find({id:2,orgname: {$in:orgnames}},function(err,docbgs){
+                var counter = 0;
+                for(var k = 0; k < docbgs.length; k++){
+                    for (var i = 0; i < orgTree.length; i++) {
+                            if(orgTree[i]['name'] == docbgs[k]['orgname'] ){
+                              //  console.log('found' );
+                                orgTree[i]['businessGroups'].push({
+                                    name: docbgs[k]['productgroupname'],
+                                    text: docbgs[k]['productgroupname'],
+                                    href: 'javascript:void(0)',
+                                    nodes:[],
+                                    projects: []
+                                });
+                                orgTree[i]['nodes'].push({
+                                    name: docbgs[k]['productgroupname'],
+                                    text: docbgs[k]['productgroupname'],
+                                    icon: 'fa fa-fw fa-1x fa-group',
+                                    borderColor:'#000',
+                                    href: 'javascript:void(0)',
+                                    nodes:[],
+                                    selectable: false,
+                                    projects: []
+                                });
+                                d4dModelNew.d4dModelMastersProjects.find({id:4,orgname:orgTree[i]['name'],productgroupname:docbgs[k]['productgroupname']},function(err,docprojs){
+                                   // console.log('Projects:' + docprojs);
+
+                                    var prjnames = docprojs.map(function(docprojs1){return docprojs1.projectname;});
+                                   
+                                    for (var _i = 0; _i < orgTree.length; _i++) {
+                                        console.log('Orgnames:' + orgTree[_i]['name']);
+                                        for(var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++){
+                                            console.log('businessGroups:' + orgTree[_i]['businessGroups'][__i]['name']); 
+                                            console.log('docprojs.length:' + docprojs.length);
+                                            for(var _bg =0; _bg < docprojs.length;_bg++){
+                                                
+                                                if(docprojs[_bg]['orgname'] == orgTree[_i]['name'] &&  docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']){
+                                                    console.log('hit');
+                                                    if(orgTree[_i]['businessGroups'][__i]['projects'].length <= 0){
+                                                        for(var _prj = 0; _prj < docprojs.length;_prj++){
+                                                            var envs = docprojs[_prj]['environmentname'].split(',');
+                                                            var envs_ = [];
+                                                            for(var nt = 0; nt < envs.length;nt++){
+                                                                envs_.push({text:envs[nt],
+                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    icon: 'fa fa-fw fa-1x fa-desktop'
+                                                                });
+                                                            }
+                                                            console.log("Env in:" + docprojs);
+                                                            orgTree[_i]['businessGroups'][__i]['projects'].push( {//
+                                                                     name: docprojs[_prj]['projectname'],
+                                                                     environments: envs
+                                                                });
+                                                            orgTree[_i]['nodes'][__i]['nodes'].push( {//
+                                                                     name: docprojs[_prj]['projectname'],
+                                                                     text: docprojs[_prj]['projectname'],
+                                                                     icon: 'fa fa-fw fa-1x fa-tasks',
+                                                                     nodes:envs_,
+                                                                     borderColor:'#000',
+                                                                     selectable: false,
+                                                                     href: 'javascript:void(0)',
+                                                                     environments: envs
+                                                                });
+
+                                                        }
+                                                            
+                                                    }
+
+                                                 //   console.log("Env:" + docprojs[_bg]['environmentname']);
+                                                    // if(orgTree[_i]['environments'].length <=0){
+                                                    //     for(var envname in docprojs[_bg]['environmentname'])
+                                                    //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
+                                                    // }
+                                                }
+                                            }
+                                        }
+                                    }
+                                     console.log("OrgTree:" + JSON.stringify(orgTree));
+                                     if(counter >= docbgs.length - 1){
+                                        d4dModelNew.d4dModelMastersEnvironments.find({id:3,orgname: {$in:orgnames}},function(err,docenvs){
+                                            for (var _i = 0; _i < orgTree.length; _i++) {
+                                                for(var _env =0; _env < docenvs.length;_env++){
+                                                    if(orgTree[_i]['name'] == docenvs[_env]['orgname'] ){
+                                                        orgTree[_i]['environments'].push(docenvs[_env]['environmentname']);
+                                                    }
+                                                }
+                                                if(_i >= orgTree.length -1){
+                                                    res.send(orgTree);
+                                                    return;
+                                                }
+                                            }
+                                        });
+
+                                        //res.send(orgTree);
+                                       // return;
+                                        
+                                     }
+                                     counter++;
+                                });
+                                
+                            }
+
+                    }
+                    
+                }
+                //finding the current bg
+                // orgTree.forEach(function(k1,v1){
+                    
+                //     // orgTree[v1].forEach(function(k2,v2){
+                //     //         console.log(orgTree[v1][v2]);
+                //     // });
+
+                // });
+                //     var orgj = JSON.parse(k1);
+                //     Object.keys(orgj).forEach(function(vals,keys){
+                //        console.log('key' + keys + ' ' + vals);
+
+                //    });
+                //    // console.log("orgTree:" + JSON.stringify(orgTree));
+                // });
+
+               // orgTree.businessGroups.push(docbgs.)
+            });
+        
+
+       });
+              
+            
+    });
 
     app.get('/organizations/getTree',function(req,res){
        d4dModelNew.d4dModelMastersOrg.find({id:1},function(err,docorgs){
