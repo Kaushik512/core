@@ -317,6 +317,7 @@
 					treeItem
 						.append($(self._template.link)
 							.attr('href', node.href)
+							.attr('orgname',node.orgname)
 							.append(node.text)
 						);
 				}
@@ -411,7 +412,7 @@
 
 		_template: {
 			list: '<ul class="list-group"></ul>',
-			item: '<li class="list-group-item"></li>',
+			item: '<li class="list-group-item" breadcrumb=""></li>',
 			indent: '<span class="indent"></span>',
 			expandCollapseIcon: '<span class="expand-collapse"></span>',
 			icon: '<span class="icon"></span>',

@@ -1075,29 +1075,39 @@ $(document).ready(function(){
        dataType: "json",
 
        async: false,
-       url: "../organizations/getTree",
+       url: "../organizations/getTreeNew",
        success: function(data) {
+          alert(JSON.stringify(data));
+          alert(typeof data);
+          console.log(data);
+           data = JSON.parse(JSON.stringify(data));
            var $orgListInput = $('#orgnameSelect');
-           $orgListInput.append($('<option></option>').val('choose').html('Choose'));
+           //$orgListInput.append($('<option></option>').val('choose').html('Choose'));
            $bgList = $('#bgListInput');
            var $envList = $('#envList');
+          // alert(data.length);
            for (var i = 0; i < data.length; i++) {
+             // alert('BG:' + JSON.stringify(data[i].businessGroups));
+               console.log(data[i].businessGroups);
                $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
            }
            $orgListInput.change(function(e) {
                // alert('trigged org selection');
                var orgName = $(this).val();
+              // alert(orgName);
                if (orgName == 'choose') {
                    return;
                }
                var $selectedOrgOption = $(this).find(":selected");
                $bgList.empty();
                $bgList.append($('<option></option>').val('choose').html('Choose'));
+               alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
+
                var getBGs = $selectedOrgOption.data('bglist');
                for (var i = 0; i < getBGs.length; i++) {
                    $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
                }
-
+               alert('out');
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
                $envList.append($('<option></option>').val('choose').html('Choose'))

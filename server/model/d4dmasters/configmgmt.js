@@ -6,53 +6,71 @@ var d4dModelNew = require('./d4dmastersmodelnew.js');
 var codelist = require('../../codelist.json');
 var appConfig = require('../../config/app_config');
 var chefSettings = appConfig.chef;
+var logger = require('../../lib/logger')(module);
 
 function Configmgmt() {
     this.getDBModelFromID = function(id, callback) {
-        console.log('in getDBModelFromID');
+        logger.log('Entering getDBModelFromID');
         switch (id.toString()) {
             case "1":
+                logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersOrg');
                 break;
             case "2":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersProductGroup');
                 break;
             case "3":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersEnvironments');
                 break;
             case "4":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersProjects');
                 break;
             case "5":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersProjects');
                 break;
             case "6":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersUserroles');
                 break;
             case "7":
+                logger.log('Exting getDBModelFromID  '  + id.toString());
                 callback(null, 'd4dModelMastersUsers');
                 break;
             case "8":
+                logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersglobalaccess');
                 break;
             case "9":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersProjects');
                 break;
             case "10":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersConfigManagement');
                 break;
             case "16":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersDesignTemplateTypes');
                 break;
             case "17":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersTemplatesList');
                 break;
             case "18":
+                logger.log('Exting getDBModelFromID '  + id.toString());
                 callback(null, 'd4dModelMastersDockerConfig');
-                console.log('returning d4dModelMastersDockerConfig');
                 break;
             case "19":
+                logger.log('Exting getDBModelFromID ' +  id.toString());
                 callback(null, 'd4dModelMastersServicecommands');
+                break;
+            case "20":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelJenkinsConfig');
                 break;
         }
     };
