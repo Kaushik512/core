@@ -476,6 +476,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                 });
                             } else {
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: true,
+                                    log: 'Unable to run chef-client',
+                                    timestamp: new Date().getTime()
+                                });
                                 return;
                             }
                         }, function(stdOutData) {

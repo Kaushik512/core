@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
+var logger = require('../../lib/logger')(module);
+
 
 var Schema = mongoose.Schema;
 
@@ -29,6 +31,8 @@ var LogsDao = function() {
 
             }
         });
+
+        logger.info(logData);
 
     };
 
