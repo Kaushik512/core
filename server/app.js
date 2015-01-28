@@ -44,7 +44,10 @@ app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('sport', appConfig.app_run_secure_port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(express.compress());
+
 app.use(express.favicon());
+
 app.use(express.logger('dev'));
 app.use(express.cookieParser());
 

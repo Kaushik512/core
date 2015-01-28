@@ -27,112 +27,77 @@
                                                 <!-- widget content -->
                                                 <div class="widget-body no-padding">
                                                     
-                                                    <form action="" class="smart-form" novalidate="novalidate">
+                                                    <form action="" id="myform3">
                                                         
 
-                                                        <fieldset>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        
+                                                            
+                                                                <div class="col-lg-6">
+                                                                    Name:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input"> <i class="icon-append fa fa-building"></i>
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Project" id="projectname" class="form-control" type="text"  cdata="catalyst" cat-validation="required,nospecial,max15">
-                                                                    </label>
+                                                                    <br>
+                                                                    <!-- <i class="icon-append fa fa-building"></i> -->
+                                                                        <input autofocus name="ctl00$MainContent$orgname" value="Default Project" id="projectname" class="form-control" type="text"  cdata="catalyst" cat-validation="required,nospecial,max15">
                                                                     
-                                                                </section>
-                                                                <section class="col col-6">
-                                                                    <label for="">Description
-                                                                        
-                                                                    </label>
-                                                                    <label class="input"> <i class="icon-append fa fa-building"></i>
+                                                                    
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    Description:
+                                                                    <!-- <i class="icon-append fa fa-building"></i> -->
                                                                         <input name="ctl00$MainContent$orgname" value="Default Description" id="description" class="form-control" type="text"  cdata="catalyst">
-                                                                    </label>
                                                                     
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
+                                                                    
+                                                                </div>
+                                                            
+                                                             <div class="row">
                                                                 <hr /><br />
-                                                            </div>
+                                                            </div> 
                                                                 
-                                                                <div class="row">
-                                                                    <section class="col col-6">
-                                                                        <label for="category">Organization<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                                        <label class="input">
-                                                                            <select id="orgname" class="form-control chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname','environmentname']"  cdata="catalyst" cat-validation="required">
+                                                                
+                                                                <div class="col-lg-6">
+                                                                        Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                        
+                                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname','environmentname']"  cdata="catalyst" cat-validation="required">
                                                                                 <option value="">Select Organization</option>
 
                                                                             </select>
                                                                             
-                                                                        </label>
-                                                                    </section>
-                                                                    <section class="col col-6">
-                                                                        <label for="category">Business Group<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                                        <label class="input">
-                                                                            <select id="productgroupname" class="form-control chooseBG width-100" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst" cat-validation="required">
+                                                                        
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        Business Group:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                                        <select id="productgroupname" class="chooseBG width-100" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst" cat-validation="required">
                                                                                 <option value="">Select Business Group</option>
 
                                                                             </select>
                                                                            
-                                                                        </label>
-                                                                        <!--<div  id="productgroupname" multiselect="multiselect" datatype="select" sourcepath="2" datapath="masterjson.rows.row" valuelinkfield="productgroupname" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%">
-
-
-                                                                        </div>-->
                                                                         
-                                                                    </section>
+                                                                       
+                                                                        
+                                                                    </div>
                                                                     
 
-                                                                </div>
-                                                             <div class="row">
-                                                                    <section class="col col-6">
-                                                                        <div class="">
-                                                                            <button type="submit" class="btn  btn-primary btn-sm" data-toggle="modal" data-target=".bs-costcodes-modal-sm">
-                                                                                <i class="fa fa-plus"></i>
-                                                                                Select Cost Codes
-                                                                            </button>
-                                                                        </div>
-
-                                                                        <div class="modal fade bs-costcodes-modal-sm " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                                            <input type="hidden" id="costcode" value="Code1" />
-                                                                            <div class="modal-dialog modal-sm" style="margin-left:25%;margin-top: 15%;">
-                                                                                <div class="modal-content" style="height: 300px;padding:10px;">
-                                                                                    <div class="modal-header">
-                                                                                        <button type="button" class="close btn-default  btn-sm" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                                        <h4 class="modal-title" id="myModalLabel">Select Cost Codes</h4>
-                                                                                    </div>
-                                                                                    <div class="modal-body" id="codelistitems" style="height: 240px;overflow: auto">
-
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-default  btn-sm" data-dismiss="modal">Close</button>
-                                                                                        <button type="button" class="btn btn-primary  btn-sm" data-dismiss="modal">Save</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </section>
-                                                                </div>
-                                                             <div class="row">
+                                                                
+                                                             
+                                                             
                                                                 <hr /><br />
-                                                            </div>
-                                                                <div class="row">
+                                                            
+                                                                
                                                                     
-                                                                    <section class="col col-6">
-                                                                        <label for="category">Environments</label>
+                                                                    <div class="col-lg-6">
+                                                                        Environments:
                                                                        
                                                                         <div  id="environmentname" multiselect="multiselect" datatype="select" sourcepath="3" datapath="masterjson.rows.row"  linkedto="orgname" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"   cdata="catalyst">
 
 
                                                                             </div>
-                                                                    </section>
+                                                                    </div>
 
-                                                                </div>
+                                                                
 
                                                                
 
-</fieldset>   
+
                                                                 
                                                     </form>
 
@@ -632,3 +597,21 @@
 
     }
 </script>
+
+<script>
+        $(document).ready(function () {
+
+            $('#myform3').submit(function() {
+                $(this).validate();
+
+                if($(this).valid){
+                     alert('valid form submitted'); // for demo
+                    if(validateForm())saveform('1');
+                }else{
+                     alert('invalid valid form submitted'); // for demo
+                }
+                return false; // for demo
+            });
+        });
+            </script>
+
