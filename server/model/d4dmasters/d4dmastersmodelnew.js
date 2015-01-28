@@ -161,6 +161,18 @@ var d4dMastersglobalaccess = new mongoose.Schema(
 );
 var d4dModelMastersglobalaccess = mongoose.model('d4dModelMastersglobalaccess',d4dMastersglobalaccess,'d4dmastersnew');
 
+var d4dMastersJenkinsConfig = new mongoose.Schema(
+	{id: String,
+	jenkinsname: String,
+	jenkinsurl: String,
+	jenkinsusername: String,
+	jenkinspassword: String,
+	jenkinstoken: String,
+	folderpath: String,
+	rowid:String},{collection:'d4dmastersnew'}
+);
+var d4dModelJenkinsConfig = mongoose.model('d4dModelJenkinsConfig',d4dMastersJenkinsConfig,'d4dmastersnew');
+
 
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
@@ -175,3 +187,4 @@ module.exports.d4dModelMastersServicecommands  = d4dModelMastersServicecommands;
 module.exports.d4dModelMastersUsers  = d4dModelMastersUsers;
 module.exports.d4dModelMastersUserroles  = d4dModelMastersUserroles;
 module.exports.d4dModelMastersglobalaccess  = d4dModelMastersglobalaccess;
+module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;

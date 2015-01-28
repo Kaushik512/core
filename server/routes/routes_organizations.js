@@ -170,6 +170,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 orgTree[i]['nodes'].push({
                                     name: docbgs[k]['productgroupname'],
                                     text: docbgs[k]['productgroupname'],
+                                    orgname: orgTree[i]['name'],
                                     icon: 'fa fa-fw fa-1x fa-group',
                                     borderColor:'#000',
                                     href: 'javascript:void(0)',
@@ -198,6 +199,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             for(var nt = 0; nt < envs.length;nt++){
                                                                 envs_.push({text:envs[nt],
                                                                     href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    orgname: orgTree[_i]['name'],
                                                                     icon: 'fa fa-fw fa-1x fa-desktop'
                                                                 });
                                                             }
@@ -209,6 +211,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             orgTree[_i]['nodes'][__i]['nodes'].push( {//
                                                                      name: docprojs[_prj]['projectname'],
                                                                      text: docprojs[_prj]['projectname'],
+                                                                     orgname: orgTree[_i]['name'],
                                                                      icon: 'fa fa-fw fa-1x fa-tasks',
                                                                      nodes:envs_,
                                                                      borderColor:'#000',
