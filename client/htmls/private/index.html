@@ -128,15 +128,17 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
-		
-		<div id="Workspace1">
+		<div class="login-info" id="Workspace1">
+			<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
 			
-			<div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
-				
-				<div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px">WORKZONE</div>
-				
-			</div>
-			<div id="tree" style="font-size:12px;"></div>
+			<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
+				<i class="fa fa-lg fa-fw fa-building"></i>
+				Organization
+				<i class="fa fa-chevron-right"></i>
+			</a>
+			
+			</span>
+			<div id="tree" style="font-size:12px;display:none"></div>
 		</div>
 		<!-- NAVIGATION :fa-angle-down  This navigation is also responsive
 		To make this navigation dynamic please make sure to link the node
@@ -226,6 +228,12 @@
 						<li>
 							<a href="ajax/Settings/DockerTemplatesList.html"><i class="fa fa-lg fa-fw fa-hdd-o"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Docker
+								</span>
+							</a>
+						</li>
+						<li>
+							<a href="ajax/Settings/JenkinsConfigList.html"><i class="fa fa-lg fa-fw fa-link"></i>
+								<span class="menu-item-parent" style="font-weight:bold">Jenkins
 								</span>
 							</a>
 						</li>
@@ -588,7 +596,9 @@
 						// selectedBackColor:'#40baf1  !important',
 						// selectedColor: '#fff !important',
 						onNodeSelected: function(event, node) {
-						//	alert('node' + node.nodeId);
+							
+							window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
+							//alert('node' + node.nodeId + 'orgname' + window.selectedOrgName);
 							//debugger;
 							// $('i[rightcarate="yes"]').detach();
 							// $('li[data-nodeid="3"]').first().attr('style','background-color : blue !important');
@@ -761,7 +771,7 @@
 		});
 	} //function ends
 
-//loadTreeFunc();
+loadTreeFunc();
 		//Selecting the first provider in the list on load
 			
 
