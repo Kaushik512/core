@@ -514,7 +514,7 @@ function loadLaunchParams(){
    
 $(document).ready(function(){
     $('.chooseSelect').select2();
-    alert(localStorage.getItem('selectedOrgName'));
+    console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
        var $instanceOS = $('#instanceOS');
        for(var i=0;i<data.length;i++) {
