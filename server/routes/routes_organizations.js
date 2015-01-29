@@ -150,6 +150,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 borderColor:'#000',
                                 businessGroups: [],
                                 selectable: false,
+                                itemtype:'org',
                                 environments: []
                             });
         });
@@ -176,6 +177,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     href: 'javascript:void(0)',
                                     nodes:[],
                                     selectable: false,
+                                    itemtype:'bg',
                                     projects: []
                                 });
                                 d4dModelNew.d4dModelMastersProjects.find({id:4,orgname:orgTree[i]['name'],productgroupname:docbgs[k]['productgroupname']},function(err,docprojs){
@@ -197,9 +199,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             var envs = docprojs[_prj]['environmentname'].split(',');
                                                             var envs_ = [];
                                                             for(var nt = 0; nt < envs.length;nt++){
+                                                                //fixing the length of the env name
+                                                                var ttp = '';
+                                                                if(envs[nt].length > 12){
+                                                                    ttp = envs[nt];
+                                                                    envs[nt] = envs[nt].substring(0,12);
+                                                                }
                                                                 envs_.push({text:envs[nt],
                                                                     href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
                                                                     orgname: orgTree[_i]['name'],
+                                                                    itemtype:'env',
+                                                                    tooltip: ttp,
                                                                     icon: 'fa fa-fw fa-1x fa-desktop'
                                                                 });
                                                             }
@@ -216,6 +226,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                      nodes:envs_,
                                                                      borderColor:'#000',
                                                                      selectable: false,
+                                                                     itemtype:'proj',
                                                                      href: 'javascript:void(0)',
                                                                      environments: envs
                                                                 });

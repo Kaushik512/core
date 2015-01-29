@@ -128,8 +128,8 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
-		<div class="login-info" id="Workspace1">
-			<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
+		<!-- <div class="login-info" id="Workspace1">
+			<span> 
 			
 			<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
 				<i class="fa fa-lg fa-fw fa-building"></i>
@@ -139,6 +139,15 @@
 			
 			</span>
 			<div id="tree" style="font-size:12px;display:none"></div>
+		</div> -->
+		<div id="Workspace1">
+			
+			<div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
+				
+				<div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px">WORKZONE</div>
+				
+			</div>
+			<div id="tree" style="font-size:12px;"></div>
 		</div>
 		<!-- NAVIGATION :fa-angle-down  This navigation is also responsive
 		To make this navigation dynamic please make sure to link the node
@@ -593,36 +602,28 @@
 						data:data1,enableLinks:true,
 						collapseIcon:'fa fa-angle-down',
 						expandIcon:'fa fa-angle-right',
+						levels: 1,
 						// selectedBackColor:'#40baf1  !important',
 						// selectedColor: '#fff !important',
 						onNodeSelected: function(event, node) {
 							
 							window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
-							//alert('node' + node.nodeId + 'orgname' + window.selectedOrgName);
-							//debugger;
-							// $('i[rightcarate="yes"]').detach();
-							// $('li[data-nodeid="3"]').first().attr('style','background-color : blue !important');
-							// $('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : blue !important').append('<i  class="fa fa-caret-left" rightcarate="yes"></i>');
-							
-							// alert('node' + node.nodeId);
-
-							// console.log('in here');
-							// var $expcollp = $('li[data-nodeid="' + node.nodeId + '"]').first().find('span.expand-collapse').first();
-							// if($expcollp)
-							// 	$expcollp.trigger('click');
-							// else
-							// {
-
-							// }
+							console.log("Org Selected:" + window.selectedOrgName );
+							localStorage.setItem('selectedOrgName',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
 						}
 					});
-					$('#tree ul').click(function(event,itm){
-					//	alert(itm);
-					});
+					
 				}
 			});
 	}
+	var selectFirstEnv = function(){
+		$('a[itemtype="org"]').first().trigger('click');
+		$('a[itemtype="bg"]').first().trigger('click');
+		$('a[itemtype="proj"]').first().trigger('click');
+		$('a[itemtype="env"]').first().trigger('click');
+	}
 	loadTreeFuncNew();
+	selectFirstEnv();
 	var loadTreeFunc = function(){
 	$.ajax({
 				type: "get",
@@ -771,7 +772,7 @@
 		});
 	} //function ends
 
-loadTreeFunc();
+//loadTreeFunc();
 		//Selecting the first provider in the list on load
 			
 

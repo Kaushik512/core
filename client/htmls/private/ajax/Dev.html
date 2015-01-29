@@ -93,9 +93,6 @@
                                                                     
                                                                    
                                                                 </tbody>
-                                                                
-                                                               
-                                                            </tbody>
                                                             
                                                         </table>
                                                         
@@ -1888,32 +1885,37 @@ $(function() {
         //alert(orgId + "/" + projectId + "/" + envId + data.length);
 
         //Displaying the Template Types.
-        $.get("/d4dMasters/readmasterjson/16", function(tdata) {
-
-            var rowLength = JSON.stringify(tdata.masterjson.rows.row.length);
+        $.get("/d4dMasters/readmasterjsonnew/16", function(tdata) {
+            tdata = JSON.parse(tdata);
+            var rowLength = tdata.length;
+            //alert(rowLength);
             var $containerTemp = "";
             var selectedrow = false;
             var getDesignTypeImg;
             var getDesignTypeRowID;
+            var getDesignTypeName;
             $('#accordion-2').empty();
+            console.log(tdata);
             for (var i = 0; i < rowLength; i += 1) {
-                getDesignTypeImg = "";
-                getDesignTypeRowID = "";
-                for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
-                    if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
-                        getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
-                    }
-                    if (tdata.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename") {
-                        getDesignTypeImg = tdata.masterjson.rows.row[i].field[x].values.value;
+                getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
+                getDesignTypeRowID = tdata[i]['rowid'];
+                getDesignTypeName = tdata[i]['templatetypename'];
+                // for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
+                //     if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
+                //         getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
+                //     }
+                //     if (tdata.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename") {
+                //         getDesignTypeImg = tdata.masterjson.rows.row[i].field[x].values.value;
 
-                    }
-                    if (tdata.masterjson.rows.row[i].field[x].name == "templatetypename") {
-                        getDesignTypeName = tdata.masterjson.rows.row[i].field[x].values.value;
+                //     }
+                //     if (tdata.masterjson.rows.row[i].field[x].name == "templatetypename") {
+                //         getDesignTypeName = tdata.masterjson.rows.row[i].field[x].values.value;
 
-                    }
-                }
+                //     }
+                // }
                 //Extracting the TT definitions. Add New Template types
                 var $currRolePanel = null;
+                //alert(getDesignTypeName);
                 switch (getDesignTypeName) {
                     case "AppFactory":
                         $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
@@ -2073,9 +2075,9 @@ $(function() {
                     //Attaching the selection event.
                     if (i == (data.length - 1)) {
                         var $productdiv1 = $('.productdiv1');
-                        //alert($productdiv1.length);
+                       
                         $productdiv1.click(function(e) {
-                            //alert('yes');
+                            
                             $productdiv1.removeClass('role-Selected1');
                             $(this).addClass('role-Selected1');
                         });
