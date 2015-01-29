@@ -1255,10 +1255,7 @@ var orgId = urlParams['org'];
 $(document).ready(function() {
    $('#instanceOS').select2();
 
-  //emptying ssh container 
-  $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
-      $('#modalSSHShellContainer').find('.modal-body').empty();
-  });
+  
 
 
   if(localStorage.getItem("SelectedClass") == "Orchestration")
@@ -2548,12 +2545,22 @@ var instanceLogsHandler = function(e) {
     pollLogs(lastTimestamp, 0, true);
 };
 
+
+//emptying ssh container 
+$('#modalSSHShellContainer').on('hide.bs.modal',function(e){
+    $('#modalSSHShellContainer').find('#ssh-terminateBtn').click(); 
+    $('#modalSSHShellContainer').find('.modal-body').empty();
+});
 function showSSHModal() {
     var $sshModal = $('#modalSSHShellContainer');
     var instanceId = $(this).attr('data-instanceId');
-    var $iframe = $('<iframe src="sshShell.html?id=' + instanceId + '" height="100%" width="100%" frameBorder="0"></iframe>');
-    $sshModal.find('.modal-body').empty().append($iframe);
+    $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
     $sshModal.modal('show');
+    $.get('sshShell.html?id=' + instanceId,function(data){
+
+      $sshModal.find('.modal-body').empty().append(data);
+       $sshModal.find('#ssh-instanceId').val(instanceId);
+    });
 }
 
 function addInstanceToDOM(data) {
