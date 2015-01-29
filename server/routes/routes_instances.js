@@ -13,6 +13,7 @@ var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var javaSSHWrapper = require('../model/javaSSHWrapper.js');
+var errorResponses = require('./error_responses');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 

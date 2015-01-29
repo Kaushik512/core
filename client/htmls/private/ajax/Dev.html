@@ -3438,6 +3438,8 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
             $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
             $parent.find('.moreInfo').trigger('click');
             console.log(data);
+        }).fail(function(jxObj){
+            
         });
     });
 

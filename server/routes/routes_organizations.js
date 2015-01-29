@@ -11,6 +11,8 @@ var uuid = require('node-uuid');
 var fileIo = require('../lib/utils/fileio');
 var logsDao = require('../model/dao/logsdao.js');
 
+var errorResponses = require('./error_responses');
+
 
 var credentialCryptography = require('../lib/credentialcryptography');
 
@@ -789,12 +791,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/organizations/:orgname/chefRunlist', function(req, res) {
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
-                res.send(500);
+                res.send(500,errorResponses.db.error);
                 return;
             }
             logger.debug("chefdata", chefDetails);
             if (!chefDetails) {
-                res.send(404);
+                res.send(404,errorResponses.db.error);
                 return;
             }
             var chef = new Chef({
@@ -808,15 +810,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
             chef.getCookbooksList(function(err, cookbooks) {
                
                 if (err) {
-                     logger.error('Unable to fetch cookbooks : ', err);
-                    res.send(500);
+                    logger.error('Unable to fetch cookbooks : ', err);
+                    res.send(500,errorResponses.chef.connectionError);
                     return;
                 } else {
                     chef.getRolesList(function(err, roles) {
                         
                         if (err) {
                             logger.error('Unable to fetch roles : ', err);
-                            res.send(500);
+                            res.send(500,errorResponses.chef.connectionError);
                             return;
                         } else {
                             res.send({
