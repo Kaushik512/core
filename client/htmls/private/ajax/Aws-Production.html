@@ -514,6 +514,7 @@ function loadLaunchParams(){
    
 $(document).ready(function(){
     $('.chooseSelect').select2();
+    console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
        var $instanceOS = $('#instanceOS');
        for(var i=0;i<data.length;i++) {
@@ -799,8 +800,9 @@ $(document).ready(function(){
                    alert('please choose a blueprint design');
                    return false;
                }
-
-               $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+               //Selection of Orgname from localstorage 
+            //   $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+               $('#orgnameSelect').val(localStorage.getItem('selectedOrgName'));
                console.log('role-Selected before ==> ',$('#tab2 .role-Selected').length);
                if ($('.productdiv2.role-Selected').length > 0) {
                    //Setting controls connected to docker to hidden

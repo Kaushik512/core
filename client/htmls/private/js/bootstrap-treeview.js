@@ -144,7 +144,7 @@
 					//alert('in');
 					
 					this._setSelectedNode(node);
-					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : #2c3742 !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;"></i>');
+					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : #000000 !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 					$(location).attr('href',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('href')) ;
 				} else {
 
@@ -318,6 +318,8 @@
 						.append($(self._template.link)
 							.attr('href', node.href)
 							.attr('orgname',node.orgname)
+							.attr('itemtype',node.itemtype)
+							.attr('title',node.tooltip)
 							.append(node.text)
 						);
 				}
