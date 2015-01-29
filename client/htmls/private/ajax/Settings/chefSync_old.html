@@ -393,6 +393,7 @@ $('.showChefImportNodesModalBtn').click(function(e){
    var reqBody = {};
    reqBody.orgId = $orgListInput.val();
    reqBody.projectId = $projectList.val();
+   reqBody.bgId = $bgList.val();
    reqBody.users = $('#userListSelect').val();
    if(!reqBody.users || !reqBody.users.length) {
      alert('Please Choose Users');

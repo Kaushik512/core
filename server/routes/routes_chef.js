@@ -1,7 +1,7 @@
 
 var Chef = require('../lib/chef');
 var EC2 = require('../lib/ec2');
-var instancesDao = require('../model/instances');
+var instancesDao = require('../model/dao/instancesdao');
 var environmentsDao = require('../model/d4dmasters/environments.js');
 var logsDao = require('../model/dao/logsdao.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
@@ -83,6 +83,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var reqBody = req.body;
         var projectId = reqBody.projectId;
         var orgId = reqBody.orgId;
+        var bgId = reqBody.bgId;
         var count = 0;
 
         var users = reqBody.users;
@@ -280,7 +281,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                 console.log('creating env ==>', node.chef_environment);
                                 console.log('orgId ==>', orgId);
-                                environmentsDao.createEnv(node.chef_environment, orgId, function(err, data) {
+                                console.log('bgid ==>',bgId);
+                               // console.log('node ===>', node)
+                                environmentsDao.createEnv(node.chef_environment, orgId,bgId,projectId ,function(err, data) {
                                     if (err) {
                                         count++;
                                         console.log(err, 'occured in creating environment in mongo');

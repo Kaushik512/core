@@ -8,6 +8,7 @@ var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
 var logger = require('./lib/logger')(module);
+var expressLogger = require('./lib/logger').ExpressLogger();
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
@@ -38,17 +39,19 @@ var mongoStore = new MongoStore({
     port: appConfig.db.port
 });
 
-
-
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('sport', appConfig.app_run_secure_port);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 app.use(express.compress());
-
 app.use(express.favicon());
+app.use(express.logger({
+    format:'dev', 
+    stream: {
+        write: function(message, encoding){
+            expressLogger.debug(message);
+        }
+    }
+}));
 
-app.use(express.logger('dev'));
 app.use(express.cookieParser());
 
 logger.debug("Initializing Session store in mongo");
@@ -61,9 +64,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 
-
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 
 var options = {
     key: fs.readFileSync('rlcatalyst.key'),
@@ -77,11 +78,6 @@ var routes = require('./routes/routes.js');
 routes.setRoutes(app);
 
 var server = http.createServer(app);
-/*var server = https.createServer(options,app).listen(app.get('sport'),function(){
-  console.log('Express server listening on https port ' + server.address().port);
-});*/
-
-
 
 // setting up socket.io
 io = io.listen(server, {

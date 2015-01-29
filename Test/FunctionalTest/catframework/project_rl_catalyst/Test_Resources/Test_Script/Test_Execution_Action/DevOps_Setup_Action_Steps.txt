@@ -159,6 +159,7 @@ Verify the Workzone and Design
     Look for the list of links for the logged in user
     Click on Workzone
     Verify if there is an environment by name _default
+#    Verify the environment         ${ENVIRONMENT NAME}
     Verify the list of instances
     Verify the availability of Start play icon on the instance card
     Verify the availabity of the Chef run icon on the instance card
@@ -176,6 +177,7 @@ Verify the Workzone Instances
 #    Wait For Condition  Page Should Contain Link      xpath=//header[@id='header']/div[2]/li/a      WORKZONE
     Look for the list of links for the logged in user
     Click on Workzone
+#   Verify the environment         ${ENVIRONMENT NAME}
     Verify if there is an environment by name _default
     Click on instances table view
     Select instance from the list and verify the instance status
@@ -244,7 +246,7 @@ Select Multiple Assign User
 
 Click on Import button
     Click Element      xpath=//button[./text()='Import']
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
 
 Look for the list of links for the logged in user
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=//header[@id='header']/div[1]
@@ -253,6 +255,10 @@ Look for the list of links for the logged in user
 
 Click on Workzone
     Click Element      xpath=//header[@id='header']/div[2]/li/a
+
+Verify the environment
+    [Arguments]    ${env}
+    Click Element      xpath=//a[@title='${env}']
 
 Verify if there is an environment by name _default
     Click Element      xpath=//a[@title='_default']
@@ -270,12 +276,15 @@ Wait for few minutes and click on close button
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
 
 
+
 Verify the stop status of the instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//button[@data-bb-handler='confirm']
+    Click Element                   xpath=//button[@data-bb-handler='confirm']
     Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span         stopped
 #    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span       stopped
 
 Click on start icon on the instance card
-    Click Link         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[4]/div[2]/a
+    Click Element          xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[4]/div[2]                          #xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[4]/div[2]/a
 
 Verify the start status of the instance
     Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain         xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span       running
@@ -292,7 +301,9 @@ Select any of the cookbooks andn click on >> button
 
 Click on update button
     Click Element     xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element     xpath=//button[@data-bb-handler='confirm']
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element     xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    
 
 Import User Name and Password
     Input Text     id=importUsernameInput      ${VALID USER}
@@ -349,6 +360,8 @@ run chef
     Add cookbook    ${GIT COOKBOOK}
     Add cookbook    ${SERVER TIME COOKBOOK}
     Click Element     xpath=//button[./text()='Update']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//button[@data-bb-handler='confirm']
+    Click Element                   xpath=//button[@data-bb-handler='confirm']
     Wait for few minutes and click on close button
 
 Add cookbook
@@ -363,6 +376,8 @@ Verify stop status of the instance
     [Arguments]    ${last index}
     Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[2]
     Click Element     xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[9]/div/div[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//button[@data-bb-handler='confirm']
+    Click Element                   xpath=//button[@data-bb-handler='confirm']
     Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=//div[@class='logsArea']/div[2]/div/div[2]
     Element Should Contain    xpath=//div[@class='logsArea']/div[2]/div/div[2]       ${INSTANCE STOPPED}
     Wait for few minutes and click on close button

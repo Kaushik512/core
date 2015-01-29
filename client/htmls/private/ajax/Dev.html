@@ -37,7 +37,14 @@
                                     <a data-toggle="collapse">Instance</a>
                                 </h4>
 
-                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+
+                                <span class="pull-right swap-view">
+                                    
+                                    <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;
+                                    <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                <!-- <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
+                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span> -->
+
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
@@ -66,9 +73,6 @@
                                                                     
                                                                    
                                                                 </tbody>
-                                                                
-                                                               
-                                                            </tbody>
                                                             
                                                         </table>
                                                         
@@ -110,8 +114,14 @@
                         
                          
                      </div>
-                    <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" style="margin-right:12px" > <i class="fa fa-trash-o"></i></button>
-                    &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px"> <i class="fa fa-plug"></i></a>
+                     <a class="btn pull-right btn-danger margin-right12" title="Remove Instance" onClick="removeSelectedInstance()" > 
+                        <i class="fa fa-trash-o"></i>
+                    </a>&nbsp;
+                    <a class="btn pull-right btn-info margin-right12" id="" data-original-title="Import Instance" data-placement="top" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
+                        <i class="fa fa-laptop"/>
+                    </a>
+                    
+                    &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px;"> <i class="fa fa-plug"></i></a>
 
                 </div>
 </footer>
@@ -311,7 +321,7 @@
                                                               </div>
                                                              </div> 
                                                           </div>
-                                                          <div class="card2 front2  terminate">
+                                                          <div class="card2 front2  unpause">
                                                               <div id="flip3" style="margin-top:5px;"  title="UnPause" >
                                                                   <div class="">
                                                                       <a href="javascript:void(0)" data-original-title="Unpause"  dockercontaineraction="5"  data-placement="top" rel="tooltip" class="dockeractionbutton"><i class="fa fa-eject fa-1x txt-color-white" style="transform:rotate(90deg)"></i></a>
@@ -1048,6 +1058,88 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
+
+<!-- Modal for Container tab started-->
+<div class="modal fade" id="modalContainerimportInstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Import Instance By IP
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form role="form" class="smart-form" id="addInstanceForm" autocomplete="off">
+
+                    <fieldset style="padding-top:0px;margin-top:10px;">
+                      <div class="">
+                        <section class="col col-6">
+                            <div class="form-group" style="margin-bottom:15px;">
+                              <label for="">Enter IP Address</label>
+                              <label class="input">
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN">
+                                <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i>Please enter IP Address</b>
+                              </label>
+                            </div>
+                            <div class="form-group" style="margin-bottom:15px;">
+                              <label for="">Choose Operating System</label>
+                              <select id="instanceOS"  class="width-100" >
+                                <option value="linux">linux</option>
+                                <option value="windows">windows</option>
+                              </select>
+                            </div>
+                        </section>
+                        <section class="col col-6 credentialSection" style="margin-bottom:12px;">
+                            <div class="form-group">
+                              <label for="">Username</span></label>
+                              <label class="input">
+                              <input type="text" name="usernameInput" class="form-control" id="instanceUsername">
+                                <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+                              </label>
+                            </div>
+                        </section>
+                        <section class="col col-6 credentialSection" style="margin-bottom:18px;">
+                            <div class="form-group">
+                              <label for="">Password</label>
+                              <label class="input">
+                              <input type="password" class="form-control" id="instancePassword" />
+                                <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
+                              </label>
+                            </div>
+                        </section>
+                        <section class="col col-6 credentialSection" >
+                            <div class="form-group">
+                              <label for="">Pem File</label>
+                              <label class="checkbox" style="display:inline;padding-top:4px;">
+                                  <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
+                              </label>
+                              <div class="">  
+                                <input type="file" id="importPemfileInput" style="display:inline" disabled/>
+                              </div>
+                            </div>
+                        </section>
+                      </div>
+                    </fieldset>
+                </form>
+            </div>
+             <div class="modal-footer">
+                <button id="addInstanceBtn" class="btn btn-primary" type="submit">
+                   <i class="fa fa-upload fa-1x"></i>&nbsp;Import
+                </button>
+                 <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                   <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                </button>
+             </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal for Container tab ended-->
 <script type="text/javascript">
 
 
@@ -1069,7 +1161,16 @@
         // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
         // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
      });
-    
+
+    $('#pemFileCheckbox').change(function(){
+        if($(this).is(':checked')) {
+          $('#importPemfileInput').attr('disabled',false);
+          $('#passwordInput').attr('disabled',true);
+        } else {
+          $('#importPemfileInput').attr('disabled',true);
+          $('#passwordInput').attr('disabled',false);
+        } 
+  });
 </script>
 <script type="text/javascript">
 
@@ -1106,7 +1207,7 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
 $(document).ready(function() {
-   
+   $('#instanceOS').select2();
 
   //emptying ssh container 
   $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
@@ -1351,6 +1452,7 @@ $('#defaultViewButton').click(); //setting the detault view
 
 
 
+
 $('.dockerinstancestart').click(function(e){
     $('.instanceselectedfordocker').each(function(){
       if($(this).is(':checked')){
@@ -1373,8 +1475,18 @@ $('.dockerinstancestart').click(function(e){
            var dockerlaunchparameters = generateDockerLaunchParams();
             if(!dockerlaunchparameters)
                 dockerlaunchparameters = 'null';
-           // alert('../instances/dockerimagepull/' + instid + '/' + encodeURIComponent(repopath) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters));
-          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(dockerlaunchparameters),function(data){
+           var lp = 'null'; //launch parameter
+           var sp = 'null'; //start parameter
+            if(dockerlaunchparameters)
+            {
+               if(dockerlaunchparameters[0])
+                     lp = dockerlaunchparameters[0];
+               if(dockerlaunchparameters[1])
+                sp = dockerlaunchparameters[1];
+            }
+           // alert(lp + ' ' + sp);
+       // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
+          $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp),function(data){
             if(data == "OK"){
                 var $statmessage = $td.find('.dockerspinner').parent();
                 $td.find('.dockerspinner').detach();
@@ -1401,6 +1513,71 @@ $('.dockerinstancestart').click(function(e){
 });
 
 
+$('#addInstanceBtn').click(function(e) {
+    
+    var reqBody = {};
+    var $form = $('#addInstanceForm');
+    reqBody.fqdn = $form.find('#instanceFQDN').val();
+    reqBody.os = $form.find('#instanceOS').val();
+    reqBody.credentials = {
+        username: $form.find('#instanceUsername').val()
+    };
+
+    if(!reqBody.fqdn) {
+       alert('Please enter IP');
+       return;
+    }
+
+    if(!reqBody.os) {
+       alert('Please choose OS');
+    }
+
+    function makeRequest() {
+      $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
+          $('#tabInstanceStatus').hide();
+          addInstanceToDOM(data);
+          var $divinstancescardview = $('#divinstancescardview');
+          if ($divinstancescardview.find('li').length > 0) {
+            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+          }
+          $divinstancescardview.find('.item').first().addClass('active');
+          $('#modalContainerimportInstance').modal('hide');
+      });
+    }
+
+    var $checkbox = $('#pemFileCheckbox');
+    if ($checkbox.is(':checked')) {
+        
+       var pemFileInput = $form.find('#importPemfileInput').get(0);
+       if(!reqBody.credentials.username){
+          alert('Please Enter Username');
+          return;
+       }
+       if(!pemFileInput.files.length) {
+         alert('Please Choose a Pem file');
+         return;
+       }
+       var reader = new FileReader();
+       // Closure to capture the file information.
+       reader.onload = function(e) {
+           // Render thumbnail.
+            reqBody.credentials.pemFileData = e.target.result;
+           
+            makeRequest();
+           
+       };
+       // Read in the image file as a data URL.
+       reader.readAsText(pemFileInput.files[0]);
+    } else {
+        reqBody.credentials.password = $form.find('#instancePassword').val();
+        if(!reqBody.credentials.password) {
+           alert("Please enter password");
+           return;
+        }
+        makeRequest();
+    }
+
+});
 
 
 /**
@@ -1662,32 +1839,37 @@ $(function() {
         //alert(orgId + "/" + projectId + "/" + envId + data.length);
 
         //Displaying the Template Types.
-        $.get("/d4dMasters/readmasterjson/16", function(tdata) {
-
-            var rowLength = JSON.stringify(tdata.masterjson.rows.row.length);
+        $.get("/d4dMasters/readmasterjsonnew/16", function(tdata) {
+            tdata = JSON.parse(tdata);
+            var rowLength = tdata.length;
+            //alert(rowLength);
             var $containerTemp = "";
             var selectedrow = false;
             var getDesignTypeImg;
             var getDesignTypeRowID;
+            var getDesignTypeName;
             $('#accordion-2').empty();
+            console.log(tdata);
             for (var i = 0; i < rowLength; i += 1) {
-                getDesignTypeImg = "";
-                getDesignTypeRowID = "";
-                for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
-                    if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
-                        getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
-                    }
-                    if (tdata.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename") {
-                        getDesignTypeImg = tdata.masterjson.rows.row[i].field[x].values.value;
+                getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
+                getDesignTypeRowID = tdata[i]['rowid'];
+                getDesignTypeName = tdata[i]['templatetypename'];
+                // for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
+                //     if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
+                //         getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
+                //     }
+                //     if (tdata.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename") {
+                //         getDesignTypeImg = tdata.masterjson.rows.row[i].field[x].values.value;
 
-                    }
-                    if (tdata.masterjson.rows.row[i].field[x].name == "templatetypename") {
-                        getDesignTypeName = tdata.masterjson.rows.row[i].field[x].values.value;
+                //     }
+                //     if (tdata.masterjson.rows.row[i].field[x].name == "templatetypename") {
+                //         getDesignTypeName = tdata.masterjson.rows.row[i].field[x].values.value;
 
-                    }
-                }
+                //     }
+                // }
                 //Extracting the TT definitions. Add New Template types
                 var $currRolePanel = null;
+                //alert(getDesignTypeName);
                 switch (getDesignTypeName) {
                     case "AppFactory":
                         $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
@@ -1775,7 +1957,7 @@ $(function() {
                             $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
                             
                             if(data[i].dockerlaunchparameters)
-                                $itemBody.attr('dockerlaunchparameters', data[i].dockerlaunchparameters);
+                                   $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
                             var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                             $ul.append($liDockerRepoName);
                             if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
@@ -1823,9 +2005,12 @@ $(function() {
                         var $li = $('<li></li>').css({
                             "font-size": '10px'
                         }).append(tagLabel, $selectVer, $selectVerEdit);
-                        for (var j = 0; j < data[i].versionsList.length; j++) {
-                            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                            $selectVer.append($options);
+                        if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
+                        {
+                            for (var j = 0; j < data[i].versionsList.length; j++) {
+                                var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                                $selectVer.append($options);
+                            }
                         }
                         $selecteditBtnContainer.append($li);
                     }
@@ -1844,9 +2029,9 @@ $(function() {
                     //Attaching the selection event.
                     if (i == (data.length - 1)) {
                         var $productdiv1 = $('.productdiv1');
-                        //alert($productdiv1.length);
+                       
                         $productdiv1.click(function(e) {
-                            //alert('yes');
+                            
                             $productdiv1.removeClass('role-Selected1');
                             $(this).addClass('role-Selected1');
                         });
@@ -1972,7 +2157,6 @@ $(function() {
     }
 
     $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
-
         initializeBlueprintArea(data.blueprints);
         initializeTaskArea(data.tasks);
         initializeInstanceArea(data.instances);
@@ -1986,12 +2170,21 @@ function generateDockerLaunchParams(){
     return('');
   }
 
-    var launchparams = '';
+    var launchparams = [];
+    var preparams = '';
+    var startparams = '';
     $('[dockerparamkey]').each(function(){
       if($(this).val() != ''){
         var itms = $(this).val().split(',');
         for(itm in itms)
-          launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+          {
+            if($(this).attr('dockerparamkey') != '-c') //checking for start parameter
+                preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+            else
+                startparams += ' ' + itms[itm];
+          }
+          launchparams[0] = preparams;
+          launchparams[1] = startparams;
       }
     });
     return(launchparams);
@@ -2000,7 +2193,15 @@ function generateDockerLaunchParams(){
 function loadLaunchParams(){
   var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
   if(lparam != ''){
-      $('[dockerparamkey]').val('');
+      $('[dockerparamkey]').val(''); //clearing the popup input boxes
+      //split by -c to get startup and other parameters
+      var preparams = lparam.split('-c');
+      var cparams = ''; //this is the startup parameters
+      if(preparams.length > 1){
+        lparam = preparams[0];
+        cparams = preparams[1];
+      }
+      console.log(lparam + ' ' + cparams);
       var params = lparam.split(' -');
       for(para in params){
         var subparam = params[para].split(' ');
@@ -2013,6 +2214,8 @@ function loadLaunchParams(){
         }
         //alert(params[para]);
       }
+      //Updating the startup parameter
+      $('[dockerparamkey="-c"]').first().val(cparams);
     }
     else
        $('[dockerparamkey]').val(''); 
@@ -2166,20 +2369,12 @@ function pollInstanceState(instanceId, state, delay) {
         })
     }, delay);
 }
-
 var startStopInstanceHandler = function(e) {
     var $this = $(this);
     var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
     var type = $this.attr('data-actionType');
 
-    bootbox.confirm(type + " instance?", function(result) {
-        if (!result) {
-            return;
-        }
-        url = '../instances/' + instanceId + '/startInstance';
-        if (type === 'Stop') {
-            url = '../instances/' + instanceId + '/stopInstance'
-        }
+    function makeRequest(url) {
         var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
         $parent.find('.moreInfo').trigger('click');
         $.get(url, function(data) {
@@ -2198,9 +2393,23 @@ var startStopInstanceHandler = function(e) {
 
             pollInstanceState(instanceId, oldState, 2000);
         });
-    });
-}
 
+    }
+    var url = '../instances/' + instanceId + '/startInstance';
+    if (type === 'Stop') {
+        url = '../instances/' + instanceId + '/stopInstance'
+    }
+    if (type === 'Stop') {
+        bootbox.confirm(type + " instance?", function(result) {
+            if (!result) {
+                return;
+            }
+            makeRequest(url);
+        });
+    } else {
+         makeRequest(url);
+    }
+}
 
 
 
@@ -3214,6 +3423,7 @@ $('.actionControlPanel').click(function(e) {
     if ($('#divinstancescardview').is(':visible')) {
 
         var $selectedCard = $('.role-Selectedcard');
+        console.log($selectedCard.length);
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {

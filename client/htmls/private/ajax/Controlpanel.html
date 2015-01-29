@@ -651,9 +651,11 @@ $.get('../instances/'+urlParams.id,function(data){
     }
 
     //fetching services list
-
+    //alert(data.chef.serverId);
     $.get('/d4dMasters/19/chefserverid/'+data.chef.serverId,function(services){
       //console.log('hi ==>',serviceList);
+      services = JSON.parse(services);
+      //alert('Out json :' + JSON.stringify(services)+ services.length);
       var $serviceList = $('#serviceList');
       console.log(services,"length==>",services.length);
       var serviceIds = [];
@@ -692,12 +694,12 @@ $.get('../instances/'+urlParams.id,function(data){
       
 
     });
-    console.log(data.serviceIds,"  ---  ",data.serviceIds.length);
     $.post('/d4dMasters/getrows/19', {
         serviceids: data.serviceIds
     }, function(services) {
-        console.log(services);
+        services = JSON.parse(services);
         for (var i = 0; i < services.length; i++) {
+            console.log("sd1 = ",services[i]);
             addServiceToDom(services[i]);
         }
     });
@@ -1074,6 +1076,7 @@ function getCookbookActionHtml(serviceId,serviceData) {
 var $serviceTableBody = $('.servicesTbody');
 
 function addActionToServiceDom(serviceId,serviceData) {
+    console.log("sd==",serviceData);
     $td = $serviceTableBody.find('td[data-serviceId='+serviceId+']');
     var commandType = serviceData.commandtype;
     if(commandType === 'Chef Cookbook/Recepie') {

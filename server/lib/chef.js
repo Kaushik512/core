@@ -13,6 +13,7 @@ var Chef = function(settings) {
     var bootstrapattemptcount = 0;
 
     function initializeChefClient(callback) {
+        console.log('User Pem file:' + settings.chefUserPemFile);
         if (!chefClient) {
             fileIo.readFile(settings.chefUserPemFile, function(err, key) {
                 if (err) {
@@ -44,7 +45,7 @@ var Chef = function(settings) {
                     callback(true, null);
                     return;
                 }
-                
+
                 var nodeNames = Object.keys(chefResBody);
                 callback(null, nodeNames);
             });
@@ -317,21 +318,19 @@ var Chef = function(settings) {
         }
 
         if (typeof callbackOnStdErr === 'function') {
-            
+
             options.onStdErr = function(data) {
-                if(bootstrapattemptcount < 4){
+                if (bootstrapattemptcount < 4) {
                     //retrying bootstrap .... needed for windows
-                    if(data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0 ){
-                    callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount +1) + '/4 ...');
-                    that.bootstrapInstance(params,callback,callbackOnStdOut, callbackOnStdErr);
-                    bootstrapattemptcount++;
-                    }
-                    else{
+                    if (data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0) {
+                        callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount + 1) + '/4 ...');
+                        that.bootstrapInstance(params, callback, callbackOnStdOut, callbackOnStdErr);
+                        bootstrapattemptcount++;
+                    } else {
                         console.log('Hit an error :' + data);
                         callbackOnStdErr(data);
                     }
-                }
-                else{
+                } else {
                     console.log('Hit an error :' + data);
                     callbackOnStdErr(data);
                 }
@@ -351,43 +350,47 @@ var Chef = function(settings) {
         argList.push(params.instanceIp);
 
         var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
-        
+
         var credentialArg;
         if (params.pemFilePath) {
-            credentialArg = '-i' + params.pemFilePath;
+            argList.push('-i');
+            argList.push(params.pemFilePath);
+        //    credentialArg = '-i' + params.pemFilePath;
 
         } else {
-            credentialArg = '-P' + params.instancePassword;
+            argList.push('-P');
+            argList.push(params.instancePassword);
         }
         //If windows box then credetial to be updated to stored password
         if (params.instanceOS == 'windows') {
-            credentialArg = '-P\'Zaq!2wsx\'';
+            argList.push('-P');
+            argList.push('Zaq!2wsx');
         }
 
-        argList.push(credentialArg);
-
         if (params.instanceOS == 'windows') {
-            argList.push('-p5985');
-
+            argList.push('-p');
+            argList.push('5985');
         } else {
             argList.push('--sudo');
         }
 
 
-        console.log('runlist to length==>', runlist.length);
-        console.log('runlist ==>', runlist);
         if (runlist.length) {
-            console.log('runlist join ==>', '-r "' + runlist.join() + '"', 'length==?', runlist.join().length);
-            argList.push("-r" + runlist.join() + "");
+            argList.push('-r');
+            argList.push(runlist.join());
         }
 
-        argList = argList.concat(['-x' + params.instanceUsername, '-N' + params.nodeName, '-E' + params.environment]);
-        console.log('argList ==>', argList.join(" "));
-        console.log('bootstrap arglist ==>', argList);
-        argList.push('--hint ec2');
+        argList = argList.concat(['-x',params.instanceUsername, '-N',params.nodeName, '-E',params.environment]);
+        
+        if (chefDefaults.ohaiHints && chefDefaults.ohaiHints.length) {
+            for (var i = 0; i < chefDefaults.ohaiHints.length; i++) {
+                argList.push('--hint');
+                argList.push(chefDefaults.ohaiHints[i]);
+            }
+        }
         var proc = new Process('knife', argList, options);
         proc.start();
-        
+
     };
 
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
@@ -422,7 +425,7 @@ var Chef = function(settings) {
                 }
                 javaSSh.execChefClient(runlist.join(), overrideRunlist, callback, callbackOnStdOut, callbackOnStdErr);
             });
-     
+
         } else {
 
             var processOptions = {
@@ -449,7 +452,7 @@ var Chef = function(settings) {
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
             console.log('host name ==>', options.host);
             //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
-            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' +  ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
             proc.start();
 
         }

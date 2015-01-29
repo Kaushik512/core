@@ -8,7 +8,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst new organization setup
-    [Tags]       Sanity
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Create New Organization

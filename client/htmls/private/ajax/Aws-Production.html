@@ -489,6 +489,7 @@ function loadLaunchParams(){
    
 $(document).ready(function(){
     $('.chooseSelect').select2();
+    console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
        var $instanceOS = $('#instanceOS');
        for(var i=0;i<data.length;i++) {
@@ -525,39 +526,41 @@ $(document).ready(function(){
     $(".chooseEnv").select2();
     $(".chooseDockerContainer").select2();
    $.ajax({
-    url: "/d4dMasters/readmasterjson/16",
+    url: "/d4dMasters/readmasterjsonnew/16",
     dataType: "json",
     type:"GET",
     cache: "true",
     success: function(data){
-        var rowLength = JSON.stringify(data.masterjson.rows.row.length);
+        var rowLength = JSON.stringify(data.length);
         var containerTemp = "";
         var selectedrow = false;
         var getDesignTypeImg; var getDesignTypeRowID;
+        //alert(JSON.stringify(data));
         for(var i=0; i<rowLength; i+=1){
-             getDesignTypeImg= "";
-             getDesignTypeRowID= "";
-            for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
+
+             getDesignTypeImg= data[i]['designtemplateicon_filename'];
+             getDesignTypeRowID= data[i]['rowid'];
+            // for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
                
 
-                if(data.masterjson.rows.row[i].field[x].name == "rowid"){
-                  getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
-                }
-             if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
-                  getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
+            //     if(data.masterjson.rows.row[i].field[x].name == "rowid"){
+            //       getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
+            //     }
+            //  if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
+            //       getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
                   
-                }
+            //     }
                     
 
-            }
+            // }
         containerTemp += '<div class="" style="width:222px;float:left">'+
                             ' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
-                            'templateType="'+data.masterjson.rows.row[i].field[0].values.value+'">'+
+                            'templateType="'+data[i]['templatetypename']+'">'+
                             '<div style="">'+
                             '<img  style="height:25px;padding:2px" alt="" src="img/app-store-'+
                             'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;'+
                             'padding-left: 4px;">'+
-                            '<b>'+data.masterjson.rows.row[i].field[0].values.value+'</b>'+
+                            '<b>'+data[i]['templatetypename']+'</b>'+
                             '</span></div>'+
                             '<div style="padding-top:10px;padding-left:27px;">'+
                              '<img alt="JBoss Stack" '+
@@ -620,75 +623,84 @@ $(document).ready(function(){
                //                   '</div></div></div><div cls=="clearfix"></div>';
 
                $.ajax({
-                   url: "/d4dMasters/readmasterjson/17",
+                   url: "/d4dMasters/readmasterjsonnew/17",
                    dataType: "json",
                    type: "GET",
                    cache: "true",
                    success: function(data) {
-                       var rowGridLength = (data.masterjson.rows.row.length);
+                       var rowGridLength = (data.length);
                        var getIndividualData = "";
                        var getTempName;
                        var getRowID, getImage;
+                       //alert(JSON.stringify(data));
                        for (var z = 0; z < rowGridLength; z += 1) {
                            //iterate thhrough columns to get correct column and value
                            var selectedrow = false;
                            var currField = null;
-                           getTempName = '';
-                           getRowID = '';
-                           getImage = '';
-                           getTemplateType = '';
-                           gettemplatescookbooks = '';
-                           dockercontainerpathstitle = '';
-                           dockercontainerpaths = '';
-                           dockerreponame = '';
+
+                           getTempName = data[z]['templatename'];
+
+
+                           getRowID = data[z]['rowid'];
+                           getImage = data[z]['templatesicon_filename'];
+                           getTemplateType = data[z]['templatetypename'];
+
+                           if(selectedText != getTemplateType)
+                              continue;
+
+                           gettemplatescookbooks = data[z]['templatescookbooks'].replace(/"/g, "");
+                           dockercontainerpathstitle = data[z]['dockercontainerpathstitle'];
+                           dockercontainerpaths = data[z]['dockercontainerpaths'];
+                           dockerreponame = data[z]['dockerreponame'];
                            //To be removed and converted to reference when the new master model is implemented.
                            dockerusername = '';
                            dockercred = '';
                            dockeremail = '';
+                          
+                           //alert(JSON.stringify(data));
+                           // for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
+                           //         getImage = data.masterjson.rows.row[z].field[x].values.value;
+                           //         //alert(getImage);
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "rowid") {
+                           //         getRowID = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
+                           //         getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
+                           //         gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
+                           //         //clearing additional double quotes
+                           //         gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
+                           //     }
 
-                           for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
-                               if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
-                                   getImage = data.masterjson.rows.row[z].field[x].values.value;
-                                   //alert(getImage);
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "rowid") {
-                                   getRowID = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-                                   getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
-                                   gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
-                                   //clearing additional double quotes
-                                   gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
-                               }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatename") {
+                           //         getTempName = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
+                           //         if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
+                           //             selectedrow = true;
+                           //         }
+                           //     }
 
-                               if (data.masterjson.rows.row[z].field[x].name == "templatename") {
-                                   getTempName = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-                                   if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
-                                       selectedrow = true;
-                                   }
-                               }
+                           //     //For docker 
+                           //     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
+                           //         dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
+                           //         dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
+                           //     }
+                           //     if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
+                           //         dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
+                           //         //
 
-                               //For docker 
-                               if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
-                                   dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
-                                   dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
-                               }
-                               if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
-                                   dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
-                                   //
+                           //     }
 
-                               }
-
-                           }
+                           // }
                            console.log('here end');
 
-                           if (selectedrow) {
+                           
                                getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
                                    '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
                                    'templateComponent="component' + z + '" ' +
@@ -723,7 +735,7 @@ $(document).ready(function(){
 
                                getIndividualData += licb + '</ul></div></div>';
 
-                           }
+                           
                        }
                        $("#individualTemplateNameGrid").html("");
                        //$("#individualTemplateNameGrid").append(getParent);
@@ -763,8 +775,9 @@ $(document).ready(function(){
                    alert('please choose a blueprint design');
                    return false;
                }
-
-               $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+               //Selection of Orgname from localstorage 
+            //   $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
+               $('#orgnameSelect').val(localStorage.getItem('selectedOrgName'));
                console.log('role-Selected before ==> ',$('#tab2 .role-Selected').length);
                if ($('.productdiv2.role-Selected').length > 0) {
                    //Setting controls connected to docker to hidden
@@ -801,7 +814,7 @@ $(document).ready(function(){
                        //Attaching the change event to pull tags for the select repo
                        $dockerrepoListInput.change(function(e) {
                            //tutum/centos
-                           console.log('Docker Query -> ', '/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame);
+                           //alert('Docker Query -> ' +  '/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame);
                            $.get('/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame, function(data) {
                                //Sample json given below
                                //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
@@ -935,7 +948,7 @@ $(document).ready(function(){
                reqBody.dockerimagename= $('#dockerrepoListInput').val();
                reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
                reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-               alert(reqBody.dockerreponame);
+               //alert(reqBody.dockerreponame);
                reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
                reqBody.orgId = $('#orgnameSelect').val();
                reqBody.projectId = $('#projectListInput').val();
@@ -1039,32 +1052,44 @@ $(document).ready(function(){
        dataType: "json",
 
        async: false,
-       url: "../organizations/getTree",
+       url: "../organizations/getTreeNew",
        success: function(data) {
+          //alert(JSON.stringify(data));
+          //alert(typeof data);
+          console.log(data);
+           data = JSON.parse(JSON.stringify(data));
            var $orgListInput = $('#orgnameSelect');
-           $orgListInput.append($('<option></option>').val('choose').html('Choose'));
+           //$orgListInput.append($('<option></option>').val('choose').html('Choose'));
            $bgList = $('#bgListInput');
            var $envList = $('#envList');
+          // alert(data.length);
            for (var i = 0; i < data.length; i++) {
+             // alert('BG:' + JSON.stringify(data[i].businessGroups));
+               console.log(data[i].businessGroups);
                $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
            }
            $orgListInput.change(function(e) {
                // alert('trigged org selection');
                var orgName = $(this).val();
+              // alert(orgName);
                if (orgName == 'choose') {
                    return;
                }
                var $selectedOrgOption = $(this).find(":selected");
                $bgList.empty();
                $bgList.append($('<option></option>').val('choose').html('Choose'));
+               //alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
+
                var getBGs = $selectedOrgOption.data('bglist');
+
                for (var i = 0; i < getBGs.length; i++) {
                    $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
                }
-
+               //alert('out');
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
-               $envList.append($('<option></option>').val('choose').html('Choose'))
+               $envList.append($('<option></option>').val('choose').html('Choose'));
+               //alert(getEnv.length);
                for (var i = 0; i < getEnv.length; i++) {
                    $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
                }
@@ -1108,8 +1133,10 @@ $(document).ready(function(){
                $projectList.empty();
                $projectList.append($('<option></option>').val('choose').html('Choose'));
                var getProjs = $selectedOrgOption.data('projList');
+              // alert(getProjs.length);
                for (var i = 0; i < getProjs.length; i++) {
-                   $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
+
+                   $projectList.append($('<option></option>').val(getProjs[i].name).html(getProjs[i].name));
                }
            });
 

@@ -1,4 +1,7 @@
 var d4dModel = require('../model/d4dmasters/d4dmastersmodel.js');
+var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
+
+
 
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
@@ -12,12 +15,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     //app.all('/d4dMasters',sessionVerification);
 
     /*app.get('/d4dMasters/saveTest', function(req, res) {
-		var m = new d4dModel();
-		m.save(function(err, data) {
-			console.log(data);
-			res.send(data);
-		});
-	})*/
+        var m = new d4dModel();
+        m.save(function(err, data) {
+            console.log(data);
+            res.send(data);
+        });
+    })*/
     app.get('/d4dmasters/dockervalidate/:username/:password', function(req, res) {
         var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
         var curl = new Curl();
@@ -41,18 +44,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {
         //fetch the username and password from 
         //Need to populate dockerrowid in template card. - done
+        console.log('hit getdockertags');
         configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
             if (!err) {
 
-                //	var dockerRepo = JSON.parse(data);
-                console.log('Docker Repo ->', JSON.stringify(data));
+                var dockerRepo = JSON.parse(data);
+                console.log('Docker Repo ->', JSON.stringify(dockerRepo));
                 var cmd = '';
-                var dock = JSON.parse(data);
-               // var dockkeys = Object.keys(data);
-                console.log('username:' + dock.dockeruserid);
-                //
                 //Below is for public repository
-                cmd = 'curl -v -H "Accept: application/json" -X GET https://' +  dock.dockeruserid  + ':' + encodeURIComponent(dock.dockerpassword) +  '@index.docker.io/v1/repositories/' + decodeURIComponent(req.params.repopath) + '/tags';
+                cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath + '/tags';
                 //Below is for private repository
                 //cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
                 console.log('executing - ', cmd);
@@ -74,11 +74,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                 });
 
-            } else
+            } else {
+                console.log('Error:' + err);
                 res.end(err);
+            }
         });
 
-        /*	*/
+        /*  */
 
     });
 
@@ -134,76 +136,107 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
 
         console.log('received request ' + req.params.id);
-        d4dModel.findOne({
-            id: req.params.id
-        }, function(err, d4dMasterJson) {
+        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {
                 console.log("Hit and error:" + err);
             }
-            if (d4dMasterJson) {
-                /*res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(d4dMasterJson));*/
-                console.log("Before splice" + JSON.stringify(d4dMasterJson));
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    //console.log("found" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == req.params.fieldname) {
-                            //console.log("found:" + itm.field[j]["values"].value);
-                            if (itm.field[j]["values"].value == req.params.fieldvalue) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                d4dMasterJson.masterjson.rows.row.splice(i, 1);
-                                // d4dMasterJson.masterjson.changed = true;
-
-                                return;
-                            }
-                        }
-
-                        // console.log();
-                    }
-                    /*JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
-                    console.log(" Innner: " + JSON.stringify(itmjson));
-                });*/
-
-                });
-
-                // d4dMasterJson.content = JSON.stringify(d4dMasterJson);
-
-                d4dMasterJson.markModified('masterjson');
-
-                d4dMasterJson.save(function(err, d4dMasterJson) {
+            if (dbtype) {
+                //Currently rowid is hardcoded since variable declaration was working
+                var item = '\"' + req.params.fieldname + '\"';
+                console.log("Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
+                eval('d4dModelNew.' + dbtype).remove({
+                    rowid: req.params.fieldvalue
+                }, function(err) {
                     if (err) {
-                        console.log("Hit and error:" + err)
+                        console.log('Hit an errror on delete : ' + err);
                         res.send(500);
-                    };
-                    console.log('saved');
-                });
-
-                //  console.log("After splice" + JSON.stringify(d4dMasterJson));
-                /*d4dMasterJson.save(function (err, d4dMasterJson) {
-                if (err) {
-                    console.log("Hit and error:" + err)
-                    res.send(500);
-                };
-                console.log('saved');
-            });*/
-                res.end(JSON.stringify(d4dMasterJson));
-                console.log("sent response" + JSON.stringify(d4dMasterJson));
-
-            } else {
-                res.send(400, {
-                    "error": err
-                });
-                console.log("none found");
+                        return;
+                    } else {
+                        console.log('Document deleted : ' + req.params.fieldvalue);
+                        res.send(200);
+                        return;
+                    }
+                }); //end findOne
             }
+        }); //end configmgmtDao
 
 
-        });
+
+
+        // d4dModel.findOne({
+        //  id: req.params.id
+        // }, function(err, d4dMasterJson) {
+        //  if (err) {
+        //      console.log("Hit and error:" + err);
+        //  }
+        //  if (d4dMasterJson) {
+        //      /*res.writeHead(200, { 'Content-Type': 'application/json' });
+        //           res.end(JSON.stringify(d4dMasterJson));*/
+        //      console.log("Before splice" + JSON.stringify(d4dMasterJson));
+        //      d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
+        //          //console.log("found" + itm.field.length);
+        //          for (var j = 0; j < itm.field.length; j++) {
+        //              if (itm.field[j]["name"] == req.params.fieldname) {
+        //                  //console.log("found:" + itm.field[j]["values"].value);
+        //                  if (itm.field[j]["values"].value == req.params.fieldvalue) {
+        //                      console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+        //                      d4dMasterJson.masterjson.rows.row.splice(i, 1);
+        //                      // d4dMasterJson.masterjson.changed = true;
+
+        //                      return;
+        //                  }
+        //              }
+
+        //              // console.log();
+        //          }
+        //          JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
+        //                   console.log(" Innner: " + JSON.stringify(itmjson));
+        //               });
+
+        //      });
+
+        //      // d4dMasterJson.content = JSON.stringify(d4dMasterJson);
+
+        //      d4dMasterJson.markModified('masterjson');
+
+        //      d4dMasterJson.save(function(err, d4dMasterJson) {
+        //          if (err) {
+        //              console.log("Hit and error:" + err)
+        //              res.send(500);
+        //          };
+        //          console.log('saved');
+        //      });
+
+        //      //  console.log("After splice" + JSON.stringify(d4dMasterJson));
+        //      /*d4dMasterJson.save(function (err, d4dMasterJson) {
+        //               if (err) {
+        //                   console.log("Hit and error:" + err)
+        //                   res.send(500);
+        //               };
+        //               console.log('saved');
+        //           });*/
+        //      res.end(JSON.stringify(d4dMasterJson));
+        //      console.log("sent response" + JSON.stringify(d4dMasterJson));
+
+        //  } else {
+        //      res.send(400, {
+        //          "error": err
+        //      });
+        //      console.log("none found");
+        //  }
+
+
+        // });
+
+
+
     });
 
     //Reading a icon file saved
     app.get('/d4dMasters/image/:imagename', function(req, res) {
         var settings = appConfig.chef;
         var chefRepoPath = settings.chefReposLocation;
+        console.log(chefRepoPath);
         fs.readFile(chefRepoPath + 'catalyst_files/' + req.params.imagename, function(err, data) {
             if (err) {
                 res.end(404);
@@ -213,8 +246,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
             res.end(data, 'binary');
         });
-
-
     });
 
     app.get('/d4dMasters/readmasterjson/:id', function(req, res) {
@@ -247,58 +278,145 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
-      //  console.log('received request ' + req.params.id);
-      var ret = [];
-      var masts = ['1','2','3','4'];
-      // for(var i = 1; i < 4; i++){
-            d4dModel.find({
-                id: {$in:masts}
-            }, function(err, d4dMasterJson) {
-                if (err) {
-                    console.log("Hit and error:" + err);
-                }
-                if (d4dMasterJson) {
-                    // res.send(200, d4dMasterJson);
-                    //  res.writeHead(200, { 'Content-Type': 'text/plain' });
-                    res.writeHead(200, {
-                        'Content-Type': 'application/json'
-                    });
-                    // res.json(d4dMasterJson);
-                    //res.setHeader('Content-Type', 'application/json');
-                   // res.end(JSON.stringify(d4dMasterJson));
-                  // ret.push(i + ':' + d4dMasterJson.masterjson.rows.row.length);
+    app.get('/d4dMasters/readmasterjsonrecord/:id/:rowid', function(req, res) {
+        console.log('received request ' + req.params.id + ' rowid: ' + req.params.rowid);
+        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                console.log("Master Type: " + dbtype)
+                eval('d4dModelNew.' + dbtype).findOne({
+                    rowid: req.params.rowid
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if (d4dMasterJson) {
+                        // res.send(200, d4dMasterJson);
+                        //  res.writeHead(200, { 'Content-Type': 'text/plain' });
+                        res.writeHead(200, {
+                            'Content-Type': 'application/json'
+                        });
+                        // res.json(d4dMasterJson);
+                        //res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify(d4dMasterJson));
+                        console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        //res.end();
+                    } else {
+                        res.end(JSON.stringify([]));
+                        console.log("none found");
+                    }
 
-                    console.log("sent response" + JSON.stringify(d4dMasterJson));
-                    console.log(d4dMasterJson.length);
-                    var i = 0;
-                    d4dMasterJson.forEach(function(itm){
-                        console.log(itm.id + ' ' + itm.masterjson.rows.row.length);
-                        ret.push('{"' + itm.id + '":"' + itm.masterjson.rows.row.length + '"}');
-                        i++;
-                        if(i >= d4dMasterJson.length)
-                        {res.end('[' + ret.join(',') + ']');
-                            return;
-                        }
-                    });
 
-                    //res.end();
-                } else {
-                    //res.send(400, {
-                        ret.push(i + ':' + '');
-                    //     "error": err
-                    // });
-                    console.log("none found");
-                }
-                // if(i >= 4){
-                //     res.end(JSON.stringify(ret));
-                //     return;
-                // }
+                });
+            }
+        });
 
-            });
-        // }
+
     });
 
+    app.get('/d4dMasters/readmasterjsonnew__/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+        d4dModelNew.d4dModelMastersOrg.find({
+            id: req.params.id
+        }, function(err, d4dMasterJson) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (d4dMasterJson) {
+                //
+                // res.send(200, d4dMasterJson);
+                //  res.writeHead(200, { 'Content-Type': 'text/plain' });
+                res.writeHead(200, {
+                    'Content-Type': 'application/json'
+                });
+                // res.json(d4dMasterJson);
+                //res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(d4dMasterJson));
+                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                //res.end();
+            } else {
+                res.send(400, {
+                    "error": err
+                });
+                console.log("none found");
+            }
+
+
+        });
+    });
+
+    app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.' + dbtype).find({
+                    id: req.params.id
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    res.end(JSON.stringify(d4dMasterJson));
+                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                });
+            }
+        });
+    });
+    app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
+        console.log('received request ' + req.params.id);
+        var ret = [];
+        var masts = ['1', '2', '3', '4'];
+        // for(var i = 1; i < 4; i++){
+        d4dModel.find({
+            id: {
+                $in: masts
+            }
+        }, function(err, d4dMasterJson) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (d4dMasterJson) {
+                // res.send(200, d4dMasterJson);
+                // res.writeHead(200, { 'Content-Type': 'text/plain' });
+                res.writeHead(200, {
+                    'Content-Type': 'application/json'
+                });
+                // res.json(d4dMasterJson);
+                //res.setHeader('Content-Type', 'application/json');
+                // res.end(JSON.stringify(d4dMasterJson));
+                // ret.push(i + ':' + d4dMasterJson.masterjson.rows.row.length);
+                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                console.log(d4dMasterJson.length);
+                var i = 0;
+                d4dMasterJson.forEach(function(itm) {
+                    console.log(itm.id + ' ' + itm.masterjson.rows.row.length);
+                    ret.push('{"' + itm.id + '":"' + itm.masterjson.rows.row.length + '"}');
+                    i++;
+                    if (i >= d4dMasterJson.length) {
+                        res.end('[' + ret.join(',') + ']');
+                        return;
+                    }
+                });
+                //res.end();
+            } else {
+                //res.send(400, {
+                ret.push(i + ':' + '');
+                // "error": err
+                // });
+                console.log("none found");
+            }
+            // if(i >= 4){
+            // res.end(JSON.stringify(ret));
+            // return;
+            // }
+        });
+        // }
+    });
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
         console.log('received request ' + req.params.items);
         var masts = [];
@@ -406,9 +524,9 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
                         }
                     }
                     /* if(jsonlist == '')
-	    					jsonlist += "\"" + fieldvalue + "\":\"" +  rowid + "\"";
-					   else
-	    					jsonlist += ",\"" + fieldvalue + "\":\"" +  rowid + "\""; */
+                            jsonlist += "\"" + fieldvalue + "\":\"" +  rowid + "\"";
+                       else
+                            jsonlist += ",\"" + fieldvalue + "\":\"" +  rowid + "\""; */
 
                     if (jsonlist == '')
                         jsonlist += "{\"" + req.params.fieldname + "\":\"" + fieldvalue + "\",\"" + req.params.fieldname1 + "\":\"" + rowid + "\"}";
@@ -445,54 +563,33 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
 
         });
     });
+
+
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
 
-        d4dModel.findOne({
-            id: req.params.masterid
-        }, function(err, d4dMasterJson) {
+        configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
                 console.log("Hit and error:" + err);
             }
-            if (d4dMasterJson) {
-                var chefRepoPath = '';
-                var hasOrg = false;
-                var root = '';
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
-                    if (root != '')
-                        root += ",{";
-                    else
-                        root += "{";
+            if (dbtype) {
+                var query = {};
+                query[req.params.filtercolumnname] = req.params.filtercolumnvalue; //building the query 
+                query['id'] = req.params.masterid;
 
-                    var configmgmt = '';
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == req.params.filtercolumnname) {
-                            if (itm.field[j]["values"].value == req.params.filtercolumnvalue) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
-
-
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (configmgmt == '')
-                                        configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                    else
-                                        configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-                                }
-                                // configmgmt = "{" + configmgmt + "}";
-                                // console.log(JSON.stringify(configmgmt));
-                                // res.end(configmgmt);
-                            }
-                        }
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
                     }
-                    root += configmgmt + "}";
-                }); // rows loop
-                root = '[' + root + ']';
-                //console.log(JSON.stringify(root));
-                res.send(JSON.parse(root));
+                    res.end(JSON.stringify(d4dMasterJson));
+                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                });
             }
         });
     });
+
+
+
 
     app.get('/d4dMasters/configmgmt/:rowid', function(req, res) {
 
@@ -504,48 +601,48 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
             }
             if (d4dMasterJson) {
                 var chefRepoPath = '';
-                var settings = appConfig.chef;
-                chefRepoPath = settings.chefReposLocation;
-                console.log("Repopath:" + chefRepoPath);
+                settingsController.getChefSettings(function(settings) {
+                    chefRepoPath = settings.chefReposLocation;
+                    console.log("Repopath:" + chefRepoPath);
 
-                var hasOrg = false;
-                d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
-                    for (var j = 0; j < itm.field.length; j++) {
-                        if (itm.field[j]["name"] == 'rowid') {
-                            if (itm.field[j]["values"].value == req.params.rowid) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-                                hasOrg = true;
-                                //Re-construct the json with the item found
-                                var configmgmt = '';
-                                var orgname = '';
-                                var loginname = '';
-                                //looping to get the orgname , loginname
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("login") >= 0)
-                                        loginname = itm.field[k]["values"].value + "/";
-                                    if (itm.field[k]["name"].indexOf("orgname") >= 0)
-                                        orgname = itm.field[k]["values"].value + "/";
-                                }
-
-                                for (var k = 0; k < itm.field.length; k++) {
-                                    if (itm.field[k]["name"].indexOf("filename") > 0) {
-                                        if (configmgmt == '')
-                                            configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-                                        else
-                                            configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
-
+                    var hasOrg = false;
+                    d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
+                        console.log("found" + itm.field.length);
+                        for (var j = 0; j < itm.field.length; j++) {
+                            if (itm.field[j]["name"] == 'rowid') {
+                                if (itm.field[j]["values"].value == req.params.rowid) {
+                                    console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                    hasOrg = true;
+                                    //Re-construct the json with the item found
+                                    var configmgmt = '';
+                                    var orgname = '';
+                                    var loginname = '';
+                                    //looping to get the orgname , loginname
+                                    for (var k = 0; k < itm.field.length; k++) {
+                                        if (itm.field[k]["name"].indexOf("login") >= 0)
+                                            loginname = itm.field[k]["values"].value + "/";
+                                        if (itm.field[k]["name"].indexOf("orgname") >= 0)
+                                            orgname = itm.field[k]["values"].value + "/";
                                     }
+
+                                    for (var k = 0; k < itm.field.length; k++) {
+                                        if (itm.field[k]["name"].indexOf("filename") > 0) {
+                                            if (configmgmt == '')
+                                                configmgmt += "\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
+                                            else
+                                                configmgmt += ",\"" + itm.field[k]["name"].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + loginname + '.chef/' + itm.field[k]["values"].value + "\"";
+
+                                        }
+                                    }
+                                    configmgmt = "{" + configmgmt + "}";
+                                    console.log(JSON.stringify(configmgmt));
                                 }
-                                configmgmt = "{" + configmgmt + "}";
-                                console.log(JSON.stringify(configmgmt));
                             }
+
+                            // console.log();
                         }
-
-                        // console.log();
-                    }
-                }); // rows loop
-
+                    }); // rows loop
+                }); //setting closure
             }
         });
     });
@@ -628,13 +725,21 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
         var settings = appConfig.chef;
 
         var chefRepoPath = settings.chefReposLocation;
+
+        console.log('Type of org : ' + typeof req.params.orgname);
+
         console.log(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
+        console.log('Orgname : #' + req.params.orgname.toString() + '#' + (req.params.orgname == ''));
 
         //Handling the exception to handle uploads without orgname
-        if (req.params.orgname == "undefined") {
-            req.params.orgname = "catalyst_files";
-        }
+        if (req.params.orgname) {
+            if (req.params.orgname == '/')
+                req.params.orgname = '';
 
+            if (req.params.orgname == '' || req.params.orgname == "undefined") {
+                req.params.orgname = "catalyst_files";
+            }
+        }
         var path = chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1);
 
 
@@ -660,15 +765,15 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
             var fil = eval('req.files.' + fi[i]);
             if (typeof fil != 'undefined') {
 
-                var data = fs.readFileSync(fil.path); //, function(err, data) {	
+                var data = fs.readFileSync(fil.path); //, function(err, data) { 
                 //var getDirName = require("path").dirname;
                 /*fileIo.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data, null, function(err) {
-									console.log(err);
-									count--;
-									if (count === 0) { // all files uploaded
-										return("200");
-									}
-								});*/
+                                    console.log(err);
+                                    count--;
+                                    if (count === 0) { // all files uploaded
+                                        return("200");
+                                    }
+                                });*/
                 if (folderpath == '') {
                     console.log('this is where file gets saved as (no folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
                     fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
@@ -694,7 +799,7 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
                 }
 
 
-                //	});
+                //  });
 
             }
         }
@@ -702,7 +807,34 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
         return ("200");
     }
 
-    app.post('/d4dMasters/getrows/:masterid', function(req, res) {
+
+    app.post('/d4dmasters/getrows/:masterid', function(req, res) {
+        configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                var query = {};
+                query['rowid'] = {
+                    '$in':req.body.serviceids
+                }
+                query['id'] = req.params.masterid;
+
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    res.end(JSON.stringify(d4dMasterJson));
+                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                });
+            } else {
+                res.send(500);
+            }
+        });
+    });
+
+    app.post('/d4dMastersold/getrows/:masterid', function(req, res) {
         console.log('received request ' + req.params.id);
         d4dModel.findOne({
             id: req.params.masterid
@@ -857,16 +989,16 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
 
 
                     /*d4dMasterJson.masterjson.rows.row.forEach(function(row){
-							for(var i = 0; i < row.field.length; i++){
-								console.log("Value:" + bodyJson[row.field[i].name]);
-								if(row.field[i].values.value == bodyJson["rowid"])
-								{
-									
-									rowtoedit = this;
-									return(true);
-								}
-							}
-						}); */
+                            for(var i = 0; i < row.field.length; i++){
+                                console.log("Value:" + bodyJson[row.field[i].name]);
+                                if(row.field[i].values.value == bodyJson["rowid"])
+                                {
+                                    
+                                    rowtoedit = this;
+                                    return(true);
+                                }
+                            }
+                        }); */
                 } else
                     bodyJson["rowid"] = uuid1;
                 //console.log(bodyJson['orgname']);
@@ -879,7 +1011,7 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
 
                 //var frmvals = Object.keys(bodyJson);
                 var rowFLD = [];
-                //	var filesNames = Object.keys(req.files);
+                //  var filesNames = Object.keys(req.files);
                 var folderpath = ''; //will hold the folderpath field to create the path in the system
 
                 console.log(JSON.stringify(bodyJson));
@@ -960,6 +1092,162 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
         });
     });
 
+    app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
+        console.log('received new save request ' + req.params.id);
+        var bodyJson = JSON.parse(JSON.stringify(req.body));
+        //pushing the rowid field
+
+        var editMode = false; //to identify if in edit mode.
+        var rowtoedit = null;
+        if (bodyJson["rowid"] != null) {
+            editMode = true;
+        } else {
+            editMode = false;
+            bodyJson["rowid"] = uuid.v4();
+        }
+        bodyJson["id"] = req.params.id; //storing the form id.
+        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                console.log("Master Type: " + dbtype);
+
+                eval('d4dModelNew.' + dbtype).findOne({
+                    rowid: bodyJson["rowid"]
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if (d4dMasterJson) {
+                        rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
+                        console.log('<<<<< Reached here >>>>' + (rowtoedit == null));
+                    }
+                    // if(!rowtoedit)
+                    //  console.log("Edited Row:" + rowtoedit);
+
+                    var frmkeys = Object.keys(bodyJson);
+
+                    //var frmvals = Object.keys(bodyJson);
+                    var rowFLD = [];
+                    //  var filesNames = Object.keys(req.files);
+                    var folderpath = ''; //will hold the folderpath field to create the path in the system
+
+                    //       console.log('BodyJSON rowid:' + JSON.stringify(bodyJson));
+                    var newrowid = '';
+                    frmkeys.forEach(function(itm) {
+                        console.log("Each item: itm" + itm + ' bodyJson[itm] ' + bodyJson[itm]);
+                        if (itm.trim() == 'rowid') {
+                            console.log('!!!! in rowid ' + bodyJson[itm]);
+                            newrowid = bodyJson[itm];
+                        }
+                        if (!editMode) {
+                            var thisVal = bodyJson[itm];
+                            console.log(thisVal);
+                            var item = null;
+                            if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
+                                item = "\"" + itm + "\" : \"" + thisVal + "\"";
+                            } else //
+                                item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
+                            rowFLD.push(item);
+                        } else {
+                            if (d4dMasterJson != null) {
+                                uuid1 = bodyJson["rowid"];
+                                //    console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+                                console.log('rowtoedit :' + rowtoedit);
+                                if (bodyJson["folderpath"] == undefined) //folderpath issue fix
+                                    folderpath = ''
+                                else
+                                    folderpath = bodyJson["folderpath"];
+                                for (var myval in rowtoedit) {
+                                    if (itm == myval)
+                                        rowtoedit[myval] = bodyJson[myval];
+                                    console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
+                                }
+                                // for(var myval in d4dMasterJson){
+                                //      console.log("key:"+myval+", value:");
+                                // //   d4dMasterJson[myval] = bodyJson[myval];
+
+                                // }
+                                //console.log(JSON.stringify(d4dMasterJson));
+                            }
+                        }
+                    });
+                    var FLD = JSON.stringify(rowFLD);
+                    if (!editMode) { //push new values only when not in edit mode
+                        //dMasterJson = JSON.parse(FLD);
+                        //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
+
+                        eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
+                        mastersrdb.save(function(err, data) {
+                            if (err) {
+                                console.log('Hit Save error' + err);
+                                res.send(500);
+                                return;
+
+                            }
+                            console.log('New Master Saved');
+
+                            console.log(req.params.fileinputs == 'null');
+                            console.log('New record folderpath:' + folderpath + ' rowid:' + newrowid);
+                            if (FLD["folderpath"] == undefined) //folderpath issue fix
+                                folderpath = ''
+                            else
+                                folderpath = rowFLD["folderpath"];
+
+                            if (req.params.fileinputs != 'null')
+                                res.send(saveuploadedfile(newrowid + '__', folderpath, req));
+                            else
+                                res.send(200);
+
+                            return;
+                        });
+                    } else {
+                        console.log("Rowid: " + bodyJson["rowid"]);
+                        var currowid = bodyJson["rowid"];
+                        eval('d4dModelNew.' + dbtype).update({
+                            rowid: bodyJson["rowid"]
+                        }, {
+                            $set: rowtoedit
+                        }, {
+                            upsert: false
+                        }, function(err, saveddata) {
+                            if (err) {
+                                console.log('Hit Save error' + err);
+                                res.send(500);
+                                return;
+                            }
+
+                            if (bodyJson["folderpath"] == undefined) //folderpath issue fix
+                                folderpath = ''
+                            else
+                                folderpath = bodyJson["folderpath"];
+
+                            console.log('Master Data Updated: ' + saveddata);
+                            console.log(req.params.fileinputs == 'null');
+                            console.log('folderpath:' + folderpath + ' rowid:' + currowid);
+
+                            if (req.params.fileinputs != 'null')
+                                res.send(saveuploadedfile(currowid + '__', folderpath, req));
+                            else
+                                res.send(200);
+                            return;
+                        });
+                    }
+                    //dMasterJson = rowtoedit;
+
+                    //console.log(JSON.stringify(d4dMasterJson));
+
+
+
+                }); //end findone
+                //console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
+
+            }
+        }); //end getdbmodelfromid
+
+    });
+
     app.post('/d4dMasters/testingupload/:suffix/:fileinputs', function(req, res) {
         console.log(req.body);
         var fi;
@@ -978,42 +1266,42 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
             console.log(item);
         });
 
-        var settings = appConfig.chef;
 
-        var chefRepoPath = settings.chefReposLocation;
-        fs.mkdirParent(chefRepoPath + req.params.orgname); //if path is not present create it.
-        for (var i = 0; i < fi.length; i++) {
-            var controlName = fi[i];
-            var fil = eval('req.files.' + fi[i]);
-            if (typeof fil != 'undefined') {
-                console.log('this is where file gets saved  : ' + chefRepoPath + fil.name);
-                fileIo.readFile(fil.path, function(err, data) {
-                    //var getDirName = require("path").dirname;
-                    fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + controlName + '__' + fil.name, data, null, function(err) {
-                        console.log(err);
-                        count--;
-                        if (count === 0) { // all files uploaded
-                            res.send("ok");
-                        }
+        settingsController.getChefSettings(function(settings) {
+            var chefRepoPath = settings.chefReposLocation;
+            fs.mkdirParent(chefRepoPath + req.params.orgname); //if path is not present create it.
+            for (var i = 0; i < fi.length; i++) {
+                var controlName = fi[i];
+                var fil = eval('req.files.' + fi[i]);
+                if (typeof fil != 'undefined') {
+                    console.log('this is where file gets saved  : ' + chefRepoPath + fil.name);
+                    fileIo.readFile(fil.path, function(err, data) {
+                        //var getDirName = require("path").dirname;
+                        fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + controlName + '__' + fil.name, data, null, function(err) {
+                            console.log(err);
+                            count--;
+                            if (count === 0) { // all files uploaded
+                                res.send("ok");
+                            }
+                        });
+                        /*mkdirp(getDirName(chefRepoPath + 'logo' ),function(err){
+                            if(err) console.log(err);
+                            else{
+
+                                fileIo.writeFile(chefRepoPath + 'logo/' + fil.name, data, null, function(err) {
+                                    console.log(err);
+                                    count--;
+                                    if (count === 0) { // all files uploaded
+                                        res.send("ok");
+                                    }
+                                });
+                            }
+                        }); */
                     });
-                    /*mkdirp(getDirName(chefRepoPath + 'logo' ),function(err){
-							if(err) console.log(err);
-							else{
 
-								fileIo.writeFile(chefRepoPath + 'logo/' + fil.name, data, null, function(err) {
-									console.log(err);
-									count--;
-									if (count === 0) { // all files uploaded
-										res.send("ok");
-									}
-								});
-							}
-						}); */
-                });
-
+                }
             }
-        }
-
+        });
         res.send(200);
     });
 
@@ -1334,11 +1622,11 @@ app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
                     });
 
                     /*d4dMasterJson.update(function (err, d4dMasterJson) {
-						if (err) {
-							console.log("Hit and error:" + err)
-						}
-						console.log('updated' + JSON.stringify(d4dMasterJson));
-					});*/
+                        if (err) {
+                            console.log("Hit and error:" + err)
+                        }
+                        console.log('updated' + JSON.stringify(d4dMasterJson));
+                    });*/
                     //res.send(200);
                 } else {
                     res.send(200);

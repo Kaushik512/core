@@ -1,6 +1,6 @@
-var blueprintsDao = require('../model/blueprints');
+var blueprintsDao = require('../model/dao/blueprints');
 
-var instancesDao = require('../model/instances');
+var instancesDao = require('../model/dao/instancesdao');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
 var taskstatusDao = require('../model/taskstatus');
@@ -255,9 +255,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
-    app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams', function(req, res) {
+    app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
 
-        console.log('reached here a');
+        console.log('reached here b');
         var instanceid = req.params.instanceid;
 
         configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
@@ -274,7 +274,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
 
-                cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                //removing docker userID
+                cmd += ' && sudo docker pull ' + decodeURIComponent(req.params.imagename);
+                console.log('Intermediate cmd: ' + cmd);
                 if (req.params.tagname != null) {
                     cmd += ':' + req.params.tagname;
                 }
@@ -282,7 +285,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 if (req.params.runparams != 'null') {
                     runparams = decodeURIComponent(req.params.runparams);
                 }
-                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' /bin/bash';
+                var startparams = '';
+                if (req.params.startparams != 'null') {
+                    startparams = decodeURIComponent(req.params.startparams);
+                }
+                else
+                    startparams = '/bin/bash';
+                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' ' + startparams;
                 console.log('Docker command executed : ' + cmd);
                 _docker.runDockerCommands(cmd, req.params.instanceid,
                     function(err, retCode) {
@@ -467,6 +476,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                 });
                             } else {
+                                logsDao.insertLog({
+                                    referenceId: req.params.instanceId,
+                                    err: true,
+                                    log: 'Unable to run chef-client',
+                                    timestamp: new Date().getTime()
+                                });
                                 return;
                             }
                         }, function(stdOutData) {
@@ -741,6 +756,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 }
                 if (!services.length) {
+                    console.log(services.length);
                     res.send(404);
                     return;
                 }
@@ -908,132 +924,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.get('/instances/:instanceId/bootstrap', function(req, res) {
-        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-
-            if (data.length) {
-                var instance = data[0];
-                configmgmtDao.getChefServerDetails(data[0].chef.serverId, function(err, chefDetails) {
-                    if (err) {
-                        res.send(500);
-                        return;
-                    }
-                    if (!chefDetails) {
-                        res.send(500);
-                        return;
-                    }
-                    var chef = new Chef({
-                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                        chefUserName: chefDetails.loginname,
-                        chefUserPemFile: chefDetails.userpemfile,
-                        chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
-                    });
-
-                    chef.bootstrapInstance({
-                        instanceIp: instance.instanceIP,
-                        pemFilePath: instance.credentials.pemFileLocation,
-                        runlist: instance.runlist,
-                        instanceUsername: instance.credentials.username,
-                        nodeName: instance.chef.chefNodeName,
-                        environment: instance.envId,
-                        instanceOS: instance.hardware.os
-                    }, function(err, code) {
-
-                        console.log('process stopped ==> ', err, code);
-                        if (err) {
-                            console.log("knife launch err ==>", err);
-                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-
-                            });
-                        } else {
-                            if (code == 0) {
-                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                    if (err) {
-                                        console.log("Unable to set instance bootstarp status");
-                                    } else {
-                                        console.log("Instance bootstrap status set to success");
-                                    }
-                                });
-
-                                chef.getNode(instance.chefNodeName, function(err, nodeData) {
-                                    if (err) {
-                                        console.log(err);
-                                        return;
-                                    }
-                                    var hardwareData = {};
-                                    hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                    hardwareData.platform = nodeData.automatic.platform;
-                                    hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                    hardwareData.memory = {};
-                                    hardwareData.memory.total = nodeData.automatic.memory.total;
-                                    hardwareData.memory.free = nodeData.automatic.memory.free;
-                                    hardwareData.os = instance.hardware.os;
-                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
-                                        if (err) {
-                                            console.log("Unable to set instance hardware details");
-                                        } else {
-                                            console.log("Instance hardware details set successessfully");
-                                        }
-                                    });
-                                });
-
-                            } else {
-                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                    if (err) {
-                                        console.log("Unable to set instance bootstarp status");
-                                    } else {
-                                        console.log("Instance bootstrap status set to failed");
-                                    }
-                                });
-
-                            }
-                        }
-
-                    }, function(stdOutData) {
-
-                        logsDao.insertLog({
-                            referenceId: instance.id,
-                            err: false,
-                            log: stdOutData.toString('ascii'),
-                            timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update bootStrapLog');
-                                return;
-                            }
-                            console.log('bootStrapLog updated');
-                        });
-
-                    }, function(stdErrData) {
-
-                        logsDao.insertLog({
-                            referenceId: instance.id,
-                            err: true,
-                            log: stdErrData.toString('ascii'),
-                            timestamp: new Date().getTime()
-                        }, function(err, data) {
-                            if (err) {
-                                console.log('unable to update bootStrapLog');
-                                return;
-                            }
-                            console.log('bootStrapLog updated');
-                        });
-
-
-                    });
-                    res.send(200);
-                });
-
-            } else {
-                res.send(404);
-            }
-        });
-
+    app.post('/instances/bootstrap', function(req, res) {
+        
     });
 
 
