@@ -11,15 +11,6 @@
                 <li class="pull-left active">
                     <a href="#l2" id="tabheader" data-toggle="tab">Choose Template Type</a>
                 </li>
-                <!--<li class="pull-left">
-                    <a href="#l3" data-toggle="tab">App Factory</a>
-                </li>
-                <li class="pull-left">
-                    <a href="#l4" data-toggle="tab">Enviornments</a>
-                </li>
-                <li class="pull-left">
-                    <a href="#l5" data-toggle="tab">Usage</a>
-                </li>-->
             </ul>
 
             <div id="myTabContent3" class="nav tab-content">
@@ -125,26 +116,21 @@
                                   <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                        <div class="widget-body no-padding">
-                                            <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                                            <form action="" id="checkout-form">
 
                                                 <div class="row " style="margin:0px;">
                                                     
-                                                   <section class="col col-6">
-                                                    <label for="">Choose Operating System <span style="color:red">*</span>
-                                                    </label>
-                                                    <label class="select">
+                                                   <div class="col-lg-6">
+                                                    Choose Operating System:<span style="color:red">*</span>
+                                                    <select id="instanceOS" class="chooseOS width-100">
+                                                    </select>
 
-                                                       <select id="instanceOS" class="chooseOS width-100">
-                                                          
-                                                            
-                                                      </select>
-
-                                                    </label>                                          
-                                                </section>
-                                                <section class="col col-6">
-                                                    <label for="category">Choose Security Group <span style="color:red">*</span>
-                                                    </label>
-                                                    <label class="select"> 
+                                                                                              
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    Choose Security Group:<span style="color:red">*</span>
+                                                    
+                                                    
                                                         <select class="chooseSecurity width-100">
                                                             <option value="0">default-d4d</option>
                                                             <!--<option value="1">default-d4d</option>-->
@@ -153,20 +139,20 @@
                                                             <option value="4">Default VPC</option>
 
                                                         </select>
-                                                    </label>
+                                                    
                                                 
-                                            </section>
-                                            <section class="col col-6">
-                                                <label for="category">Choose Instance Size <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
+                                            </div>
+                                            <div class="col-lg-6">
+                                                Choose Instance Size:<span style="color:red">*</span>
+                                                
+                                                
                                                   <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
                                                   </select>
-                                                </label> 
-                                            </section>
+                                                
+                                            </div>
                                             <!--To add the Swipe Functionality-->                            
                                             </div>
-                                            </div>
+                                            </form><!--end-->
                                         </div> 
                                     </div>
                                   </div>
@@ -179,24 +165,21 @@
                                           </h4>
                                       </div>
                                       <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
-                                          <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                                          <form action="" id="checkout-form">
                                                 <div class="row " style="margin:0px;">
-                                                    <section class="col col-6">
-                                                        <label for="">Choose Organization <span style="color:red">*</span>
-                                                        </label>
-                                                        <label class="select"> 
-                                                           <select id="orgnameSelect" class="chooseOrgselect2 width-100">
-                                                           </select>
-                                                       </label> 
-                                                    </section>
-                                                    <section class="col col-12">
+                                                    <div class="col-lg-6">
+                                                        Choose Organization <span style="color:red">*</span>
+                                                        <select id="orgnameSelect" class="chooseOrgselect2 width-100">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-12">
                                                        <div class="cookbookShow">
 
                                                        </div>
-                                                   </section>
+                                                   </div>
                                                    
                                                 </div>
-                                            </div>
+                                            </form>
                                       </div>
                               </div>
 
@@ -293,14 +276,6 @@
                                                    <label class="input"><a  href="javascript:void(0);" onclick="$('[dockerparamkey]').val('');loadLaunchParams();"><i title="Add" class="icon-append fa fa-plus" ></i></a>
                                                     <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add"/>
                                                   </label>
-                                                    
-                                                
-                                                <!-- <label for="category" class="input clearfix" style="font-size:small">
-                                                  <button class="btn btn-primary btn-small" style="margin-left:11px;" >
-                                                                            <i class="ace-icon fa fa-check bigger-110"></i>
-                                                                             Add
-                                                                        </button>
-                                                </label>    --> 
                                             </section>
                                             </div>            
                                        </div>

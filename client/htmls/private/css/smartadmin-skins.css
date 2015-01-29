@@ -14,7 +14,7 @@
 .custom-theme .productdiv4{
 	padding-left: 10px;
 }
-.custom-theme .login-info span a{
+.custom-theme .tree-view span a{
 	color:white;
 }
 
@@ -101,13 +101,13 @@ body.custom-theme {
 	background: #008DC4;
 }
 
-.custom-theme .login-info span, 
-.custom-theme .login-info {
+.custom-theme .tree-view span, 
+.custom-theme .tree-view {
 	border: 0 !important; 
 	box-shadow:none !important;
 }
 
-.custom-theme .login-info span {
+.custom-theme .tree-view span {
 	
 	background:none repeat scroll 0 0 #40baf1;
 	margin-right: 1px;
@@ -118,13 +118,13 @@ body.custom-theme {
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.custom-theme .login-info a, 
-.custom-theme .login-info strong {
+.custom-theme .tree-view a, 
+.custom-theme .tree-view strong {
 	font-size: 16px;
 	color: white;
 }
 
-.custom-theme .login-info img {
+.custom-theme .tree-view img {
 	width:35px;
 }
 
@@ -266,11 +266,11 @@ padding: 12px 11px;
 	font-size:18px !important;
 }
 
-.custom-theme.minified .login-info span {
+.custom-theme.minified .tree-view span {
 	padding:0;
 }
 
-.custom-theme.minified .login-info {
+.custom-theme.minified .tree-view {
 	margin:0 !important;
 }
 
