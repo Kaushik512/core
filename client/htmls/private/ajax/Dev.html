@@ -1121,17 +1121,18 @@
                 <form role="form" class="smart-form" id="addInstanceForm" autocomplete="off">
 
                     <fieldset style="padding-top:0px;margin-top:10px;">
-                      <div class="">
                         <section class="col col-6">
-                            <div class="form-group" style="margin-bottom:15px;">
+                            <div class="form-group">
                               <label for="">Enter IP Address</label>
                               <label class="input">
                               <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN">
                                 <b class="tooltip tooltip-top-right">
-                                <i class="fa fa-user txt-color-teal"></i>Please enter IP Address</b>
+                                <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
                               </label>
                             </div>
-                            <div class="form-group" style="margin-bottom:15px;">
+                        </section>
+                        <section class="col col-6">
+                            <div class="form-group">
                               <label for="">Choose Operating System</label>
                               <select id="instanceOS"  class="width-100" >
                                 <option value="linux">linux</option>
@@ -1139,7 +1140,9 @@
                               </select>
                             </div>
                         </section>
-                        <section class="col col-6 credentialSection" style="margin-bottom:12px;">
+                    </fieldset>
+                    <fieldset style="padding-top:15px;">
+                        <section class="col col-6 credentialSection">
                             <div class="form-group">
                               <label for="">Username</span></label>
                               <label class="input">
@@ -1149,7 +1152,18 @@
                               </label>
                             </div>
                         </section>
-                        <section class="col col-6 credentialSection" style="margin-bottom:18px;">
+                        <section class="col col-6">
+                            <div class="form-group">
+                              <label for="">Choose Authentication Type</label>
+                              <select id="pemFileDropdown"  class="authenticationType width-100" >
+                                <option value="password">Password</option>
+                                <option value="pemFile">Pem File</option>
+                              </select>
+                            </div>
+                        </section>
+                    </fieldset>
+                    <fieldset style="padding-top:15px;border-top:0px;">
+                        <section class="col col-6 credentialSection authPassword">
                             <div class="form-group">
                               <label for="">Password</label>
                               <label class="input">
@@ -1159,8 +1173,16 @@
                               </label>
                             </div>
                         </section>
-                        <section class="col col-6 credentialSection" >
-                            <div class="form-group">
+                        <section class="col col-6 credentialSection authPemFile ">
+                            <div class="smart-forms">
+                                <label for="">Pem File</label>
+                                <label for="templatesicon" name="field" class="file">
+                                    <span class="button btn-primary">Browse</span>
+                                    <input id="importPemfileInput" type="file" class="gui-file">
+                                    <input type="text" readonly="" class="gui-input">
+                                </label>
+                            </div>
+                            <!-- <div class="form-group">
                               <label for="">Pem File</label>
                               <label class="checkbox" style="display:inline;padding-top:4px;">
                                   <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
@@ -1168,9 +1190,8 @@
                               <div class="">  
                                 <input type="file" id="importPemfileInput" style="display:inline" disabled/>
                               </div>
-                            </div>
+                            </div> -->
                         </section>
-                      </div>
                     </fieldset>
                 </form>
             </div>
@@ -1191,6 +1212,18 @@
 
 </script>
 <script type="text/javascript">
+$(".authPassword").show();
+$(".authPemFile").hide();
+$('.authenticationType').change(function(e) {
+    if (this.value == "password") {
+        $(".authPassword").show();
+        $(".authPemFile").hide();
+    } else {
+        $(".authPassword").hide();
+        $(".authPemFile").show();
+    }
+});
+
     $('.searchInstances').keyup(function(e){
         var searchText = $(this).val();
         //alert(searchText);
@@ -1207,16 +1240,6 @@
         // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
         // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
      });
-
-    $('#pemFileCheckbox').change(function(){
-        if($(this).is(':checked')) {
-          $('#importPemfileInput').attr('disabled',false);
-          $('#passwordInput').attr('disabled',true);
-        } else {
-          $('#importPemfileInput').attr('disabled',true);
-          $('#passwordInput').attr('disabled',false);
-        } 
-  });
 </script>
 <script type="text/javascript">
 
@@ -1254,6 +1277,8 @@ var orgId = urlParams['org'];
 
 $(document).ready(function() {
    $('#instanceOS').select2();
+   $('.authenticationType').select2();
+
 
   //emptying ssh container 
   $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
@@ -1293,7 +1318,8 @@ $('.Instances').click(function(e){
     }
     DummyBreadCrumb += '>' + 'Instances';
 
-    if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+    if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined'
+        )
     {
         localStorage.removeItem("breadcrumb");
         splitBread = DummyBreadCrumb.split('>');
@@ -1591,8 +1617,8 @@ $('#addInstanceBtn').click(function(e) {
       });
     }
 
-    var $checkbox = $('#pemFileCheckbox');
-    if ($checkbox.is(':checked')) {
+    var $dropdown = $('#pemFileDropdown');
+    if ($dropdown.val()==='pemFile') {
         
        var pemFileInput = $form.find('#importPemfileInput').get(0);
        if(!reqBody.credentials.username){

@@ -122,7 +122,16 @@
           </label>
         </div>
       </section>
-      <section class="col col-6 credentialSection" style="margin-bottom:18px;">
+      <section class="col col-6">
+          <div class="form-group">
+            <label for="">Choose Authentication Type</label>
+            <select id="pemFileDropdown"  class="authenticationType width-100" >
+              <option value="password">Password</option>
+              <option value="pemFile">Pem File</option>
+            </select>
+          </div>
+      </section>
+      <section class="col col-6 credentialSection authPassword" style="margin-bottom:18px;">
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
           <label class="input">
@@ -132,8 +141,16 @@
           </label>
         </div>
       </section>
-      <section class="col col-6 credentialSection" >
-        <div class="form-group">
+      <section class="col col-6 credentialSection authPemFile">
+        <div class="smart-forms">
+            <label for="exampleInputEmail1">Pem File</label>
+            <label for="" name="field" class="file">
+                <span class="button btn-primary">Browse</span>
+                <input id="importPemfileInput" type="file" class="gui-file">
+                <input type="text" readonly="" class="gui-input">
+            </label>
+        </div>
+        <!-- <div class="form-group">
           <label for="exampleInputEmail1">Pem File</label>
           <label class="checkbox" style="display:inline;padding-top:4px;">
               <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
@@ -142,7 +159,7 @@
             
             <input type="file" id="importPemfileInput" style="display:inline" disabled/>
         </div>
-        </div>
+        </div> -->
       </section>
 
      <!--<div class="smart-forms">
@@ -217,9 +234,23 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+$(document).ready(function() {
+   $('.authenticationType').select2();
+   $('#chefImportBgSelect').select2();
+   $('#chefImportProjectSelect').select2();
+ });
+$(".authPassword").show();
+$(".authPemFile").hide();
+$('.authenticationType').change(function(e) {
+    if (this.value == "password") {
+        $(".authPassword").show();
+        $(".authPemFile").hide();
+    } else {
+        $(".authPassword").hide();
+        $(".authPemFile").show();
+    }
+});
 
-$('#chefImportBgSelect').select2();
-$('#chefImportProjectSelect').select2();
 
 
 drawBreadCrumb1();
@@ -238,16 +269,16 @@ var urlParams ={};
 $(function(){
 
 
-  var $pemFileCheckBox = $('#pemFileCheckbox').change(function(){
+  // var $pemFileDropdown = $('#pemFileDropdown').change(function(){
    
-    if($(this).is(':checked')) {
-      $('#importPemfileInput').attr('disabled',false);
-      $('#importPasswordInput').attr('disabled',true);
-    } else {
-      $('#importPemfileInput').attr('disabled',true);
-      $('#importPasswordInput').attr('disabled',false);
-    } 
-  });
+  //   if($(this).is(':checked')) {
+  //     $('#importPemfileInput').attr('disabled',false);
+  //     $('#importPasswordInput').attr('disabled',true);
+  //   } else {
+  //     $('#importPemfileInput').attr('disabled',true);
+  //     $('#importPasswordInput').attr('disabled',false);
+  //   } 
+  // });
 
  //drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
@@ -493,7 +524,9 @@ $('.showChefImportNodesModalBtn').click(function(e){
    //if($('.credentialSection').is(':visible')){
      reqBody.credentials = {};
      reqBody.credentials.username = $('#importUsernameInput').val();
-     if(!$pemFileCheckBox.is(':checked')) {
+
+    var $dropdown = $('#pemFileDropdown');
+    if ($dropdown.val()==='pemFile') {
        reqBody.credentials.password = $('#importPasswordInput').val();
        if(!reqBody.credentials.username){
          alert('Please Enter Username');
