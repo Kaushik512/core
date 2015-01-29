@@ -265,8 +265,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 //  var dockerRepo = JSON.parse(data);
                 console.log('Docker Repo ->', JSON.stringify(data));
-                 var dock = JSON.parse(data);
-               // var dockkeys = Object.keys(data);
+                var dock = JSON.parse(data);
+                // var dockkeys = Object.keys(data);
                 console.log('username:' + dock.dockeruserid);
 
                 var _docker = new Docker();
@@ -288,8 +288,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 var startparams = '';
                 if (req.params.startparams != 'null') {
                     startparams = decodeURIComponent(req.params.startparams);
-                }
-                else
+                } else
                     startparams = '/bin/bash';
                 cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' ' + startparams;
                 console.log('Docker command executed : ' + cmd);
@@ -420,6 +419,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         } else {
                             chefClientOptions.password = decryptedCredentials.password;
                         }
+                        logsDao.insertLog({
+                            referenceId: req.params.instanceId,
+                            err: false,
+                            log: 'Running chef-client',
+                            timestamp: new Date().getTime()
+                        });
 
                         chef.runChefClient(chefClientOptions, function(err, retCode) {
                             if (decryptedCredentials.pemFileLocation) {
@@ -433,6 +438,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
 
                             if (err) {
+                                //console.log(err);
                                 logsDao.insertLog({
                                     referenceId: req.params.instanceId,
                                     err: true,
@@ -476,12 +482,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                 });
                             } else {
+                                if (retCode === -5000) {
+                                    logsDao.insertLog({
+                                        referenceId: req.params.instanceId,
+                                        err: true,
+                                        log: 'Host Unreachable',
+                                        timestamp: new Date().getTime()
+                                    });
+                                } else if (retCode === -5001) {
+                                    logsDao.insertLog({
+                                        referenceId: req.params.instanceId,
+                                        err: true,
+                                        log: 'Invalid credentials',
+                                        timestamp: new Date().getTime()
+                                    });
+                                } else {
+                                    logsDao.insertLog({
+                                        referenceId: req.params.instanceId,
+                                        err: true,
+                                        log: 'Unknown error occured. ret code = '+retCode,
+                                        timestamp: new Date().getTime()
+                                    });
+                                }
                                 logsDao.insertLog({
                                     referenceId: req.params.instanceId,
                                     err: true,
                                     log: 'Unable to run chef-client',
                                     timestamp: new Date().getTime()
                                 });
+
                                 return;
                             }
                         }, function(stdOutData) {
@@ -783,6 +812,28 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             timestamp: new Date().getTime()
                         });
                     } else {
+                        if (retCode === -5000) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: 'Host Unreachable',
+                                timestamp: new Date().getTime()
+                            });
+                        } else if (retCode === -5001) {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: 'Invalid credentials',
+                                timestamp: new Date().getTime()
+                            });
+                        } else {
+                            logsDao.insertLog({
+                                referenceId: req.params.instanceId,
+                                err: true,
+                                log: 'Unknown error occured. ret code = '+retCode,
+                                timestamp: new Date().getTime()
+                            });
+                        }
                         logsDao.insertLog({
                             referenceId: req.params.instanceId,
                             err: true,
@@ -925,7 +976,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances/bootstrap', function(req, res) {
-        
+
     });
 
 

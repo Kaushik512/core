@@ -17,8 +17,8 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 
 console.log(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
-java.classpath.push(D4DfolderPath + '/java/classes');
-//java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
+//java.classpath.push(D4DfolderPath + '/java/classes');
+java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
 
 
 var defaults = {
@@ -106,30 +106,6 @@ function JavaSSH(javaSSHInstance, options) {
                         onComplete(err, retCode);
                     }
                 });
-                /*var cmdList = java.newArray("java.lang.String", ['ls','ps -ef','pwd']);
-                java.callMethod(javaSSHInstance, 'executeListOfCmds', cmdList, stdOutLogFile, stdErrLogFile, function(err, retCode) {
-                    // deleting log files
-                    if (tailStdOut) {
-                        tailStdOut.stopTailing();
-                        fs.unlink(stdOutLogFile);
-                    }
-                    if (tailStdErr) {
-                        tailStdErr.stopTailing();
-                        fs.unlink(stdErrLogFile);
-                    }
-                    if (err) {
-                        console.log("error in runnnig method");
-                        console.log(err);
-                        if (typeof onComplete === 'function') {
-                            onComplete(err, null);
-                        }
-                        return;
-                    }
-                    if (typeof onComplete === 'function') {
-                        onComplete(err,retCode );
-                    }
-                });*/
-
             });
 
         });
@@ -178,6 +154,7 @@ function JavaSSH(javaSSHInstance, options) {
                     }
                     if (err) {
                         console.log("error in runnnig method");
+                        
                         console.log(err);
                         if (typeof onComplete === 'function') {
                             onComplete(err, null);
