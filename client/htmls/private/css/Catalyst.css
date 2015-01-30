@@ -141,18 +141,6 @@
     font-weight: 400;
 }
 
-.smart-form .select i:after {
-    bottom: 0;
-    border-top: 4px solid #404040;
-}
-.smart-form .select i:before {
-    top: 0;
-    border-bottom: 4px solid #404040;
-}
-.smart-form .select-multiple select {
-    height: auto;
-}
-
 .smart-form .checkbox, .smart-form .radio {
     margin-bottom: 4px;
     padding-left: 25px;
@@ -1185,6 +1173,10 @@ nav ul ul>li:hover b {
 #logo {
     margin-left: 4px;
 }
+.left-projects-links{
+	font-size:12px!important;
+	margin-top: 30px!important;
+}
 .btn-header.transparent a {
     border: 0!important;
     background: 0 0;
@@ -1334,7 +1326,7 @@ nav ul ul>li:hover b {
     content: "\f0a9"}
 
 .minified #main {
-    margin-left: 45px;
+    margin-left: 220px;
 }
 .minified #left-panel, .minified nav>ul>li {
     overflow: visible;
@@ -2205,6 +2197,19 @@ nav ul ul>li:hover b {
     width: 100px;
     height: 100px;
     overflow: scroll;
+}
+
+@media (min-width:768px) and (max-width:980px)
+{
+	.left-projects-links
+	{
+		font-size:12px!important;
+	}
+	
+	#logout
+	{
+		margin-top: -10px;
+	}
 }
 
 /*Dev.html CSS-Main*/
@@ -5409,6 +5414,12 @@ label{
 }
 .no-padding .smart-accordion-default>div:last-child {
     border-bottom: 0!important;
+}
+
+.alert-success {
+    border-color:#40BAF1;
+    color: #ffffff;
+    background: #40BAF1;
 }
 
 
