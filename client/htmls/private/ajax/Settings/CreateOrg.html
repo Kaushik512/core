@@ -34,7 +34,7 @@
                                                 <!-- widget content -->
                                                 <div class="widget-body no-padding">
                                                     
-                                                    <form action="" class="smart-form" novalidate="novalidate">
+                                                    <form action="" id="myform" class="smart-form" novalidate="novalidate">
                                                         
 
                                                         <fieldset>
@@ -117,7 +117,7 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm())saveform('1');">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm()){console.log('serialixe ==> ' ,$('#myform').serialize());saveform('1');}">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
