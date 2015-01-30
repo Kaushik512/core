@@ -729,9 +729,10 @@
                                 <table align="left">
                                  <thead>
                                    <tr style="line-height:2.3">
-                                     <th style="width:80%;" scope="col"><u style="font-size:12px;">Name</u>
+                                     <th style="width:100px" scope="col"><u style="font-size:12px;">Name</u>
                                      </th>
-                                     <th scope="col"> <u style="font-size:12px;">IP Address</u></th>
+                                     <th style="width:100px" scope="col"> <u style="font-size:12px;">IP Address</u></th>
+                                     <th scope="col"> <u style="font-size:12px;">Status</u></th>
                                    </tr>   
                                  </thead>
 
@@ -1625,9 +1626,13 @@ $(function() {
                         var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
                             'font-size': '12px'
                         });
-                        $tr.append($tdInstanceName).append($tdInstanceIp);
+                        var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
+                            'font-size': '12px'
+                        });
+                        $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
                         $taskNodeListContainer.append($tr);
                     }
+                    $('#assignedNode').modal('show'); 
                 });
             });
             $tr.append($tdNodeList);
