@@ -89,7 +89,7 @@
                 <div class="widget-toolbox clearfix">
                     <div class="btn-group pull-right">
                         <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()) saveform(3);">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(!saveform('3'))return false;">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                             Save
                         </button>
