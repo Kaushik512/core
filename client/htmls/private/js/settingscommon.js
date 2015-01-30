@@ -30,6 +30,9 @@ function deleteItem(docid, key, value, button) {
 
                 var tab = 'envtable';
                 $('#' + tab).dataTable();
+                if(parseInt(docid) < 5){
+                    loadTreeFuncNew();
+                }
             },
             failure: function(data) {
                 // debugger;
@@ -1579,6 +1582,11 @@ function saveform(formID) {
             $(".savespinner").hide();
             if ($('#btncancel'))
                 $('#btncancel').click();
+            if(parseInt(formID) < 5)
+            {
+                loadTreeFuncNew(); //this should refresh the tree
+                
+            }
         },
         error: function(jqxhr) {
             alert(jqxhr.status);
@@ -2130,6 +2138,21 @@ function isFormValid() {
                         currCtrl.focus();
                     }
                     break;
+                case "max15":
+                    if (currCtrl.val().length > 25) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 25 chars");
+                        currCtrl.focus();
+                    }
+                    break;
+                 case "nospace":
+                    var str = currCtrl.val();
+                    if (str.indexOf(' ') > 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
                 case "numeric":
                     var str = currCtrl.val();
                     if (/^[0-9]*$/.test(str) == false) {
@@ -2163,12 +2186,13 @@ function enableUniqueCheckingForInputs(id) {
         $('input[unique="true"], select[unique="true"]').blur(function() {
             //Disabling the save button while testing for uniqueness
             $('button[onclick*="saveform"]').attr('disabled', 'disabled');
-
+           // debugger;
             var uni = $('#unique_' + $(this).attr("id"));
             if ($(this).attr("initialvalue") != null) {
                 if ($(this).attr("initialvalue") == $(this).val()) {
                     if (uni.length > 0)
                         uni.html('');
+                    $('button[onclick*="saveform"]').removeAttr('disabled');
                     return (true);
                 }
             }

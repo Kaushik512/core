@@ -577,6 +577,7 @@
 		if(breadcrumbHeader == 'org') {
 	var orgName = $('.orgSelected span').text();
 	window.selectedOrgName = orgName;
+	selectFirstEnv(); //selecting the first item in the org tree.
 		} else {
 		window.selectedOrgName = breadcrumbHeader;
 		}
@@ -590,6 +591,7 @@
 	window.selectedOrgName = $('.orgSelected').text().trim();
 	//alert('in');
 	var loadTreeFuncNew = function(){
+		console.log('Loaded a tree');
 		$.ajax({
 				type: "get",
 				dataType: "json",
@@ -598,7 +600,7 @@
 				success: function (data1) {
 					console.log('ajax success');
 					//alert('New Json' + JSON.stringify(data1));
-					$('#tree').treeview({
+					$('#tree').html('').treeview({
 						data:data1,enableLinks:true,
 						collapseIcon:'fa fa-angle-down',
 						expandIcon:'fa fa-angle-right',
@@ -617,9 +619,13 @@
 			});
 	}
 	var selectFirstEnv = function(){
-		$('a[itemtype="org"]').first().trigger('click');
-		$('a[itemtype="bg"]').first().trigger('click');
-		$('a[itemtype="proj"]').first().trigger('click');
+		//alert('hit');
+		if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+			$('a[itemtype="org"]').first().trigger('click');
+		if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+			$('a[itemtype="bg"]').first().trigger('click');
+		if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+			$('a[itemtype="proj"]').first().trigger('click');
 		$('a[itemtype="env"]').first().trigger('click');
 	}
 	loadTreeFuncNew();
