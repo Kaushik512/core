@@ -2878,6 +2878,7 @@ function loadContainersTable(){
     //alert('called');
     console.log('called');
     $dockercontainertable = $('#dockercontainertable tbody');
+    $dockercontainertable.css('padding','8px 4px !important');
     $('.container').each(function(){
       var $docker = $(this).find('.dockerenabledinstacne');
       if($docker.html() != undefined){
