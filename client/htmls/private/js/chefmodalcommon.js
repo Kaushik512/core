@@ -88,6 +88,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
         if (typeof callback === 'function') {
             callback('done');
         }
+    }).fail(function(data) {
+        var $erroMsgArea = $('<span></span>').css({'color':'red'}).text(' ' + data.responseJSON.message);
+        $('.cookbookspinner').detach();
+        $strong1.append($erroMsgArea);
     });
 
     //$ul1.append($hr1);

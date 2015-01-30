@@ -311,11 +311,16 @@
                         </div>
                     </div>
                      <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
+                        
+                        
 
-                        <h3 style="text-align:center"><strong>Blueprint Saved</strong></h3>
-
-                        <div class="">
+                        <div class="blueprintSaveSuccess blueprintMsgContainer">
                             <h3 class="alert alert-success">Blueprint Saved.</h3>
+                        </div>
+
+                        <div class="blueprintSaveFail blueprintMsgContainer">
+
+                            <h3 class="alert alert-danger">Unable to save blueprint. Please try again later.</h3>
                         </div>
                     </div>
 
@@ -1002,15 +1007,18 @@ $(document).ready(function(){
                }
                //alert(JSON.stringify(reqBody));
 
-
-               console.log('pushing');
-               console.log(reqBody);
+               
+               $('.blueprintMsgContainer').hide();
+               
                $.post('../projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);
+                   $('.blueprintSaveSuccess').show();
                    var wizard = $wizard.data('bootstrapWizard');
                     wizard.disablePreviouBtn();
+               }).error(function(){
+                  $('.blueprintSaveFail').show();
                });
                console.log('final', reqBody);
 
