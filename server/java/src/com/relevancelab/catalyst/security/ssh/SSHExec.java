@@ -2,11 +2,19 @@ package com.relevancelab.catalyst.security.ssh;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 import com.jcraft.jsch.*;
+import com.relevancelab.catalyst.security.ssh.exceptions.AuthFailedException;
+import com.relevancelab.catalyst.security.ssh.exceptions.HostUnreachableException;
 import com.relevancelab.catalyst.security.ssh.streamreader.SSHExecInputStreamReader;
 
 public class SSHExec {
+
+	//error codes 
+	final int HOST_UNREACHABLE = -5000;
+	final int INVALID_CREDENTIALS = -5001;
+	final int JSCH_EXCEPTION = -5002;
+	final int UNKOWN_EXCEPTION = -5003;
+
 
 	//ssh parameters
 	final int SSH_TIMEOUT = 60000;
@@ -41,13 +49,51 @@ public class SSHExec {
 		}
 	}
 
+
+
+	private Session openSession() throws JSchException, HostUnreachableException, AuthFailedException {
+		JSch.setConfig("StrictHostKeyChecking", "no");
+		JSch jsch;
+		Session session = null;
+		try {
+			jsch=new JSch();
+			if(pemFilePath != null) {
+				System.out.println("Setting pem file");
+				jsch.addIdentity(pemFilePath);
+			}
+			session=jsch.getSession(username, host, port);
+			if(password != null) {
+				System.out.println("Setting password");
+				session.setPassword(password);
+				//sudoCmd = "echo "+password+" | sudo -S";
+			}
+			System.out.println("Session connecting");
+			session.connect(SSH_TIMEOUT);
+		} catch (JSchException je) {
+			System.out.println(je.getMessage());
+			if(je.getMessage().equals("timeout: socket is not established")) {
+				throw new HostUnreachableException("Host is not reachable");
+			} else if(je.getMessage().equals("Auth fail")) {
+				throw new AuthFailedException("Invalid Credentials");
+			} else {
+				throw je;	
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+		return session;
+	}
+
 	/**
 	 * 
 	 * @param cmd
 	 * @throws JSchException
 	 * @throws IOException
+	 * @throws AuthFailedException 
+	 * @throws HostUnreachableException 
 	 */
-	private int doSSh(String cmd,String stdOutLogFile,String stdErrLogFile) throws JSchException, IOException {
+	private int doSSh(String cmd,String stdOutLogFile,String stdErrLogFile) throws IOException, HostUnreachableException, AuthFailedException, JSchException {
 		System.out.println(host);
 		System.out.println(port);
 		System.out.println(username);
@@ -59,31 +105,22 @@ public class SSHExec {
 		//jsch variables
 		InputStream stdOutInputstream;
 		InputStream stdErrInputstream;
-		JSch jsch;
-		Session session = null;
+
 		ChannelExec channel = null;
+		Session session = null;
 
 
 		try {
+			//run stuff
+
+
 
 			String sudoCmd = "sudo"; 
-
-			JSch.setConfig("StrictHostKeyChecking", "no");
-			jsch=new JSch();
-			if(pemFilePath != null) {
-				System.out.println("Setting pem file");
-				jsch.addIdentity(pemFilePath);
-			}
-			session=jsch.getSession(username, host, port);
 			if(password != null) {
-				System.out.println("Setting password");
-				session.setPassword(password);
 				sudoCmd = "echo "+password+" | sudo -S";
 			}
-			System.out.println("Session connecting");
-			session.connect(SSH_TIMEOUT);
-			System.out.println("Session Connected");
-			//run stuff
+
+			session = openSession();
 			channel = (ChannelExec)session.openChannel("exec");
 			System.out.println(cmd);
 			channel.setCommand(sudoCmd+" "+cmd);
@@ -112,7 +149,6 @@ public class SSHExec {
 			}
 			System.out.println("Disconnecting Channel");
 			channel.disconnect();
-
 			System.out.println("Exit status "+channel.getExitStatus());
 			return channel.getExitStatus();
 		} finally {
@@ -125,7 +161,6 @@ public class SSHExec {
 				session.disconnect();
 				session = null;
 			}
-			jsch = null;
 		}
 	}
 
@@ -134,75 +169,119 @@ public class SSHExec {
 	 * @param runlist
 	 * @param overrideRunlist
 	 * @return
+	 * @throws IOException 
+	 * @throws JSchException 
+	 * @throws AuthFailedException 
+	 * @throws HostUnreachableException 
 	 */
 	public int execChefClient(String runlist,boolean overrideRunlist,String stdOutLogFile,String stdErrLogFile) {
 		if(runlist == null || runlist.length() == 0){
 			return -1002; //Need to think about the return codes
 		}
+		String cmd = "chef-client";
+		if(overrideRunlist) {
+			cmd += " -o";
+		} else {
+			cmd += " -r";
+		}
+		cmd += " "+runlist;
 		try {
-			String cmd = "chef-client";
-			if(overrideRunlist) {
-				cmd += " -o";
-			} else {
-				cmd += " -r";
-			}
-			cmd += " "+runlist;
-			return doSSh(cmd,stdOutLogFile,stdErrLogFile);
-		} catch (JSchException | IOException e) {
-			System.out.println("Exception Occured");
-			//e.printStackTrace();
+			return  doSSh(cmd,stdOutLogFile,stdErrLogFile);
+		} catch(AuthFailedException afe) {
+			afe.printStackTrace();
+			return INVALID_CREDENTIALS;
+		} catch (HostUnreachableException e2) {
+			e2.printStackTrace();
+			return HOST_UNREACHABLE;
+		} catch (JSchException jsche) {
+			jsche.printStackTrace();
+			return JSCH_EXCEPTION;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return UNKOWN_EXCEPTION;
+		}
+		catch (Exception e) {
 			e.printStackTrace();
-			return -1001; /// need to think about it
-		} 
+			return UNKOWN_EXCEPTION;
+		}
+
 
 	}
 
-	public int execServiceCmd(String serviceName,String serviceAction,String stdOutLogFile,String stdErrLogFile) {
+	public int execServiceCmd(String serviceName,String serviceAction,String stdOutLogFile,String stdErrLogFile)  {
 		if((serviceName == null || serviceName.length() == 0) || (serviceAction == null || serviceAction.length() == 0)){
 			return -1002; //Need to think about the return codes
 		}
+		String cmd = "service "+serviceName + " " + serviceAction;
 		try {
-			String cmd = "service "+serviceName + " " + serviceAction;
 			return doSSh(cmd,stdOutLogFile,stdErrLogFile);
-		} catch (JSchException | IOException e) {
-			e.printStackTrace();
-			return -1001; /// need to think about it
+		} catch(AuthFailedException afe) {
+			afe.printStackTrace();
+			return INVALID_CREDENTIALS;
+		} catch (HostUnreachableException e2) {
+			e2.printStackTrace();
+			return HOST_UNREACHABLE;
+		} catch (JSchException jsche) {
+			jsche.printStackTrace();
+			return JSCH_EXCEPTION;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return UNKOWN_EXCEPTION;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return UNKOWN_EXCEPTION;
+		}
+
 	}
 
-	public int executeListOfCmds(String[] cmdArray,String stdOutLogFile,String stdErrLogFile) {
+	public int executeListOfCmds(String[] cmdArray,String stdOutLogFile,String stdErrLogFile)  {
 		if(cmdArray == null || cmdArray.length == 0) {
 			return -1002; //Need to think about the return codes
 		}
-		try {
-			StringBuilder cmdStringBuilder = new StringBuilder();
-			for (int i = 0;i<cmdArray.length;i++) {
-				String cmd = cmdArray[i];
-				if(cmd !=null && !cmd.isEmpty()) {
-					cmdStringBuilder.append(" ").append(cmd);
-					if(i < cmdArray.length -1) {
-						cmdStringBuilder.append(" &&");
-					}
+		StringBuilder cmdStringBuilder = new StringBuilder();
+		for (int i = 0;i<cmdArray.length;i++) {
+			String cmd = cmdArray[i];
+			if(cmd !=null && !cmd.isEmpty()) {
+				cmdStringBuilder.append(" ").append(cmd);
+				if(i < cmdArray.length -1) {
+					cmdStringBuilder.append(" &&");
 				}
 			}
-			String cmdString = cmdStringBuilder.toString();
-			if(cmdString.endsWith(" &&")) {
-				cmdString = cmdString.substring(0, cmdString.length()-4);
-			}
-			
-			return doSSh(cmdString,stdOutLogFile,stdErrLogFile);
-		} catch (JSchException | IOException e) {
-			e.printStackTrace();
-			return -1001; /// need to think about it
 		}
+		String cmdString = cmdStringBuilder.toString();
+		if(cmdString.endsWith(" &&")) {
+			cmdString = cmdString.substring(0, cmdString.length()-4);
+		}
+
+		try {
+			return doSSh(cmdString,stdOutLogFile,stdErrLogFile);
+		} catch(AuthFailedException afe) {
+			afe.printStackTrace();
+			return INVALID_CREDENTIALS;
+		} catch (HostUnreachableException e2) {
+			e2.printStackTrace();
+			return HOST_UNREACHABLE;
+		} catch (JSchException jsche) {
+			jsche.printStackTrace();
+			return JSCH_EXCEPTION;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return UNKOWN_EXCEPTION;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return UNKOWN_EXCEPTION;
+		}
+
 	}
 
 
 	public static void testMethodStatic() {
 		System.out.println("In Static Method");
 	}
-	
-	
-	
+
+
+
 
 }

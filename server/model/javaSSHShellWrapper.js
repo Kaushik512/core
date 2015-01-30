@@ -42,7 +42,7 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
     var con;
 
     socketServer.on('connection', function(socket) {
-        console.log('connection established');
+        console.log('socket connection established');
         con = socket;
         con.setEncoding('utf8');
         con.setNoDelay(true);
@@ -69,7 +69,7 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
             callback(err, null);
             return;
         }
-        callback(null, that);
+        callback(null, that,retCode);
     });
 
 

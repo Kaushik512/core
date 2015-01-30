@@ -1,32 +1,26 @@
 <html>
 <head>
 	<script src="/socket.io/socket.io.js"></script>
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-     <script type="text/javascript" src="js/term.js"></script>
-
-<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-
+	 <script type="text/javascript" src="js/term.js"></script>
 
 <script type="text/javascript">
 </script>
 </head>
 <body style="background:white">
 
-<div id="loadingContainer" style="height:100%;display:none" >
+<div id="ssh-loadingContainer" style="height:100%;display:none" >
 <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
 </div>
 
-<form id="login-form" class="smart-form1" role="form">
+<form id="ssh-login-form" class="smart-form1" role="form">
+    <input type='hidden' id='ssh-instanceId'>
           <fieldset style="padding-top:0px;">
           <div class="">
       <section class="col col-12 credentialSection">
         <div class="form-group">
           <label for="exampleInputEmail1">Username<span class="control-label" style="color:Red;">&nbsp;*</span></label>
           <label class="input">
-         <input type="text" id="username" value="" autocomplete="off" class="form-control"/>
+         <input type="text" id="ssh-username" value="" autocomplete="off" class="form-control"/>
 
                     <b class="tooltip tooltip-top-right">
                     <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
@@ -37,7 +31,7 @@
         <div class="form-group">
           <label for="exampleInputEmail1">Password</label>
           <label class="input">
-          <input type="password" id="password" value="" autocomplete="off" class="form-control">
+          <input type="password" id="ssh-password" value="" autocomplete="off" class="form-control">
                     <b class="tooltip tooltip-top-right">
                     <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
           </label>
@@ -48,9 +42,9 @@
           <label for="exampleInputEmail1">Pem File</label>
           <div class="">
             <label style="display:inline;padding-top:4px;" class="checkbox">
-                <input type="checkbox" class="smart-form" id="pemFileCheckbox"><i></i>&nbsp;
+                <input type="checkbox" class="smart-form" id="ssh-pemFileCheckbox"><i></i>&nbsp;
             </label>
-            <input type="file" disabled="" style="display:inline" id="pemfileInput">
+            <input type="file" disabled="" style="display:inline" id="ssh-pemfileInput">
         </div>
         </div>
       </section>
@@ -59,17 +53,19 @@
         <div>
     </div>
     </fieldset>
+    <input type="button" id='ssh-terminateBtn' style="display:none"/>
 </form>
 
 
 
-<div id="errorArea" style="color:red">
+<div id="ssh-errorArea" style="color:red">
 </div>
 
-<div id="terminalContainer" style="display:none"></div>
+<div id="ssh-terminalContainer" style="display:none"></div>
 
 </body>
 <script type="text/javascript">
+
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
@@ -90,25 +86,29 @@ var urlParams = {};
 $(function() {
 
 
-    var $pemFileCheckBox = $('#pemFileCheckbox').change(function() {
+    var $pemFileCheckBox = $('#ssh-pemFileCheckbox').change(function() {
 
         if ($(this).is(':checked')) {
-            $('#pemfileInput').attr('disabled', false);
-            $('#password').attr('disabled', true);
+            $('#ssh-pemfileInput').attr('disabled', false);
+            $('#ssh-password').attr('disabled', true);
         } else {
-            $('#pemfileInput').attr('disabled', true);
-            $('#password').attr('disabled', false);
+            $('#ssh-pemfileInput').attr('disabled', true);
+            $('#ssh-password').attr('disabled', false);
         }
     });
 
 
    
-    var $errorArea = $('#errorArea');
-    var $submitCmdBtn = $('#submitCmdBtn');
-    var $terminalContainer = $('#terminalContainer');
-    var $loadingContainer = $('#loadingContainer'); 
-    var $terminalContainer = $('#terminalContainer'); 
-    var $loginForm = $('#login-form');
+    var $errorArea = $('#ssh-errorArea');
+    
+    var $terminalContainer = $('#ssh-terminalContainer');
+    var $loadingContainer = $('#ssh-loadingContainer'); 
+    var $terminalContainer = $('#ssh-terminalContainer'); 
+    var $loginForm = $('#ssh-login-form');
+    var $terminateBtn = $('#ssh-terminateBtn'); 
+     
+
+    console.log($loginForm)
 
 
     var socket = io.connect('/sshShell');
@@ -167,12 +167,13 @@ $(function() {
     }
 
     $loginForm.submit(function(e) {
+        console.log('submitting form');
         var reqBody = {};
-        reqBody.id = urlParams.id;
-        reqBody.username = $('#username').val();
+        reqBody.id = $('#ssh-instanceId').val();
+        reqBody.username = $('#ssh-username').val();
 
         if (!$pemFileCheckBox.is(':checked')) {
-            reqBody.password = $('#password').val();
+            reqBody.password = $('#ssh-password').val();
             if (!reqBody.username) {
                 alert('Please Enter Username');
                 return;
@@ -184,7 +185,7 @@ $(function() {
             console.log(reqBody);
             openSSh(reqBody);
         } else {
-            var pemFileInput = $('#pemfileInput').get(0);
+            var pemFileInput = $('#ssh-pemfileInput').get(0);
             if (!reqBody.username) {
                 alert('Please Enter Username');
                 return;
@@ -232,7 +233,13 @@ $(function() {
     
     socket.on('close', function() {
         destroyTerminal()
-    }); 
+    });
+
+    $terminateBtn.click(function(){
+        if (sshOpened) {
+          socket.disconnect();
+        }
+    });
 
    
 });
