@@ -121,7 +121,11 @@ $(document).ready(function() {
             $(".pemFileCheck").show();
         }
     });
+});
 
+$('#pemfileInput').change(function(){
+    //console.log(this.files);
+    $(this).next().val(this.files[0].name);
 });
 
 $(function() {

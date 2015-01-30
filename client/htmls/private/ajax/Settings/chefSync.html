@@ -145,7 +145,7 @@
         <div class="smart-forms">
             <label for="exampleInputEmail1">Pem File</label>
             <label for="" name="field" class="file">
-                <span class="button btn-primary">Browse</span>
+                <span class="button btn-primary" style="top:6px;">Browse</span>
                 <input id="importPemfileInput" type="file" class="gui-file">
                 <input type="text" readonly="" class="gui-input">
             </label>
@@ -503,7 +503,10 @@ $('.showChefImportNodesModalBtn').click(function(e){
    }
   $('#chefImportNodesModal').modal('show');
 });
-
+$('#importPemfileInput').change(function(){
+    //console.log(this.files);
+    $(this).next().val(this.files[0].name);
+});
  $('.importNodesBtn').click(function(e){
    var $checkBoxes = $('.nodeCheckBox:checked');
    var reqBody = {};
@@ -675,6 +678,8 @@ $.get('../users',function(userList){
 
 </script>
 <script>
+
+
 var b = $('#tabContent tr td').width();
 var c = $('#tabContent tr ').width(); 
  b=c;

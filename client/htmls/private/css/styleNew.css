@@ -8,7 +8,12 @@
     margin-right: 12px;
     border-radius: 50%;
 }
-
+.importantRule{
+    background: none repeat scroll 0 0 #3b4142 !important;
+}
+.node-tree:hover{
+    background-color: transparent !important;
+}
 .padding-right0{
     padding-right: 0px !important;
 }

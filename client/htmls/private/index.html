@@ -598,7 +598,8 @@
 				success: function (data1) {
 					console.log('ajax success');
 					//alert('New Json' + JSON.stringify(data1));
-					$('#tree').treeview({
+					var $tree = $('#tree');
+					$tree.treeview({
 						data:data1,enableLinks:true,
 						collapseIcon:'fa fa-angle-down',
 						expandIcon:'fa fa-angle-right',
@@ -612,6 +613,10 @@
 							localStorage.setItem('selectedOrgName',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
 						}
 					});
+
+					//alert($tree.find('li:has(span.fa-desktop)').length);
+					//alert($tree.find('li').length);
+
 					
 				}
 			});

@@ -1177,7 +1177,7 @@
                             <div class="smart-forms">
                                 <label for="">Pem File</label>
                                 <label for="templatesicon" name="field" class="file">
-                                    <span class="button btn-primary">Browse</span>
+                                    <span class="button btn-primary" style="top:6px;">Browse</span>
                                     <input id="importPemfileInput" type="file" class="gui-file">
                                     <input type="text" readonly="" class="gui-input">
                                 </label>
@@ -1584,6 +1584,10 @@ $('.dockerinstancestart').click(function(e){
     });
 });
 
+$('#importPemfileInput').change(function(){
+    //console.log(this.files);
+    $(this).next().val(this.files[0].name);
+});
 
 $('#addInstanceBtn').click(function(e) {
     
@@ -1639,6 +1643,7 @@ $('#addInstanceBtn').click(function(e) {
            
        };
        // Read in the image file as a data URL.
+       
        reader.readAsText(pemFileInput.files[0]);
     } else {
         reqBody.credentials.password = $form.find('#instancePassword').val();
