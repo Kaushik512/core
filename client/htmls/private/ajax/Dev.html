@@ -1671,6 +1671,9 @@ $(function() {
                         var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
                             'font-size': '12px'
                         });
+                        var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceIP).css({
+                            'font-size': '12px'
+                        });
                         $tr.append($tdInstanceName).append($tdInstanceIp);
                         $taskNodeListContainer.append($tr);
                     }
