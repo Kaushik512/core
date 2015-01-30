@@ -905,7 +905,8 @@ function readform(formID) {
 
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
-        $('button[onclick*="saveform"]').attr("rowid", rowid);
+        $('button').attr("rowid", rowid);
+        $("button[rowid*='"+"']");
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
@@ -1552,11 +1553,12 @@ function saveform(formID) {
 
 
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
-    if ($('button[onclick*="saveform"]').attr("rowid") != null) {
+    if ($('button').attr("rowid") != null) {
         // alert("in edit");
-        data1.append("rowid", $('button[onclick*="saveform"]').attr("rowid"));
+        data1.append("rowid", $('button').attr("rowid"));
         
     }
+
    
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
