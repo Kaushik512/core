@@ -169,6 +169,7 @@
    
    
    function saveform_old(formName) {
+
        // debugger;
        $(".savespinner").show();
        //   $('.widget-box').css('opacity', '0.1');
@@ -291,11 +292,13 @@
    $(document).ready(function () {
    
        $('#myForm').submit(function() {
+         console.log('serialize ==> ',$(this).serialize());
            $(this).validate();
    
            if($(this).valid){
                 /*alert('valid form submitted'); // for demo*/
                if(validateForm())saveform('1');
+             
            }else{
                 alert('invalid valid form submitted'); // for demo
            }
