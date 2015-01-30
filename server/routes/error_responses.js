@@ -13,7 +13,7 @@ module.exports = {
         error: getErrMsgObj('Server Behaved Unexpectedly')
     },
     instance:{
-    	notFound : getErrMsgObj('Instance Does Not Exist');
+    	notFound : getErrMsgObj('Instance Does Not Exist')
     }
 
 };
