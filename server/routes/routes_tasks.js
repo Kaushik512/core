@@ -117,9 +117,31 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             timestamp: new Date().getTime()
                                         });
                                     } else {
+                                        if (retCode === -5000) {
+                                            logsDao.insertLog({
+                                                referenceId:  instance._id,
+                                                err: true,
+                                                log: 'Host Unreachable',
+                                                timestamp: new Date().getTime()
+                                            });
+                                        } else if (retCode === -5001) {
+                                            logsDao.insertLog({
+                                                referenceId:  instance._id,
+                                                err: true,
+                                                log: 'Invalid credentials',
+                                                timestamp: new Date().getTime()
+                                            });
+                                        } else {
+                                            logsDao.insertLog({
+                                                referenceId:  instance._id,
+                                                err: true,
+                                                log: 'Unknown error occured. ret code = '+retCode,
+                                                timestamp: new Date().getTime()
+                                            });
+                                        }
                                         logsDao.insertLog({
                                             referenceId: instance._id,
-                                            err: false,
+                                            err: true,
                                             log: 'Error in running chef-client',
                                             timestamp: new Date().getTime()
                                         });
@@ -157,8 +179,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
 
                 res.send({
-                    timestamp:taskRunTimestamp,
-                    instances:instances
+                    timestamp: taskRunTimestamp,
+                    instances: instances
                 });
 
             });

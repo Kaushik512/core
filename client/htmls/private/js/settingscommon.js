@@ -30,6 +30,9 @@ function deleteItem(docid, key, value, button) {
 
                 var tab = 'envtable';
                 $('#' + tab).dataTable();
+                if(parseInt(docid) < 5){
+                    loadTreeFuncNew();
+                }
             },
             failure: function(data) {
                 // debugger;
@@ -1579,6 +1582,11 @@ function saveform(formID) {
             $(".savespinner").hide();
             if ($('#btncancel'))
                 $('#btncancel').click();
+            if(parseInt(formID) < 5)
+            {
+                loadTreeFuncNew(); //this should refresh the tree
+                
+            }
         },
         error: function(jqxhr) {
             alert(jqxhr.status);
@@ -2130,6 +2138,21 @@ function isFormValid() {
                         currCtrl.focus();
                     }
                     break;
+                case "max15":
+                    if (currCtrl.val().length > 25) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 25 chars");
+                        currCtrl.focus();
+                    }
+                    break;
+                 case "nospace":
+                    var str = currCtrl.val();
+                    if (str.indexOf(' ') > 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
                 case "numeric":
                     var str = currCtrl.val();
                     if (/^[0-9]*$/.test(str) == false) {
@@ -2163,12 +2186,13 @@ function enableUniqueCheckingForInputs(id) {
         $('input[unique="true"], select[unique="true"]').blur(function() {
             //Disabling the save button while testing for uniqueness
             $('button[onclick*="saveform"]').attr('disabled', 'disabled');
-
+           // debugger;
             var uni = $('#unique_' + $(this).attr("id"));
             if ($(this).attr("initialvalue") != null) {
                 if ($(this).attr("initialvalue") == $(this).val()) {
                     if (uni.length > 0)
                         uni.html('');
+                    $('button[onclick*="saveform"]').removeAttr('disabled');
                     return (true);
                 }
             }
@@ -2336,333 +2360,4 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
     return obj;
 }
 
-//ChefItem added below
-var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) {
-    if (!selectedRunlist) {
-        selectedRunlist = [];
-    }
-    var $chefItemdiv = $("<div></div>").addClass('smart-form');
 
-    var $panelbody = $("<div></div>").addClass('panel-body');
-    var $fieldsetpanel = $("<fieldset></fieldset>").addClass('padding0');
-    var $section = $("<section></section>").addClass('col col-sm-6 col-xs-12');
-    // var $label = $("<label></label>").text('Choose Organization');
-    // var $divpanel = $("<div></div>").addClass('col col-9 padding0')
-    // var $select = $("<select></select>").addClass('form-control width-100 chooseCheforgType');
-    // var $optionorg1 = $("<option></option>").text('Choose');
-    // var $optionorg2 = $("<option></option>").text('Phoenix');
-
-    // $select.append($optionorg1);
-    // $select.append($optionorg2);
-    // $section.append($label);
-    // $divpanel.append($select);
-    // $section.append($divpanel);  
-    //alert('in' + catorgname);
-    $loadingContainer = $('<div></div>').addClass('loadingContainer').addClass('hidden');
-    var $imgerrorContainer = $("<img />").attr('src', 'img/loading.gif').addClass('center-block chefItemwithoutOrgloadingContainerCSS');
-    $loadingContainer.append($imgerrorContainer);
-    $section.append($loadingContainer);
-    $fieldsetpanel.append($section);
-    $panelbody.append($fieldsetpanel);
-
-    $chefItemdiv.append($panelbody);
-
-    var $fieldset = $("<fieldset></fieldset>").addClass('padding0 fieldsetContainschefItem');
-    var $section1 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
-
-    var $label1 = $("<label></label>").addClass('label');
-    var $img1 = $("<img />").attr('src', 'img/templateicons/Create-run-list---deployment.png');
-    var $strong1 = $("<span></span>").text("Select Runlist").append('<img class="cookbookspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
-    $label1.append($img1);
-    $label1.append($strong1);
-    $section1.append($label1);
-    var $row1 = $("<div></div>").addClass('row');
-    var $div1 = $("<div></div>").addClass('col col-10 padding-right0');
-    var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
-    var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
-    var $inputtypetextCookbooks = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Cookbooks">').addClass('searchoptionforCookbooks form-control padding0');
-    var $hr1 = $("<hr>");
-    $ul1.append($label2);
-    $ul1.append($inputtypetextCookbooks);
-    $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
-        console.log("Cookbooks Query:" + data);
-
-        var cookbooks = data.cookbooks;
-        var keys = Object.keys(cookbooks);
-        //alert(keys);
-        keys.sort(function(a, b) {
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-
-        var $deploymentCookbookList = $('.deploymentsCookbookList');
-        for (i = 0; i < keys.length; i++) {
-            var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxCookbook" value="recipe[' + keys[i] + ']" data-cookbookName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
-            if (selectedRunlist.indexOf('recipe[' + keys[i] + ']') !== -1) {
-                $li.hide().data('itemSelected', true);
-            }
-            $deploymentCookbookList.append($li);
-        }
-        var roles = data.roles;
-        var keys = Object.keys(roles);
-        keys.sort(function(a, b) {
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-        //alert("ServerID:" + data.serverId);
-        $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
-
-        var $deploymentRolesList = $('.deploymentRoleList');
-        for (i = 0; i < keys.length; i++) {
-            var $li = $('<li><label class="checkbox" style="margin: 5px;"><input type="checkbox"  name="checkboxRole" value="role[' + keys[i] + ']" data-roleName="' + keys[i] + '"><i></i>' + keys[i] + '</label></li>');
-            if (selectedRunlist.indexOf('role[' + keys[i] + ']') !== -1) {
-                $li.hide().data('itemSelected', true);
-            }
-            $deploymentRolesList.append($li);
-        }
-        if ($('.deploymentsCookbookList li').length <= 0)
-            $('.deploymentsCookbookList').append($('<span class="label text-align-center">[ None Found ]</span>'));
-        if ($('.deploymentRoleList li').length <= 0)
-            $('.deploymentRoleList').append($('<span class="label text-align-center">[ None Found ]</span>'));
-        $('.cookbookspinner').detach();
-        if (typeof callback === 'function') {
-            callback('done');
-        }
-    });
-
-    //$ul1.append($hr1);
-
-    $div1.append($ul1);
-    var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
-    var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
-    var $inputtypetextRoles = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Roles">').addClass('searchoptionforRoles form-control padding0');
-    var $hr2 = $("<hr>");
-    $ul2.append($label3);
-    $ul2.append($hr2);
-    $ul2.append($inputtypetextRoles);
-
-    $div1.append($ul2);
-    $row1.append($div1);
-
-    $div2 = $("<div></div>").addClass('col col-2 margin-top-122');
-    $divinputgroupAddRemove = $("<div></div>").addClass('input-group');
-    $divbtngroupAdd = $("<div></div>").addClass('btn-group padding-bottom-10');
-
-    $btntoAdd = $("<button></button>").addClass('btn btn-default btn-primary btnItemAdd btnItemCSS ');
-    $btntoAdditag = $("<i></i>").addClass('fa fa-angle-double-right font-size-20');
-    $btntoAdd.append($btntoAdditag);
-    $divbtngroupAdd.append($btntoAdd);
-    $divinputgroupAddRemove.append($divbtngroupAdd);
-
-    $btnClearfix = $("<div></div>").addClass('clearfix');
-    $divinputgroupAddRemove.append($btnClearfix);
-
-    $divbtngroupRemove = $("<div></div>").addClass('btn-group');
-    $btntoRemove = $("<button></button>").addClass('btn btn-default btn-primary btnItemRemove btnItemCSS');
-    $btntoRemoveitag = $("<i></i>").addClass('fa fa-angle-double-left font-size-20');
-    $btntoRemove.append($btntoRemoveitag);
-    $divbtngroupRemove.append($btntoRemove);
-    $divinputgroupAddRemove.append($divbtngroupRemove);
-
-    $div2.append($divinputgroupAddRemove);
-    $row1.append($div2);
-
-    $section1.append($row1);
-
-    //Section 2 started
-
-    var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
-    var $label2 = $("<label></label>").addClass('label');
-    var $img2 = $("<img />").attr('src', 'img/templateicons/Order-run-list---deployment.png');
-    var $strong2 = $("<span></span>").text("Order Runlist");
-    $label2.append($img2);
-    $label2.append($strong2);
-    $section2.append($label2);
-
-    var $rowOrder1 = $("<div></div>").addClass('row');
-    var $divOrder1 = $("<div></div>").addClass('col col-10 padding-right0');
-    var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
-    //alert('here ==>');
-    //alert(selectedRunlist); 
-    for (var i = 0; i < selectedRunlist.length; i++) {
-        var name = '';
-        var item = selectedRunlist[i];
-        var indexOfBracketOpen = item.indexOf('[');
-        if (indexOfBracketOpen != -1) {
-            var indexOfBracketClose = item.indexOf(']');
-            if (indexOfBracketClose != -1) {
-                name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
-            }
-        }
-        if (name) {
-            if (item.indexOf('recipe') === 0) {
-                $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_cookbook_recipes.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
-                    if ($(this).hasClass('deploymentCookbookSelected')) {
-                        $(this).removeClass('deploymentCookbookSelected');
-                    } else {
-                        $(this).addClass('deploymentCookbookSelected');
-                    }
-                }));
-            } else {
-                $ulOrder1.append($('<li title="' + name + '"><label style="margin: 5px;"><input type="hidden" value="' + item + '"/>' + name.substr(0, 15) + '</label><img src="img/icon_roles.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
-                    if ($(this).hasClass('deploymentCookbookSelected')) {
-                        $(this).removeClass('deploymentCookbookSelected');
-                    } else {
-                        $(this).addClass('deploymentCookbookSelected');
-                    }
-                }));
-            }
-        }
-
-
-    }
-
-    $divOrder1.append($ulOrder1);
-    $rowOrder1.append($divOrder1);
-
-
-
-    $divOrder2 = $("<div></div>").addClass('col col-2 margin-top-122');
-    $divinputgroupUpDown = $("<div></div>").addClass('input-group');
-    $divbtngroupUp = $("<div></div>").addClass('btn-group padding-bottom-10');
-
-    $btntoUp = $("<button></button>").addClass('btn btn-default btn-primary btnItemUp btnItemCSS ');
-    $btntoUpitag = $("<i></i>").addClass('fa fa-angle-double-up font-size-20');
-    $btntoUp.append($btntoUpitag);
-    $divbtngroupUp.append($btntoUp);
-    $divinputgroupUpDown.append($divbtngroupUp);
-
-    $btnClearfix1 = $("<div></div>").addClass('clearfix');
-    $divinputgroupUpDown.append($btnClearfix1);
-
-    $divbtngroupDown = $("<div></div>").addClass('btn-group');
-    $btntoDown = $("<button></button>").addClass('btn btn-default btn-primary btnItemDown btnItemCSS');
-    $btntoDownitag = $("<i></i>").addClass('fa fa-angle-double-down font-size-20');
-    $btntoDown.append($btntoDownitag);
-    $divbtngroupDown.append($btntoDown);
-    $divinputgroupUpDown.append($divbtngroupDown);
-
-    $divOrder2.append($divinputgroupUpDown);
-    $rowOrder1.append($divOrder2);
-
-
-    $section2.append($rowOrder1);
-
-
-
-    $fieldset.append($section1);
-    $fieldset.append($section2);
-    $chefItemdiv.append($fieldset);
-
-    $errorContainer = $('<div></div>').addClass('errorContainer').addClass('hidden').text('This is Error Cointainer div');
-    $chefItemdiv.append($errorContainer);
-
-    // if($loadingContainer)
-    //    $loadingContainer.detach(); //commented to handle a javascript error, to be reverted.
-    // $("#toAdd").click(function(e){
-    //    $("#toaddbtn").append($form);
-    // });
-
-    $chefItemdiv.find('.btnItemAdd').click(function(e) {
-        var $deploymentSelectedList = $('.deploymentSelectedRunList');
-        var $selectedCookbooks = $("input[name=checkboxCookbook]:checked");
-        $selectedCookbooks.each(function(idx) {
-            var $this = $(this);
-            //
-            $deploymentSelectedList.append($('<li title="' + $this.attr('data-cookbookName') + '"><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-cookbookName').substr(0, 15) + '</label><img src="img/icon_cookbook_recipes.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
-                if ($(this).hasClass('deploymentCookbookSelected')) {
-                    $(this).removeClass('deploymentCookbookSelected');
-                } else {
-                    $(this).addClass('deploymentCookbookSelected');
-                }
-            }));
-            $this.attr('checked', false);
-            $this.parents('li').hide().data('itemSelected', true);
-        });
-        var $selectedRoles = $("input[name=checkboxRole]:checked");
-        $selectedRoles.each(function(idx) {
-            var $this = $(this);
-            //
-            $deploymentSelectedList.append($('<li title="' + $this.attr('data-roleName') + '"><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-roleName').substr(0, 15) + '</label><img src="img/icon_roles.png" style="height:24px;width:auto;margin-top:4px" class="pull-right"></li>').on('click', function(e) {
-                if ($(this).hasClass('deploymentCookbookSelected')) {
-                    $(this).removeClass('deploymentCookbookSelected');
-                } else {
-                    $(this).addClass('deploymentCookbookSelected');
-                }
-            }));
-            $this.attr('checked', false);
-            $this.parents('li').hide().data('itemSelected', true);
-        });
-        // $deploymentSelectedList.sortable({
-        // cursor: "move"
-        // });
-
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
-    });
-    $inputtypetextCookbooks.keyup(function(e) {
-        var searchText = $(this).val().toUpperCase();
-        $allListElements = $chefItemdiv.find('.deploymentsCookbookList > li');
-        $matchingListElements = $allListElements.filter(function(i, el) {
-            if ($(el).data('itemSelected')) {
-                return false;
-            }
-            return $(el).text().toUpperCase().indexOf(searchText) !== -1;
-        });
-        $allListElements.hide();
-        $matchingListElements.show();
-    });
-
-    $inputtypetextRoles.keyup(function(e) {
-        var searchText = $(this).val().toUpperCase();
-        $allListElements = $chefItemdiv.find('.deploymentRoleList > li');
-        $matchingListElements = $allListElements.filter(function(i, el) {
-            if ($(el).data('itemSelected')) {
-                return false;
-            }
-            return $(el).text().toUpperCase().indexOf(searchText) !== -1;
-        });
-        $allListElements.hide();
-        $matchingListElements.show();
-    });
-    $chefItemdiv.find('.btnItemRemove').click(function(e) {
-        var $deploymentSelectedList = $('.deploymentSelectedRunList');
-        $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
-            var value = $(this).find('input').val();
-            var selector = 'input[name=checkboxRole][value="' + value + '"]';
-            console.log(selector);
-            $('input[name=checkboxRole][value="' + value + '"]').parents('li').show().data('itemSelected', false);
-            $('input[name=checkboxCookbook][value="' + value + '"]').parents('li').show().data('itemSelected', false);
-            $(this).remove();
-        });
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
-    });
-
-    $chefItemdiv.find(".btnItemUp").on('click', function(e) {
-        var $selectedRunlist = $('.deploymentCookbookSelected');
-
-        $selectedRunlist.insertBefore($selectedRunlist.first().prev());
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
-    });
-
-    $chefItemdiv.find(".btnItemDown").on('click', function(e) {
-        var $selectedRunlistDown = $('.deploymentCookbookSelected');
-
-        $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
-    });
-
-    // $chefItemdiv.find(".chooseCheforgType").on('click', function () {
-    //     $(".chooseCheforgType").select2();
-    // });
-    // $chefItemdiv.ready(function() {
-    //     $(".chooseCheforgType").select2();
-    // });
-    $chefItemdiv.find('.chooseCheforgType').select2();
-    return $chefItemdiv;
-}

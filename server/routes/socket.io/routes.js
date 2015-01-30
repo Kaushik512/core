@@ -1,6 +1,6 @@
 var instanceDao = require('../../model/dao/instancesdao.js');
 var javaSSHShellwrapper = require('../../model/javaSSHShellWrapper.js');
-
+var logger = require('../../lib/logger')(module);
 
 
 
@@ -15,7 +15,9 @@ module.exports.setRoutes = function(socketIo) {
         //console.log('socket ==>',socket);
         socket.on('open', function(instanceData) {
             instanceDao.getInstanceById(instanceData.id, function(err, instances) {
+                logger.debug(instanceData.id);
                 if (err) {
+                    logger.error(err);
                     socket.emit('conErr', {
                         message: "Invalid instance Id"
                     });
@@ -35,29 +37,41 @@ module.exports.setRoutes = function(socketIo) {
                     username: instanceData.username,
                     password: instanceData.password,
                     pemFileData: instanceData.pemFileData
-                }, function(err, shell) {
+                }, function(err, shell, retCode) {
                     if (err) {
-                        console.log('here err');
                         socket.emit('conErr', {
                             message: "Unable to connect to instance"
                         });
                         return;
                     }
-                    socket.shellInstance = shell;
-                    //console.log(shell.on);
-                    shell.on('out', function(outData) {
-                        socket.emit('out', {
-                            res: outData
+                    if (retCode === 0) {
+                        socket.shellInstance = shell;
+                        shell.on('out', function(outData) {
+                            socket.emit('out', {
+                                res: outData
+                            });
                         });
-                    });
 
-                    shell.on('close', function() {
-                        socket.shellInstance = null;
-                        socket.emit('close');
-                    });
+                        shell.on('close', function() {
+                            socket.shellInstance = null;
+                            socket.emit('close');
+                        });
 
 
-                    socket.emit('opened');
+                        socket.emit('opened');
+                    } else if(retCode === -5000) {
+                        socket.emit('conErr', {
+                            message: "Host Unreachable"
+                        });
+                    } else if(retCode === -5001) {
+                        socket.emit('conErr', {
+                            message: "Invalid Credentials"
+                        });
+                    } else {
+                        socket.emit('conErr', {
+                            message: "Unable to connect to instance, error code = "+retCode 
+                        });
+                    }
                 });
             });
         });
@@ -77,7 +91,7 @@ module.exports.setRoutes = function(socketIo) {
         });
 
         socket.on('disconnect', function() {
-            console.log('Got disconnect!');
+            logger.debug('Got disconnect!');
             if (socket.shellInstance) {
                 socket.shellInstance.close();
                 socket.shellInstance = null;

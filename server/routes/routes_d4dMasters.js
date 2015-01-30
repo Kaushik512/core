@@ -1,14 +1,13 @@
 var d4dModel = require('../model/d4dmasters/d4dmastersmodel.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 
-
-
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Chef = require('../lib/chef');
 var Curl = require('../lib/utils/curl.js');
 var appConfig = require('../config/app_config');
+var logger  = require('../lib/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -367,12 +366,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
-    app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
-        console.log('received request ' + req.params.id);
+    app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
+        logger.debug('Entered readmasterjsoncounts');
         var ret = [];
         var masts = ['1', '2', '3', '4'];
-        // for(var i = 1; i < 4; i++){
-        d4dModel.find({
+        var counts = [];
+        for(var i =1;i<5;i++)
+            counts[i] = 0;
+       
+        d4dModelNew.d4dModelMastersOrg.find({
             id: {
                 $in: masts
             }
@@ -386,23 +388,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.writeHead(200, {
                     'Content-Type': 'application/json'
                 });
-                // res.json(d4dMasterJson);
-                //res.setHeader('Content-Type', 'application/json');
-                // res.end(JSON.stringify(d4dMasterJson));
-                // ret.push(i + ':' + d4dMasterJson.masterjson.rows.row.length);
+                
                 console.log("sent response" + JSON.stringify(d4dMasterJson));
-                console.log(d4dMasterJson.length);
+                logger.debug(d4dMasterJson.length);
                 var i = 0;
-                d4dMasterJson.forEach(function(itm) {
-                    console.log(itm.id + ' ' + itm.masterjson.rows.row.length);
-                    ret.push('{"' + itm.id + '":"' + itm.masterjson.rows.row.length + '"}');
-                    i++;
-                    if (i >= d4dMasterJson.length) {
-                        res.end('[' + ret.join(',') + ']');
-                        return;
-                    }
-                });
+                for(var i=0;i < d4dMasterJson.length;i++){
+                    logger.debug(d4dMasterJson[i]["id"]);
+                    counts[d4dMasterJson[i]["id"]]++;
+                }
+                for(var i =1;i<5;i++){
+                    ret.push('{"' + i + '":"' + counts[i] + '"}');
+                }
+                res.end('[' + ret.join(',') + ']');
                 //res.end();
+                return;
             } else {
                 //res.send(400, {
                 ret.push(i + ':' + '');
@@ -410,13 +409,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // });
                 console.log("none found");
             }
-            // if(i >= 4){
-            // res.end(JSON.stringify(ret));
-            // return;
-            // }
         });
-        // }
     });
+
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
         console.log('received request ' + req.params.items);
         var masts = [];

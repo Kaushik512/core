@@ -1,15 +1,8 @@
 <html>
 <head>
 	<script src="/socket.io/socket.io.js"></script>
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-     <script type="text/javascript" src="js/term.js"></script>
-     <script type="text/javascript" src="js/select2.min.js"></script>
-
-<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/styleNew.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	 <script type="text/javascript" src="js/term.js"></script>
+     
 <style type="text/css">
 .select2-container .select2-choice .select2-arrow b:before{
     margin-top: 7px;
@@ -30,67 +23,60 @@
 </head>
 <body style="background:white">
 
-<div id="loadingContainer" style="height:100%;display:none" >
+<div id="ssh-loadingContainer" style="height:100%;display:none" >
 <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
 </div>
 
-<form class="forms" id="login-form">
-      <div class="col-lg-12 credentialSection">
+
+<form class="forms" id="ssh-login-form">
+    <input type='hidden' id='ssh-instanceId'>
+      <div class="col-lg-12 credentialSection" style="margin-bottom:4%;">
           Username<span class="control-label" style="color:Red;">&nbsp;*</span>
-         <input type="text" id="username" value="" autocomplete="off" class="form-control"/>
+         <input type="text" id="ssh-username" value="" autocomplete="off" class="form-control"/>
             <b class="tooltip tooltip-top-right">
             <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
       </div>
-      <br>
-      <div class="col-lg-12 credentialSection">
+      <div class="col-lg-12 credentialSection" style="margin-bottom:4%;">
         Select Authentication Type
-        <select class="chooseAuthenticationtype width-100">
+        <select id="ssh-pemFileCheckbox" class="chooseAuthenticationtype width-100">
             <option id="authPassword" value="Password">Password</option>
             <option id="pemFileCheckbox" value="pemFile">Pem File</option>
         </select>
       </div>
-      <br>
-      <div class="col-lg-12 credentialSection passwordCheck">
+      <div class="col-lg-12 credentialSection passwordCheck" style="margin-bottom:4%;">
           Password
-          <input type="password" id="password" value="" autocomplete="off" class="form-control" />
+          <input type="password" id="ssh-password" value="" autocomplete="off" class="form-control" />
                 <b class="tooltip tooltip-top-right">
                 <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
       </div>
-      <div class="col-lg-12 credentialSection pemFileCheck">
+      <div class="col-lg-12 credentialSection pemFileCheck" style="margin-bottom:4%;">
             <div class="smart-forms">
             Pem File
             <label for="pemFileBrowse" name="field" class="file">
-            <span class="button btn-primary" style="top:5px;">Browse</span><input id="pemfileInput" type="file" class="gui-file"><input type="text" readonly="" class="gui-input">
+            <span class="button btn-primary" style="top:6px;">Browse</span><input id="ssh-pemfileInput" type="file" class="gui-file"><input type="text" readonly="" class="gui-input">
             </label>
-        </div>
-                                                                
 
-
-        <!-- <div class="form-group">
-          <label for="exampleInputEmail1">Pem File</label>
-          <div class="">
-            <label style="display:inline;padding-top:4px;" class="checkbox">
-                <input type="checkbox" class="smart-form" id="pemFileCheckbox"><i></i>&nbsp;
-            </label>
-            <input type="file" disabled="" style="display:inline" id="pemfileInput">
         </div>
-        </div> -->
+       
       </div>
       <br>
-    <div style="text-align:center">
+    <div style="text-align:center" style="margin-top:5%;">
         <input type="submit" value="Submit" class="btn btn-primary">
     <div>
+
+ <input type="button" id='ssh-terminateBtn' style="display:none"/>
 </form>
 
 
 
-<div id="errorArea" style="color:red">
+<div id="ssh-errorArea" style="color:red">
 </div>
 
-<div id="terminalContainer" style="display:none"></div>
+<div id="ssh-terminalContainer" style="display:none"></div>
 
 </body>
 <script type="text/javascript">
+
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
@@ -131,25 +117,30 @@ $('#pemfileInput').change(function(){
 $(function() {
 
 
-    var $pemFileCheckBox = $('#pemFileCheckbox').change(function() {
+    var $pemFileCheckBox = $('#ssh-pemFileCheckbox').change(function() {
 
         if ($(this).is(':selected')) {
-            $('#pemfileInput').attr('disabled', false);
-            $('#password').attr('disabled', true);
+            $('#ssh-pemfileInput').attr('disabled', false);
+            $('#ssh-password').attr('disabled', true);
+
         } else {
-            $('#pemfileInput').attr('disabled', true);
-            $('#password').attr('disabled', false);
+            $('#ssh-pemfileInput').attr('disabled', true);
+            $('#ssh-password').attr('disabled', false);
         }
     });
 
 
    
-    var $errorArea = $('#errorArea');
-    var $submitCmdBtn = $('#submitCmdBtn');
-    var $terminalContainer = $('#terminalContainer');
-    var $loadingContainer = $('#loadingContainer'); 
-    var $terminalContainer = $('#terminalContainer'); 
-    var $loginForm = $('#login-form');
+    var $errorArea = $('#ssh-errorArea');
+    
+    var $terminalContainer = $('#ssh-terminalContainer');
+    var $loadingContainer = $('#ssh-loadingContainer'); 
+    var $terminalContainer = $('#ssh-terminalContainer'); 
+    var $loginForm = $('#ssh-login-form');
+    var $terminateBtn = $('#ssh-terminateBtn'); 
+     
+
+    console.log($loginForm)
 
 
     var socket = io.connect('/sshShell');
@@ -208,12 +199,15 @@ $(function() {
     }
 
     $loginForm.submit(function(e) {
+        console.log('submitting form');
         var reqBody = {};
-        reqBody.id = urlParams.id;
-        reqBody.username = $('#username').val();
+        reqBody.id = $('#ssh-instanceId').val();
+        reqBody.username = $('#ssh-username').val();
+
 
         if (!$pemFileCheckBox.is(':selected')) {
-            reqBody.password = $('#password').val();
+            reqBody.password = $('#ssh-password').val();
+
             if (!reqBody.username) {
                 alert('Please Enter Username');
                 return;
@@ -225,7 +219,7 @@ $(function() {
             console.log(reqBody);
             openSSh(reqBody);
         } else {
-            var pemFileInput = $('#pemfileInput').get(0);
+            var pemFileInput = $('#ssh-pemfileInput').get(0);
             if (!reqBody.username) {
                 alert('Please Enter Username');
                 return;
@@ -273,7 +267,13 @@ $(function() {
     
     socket.on('close', function() {
         destroyTerminal()
-    }); 
+    });
+
+    $terminateBtn.click(function(){
+        if (sshOpened) {
+          socket.disconnect();
+        }
+    });
 
    
 });
