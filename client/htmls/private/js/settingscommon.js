@@ -2084,7 +2084,7 @@ function errormessageforInput(id, msg) {
     if (errlabel.length > 0) { //no error label found
         errlabel.html(msg);
     } else {
-        currCtrl.closest('section').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
         errlabel = $('#errmsg_' + id).html(msg);
     }
     //attaching a keydown event to clear the message
@@ -2118,7 +2118,7 @@ function isFormValid() {
                 case "required":
                     if (currCtrl.val() == '') {
                         isValid = false;
-                        errormessageforInput(currCtrl.attr('id'), "required");
+                        errormessageforInput(currCtrl.attr('id'), "Required");
                         currCtrl.focus();
                     }
                     break;
@@ -2177,14 +2177,14 @@ function enableUniqueCheckingForInputs(id) {
                 uni.html('');
             else {
                 //alert("in");
-                $(this).closest('section').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
+                $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
             var getBG = getRelatedValues(id, $(this).attr("id"), $(this).val(), $(this).attr("id"));
             //alert(getBG != "" && uni.attr("id"));
             if (getBG != "") { //this ensures that its present
                 uni.css("color", "red");
-                uni.html('selected is already registered');
+                uni.html('Selected is already registered');
                 $(this).focus();
             } else {
                 uni.css("color", "green");

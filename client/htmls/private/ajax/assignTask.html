@@ -1,81 +1,79 @@
-<form action="" class="smart-form"> 
-        <fieldset style="padding:0px;">
-            <section class="col col-4">
-                <label class="label">
+<form action=""> 
+        
+            <div class="col-lg-4">
+                <label>
                     <strong>Select Task Type</strong>
                 </label>
                 <div class="row">
-                    <div class="col col-10">
-                        <label class="select"> 
-                            <select class="form-control chooseTasktype width-100">
+                    <div class="col-lg-10">
+                        
+                            <select class="chooseTasktype width-100">
                                 <option id="Chef" value="Chef">Chef</option>
                                 <option id="Jenkins" value="Jenkins">Jenkins</option>
                                 <option id="Custom" value="Custom">Custom</option>
                             </select>
-                        </label>
+                        
                     </div>  
                 </div>
-            </section>
-        </fieldset>
-    </form>
-    <hr>
-    <br>
+            </div>
+        
+    
+
 <div id="chef-dropdown">
-    <form action="" class="smart-form"> 
-        <fieldset style="padding:0px;">
-            <section class="col col-4">
-                <label class="label">
-                    <!-- <img src="img/templateicons/Select-nodes---deployment.png"> -->
+    
+        
+            <div class="col-lg-4">
+                <label>
                     <strong>Task Name <span style="color:red">*</span></strong>
                 </label>
                 <div class="row">
-                    <div class="col col-10">
-                        <label class="input">
-                            <i class="icon-append fa fa-building"></i>
+                    <div class="col-lg-10">
+                        
                             <input type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
-                        </label>
+                        
                     </div>  
                 </div>
-            </section>
-            <section class="col col-4">
-                <label class="label">
+            </div>
+            <div class="col-lg-4">
+                <label>
                     <!-- <img src="img/templateicons/Select-nodes---deployment.png"> -->
                     <strong>Chef Server URL</strong>
                 </label>
                 <div class="row">
-                    <div class="col col-10">
-                        <label class="input">
-                            <i class="icon-append fa fa-building"></i>
+                    <div class="col-lg-10">
+                        
+                            
                             <input type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control" name="ctl00$MainContent$orgname" placeholder="https://api.opscode.com/organizations/pjlab">
-                        </label>
+                        
                     </div>  
                 </div>
-            </section>
+            </div>
                    
-        </fieldset>
-    </form>
-    <form action="" class="smart-form"> 
-        <fieldset style="padding:0px;">
+        
+    
+        
            
-            <section class="col col-4">
-                <label class="label">
+            <div class="col-lg-4" style="margin-top:15px;margin-left:15px">
+                <div class="smart-form">
+                <label>
                     <img src="img/templateicons/Select-nodes---deployment.png">
                     <strong>Select Nodes <span style="color:red">*</span></strong>
                 </label>
                 <div class="row">
-                    <div class="col col-10">
+                    <div class="col-lg-10">
                         <ul id="selectedNodesChefTask" class="deploymentNodeList" style="border:1px solid #dddddd;list-style:none outside none;height:300px;overflow-y:auto;">
                          
                         </ul>
                     </div>
                 </div>
-            </section>
-            <section class="col col-8 runlistContainer">
-            </section>
+            </div>
+        </div>
+            <div class="col-lg-7 runlistContainer" style="margin-top:15px;">
+            </div>
            
 
         
-        </fieldset>
+        
 
     </form>
 </div>
