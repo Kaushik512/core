@@ -62,12 +62,11 @@
       <br>
     <div style="text-align:center" style="margin-top:5%;">
         <input type="submit" value="Submit" class="btn btn-primary">
-    <div>
+    </div>
 
- <input type="button" id='ssh-terminateBtn' style="display:none"/>
+
 </form>
-
-
+ <input type="button" id='ssh-terminateBtn' style="display:none"/>
 
 <div id="ssh-errorArea" style="color:red">
 </div>
@@ -117,17 +116,7 @@ $('#ssh-pemfileInput').change(function(){
 $(function() {
 
 
-    var $pemFileCheckBox = $('#ssh-pemFileCheckbox').change(function() {
-
-        if ($(this).is(':selected')) {
-            $('#ssh-pemfileInput').attr('disabled', false);
-            $('#ssh-password').attr('disabled', true);
-
-        } else {
-            $('#ssh-pemfileInput').attr('disabled', true);
-            $('#ssh-password').attr('disabled', false);
-        }
-    });
+    var $pemFileCheckBox = $('#ssh-pemFileCheckbox');
 
 
    
@@ -205,7 +194,7 @@ $(function() {
         reqBody.username = $('#ssh-username').val();
 
 
-        if (!$pemFileCheckBox.is(':selected')) {
+        if ($pemFileCheckBox.val()==='Password') {
             reqBody.password = $('#ssh-password').val();
 
             if (!reqBody.username) {

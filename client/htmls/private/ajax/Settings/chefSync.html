@@ -529,7 +529,7 @@ $('#importPemfileInput').change(function(){
      reqBody.credentials.username = $('#importUsernameInput').val();
 
     var $dropdown = $('#pemFileDropdown');
-    if ($dropdown.val()==='pemFile') {
+    if (!($dropdown.val()==='pemFile')) {
        reqBody.credentials.password = $('#importPasswordInput').val();
        if(!reqBody.credentials.username){
          alert('Please Enter Username');
