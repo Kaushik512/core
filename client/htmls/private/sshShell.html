@@ -3,6 +3,23 @@
 	<script src="/socket.io/socket.io.js"></script>
 	 <script type="text/javascript" src="js/term.js"></script>
 
+     
+<style type="text/css">
+.select2-container .select2-choice .select2-arrow b:before{
+    margin-top: 7px;
+}
+.btn-primary{
+    background-color: #40baf1;
+    border-color: #40baf1;
+}
+.btn-primary:hover{
+    background-color: #40baf1;
+    border-color: #40baf1;
+}
+</style>
+
+
+
 <script type="text/javascript">
 </script>
 </head>
@@ -12,51 +29,46 @@
 <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
 </div>
 
-<form id="ssh-login-form" class="smart-form1" role="form">
+
+<form class="forms" id="ssh-login-form">
     <input type='hidden' id='ssh-instanceId'>
-          <fieldset style="padding-top:0px;">
-          <div class="">
-      <section class="col col-12 credentialSection">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Username<span class="control-label" style="color:Red;">&nbsp;*</span></label>
-          <label class="input">
+      <div class="col-lg-12 credentialSection" style="margin-bottom:4%;">
+          Username<span class="control-label" style="color:Red;">&nbsp;*</span>
          <input type="text" id="ssh-username" value="" autocomplete="off" class="form-control"/>
-
-                    <b class="tooltip tooltip-top-right">
-                    <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
-          </label>
-        </div>
-      </section>
-      <section class="col col-12 credentialSection">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Password</label>
-          <label class="input">
-          <input type="password" id="ssh-password" value="" autocomplete="off" class="form-control">
-                    <b class="tooltip tooltip-top-right">
-                    <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
-          </label>
-        </div>
-      </section>
-      <section class="col col-12 credentialSection">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Pem File</label>
-          <div class="">
-            <label style="display:inline;padding-top:4px;" class="checkbox">
-                <input type="checkbox" class="smart-form" id="ssh-pemFileCheckbox"><i></i>&nbsp;
+            <b class="tooltip tooltip-top-right">
+            <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+      </div>
+      <div class="col-lg-12 credentialSection" style="margin-bottom:4%;">
+        Select Authentication Type
+        <select id="ssh-pemFileCheckbox" class="chooseAuthenticationtype width-100">
+            <option id="authPassword" value="Password">Password</option>
+            <option id="pemFileCheckbox" value="pemFile">Pem File</option>
+        </select>
+      </div>
+      <div class="col-lg-12 credentialSection passwordCheck" style="margin-bottom:4%;">
+          Password
+          <input type="password" id="ssh-password" value="" autocomplete="off" class="form-control" />
+                <b class="tooltip tooltip-top-right">
+                <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
+      </div>
+      <div class="col-lg-12 credentialSection pemFileCheck" style="margin-bottom:4%;">
+            <div class="smart-forms">
+            Pem File
+            <label for="pemFileBrowse" name="field" class="file">
+            <span class="button btn-primary" style="top:6px;">Browse</span><input id="ssh-pemfileInput" type="file" class="gui-file"><input type="text" readonly="" class="gui-input">
             </label>
-            <input type="file" disabled="" style="display:inline" id="ssh-pemfileInput">
+
         </div>
-        </div>
-      </section>
-        <div style="text-align:center">
-      <input type="submit" value="Submit" class="btn btn-primary">
-        <div>
+       
+      </div>
+      <br>
+    <div style="text-align:center" style="margin-top:5%;">
+        <input type="submit" value="Submit" class="btn btn-primary">
     </div>
-    </fieldset>
-    <input type="button" id='ssh-terminateBtn' style="display:none"/>
+
+
 </form>
-
-
+ <input type="button" id='ssh-terminateBtn' style="display:none"/>
 
 <div id="ssh-errorArea" style="color:red">
 </div>
@@ -81,21 +93,32 @@ var urlParams = {};
     }
 
 })();
+$(document).ready(function() {
+    $(".chooseAuthenticationtype").select2();
+    $(".choosetemplateType").select2();
+    $(".pemFileCheck").hide();
 
+    $('.chooseAuthenticationtype').change(function(e) {
+        if (this.value == "Password") {
+            $(".pemFileCheck").hide();
+            $(".passwordCheck").show();
+        } 
+        else {
+            $(".passwordCheck").hide();
+            $(".pemFileCheck").show();
+        }
+    });
+});
+
+$('#ssh-pemfileInput').change(function(){
+    //console.log(this.files);
+    $(this).next().val(this.files[0].name);
+});
 
 $(function() {
 
 
-    var $pemFileCheckBox = $('#ssh-pemFileCheckbox').change(function() {
-
-        if ($(this).is(':checked')) {
-            $('#ssh-pemfileInput').attr('disabled', false);
-            $('#ssh-password').attr('disabled', true);
-        } else {
-            $('#ssh-pemfileInput').attr('disabled', true);
-            $('#ssh-password').attr('disabled', false);
-        }
-    });
+    var $pemFileCheckBox = $('#ssh-pemFileCheckbox');
 
 
    
@@ -172,8 +195,10 @@ $(function() {
         reqBody.id = $('#ssh-instanceId').val();
         reqBody.username = $('#ssh-username').val();
 
-        if (!$pemFileCheckBox.is(':checked')) {
+
+        if ($pemFileCheckBox.val()==='Password') {
             reqBody.password = $('#ssh-password').val();
+
             if (!reqBody.username) {
                 alert('Please Enter Username');
                 return;

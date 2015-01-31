@@ -144,7 +144,10 @@
 					//alert('in');
 					
 					this._setSelectedNode(node);
-					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : grey !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
+					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','font-size : 14px !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
+
+					//$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : grey !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
+
 					$(location).attr('href',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('href')) ;
 				} else {
 
@@ -236,6 +239,7 @@
 		},
 
 		_render: function() {
+			//alert('render')
 
 			var self = this;
 
@@ -275,6 +279,12 @@
 					.addClass((node === self.selectedNode) ? 'node-selected' : '')
 					.attr('data-nodeid', node.nodeId)
 					.attr('style', self._buildStyleOverride(node));
+				//alert(level);	
+				if((level-1)===3) {
+					//alert('im in level 3');
+					treeItem.addClass('importantRule');
+					//treeItem.css({'background-color':'red !important'});
+				}
 
 				// Add indent/spacer to mimic tree structure
 				for (var i = 0; i < (level - 1); i++) {
@@ -348,6 +358,8 @@
 				// Recursively add child ndoes
 				if (node.nodes) {
 					return self._buildTree(node.nodes, level);
+				} else {
+					//alert('tree created');
 				}
 			});
 		},
