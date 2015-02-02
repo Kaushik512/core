@@ -550,7 +550,8 @@
 
 	<!-- MAIN APP JS FILE -->
 	<script type="text/javascript">
-	
+
+
 	function setleftnavigation(toplink,breadcrumbHeader){
 	
 		$('a[onclick*="setleftnavigation"]').removeClass('active');
@@ -835,6 +836,27 @@
      }
 
  });
+
+function setLogo(data){
+	if(!data.isRelevanceLab){
+$('#logo-group').find('img').attr({
+	'src':data.company.image.src,'height':data.company.image.height,
+	'width':data.company.image.width
+});
+		}
+
+
+	}
+		setLogo({
+isRelevanceLab:false,
+company:{
+	image:{
+		src:'img/verint.jpg',
+		height:'30px',
+		width:'30px',
+	}
+}
+	})
     
 
 </script>

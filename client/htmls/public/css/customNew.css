@@ -884,3 +884,11 @@ legend {
     width: 150px;
     height: 150px;
 }
+
+.hide{
+    display: none !important;
+}
+.margincenter
+{
+    margin:auto 350px;
+}
