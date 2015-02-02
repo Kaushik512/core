@@ -452,7 +452,7 @@
    
            if($(this).valid){
                 /*alert('valid form submitted'); // for demo*/
-               if(validateForm())saveform('2');
+               if(!saveform('2'))return false;
            }else{
                 alert('invalid valid form submitted'); // for demo
            }

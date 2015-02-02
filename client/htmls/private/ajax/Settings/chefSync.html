@@ -71,132 +71,99 @@
 <div class="modal fade" id="chefImportNodesModal" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
+      <form role="form" autocomplete="off">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Import Nodes</h4>
       </div>
-      <div class="modal-body" style="padding:0px !important">
-         <form role="form" class="smart-form" autocomplete="off">
-          <fieldset style="padding-top:0px;margin-top:10px;">
-          <div class="">
-          <section class="col col-6">
-            <div class="form-group" style="margin-bottom:15px;">
+      <div class="modal-body modalbody-height">
+         
+          
+          <div class="col-lg-6">
+            
               <label for="exampleInputEmail1">Organization</label>
                 <select id="chefImportOrgSelect"  class="width-100 aaa" disabled>
                   
                 </select>
-            </div>
-            <div class="form-group" style="margin-bottom:15px;">
+            
+          </div>
+
+          <div class="col-lg-6 credentialSection">
+        
+            <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput">
+              <b class="tooltip tooltip-top-right">
+              <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+          
+        
+          </div>
+
+          <div class="col-lg-6" style="margin-top:20px;">  
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
               <select id="chefImportBgSelect"  class="width-100 aaaaa" >
                 
               </select>
-            </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-            <div class="">
-              <select id="chefImportProjectSelect"  class="width-100" >
-                    
-              </select>
-            </div>
+            
           </div>
-        </section>
-      
-      <section class="col col-6" style="display:none">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Provider</label>
-          <div class="">
-          <select id="chefImportProviderSelect"  class="form-control" >
-                
-          </select>
-        </div>
-        </div>
-      </section>
-      <section class="col col-6 credentialSection" style="margin-bottom:12px;">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <label class="input">
-          <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput">
-            <b class="tooltip tooltip-top-right">
-            <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
-          </label>
-        </div>
-      </section>
-      <section class="col col-6">
-          <div class="form-group">
+
+          <div class="col-lg-6" style="margin-top:20px;">
+          
             <label for="">Choose Authentication Type</label>
             <select id="pemFileDropdown"  class="authenticationType width-100" >
               <option value="password">Password</option>
               <option value="pemFile">Pem File</option>
             </select>
+          
           </div>
-      </section>
-      <section class="col col-6 credentialSection authPassword" style="margin-bottom:18px;">
-        <div class="form-group">
+
+          <div class="col-lg-6" style="margin-top:20px;">
+            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            
+              <select id="chefImportProjectSelect"  class="width-100" >
+                    
+              </select>
+            
+        </div>
+      
+      <div class="col-lg-6" style="display:none">
+        
+          <label for="exampleInputEmail1">Provider</label>
+          
+          <select id="chefImportProviderSelect"  class="form-control" >
+                
+          </select>
+        
+        
+      </div>
+      
+      
+      <div class="col-lg-6 credentialSection authPassword" style="margin-top:20px;">
+        
           <label for="exampleInputEmail1">Password</label>
-          <label class="input">
+          
           <input type="password" class="form-control" id="importPasswordInput" />
             <b class="tooltip tooltip-top-right">
             <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
-          </label>
-        </div>
-      </section>
+          
+        
+      </div>
 
-      <section class="col col-6 credentialSection authPemFile">
+      <div class="col-lg-6 credentialSection authPemFile" style="margin-top:20px;">
         <div class="smart-forms">
             <label for="exampleInputEmail1">Pem File</label>
             <label for="" name="field" class="file">
-                <span class="button btn-primary" style="top:6px;">Browse</span>
+                <span class="button btn-primary">Browse</span>
                 <input id="importPemfileInput" type="file" class="gui-file">
                 <input type="text" readonly="" class="gui-input">
             </label>
         </div>
-        <!-- <div class="form-group">
+      </div>
 
-          <label for="exampleInputEmail1">Pem File</label>
-          <label class="checkbox" style="display:inline;padding-top:4px;">
-              <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
-          </label>
-          <div class="">
-            
-            <input type="file" id="importPemfileInput" style="display:inline" disabled/>
-        </div>
-        </div> -->
-      </section>
-
-     <!--<div class="smart-forms">
-          <label for="">Icon</label>
-          <label for="templatesicon" name="field" class="file">
-          <div class="imgdiv" value="1"></div>
-          <span class="button btn-primary">Browse</span><input id="templatesicon" type="file" onchange="this.nextSibling.value = this.value" cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
-          </label>
-      </div>-->
-
-      <!-- <label class="input input-file" for="file">
-                <div class="button">
-                  <input type="file" id="importPemfileInput" style="display:inline" disabled>Browse
-                </div>
-                <input type="text" readonly="">
-            </label> -->
-      <!-- <section class="col col-6 credentialSection">
-        <div class="form-group">
-          <div class="smart-forms">
-            <label for="exampleInputEmail1">Pem File</label>
-            <label class="checkbox" style="display:inline;padding-top:4px;">
-                <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
-            </label>
-            <label for="importPemfileInput" name="field" class="file">
-                <span class="button btn-primary">Browse</span>
-                <input id="importPemfileInput" type="file" style="display:inline" disabled class="gui-file">
-                <input type="text" readonly="" class="gui-input">
-            </label>
-            
-          </div>
-        </div>
-      </section> -->
-      <section class="col col-6" style="margin-top:20px;">
+     
+      <div class="col-lg-6" style="margin-top:20px;">
           <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <label class="select select-multiple">
+          
               <div class="userListLoadingContainer"></div>
               <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
                   <option value="1">User1</option>
@@ -205,16 +172,17 @@
                   <option value="4">User4</option>
                   <option value="5">User5</option>
               </select> 
-          </label>
-      </section>
-    </div>
-    </fieldset>
-         </form>
+          
+      </div>
+    
+    
+         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary importNodesBtn">Import</button>
       </div>
+      </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

@@ -1605,6 +1605,7 @@ $('#addInstanceBtn').click(function(e) {
 $(function() {
 
     function initializeTaskArea(data) {
+      if (!$.fn.dataTable.isDataTable('#tableOrchestration') ){
         //var $taskListArea = $('.taskListArea').empty();
            $taskDatatable =  $('#tableOrchestration').DataTable({
                 "pagingType": "full_numbers",
@@ -1624,6 +1625,7 @@ $(function() {
                 ]
 
             });
+         }
 
 
         for (var i = 0; i < data.length; i++) {
@@ -2568,9 +2570,8 @@ function addInstanceToDOM(data) {
         }
     }
   
-   
-
     var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
+    
 
 
     var $li = $('<li></li>').addClass('domain-role-thumbnail');

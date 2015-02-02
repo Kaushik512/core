@@ -25,8 +25,7 @@
                                  <div class="col-lg-6">
                                     <label for="name">Name:
                                     <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <input autofocus name="ctl00$MainContent$orgname" placeholder="Default Organization" id="orgname" unique="true" class="form-control" cdata="catalyst" type="text" cat-validation="required,nospecial,max15">
-                                    <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                    <input autofocus name="ctl00$MainContent$orgname" value="Default Organization" id="orgname" unique="true" class="form-control" cdata="catalyst" type="text" cat-validation="required,nospace,nospecial,max15"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                     <input id="orgid" type="hidden" />
                                  </div>
                                  <div class="col-lg-6">
@@ -298,7 +297,7 @@
    
            if($(this).valid){
                 /*alert('valid form submitted'); // for demo*/
-               if(validateForm())saveform('1');
+               if(!saveform('1'))return false;
              
            }else{
                 alert('invalid valid form submitted'); // for demo
