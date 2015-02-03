@@ -71,7 +71,7 @@
 <div class="modal fade" id="chefImportNodesModal" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form role="form" autocomplete="off">
+      <form role="form" id="myform12" autocomplete="off">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Import Nodes</h4>
@@ -92,7 +92,7 @@
         
             <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
-            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput">
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" cdata="catalyst" cat-validation="required,nospecial,max15,nospace">
               <b class="tooltip tooltip-top-right">
               <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
           
@@ -101,7 +101,7 @@
 
           <div class="col-lg-6" style="margin-top:20px;">  
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-              <select id="chefImportBgSelect"  class="width-100 aaaaa" >
+              <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required">
                 
               </select>
             
@@ -110,7 +110,7 @@
           <div class="col-lg-6" style="margin-top:20px;">
           
             <label for="">Choose Authentication Type</label>
-            <select id="pemFileDropdown"  class="authenticationType width-100" >
+            <select id="pemFileDropdown"  class="authenticationType width-100" cdata="catalyst" cat-validation="required">
               <option value="password">Password</option>
               <option value="pemFile">Pem File</option>
             </select>
@@ -120,7 +120,7 @@
           <div class="col-lg-6" style="margin-top:20px;">
             <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
-              <select id="chefImportProjectSelect"  class="width-100" >
+              <select id="chefImportProjectSelect"  class="width-100" cdata="catalyst">
                     
               </select>
             
@@ -130,7 +130,7 @@
         
           <label for="exampleInputEmail1">Provider</label>
           
-          <select id="chefImportProviderSelect"  class="form-control" >
+          <select id="chefImportProviderSelect"  class="form-control" cat-validation="required">
                 
           </select>
         
@@ -142,7 +142,7 @@
         
           <label for="exampleInputEmail1">Password</label>
           
-          <input type="password" class="form-control" id="importPasswordInput" />
+          <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" required />
             <b class="tooltip tooltip-top-right">
             <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
           
@@ -165,7 +165,7 @@
           <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
           
               <div class="userListLoadingContainer"></div>
-              <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
+              <select class="custom-scroll" multiple="" id="userListSelect" style="display:none" cdata="catalyst" cat-validation="required">
                   <option value="1">User1</option>
                   <option value="2">User2</option>
                   <option value="3">User3</option>
@@ -254,6 +254,7 @@ $(function(){
 var $orgListInput = $('#chefImportOrgSelect');
 var $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
+
 
 $('.nodeListContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
@@ -482,10 +483,16 @@ $('#importPemfileInput').change(function(){
    var reqBody = {};
    reqBody.orgId = $orgListInput.val();
    reqBody.bgId = $bgList.val();
+   //alert($bgList.val());
+   //alert($projectList.val());
    reqBody.projectId = $projectList.val();
+   //alert('#chefImportProjectSelect').val());
    if(!reqBody.projectId || !reqBody.projectId.length){
     alert('Please Select Business Groups & Project');
     return;
+   }
+   if(reqBody.projectId == 'choose'){
+    alert('Please choose a Project');
    }
    
 
@@ -667,4 +674,22 @@ $('.tabContent tr').find('input').on('blur', function(){
   $(this).hide();
   $(this).parent().children('span').show().html(inputVal);
 });
+</script>
+
+<script>
+   $(document).ready(function () {
+   
+       $('#myform12').submit(function() {
+           $(this).validate();
+   
+           if($(this).valid){
+                /*alert('valid form submitted'); // for demo*/
+               if(!saveform('12'))return false;;
+           }else{
+                alert('invalid valid form submitted'); // for demo
+           }
+           return false; // for demo
+       });
+   });
+       
 </script>

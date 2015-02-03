@@ -156,6 +156,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/getTreeForbtv', function(req, res) {
+        console.log("Enter /organizations/getTreeForbtv");
         d4dModelNew.d4dModelMastersOrg.find({
             id: 1
         }, function(err, docorgs) {
@@ -181,6 +182,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             });
             orgCount++;
+            console.log("Found Orgs");
             d4dModelNew.d4dModelMastersProductGroup.find({
                 id: 2,
                 orgname: {
