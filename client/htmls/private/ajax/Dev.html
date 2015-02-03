@@ -1610,6 +1610,7 @@ $('#addInstanceBtn').click(function(e) {
     }
 
     function makeRequest() {
+     
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
