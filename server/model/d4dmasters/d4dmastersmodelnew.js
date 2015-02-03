@@ -49,9 +49,9 @@ var d4dModelNew = mongoose.model('d4dMasterNew', d4dMastersSchemaNew, 'd4dmaster
 
 var d4dMastersOrg = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String,trim:true},
-	orgname: {type:String,required:true, trim:true, validate:nameValidator},
-	domainname: {type:String, trim:true, validate:nameValidator},
+	name: {type:String,trim:true, validate:nameValidator},
+	orgname: {type:String,required:true, trim:true},
+	domainname: {type:String, trim:true},
 	description: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );

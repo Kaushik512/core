@@ -1,13 +1,11 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
-
 var schemaValidator = require('./schema-validator');
-
 var uniqueValidator = require('mongoose-unique-validator');
+var logger  = require('../../lib/logger')(module);
+
 
 var Schema = mongoose.Schema;
-
-
 var InstanceSchema = new Schema({
     orgId: {
         type: String,
@@ -99,22 +97,24 @@ var Instances = mongoose.model('instances', InstanceSchema);
 var InstancesDao = function() {
 
     this.getInstanceById = function(instanceId, callback) {
-
-        console.log(instanceId); 
+        logger.debug("Enter getInstanceById (%s)", instanceId);
 
         Instances.find({
             "_id": new ObjectId(instanceId)
         }, function(err, data) {
             if (err) {
+                logger.error("Failed getInstanceById (%s)", instanceId, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit getInstanceById (%s)", instanceId);
             callback(null, data);
 
         });
-    }
+    };
 
     this.getInstances = function(instanceIds, callback) {
+        logger.debug("Enter getInstances :: ", instanceIds);
         var queryObj = {};
         if (instanceIds && instanceIds.length) {
             queryObj._id = {
@@ -124,10 +124,12 @@ var InstancesDao = function() {
 
         Instances.find(queryObj, function(err, data) {
             if (err) {
+                logger.error("Failed to getInstances :: ", instanceIds, err);
                 callback(err, null);
                 return;
             }
-            console.log(data);
+            //logger.debug(data);
+            logger.debug("Exit getInstances :: ", instanceIds);
             callback(null, data);
         });
 
@@ -135,6 +137,7 @@ var InstancesDao = function() {
 
 
     this.getInstancesByProjectAndEnvId = function(projectId, envId, instanceType, userName, callback) {
+        logger.debug("Enter getInstancesByProjectAndEnvId(%s, %s, %s, %s)", projectId, envId, instanceType, userName);
         var queryObj = {
             projectId: projectId,
             envId: envId
@@ -147,14 +150,17 @@ var InstancesDao = function() {
         }
         Instances.find(queryObj, function(err, data) {
             if (err) {
+                logger.error("Failed to getInstancesByProjectAndEnvId(%s, %s, %s, %s)", projectId, envId, instanceType, userName, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit getInstancesByProjectAndEnvId(%s, %s, %s, %s)", projectId, envId, instanceType, userName);
             callback(null, data);
         });
     };
 
     this.getInstancesByOrgProjectAndEnvId = function(orgId, projectId, envId, instanceType, userName, callback) {
+        logger.debug("Enter getInstancesByOrgProjectAndEnvId (%s, %s, %s, %s, %s)", orgId, projectId, envId, instanceType, userName);
         var queryObj = {
             orgId: orgId,
             projectId: projectId,
@@ -168,28 +174,34 @@ var InstancesDao = function() {
         }
         Instances.find(queryObj, function(err, data) {
             if (err) {
+                logger.error("Failed to getInstancesByOrgProjectAndEnvId (%s, %s, %s, %s, %s)", orgId, projectId, envId, instanceType, userName, err);
                 callback(err, null);
                 return;
             }
+
+            logger.debug("Exit getInstancesByOrgProjectAndEnvId (%s, %s, %s, %s, %s)", orgId, projectId, envId, instanceType, userName);
             callback(null, data);
         });
     };
 
 
     this.createInstance = function(instanceData, callback) {
+        logger.debug("Enter createInstance");
         var instance = new Instances(instanceData);
 
         instance.save(function(err, data) {
             if (err) {
+                logger.error("CreateInstance Failed", err, instanceData);
                 callback(err, null);
                 return;
             }
-            console.log("Instance Created");
+            logger.debug("Exit createInstance");
             callback(null, data);
         });
     };
 
     this.updateInstanceIp = function(instanceId, ipaddress, callback) {
+        logger.debug("Enter updateInstanceIp (%s, %s)", instanceId, ipaddress);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -200,15 +212,19 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
+                logger.error("Failed to updateInstanceIp (%s, %s)", instanceId, ipaddress, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit updateInstanceIp (%s, %s)", instanceId, ipaddress);
             callback(null, data);
         });
 
     };
 
     this.updateInstanceDockerStatus = function(instanceId, dockerstatus, dockerapiurl, callback) {
+        logger.debug("Enter updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl);
+
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -221,16 +237,20 @@ var InstancesDao = function() {
         }, {
             upsert: false
         }, function(err, data) {
+            logger.error("Failed to updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl, err);
             if (err) {
                 callback(err, null);
                 return;
             }
+
+            logger.debug("Exit updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl);
             callback(null, data);
         });
 
     };
 
     this.updateInstanceState = function(instanceId, state, callback) {
+        logger.debug("Enter updateInstanceState (%s, %s)", instanceId, state);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -241,14 +261,18 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
+                logger.error("Failed to updateInstanceState (%s, %s)", instanceId, state, err);
                 callback(err, null);
                 return;
             }
+
+            logger.debug("Exit updateInstanceState (%s, %s)", instanceId, state);
             callback(null, data);
         });
     };
 
     this.updateInstanceBootstrapStatus = function(instanceId, status, callback) {
+        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, state);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -259,27 +283,32 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
+                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, state, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, state);
             callback(null, data);
         });
     };
 
     this.removeInstancebyId = function(instanceId, callback) {
+        logger.debug("Enter removeInstancebyId (%s)", instanceId);
         Instances.remove({
             "_id": ObjectId(instanceId)
         }, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.error("Failed to removeInstancebyId (%s)", instanceId, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit removeInstancebyId (%s)", instanceId);
             callback(null, data);
         });
     }
 
     this.updateInstanceLog = function(instanceId, log, callback) {
+        logger.debug("Enter updateInstanceLog ", instanceId, log);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -290,15 +319,17 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
+                logger.error("Failed to updateInstanceLog ", instanceId,log, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit updateInstanceLog", instanceId, log);
             callback(null, data);
         });
     };
 
     this.updateInstancesRunlist = function(instanceId, runlist, callback) {
-
+        logger.debug("Enter updateInstancesRunlist ", instanceId, runlist);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -309,15 +340,18 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
+                logger.error("Failed to updateInstancesRunlist ", instanceId, runlist, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit updateInstancesRunlist ", instanceId, runlist);
             callback(null, data);
         });
 
     };
 
     this.setHardwareDetails = function(instanceId, hardwareData, callback) {
+        logger.debug("Enter setHardwareDetails ", instanceId, hardwareData);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -337,9 +371,12 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
+                logger.error("Failed to setHardwareDetails ", instanceId, hardwareData, err);
                 callback(err, null);
                 return;
             }
+
+            logger.debug("Exit setHardwareDetails ", instanceId, hardwareData);
             callback(null, data);
         });
 
@@ -348,7 +385,7 @@ var InstancesDao = function() {
 
 
     this.addService = function(instanceId, serviceIds, callback) {
-        console.log('length ==>', serviceIds.length);
+        logger.debug("Enter addService ", instanceId, serviceIds);
 
         Instances.update({
             "_id": new ObjectId(instanceId),
@@ -362,9 +399,11 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, updateCount) {
             if (err) {
+                logger.error("Failed to addService ", instanceId, serviceIds, err);
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit addService ", instanceId, serviceIds);
             callback(null, updateCount);
 
         });
@@ -372,6 +411,7 @@ var InstancesDao = function() {
     };
 
     this.deleteService = function(instanceId, serviceId, callback) {
+        logger.debug("Enter deleteService ", instanceId, serviceIds);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -383,10 +423,11 @@ var InstancesDao = function() {
             multi: true
         }, function(err, deleteCount) {
             if (err) {
+                logger.error("Failed to deleteService ", instanceId, serviceIds, err);
                 callback(err, null);
                 return;
             }
-
+            logger.debug("Exit deleteService ", instanceId, serviceIds);
             callback(null, deleteCount);
 
         });
@@ -394,6 +435,7 @@ var InstancesDao = function() {
     };
 
     this.createServiceAction = function(instanceId, serviceId, actionData, callback) {
+        logger.debug("Enter createServiceAction", instanceId, serviceId, actionData);
         var serviceAction = new ServiceAction({
             actionType: actionData.actionType,
             serviceRunlist: actionData.runlist,
@@ -411,9 +453,12 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, updateCount) {
             if (err) {
+                logger.error("Failed to createServiceAction", instanceId, serviceId, actionData, err);
                 callback(err, null);
                 return;
             }
+
+            logger.debug("Exit createServiceAction", instanceId, serviceId, actionData);
             if (updateCount > 0) {
                 callback(null, serviceAction);
             } else {
@@ -424,7 +469,7 @@ var InstancesDao = function() {
     };
 
     this.getServiceAction = function(instanceId, serviceId, actionId, callback) {
-
+        logger.debug("Enter getServiceAction ", instanceId, serviceId, actionId);
         Instances.find({
             "_id": new ObjectId(instanceId),
             "services._id": new ObjectId(serviceId),
@@ -441,18 +486,19 @@ var InstancesDao = function() {
             }
         }, function(err, data) {
             if (err) {
+                logger.debug("Failed to getServiceAction ", instanceId, serviceId, actionId, err);
                 callback(err, null);
                 return;
             }
-
+            logger.debug("Exit getServiceAction ", instanceId, serviceId, actionId);
             callback(null, data);
 
 
         });
 
-    }
+    };
 
 
-}
+};
 
 module.exports = new InstancesDao();

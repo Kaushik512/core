@@ -20,7 +20,6 @@ var executecurl = function(){
 				callback(null,stdout);
 			}
 		});
-		
 	}
 	this.executecwdcmd = function(cmd,cwd1,callback){
 

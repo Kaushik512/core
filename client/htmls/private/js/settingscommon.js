@@ -1571,7 +1571,8 @@ function saveform(formID) {
     if(typeof(orgname) == 'undefined'){
         orgName = '%2f';
     }
-    //console.log(data1);
+   
+    console.log('This is the data that gets saved:' + JSON.stringify(data1));
    // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,

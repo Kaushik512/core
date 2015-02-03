@@ -188,7 +188,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
         if (action == 'delete') {
-            cmd = 'sudo docker rm -f ' + req.params.containerid;
+            cmd = 'sudo docker stop ' + req.params.containerid + ' &&  sudo docker rm ' + req.params.containerid;
         }
         console.log('cmd received: ' + cmd);
         var stdOut = '';

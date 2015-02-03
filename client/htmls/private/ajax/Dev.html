@@ -355,7 +355,9 @@
                                           </tbody>
                                           
                                       </table>
-                                    
+                                <div class="loadingimagefordockertable hidden">
+                                       <img src="img/select2-spinner.gif">&nbsp; Loading...
+                                </div>  
                               </div>                      
                               </div>
                             </div>
@@ -1493,7 +1495,7 @@ $('.dockerinstancestart').click(function(e){
             if(dockerlaunchparameters)
             {
                if(dockerlaunchparameters[0])
-                     lp = dockerlaunchparameters[0];
+                lp = dockerlaunchparameters[0];
                if(dockerlaunchparameters[1])
                 sp = dockerlaunchparameters[1];
             }
@@ -1512,6 +1514,7 @@ $('.dockerinstancestart').click(function(e){
                     if($instancecard.find('.dockerenabledinstacne').length <= 0){
                         $instancecard.find('.componentlistContainer').first().append($dockericon);
                     }
+                    loadContainersTable(); //Clearing and loading the containers again.                
                 }
                 else
                 {
@@ -1550,6 +1553,7 @@ $('#addInstanceBtn').click(function(e) {
     }
 
     function makeRequest() {
+     
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
@@ -2864,6 +2868,9 @@ function addInstanceToDOM(data) {
 function loadContainersTable(){
     //alert('called');
     console.log('called');
+    //Shwoing the loader spinner and clearing the rows.
+    $('tr[id*="trfordockercontainer_"]').remove();
+    $('.loadingimagefordockertable').removeClass('hidden');
     $dockercontainertable = $('#dockercontainertable tbody');
 
     $('.container').each(function(){
@@ -2873,7 +2880,11 @@ function loadContainersTable(){
         var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
             $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
                 if(!data){
+                    $('.loadingimagefordockertable').addClass('hidden');
                     return;
+                }
+                if(data){
+                    $('.loadingimagefordockertable').addClass('hidden');
                 }
                 var dockerContainerData = JSON.parse(data);
              //   alert(JSON.stringify(dockerContainerData));
@@ -2898,73 +2909,105 @@ function loadContainersTable(){
                     $('.dockeractionbutton').click(function(){
                        // alert('test' + $(this).attr('dockercontaineraction'));
                        //append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                       $(this).closest('tr').fadeTo('slow',0.5);
-                       var $progressicon = $(this).closest('tr').find('.dockercontainerprogress').first();
-                       var $thistr = $(this);
-                       $progressicon.removeClass('hidden');
+                       
+                      
                         var action =  $(this).attr('dockercontaineraction');
                         var instanceid =  $(this).closest('tr').attr('instanceid');
                         var containerid =  $(this).closest('tr').attr('containerid');
                         var $contextRow = $(this).closest('tr');
-                       // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
-                        if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5' || action == '6'){
-                            $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
-                             // alert(data);
-                              if(data == 'OK'){
-                                //$(this).parents('.flip-toggle').toggleClass('flip1');
-                               //alert('ok');
-                              //  $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
-                               //alert($thistr.closest('.dockercontainertabletemplatetr').html());
-                               
-                                $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
-                                    var dockerContainerData = JSON.parse(data);
-                                    //alert(JSON.stringify(dockerContainerData));
-                                    //Updating More Info dialog
-                                    // $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
-                                    //     console.log("dockerContainerData." +  $(this).attr('containerdata'));
-                                    //      if($(this).attr('containerdata') != '')
-                                    //         $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
-                                    // });
-                                    // // updating row.
-                                    // $contextRow.find('dockercontainerstatus').html(dockerContainerData);
-                                    $.each(dockerContainerData,function(i,item){
-                                        //alert(item.Id.substring(0,12) + ':' + containerid);
-                                        if(item.Id.substring(0,12) == containerid){
-                                         //   alert('found constructing ' + item.toString())
-                                            var $updatedContainerRow = createdockercontainerrow(item,instanceid);
-                                            //Do not bind any action buttons
-                                            $updatedContainerRow.find('td').each(function(i,k){
-                                                //alert(i + ':' + k);
-                                                if(i > 0 && i < 7){
-                                                    $contextRow.find('td:eq(' + i + ')').html('').append($(k).html());
-                                                }
-
-                                            });
-                                            $thistr.closest('.container1').find('.flipper').toggleClass('hidden');
-                                            //Managing the pause and unpause buttons
-                                            if(item.Status.indexOf('Exited') >= 0){
-                                              //  alert('in');
-                                                $thistr.closest('.container1').find('.pause').addClass('hidden');
-                                                $thistr.closest('.container1').find('.unpause').addClass('hidden');
-                                            }
-                                            
+                        var $thistr = $(this);
+                        // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
+                        var performAction = function(){
+                        $thistr.closest('tr').fadeTo('slow',0.5);
+                        var $progressicon = $thistr.closest('tr').find('.dockercontainerprogress').first();
+                        
+                        $progressicon.removeClass('hidden');
+                            if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5' || action == '6'){
+                                    $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
+                                     // alert(data);
+                                      if(data == 'OK'){
+                                        //$(this).parents('.flip-toggle').toggleClass('flip1');
+                                       //alert('ok');
+                                      //  $(this).closest('.container1').first().find('.flipper').toggleClass('hidden');
+                                       //alert($thistr.closest('.dockercontainertabletemplatetr').html());
+                                       if(action == '6'){
+                                            $contextRow.detach(); //removing the row on terminate.
                                        }
+                                       else{
+                                                    $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
+                                                        var dockerContainerData = JSON.parse(data);
+                                                        //alert(JSON.stringify(dockerContainerData));
+                                                        //Updating More Info dialog
+                                                        // $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
+                                                        //     console.log("dockerContainerData." +  $(this).attr('containerdata'));
+                                                        //      if($(this).attr('containerdata') != '')
+                                                        //         $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
+                                                        // });
+                                                        // // updating row.
+                                                        // $contextRow.find('dockercontainerstatus').html(dockerContainerData);
+                                                        $.each(dockerContainerData,function(i,item){
+                                                            //alert(item.Id.substring(0,12) + ':' + containerid);
+                                                            if(item.Id.substring(0,12) == containerid){
+                                                             //   alert('found constructing ' + item.toString())
+                                                                var $updatedContainerRow = createdockercontainerrow(item,instanceid);
+                                                                //Do not bind any action buttons
+                                                                $updatedContainerRow.find('td').each(function(i,k){
+                                                                    //alert(i + ':' + k);
+                                                                    if(i > 0 && i < 7){
+                                                                        $contextRow.find('td:eq(' + i + ')').html('').append($(k).html());
+                                                                    }
+
+                                                                });
+                                                                $thistr.closest('.container1').find('.flipper').toggleClass('hidden');
+                                                                //Managing the pause and unpause buttons
+                                                                if(item.Status.indexOf('Exited') >= 0){
+                                                                  //  alert('in');
+                                                                    $thistr.closest('.container1').find('.pause').addClass('hidden');
+                                                                    $thistr.closest('.container1').find('.unpause').addClass('hidden');
+                                                                }
+                                                                
+                                                           }
+                                                        });
+                                                        
+                                                        
+
+                                                        $thistr.closest('tr').fadeTo('slow',1);
+                                                        $progressicon.addClass('hidden');
+                                                   });
+                                        }
+
+                                      }
+                                      else
+                                        $progressicon.addClass('hidden');
+                                            
                                     });
-                                    
-                                    
-
-                                    $thistr.closest('tr').fadeTo('slow',1);
-                                    $progressicon.addClass('hidden');
-                               });
+                            }
+                            return(false);
+                        }
 
 
-                              }
-                              else
-                                $progressicon.addClass('hidden');
-                                    
+
+                        if(action == '6'){
+                            bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+                                if (!result) {
+                                    return;
+                                }
+                                performAction();
                             });
                         }
-                        return(false);
+                        else if(action == '2'){
+                            bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+                                if (!result) {
+                                    return;
+                                }
+                                performAction();
+                            });
+                        }
+                        else{
+                            performAction();
+                        }
+                        
+                       
                     });
                     return;
                    }
@@ -2991,6 +3034,7 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
 
 
     var $docctr = $('#dockercontainertabletemplatetr').clone().removeClass('hidden');
+    $docctr.attr('id','trfordockercontainer_' + dockerContainerItem.Id);
     $docctr.find('.dockercontainerstatus').html(dockerContainerItem.Status).parent().append($cadvisor);
     var docdate = new Date(1000*dockerContainerItem.Created);
     $docctr.find('.dockercontainerstartedon').html(docdate.toLocaleString());
