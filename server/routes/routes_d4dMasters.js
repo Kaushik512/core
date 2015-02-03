@@ -40,6 +40,33 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
+    app.get('/d4dmasters/instanceping/:ip',function(req,res){
+        var cmd = 'ping -c 1 -w 1 ' + req.params.ip ;
+        var curl = new Curl();
+        console.log("Pinging Node to check if alive :" + cmd );
+        curl.executecurl(cmd, function(err, stdout) {
+            if (err) {
+                res.end(err);
+            }
+            if (stdout) {
+                if (stdout.indexOf('1 received') > 0) {
+                    console.log('Good');
+                    //res.send();
+                    res.end('Alive');
+                    //res.send('200');
+                    return;
+
+                } else {
+                    console.log('Not Found');
+                    //res.send('400 Not Found');\
+                   res.end('Not Alive');
+                   // res.send('200');
+                    return;
+                }
+            }
+        });
+    });
+
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {
         //fetch the username and password from 
         //Need to populate dockerrowid in template card. - done

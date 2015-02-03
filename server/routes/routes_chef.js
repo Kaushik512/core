@@ -10,6 +10,7 @@ var appConfig = require('../config/app_config');
 var uuid = require('node-uuid');
 var taskStatusModule = require('../model/taskstatus');
 var credentialCryptography = require('../lib/credentialcryptography');
+var Curl = require('../lib/utils/curl.js');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -208,7 +209,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         runlist: runlist,
                         platformId: platformId,
                         instanceIP: nodeIp,
-                        instanceState: 'unknown',
+                        instanceState: node.isAlive,
                         bootStrapStatus: 'success',
                         hardware: hardwareData,
                         credentials: encryptedCredentials,
@@ -282,7 +283,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 console.log('creating env ==>', node.chef_environment);
                                 console.log('orgId ==>', orgId);
                                 console.log('bgid ==>',bgId);
-                               // console.log('node ===>', node)
+                               // console.log('node ===>', node);
                                 environmentsDao.createEnv(node.chef_environment, orgId,bgId,projectId ,function(err, data) {
                                     if (err) {
                                         count++;
@@ -291,10 +292,41 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         return;
                                     }
                                     count++;
-                                    insertNodeInMongo(node);
-                                    console.log('importing node ' + node.name);
-                                    updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
 
+                                    //fetching the ip of the imported node
+                                    var nodeIp = 'unknown';
+                                    if (node.automatic.ipaddress) {
+                                        nodeIp = node.automatic.ipaddress;
+                                    }
+
+                                    if (node.automatic.cloud) {
+                                        nodeIp = node.automatic.cloud.public_ipv4;
+                                    }
+
+
+                                    if(nodeIp != 'unknown'){
+                                        var cmd = 'ping -c 1 -w 1 ' + nodeIp;
+                                        var curl = new Curl();
+                                        console.log("Pinging Node to check if alive :" + cmd );
+                                        curl.executecurl(cmd, function(err, stdout) {
+                                            if(stdout){
+                                                if (stdout.indexOf('1 received') > 0) {
+                                                    node.isAlive = 'running';
+                                                }
+                                            //    console.log('node ===>', node);
+                                                insertNodeInMongo(node);
+                                                console.log('importing node ' + node.name);
+                                                updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
+                                            }
+                                        });
+                                    }
+                                    else{
+                                       //     console.log('node ===>', node);
+                                            node.isAlive = 'unknown';
+                                            insertNodeInMongo(node);
+                                            console.log('importing node ' + node.name);
+                                            updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
+                                    }
                                 });
                             }
                         });
