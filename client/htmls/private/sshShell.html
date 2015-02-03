@@ -63,7 +63,7 @@
       </div>
       <br>
     <div style="text-align:center" style="margin-top:5%;">
-        <input type="submit" value="Submit" class="btn btn-primary">
+        <button type="button" class="btn btn-primary sshSubmit">Submit</button>
     </div>
 
 
@@ -189,7 +189,7 @@ $(function() {
          socket.emit('open', reqBody);
     }
 
-    $loginForm.submit(function(e) {
+    $('.sshSubmit').click(function(e) {
         console.log('submitting form');
         var reqBody = {};
         reqBody.id = $('#ssh-instanceId').val();

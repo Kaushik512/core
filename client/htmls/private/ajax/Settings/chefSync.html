@@ -71,7 +71,7 @@
 <div class="modal fade" id="chefImportNodesModal" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form role="form" id="myform12" autocomplete="off">
+      <form action="" autocomplete="off">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Import Nodes</h4>
@@ -92,7 +92,7 @@
         
             <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
-            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" cdata="catalyst" cat-validation="required,nospecial,max15,nospace">
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="">
               <b class="tooltip tooltip-top-right">
               <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
           
@@ -120,8 +120,7 @@
           <div class="col-lg-6" style="margin-top:20px;">
             <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
-              <select id="chefImportProjectSelect"  class="width-100" cdata="catalyst">
-                    
+              <select id="chefImportProjectSelect"  class="width-100">
               </select>
             
         </div>
@@ -142,7 +141,7 @@
         
           <label for="exampleInputEmail1">Password</label>
           
-          <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" required />
+          <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" cat-validation="required"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
             <b class="tooltip tooltip-top-right">
             <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
           
@@ -179,7 +178,7 @@
          
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
         <button type="button" class="btn btn-primary importNodesBtn">Import</button>
       </div>
       </form>
@@ -238,19 +237,6 @@ var urlParams ={};
 })();
 $(function(){
 
-
-  // var $pemFileDropdown = $('#pemFileDropdown').change(function(){
-   
-  //   if($(this).is(':checked')) {
-  //     $('#importPemfileInput').attr('disabled',false);
-  //     $('#importPasswordInput').attr('disabled',true);
-  //   } else {
-  //     $('#importPemfileInput').attr('disabled',true);
-  //     $('#importPasswordInput').attr('disabled',false);
-  //   } 
-  // });
-
- //drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
 var $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
@@ -483,16 +469,14 @@ $('#importPemfileInput').change(function(){
    var reqBody = {};
    reqBody.orgId = $orgListInput.val();
    reqBody.bgId = $bgList.val();
-   //alert($bgList.val());
-   //alert($projectList.val());
    reqBody.projectId = $projectList.val();
-   //alert('#chefImportProjectSelect').val());
-   if(!reqBody.projectId || !reqBody.projectId.length){
+   /*if(!reqBody.bgId || !reqBody.bgId.length){
     alert('Please Select Business Groups & Project');
     return;
-   }
-   if(reqBody.projectId == 'choose'){
-    alert('Please choose a Project');
+   }*/
+   if (!reqBody.projectId || reqBody.projectId === 'choose'){
+    alert('Please Select a Project');
+    return;
    }
    
 
@@ -501,7 +485,6 @@ $('#importPemfileInput').change(function(){
      reqBody.selectedNodes.push($(this).attr('data-nodeName'));
    });
  
-   //if($('.credentialSection').is(':visible')){
      reqBody.credentials = {};
      reqBody.credentials.username = $('#importUsernameInput').val();
 
@@ -539,8 +522,6 @@ $('#importPemfileInput').change(function(){
         return;
        }
        var reader = new FileReader();
-
-       // Closure to capture the file information.
        reader.onload = function(e) {
            // Render thumbnail.
             reqBody.credentials.pemFileData = e.target.result;
@@ -552,9 +533,6 @@ $('#importPemfileInput').change(function(){
        reader.readAsText(pemFileInput.files[0]);
  
      }       
-   /*} else {
-     makeRequest();
-   }*/
 
       function makeRequest() {
         console.log(reqBody);
