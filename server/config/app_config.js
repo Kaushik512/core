@@ -22,7 +22,7 @@ var config = {
         express_sid_key: 'express.sid',
         sessionSecret: 'sessionSekret'
     },
-    app_run_port: 3004,
+    app_run_port: 3001,
     userHomeDir: pathExtra.homedir(),
     catalysHomeDirName: 'catalyst',
     instancePemFilesDirName: 'instance-pemfiles',

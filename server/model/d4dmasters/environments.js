@@ -129,7 +129,9 @@ function Env() {
                         },function(err,data2){
                             if(!err)
                             {
-                                var newenv = data2.environmentname + ',' + name;
+                                if(data2.environmentname != '')
+                                    data2.environmentname +=  ',' ;
+                                var newenv = data2.environmentname + name;
                                 d4dModelNew.d4dModelMastersProjects.update({
                                     orgname: orgname,
                                     productgroupname: bgname,
