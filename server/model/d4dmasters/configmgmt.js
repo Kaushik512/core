@@ -218,7 +218,7 @@ function Configmgmt() {
         var countOuter = 0;
         var countInner = 0;
         var countInnerInner = 0;
-        var roleslist = this.getListFiltered(7, "userrolename", "loginname", loginname, function(err, rolenames) {
+        var roleslist = this.getListFilteredNew(7, "userrolename", "loginname", loginname, function(err, rolenames) {
             if (rolenames) {
                 console.log("Rolenames for User:" + rolenames);
                 var rn = rolenames.replace(/\"/g, '').split(':')[0].split(',');
@@ -230,7 +230,7 @@ function Configmgmt() {
                         user.rolename += ",&nbsp;" + rn1;
 
                     console.log("Role " + countOuter + ":" + rn1);
-                    var permissionlist = mainRef.getListFiltered(6, "globalaccessname", "userrolename", rn1, function(err, globalaccessname) {
+                    var permissionlist = mainRef.getListFilteredNew(6, "globalaccessname", "userrolename", rn1, function(err, globalaccessname) {
 
                         console.log("inside globalaccessname : " + (globalaccessname == null));
                         console.log("globalaccessname : " + globalaccessname.toString());
@@ -240,7 +240,7 @@ function Configmgmt() {
                             ga.forEach(function(ga1) {
 
                                 console.log('Access Type : ' + ga1);
-                                mainRef.getListFiltered(8, "files", "globalaccessname", ga1, function(err, jlt) {
+                                mainRef.getListFilteredNew(8, "files", "globalaccessname", ga1, function(err, jlt) {
                                     countInner++;
                                     console.log('inner loop ' + jlt);
                                     //count++;
@@ -282,7 +282,7 @@ function Configmgmt() {
         var accessibleFiles = [];
         var mainRef = this;
         var countOuter = 0;
-        var roleslist = this.getListFiltered(7, "userrolename", "loginname", loginname, function(err, rolenames) {
+        var roleslist = this.getListFilteredNew(7, "userrolename", "loginname", loginname, function(err, rolenames) {
             if (rolenames) {
                 console.log("Rolenames for User:" + rolenames);
                 var rn = rolenames.replace(/\"/g, '').split(':')[0].split(',');
@@ -291,7 +291,7 @@ function Configmgmt() {
                     rn.forEach(function(rn1) {
                         console.log("Role " + countOuter + ":" + rn1);
                         countOuter++;
-                        var permissionlist = mainRef.getListFiltered(5, "globalaccessname", "userrolename", rn1, function(err, globalaccessname) {
+                        var permissionlist = mainRef.getListFilteredNew(5, "globalaccessname", "userrolename", rn1, function(err, globalaccessname) {
                             console.log("inside" + (globalaccessname == null));
                             if (err) {
                                 console.log("Hit and error:" + err);
@@ -302,7 +302,7 @@ function Configmgmt() {
                                 if (ga) {
                                     var count = 0;
                                     ga.forEach(function(ga1) {
-                                        mainRef.getListFiltered(8, "files", "globalaccessname", ga1, function(err, jlt) {
+                                        mainRef.getListFilteredNew(8, "files", "globalaccessname", ga1, function(err, jlt) {
                                             console.log('inner loop ' + jlt);
                                             count++;
                                             if (accessibleFiles.indexOf(jlt) < 0) {
@@ -335,7 +335,7 @@ function Configmgmt() {
         console.log("Received Role name: " + rolename);
         var accessibleFiles = [];
         var mainRef = this;
-        var roleslist = this.getListFiltered(6, "globalaccessname", "userrolename", rolename, function(err, globalaccessname) {
+        var roleslist = this.getListFilteredNew(6, "globalaccessname", "userrolename", rolename, function(err, globalaccessname) {
             if (err) {
                 console.log("Hit and error:" + err);
             }
@@ -356,7 +356,7 @@ function Configmgmt() {
                             console.log('Set Global Access : ' + ga[k]);
 
 
-                            var justlikethat = mainRef.getListFiltered(8, "files", "globalaccessname", ga[k], function(err, gafiles) {
+                            var justlikethat = mainRef.getListFilteredNew(8, "files", "globalaccessname", ga[k], function(err, gafiles) {
                                 if (gafiles) {
 
                                     var gaf = gafiles.split(',');
@@ -703,9 +703,52 @@ function Configmgmt() {
         });
     };
 
-    this.getListFilteredNew = function(mastername, fieldname, comparedfieldname, comparedfieldvalue) {
+    this.getListFilteredNew = function(mastername, fieldname, comparedfieldname, comparedfieldvalue,callback) {
+            console.log(mastername);
+            this.getDBModelFromID(mastername, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                var query = {};
+                query[comparedfieldname] = comparedfieldvalue; //building the query 
+                query['id'] = mastername;
 
-    }
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    var d4d = JSON.parse(JSON.stringify(d4dMasterJson));
+                    var jsonlist = '';
+                    d4d.forEach(function(k,v){
+                            var ke = Object.keys(k);
+                            console.log(ke.length + ' ' +k[fieldname]);
+                             if (jsonlist == '')
+                                jsonlist += "\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
+                            else
+                                jsonlist += ",\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
+                            //ke['']
+                            //for(var j = 0; j < ke.length)
+                                                // var bodyItems = Object.keys(req.body);
+                                                // var saveAsfileName = '';
+                                                // for (var i = 0; i < bodyItems.length; i++) {
+                                                // if (bodyItems[i].indexOf("_filename") > 0)
+                                                // saveAsfileName = req.body[bodyItems[i]];
+                                                // }
+
+
+
+                    });
+                    //console.log(d4d.length);
+                    configmgmt = "{" + jsonlist + "}";
+                    console.log("sent response" + JSON.stringify(configmgmt));
+                    callback(null,jsonlist);
+                    
+                });
+            }
+        });
+    };
 
     this.getCodeList = function(name, callback) {
         if (codelist) {

@@ -1586,7 +1586,6 @@ function saveform(formID) {
             if(parseInt(formID) < 5)
             {
                 loadTreeFuncNew(); //this should refresh the tree
-                
             }
         },
         error: function(jqxhr) {

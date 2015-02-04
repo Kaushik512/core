@@ -363,76 +363,103 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
      
   });
 
-  $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(nodeList){
-    $('.nodeListContainer img').remove();
+  $.get('/chef/servers/' + urlParams.chefId + '/environments',function(envList){ //getting the list of env
+      if(envList){
 
-    var $tableBody = $('.table-hover tbody');
-    
+      var envlist = envList.toString().split(',');
+      var $envselect = $('<select></select>').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding:0px;');
+      for(var j = 0; j < envList.length;j++){
+        $envselect.append('<option value="' + envList[j] + '">' + envList[j] + '</option>');
+      }
+        $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(nodeList){
+          $('.nodeListContainer img').remove();
 
-    for(var i=0;i<nodeList.length;i++) {
-       var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName',nodeList[i]);
-       $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
-       $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $tr.append($('<td></td>').addClass('chef-fqdn').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $tr.append($('<td></td>').addClass('chef-platform').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $tr.append($('<td></td>').addClass('chef-uptime').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-    
-       $tr.append($('<td></td>').addClass('chef-env').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
-       $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/><i></i>');
-       $nodecheckboxlabel.append($nodecheckboxinput);
+          var $tableBody = $('.table-hover tbody');
+          
 
-       // $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
-       $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel)); 
-       $tableBody.append($tr);  
+          for(var i=0;i<nodeList.length;i++) {
+             var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName',nodeList[i]);
+             $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
+             $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $tr.append($('<td></td>').addClass('chef-fqdn').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $tr.append($('<td></td>').addClass('chef-platform').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $tr.append($('<td></td>').addClass('chef-uptime').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+          
+             $tr.append($('<td></td>').addClass('chef-env').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
+             $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/><i></i>');
+             $nodecheckboxlabel.append($nodecheckboxinput);
 
-       $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeList[i],function(node){
-           var $tr = $tableBody.find('tr[data-nodeName="'+node.name+'"]');
-            var ip = 'unknown';
-            if(node.automatic.ipaddress) {
-                ip = node.automatic.ipaddress;
-            }
-            $tr.find('.chef-ip').empty().append('<span>'+ip+'</span>');
+             // $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
+             $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel)); 
+             $tableBody.append($tr);  
 
-            var fqdn = 'unknown';
-            if(node.automatic.fqdn) {
-                fqdn = node.automatic.fqdn;
-            }
-            $tr.find('.chef-fqdn').empty().append('<span>'+fqdn+'</span>');
-            var platform = 'unknown';
-            if(node.automatic.platform) {
-                platform = node.automatic.platform;
-            }
-            $tr.find('.chef-platform').empty().append('<span>'+platform+'</span>');
+             $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeList[i],function(node){
+                 var $tr = $tableBody.find('tr[data-nodeName="'+node.name+'"]');
+                  var ip = 'unknown';
+                  if(node.automatic.ipaddress) {
+                      ip = node.automatic.ipaddress;
+                  }
+                  $tr.find('.chef-ip').empty().append('<span>'+ip+'</span>');
 
-            var uptime = 'unknown';
-            if(node.automatic.uptime) {
-                uptime = node.automatic.uptime;
-            }
-            $tr.find('.chef-uptime').empty().append('<span>'+uptime+'</span>');
+                  var fqdn = 'unknown';
+                  if(node.automatic.fqdn) {
+                      fqdn = node.automatic.fqdn;
+                  }
+                  $tr.find('.chef-fqdn').empty().append('<span>'+fqdn+'</span>');
+                  var platform = 'unknown';
+                  if(node.automatic.platform) {
+                      platform = node.automatic.platform;
+                  }
+                  $tr.find('.chef-platform').empty().append('<span>'+platform+'</span>');
 
-
-           
-            
-            var environment = 'unknown';
-            if(node.chef_environment) {
-                environment = node.chef_environment;
-            }
-
-            $tr.find('.chef-env').empty().append('<span>'+environment+'</span>');
-            $tr.find('.nodeCheckBox').data('node',node);
-            
-            
-         });
+                  var uptime = 'unknown';
+                  if(node.automatic.uptime) {
+                      uptime = node.automatic.uptime;
+                  }
+                  $tr.find('.chef-uptime').empty().append('<span>'+uptime+'</span>');
 
 
-    }
+                 
+                  
+                  var environment = 'unknown';
+                  if(node.chef_environment) {
+                      environment = node.chef_environment;
+                  }
+                  var $tempenv = $envselect.clone();
+                  $tempenv.val(environment).attr('currentEnv',environment);
+                  $tempenv.change(function(){
+                    if($(this).val() == $(this).attr('currentEnv')){
+                      return;
+                    }
+                    $that = $(this);
+                    bootbox.confirm("Are you sure you would want to change the environment?<br/>Note:<br/>Change will done on the chef server.", function(result) {
+                        if (!result) {
+                            $that.val($that.attr('currentEnv'));
+                              return;
+                        }
+                        
+
+                    });
+
+                  });
+                  
+                  
+                  $tr.find('.chef-env').empty().append($tempenv);//.append('<span>'+environment+'</span>');
+                  $tr.find('.envselect').select2();
+                  $tr.find('.nodeCheckBox').data('node',node);
+
+               });
 
 
-    $('#organiz').show();
+          }
 
+
+          $('#organiz').show();
+
+        }); //end get '../chef/servers/'
+      }
   });
-
 
 
 });

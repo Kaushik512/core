@@ -52,6 +52,30 @@ var Chef = function(settings) {
         });
     }
 
+     this.getEnvironmentsList = function(callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+                return;
+            }
+            chefClient.get('/environments', function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return console.log(err);
+                }
+                console.log("chef status", chefRes.statusCode);
+                if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201) {
+                    callback(true, null);
+                    return;
+                }
+
+                var nodeNames = Object.keys(chefResBody);
+                callback(null, nodeNames);
+            });
+        });
+    }
+
     this.getNode = function(nodeName, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {

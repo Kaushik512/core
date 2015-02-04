@@ -2578,3 +2578,7 @@ padding-top:5px;
     margin-top:10px;
     text-align: center;
 }
+
+.smart-style-2 .form-control{
+    height:34px !important;
+}
