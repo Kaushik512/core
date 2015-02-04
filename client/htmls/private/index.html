@@ -339,7 +339,7 @@
 				success: function (data1) {
 					console.log('ajax success');
 					//alert('New Json' + JSON.stringify(data1));
-
+debugger;
 					$('#tree').html('').treeview({
 						data:data1,enableLinks:true,
 						collapseIcon:'fa fa-angle-down',
@@ -536,7 +536,7 @@
          $(".left-projects-links a").removeClass('active');
          $("#settingsNew").addClass('active');
      }
-
+drawBreadCrumb();
  });
     
 

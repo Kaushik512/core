@@ -156,37 +156,37 @@ var d4dModelMastersDesignTemplateTypes = mongoose.model('d4dModelMastersDesignTe
 
 var d4dMastersTemplatesList = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String,required:true, trim:true, validate:nameValidator},
-	templatename: {type:String,required:true, trim:true, validate:nameValidator},
-	templatesicon_filename: {type:String,required:true, trim:true, validate:nameValidator},
-	templatetypename: {type:String,required:true, trim:true, validate:nameValidator},
-	dockerreponame: {type:String,required:true, trim:true, validate:nameValidator},
-	configname: {type:String,required:true, trim:true, validate:nameValidator},
-	dockercontainerpathstitle: {type:String,required:true, trim:true},
-	dockercontainerpaths: {type:String,required:true, trim:true},
-	templatescookbooks: {type:String,required:true, trim:true},
+	name: {type:String, trim:true, validate:nameValidator},
+	templatename: {type:String, trim:true, validate:nameValidator},
+	templatesicon_filename: {type:String, trim:true, validate:nameValidator},
+	templatetypename: {type:String, trim:true, validate:nameValidator},
+	dockerreponame: {type:String, trim:true, validate:nameValidator},
+	configname: {type:String, trim:true, validate:nameValidator},
+	dockercontainerpathstitle: {type:String, trim:true},
+	dockercontainerpaths: {type:String, trim:true},
+	templatescookbooks: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersTemplatesList = mongoose.model('d4dModelMastersTemplatesList',d4dMastersTemplatesList,'d4dmastersnew');
 
 
 var d4dMastersServicecommands = new mongoose.Schema(
-	{id: {type:String,required:true, trim:true},
-	name: {type:String,required:true, trim:true, validate:nameValidator},
-	servicename: {type:String,required:true, trim:true, validate:nameValidator},
-	commandname: {type:String,required:true, trim:true, validate:nameValidator},
-	commandtype: {type:String,required:true, trim:true},
-	configname: {type:String,required:true, trim:true, validate:nameValidator},
+	{id: {type:String, trim:true},
+	name: {type:String, trim:true, validate:nameValidator},
+	servicename: {type:String, trim:true, validate:nameValidator},
+	commandname: {type:String, trim:true, validate:nameValidator},
+	commandtype: {type:String, trim:true},
+	configname: {type:String, trim:true, validate:nameValidator},
 	chefserverid: {type:String, trim:true},
-	operatingsystem: {type:String,required:true, trim:true},
-	servicecookbook: {type:String,required:true, trim:true},
-	servicestart: {type:String,required:true, trim:true},
-	servicestop: {type:String,required:true, trim:true},
-	servicerestart: {type:String,required:true, trim:true},
-	servicestatus: {type:String,required:true, trim:true},
-	servicekill: {type:String,required:true, trim:true},
-	command: {type:String,required:true, trim:true},
-	commandaction: {type:String,required:true, trim:true},
+	operatingsystem: {type:String, trim:true},
+	servicecookbook: {type:String, trim:true},
+	servicestart: {type:String, trim:true},
+	servicestop: {type:String, trim:true},
+	servicerestart: {type:String, trim:true},
+	servicestatus: {type:String, trim:true},
+	servicekill: {type:String, trim:true},
+	command: {type:String, trim:true},
+	commandaction: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersServicecommands = mongoose.model('d4dModelMastersServicecommands',d4dMastersServicecommands,'d4dmastersnew');
@@ -205,8 +205,8 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 	jenkinsurl: {type:String,required:true, trim:true},
 	jenkinsusername: {type:String,required:true, trim:true, validate:nameValidator},
 	jenkinspassword: {type:String,required:true, trim:true},
-	jenkinstoken: {type:String,required:true, trim:true},
-	folderpath: {type:String,required:true, trim:true},
+	jenkinstoken: {type:String, trim:true},
+	folderpath: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelJenkinsConfig = mongoose.model('d4dModelJenkinsConfig',d4dMastersJenkinsConfig,'d4dmastersnew');
