@@ -146,7 +146,7 @@ background: #1b1e24;
 background:#22262e !important;
 }
 
-.smart-style-1 .login-info span, .smart-style-1 .login-info {
+.smart-style-1 .tree-view span, .smart-style-1 .tree-view {
 	border-bottom:none;
 }
 
@@ -209,8 +209,8 @@ vertical-align: 0px;
 
 
 .smart-style-1 nav ul li a, 
-.smart-style-1 .login-info strong, 
-.smart-style-1 .login-info a {
+.smart-style-1 .tree-view strong, 
+.smart-style-1 .tree-view a {
 	color: #8b91a0;
 }.smart-style-1 nav ul li a:active {
 	background:none;
@@ -227,14 +227,14 @@ vertical-align: 0px;
 	padding: 12px 17px 12px 16px;
 }
 
-.smart-style-1 .login-info {
+.smart-style-1 .tree-view {
 	height:auto;
 }
-.smart-style-1 .login-info span{
+.smart-style-1 .tree-view span{
 	padding: 5px 10px;
 }
 
-.smart-style-1 .login-info img {
+.smart-style-1 .tree-view img {
 	width: 35px;
 	border-radius:50%;
 }
@@ -319,10 +319,10 @@ border-top: 1px solid #303031;
 	background:#22262E;
 }
 
-.smart-style-1.minified .login-info img {
+.smart-style-1.minified .tree-view img {
 	width: 30px !important;
 }
-.smart-style-1.minified .login-info span {
+.smart-style-1.minified .tree-view span {
 	padding: 0px 5px !important;
 }
 
@@ -510,29 +510,29 @@ body.smart-style-2 {
 	background: #008DC4;
 }
 
-.smart-style-2 .login-info span, 
-.smart-style-2 .login-info {
+.smart-style-2 .tree-view span, 
+.smart-style-2 .tree-view {
 	border: 0 !important; 
 	box-shadow:none !important;
 }
 
-.smart-style-2 .login-info span {
+.smart-style-2 .tree-view span {
 	padding: 5px 10px 7px;
 	background: #FFF;
 	border-radius: 4px;
 }
 
-.smart-style-2 .login-info { 
+.smart-style-2 .tree-view { 
 	margin-bottom:18px !important;	
 }
 
-.smart-style-2 .login-info a, 
-.smart-style-2 .login-info strong {
+.smart-style-2 .tree-view a, 
+.smart-style-2 .tree-view strong {
 	font-size: 16px;
 	color: #33455A;
 }
 
-.smart-style-2 .login-info img {
+.smart-style-2 .tree-view img {
 	width:35px;
 }
 
@@ -719,11 +719,11 @@ padding: 12px 11px;
 	font-size:18px !important;
 }
 
-.smart-style-2.minified .login-info span {
+.smart-style-2.minified .tree-view span {
 	padding:0;
 }
 
-.smart-style-2.minified .login-info {
+.smart-style-2.minified .tree-view {
 	margin:0 !important;
 }
 
@@ -903,29 +903,29 @@ body.smart-style-3 {
 	background: #008DC4;
 }
 
-.smart-style-3 .login-info span, 
-.smart-style-3 .login-info {
+.smart-style-3 .tree-view span, 
+.smart-style-3 .tree-view {
 	border: 0 !important; 
 	box-shadow:none !important;
 }
 
-.smart-style-3 .login-info span {
+.smart-style-3 .tree-view span {
 	padding: 5px 10px 7px;
 	background: #FFF;
 	border-radius: 4px;
 }
 
-.smart-style-3 .login-info { 
+.smart-style-3 .tree-view { 
 	margin-bottom:18px !important;	
 }
 
-.smart-style-3 .login-info a, 
-.smart-style-3 .login-info strong {
+.smart-style-3 .tree-view a, 
+.smart-style-3 .tree-view strong {
 	font-size: 16px;
 	color: #33455A;
 }
 
-.smart-style-3 .login-info img {
+.smart-style-3 .tree-view img {
 	width:35px;
 }
 
@@ -1105,11 +1105,11 @@ padding: 12px 11px;
 	font-size:18px !important;
 }
 
-.smart-style-3.minified .login-info span {
+.smart-style-3.minified .tree-view span {
 	padding:0;
 }
 
-.smart-style-3.minified .login-info {
+.smart-style-3.minified .tree-view {
 	margin:0 !important;
 }
 
@@ -1289,29 +1289,29 @@ body.smart-style-4 {
 	background: #008DC4;
 }
 
-.smart-style-4 .login-info span, 
-.smart-style-4 .login-info {
+.smart-style-4 .tree-view span, 
+.smart-style-4 .tree-view {
 	border: 0 !important; 
 	box-shadow:none !important;
 }
 
-.smart-style-4 .login-info span {
+.smart-style-4 .tree-view span {
 	padding: 5px 10px 7px;
 	background: #FFF;
 	border-radius: 4px;
 }
 
-.smart-style-4 .login-info { 
+.smart-style-4 .tree-view { 
 	margin-bottom:18px !important;	
 }
 
-.smart-style-4 .login-info a, 
-.smart-style-4 .login-info strong {
+.smart-style-4 .tree-view a, 
+.smart-style-4 .tree-view strong {
 	font-size: 16px;
 	color: #33455A;
 }
 
-.smart-style-4 .login-info img {
+.smart-style-4 .tree-view img {
 	width:35px;
 }
 
@@ -1499,11 +1499,11 @@ padding: 12px 11px;
 	font-size:18px !important;
 }
 
-.smart-style-4.minified .login-info span {
+.smart-style-4.minified .tree-view span {
 	padding:0;
 }
 
-.smart-style-4.minified .login-info {
+.smart-style-4.minified .tree-view {
 	margin:0 !important;
 }
 

@@ -1,10 +1,3 @@
-<style type="text/css">
-    .visibleClass{
-        display: block;
-    }
-</style>
-
-
 <div class="row">
 
     <article class="col-sm-12 col-md-12 col-lg-12">
@@ -14,29 +7,18 @@
 
                 <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
                     <li class="active Instances">
-                        <a href="#l1" data-toggle="tab"><i class="fa fa-reorder"></i>&nbsp;Instances</a>
+                        <a href="#l1" style="display:block!important" data-toggle="tab" ><i class="fa fa-reorder"></i>&nbsp;Instances</a>
                     </li>
-                    <!--<li class="pull-left">
-                        <a href="#l2" data-toggle="tab">DevOps Roles</a>
-                    </li>-->
-                    
                     <li class="pull-left Blueprints">
-                        <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
+                        <a href="#l2" style="display:block!important" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
                     </li>
 
                     <li class="pull-left Orchestration">
-                        <a href="#l3" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
+                        <a href="#l3" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
                      <li class="pull-left Containers">
-                        <a href="#l4" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
+                        <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                     </li>
-
-                    <!--<li class="pull-left">
-                        <a href="#l4" data-toggle="tab">Enviornments</a>
-                    </li>
-                    <li class="pull-left">
-                        <a href="#l5" data-toggle="tab">Usage</a>
-                    </li>-->
                 </ul>
 
                 <div id="myTabContent3" class="nav tab-content">
@@ -45,26 +27,21 @@
         <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 
             <div>
-               <!-- <div class="jarviswidget-editbox">
-
-                </div>--> <!--Not Required -->
+               
                 <div class="widget-body no-padding">
 
                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <!-- <h4 class="panel-title" style="display: inline-flex;"> -->
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse">Instance</a>
-                                    <!-- <input type="text" class="searchInstances form-control" style="margin-left: 10px; margin-top: 6px;height:32px !important"> -->
                                 </h4>
+
 
                                 <span class="pull-right swap-view">
                                     
                                     <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;
                                     <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
-                                <!-- <h4 class="panel-title"><a data-toggle="collapse">Instance</a></h4>
-                                <span class="pull-right swap-view"><a class="btn1" id="defaultViewButton" style="" onclick="$('#divinstancestableview').hide();$('#divinstancescardview').show();return(false);"><i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;<a class="btn1" onclick="$('#divinstancestableview').show();$('#divinstancescardview').hide();return(false);"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span> -->
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
@@ -134,10 +111,10 @@
                         
                          
                      </div>
-                     <a class="btn pull-right btn-danger margin-right12" title="Remove Instance" onClick="removeSelectedInstance()" > 
+                     <a class="btn pull-right btn-danger right-button" title="Remove Instance" onClick="removeSelectedInstance()" > 
                         <i class="fa fa-trash-o"></i>
                     </a>&nbsp;
-                    <a class="btn pull-right btn-info margin-right12" id="" data-original-title="Import Instance" data-placement="top" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
+                    <a class="btn pull-right btn-info right-button" id="" data-original-title="Import Instance" data-placement="top" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
                         <i class="fa fa-laptop"/>
                     </a>
                     
@@ -146,28 +123,7 @@
                 </div>
 </footer>
 
-        <!-- <div class="row">
-            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="bottom:0px;position:fixed">
-                <div class="clearfix form-actions" style="text-align:center;">
-                    <div class="btn-group">
-                        
-                        <button class="btn btn-primary actionControlPanel">
-                            <i class="fa fa-gears"></i>
-                            Control Panel
-                        </button> -->
-
-                        
-                         <!--<button class="btn pull-left btn-primary ChefconfigPanel" style="margin-left:5px">
-                            <i class="fa fa-home"></i>
-                            Chef config Panel
-                        </button>-->
-                    <!-- </div>
-                    <button class="btn pull-right btn-danger" title="Remove Instance" onClick="removeSelectedInstance()" > <i class="fa fa-trash-o"></i></button>
-                    &nbsp;&nbsp;
-
-                </div>
-            </div>
-        </div> --><!--Launch div ends here-->
+        
 
     </div> <!--tab-pane l1 gets over-->
 
@@ -176,11 +132,6 @@
 
                             <div>
 
-
-                               <!-- <div class="jarviswidget-editbox">
-
-
-                                </div> -->
                                 <div class="widget-body no-padding">
 
                                     <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
@@ -250,7 +201,7 @@
                                             Launch
                                         </button>
                                     </div>
-                                     <button class="btn pull-right btn-danger" title="Remove Blueprint" onClick="removeSelectedBlueprint()" style="margin-right:12px"> <i class="fa fa-trash-o"></i></button>
+                                     <button class="btn pull-right btn-danger right-button" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
                                 </div>
                             
                         </footer><!--Launch div ends here-->
@@ -1112,6 +1063,7 @@
 <div class="modal fade" id="modalContainerimportInstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
+          <form role="form" id="addInstanceForm" autocomplete="off">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
@@ -1120,83 +1072,74 @@
                     <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Import Instance By IP
                 </h4>
             </div>
-            <div class="modal-body no-padding">
-                <form role="form" class="smart-form" id="addInstanceForm" autocomplete="off">
+            <div class="modal-body modal-height">
+                
 
-                    <fieldset style="padding-top:0px;margin-top:10px;">
-                        <section class="col col-6">
-                            <div class="form-group">
+                    
+                        <div class="col-lg-6">
+                            
                               <label for="">Enter IP Address</label>
-                              <label class="input">
-                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN">
+                              
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN"/>
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
-                              </label>
-                            </div>
-                        </section>
-                        <section class="col col-6">
-                            <div class="form-group">
+                              
+                            
+                        </div>
+                        <div class="col-lg-6">
+                            
                               <label for="">Choose Operating System</label>
                               <select id="instanceOS"  class="width-100" >
                                 <option value="linux">linux</option>
                                 <option value="windows">windows</option>
                               </select>
-                            </div>
-                        </section>
-                    </fieldset>
-                    <fieldset style="padding-top:15px;">
-                        <section class="col col-6 credentialSection">
-                            <div class="form-group">
+                            
+                        </div>
+                    
+                    
+                        <div class="col-lg-6" style="margin-top:15px">
+                            
                               <label for="">Username</span></label>
-                              <label class="input">
+                              
                               <input type="text" name="usernameInput" class="form-control" id="instanceUsername">
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
-                              </label>
-                            </div>
-                        </section>
-                        <section class="col col-6">
-                            <div class="form-group">
+                              
+                            
+                        </div>
+                        <div class="col-lg-6" style="margin-top:15px">
+                            
                               <label for="">Choose Authentication Type</label>
                               <select id="pemFileDropdown"  class="authenticationType width-100" >
                                 <option value="password">Password</option>
                                 <option value="pemFile">Pem File</option>
                               </select>
-                            </div>
-                        </section>
-                    </fieldset>
-                    <fieldset style="padding-top:15px;border-top:0px;">
-                        <section class="col col-6 credentialSection authPassword">
-                            <div class="form-group">
+                            
+                        </div>
+                    
+                       
+                        <div class="col-lg-6 authPassword" style="margin-top:15px">
+                            
                               <label for="">Password</label>
-                              <label class="input">
+                              
                               <input type="password" class="form-control" id="instancePassword" />
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
-                              </label>
-                            </div>
-                        </section>
-                        <section class="col col-6 credentialSection authPemFile ">
+                              
+                         
+                        </div>
+                        <div class="col-lg-6 authPemFile" style="margin-top:15px">
                             <div class="smart-forms">
                                 <label for="">Pem File</label>
                                 <label for="templatesicon" name="field" class="file">
-                                    <span class="button btn-primary" style="top:6px;">Browse</span>
+                                    <span class="button btn-primary">Browse</span>
                                     <input id="importPemfileInput" type="file" class="gui-file">
                                     <input type="text" readonly="" class="gui-input">
                                 </label>
                             </div>
-                            <!-- <div class="form-group">
-                              <label for="">Pem File</label>
-                              <label class="checkbox" style="display:inline;padding-top:4px;">
-                                  <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
-                              </label>
-                              <div class="">  
-                                <input type="file" id="importPemfileInput" style="display:inline" disabled/>
-                              </div>
-                            </div> -->
-                        </section>
-                    </fieldset>
-                </form>
+                        </div>
+                    
+                
             </div>
              <div class="modal-footer">
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
@@ -1206,7 +1149,7 @@
                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
                 </button>
              </div>
-
+             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Container tab ended-->
@@ -1666,6 +1609,7 @@ $('#addInstanceBtn').click(function(e) {
 $(function() {
 
     function initializeTaskArea(data) {
+      if (!$.fn.dataTable.isDataTable('#tableOrchestration') ){
         //var $taskListArea = $('.taskListArea').empty();
            $taskDatatable =  $('#tableOrchestration').DataTable({
                 "pagingType": "full_numbers",
@@ -1685,6 +1629,7 @@ $(function() {
                 ]
 
             });
+         }
 
 
         for (var i = 0; i < data.length; i++) {
@@ -2629,9 +2574,8 @@ function addInstanceToDOM(data) {
         }
     }
   
-   
-
     var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
+    
 
 
     var $li = $('<li></li>').addClass('domain-role-thumbnail');
@@ -2690,7 +2634,7 @@ function addInstanceToDOM(data) {
 
 
 
-    $divComponentListImage = $('<a class="chefClientRunlistImage"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
+    $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId',data._id);
 
     //Check if the docker status is succeeded
     if(data.docker != null){
@@ -2752,7 +2696,7 @@ function addInstanceToDOM(data) {
     //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
     $rowContainter.append($tableInstanceStatusIndicator);
 
-    $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"><img class="center-block"  src="img/galleryIcons/moreinfo.png" /></a></td>');
+    $rowContainter.append('<td><a class="tableMoreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
 
     $divDomainRolesCaption.append($divComponentListContainer);
     var $divInstanceDetails = $('<div></div>')
@@ -2800,7 +2744,7 @@ function addInstanceToDOM(data) {
     $divActionBtnContainer.append($divActionShutdownContainer); 
      
     // <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
-     var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" data-instanceid="'+data._id+'"><img src="img/galleryIcons/sshIcon.png"/ height="28px" width="32px" ></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
+     var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon" data-instanceid="'+data._id+'"></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
     $divActionBtnContainer.append($divActionSSHContainer); 
    
     var $back = $('<div></div>').addClass('back card-backflip');

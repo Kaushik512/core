@@ -11,15 +11,6 @@
                 <li class="pull-left active">
                     <a href="#l2" id="tabheader" data-toggle="tab">Choose Template Type</a>
                 </li>
-                <!--<li class="pull-left">
-                    <a href="#l3" data-toggle="tab">App Factory</a>
-                </li>
-                <li class="pull-left">
-                    <a href="#l4" data-toggle="tab">Enviornments</a>
-                </li>
-                <li class="pull-left">
-                    <a href="#l5" data-toggle="tab">Usage</a>
-                </li>-->
             </ul>
 
             <div id="myTabContent3" class="nav tab-content">
@@ -125,26 +116,21 @@
                                   <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                        <div class="widget-body no-padding">
-                                            <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
+                                            <form action="" id="checkout-form">
 
                                                 <div class="row " style="margin:0px;">
                                                     
-                                                   <section class="col col-6">
-                                                    <label for="">Choose Operating System <span style="color:red">*</span>
-                                                    </label>
-                                                    <label class="select">
+                                                   <div class="col-lg-6">
+                                                    <label for="">Choose Operating System:<span style="color:red">*</span></label>
+                                                    <select id="instanceOS" class="chooseOS width-100">
+                                                    </select>
 
-                                                       <select id="instanceOS" class="chooseOS width-100">
-                                                          
-                                                            
-                                                      </select>
-
-                                                    </label>                                          
-                                                </section>
-                                                <section class="col col-6">
-                                                    <label for="category">Choose Security Group <span style="color:red">*</span>
-                                                    </label>
-                                                    <label class="select"> 
+                                                                                              
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="">Choose Security Group:<span style="color:red">*</span></label>
+                                                    
+                                                    
                                                         <select class="chooseSecurity width-100">
                                                             <option value="0">default-d4d</option>
                                                             <!--<option value="1">default-d4d</option>-->
@@ -153,20 +139,20 @@
                                                             <option value="4">Default VPC</option>
 
                                                         </select>
-                                                    </label>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6" style="margin-top:15px;">
+                                                <label for="">Choose Instance Size:<span style="color:red">*</span></label>
                                                 
-                                            </section>
-                                            <section class="col col-6">
-                                                <label for="category">Choose Instance Size <span style="color:red">*</span>
-                                                </label>
-                                                <label class="select"> 
+                                                
                                                   <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
                                                   </select>
-                                                </label> 
-                                            </section>
+                                                
+                                            </div>
                                             <!--To add the Swipe Functionality-->                            
-                                            </div>
-                                            </div>
+                                            
+                                            </form><!--end-->
                                         </div> 
                                     </div>
                                   </div>
@@ -179,24 +165,21 @@
                                           </h4>
                                       </div>
                                       <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
-                                          <div action="" id="checkout-form" class="smart-form1" novalidate="novalidate">
-                                                <div class="row " style="margin:0px;">
-                                                    <section class="col col-6">
-                                                        <label for="">Choose Organization <span style="color:red">*</span>
-                                                        </label>
-                                                        <label class="select"> 
-                                                           <select id="orgnameSelect" class="chooseOrgselect2 width-100">
-                                                           </select>
-                                                       </label> 
-                                                    </section>
-                                                    <section class="col col-12">
+                                          <form action="" id="checkout-form">
+                                                
+                                                    <div class="col-lg-6">
+                                                        <label for="">Choose Organization <span style="color:red">*</span></label>
+                                                        <select id="orgnameSelect" class="chooseOrgselect2 width-100">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-12" style="margin-top:10px;">
                                                        <div class="cookbookShow">
 
                                                        </div>
-                                                   </section>
+                                                   </div>
                                                    
-                                                </div>
-                                            </div>
+                                                
+                                            </form>
                                       </div>
                               </div>
 
@@ -208,63 +191,64 @@
                                   </div>
                                   <div id="CollapseEditorgParam" class="panel-collapse collapse">
                                       <div class="panel-body">
-                                            <div action="" id="checkout-form" class="smart-form" novalidate="novalidate">
-
-                                                <div class="row " style="margin:0px;">
-
-                                                    <section class="col col-sm-6">
-                                                        <label for="category">Blueprint Name <span style="color:red">*</span>
+                                            <form action="" id="checkout-form">
+                                              <div class="row" style="margin:0px">
+                                  <div class="col-lg-6">
+                                    <label for="name">Blueprint Name:
+                                    <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                    <input  id="blueprintNameInput" class="form-control" type="text">
+                                    <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                 </div>
+ 
+                                                    <div class="col-lg-6">
+                                                        <label for="">Business Group <span style="color:red">*</span>
                                                         </label>
-                                                        <label class="input">
-                                                            <!-- <i class="icon-append fa fa-building"></i>  -->
-                                                            <input type="text" id="blueprintNameInput"/>
-                                                        </label>                                          
-                                                    </section>
-
-                                                    <section class="col col-sm-6">
-                                                        <label for="category">Business Group <span style="color:red">*</span>
-                                                        </label>
-                                                        <label class="select"> 
+                                                         
                                                             <select id="bgListInput" class="chooseBG width-100">
-
+                                                             
                                                             </select>
-                                                        </label>   
-                                                    </section>
-                                                </div>
-                                            <div class="row " style="margin:0px;">
-                                               <section class="col col-sm-6">
-                                                <label class="label">Assign Users  <span style="color:red">*</span></label>
-                                                <label class="select select-multiple">
+                                                          
+                                                    </div>
+                                               
+                                            
+                                             
+
+                                          </div>
+                                          <div class="col-lg-6" style="margin-top:5px;">
+                                                <label for="">Assign Users<span style="color:red">*</span></label>
+                                                
                                                     <div class="userListLoadingContainer">
                                                         
                                                     </div>
-                                                        <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
+                                                        <select class="custom-scroll width-100" multiple="" id="userListSelect" style="display:none">
 
                                                         </select> 
-                                                </label>
-                                                </section> 
-
-                                          
-                                              <section class="col col-sm-6">
+                                                  
+                                                </div>
+                                              <div class="col-lg-6" style="margin-top:5px">
                                                 <label for="category">Project <span style="color:red">*</span>
                                                 </label>
-                                                <label class="select"> 
+                                                
                                                   <select id="projectListInput" class="chooseProject width-100">
-
+                                                    
                                                   </select>
-                                              </label>   
-                                              </section>
-                                              <section class="col col-sm-6 offset6" style="">
+                                               
+                                              </div>
+
+                                              
+                                              <div class="col-lg-6" style="margin-top:5px">
                                                 <label for="category">Environment <span style="color:red">*</span>
                                                 </label>
-                                                <label class="select"> 
+                                                
                                                     <select  id="envList" class="chooseEnv width-100">
-
+                                                      
                                                     </select>
-                                                </label>
-                                                </label>
-                                              </section>
-                                            </div>
+                                                
+                                                
+                                              </div>
+                                             
+                                                 
+                                            
                    
                                            <section class="col col-6 fordocker">
                                                 <label for="category">Select Docker Image <span style="color:red">*</span>
@@ -293,16 +277,8 @@
                                                    <label class="input"><a  href="javascript:void(0);" onclick="$('[dockerparamkey]').val('');loadLaunchParams();"><i title="Add" class="icon-append fa fa-plus" ></i></a>
                                                     <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add"/>
                                                   </label>
-                                                    
-                                                
-                                                <!-- <label for="category" class="input clearfix" style="font-size:small">
-                                                  <button class="btn btn-primary btn-small" style="margin-left:11px;" >
-                                                                            <i class="ace-icon fa fa-check bigger-110"></i>
-                                                                             Add
-                                                                        </button>
-                                                </label>    --> 
                                             </section>
-                                            </div>            
+                                            </form>            
                                        </div>
                                   </div>
                               </div>
@@ -325,12 +301,12 @@
                     </div>
 
 
-                                    <div class="row">
-                                        <div style="bottom:0px;position:fixed;padding-left:0px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <div style="text-align:center;padding-right:20%;" class="clearfix form-actions">
+                                    <footer class="footer">
+                                        
+                                            <div style="text-align:center;" class="clearfix form-actions no-padding">
 
                                                 <div class="btn-group">
-                                                    <ul class="pager wizard no-margin">
+                                                    <ul class="pager wizard no-margin" style="margin-left:200px">
 
                                                         <li class="previous disabled">
                                                             <a style="border-radius:0px" class="btn btn-primary" href="javascript:void(0);"> Previous </a>
@@ -342,8 +318,8 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        
+                                    </footer>
 
                                                         </div>
                                                     </div>
