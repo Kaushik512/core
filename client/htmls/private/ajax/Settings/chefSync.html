@@ -645,6 +645,7 @@ $('#importPemfileInput').change(function(){
                 var nodeData= $($checkBoxes[0]).data('node');
                 if(nodeData && nodeData.chef_environment) {
                   $chefResultModalContainer.modal('hide');
+                  loadTreeFuncNew();
                    //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
                  }
                }
@@ -654,6 +655,7 @@ $('#importPemfileInput').change(function(){
 
      }
      pollTaskStatus(data.taskId,0);
+     //Refreshing the workzone tree
 
    }).error(function(){
     alert('Unable to import instances. Please try again later');
