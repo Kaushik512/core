@@ -178,6 +178,28 @@
                           </div>
                         </div>
                         <!--Configmgmt Attributes Ends here-->
+
+                        <!--Application URL-->
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
+                          </div>
+                          <div id="collapseAppURL" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <form action="" id="myForm30">
+                                  <div class="col-lg-6">
+                                    <label for="">Application URL:</label>
+                                    <br>
+                                  <input type="text" id="name1" value="" readonly>
+
+                                    <span class="glyphicon glyphicon-pencil" onclick=editName('1')></span>
+                                  </div>
+                                  <!-- <button type="submit" class="formSubmit">Submit</button> -->
+                                </form>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Application URL Ends here-->
                       </div>
 
             </div> <!-- info tab contents ends here-->
@@ -1284,4 +1306,47 @@ $('.goback').click(function(e) {
         $('.front').show();
         $('.back').hide();
     });
+</script>
+
+<script>
+function editName(number) {
+    document.getElementById('name' + number).readOnly=false;
+    
+      
+};
+</script>
+<script>
+$('.formSubmit').click(function(e){
+  $('.instance-bootstrap-list').last().append('<a href="#name1" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
+  return false;
+});
+</script>
+
+<script>
+   $(document).ready(function () {
+
+       //$('#myForm30').find("input").ch
+   
+       $('#myForm30').submit(function() {
+          //console.log('serialize ==> ',$(this).serialize());
+           
+           var icon = $('.instance-bootstrap-list').find(".app.url");
+           
+           if(!icon.length){
+            var href= $("#name1").val();
+            href = $.trim(href);
+            if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
+              href = "http://"+href;
+            }
+           
+             var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
+            $('.instance-bootstrap-list').last().append(anchor);
+           }
+           return false; // for demo
+       });
+   
+   
+   
+   
+   });
 </script>
