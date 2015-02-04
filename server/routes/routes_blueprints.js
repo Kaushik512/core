@@ -10,92 +10,95 @@ var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
-
+var logger = require('../lib/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
 
-
-
     app.post('/blueprints/:blueprintId/update', function(req, res) {
+        logger.debug("Enter /blueprints/%s/update", req.params.blueprintId);
 
         var blueprintUpdateData = req.body.blueprintUpdateData;
         if (!blueprintUpdateData.runlist) {
             blueprintUpdateData.runlist = [];
         }
+
         //blueprintUpdateData.runlist.splice(0, 0, 'recipe[ohai]');
 
-
+        logger.debug("Blueprint Data = ", blueprintUpdateData);
         blueprintsDao.updateBlueprint(req.params.blueprintId, blueprintUpdateData, function(err, data) {
             if (err) {
+                logger.error("Blueprint Updated Failed >> ", err);
                 res.send(500);
                 return;
             }
 
             if (!data) {
+                logger.error("Exit /blueprints/%s/update. Update Failed. No Such Blueprint", req.params.blueprintId);
                 res.send(404)
             } else {
+                logger.debug("Exit /blueprints/%s/update. Update Successful", req.params.blueprintId);
                 res.send({
                     version: data.version
                 });
             }
 
         });
-    });
+    }); // end app.post('/blueprints/:blueprintId/update' )
 
     app.get('/blueprints/:blueprintId/versions/:version', function(req, res) {
-
+        logger.debug("Enter /blueprints/%s/versions/%s", req.params.blueprintId, req.params.version);
         blueprintsDao.getBlueprintVersionData(req.params.blueprintId, req.params.version, function(err, data) {
             if (err) {
+                logger.debug("Failed to get blueprint versions ", err);
                 res.send(500);
                 return;
             }
 
             if (!data.length) {
+                logger.error("No such blueprint or blueprint version");
                 res.send(404);
                 return;
             }
+
+            logger.debug("Exit /blueprints/%s/versions/%s (Success)", req.params.blueprintId, req.params.version);
             res.send(data[0]);
-
-
         });
     });
 
     app.get('/blueprints/delete/:blueprintId', function(req, res) {
-
+        logger.debug("Enter /blueprints/delete/%s", req.params.blueprintId);
         blueprintsDao.removeBlueprintbyId(req.params.blueprintId, function(err, data) {
             if (err) {
+                logger.error("Failed to delete blueprint>>", err);
                 res.send(500);
                 return;
             }
 
+            logger.debug("Exit /blueprints/delete/%s", req.params.blueprintId);
             res.end('OK');
-
-
         });
     });
 
 
-
-
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
-
-        console.log('Entered Launch');
+        logger.debug("Enter /blueprints/%s/launch", req.params.blueprintId);
+        
         blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
             if (err) {
-                console.log('getBlueprintByID Error:', err);
+                logger.error('Failed to getBlueprint. Error = ', err);
                 res.send(500);
                 return;
             }
             if (data.length) {
+                logger.debug("getBlueprintById returned this >> ", data);
                 var blueprint = data[0];
                 var launchVersionNumber = blueprint.latestVersion;
                 if (req.query.version) {
-                    console.log('in version');
                     launchVersionNumber = req.query.version;
                 }
-                console.log("query v==>", req.query.version, launchVersionNumber);
+                logger.debug("req.query.version = %s and launchVersionNumber = %s", req.query.version, launchVersionNumber);
                 var version;
                 for (var i = 0; i < blueprint.versionsList.length; i++) {
                     if (blueprint.versionsList[i].ver === launchVersionNumber) {
@@ -104,17 +107,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                 }
                 if (!version) {
+                    logger.debug("No blueprint version available ( 404 )");
                     res.send(404);
                     return;
                 }
-                console.log('chef serverid : ', blueprint.chefServerId);
-                console.log("version ==>", version);
+                logger.debug('Using Chef serverid : ', blueprint.chefServerId);
+                //logger.debug("Using blueprint version ==>", version);
                 configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
                     if (err) {
+                        logger.error("Failed to getChefServerDetails", err);
                         res.send(500);
                         return;
                     }
                     if (!chefDetails) {
+                        logger.error("No CHef Server Detailed available.", err);
                         res.send(500);
                         return;
                     }
@@ -125,10 +131,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url
                     });
-                    console.log('*************************');
-                    console.log('Chef ' + chefDetails.chefRepoLocation);
+                    
+                    logger.debug('Chef Repo Location = ' , chefDetails.chefRepoLocation);
 
                     function launchInstance() {
+                        logger.debug("Enter launchInstance");
 
                         var settings = appConfig;
                         //encrypting default pem file
@@ -137,21 +144,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         var encryptedPemFileLocation = settings.instancePemFilesDir + uuid.v4();
                         cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                             if (err) {
-                                console.log(err);
+                                logger.log("encryptFile Failed >> ", err);
                                 res.send(500);
                                 return;
                             }
 
+                            logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
+
                             var ec2 = new EC2(settings.aws);
                             ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-'+blueprint.name, function(err, instanceData) {
                                 if (err) {
-                                    console.log(err);
+                                    logger.error("launchInstance Failed >> ", err);
                                     res.send(500);
                                     return;
                                 }
 
-                                console.log(version.runlist);
-                                console.log(instanceData);
+                                logger.debug("Instance Launched. Runlist = ", version.runlist);
+                                logger.debug("Instance Launched. Instance data = ", instanceData);
+
                                 var instance = {
                                     orgId: blueprint.orgId,
                                     projectId: blueprint.projectId,
@@ -191,10 +201,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     }
                                 }
 
-
+                                logger.debug('Creating instance in catalyst');
                                 instancesDao.createInstance(instance, function(err, data) {
                                     if (err) {
-                                        console.log(err);
+                                        logger.error("Failed to create Instance", err);
                                         res.send(500);
                                         return;
                                     }
@@ -207,41 +217,42 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         timestamp: new Date().getTime()
                                     }, function(err, data) {
                                         if (err) {
-                                            console.log('unable to update log');
+                                            logger.error('Unable to update log after creating instance', err);
                                             return;
                                         }
-                                        console.log('log updated');
+                                        logger.debug('log updated after creating instance');
                                     });
                                     //For windows instance handle another check..
 
 
                                     ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
                                         if (err) {
+                                            logger.error("waitForInstanceRunnnigState returned an error  >>", err);
                                             return;
                                         }
-                                        console.log(instanceData);
+                                        logger.debug("Enter waitForInstanceRunnnigState :", instanceData);
                                         instance.instanceIP = instanceData.PublicIpAddress;
                                         instancesDao.updateInstanceIp(instance.id, instanceData.PublicIpAddress, function(err, updateCount) {
                                             if (err) {
-                                                console.log("update instance ip err ==>", err);
+                                                logger.error("instancesDao.updateInstanceIp Failed ==>", err);
                                                 return;
                                             }
-                                            console.log('instance ip upadated');
+                                            logger.debug('Instance ip upadated');
                                         });
 
                                         instancesDao.updateInstanceState(instance.id, instanceData.State.Name, function(err, updateCount) {
                                             if (err) {
-                                                console.log("update instance state err ==>", err);
+                                                logger.error("error(date instance state err ==>", err);
                                                 return;
                                             }
-                                            console.log('instance state upadated');
+                                            logger.debug('instance state upadated');
                                         });
 
 
-                                        console.log('****************************');
-                                        console.log('UN:' + instance.credentials.username, ' pemFile' + instance.credentials.pemFileLocation);
-                                        console.log('Chef ' + JSON.stringify(chef));
-                                        console.log('****************************');
+                                        logger.debug('****************************');
+                                        logger.debug('User Name:' + instance.credentials.username, ' pemFile' + instance.credentials.pemFileLocation);
+                                        logger.debug('Chef Details ' + JSON.stringify(chef));
+                                        logger.debug('****************************');
 
                                         //decrypting pem file
                                         var cryptoConfig = appConfig.cryptoSettings;
@@ -250,9 +261,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             if (err) {
                                                 instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                                     if (err) {
-                                                        console.log("Unable to set instance bootstarp status");
+                                                        logger.error("Unable to set instance bootstarp status", err);
                                                     } else {
-                                                        console.log("Instance bootstrap status set to failed");
+                                                        logger.debug("Instance bootstrap status set to failed");
                                                     }
                                                 });
                                                 logsDao.insertLog({
@@ -276,16 +287,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                 fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
                                                     if (err) {
-                                                        console.log("Unable to delete temp pem file =>", err);
+                                                        logger.error("Unable to delete temp pem file =>", err);
                                                     } else {
-                                                        console.log("temp pem file deleted =>", err);
+                                                        logger.debug("temp pem file deleted =>", err);
                                                     }
                                                 });
 
 
-                                                console.log('process stopped ==> ', err, code);
+                                                logger.error('process stopped ==> ', err, code);
                                                 if (err) {
-                                                    console.log("knife launch err ==>", err);
+                                                    logger.error("knife launch err ==>", err);
                                                     instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
 
                                                     });
@@ -294,15 +305,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if (code == 0) {
                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                             if (err) {
-                                                                console.log("Unable to set instance bootstarp status. code 0");
+                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
                                                             } else {
-                                                                console.log("Instance bootstrap status set to success");
+                                                                logger.debug("Instance bootstrap status set to success");
                                                             }
                                                         });
 
                                                         chef.getNode(instance.chefNodeName, function(err, nodeData) {
                                                             if (err) {
-                                                                console.log(err);
+                                                                logger.error("Failed chef.getNode", err);
                                                                 return;
                                                             }
                                                             var hardwareData = {};
@@ -315,14 +326,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 hardwareData.memory.free = nodeData.automatic.memory.free;
                                                             }
                                                             hardwareData.os = instance.hardware.os;
-                                                            //console.log(instance);
-                                                            //console.log(hardwareData,'==',instance.hardware.os);
                                                             instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                                 if (err) {
-                                                                    console.log(err);
-                                                                    console.log("Unable to set instance hardware details  code (setHardwareDetails)");
+                                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
                                                                 } else {
-                                                                    console.log("Instance hardware details set successessfully");
+                                                                    logger.debug("Instance hardware details set successessfully");
                                                                 }
                                                             });
                                                             //Checking docker status and updating
@@ -330,16 +338,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             _docker.checkDockerStatus(instance.id,
                                                                 function(err, retCode) {
                                                                     if (err) {
-                                                                        console.log(err);
+                                                                        logger.error("Failed _docker.checkDockerStatus", err);
                                                                         res.send(500);
                                                                         return;
                                                                         //res.end('200');
 
                                                                     }
-                                                                    console.log('Docker Check Returned:' + retCode);
+                                                                    logger.debug('Docker Check Returned:' + retCode);
                                                                     if (retCode == '0') {
                                                                         instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
-                                                                            console.log('Instance Docker Status set to Success');
+                                                                            logger.debug('Instance Docker Status set to Success');
                                                                         });
 
                                                                     }
@@ -350,9 +358,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     } else {
                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                                             if (err) {
-                                                                console.log("Unable to set instance bootstarp status code != 0");
+                                                                logger.error("Unable to set instance bootstarp status code != 0", err);
                                                             } else {
-                                                                console.log("Instance bootstrap status set to failed");
+                                                                logger.debug("Instance bootstrap status set to failed");
                                                             }
                                                         });
 
@@ -401,15 +409,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     chef.getEnvironment(blueprint.envId, function(err, env) {
                         if (err) {
-                            console.log(err);
+                            logger.error("Failed chef.getEnvironment",err);
                             res.send(500);
                             return;
                         }
 
                         if (!env) {
-                            console.log(blueprint.envId);
+                            logger.debug("Blueprint ID = ",blueprint.envId);
                             chef.createEnvironment(blueprint.envId, function(err, envName) {
                                 if (err) {
+                                    logger.error("Failed chef.createEnvironment", err);
                                     res.send(500);
                                     return;
                                 }
@@ -435,10 +444,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.post('/blueprints/:blueprintId/provision', function(req, res) {
-        console.log('body ==>', req.body);
+        logger.debug("Enter /blueprints/%s/provision", req.params.blueprintId);
+
         blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.error("getBlueprintById Failed", err);
                 res.send(500);
                 return;
             }
@@ -448,6 +458,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 if (req.query.version) {
                     launchVersionNumber = req.body.version;
                 }
+                logger.debug('Launching Version ::', launchVersionNumber);
+
                 var version;
                 for (var i = 0; i < blueprint.versionsList.length; i++) {
                     if (blueprint.versionsList[i].ver === blueprint.latestVersion) {
@@ -456,15 +468,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                 }
                 if (!version) {
+                    logger.debug("No Blueprint Version Found");
                     res.send(404);
                     return;
                 }
+
                 configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
                     if (err) {
+                        logger.error("Unable to get Chef Server Details found in blueprint", err);
                         res.send(500);
                         return;
                     }
                     if (!chefDetails) {
+                        logger.error("No Chef Server Details in Blueprint");
                         res.send(500);
                         return;
                     }
@@ -518,7 +534,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                         instancesDao.createInstance(instance, function(err, data) {
                             if (err) {
-                                console.log(err);
+                                logger.error("Failed to create an instance from blueprint", err);
                                 res.send(500);
                                 return;
                             }
@@ -546,9 +562,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 instanceOS: instance.hardware.os
                             }, function(err, code) {
 
-                                console.log('process stopped ==> ', err, code);
+                                logger.error('process stopped ==> ', err, code);
                                 if (err) {
-                                    console.log("knife launch err ==>", err);
+                                    logger.error("knife launch err ==>", err);
                                     instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
 
                                     });
@@ -556,15 +572,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     if (code == 0) {
                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                             if (err) {
-                                                console.log("Unable to set instance bootstarp status");
+                                                logger.error("Unable to set instance bootstarp status", err);
                                             } else {
-                                                console.log("Instance bootstrap status set to success");
+                                                logger.debug("Instance bootstrap status set to success");
                                             }
                                         });
 
                                         chef.getNode(instance.chefNodeName, function(err, nodeData) {
                                             if (err) {
-                                                console.log(err);
+                                                logger.error("Unable to get Node", err);
                                                 return;
                                             }
                                             var hardwareData = {};
@@ -577,10 +593,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             hardwareData.os = instance.hardware.os;
                                             instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                 if (err) {
-                                                    console.log(err);
-                                                    console.log("Unable to set instance hardware details");
+                                                    logger.error("Unable to set instance hardware details", err);
                                                 } else {
-                                                    console.log("Instance hardware details set successessfully");
+                                                    logger.debug("Instance hardware details set successessfully");
                                                 }
                                             });
                                         });
@@ -588,9 +603,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     } else {
                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                             if (err) {
-                                                console.log("Unable to set instance bootstarp status");
+                                                logger.error("Unable to set instance bootstarp status", err);
                                             } else {
-                                                console.log("Instance bootstrap status set to failed");
+                                                logger.debug("Instance bootstrap status set to failed");
                                             }
                                         });
 
@@ -627,15 +642,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     chef.getEnvironment(blueprint.envId, function(err, env) {
                         if (err) {
-                            console.log(err);
+                            logger.error("Error in chef.getEnvironment",err);
                             res.send(500);
                             return;
                         }
 
                         if (!env) {
-                            console.log(blueprint.envId);
+                            logger.debug(blueprint.envId);
                             chef.createEnvironment(blueprint.envId, function(err, envName) {
                                 if (err) {
+                                    logger.error("Error in chef.createEnvironment", err);
                                     res.send(500);
                                     return;
                                 }

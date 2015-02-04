@@ -91,7 +91,7 @@ var BlueprintsDao = function() {
             "_id": new ObjectId(blueprintId)
         }, function(err, data) {
             if (err) {
-                logger.error("Failed getting Blueprint >> "+ blueprintId);
+                logger.error("Failed getting Blueprint >> %s", blueprintId, err);
                 callback(err, null);
                 return;
             }
@@ -116,7 +116,7 @@ var BlueprintsDao = function() {
         }
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
-                logger.warn("Error in getBlueprintsByProjectAndEnvId \n"+ JSON.stringify(err));
+                logger.error("Error in getBlueprintsByProjectAndEnvId ", err);
                 callback(err, null);
                 return;
             }
@@ -185,9 +185,7 @@ var BlueprintsDao = function() {
 
         blueprint.save(function(err, data) {
             if (err) {
-                logger.warn(" !!! Failed to create Blueprint !!!");
-                logger.warn("Error = "+ JSON.stringify(err));
-                logger.warn("Blueprint Data = "+JSON.stringify(blueprintData));
+                logger.error(" !!! Failed to create Blueprint !!!", err);
 
                 callback(err, null);
                 return;
@@ -201,7 +199,7 @@ var BlueprintsDao = function() {
         logger.debug("Enter updateBlueprint(%s, %s)", blueprintId, JSON.stringify(updateData));
         this.getBlueprintById(blueprintId, function(err, data) {
             if (err) {
-                logger.warn("Exit updateBlueprint because getBlueprintById failed ");
+                logger.error("Exit updateBlueprint because getBlueprintById failed ", err);
                 callback(err, null);
                 return;
             }
@@ -226,7 +224,7 @@ var BlueprintsDao = function() {
                     upsert: false
                 }, function(err, updatedData) {
                     if (err) {
-                        loggger.error(" updateBlueprint Failed - "+ JSON.stringify(err));
+                        logger.error(" updateBlueprint Failed - ", err);
                         callback(err, null);
                         return;
                     }
@@ -249,7 +247,7 @@ var BlueprintsDao = function() {
             "_id": ObjectId(blueprintId)
         }, function(err, data) {
             if (err) {
-                logger.warn("removeBlueprintbyId Failed - "+ JSON.stringify(err));
+                logger.error("removeBlueprintbyId Failed - ", err);
                 callback(err, null);
                 return;
             }
@@ -279,7 +277,7 @@ var BlueprintsDao = function() {
 
         Blueprint.find(queryObj, projectionObj, function(err, data) {
             if (err) {
-                logger.warn("getBlueprintVersionData Failed - "+ JSON.stringify(err));
+                logger.error("getBlueprintVersionData Failed - ", err);
                 callback(err, null);
                 return;
             }

@@ -100,6 +100,14 @@
               </select>
             </div>
           </div>
+          <div class="form-group hidden">
+            <label for="exampleInputEmail1">Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            <div class="">
+              <select id="chefImportEnvSelect"  class="width-100" >
+                    
+              </select>
+            </div>
+          </div>
         </section>
       
       <section class="col col-6" style="display:none">
@@ -234,11 +242,14 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+
 $(document).ready(function() {
    $('.authenticationType').select2();
    $('#chefImportBgSelect').select2();
    $('#chefImportProjectSelect').select2();
+   $('#chefImportEnvSelect').select2();
  });
+
 $(".authPassword").show();
 $(".authPemFile").hide();
 $('.authenticationType').change(function(e) {
@@ -284,6 +295,7 @@ $(function(){
 var $orgListInput = $('#chefImportOrgSelect');
 var $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
+var $envList = $('#chefImportEnvSelect');
 
 $('.nodeListContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
@@ -329,10 +341,27 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
       $projectList.append($('<option></option>').val('choose').html('Choose'));
 
       var getProjs = getRelatedValues_Top(4, "productgroupname", bgName, "projectname");
+     // alert(JSON.stringify(getProjs));
       for(var i=0;i<getProjs.length;i++) {
          $projectList.append($('<option></option>').val(getProjs[i]).html(getProjs[i]));
       }
     });
+  $projectList.change(function(e){
+    var projName = $(this).val();
+      if(projName == 'choose') {
+          return;
+      }
+      var getEnvs_ = getRelatedValues_Top(4, "projectname", projName, "environmentname");
+      //debugger;
+      //alert(JSON.stringify(getEnvs_));
+      var getEnvs = getEnvs_.toString().replace(/"/g,'').split(',');
+     // alert(getEnvs.length);
+     // var getEnvs = JSON.parse(getEnvs_);
+      for(var i=0;i<getEnvs.length;i++) {
+         $envList.append($('<option></option>').val(getEnvs[i]).html(getEnvs[i]));
+      }
+     
+  });
 
   $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(nodeList){
     $('.nodeListContainer img').remove();

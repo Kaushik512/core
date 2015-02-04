@@ -40,6 +40,33 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
+    app.get('/d4dmasters/instanceping/:ip',function(req,res){
+        var cmd = 'ping -c 1 -w 1 ' + req.params.ip ;
+        var curl = new Curl();
+        console.log("Pinging Node to check if alive :" + cmd );
+        curl.executecurl(cmd, function(err, stdout) {
+            if (err) {
+                res.end(err);
+            }
+            if (stdout) {
+                if (stdout.indexOf('1 received') > 0) {
+                    console.log('Good');
+                    //res.send();
+                    res.end('Alive');
+                    //res.send('200');
+                    return;
+
+                } else {
+                    console.log('Not Found');
+                    //res.send('400 Not Found');\
+                   res.end('Not Alive');
+                   // res.send('200');
+                    return;
+                }
+            }
+        });
+    });
+
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {
         //fetch the username and password from 
         //Need to populate dockerrowid in template card. - done
@@ -1015,7 +1042,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (!editMode) {
                         var thisVal = bodyJson[itm];
                         //console.log(thisVal.replace(/\"/g,'\\"'));
-                        console.log(thisVal);
+                        console.log('thisVal' + thisVal);
                         var item;
 
                         if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
@@ -1131,7 +1158,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //       console.log('BodyJSON rowid:' + JSON.stringify(bodyJson));
                     var newrowid = '';
                     frmkeys.forEach(function(itm) {
-                        console.log("Each item: itm" + itm + ' bodyJson[itm] ' + bodyJson[itm]);
+                        console.log("Each item: itm " + itm + ' bodyJson[itm] ' + bodyJson[itm]);
                         if (itm.trim() == 'rowid') {
                             console.log('!!!! in rowid ' + bodyJson[itm]);
                             newrowid = bodyJson[itm];
@@ -1144,7 +1171,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 item = "\"" + itm + "\" : \"" + thisVal + "\"";
                             } else //
                                 item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
+
                             rowFLD.push(item);
+                            if (itm == 'folderpath') { //special variable to hold the folder to which the files will be copied.
+                                rowFLD.push("\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"");
+                                console.log('Got a folderpath:' + thisVal);
+                                folderpath = thisVal;
+                            }
                         } else {
                             if (d4dMasterJson != null) {
                                 uuid1 = bodyJson["rowid"];
@@ -1184,11 +1217,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             console.log('New Master Saved');
 
                             console.log(req.params.fileinputs == 'null');
-                            console.log('New record folderpath:' + folderpath + ' rowid:' + newrowid);
-                            if (FLD["folderpath"] == undefined) //folderpath issue fix
-                                folderpath = ''
-                            else
-                                folderpath = rowFLD["folderpath"];
+                            console.log('New record folderpath:' + folderpath + ' rowid:' + newrowid + ' FLD["folderpath"]:' + folderpath);
+                            if(!folderpath)
+                            {
+                                if (FLD["folderpath"] == undefined) //folderpath issue fix
+                                    folderpath = ''
+                                else
+                                    folderpath = rowFLD["folderpath"];
+                            }
 
                             if (req.params.fileinputs != 'null')
                                 res.send(saveuploadedfile(newrowid + '__', folderpath, req));
