@@ -18,11 +18,11 @@ try {
 
 var config = {
     express: {
-        port: 3001,
+        port: 3004,
         express_sid_key: 'express.sid',
         sessionSecret: 'sessionSekret'
     },
-    app_run_port: 3001,
+    app_run_port: 3004,
     userHomeDir: pathExtra.homedir(),
     catalysHomeDirName: 'catalyst',
     instancePemFilesDirName: 'instance-pemfiles',

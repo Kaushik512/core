@@ -14581,7 +14581,7 @@ to {
 .btn, a:link, button {
     -webkit-tap-highlight-color: rgba(169, 3, 41, .5);
 }
-#logo-group *, .login-info, .login-info *, .minified .menu-item-parent {
+#logo-group *, .tree-view, .tree-view *, .minified .menu-item-parent {
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
@@ -14734,7 +14734,7 @@ to {
 .smaller-stat span.label:hover {
     opacity: 1;
 }
-.login-info {
+.tree-view {
     display: block;
     font-size: 12px;
     height: 39px;
@@ -14748,23 +14748,23 @@ to {
     margin: 0!important;
     border-bottom: 1px solid #525151;
 }
-.login-info a, .login-info strong {
+.tree-view a, .tree-view strong {
     text-transform: capitalize;
     font-size: 14px;
     display: inline-block;
     color: #A8A8A8;
     text-decoration: none;
 }
-.login-info a:hover, .login-info strong {
+.tree-view a:hover, .tree-view strong {
     color: #fff;
 }
-.login-info span {
+.tree-view span {
     height: 42px;
     display: block;
     padding: 0 10px;
     border-bottom: 1px solid #1A1817;
 }
-.login-info img {
+.tree-view img {
     width: 25px;
     height: auto;
     display: inline-block;
@@ -14838,18 +14838,18 @@ img.away {
 }
 .minified .minifyme .fa:before {
     content: "\f0a9"}
-.minified .login-info a {
+.minified .tree-view a {
     display: none;
 }
-.minified .login-info span {
+.minified .tree-view span {
     padding: 0 5px;
     text-align: center;
 }
-.minified .login-info img {
+.minified .tree-view img {
     margin: -4px 0 0;
     width: 30px;
 }
-.minified .login-info {
+.minified .tree-view {
     height: 38px;
     border-bottom: 1px solid #181818;
 }

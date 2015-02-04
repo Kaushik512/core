@@ -6,57 +6,11 @@
 		<title>Catalyst</title>
 		<meta name="description" content="">
 		<meta name="author" content="">
-		<!-- Use the correct meta names below for your web application
-			Ref: http://davidbcalhoun.com/2010/viewport-metatag
-			
-		<meta name="HandheldFriendly" content="True">
-		<meta name="MobileOptimized" content="320">-->
-		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<!-- <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"> -->
-		<!-- Basic Styles -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
-		<!-- <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css"> -->
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.dataTables.css">
-		<!-- SmartAdmin RTL Support is under construction
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
-		<!-- We recommend you use "your_style.css" to override SmartAdmin
-		specific styles this will also ensure you retrain your customization
-		with each SmartAdmin update.
-		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css"> -->
-		<!--Custom CSS-->
-		<link rel="stylesheet" href="css/style.css">
-		<!--Bootstrap CSS-->
-		<!--<link rel="stylesheet" href="css/bootstrap.css">-->
-		
-		<link rel="stylesheet" href="css/daterangepicker.css">
-		<!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/styleNew.css">
-		<!-- FAVICONS -->
-		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="img/favicon/version2_4.png" type="image/x-icon">
-		<!-- GOOGLE FONT -->
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
-		<!-- multiselect stylesheet -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/multi-select.css">
-		<link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet"> 
-		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-treeview.css">
-		<!--for checkbox in dropdown -->
-		<!-- <link rel="stylesheet" type="text/css" href="css/jquery.multiselect.css">
-		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
- 		-->
- 		<!--<link rel="stylesheet/less" href="less/style.less" type="text/css">
-		<script type="text/javascript" src="js/less-1.0.30.min.js"></script>
-		<script src="http://lesscss.googlecode.com/files/less-1.0.21.min.js"></script>-->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
 	</head>
-	<body class="desktop-detected smart-style-2">
+	<body class="custom-theme">
 		<script type="text/javascript">
 		//Refresh Issue Fix. This function will get executed when there is a refresh and the url is not of the home page.
 		function firstLoad(){
@@ -67,79 +21,47 @@
 		</script>
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 		<!-- HEADER -->
-		<header id="header">
-			<div id="logo-group">
-				<!-- PLACE YOUR LOGO HERE -->
-				<span id="logo">
-					
-				 <img src="img/version2_22.png" style="" alt="DevOps">
+		<!-- Header starts here -->
+		<header>
+			<nav class="navbar navbar-default">
+	  			<div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      	<a class="navbar-brand" style="width:220px;"><div class="logo"></div></a>
+			    </div>
 
-				</span>
-			</div>
-			<!-- END AJAX-DROPDOWN -->
-		</div>
-		
-		<!-- projects dropdown -->
-		<div id="project-context" style="padding-top:15px;">
-			<li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-				<a class="active" id="workZoneNew" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a>
-			</li>
-		</div>
-		<div id="project-context" style="padding-top:15px;">
-			<li class="left-projects-links hidden" data-target="#blueprints"  navigation="blueprints">
-				<a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
-			</li>
-		</div>
-		
-		
-		<!-- end projects dropdown -->
-		<!-- pulled right: nav area -->
-		<div class="pull-right">
-			<!-- collapse menu button -->
-			<!--Removed from Srikanth . Make it Available for Mobile View -->
-			<!-- <div id="hide-menu1" class="btn-header pull-right">
-				<span> <a id="show-main-collapse" href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
-			</div> -->
-			<!-- end collapse menu -->
-			<!-- logout button -->
-			<div id="logout" class="btn-header transparent pull-right">
-				<span> <a href="../auth/signout" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
-			</div>
-			<div id="project-context" style="padding-top:15px;">
-				<li class="left-projects-links active" id="liuserinfo" style="color:white" >
-					
-				</li>
-			</div>
-			<!-- end logout button -->
-			<div id="project-context" style="padding-top:15px;">
-				<!-- <li class="left-projects-links hidden" data-target="#Track" navigation="Track">
-					<a class="dropdown-toggle" href="#ajax/Settings/TrackerDashboard.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
-				</li> -->
-			</div>
-			<div id="project-context" style="padding-top:15px;">
-				<li class="left-projects-links active hidden" data-target="#Settings"   navigation="Settings">
-					<a class="dropdown-toggle" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-				</li>
-			</div>
-		</div>
-		<!-- end pulled right: nav area -->
-	</header>
-	<!-- END HEADER -->
+    
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			    	<!--left side navbar-->
+			      <ul class="nav navbar-nav" style="margin-top:20px;">
+			        <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1"><a class="active" id="workZoneNew" style="font-size:14px!important" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a></li>
+			        <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
+							<a href="#ajax/Aws-Production.html" style="font-size:14px!important" id="designNew" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
+						</li>
+			        
+			      </ul>
+			      <!--right side navbar-->
+			      <ul class="nav navbar-nav navbar-right" style="font-size:14px!important;margin-top:20px">
+			      	<li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
+			      	<!-- <li class="left-projects-links"></li> -->
+			        <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
+								<a class="dropdown-toggle" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+							</li>
+
+							<li id="logout" class="btn-header transparent pull-right logouttop">
+							<span> <a href="../auth/signout" title="Sign Out" style="font-size:16px!important;"><i class="fa fa-sign-out"></i></a> </span></li>
+					</ul>
+			    </div>
+  			</nav>
+		</header>
+	<!--HEADER ends here -->
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
-		<!-- <div class="login-info" id="Workspace1">
-			<span> 
-			
-			<a data-action="toggleShortcut" id="show-shortcut" href="javascript:void(0);">
-				<i class="fa fa-lg fa-fw fa-building"></i>
-				Organization
-				<i class="fa fa-chevron-right"></i>
-			</a>
-			
-			</span>
-			<div id="tree" style="font-size:12px;display:none"></div>
-		</div> -->
 		<div id="Workspace1">
 			
 			<div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
@@ -149,16 +71,9 @@
 			</div>
 			<div id="tree" style="font-size:12px;"></div>
 		</div>
-		<!-- NAVIGATION :fa-angle-down  This navigation is also responsive
-		To make this navigation dynamic please make sure to link the node
-		(the reference to the nav > ul) after page load. Or the navigation
-		will not initialize.
-		-->
-		<nav>
-			<!-- NOTE: Notice the gaps after each icon usage <i></i>..
-			Please note that these links work a bit different than
-			traditional href="" links. See documentation for details.
-			-->
+		
+		<nav style="font-size:12px!important;">
+			
 			<!--Workspace left panel -->
 			<ul class="menu-item-parentdemo hidden" id="Settings">
 				<li class="open active">
@@ -188,46 +103,16 @@
 								<span class="menu-item-parent" style="font-weight:bold">Projects</span>
 							</a>
 						</li>
-						<!--<li>
-								<a href="ajax/Authentication.html"><i class="fa fa-lg fa-fw fa-key"></i>
-										<span class="menu-item-parent" style="font-weight:bold">Authentication</span>
-								</a>
-						</li>-->
+						
 					</ul>
 				</li>
-				<!--<li class="">
-						<a href="ajax/DefaultOrganization.html"><i class="fa fa-lg fa-fw fa-building"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Organization</span>
-						</a>
-				</li>
 				
-				<li>
-						<a href="ajax/Productgroups.html"><i class="fa fa-lg fa-fw fa-th"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Product Groups</span>
-						</a>
-				</li>
-				<li>
-						<a href="ajax/Authentication.html"><i class="fa fa-lg fa-fw fa-key"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Authentication</span>
-						</a>
-				</li>-->
 				<li>
 					<a href="#"><i class="fa fa-lg fa-fw fa-qrcode"></i>
 						<span class="menu-item-parent" style="font-weight:bold">DevOps Setup</span>
 					</a>
 					<ul>
-						<!-- <li>
-								<a href="ajax/Settings/OrgList.html"><i class="fa fa-lg fa-fw fa-stack-overflow"></i>
-										<span class="menu-item-parent" style="font-weight:bold">Providers
-										</span>
-								</a>
-						</li> -->
-						<!-- <li>
-							<a href="ajax/Settings/ProvidersList.html"><i class="fa fa-lg fa-fw fa-sitemap"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Providers
-								</span>
-							</a>
-						</li> -->
+						
 						<li>
 							<a href="ajax/Settings/ConfigManagementList.html"><i class="fa fa-lg fa-fw fa-random"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Config Management
@@ -246,56 +131,6 @@
 								</span>
 							</a>
 						</li>
-						<!-- <li>
-							<a href="ajax/Settings/BuildServerList.html"><i class="fa fa-lg fa-fw fa-inbox"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Build Servers
-								</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Settings/PlanningServerList.html"><i class="fa fa-lg fa-fw fa-road"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Planning Servers
-								</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Settings/CodeRepositoryList.html"><i class="fa fa-lg fa-fw fa-archive"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Code Repository
-								</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="ajax/Settings/DockerRepositoryList.html"><i class="fa fa-lg fa-fw fa-ils"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Docker Repository
-								</span>
-							</a>
-						</li> -->
-						
-						<!-- <li>
-							<a href="ajax/Testmanagement.html"><i class="fa fa-lg fa-fw fa-rss"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Test Management
-								</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="ajax/Monitoring.html"><i class="fa fa-lg fa-fw fa-desktop"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Monitoring
-								</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Planning.html"><i class="fa fa-lg fa-fw fa-signal"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Planning
-								</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Tools.html"><i class="fa fa-lg fa-fw fa-gavel"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Tools</span>
-							</a>
-						</li> -->
 					</ul>
 				</li>
 				<!--User Setup starts here -->
@@ -304,11 +139,7 @@
 						<span class="menu-item-parent" style="font-weight:bold">Users Setup</span>
 					</a>
 					<ul>
-						<!-- <li>
-							<a href="ajax/Settings/CreateAuthentication.html"><i class="fa fa-lg fa-fw fa-key"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Authentication</span>
-							</a>
-						</li> -->
+						
 						<li>
 							<a href="ajax/Settings/RolesList.html"><i class="fa fa-lg fa-fw fa-th-list"></i>
 								<span class="menu-item-parent" style="font-weight:bold">User Roles</span>
@@ -327,12 +158,6 @@
 						<span class="menu-item-parent" style="font-weight:bold">Gallery Setup</span>
 					</a>
 					<ul>
-
-						<!-- <li>
-							<a href="ajax/Settings/DesignTemplateTypesList.html"><i class="fa fa-lg fa-fw fa-clipboard"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Template Types</span>
-							</a>
-						</li> -->
 						<li>
 							<a href="ajax/Settings/TemplatesList.html"><i class="fa fa-lg fa-fw fa-files-o"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Templates</span>
@@ -343,26 +168,7 @@
 								<span class="menu-item-parent" style="font-weight:bold">Service Command</span>
 							</a>
 						</li>
-						<!-- <li>
-							<a href="ajax/Blueprintgallery.html"><i class="fa fa-lg fa-fw fa-ticket"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Blueprint</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Cookbookgallery.html"><i class="fa fa-lg fa-fw fa-book"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Cookbook</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Lifecycle.html"><i class="fa fa-lg fa-fw fa-bullseye"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Lifecycle</span>
-							</a>
-						</li>
-						<li>
-							<a href="ajax/Themes.html"><i class="fa fa-lg fa-fw fa-puzzle-piece"></i>
-								<span class="menu-item-parent" style="font-weight:bold">Themes</span>
-							</a>
-						</li> -->
+						
 					</ul>
 				</li>
 				<li>	
@@ -371,11 +177,7 @@
 					</a>
 				</li>
 				
-				<!-- <li>
-					<a href="ajax/Audittrail.html"><i class="fa fa-lg fa-fw fa-bug"></i>
-						<span class="menu-item-parent" style="font-weight:bold">Audit Trail</span>
-					</a>
-				</li> -->
+				
 				
 			</ul>
 			<ul class="menu-item-parentdemo" id="Workspace">
@@ -392,38 +194,25 @@
 					</a>
 					<ul style="display:block">
 						<li>
-							<a href="ajax/Aws-Production.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS</span></a>
+							<a href="ajax/Aws-Production.html" class="devops_providers"><div class="aws"><span class="menu-item-parent provider-images">&nbsp;&nbsp;AWS</span></div></a>
 						</li>
-						<!--<li>
-							<a href="ajax/Aws-ProductionAccordian.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;AWS-Demo</span></a>
-						</li>-->
-						<!-- <li>
-							<a href="ajax/Desktop.html" class="devops_providers"><img src="img/DevOps/desktop.png" style="height: 30px;padding-bottom: 4px;" alt="Desktop"><span class="menu-item-parent">&nbsp;&nbsp;Desktop</span></a>
-						</li> -->
+						
 						<li>
-							<a href="ajax/Azure-DevOps.html" class="devops_providers"><img src="img/DevOps/3.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Azure</span></a>
+							<a href="ajax/Azure-DevOps.html" class="devops_providers"><div class="azure"><span class="menu-item-parent provider-images">&nbsp;&nbsp;Azure</span></div></a>
 						</li>
 						<li>
-							<a href="ajax/RL-DevOps.html" class="devops_providers"><img src="img/DevOps/4.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Data Centre</span></a>
+							<a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl"><span class="menu-item-parent provider-images">&nbsp;Data Centre</span></div></a>
 						</li>
-						<!-- <li>
-							<a href="ajax/ManagedDomains.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Managed Domains</span></a>
-						</li> -->
+						
 						<li>
-							<a href="ajax/OpenStack.html" class="devops_providers"><img src="img/DevOps/5.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;Open Stack</span></a>
+							<a href="ajax/OpenStack.html" class="devops_providers"><div class="openstack"><span class="menu-item-parent provider-images">&nbsp;Open Stack</span></div></a>
 						</li>
 						<li>
-							<a href="ajax/cloudstack.html" class="devops_providers"><img src="img/DevOps/6.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;Cloud Stack</span></a>
+							<a href="ajax/cloudstack.html" class="devops_providers"><div class="cloudstack"><span class="menu-item-parent provider-images">&nbsp;Cloud Stack</span></div></a>
 						</li>
 						<li>
-							<a href="ajax/Docker.html" class="devops_providers"><img src="img/DevOps/7.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"> <span class="menu-item-parent">&nbsp;Docker</span></a>
+							<a href="ajax/Docker.html" class="devops_providers"><div class="dock"><span class="menu-item-parent provider-images">&nbsp;Docker</span></div></a>
 						</li>
-						<!-- <li>
-							<iframe src="http://google.com" frameborder=0 width=510 height=400 scrolling=no></iframe>
-						</li> -->
-						<!-- <li>
-							<a href="ajax/designEnvironment.html" class="devops_providers"><img src="img/DevOps/1.png" style="height: 30px;padding-bottom: 4px;" alt="DevOps"><span class="menu-item-parent">&nbsp;&nbsp;Environments Design</span></a>
-						</li> -->
 					</ul>
 				</li>
 			</ul>
@@ -447,24 +236,15 @@
 				<!-- This is auto generated -->
 			</ol>
 		</div>
-		<!--<div id="ribbon">
-			<ul class="nav nav-tabs main-tabs">
-				<li class=""><a data-toggle="tab" href="#Domains" id="domain_link">Existing Blueprints</a></li>
-				<li><a data-toggle="tab" href="#cloudFormation_container" id="cloudFormation_link_tab" style="display: block;">New Blueprints</a></li>
-			</ul>
-		</div>-->
-		<!-- END RIBBON -->
+		
 		<!-- MAIN CONTENT -->
 	 	<div id="content">
 		</div> 
 		<!-- END MAIN CONTENT -->
 	</div>
 	<!-- END MAIN PANEL -->
-	<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
-	Note: These tiles are completely responsive,
-	you can add as many as you like
-	-->
-	<div id="shortcut" style="margin-left: 102px;margin-top: 90px;">
+	
+	<div id="shortcut" style="margin-left: 100px;margin-top: 90px;">
 		<ul class="orgsList">
 			
 			
@@ -477,15 +257,15 @@
 			<li class="collapseActive">
 				<a href="#ajax/Dev.html">WORKZONE</a>
 			</li>
-			<br>
+			
 			<li>
 				<a href="#ajax/Aws-Production.html">DESIGN</a>
 			</li>
-			<br>
+			
 			<li>
 				<a href="#ajax/Dashboard.html"><span>TRACK</span></a>
 			</li>
-			<br>
+			
 			<li>
 				<a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
 			</li>
@@ -494,63 +274,29 @@
 	
 	<script src="js/libs/jquery-2.0.2.min.js"></script>
 	<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
-	<!-- JS TOUCH : include this plugin for mobile drag / drop touch events
-	<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+	<script type="text/javascript" src="js/select2.min.js"></script>
+	<script src="js/bootstrap-treeview.js"></script>
 	<script src="js/libs/modernizr-2.5.3.min.js"></script>
-	<script src="js/plugins.js"></script>
-	<script src="js/dateRange.js"></script>
-	<!-- Page-Level Plugin Scripts - Dashboard -->
-	<script src="js/morris/morris.min.js"></script>
-	<script src="js/morris/morris.js"></script>
-	<!--daterange-->
-	<script src="js/daterange/moment.js"></script>
-	<script src="js/daterange/daterangepicker.js"></script>
-	<!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
-	<script src="js/flot/jquery.flot.cust.js"></script>
-	<script src="js/flot/jquery.flot.resize.js"></script>
-	<script src="js/flot/jquery.flot.fillbetween.min.js"></script>
-	<script src="js/flot/jquery.flot.orderBar.js"></script>
-	<script src="js/flot/jquery.flot.pie.js"></script>
-	<script src="js/flot/jquery.flot.tooltip.js"></script>
-	<!-- BOOTSTRAP JS -->
 	<script src="js/bootstrap/bootstrap.min.js"></script>
 	<!-- CUSTOM NOTIFICATION -->
 	<script src="js/notification/SmartNotification.min.js"></script>
 	<!-- JARVIS WIDGETS -->
-	<script src="js/smartwidgets/jarvis.widget.min.js"></script>
-	<!-- EASY PIE CHARTS
-	<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>-->
-	<!-- SPARKLINES
-	<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>-->
-	<!-- JQUERY VALIDATE -->
-	<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
-	<!-- JQUERY MASKED INPUT
-	<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>-->
-	<!-- JQUERY SELECT2 INPUT
-	<script src="js/plugin/select2/select2.min.js"></script>-->
-	<!-- JQUERY UI + Bootstrap Slider
-	<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>-->
-	<!-- browser msie issue fix
-	<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>-->
-	<!-- SmartClick: For mobile devices -->
-	<script src="js/plugin/smartclick/smartclick.js"></script>
+	
 	<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
-	<script type="text/javascript" src="js/plugin/bootstrap-tags/bootstrap-tagsinput.min.js"></script>
 	<script type="text/javascript" src="js/plugin/bootbox/bootbox.min.js"></script>
-	<script type="text/javascript" src="js/select2.min.js"></script>
-	<!--[if IE 7]>
-	<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
-	<![endif]-->
-	<!-- Demo purpose only *** Removed as issue fix to avoid user changing theme ***
-	<script src="js/demo.js"></script>-->
-	<script src="/private/js/jquery.dataTables.js"></script>
-	<script src="js/jquery.tablesorter.js"></script>
-	<script type="text/javascript" src="js/bootstrap-treeview.js"></script>
-	<!-- <script id="settingscommonscript" type="text/javascript"  src="/private/js/settingscommon.js"></script> -->
+	
+	<script src="/private/js/jquery.dataTables.min.js"></script>
+	<script src="js/jquery.tablesorter.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/additional-methods.min.js"></script>
+	
+	
+	
 
 	<!-- MAIN APP JS FILE -->
 	<script type="text/javascript">
-	
+
+
 	function setleftnavigation(toplink,breadcrumbHeader){
 	
 		$('a[onclick*="setleftnavigation"]').removeClass('active');
@@ -560,12 +306,6 @@
 		$('nav > ul').addClass('hidden'); //hiding all navigation elements
 		var navbar = $(toplink).closest("li").attr('navigation');
 		$('#Workspace1').addClass('hidden');
-		//alert($('a[onclick*="setleftnavigation"]').text().substring(1,9));
-		//window.location.reload();
-		//alert(breadcrumbHeader);
-		// if(breadcrumbHeader == "org"){
-		// 	window.location.reload();
-		// }
 		if(navbar.length){
 			var navs = navbar.split(',');
 			for(var i = 0; i< navs.length;i++){
@@ -606,8 +346,6 @@
 						collapseIcon:'fa fa-angle-down',
 						expandIcon:'fa fa-angle-right',
 						levels: 1,
-						// selectedBackColor:'#40baf1  !important',
-						// selectedColor: '#fff !important',
 						onNodeSelected: function(event, node) {
 							
 							window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
@@ -615,11 +353,6 @@
 							localStorage.setItem('selectedOrgName',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
 						}
 					});
-
-					//alert($tree.find('li:has(span.fa-desktop)').length);
-					//alert($tree.find('li').length);
-
-					
 				}
 			});
 	}
@@ -677,8 +410,6 @@
 				//Adding to Track Tree
 				$track.append($TrackerOrgnameli); //orgname added to root
 				//End Track Setting
-				//<img src="img/demo/Business Group.png" alt="BusinessGroups" style="margin-top:-10px;padding-right:5px;">
-				
 				for(var j=0;j<data[i].businessGroups.length;j++) {
 					//alert(data[i].businessGroups[j].name);
 					var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
@@ -719,7 +450,6 @@
 					$projectUl.append(liProject);
 					var $envUl = $('<ul class="referenceulClass"></ul>');
 				liProject.append($envUl);
-				// <img src="img/demo/Environment Normal.png" alt="Environment" style="padding-right:5px;">
 					for(var l=0;l<data[i].businessGroups[j].projects[k].environments.length;l++) {
 						var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k].name+'&envid='+data[i].businessGroups[j].projects[k].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].businessGroups[j].projects[k].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].businessGroups[j].projects[k].environments[l]+'</a>').attr('data-OrgName',data[i].name).attr('data-envName',data[i].businessGroups[j].projects[k].environments[l]);
 						$envUl.append($liEnv);
@@ -772,8 +502,6 @@
 				window.selectedOrgName = orgName;
 
 				$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
-//sconsole.log('$li',$li.length);
-
 			}
 
 			},
@@ -782,27 +510,12 @@
 			}
 		});
 	} //function ends
-
-//loadTreeFunc();
-		//Selecting the first provider in the list on load
-			
-
-</script>
-<script type="text/javascript">
-
-//selecting workzone by default - to be changed to user based.
-//$('li[navigation*="Workspace"]').find('a').trigger('click');
-//$('li[navigation*="Workspace"]').addClass('open');
 </script>
 <script src="js/app.js"></script>
 <script src="js/chefmodalcommon.js"></script>
-
 <script src="/private/js/settingscommon.js"></script> 
 
-
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
 <script>
-//var $ul = $('#left-panel nav ul');
  $(window).on('hashchange', function() {
 
      var hash = location.hash;
@@ -814,27 +527,19 @@
          $(".left-projects-links a").removeClass('active');
          console.log("pos if ==>", location.hash.indexOf("#ajax/Dev.html?"));
          $("#workZoneNew").addClass('active');
-        // $ul.hide();
-        // $('#Workspace').show();
-
      } else if (location.hash == "#ajax/Aws-Production.html") {
          $(".left-projects-links a").removeClass('active');
          $("#designNew").addClass('active');
-      //   $ul.hide();
-       //  $('#blueprints').show();
      } else if (location.hash == "#ajax/Settings/TrackerDashboard.html") {
          $(".left-projects-links a").removeClass('active');
          $("#trackNew").addClass('active');
-        // $ul.hide();
-        // $('#Track').show();
      } else if (location.hash.indexOf("#ajax/Settings/") === 0) {
          $(".left-projects-links a").removeClass('active');
          $("#settingsNew").addClass('active');
-      //   $ul.hide();
-       //  $('#Settings').show();
      }
-
+drawBreadCrumb();
  });
+
     
 
 </script>
