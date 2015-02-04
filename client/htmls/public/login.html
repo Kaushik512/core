@@ -128,18 +128,7 @@
 	
 	<script type="text/javascript">
 
-function setLogo(data){
-	if(!data.isRelevanceLab){
-$('#logo-group').find('img').attr({
-	'src':data.company.image.src,'height':data.company.image.height,
-	'width':data.company.image.width
-});
-$('#row2').addClass('hide');
-$('#column1').addClass('hide');
-		}
 
-
-	}
 $(function(){
 	if (window.location.toString().indexOf('o=try') > 0) {
 		var $incorrectloginMsg=$('.incorrectlogin');
@@ -149,16 +138,7 @@ $(function(){
 				$incorrectloginMsg.addClass('hidden');
 			});
 		}
-	setLogo({
-isRelevanceLab:false,
-company:{
-	image:{
-		src:'img/verint.jpg',
-		height:'30px',
-		width:'30px',
-	}
-}
-	})
+
 });
 	</script>
 </body>

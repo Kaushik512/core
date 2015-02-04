@@ -340,7 +340,7 @@
 				success: function (data1) {
 					console.log('ajax success');
 					//alert('New Json' + JSON.stringify(data1));
-debugger;
+
 					$('#tree').html('').treeview({
 						data:data1,enableLinks:true,
 						collapseIcon:'fa fa-angle-down',
@@ -540,26 +540,6 @@ debugger;
 drawBreadCrumb();
  });
 
-function setLogo(data){
-	if(!data.isRelevanceLab){
-$('#logo-group').find('img').attr({
-	'src':data.company.image.src,'height':data.company.image.height,
-	'width':data.company.image.width
-});
-		}
-
-
-	}
-		setLogo({
-isRelevanceLab:false,
-company:{
-	image:{
-		src:'img/verint.jpg',
-		height:'30px',
-		width:'30px',
-	}
-}
-	})
     
 
 </script>
