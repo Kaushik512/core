@@ -367,7 +367,7 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
       if(envList){
 
       var envlist = envList.toString().split(',');
-      var $envselect = $('<select></select>').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding:0px;');
+      var $envselect = $('<select></select>').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
       for(var j = 0; j < envList.length;j++){
         $envselect.append('<option value="' + envList[j] + '">' + envList[j] + '</option>');
       }
@@ -438,7 +438,7 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
                             $that.val($that.attr('currentEnv'));
                               return;
                         }
-                        
+
 
                     });
 

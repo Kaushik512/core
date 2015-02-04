@@ -243,14 +243,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 ttp = envs[nt];
                                                                 envs[nt] = envs[nt].substring(0, 12);
                                                             }
-                                                            envs_.push({
-                                                                text: envs[nt],
-                                                                href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
-                                                                orgname: orgTree[_i]['name'],
-                                                                itemtype: 'env',
-                                                                tooltip: ttp,
-                                                                icon: 'fa fa-fw fa-1x fa-desktop'
-                                                            });
+                                                            if(envs[nt] != ''){
+                                                                envs_.push({
+                                                                    text: envs[nt],
+                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    orgname: orgTree[_i]['name'],
+                                                                    itemtype: 'env',
+                                                                    tooltip: ttp,
+                                                                    icon: 'fa fa-fw fa-1x fa-desktop'
+                                                                });
+                                                            }
                                                         }
                                                         console.log("Env in:" + docprojs);
                                                         orgTree[_i]['businessGroups'][__i]['projects'].push({ //
