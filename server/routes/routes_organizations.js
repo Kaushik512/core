@@ -938,7 +938,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var cmd = 'ping -c 1 -w 1 ' + req.body.fqdn;
                 var curl = new Curl();
                 console.log("Pinging Node to check if alive :" + cmd );
+                var executeCount = 0;
                 curl.executecurl(cmd, function(err, stdout) {
+                    if(executeCount > 0){
+                        return;
+                    }
+                    executeCount++;
                     if(stdout){
                         if (stdout.indexOf('1 received') > 0) {
                             nodeAlive = 'running';
