@@ -27,6 +27,7 @@
                                         </span>
                                       </div>
                                       
+                                      
                                     </div>
                                     <div>
                                       <div class="instance-details-list">
@@ -1019,9 +1020,10 @@ $.get('../instances/'+urlParams.id,function(data){
     
      // data.applicationUrl.substring()
     $('#txtapplicationurl').val(data.applicationUrl);
+    }
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
-  }
+  
 
 
 });
@@ -1321,29 +1323,40 @@ function editName(number) {
       
 };
 </script>
-<script>
+<!-- <script>
 $('.formSubmit').click(function(e){
   $('.instance-bootstrap-list').last().append('<a href="#txtapplicationurl" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
   return false;
 });
-</script>
+</script>-->
 
 <script>
    $(document).ready(function () {
 
-       //$('#myForm30').find("input").ch
+       
    
        $('#myForm30').submit(function() {
-          //console.log('serialize ==> ',$(this).serialize());
+          
            
+/*<<<<<<< HEAD
+           var icon = $('.instance-bootstrap-list-linkNew').find(".app.url");
+           var href= $("#name1").val();
+=======*/
            var icon = $('.instance-bootstrap-list').find(".app.url");
            
            if(!icon.length){
             var href= $("#txtapplicationurl").val();
+/*>>>>>>> origin/feature_engineered*/
             href = $.trim(href);
             if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
               href = "http://"+href;
             }
+/*<<<<<<< HEAD
+
+           if(!icon.length){     
+             var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
+            $('.instance-bootstrap-list-linkNew').last().append(anchor);
+=======*/
            var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
            if(instanceidforappurl){
             $.get('/instances/updateappurl/' + instanceidforappurl + '/' + encodeURIComponent(href),function(data){
@@ -1359,7 +1372,16 @@ $('.formSubmit').click(function(e){
            }
            
             // 
+/*>>>>>>> origin/feature_engineered*/
            }
+           /*$('.instance-bootstrap-list-linkNew').last().empty(anchor);
+           $('.instance-bootstrap-list-linkNew').last().append(anchor);*/
+           /*else{
+            alert('here');
+            
+            alert('sri');
+            $('.instance-bootstrap-list').find(".app.url").attr("href", href);
+           }*/
            return false; // for demo
        });
    

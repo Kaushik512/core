@@ -1145,9 +1145,9 @@
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
-                 <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                 <a class="btn btn-primary" type="submit" data-dismiss="modal">
                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
-                </button>
+                </a>
              </div>
              </form>
         </div><!-- /.modal-content -->
@@ -1533,7 +1533,8 @@ $('#importPemfileInput').change(function(){
     $(this).next().val(this.files[0].name);
 });
 
-$('#addInstanceBtn').click(function(e) {
+//$('#addInstanceBtn').click(function(e) {
+  $("#addInstanceForm").submit( function(e) {
     
     var reqBody = {};
     var $form = $('#addInstanceForm');
@@ -1545,11 +1546,14 @@ $('#addInstanceBtn').click(function(e) {
 
     if(!reqBody.fqdn) {
        alert('Please enter IP');
-       return;
+        e.preventDefault();
+       return falsel;
     }
 
     if(!reqBody.os) {
        alert('Please choose OS');
+        e.preventDefault();
+       return false;
     }
 
     function makeRequest() {
@@ -1572,11 +1576,13 @@ $('#addInstanceBtn').click(function(e) {
        var pemFileInput = $form.find('#importPemfileInput').get(0);
        if(!reqBody.credentials.username){
           alert('Please Enter Username');
-          return;
+           e.preventDefault();
+          return false;
        }
        if(!pemFileInput.files.length) {
          alert('Please Choose a Pem file');
-         return;
+          e.preventDefault();
+         return false;
        }
        var reader = new FileReader();
        // Closure to capture the file information.
@@ -1594,12 +1600,16 @@ $('#addInstanceBtn').click(function(e) {
         reqBody.credentials.password = $form.find('#instancePassword').val();
         if(!reqBody.credentials.password) {
            alert("Please enter password");
-           return;
+            e.preventDefault();
+           return false;
         }
         makeRequest();
     }
 
-});
+    e.preventDefault();
+    return false;
+
+});// end form.submit
 
 
 /**
