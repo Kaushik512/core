@@ -953,6 +953,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         return;
                     executeCount++;
                     console.log('Inside executecurl');
+
                     if(stdout){
                         if (stdout.indexOf('1 received') > 0) {
                             nodeAlive = 'running';

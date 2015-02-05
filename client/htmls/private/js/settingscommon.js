@@ -1217,7 +1217,8 @@ function readform(formID) {
 
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
-        $('button[onclick*="saveform"]').attr("rowid", rowid);
+        $('button').attr("rowid", rowid);
+        $("button[rowid*='"+"']");
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
