@@ -686,7 +686,7 @@
 
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    ×
+                    Ã—
                 </button>
                 <h4 class="modal-title">
                     <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;Monitoring Container
@@ -714,7 +714,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    ×
+                    Ã—
                 </button>
                 <h4 class="modal-title">
                     <i class="fa fa-sitemap txt-color-blue"></i>&nbsp;&nbsp;Assigned Nodes
@@ -760,7 +760,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    ×
+                    Ã—
                 </button>
                 <h4 class="modal-title">
                     <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Assigned Runlists
@@ -807,7 +807,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    ×
+                    Ã—
                 </button>
                 <h4 class="modal-title">
                     <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
@@ -1142,7 +1142,7 @@
                 
             </div>
              <div class="modal-footer">
-                <button id="addInstanceBtn" class="btn btn-primary" type="">
+                <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
                  <a class="btn btn-primary" type="submit" data-dismiss="modal">
@@ -1557,11 +1557,9 @@ $('#importPemfileInput').change(function(){
     }
 
     function makeRequest() {
-      alert('in makerequest');
-      e.preventDefault();
+     
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
-          alert(JSON.stringify(data));
           addInstanceToDOM(data);
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
@@ -1591,7 +1589,7 @@ $('#importPemfileInput').change(function(){
        reader.onload = function(e) {
            // Render thumbnail.
             reqBody.credentials.pemFileData = e.target.result;
-            alert('before req1sflsdkjfdsljfdsljfjl');
+           
             makeRequest();
            
        };
@@ -1605,7 +1603,6 @@ $('#importPemfileInput').change(function(){
             e.preventDefault();
            return false;
         }
-          alert('before req2');
         makeRequest();
     }
 
