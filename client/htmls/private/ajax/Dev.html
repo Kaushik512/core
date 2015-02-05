@@ -1142,7 +1142,7 @@
                 
             </div>
              <div class="modal-footer">
-                <button id="addInstanceBtn" class="btn btn-primary" type="submit">
+                <button id="addInstanceBtn" class="btn btn-primary" type="">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
                  <button class="btn btn-primary" type="submit" data-dismiss="modal">
@@ -1553,9 +1553,11 @@ $('#addInstanceBtn').click(function(e) {
     }
 
     function makeRequest() {
-     
+      alert('in makerequest');
+      e.preventDefault();
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
+          alert(JSON.stringify(data));
           addInstanceToDOM(data);
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
@@ -1583,7 +1585,7 @@ $('#addInstanceBtn').click(function(e) {
        reader.onload = function(e) {
            // Render thumbnail.
             reqBody.credentials.pemFileData = e.target.result;
-           
+            alert('before req1sflsdkjfdsljfdsljfjl');
             makeRequest();
            
        };
@@ -1596,6 +1598,7 @@ $('#addInstanceBtn').click(function(e) {
            alert("Please enter password");
            return;
         }
+          alert('before req2');
         makeRequest();
     }
 

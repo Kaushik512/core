@@ -675,7 +675,7 @@ $.get('../instances/'+urlParams.id,function(data){
       services = JSON.parse(services);
       //alert('Out json :' + JSON.stringify(services)+ services.length);
       var $serviceList = $('#serviceList');
-      console.log(services,"length==>",services.length);
+      console.log(services,"services length==>",services.length);
       var serviceIds = [];
       if(data.serviceIds && data.serviceIds.length) {
         serviceIds = data.serviceIds;
@@ -715,14 +715,17 @@ $.get('../instances/'+urlParams.id,function(data){
     $.post('/d4dMasters/getrows/19', {
         serviceids: data.serviceIds
     }, function(services) {
-        services = JSON.parse(services);
-        for (var i = 0; i < services.length; i++) {
-            console.log("sd1 = ",services[i]);
-            addServiceToDom(services[i]);
+        if(services)
+        {
+          services = JSON.parse(services);
+          for (var i = 0; i < services.length; i++) {
+              console.log("sd1 = ",services[i]);
+              addServiceToDom(services[i]);
+          }
         }
     });
 
-  
+    console.log('Finished Services ====>');
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
@@ -756,7 +759,7 @@ $.get('../instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
   pageSetUp();
-
+  console.log('Finished pageSetUp ====>');
   
   
   var displayLog = function(e){
@@ -826,7 +829,7 @@ $.get('../instances/'+urlParams.id,function(data){
         //     addInstanceToDOM(data);
         // });
     };
-
+    debugger;
   $('.moreInfo').click(displayLog);
   $('#controlPanelLogTab').on('shown.bs.tab',displayLog);
   
@@ -1016,12 +1019,13 @@ $.get('../instances/'+urlParams.id,function(data){
   if(data.applicationUrl)
   {var anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
     $('.instance-bootstrap-list').last().append(anchor);
-    
+     $('#txtapplicationurl').val(data.applicationUrl);
+   } 
      // data.applicationUrl.substring()
-    $('#txtapplicationurl').val(data.applicationUrl);
+   
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
-  }
+  
 
 
 });
@@ -1347,7 +1351,7 @@ $('.formSubmit').click(function(e){
            var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
            if(instanceidforappurl){
             $.get('/instances/updateappurl/' + instanceidforappurl + '/' + encodeURIComponent(href),function(data){
-                $('#app.url').detach();
+                $('.app.url').detach();
                 var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
                 $('.instance-bootstrap-list').last().append(anchor);
                 $('#urlsaved').removeClass('hidden');

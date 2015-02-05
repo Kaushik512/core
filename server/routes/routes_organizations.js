@@ -158,6 +158,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/getTreeForbtv', function(req, res) {
         console.log("Enter /organizations/getTreeForbtv");
+        var nobgs
         d4dModelNew.d4dModelMastersOrg.find({
             id: 1
         }, function(err, docorgs) {
@@ -190,6 +191,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     $in: orgnames
                 }
             }, function(err, docbgs) {
+                if(docbgs.length <= 0){ //no bgs for any org return tree
+                    console.log('Not found any BUs returing empty orgs');
+                    res.send(orgTree);
+                    return;
+                }
+
                 var counter = 0;
                 for (var k = 0; k < docbgs.length; k++) {
                     for (var i = 0; i < orgTree.length; i++) {
@@ -888,7 +895,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/organizations/:orgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
-
+        console.log('Got a post request for addInstance');
         if (!(req.body.fqdn && req.body.os)) {
             res.send(400);
         }
@@ -902,6 +909,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }
 
         function getCredentialsFromReq(callback) {
+            console.log('Inside getCredentialsFromReq');
             var credentials = req.body.credentials;
             if (req.body.credentials.pemFileData) {
                 credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
@@ -924,6 +932,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
+                console.log('Got getChefServerDetails' + chefDetails);
                 if (err) {
                     res.send(500);
                     return;
@@ -938,7 +947,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var cmd = 'ping -c 1 -w 1 ' + req.body.fqdn;
                 var curl = new Curl();
                 console.log("Pinging Node to check if alive :" + cmd );
+                var executeCount = 0;
                 curl.executecurl(cmd, function(err, stdout) {
+                    if(executeCount > 0)
+                        return;
+                    executeCount++;
+                    console.log('Inside executecurl');
                     if(stdout){
                         if (stdout.indexOf('1 received') > 0) {
                             nodeAlive = 'running';

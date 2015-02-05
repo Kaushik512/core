@@ -88,6 +88,7 @@ var Chef = function(settings) {
                     return;
                 }
                 if (chefRes.statusCode === 200) {
+                    console.log('Node Details ====> ' + JSON.stringify(chefResBody));
                     callback(null, chefResBody);
                 } else {
                     callback({

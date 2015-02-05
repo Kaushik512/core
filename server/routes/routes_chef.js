@@ -45,10 +45,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         });
     });
-    app.put('/chef/servers/:serverId/node/:nodeName',function(req,res){
-        console.log(req.body.environment);
-
-    });
+    
 
     app.get('/chef/justtesting/:mastername/:fieldname/:comparedfieldname/:comparedfieldvalue',function(req,res){
         console.log('test',req.params.mastername, ' ' + req.params.fieldname, ' ' + req.params.comparedfieldname );
@@ -425,6 +422,39 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
         });
 
+    });
+
+    app.post('/chef/updatenodeenv/:serverId/:nodename',function(req,res){
+        console.log('hit here');
+         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                console.log(err);
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+         //   var settings = appConfig.chef;
+        //    var chef = new Chef(settings);
+            var env = {"chef_environment":req.body.envName};
+            chef.updateNode(req.params.nodename,env, function(err, envName) {
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(envName);
+                }
+            });
+        });
     });
 
     app.get('/chef/servers/:serverId/cookbooks', function(req, res) {
