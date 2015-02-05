@@ -26,8 +26,7 @@
                                           </a>
                                         </span>
                                       </div>
-                                      <div class="instance-bootstrap-list-linkNew">
-                                      </div>
+                                      
                                       
                                     </div>
                                     <div>
@@ -190,11 +189,11 @@
                             <div class="panel-body">
                                 <form action="" id="myForm30">
                                   <div class="col-lg-6">
-                                    <label for="">Application URL:</label>
+                                    <label for="">Application URL:</label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
                                     <br>
-                                  <input type="text" id="name1" value="" readonly>
+                                      <input type="text" id="txtapplicationurl" value="" readonly>
 
-                                    <span class="glyphicon glyphicon-pencil" onclick=editName('1')></span>
+                                    <span class="glyphicon glyphicon-pencil" onclick=editName('1') style="cursor:pointer;"></span>
                                   </div>
                                   <!-- <button type="submit" class="formSubmit">Submit</button> -->
                                 </form>
@@ -1015,9 +1014,15 @@ $.get('../instances/'+urlParams.id,function(data){
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
 
-
-  $('.loadingControlPanelIndicator').hide();
-  $('#controlPanelContainer').show();
+  if(data.applicationUrl)
+  {var anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
+    $('.instance-bootstrap-list').last().append(anchor);
+    
+     // data.applicationUrl.substring()
+    $('#txtapplicationurl').val(data.applicationUrl);
+    $('.loadingControlPanelIndicator').hide();
+    $('#controlPanelContainer').show();
+  }
 
 
 });
@@ -1312,14 +1317,14 @@ $('.goback').click(function(e) {
 
 <script>
 function editName(number) {
-    document.getElementById('name' + number).readOnly=false;
-    
+   // document.getElementById('name' + number).readOnly=false;
+    $("#txtapplicationurl").removeAttr('readOnly').focus();
       
 };
 </script>
 <!-- <script>
 $('.formSubmit').click(function(e){
-  $('.instance-bootstrap-list').last().append('<a href="#name1" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
+  $('.instance-bootstrap-list').last().append('<a href="#txtapplicationurl" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
   return false;
 });
 </script>-->
@@ -1332,19 +1337,44 @@ $('.formSubmit').click(function(e){
        $('#myForm30').submit(function() {
           
            
+/*<<<<<<< HEAD
            var icon = $('.instance-bootstrap-list-linkNew').find(".app.url");
            var href= $("#name1").val();
+=======*/
+           var icon = $('.instance-bootstrap-list').find(".app.url");
+           
+           if(!icon.length){
+            var href= $("#txtapplicationurl").val();
+/*>>>>>>> origin/feature_engineered*/
             href = $.trim(href);
             if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
               href = "http://"+href;
             }
+/*<<<<<<< HEAD
 
            if(!icon.length){     
              var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
             $('.instance-bootstrap-list-linkNew').last().append(anchor);
+=======*/
+           var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
+           if(instanceidforappurl){
+            $.get('/instances/updateappurl/' + instanceidforappurl + '/' + encodeURIComponent(href),function(data){
+                $('#app.url').detach();
+                var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
+                $('.instance-bootstrap-list').last().append(anchor);
+                $('#urlsaved').removeClass('hidden');
+                $("#txtapplicationurl").attr('readOnly','readonly');
+                setTimeout(function() {
+                  $('#urlsaved').addClass('hidden');
+                }, (2000));
+            } );
            }
-           $('.instance-bootstrap-list-linkNew').last().empty(anchor);
-           $('.instance-bootstrap-list-linkNew').last().append(anchor);
+           
+            // 
+/*>>>>>>> origin/feature_engineered*/
+           }
+           /*$('.instance-bootstrap-list-linkNew').last().empty(anchor);
+           $('.instance-bootstrap-list-linkNew').last().append(anchor);*/
            /*else{
             alert('here');
             

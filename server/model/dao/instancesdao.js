@@ -36,6 +36,10 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true
     },
+    applicationUrl: {
+        type: String,
+        trim: true
+    },
     instanceState: String,
     bootStrapStatus: String,
     users: [{
@@ -217,6 +221,28 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit updateInstanceIp (%s, %s)", instanceId, ipaddress);
+            callback(null, data);
+        });
+
+    };
+
+    this.updateInstanceAppUrl = function(instanceId, instnaceurl, callback) {
+        logger.debug("Enter updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "applicationUrl": instnaceurl
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateinstnaceurl (%s, %s)", instanceId, instnaceurl, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
             callback(null, data);
         });
 
