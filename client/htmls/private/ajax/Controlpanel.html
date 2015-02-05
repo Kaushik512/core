@@ -1317,7 +1317,7 @@ $('.goback').click(function(e) {
 <script>
 function editName(number) {
    // document.getElementById('name' + number).readOnly=false;
-    $("#txtapplicationurl").removeAttr('readOnly');
+    $("#txtapplicationurl").removeAttr('readOnly').focus();
       
 };
 </script>
@@ -1351,7 +1351,7 @@ $('.formSubmit').click(function(e){
                 var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
                 $('.instance-bootstrap-list').last().append(anchor);
                 $('#urlsaved').removeClass('hidden');
-
+                $("#txtapplicationurl").attr('readOnly','readonly');
                 setTimeout(function() {
                   $('#urlsaved').addClass('hidden');
                 }, (2000));
