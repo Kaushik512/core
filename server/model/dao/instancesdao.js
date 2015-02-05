@@ -298,7 +298,7 @@ var InstancesDao = function() {
     };
 
     this.updateInstanceBootstrapStatus = function(instanceId, status, callback) {
-        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, state);
+        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -309,11 +309,11 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, state, err);
+                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, status, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, state);
+            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
             callback(null, data);
         });
     };
