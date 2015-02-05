@@ -273,8 +273,7 @@ $(document).ready(function() {
 	// LOGOUT BUTTON
 	$('#logout a').click(function(e) {
 		//get the link
-		$.loginURL = $(this).attr('href');
-
+		$.loginURL = $(this).attr('logoutlink');
 		// ask verification
 		$.SmartMessageBox({
 			title : "<i class='fa fa-sign-out txt-color-blue'></i> Logout <span class='txt-color-orangeDark'></span> ?",
@@ -284,12 +283,14 @@ $(document).ready(function() {
 
 		}, function(ButtonPressed) {
 			if (ButtonPressed == "Yes") {
+
 				$.root_.addClass('animated fadeOutUp');
-				setTimeout(logout, 1000)
+				setTimeout(logout, 1000);	
+					
 			}
 
 		});
-		e.preventDefault();
+		
 	});
 
 	/*
