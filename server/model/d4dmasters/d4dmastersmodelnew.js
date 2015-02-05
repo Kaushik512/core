@@ -87,8 +87,8 @@ var d4dMastersProjects = new mongoose.Schema(
 	name: {type:String,trim:true},
 	orgname: {type:String,required:true, trim:true},
 	orgrowid: {type:String, trim:true},
-	projectname: {type:String,required:true, trim:true},
-	productgroupname: {type:String,required:true, trim:true},
+	projectname: {type:String, trim:true},
+	productgroupname: {type:String, trim:true},
 	environmentname: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
@@ -149,19 +149,19 @@ var d4dMastersDesignTemplateTypes = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,required:true, trim:true, validate:nameValidator},
 	templatetypename: {type:String,required:true, trim:true, validate:nameValidator},
-	designtemplateicon_filename: {type:String,required:true, trim:true, validate:nameValidator},
+	designtemplateicon_filename: {type:String,required:true, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersDesignTemplateTypes = mongoose.model('d4dModelMastersDesignTemplateTypes',d4dMastersDesignTemplateTypes,'d4dmastersnew');
 
 var d4dMastersTemplatesList = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String, trim:true, validate:nameValidator},
-	templatename: {type:String, trim:true, validate:nameValidator},
-	templatesicon_filename: {type:String, trim:true, validate:nameValidator},
-	templatetypename: {type:String, trim:true, validate:nameValidator},
-	dockerreponame: {type:String, trim:true, validate:nameValidator},
-	configname: {type:String, trim:true, validate:nameValidator},
+	name: {type:String, trim:true},
+	templatename: {type:String, trim:true},
+	templatesicon_filename: {type:String, trim:true},
+	templatetypename: {type:String, trim:true},
+	dockerreponame: {type:String, trim:true},
+	configname: {type:String, trim:true},
 	dockercontainerpathstitle: {type:String, trim:true},
 	dockercontainerpaths: {type:String, trim:true},
 	templatescookbooks: {type:String, trim:true},
