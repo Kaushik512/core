@@ -1020,9 +1020,10 @@ $.get('../instances/'+urlParams.id,function(data){
     
      // data.applicationUrl.substring()
     $('#txtapplicationurl').val(data.applicationUrl);
+    }
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
-  }
+  
 
 
 });
