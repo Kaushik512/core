@@ -26,6 +26,8 @@
                                           </a>
                                         </span>
                                       </div>
+                                      <div class="instance-bootstrap-list-linkNew">
+                                      </div>
                                       
                                     </div>
                                     <div>
@@ -1315,33 +1317,40 @@ function editName(number) {
       
 };
 </script>
-<script>
+<!-- <script>
 $('.formSubmit').click(function(e){
   $('.instance-bootstrap-list').last().append('<a href="#name1" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
   return false;
 });
-</script>
+</script>-->
 
 <script>
    $(document).ready(function () {
 
-       //$('#myForm30').find("input").ch
+       
    
        $('#myForm30').submit(function() {
-          //console.log('serialize ==> ',$(this).serialize());
+          
            
-           var icon = $('.instance-bootstrap-list').find(".app.url");
-           
-           if(!icon.length){
-            var href= $("#name1").val();
+           var icon = $('.instance-bootstrap-list-linkNew').find(".app.url");
+           var href= $("#name1").val();
             href = $.trim(href);
             if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
               href = "http://"+href;
             }
-           
-             var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
-            $('.instance-bootstrap-list').last().append(anchor);
+
+           if(!icon.length){     
+             var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
+            $('.instance-bootstrap-list-linkNew').last().append(anchor);
            }
+           $('.instance-bootstrap-list-linkNew').last().empty(anchor);
+           $('.instance-bootstrap-list-linkNew').last().append(anchor);
+           /*else{
+            alert('here');
+            
+            alert('sri');
+            $('.instance-bootstrap-list').find(".app.url").attr("href", href);
+           }*/
            return false; // for demo
        });
    
