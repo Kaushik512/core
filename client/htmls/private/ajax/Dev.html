@@ -2642,6 +2642,10 @@ function addInstanceToDOM(data) {
       
          $divComponentListContainer.append($dockerStatus);
     }
+    if(data.applicationUrl != null){
+       var $anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
+       $divComponentListContainer.append($anchor);
+    }
 
    
 
