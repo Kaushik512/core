@@ -1223,10 +1223,7 @@ var orgId = urlParams['org'];
 
 $(document).ready(function() {
    $('#instanceOS').select2();
-   $('.authenticationType#pemFileDropdown').select2();
-
-
-  
+   $('#pemFileDropdown').select2();
 
 
   if(localStorage.getItem("SelectedClass") == "Orchestration")
@@ -1238,7 +1235,7 @@ $(document).ready(function() {
       $('#myTabContent3').find('#l3').addClass('active'); 
       $('#myTab3').click();
   }
-  $('.chooseSelect').select2();
+  $('#Removelinkedcontainersonexitfield').select2();
 });
 $('.Instances').click(function(e){
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
@@ -2559,7 +2556,15 @@ function showSSHModal() {
 }
 
 function addInstanceToDOM(data) {
-     //var dataTable = $('#tableinstanceview').DataTable();
+     //var dataTable = $('#tableinstanceview').DataTable()
+     // TEMP Hack for the multiple cards issue. 
+    // Import also needs to be fixed as it inserts 2 records in the db..
+    if(data._id){// instanceId    
+      var alreadyAdded = $("#content").find("div[data-instanceid='"+data._id+"']").length;  
+      //alert(">>>>>" data._id  " >>>>>> " alreadyAdded);  
+      if(alreadyAdded) return;
+    }
+
      var $instanceDataTable = $("#tableinstanceview");
     var $divinstancescardview = $('#divinstancescardview .carousel-inner');
     var $carouselItemContainers = $divinstancescardview.find('.item');
@@ -2651,6 +2656,10 @@ function addInstanceToDOM(data) {
         var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
       
          $divComponentListContainer.append($dockerStatus);
+    }
+    if(data.applicationUrl != null){
+       var $anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
+       $divComponentListContainer.append($anchor);
     }
 
    

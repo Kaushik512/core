@@ -123,7 +123,7 @@
       
           <div class="col-lg-6" style="margin-top:20px;">
             <label for="">Choose Authentication Type</label>
-            <select id="pemFileDropdown"  class="authenticationType width-100" cdata="catalyst" cat-validation="required">
+            <select id="pemFileDropdown2"  class="authenticationType width-100" cdata="catalyst" cat-validation="required">
               <option value="password">Password</option>
               <option value="pemFile">Pem File</option>
             </select>
@@ -218,7 +218,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-   $('.authenticationType#pemFileDropdown').select2();
+   $('#pemFileDropdown2').select2();
    $('#chefImportBgSelect').select2();
    $('#chefImportProjectSelect').select2();
    $('#chefImportEnvSelect').select2();
@@ -549,7 +549,7 @@ $('#importPemfileInput').change(function(){
      reqBody.credentials = {};
      reqBody.credentials.username = $('#importUsernameInput').val();
 
-    var $dropdown = $('#pemFileDropdown');
+    var $dropdown = $('#pemFileDropdown2');
     if (!($dropdown.val()==='pemFile')) {
        reqBody.credentials.password = $('#importPasswordInput').val();
        if(!reqBody.credentials.username){
