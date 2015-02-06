@@ -48,6 +48,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     $in: orgnames
                 }
             }, function(err, docbgs) {
+                if(docbgs.length <= 0){
+                    res.send(orgTree);
+                    return;
+                }
                 var counter = 0;
                 for (var k = 0; k < docbgs.length; k++) {
                     for (var i = 0; i < orgTree.length; i++) {
@@ -209,7 +213,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             orgTree[i]['nodes'].push({
                                 name: docbgs[k]['productgroupname'],
-                                text: docbgs[k]['productgroupname'],
+                                text: docbgs[k]['productgroupname'].substring(0, 21),
                                 orgname: orgTree[i]['name'],
                                 icon: 'fa fa-fw fa-1x fa-group',
                                 borderColor: '#000',
@@ -268,7 +272,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         });
                                                         orgTree[_i]['nodes'][__i]['nodes'].push({ //
                                                             name: docprojs[_prj]['projectname'],
-                                                            text: docprojs[_prj]['projectname'],
+                                                            text: docprojs[_prj]['projectname'].substring(0, 21),
                                                             orgname: orgTree[_i]['name'],
                                                             icon: 'fa fa-fw fa-1x fa-tasks',
                                                             nodes: envs_,
