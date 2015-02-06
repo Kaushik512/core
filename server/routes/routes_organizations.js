@@ -190,6 +190,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     $in: orgnames
                 }
             }, function(err, docbgs) {
+                if(docbgs.length <= 0){ //no bgs for any org return tree
+                    console.log('Not found any BUs returing empty orgs');
+                    res.send(orgTree);
+                    return;
+                }
                 var counter = 0;
                 for (var k = 0; k < docbgs.length; k++) {
                     for (var i = 0; i < orgTree.length; i++) {
@@ -938,7 +943,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var cmd = 'ping -c 1 -w 1 ' + req.body.fqdn;
                 var curl = new Curl();
                 console.log("Pinging Node to check if alive :" + cmd );
+                var executeCount = 0;
                 curl.executecurl(cmd, function(err, stdout) {
+                    if(executeCount > 0){
+                        return;
+                    }
+                    executeCount++;
                     if(stdout){
                         if (stdout.indexOf('1 received') > 0) {
                             nodeAlive = 'running';
