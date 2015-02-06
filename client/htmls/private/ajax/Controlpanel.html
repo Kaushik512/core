@@ -1014,12 +1014,13 @@ $.get('../instances/'+urlParams.id,function(data){
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
 
-  if(data.applicationUrl)
+  if(data.applicationUrl && data.applicationUrl != 'http://')
   {var anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px' src='img/internet.png'></a>";
     $('.instance-bootstrap-list').last().append(anchor);
     
      // data.applicationUrl.substring()
     $('#txtapplicationurl').val(data.applicationUrl);
+
     }
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
@@ -1338,25 +1339,27 @@ $('.formSubmit').click(function(e){
        $('#myForm30').submit(function() {
           
            
-/*<<<<<<< HEAD
-           var icon = $('.instance-bootstrap-list-linkNew').find(".app.url");
-           var href= $("#name1").val();
-=======*/
+
            var icon = $('.instance-bootstrap-list').find(".app.url");
            
            if(!icon.length){
             var href= $("#txtapplicationurl").val();
-/*>>>>>>> origin/feature_engineered*/
-            href = $.trim(href);
-            if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
-              href = "http://"+href;
-            }
-/*<<<<<<< HEAD
 
-           if(!icon.length){     
-             var anchor = "<a class='app.url' href='"+href+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
-            $('.instance-bootstrap-list-linkNew').last().append(anchor);
-=======*/
+
+            href = $.trim(href);
+            if(href!=="http://"){
+          //    alert('show image');
+               if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
+                href = "http://"+href;
+                }  
+            }
+            else{
+            //    alert('hide image');
+
+                $('a[class="app.url"]').detach();
+            }
+            
+          
            var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
            if(instanceidforappurl){
             $.get('/instances/updateappurl/' + instanceidforappurl + '/' + encodeURIComponent(href),function(data){
@@ -1365,6 +1368,9 @@ $('.formSubmit').click(function(e){
                 $('.instance-bootstrap-list').last().append(anchor);
                 $('#urlsaved').removeClass('hidden');
                 $("#txtapplicationurl").attr('readOnly','readonly');
+                if(href=="http://"){
+                  $('a[class="app.url"]').detach();
+                }
                 setTimeout(function() {
                   $('#urlsaved').addClass('hidden');
                 }, (2000));
