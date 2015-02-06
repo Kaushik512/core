@@ -5,7 +5,7 @@
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
-        <form action="" id="frmconfigmanagement">
+        <form action="" id="myForm22">
          <div class="widget-box">
             <div class="widget-header">
                <h4 class="widget-margin" style="color:black;">New Configuration Management  <span id="spnconfigmanagement"></span></h4>
@@ -51,7 +51,7 @@
                                           
                                           <hr/>
                                           
-                                             <div class="col-lg-6" style="margin-top:20px">
+                                             <div class="col-lg-6" id="frmconfigmanagement" style="margin-top:20px">
                                                 <div class="smart-forms">
                                                    <label>User Pem File:</label>
                                                    <label for="userpemfile" class="field file">
@@ -167,7 +167,7 @@
 <script>
    $(document).ready(function () {
    
-       $('#frmconfigmanagement').submit(function() {
+       $('#myForm22').submit(function() {
            $(this).validate();
    
            if($(this).valid){

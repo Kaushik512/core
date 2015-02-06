@@ -71,7 +71,7 @@
 <div class="modal fade" id="chefImportNodesModal" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="" autocomplete="off">
+      <form action="" id="myForm12" autocomplete="off">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Import Nodes</h4>
@@ -218,7 +218,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-   $('.authenticationType').select2();
+   $('.authenticationType#pemFileDropdown').select2();
    $('#chefImportBgSelect').select2();
    $('#chefImportProjectSelect').select2();
    $('#chefImportEnvSelect').select2();
@@ -535,8 +535,8 @@ $('#importPemfileInput').change(function(){
     alert('Please Select Business Groups & Project');
     return;
    }*/
-   if (!reqBody.projectId || reqBody.projectId === 'choose'){
-    alert('Please Select a Project');
+   if (!reqBody.bgId || !reqBody.bgId.length && reqBody.projectId || reqBody.projectId === 'choose'){
+    alert('Please Select a Business Group & Project');
     return;
    }
    
@@ -720,7 +720,7 @@ $('.tabContent tr').find('input').on('blur', function(){
 <script>
    $(document).ready(function () {
    
-       $('#myform12').submit(function() {
+       $('#myForm12').submit(function() {
            $(this).validate();
    
            if($(this).valid){
