@@ -706,6 +706,7 @@ function readform__(formID) {
 
 function readform(formID) {
         var formData = null;
+        var button = $("form[id*='myForm']").find('button');
         //    alert("force edit:" + forceEdit);
         //Prefilling dropdowns
         $('select[cdata="catalyst"]').each(function() {
@@ -908,8 +909,8 @@ function readform(formID) {
 
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
-        $('button').attr("rowid", rowid);
-        $("button[rowid*='"+"']");
+        button.attr("rowid", rowid);
+        /*$("button[rowid*='"+"']");*/
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
@@ -1014,7 +1015,10 @@ function readform(formID) {
             // alert($(this).attr('initialvalue'));
         });
         return (true);
-    }
+    }//end readform
+
+
+
     function readformnew(formID) {
         var formData = null;
         //    alert("force edit:" + forceEdit);
@@ -1323,7 +1327,7 @@ function readform(formID) {
             // alert($(this).attr('initialvalue'));
         });
         return (true);
-    }
+    }// end readformnew
 
     function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
@@ -1455,6 +1459,7 @@ function saveform(formID) {
     var data1 = new FormData();
     var fileNames = '';
     var orgName = $('#orgname').val();
+    var button = $("form[id*='myForm']").find('button');
     
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
@@ -1555,12 +1560,12 @@ function saveform(formID) {
     }
 
 
-
+    //alert(button.attr("rowid"));
+    
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
-    if ($('button').attr("rowid") != null) {
-        // alert("in edit");
-        data1.append("rowid", $('button').attr("rowid"));
+    if (button.attr("rowid")) {
         
+        data1.append("rowid", button.attr("rowid"));
     }
 
    
@@ -1590,6 +1595,7 @@ function saveform(formID) {
             {
                 loadTreeFuncNew(); //this should refresh the tree
             }
+            button.removeAttr("rowid", "");
         },
         error: function(jqxhr) {
             alert(jqxhr.status);
@@ -2362,5 +2368,4 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
 
     return obj;
 }
-
 

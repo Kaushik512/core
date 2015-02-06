@@ -1223,7 +1223,7 @@ var orgId = urlParams['org'];
 
 $(document).ready(function() {
    $('#instanceOS').select2();
-   $('.authenticationType').select2();
+   $('.authenticationType#pemFileDropdown').select2();
 
 
   
@@ -2559,18 +2559,8 @@ function showSSHModal() {
 }
 
 function addInstanceToDOM(data) {
-
-    // TEMP Hack for the multiple cards issue. 
-    // Import also needs to be fixed as it inserts 2 records in the db..
-    if(data._id){// instanceId    
-      var alreadyAdded = $("#content").find("div[data-instanceid='"+data._id+"']").length;  
-      //alert(">>>>>"+ data._id + " >>>>>> "+ alreadyAdded);  
-      if(alreadyAdded) return;
-    }
-    
-
-    //var dataTable = $('#tableinstanceview').DataTable();
-    var $instanceDataTable = $("#tableinstanceview");
+     //var dataTable = $('#tableinstanceview').DataTable();
+     var $instanceDataTable = $("#tableinstanceview");
     var $divinstancescardview = $('#divinstancescardview .carousel-inner');
     var $carouselItemContainers = $divinstancescardview.find('.item');
     var $instancesList = null;
@@ -2661,10 +2651,6 @@ function addInstanceToDOM(data) {
         var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
       
          $divComponentListContainer.append($dockerStatus);
-    }
-    if(data.applicationUrl != null){
-       var $anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
-       $divComponentListContainer.append($anchor);
     }
 
    

@@ -5,7 +5,7 @@
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
-         <form action="" id="myform6">
+         <form action="" id="myForm6">
             <div class="widget-box">
                <div class="widget-header">
                   <h4 class="widget-margin" style="color:black;">Create Templates <span id="spnbuildservername"></span></h4>
@@ -54,7 +54,7 @@
                                           Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
                                           </label>
                                           <label class="select forDocker">
-                                          <select id="dockerreponame" class="form-control choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
+                                          <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
                                           </select>
                                           </label>
                                        </div>
@@ -68,7 +68,7 @@
                                           </select>
                                        </div>
                                     
-                                    <div class="row">
+                                    
                                        <section class="col-lg-10">
                                           <div class="col-lg-2 noleftpadding">
                                              <div class="forDocker">
@@ -96,7 +96,7 @@
                                              </label>
                                           </div>
                                     
-                                 </div>
+                                 
                                  
                                  <div class="col-lg-6 notforDocker" style="margin-top:25px">
                                  <label for="">Chef Server Objects List:</label>
@@ -279,7 +279,7 @@
               
                    
        });
-        $('#templatescookbooks').append($cookbookselectorcontrol);
+        $('#templatescookbooks').html($cookbookselectorcontrol);
    
        }
    }
@@ -530,7 +530,7 @@
 <script>
    $(document).ready(function () {
    
-       $('#myform6').submit(function() {
+       $('#myForm6').submit(function() {
            $(this).validate();
    
            if($(this).valid){
