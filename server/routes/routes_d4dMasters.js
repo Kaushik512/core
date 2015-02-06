@@ -1127,6 +1127,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             editMode = false;
             bodyJson["rowid"] = uuid.v4();
         }
+        console.log('EditMode:' + editMode);
         bodyJson["id"] = req.params.id; //storing the form id.
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {

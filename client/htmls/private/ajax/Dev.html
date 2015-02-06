@@ -1073,9 +1073,9 @@
                 </h4>
             </div>
             <div class="modal-body modal-height">
-                
+                        
 
-                    
+                        <span id="spanforshefserverfound">
                         <div class="col-lg-6">
                             
                               <label for="">Enter IP Address</label>
@@ -1528,6 +1528,16 @@ $('.dockerinstancestart').click(function(e){
 $('#importPemfileInput').change(function(){
     //console.log(this.files);
     $(this).next().val(this.files[0].name);
+});
+
+$('#modalContainerimportInstance').on('show.bs.modal',function(e){
+  $.get('/d4dMasters/readmasterjsonnew/10',function(data){
+    if(data && JSON.parse(data).length <= 0){
+      $('#modalContainerimportInstance').modal('hide');
+      alert('A chef server is required to import an instance. Use settings to add a new one.');
+      return false;
+    }
+  });
 });
 
 //$('#addInstanceBtn').click(function(e) {

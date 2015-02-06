@@ -1563,7 +1563,9 @@ function saveform(formID) {
     //alert(button.attr("rowid"));
     
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
+
     if (button.attr("rowid")) {
+
         
         data1.append("rowid", button.attr("rowid"));
     }
@@ -1577,8 +1579,9 @@ function saveform(formID) {
     if(typeof(orgname) == 'undefined'){
         orgName = '%2f';
     }
+    //alert('This is the data that gets saved:' + JSON.stringify(data1));
    
-    console.log('This is the data that gets saved:' + JSON.stringify(data1));
+    console.log('This is the data that gets saved:' + data1['rowid']);
    // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,
