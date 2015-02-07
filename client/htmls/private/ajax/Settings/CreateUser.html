@@ -37,6 +37,14 @@
                                           <div id="userrolename" multiselect="multiselect" datatype="select" sourcepath="6" datapath="userrolename" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"  cdata="catalyst">
                                           </div>
                                        </div>
+                                       <div class="col-lg-6 smart-form" style="margin-top:25px">
+                                          <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;Add User to LDAP</label>
+                                          <label id="msgchkadduserldap" style="display:none;color:red;"></label><br/>
+                                          <div id="ldappasswordsection" class="hidden">
+                                          Password: <label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match</label><input name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
+                                          Confirm Password: <input name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
+                                        </div>
+                                       </div>
                                     </div>
                                     <!-- end widget content -->
                                  </div>
@@ -105,6 +113,39 @@
       checkusernameexistsinldap('loginname');
    
    }
+   $('#chkadduserldap').change(function(){
+      if($(this).is(":checked"))
+        {
+          $('#ldappasswordsection').removeClass('hidden');
+        }
+        else{
+            $('#ldappasswordsection').addClass('hidden');
+        }
+
+   });
+
+   function createUserInLdap(){
+    var data1 = new FormData();
+      data1.append("username",$('#loginname').val());
+      data1.append("password",$('#userpassword').val());
+      data1.append("fname",$('#loginname').val());
+      data1.append("lname","cuser");
+      //data1.append("ldaprootusername","Admin");
+      //data1.append("ladaprootpassword","ReleV@ance");
+
+      $.ajax({
+        url: '/auth/createldapUser',
+        data: data1,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        async: false,
+        success: function(data,success){
+          //alert(data);
+          $('#loginname').trigger('blur');
+        }
+      });
+   }
    
    inLineReady();
    
@@ -114,12 +155,29 @@
    
        $('#myForm5').submit(function() {
            $(this).validate();
-   
+            
            if($(this).valid){
+                //if user has to be created in ldap
+                if($('#chkadduserldap').is(':checked')){
+                  //confirm if passwords match
+                  if($('#userpassword').val() != $('#userpassword1').val() ){
+                    console.log('invalid pass');
+                    $('#msgpasswordmatch').css("display","block");
+                    $(this).find('.userpass').keyup(function(){
+                      $('#msgpasswordmatch').css('style',"display:none");
+                    });
+                    return false;
+                  }
+                 createUserInLdap();
+                }
+
                 /*alert('valid form submitted'); // for demo*/
-               if(validateForm()) saveform('7');
+               if(validateForm()) {
+
+                saveform('7');
+              }
            }else{
-                alert('invalid valid form submitted'); // for demo
+                alert('Invalid values found cannot submit'); // for demo
            }
            return false; // for demo
        });

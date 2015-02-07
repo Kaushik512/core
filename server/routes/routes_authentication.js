@@ -5,8 +5,32 @@ var usersRoles = require('../model/user-roles.js');
 var cusers = require('../model/d4dmasters/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var logger = require('../lib/logger')(module);
+var appConfig = require('../config/app_config');
+var ldapSettings = appConfig.ldap;
 
 module.exports.setRoutes = function(app) {
+	app.post('/auth/createldapUser',function(req,res){
+		//logger.debug('post /auth/createldapUser : Request', req);
+		//var settings = ldapSettings;
+             //   chefRepoPath = settings.chefReposLocation;
+		if (req.body) {
+			var ldapClient = new LdapClient();
+			console.log('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
+			ldapClient.createUser(ldapSettings.rootuser,ldapSettings.rootpass,req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
+			if(err){
+				console.log('In Error', err);
+				res.send(err);
+			}
+			else
+				{
+
+					res.send(200);
+								return;}
+			});
+		}
+		else
+			res.send(req.body);
+	});
 
 	app.post('/auth/signin', function(req, res) {
 

@@ -137,7 +137,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             return;
         }
 
-        var insertNodeInMongo = function(node) {
+            var insertNodeInMongo = function(node) {
             var platformId = '';
             if (!node.automatic) {
                 node.automatic = {};

@@ -81,7 +81,9 @@ var config = {
     },
     ldap: {
         host: '54.187.120.22',
-        port: 389
+        port: 389,
+        rootuser: 'Admin',
+        rootpass: 'ReleV@ance'
 
     },
 
