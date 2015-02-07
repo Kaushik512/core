@@ -408,7 +408,9 @@ var Chef = function(settings) {
         
         if (chefDefaults.ohaiHints && chefDefaults.ohaiHints.length) {
             for (var i = 0; i < chefDefaults.ohaiHints.length; i++) {
-                argList.push('--hint');
+                if (params.instanceOS && params.instanceOS != 'windows') {
+                    argList.push('--hint');
+                }
                 argList.push(chefDefaults.ohaiHints[i]);
             }
         }
