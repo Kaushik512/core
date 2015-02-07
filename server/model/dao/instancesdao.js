@@ -199,7 +199,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit createInstance");
+            logger.debug("Exit createInstance : " + JSON.stringify(data));
             callback(null, data);
         });
     };

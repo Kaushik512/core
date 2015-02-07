@@ -328,6 +328,8 @@
 						.append($(self._template.link)
 							.attr('href', node.href)
 							.attr('orgname',node.orgname)
+							.attr('bgname',node.bgname)
+							.attr('projname',node.projname)
 							.attr('itemtype',node.itemtype)
 							.attr('title',node.tooltip)
 							.append(node.text)

@@ -257,8 +257,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             if(envs[nt] != ''){
                                                                 envs_.push({
                                                                     text: envs[nt],
-                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
                                                                     orgname: orgTree[_i]['name'],
+                                                                    projname: docprojs[_prj]['projectname'],
+                                                                    bgname : orgTree[_i]['businessGroups'][__i]['name'],
                                                                     itemtype: 'env',
                                                                     tooltip: ttp,
                                                                     icon: 'fa fa-fw fa-1x fa-desktop'
@@ -274,6 +276,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             name: docprojs[_prj]['projectname'],
                                                             text: docprojs[_prj]['projectname'].substring(0, 21),
                                                             orgname: orgTree[_i]['name'],
+                                                            bgname: orgTree[_i]['businessGroups'][__i]['name'],
                                                             icon: 'fa fa-fw fa-1x fa-tasks',
                                                             nodes: envs_,
                                                             borderColor: '#000',
@@ -901,7 +904,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         if (!(req.body.fqdn && req.body.os)) {
             res.send(400);
         }
-
+        console.log('Received Users:' + req.body.users);
         if (req.body.credentials && req.body.credentials.username) {
             if (!(req.body.credentials.password || req.body.credentials.pemFileData)) {
                 res.send(400);
@@ -973,7 +976,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             instanceState: nodeAlive,
                             bootStrapStatus: 'waiting',
                             runlist: [],
-                            users: [req.session.user.cn], //need to change this
+                            users: req.body.users, //[req.session.user.cn], //need to change this
                             hardware: {
                                 platform: 'unknown',
                                 platformVersion: 'unknown',
