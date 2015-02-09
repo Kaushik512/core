@@ -60,7 +60,7 @@ var d4dModelMastersOrg = mongoose.model('d4dModelMastersOrg',d4dMastersOrg,'d4dm
 
 var d4dMastersProductGroup = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String,trim:true, validate:nameValidator},
+	name: {type:String,trim:true},
 	orgname: {type:String,required:true, trim:true},
 	orgrowid: {type:String, trim:true},
 	productgroupname: {type:String,required:true, trim:true},
@@ -72,7 +72,7 @@ var d4dModelMastersProductGroup = mongoose.model('d4dModelMastersProductGroup',d
 
 var d4dMastersEnvironments = new mongoose.Schema(
 	{id: {type:String, trim:true},
-	name: {type:String,trim:true, validate:nameValidator},
+	name: {type:String,trim:true},
 	orgname: {type:String,required:true, trim:true},
 	orgrowid: {type:String, trim:true},
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
@@ -84,12 +84,12 @@ var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d
 
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String,trim:true, validate:nameValidator},
+	name: {type:String,trim:true},
 	orgname: {type:String,required:true, trim:true},
 	orgrowid: {type:String, trim:true},
 	projectname: {type:String, trim:true},
 	productgroupname: {type:String, trim:true},
-	environmentname: {type:String, trim:true, validate:nameValidator},
+	environmentname: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );

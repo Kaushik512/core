@@ -1334,13 +1334,31 @@ function drawBreadCrumb() {
 	$("#ribbon ol.breadcrumb").append($("<li>"+window.selectedOrgName+"</li>"));
 	var activeClasses = '';
 	if($('#Workspace1').hasClass('hidden')){
-activeClasses = $('nav li.active > a');
+			activeClasses = $('nav li.active > a');
+			activeClasses.each(function() {
+				$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+			});
 
 	}else{
-		activeClasses = $('#Workspace1 li.active > a');
+		// in workzonet
+		activeClasses = $('#Workspace1 li.active > a');		
+		var ol = $("#ribbon ol.breadcrumb");
+		ol.empty();
+
+		var items = [
+						"Workzone", 
+						localStorage.getItem("orgname"), 
+						localStorage.getItem("bgname"), 
+						localStorage.getItem("projname"),
+						localStorage.getItem("envname") 
+					];
+
+		items.forEach(function(item) {
+			ol.append("<li>"+ item+ "</li>");
+		});
 	}
 	activeClasses.each(function() {
-		$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+		//$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
 	});
 
 }
