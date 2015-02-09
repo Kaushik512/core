@@ -464,6 +464,7 @@ function readform__(formID) {
                         var targetCtrl = $('#' + item);
                         targetCtrl.html('');
                         var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+
                         $.each(eval(opts), function(j, itm) {
                             if (targetCtrl.attr('multiselect'))
                                 addToSelectList(itm, targetCtrl);
@@ -2024,6 +2025,16 @@ function getCount(jsonID) {
     return (count);
 }
 
+function getRelatedValuesForUniqueCheck(jsonID,queryjson){
+    $.post('/d4dMasters/getListFiltered/' + jsonID,{queryparams:[queryjson]},function(data){
+            if(data == "OK")
+                return('');
+            else
+                return('found');
+    });
+}
+
+
 function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     readMasterJson(jsonID);
     formData = d4ddata;
@@ -2216,15 +2227,18 @@ function enableUniqueCheckingForInputs(id) {
                 $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
-            var getBG = getRelatedValues(id, $(this).attr("id"), $(this).val(), $(this).attr("id"));
-            //alert(getBG != "" && uni.attr("id"));
-            if (getBG != "") { //this ensures that its present
-                uni.css("color", "red");
-                uni.html('Selected is already registered');
-                $(this).focus();
-            } else {
-                uni.css("color", "green");
-                uni.html('available');
+            if($(this).attr("checkquery"))
+           { 
+                var getBG = getRelatedValuesForUniqueCheck(id, $(this).attr("checkquery"));
+               //alert(getBG != "" && uni.attr("id"));
+               if (getBG != "") { //this ensures that its present
+                   uni.css("color", "red");
+                   uni.html('Selected is already registered');
+                   $(this).focus();
+               } else {
+                   uni.css("color", "green");
+                   uni.html('available');
+               }
             }
             $('button[onclick*="saveform"]').removeAttr('disabled');
         });
