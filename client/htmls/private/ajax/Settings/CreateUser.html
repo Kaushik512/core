@@ -38,11 +38,11 @@
                                           </div>
                                        </div>
                                        <div class="col-lg-6 smart-form" style="margin-top:25px">
-                                          <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;Add User to LDAP</label>
+                                          <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label>
                                           <label id="msgchkadduserldap" style="display:none;color:red;"></label><br/>
                                           <div id="ldappasswordsection" class="hidden">
-                                          Password: <label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match</label><input name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
-                                          Confirm Password: <input name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
+                                          Password: <span style="color:Red;" class="control-label">&nbsp;*</span><label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match or left blank</label><input name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
+                                          Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
                                         </div>
                                        </div>
                                     </div>
@@ -111,6 +111,13 @@
        drawBreadCrumb1();
        enableUniqueCheckingForInputs(7);
       checkusernameexistsinldap('loginname');
+      //frezing login name on edit mode.
+      if(typeof $('#myForm5').find('button[rowid]').first().attr('rowid') != 'undefined'){
+         $('#loginname').attr('readonly','readonly');
+      }
+      else{
+        $('#loginname').removeAttr('readonly');
+      }
    
    }
    $('#chkadduserldap').change(function(){
@@ -160,7 +167,8 @@
                 //if user has to be created in ldap
                 if($('#chkadduserldap').is(':checked')){
                   //confirm if passwords match
-                  if($('#userpassword').val() != $('#userpassword1').val() ){
+                  if($('#userpassword').val() != $('#userpassword1').val() || $('#userpassword').val() == ''){
+                    //alert('in here');
                     console.log('invalid pass');
                     $('#msgpasswordmatch').css("display","block");
                     $(this).find('.userpass').keyup(function(){

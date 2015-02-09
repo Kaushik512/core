@@ -16,6 +16,7 @@ module.exports.setRoutes = function(app) {
 		if (req.body) {
 			var ldapClient = new LdapClient();
 			console.log('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
+			console.log('ldappass:' + ldapSettings.rootpass);
 			ldapClient.createUser(ldapSettings.rootuser,ldapSettings.rootpass,req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
 			if(err){
 				console.log('In Error', err);
