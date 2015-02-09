@@ -17,8 +17,8 @@ extend('isValidDesc', function (val) {
 var nameValidator = [
   validate({
     validator: 'isLength',
-    arguments: [3, 25],
-    message: 'Name should be between 3 and 25 characters'
+    arguments: [1, 20],
+    message: 'Name should be between 1 and 20 characters'
   }),
   validate({
     validator: 'is_ValidName',
