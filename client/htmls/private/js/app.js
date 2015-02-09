@@ -1325,13 +1325,21 @@ function drawBreadCrumb() {
 		return;
 	}
 
+
 	//console.log("breadcrumb")
 	$("#ribbon ol.breadcrumb").empty();
 	if(!window.selectedOrgName) {
 		window.selectedOrgName = ' ';
 	}
 	$("#ribbon ol.breadcrumb").append($("<li>"+window.selectedOrgName+"</li>"));
-	$('nav li.active > a').each(function() {
+	var activeClasses = '';
+	if($('#Workspace1').hasClass('hidden')){
+activeClasses = $('nav li.active > a');
+
+	}else{
+		activeClasses = $('#Workspace1 li.active > a');
+	}
+	activeClasses.each(function() {
 		$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
 	});
 

@@ -144,7 +144,10 @@
 					//alert('in');
 					
 					this._setSelectedNode(node);
-					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','font-size : 14px !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
+					
+					//drawBreadCrumb(this.tree);
+
+					$('li[data-nodeid="' + node.nodeId + '"]').first().addClass('active').attr('style','font-size : 14px !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 
 					//$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : grey !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 
@@ -301,7 +304,8 @@
 						);
 				}
 				else if (node.nodes) {
-					treeItem
+
+					treeItem.addClass('active')
 						.append($(self._template.expandCollapseIcon)
 							.addClass('click-collapse')
 							.addClass(self.options.collapseIcon)
