@@ -585,7 +585,48 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         });
     });
+    app.post('/d4dMasters/getListFiltered/:masterid',function(req,res){
+        configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                var query = {};
+                // query['rowid'] = {
+                //     '$in':req.body.serviceids
+                // }
+                query['id'] = req.params.masterid;
+                var bodyJson = JSON.parse(JSON.stringify(req.body));
+                
 
+                bodyJson["queryparams"].forEach(function(k, v)    {
+                    var _keys = Object.keys(k);
+                    console.log(_keys + ' ' + k[_keys]);
+                    query[_keys] = k[_keys];
+
+                });
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if(d4dMasterJson.length > 0)
+                    {   
+                        console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        res.send("Found");
+
+                    }
+                    else
+                        {
+                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                            res.send("Not Found");
+                        }
+                    
+                });
+            } else {
+                res.send(500);
+            }
+        });
+    });
 
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
 
