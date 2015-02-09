@@ -23,7 +23,7 @@ function createDnString(username, ou) {
     if (ou) {
         str += 'ou=' + ou + ',';
     }
-    str += 'dc=d4d-ldap,dc=relevancelab,dc=com'
+    str += 'dc=d4d-ldap,dc=relevancelab,dc=com';
     return str;
     //'cn='+username+',ou=SCLT_Group3,dc=d4d-ldap,dc=relevancelab,dc=com';
 }

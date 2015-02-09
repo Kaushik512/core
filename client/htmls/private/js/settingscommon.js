@@ -2025,13 +2025,49 @@ function getCount(jsonID) {
     return (count);
 }
 
-function getRelatedValuesForUniqueCheck(jsonID,queryjson){
-    $.post('/d4dMasters/getListFiltered/' + jsonID,{queryparams:[queryjson]},function(data){
-            if(data == "OK")
-                return('');
-            else
-                return('found');
+function getRelatedValuesForUniqueCheck(jsonID,queryconditionedby){
+    var data1 = new FormData();
+   // var queryconditionedby  = 'orgname,productgroupname';
+    var retData = '';
+    if(queryconditionedby != ''){
+            var elems = queryconditionedby.split(',');
+            var query = '';
+            for(var y = 0; y < elems.length; y++){
+                data1.append(elems[y],$('#' + elems[y]).val());
+            }
+        }
+     $.ajax({
+            url: '/d4dMasters/getListFiltered/' + jsonID,
+            data: data1,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            async: false,
+            success: function(data,success){
+             // alert(data == "Not Found");
+              retData = data;
+              // if(data == "Not Found")
+              //       retData('');
+              //   else
+              //       return('found');
+              //$('#loginname').trigger('blur');
+            }
     });
+     return(retData);
+    // if(queryconditionedby.indexOf('""') < 0){
+    //    var data1 = {queryparams:[]};
+    //    data1.queryparams.push(queryconditionedby);
+    //    // data1.append('queryparams',v);
+
+    //     $.post('/d4dMasters/getListFiltered/' + jsonID,JSON.stringify(data1),function(data){
+    //             if(data == "OK")
+    //                 return('');
+    //             else
+    //                 return('found');
+    //     });
+    // }
+    // else
+    //     return('');
 }
 
 
@@ -2135,6 +2171,18 @@ function errormessageforInput(id, msg) {
 //run validation tests on inputs 
 function isFormValid() {
     var isValid = true;
+     if ($('input[unique="true"], select[unique="true"]').length > 0) {
+       // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function(){
+             $(this).trigger('blur');
+              
+              if($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0){
+                isValid = false;
+              }
+        });
+     }
+
+
     $('[cat-validation]').each(function(itm) {
         var currCtrl = $(this);
         var valiarr = $(this).attr('cat-validation').split(',');
@@ -2208,6 +2256,7 @@ function enableUniqueCheckingForInputs(id) {
 
         $('input[unique="true"], select[unique="true"]').blur(function() {
             //Disabling the save button while testing for uniqueness
+            //alert('in blue');
             $('button[onclick*="saveform"]').attr('disabled', 'disabled');
            // debugger;
             var uni = $('#unique_' + $(this).attr("id"));
@@ -2227,20 +2276,24 @@ function enableUniqueCheckingForInputs(id) {
                 $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
-            if($(this).attr("checkquery"))
-           { 
-                var getBG = getRelatedValuesForUniqueCheck(id, $(this).attr("checkquery"));
-               //alert(getBG != "" && uni.attr("id"));
-               if (getBG != "") { //this ensures that its present
-                   uni.css("color", "red");
-                   uni.html('Selected is already registered');
-                   $(this).focus();
-               } else {
-                   uni.css("color", "green");
-                   uni.html('available');
-               }
-            }
-            $('button[onclick*="saveform"]').removeAttr('disabled');
+            var queryconditionedby = $(this).attr("uniqueconditionedby");
+            if(queryconditionedby)
+               { 
+                    
+                  // alert(queryconditionedby);
+                    var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedby);
+                  //  alert('getBG !=' + getBG);
+                   //alert(getBG != "" && uni.attr("id"));
+                   if (getBG != 'Not Found') { //this ensures that its present
+                       uni.css("color", "red");
+                       uni.html('Selected is already registered');
+                       $(this).focus();
+                   } else {
+                       uni.css("color", "green");
+                       uni.html('available');
+                   }
+                }
+                $('button[onclick*="saveform"]').removeAttr('disabled');
         });
     }
 }
