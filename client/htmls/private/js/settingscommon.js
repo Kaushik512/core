@@ -2155,7 +2155,7 @@ function isFormValid() {
                     break;
                 case "nospecial":
                     var str = currCtrl.val();
-                    if (/^[a-zA-Z0-9-_]*$/.test(str) == false) {
+                    if (/^[a-zA-Z0-9_-]*$/.test(str) == false) {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "special chars not allowed");
                         currCtrl.focus();
