@@ -27,7 +27,10 @@
                                        
                                           <div class="col-lg-6">
                                              <label for="name">Environment Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                             <input autofocus name="ctl00$MainContent$orgname" value="Default_Environment" id="environmentname" class="form-control" cat-validation="required,nospecial,max15,nospace" type="text"  cdata="catalyst">
+
+
+                                             <input autofocus name="ctl00$MainContent$orgname" value="Default_Environment" id="environmentname" class="form-control" cat-validation="required,nospecial,max15,nospace" type="text"  cdata="catalyst" unique="true" uniqueconditionedby="environmentname,orgname">
+
                                           </div>
                                           <div class="col-lg-6">
                                              <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -104,6 +107,7 @@
        });
        drawBreadCrumb1();
        $("#content").css("opacity","1 !important");
+       enableUniqueCheckingForInputs(3);
    }
    
    function readMasterJson_todelete(section) {
