@@ -596,19 +596,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 //     '$in':req.body.serviceids
                 // }
                 query['id'] = req.params.masterid;
+                console.log('Req.body for glf' + JSON.stringify(req.body));
                 var bodyJson = JSON.parse(JSON.stringify(req.body));
-                
 
-                bodyJson["queryparams"].forEach(function(k, v)    {
-                    var _keys = Object.keys(k);
-                    console.log(_keys + ' ' + k[_keys]);
-                    query[_keys] = k[_keys];
-
+                console.log('Query Build in getListFiltered:' + JSON.stringify(bodyJson));
+                var _keys = Object.keys(bodyJson);
+                _keys.forEach(function(k,v){
+                    console.log(k,bodyJson[k]);
+                    query[k] = bodyJson[k];
                 });
+                // bodyJson.forEach(function(k, v)    {
+                //     console.log('Object call to ' + k);
+                //     var _keys = Object.keys(k);
+                //     console.log(_keys + ' ' + k[_keys]);
+                //     query[_keys] = k[_keys];
+
+                // });
                 eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
                     if (err) {
                         console.log("Hit and error:" + err);
                     }
+                    console.log(' getListFiltered ' + d4dMasterJson.length)
                     if(d4dMasterJson.length > 0)
                     {   
                         console.log("sent response" + JSON.stringify(d4dMasterJson));

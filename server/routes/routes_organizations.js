@@ -252,7 +252,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             var ttp = '';
                                                             if (envs[nt].length > 12) {
                                                                 ttp = envs[nt];
-                                                                envs[nt] = envs[nt].substring(0, 12);
+                                                                envs[nt] = envs[nt]; //.substring(0, 12);
                                                             }
                                                             if(envs[nt] != ''){
                                                                 envs_.push({
@@ -274,7 +274,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         });
                                                         orgTree[_i]['nodes'][__i]['nodes'].push({ //
                                                             name: docprojs[_prj]['projectname'],
-                                                            text: docprojs[_prj]['projectname'].substring(0, 19),
+                                                            text: docprojs[_prj]['projectname'], 
                                                             orgname: orgTree[_i]['name'],
                                                             bgname: orgTree[_i]['businessGroups'][__i]['name'],
                                                             icon: 'fa fa-fw fa-1x fa-tasks',
