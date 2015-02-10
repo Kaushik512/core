@@ -7,7 +7,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/users', function(req, res) {
 
-        congigMgmntDao.getList('7', 'loginname', function(err, usersList) {
+        congigMgmntDao.getListNew('7', 'loginname', function(err, usersList) {
             if (err) {
                 res.send(500);
                 return;

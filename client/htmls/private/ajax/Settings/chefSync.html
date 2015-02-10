@@ -672,6 +672,7 @@ $('#importPemfileInput').change(function(){
 var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
 $.get('../users',function(userList){
   var $userListSelect = $('#userListSelect').empty(); 
+  userList = JSON.parse(userList);
   userList.sort(function(a, b){
     var keyA =Object.keys(a);
     var keyB =Object.keys(b);

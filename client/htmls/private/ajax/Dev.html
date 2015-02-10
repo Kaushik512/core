@@ -1558,6 +1558,7 @@ function importbyipusers(){
 
 var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
     $.get('../users',function(userList){
+      userList = JSON.parse(userList);
       var $importbyipuserListSelect = $('#importbyipuserListSelect').empty(); 
       userList.sort(function(a, b){
         var keyA =Object.keys(a);
