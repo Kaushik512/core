@@ -70,7 +70,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
     //updateInstanceIp
-    app.get('/instances/updateappurl/:instanceId/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
+    app.get('/instances/updateappurl/:instanceId/:appurlid/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
+        if(req.params.appurlid == '0')
         instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
             if (err) {
                 res.send(500);
@@ -78,6 +79,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             res.end('OK');
         });
+        else
+        {
+            instancesDao.updateInstanceAppUrl1(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.end('OK');
+        });
+        }
     });
 
     app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
