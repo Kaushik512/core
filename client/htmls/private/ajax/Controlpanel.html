@@ -1027,7 +1027,8 @@ $.get('../instances/'+urlParams.id,function(data){
   $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
-  
+  if(typeof data.applicationUrl != 'undefined')
+  {
   if(data.applicationUrl != 'http://')
   {
     var href = data.applicationUrl;
@@ -1053,7 +1054,9 @@ $.get('../instances/'+urlParams.id,function(data){
         alert(typeof data.applicationUrl == 'undefined');
        
     }
-
+  }
+if(typeof data.applicationUrl1 != 'undefined')
+  {
     if(data.applicationUrl1 != 'http://')
   {
     var href1 = data.applicationUrl1;
@@ -1079,6 +1082,7 @@ $.get('../instances/'+urlParams.id,function(data){
                 }
         
     }
+  }
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
   

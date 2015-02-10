@@ -2717,6 +2717,8 @@ function addInstanceToDOM(data) {
       
          $divComponentListContainer.append($dockerStatus);
     }
+    if(typeof data.applicationUrl != 'undefined')
+    {
     if(data.applicationUrl != 'http://'){
        var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
        $divComponentListContainer.append($anchor);
@@ -2725,6 +2727,8 @@ function addInstanceToDOM(data) {
        var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
        $divComponentListContainer.append($anchor1);
     }
+  }
+
     /*else{
      $divComponentListContainer.detach($anchor1); 
     }*/
