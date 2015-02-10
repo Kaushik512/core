@@ -697,7 +697,7 @@ function readform__(formID) {
 
     //  alert('almost exiting');
     //Setting the unique field with current value
-    $('input[unique="true"]').each(function() {
+    $('input[unique="true"],select[unique="true"]').each(function() {
         // alert($(this).val());
         $(this).attr('initialvalue', $(this).val());
         // alert($(this).attr('initialvalue'));
@@ -1010,10 +1010,10 @@ function readform(formID) {
 
         //  alert('almost exiting');
         //Setting the unique field with current value
-        $('input[unique="true"]').each(function() {
-            // alert($(this).val());
+        $('input[unique="true"],select[unique="true"]').each(function() {
+            alert($(this).val());
             $(this).attr('initialvalue', $(this).val());
-            // alert($(this).attr('initialvalue'));
+            alert($(this).attr('initialvalue'));
         });
         return (true);
     }//end readform
@@ -1322,7 +1322,7 @@ function readform(formID) {
 
         //  alert('almost exiting');
         //Setting the unique field with current value
-        $('input[unique="true"]').each(function() {
+        $('input[unique="true"],select[unique="true"]').each(function() {
             // alert($(this).val());
             $(this).attr('initialvalue', $(this).val());
             // alert($(this).attr('initialvalue'));
@@ -2177,6 +2177,7 @@ function isFormValid() {
              $(this).trigger('blur');
               
               if($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0){
+                alert('pusing isvalid false');
                 isValid = false;
               }
         });
@@ -2250,15 +2251,14 @@ function isFormValid() {
 }
 
 function enableUniqueCheckingForInputs(id) {
-
-
+    
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
 
         $('input[unique="true"], select[unique="true"]').blur(function() {
             //Disabling the save button while testing for uniqueness
             //alert('in blue');
             $('button[onclick*="saveform"]').attr('disabled', 'disabled');
-           // debugger;
+            
             var uni = $('#unique_' + $(this).attr("id"));
             if ($(this).attr("initialvalue") != null) {
                 if ($(this).attr("initialvalue") == $(this).val()) {
@@ -2282,6 +2282,7 @@ function enableUniqueCheckingForInputs(id) {
                     
                   // alert(queryconditionedby);
                     var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedby);
+                    alert(getBG);
                   //  alert('getBG !=' + getBG);
                    //alert(getBG != "" && uni.attr("id"));
                    if (getBG != 'Not Found') { //this ensures that its present
