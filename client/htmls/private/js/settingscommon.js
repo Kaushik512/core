@@ -2211,9 +2211,9 @@ function isFormValid() {
                     }
                     break;
                 case "max15":
-                    if (currCtrl.val().length > 20) {
+                    if (currCtrl.val().length > 15) {
                         isValid = false;
-                        errormessageforInput(currCtrl.attr('id'), "limited to 20 chars");
+                        errormessageforInput(currCtrl.attr('id'), "limited to 15 chars");
                         currCtrl.focus();
                     }
                     break;

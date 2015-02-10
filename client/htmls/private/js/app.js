@@ -1351,7 +1351,8 @@ function drawBreadCrumb() {
 						localStorage.getItem("orgname"), 
 						localStorage.getItem("bgname"), 
 						localStorage.getItem("projname"),
-						localStorage.getItem("envname") 
+						localStorage.getItem("envname"),
+						"Instances"
 					];
 
 		if(items[1] != null){
