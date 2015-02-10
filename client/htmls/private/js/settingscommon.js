@@ -1011,9 +1011,9 @@ function readform(formID) {
         //  alert('almost exiting');
         //Setting the unique field with current value
         $('input[unique="true"],select[unique="true"]').each(function() {
-            alert($(this).val());
+           
             $(this).attr('initialvalue', $(this).val());
-            alert($(this).attr('initialvalue'));
+           
         });
         return (true);
     }//end readform

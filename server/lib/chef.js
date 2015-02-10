@@ -410,8 +410,9 @@ var Chef = function(settings) {
             for (var i = 0; i < chefDefaults.ohaiHints.length; i++) {
                 if (params.instanceOS && params.instanceOS != 'windows') {
                     argList.push('--hint');
+                    argList.push(chefDefaults.ohaiHints[i]);
                 }
-                argList.push(chefDefaults.ohaiHints[i]);
+                
             }
         }
         var proc = new Process('knife', argList, options);
