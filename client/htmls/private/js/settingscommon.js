@@ -2177,7 +2177,7 @@ function isFormValid() {
              $(this).trigger('blur');
               
               if($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0){
-                alert('pusing isvalid false');
+               // alert('pusing isvalid false');
                 isValid = false;
               }
         });

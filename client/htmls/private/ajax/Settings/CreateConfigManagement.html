@@ -140,7 +140,9 @@
        var ten = 10;
        readformnew(ten); //6 is for role
        //
-      
+       if(typeof $('#myForm22').find('button[rowid]').attr('rowid') != 'undefined')
+          $('#orgname').attr('disabled','disabled'); 
+        
        $('#content').css("opacity", "1 !important");
        //Force opening the left navigation menu
        if ($('#navSettings').is(":visible") == false) {
