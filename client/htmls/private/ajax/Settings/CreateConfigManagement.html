@@ -140,9 +140,9 @@
        var ten = 10;
        readformnew(ten); //6 is for role
        //
-       if($('#myForm22').find('button[rowid="9eb8b5b2-be1b-416f-92e9-66273d1052a4"]').length > 0){
+       if(typeof $('#myForm22').find('button[rowid]').attr('rowid') != 'undefined')
           $('#orgname').attr('disabled','disabled'); 
-       }
+        
        $('#content').css("opacity", "1 !important");
        //Force opening the left navigation menu
        if ($('#navSettings').is(":visible") == false) {
