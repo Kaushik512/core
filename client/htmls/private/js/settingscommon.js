@@ -2282,7 +2282,7 @@ function enableUniqueCheckingForInputs(id) {
                     
                   // alert(queryconditionedby);
                     var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedby);
-                    alert(getBG);
+                    //alert(getBG);
                   //  alert('getBG !=' + getBG);
                    //alert(getBG != "" && uni.attr("id"));
                    if (getBG != 'Not Found') { //this ensures that its present
