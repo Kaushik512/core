@@ -1,5 +1,12 @@
 <html>
 <head>
+    <script>
+    $(document).ready(function() {
+    $(".chooseAuthenticationtype").select2();
+    $(".choosetemplateType").select2();
+    $(".pemFileCheck").hide();
+    });
+    </script>
 	<script src="/socket.io/socket.io.js"></script>
 	 <script type="text/javascript" src="js/term.js"></script>
 
@@ -94,9 +101,9 @@ var urlParams = {};
 
 })();
 $(document).ready(function() {
-    $(".chooseAuthenticationtype").select2();
+    /*$(".chooseAuthenticationtype").select2();
     $(".choosetemplateType").select2();
-    $(".pemFileCheck").hide();
+    $(".pemFileCheck").hide();*/
 
     $('.chooseAuthenticationtype').change(function(e) {
         if (this.value == "Password") {
