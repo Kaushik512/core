@@ -2716,13 +2716,17 @@ function addInstanceToDOM(data) {
       
          $divComponentListContainer.append($dockerStatus);
     }
-    if(data.applicationUrl && data.applicationUrl != 'http://'){
-       var $anchor = "<a class='app.url' href='"+data.applicationUrl+"'' target='_blank'><img style='width:20px;height:20px;margin-left:40px;' src='img/internet.png'></a>";
+    if(data.applicationUrl != 'http://'){
+       var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
        $divComponentListContainer.append($anchor);
     }
-    else{
-     $divComponentListContainer.detach($anchor); 
+    if(data.applicationUrl1 != 'http://'){
+       var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;' class='app.url1' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
+       $divComponentListContainer.append($anchor1);
     }
+    /*else{
+     $divComponentListContainer.detach($anchor1); 
+    }*/
 
 
    

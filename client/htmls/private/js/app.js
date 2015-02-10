@@ -1282,6 +1282,7 @@ function loadURL(url, container) {
 			
 			if (container[0] == $("#content")[0]) {
 				drawBreadCrumb();
+				
 				// update title with breadcrumb...
 				//document.title = $(".breadcrumb li:last-child").text(); //Removed last page visited title. Issue Fix : 7-Oct : Vinod
 				// scroll up
@@ -1333,6 +1334,7 @@ function drawBreadCrumb() {
 	}
 	$("#ribbon ol.breadcrumb").append($("<li>"+window.selectedOrgName+"</li>"));
 	var activeClasses = '';
+	//Drawing breadcrumb in design.html
 	if($('#Workspace1').hasClass('hidden')){
 			activeClasses = $('nav li.active > a');
 			activeClasses.each(function() {
@@ -1340,11 +1342,10 @@ function drawBreadCrumb() {
 			});
 
 	}else{
-		// in workzonet
+		//Drawing Breadcrumb in workzone & Control-Panel(Dev.html)
 		activeClasses = $('#Workspace1 li.active > a');		
 		var ol = $("#ribbon ol.breadcrumb");
 		ol.empty();
-
 		var items = [
 						"Workzone", 
 						localStorage.getItem("orgname"), 
@@ -1353,13 +1354,16 @@ function drawBreadCrumb() {
 						localStorage.getItem("envname") 
 					];
 
-		items.forEach(function(item) {
-			ol.append("<li>"+ item+ "</li>");
-		});
+		if(items[1] != null){
+			items.forEach(function(item) {
+				ol.append("<li>"+ item+ "</li>");
+			});
+		}
+		
 	}
-	activeClasses.each(function() {
+	/*activeClasses.each(function() {
 		//$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
-	});
+	});*/
 
 }
 

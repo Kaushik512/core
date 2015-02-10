@@ -293,10 +293,11 @@
 	<script src="js/jquery.tablesorter.min.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
 	<script src="js/additional-methods.min.js"></script>
-	
-	
-	
 
+	<script src="js/app.js"></script>
+	
+	
+	
 	<!-- MAIN APP JS FILE -->
 	<script type="text/javascript">
 
@@ -353,16 +354,22 @@
 						collapseIcon:'fa fa-angle-down',
 						expandIcon:'fa fa-angle-right',
 						levels: 1,
-						onNodeSelected: function(event, node) {							
+						onNodeSelected: function(event, node) {		
+
 							window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
 							//console.log("Org Selected:" + window.selectedOrgName );
 							localStorage.setItem('selectedOrgName',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
-
-							//alert(node.orgname);
+							/*Description from the node*/
 							localStorage.setItem("orgname", node.orgname);
 							localStorage.setItem("projname", node.projname);
 							localStorage.setItem("bgname", node.bgname);
 							localStorage.setItem("envname", node.text);
+
+							/*Draw the braedcrumb from ol*/
+							var ol = $("#ribbon ol.breadcrumb");
+							if(ol.children().length == 0){
+								drawBreadCrumb();
+							}
 						}
 					});
 				}
@@ -569,7 +576,6 @@
 		});
 	} //function ends
 </script>
-<script src="js/app.js"></script>
 <script src="js/chefmodalcommon.js"></script>
 <script src="/private/js/settingscommon.js"></script> 
 
