@@ -1,4 +1,6 @@
 var Process = require("./utils/process");
+var childProcess = require('child_process');
+var exec = childProcess.exec;
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var chefDefaults = require('../config/app_config').chef;
@@ -401,7 +403,7 @@ var Chef = function(settings) {
             argList.push('-r');
             argList.push(runlist.join());
         }
-
+        console.log('Environment : ' + params.environment);
         argList = argList.concat(['-x',params.instanceUsername, '-N',params.nodeName, '-E',params.environment]);
         
         if (chefDefaults.ohaiHints && chefDefaults.ohaiHints.length) {
@@ -413,8 +415,22 @@ var Chef = function(settings) {
                 
             }
         }
-        var proc = new Process('knife', argList, options);
-        proc.start();
+        var cmdCreateEnv = 'knife environment create ' +  params.environment + ' -d catalystcreated';
+
+        var procEnv = exec(cmdCreateEnv, options, function(err, stdOut, stdErr) {
+            if (err) {
+                console.log('Failed in procEnv', err);
+                return;
+            }
+        });
+
+        procEnv.on('close', function(code) {
+                console.log('procEnv closed: ');
+                var proc = new Process('knife', argList, options);
+                proc.start();
+        });
+
+       
 
     };
 
@@ -448,6 +464,7 @@ var Chef = function(settings) {
                     callback(err, null);
                     return;
                 }
+                console.log('Run List:' + runlist.join());
                 javaSSh.execChefClient(runlist.join(), overrideRunlist, callback, callbackOnStdOut, callbackOnStdErr);
             });
 

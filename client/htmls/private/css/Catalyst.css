@@ -709,7 +709,7 @@ h6 {
 #left-panel {
     position: absolute;
     z-index: 1002;
-    width:220px;
+    width:254px;
     display: block;
     background: #2c3638;
     background: -webkit-gradient(linear,left top,right top,color-stop(99%,#2c3638),color-stop(100%,#2c3638));
@@ -721,7 +721,7 @@ h6 {
 }
 #main {
     display: block;
-    margin-left: 220px;
+    margin-left: 254px;
     height:91.6%!important;
 }
 #ribbon {
