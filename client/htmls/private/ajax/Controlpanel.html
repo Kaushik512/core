@@ -206,7 +206,7 @@
                                     <br>
                                       <input type="text" id="txtapplicationurl1" type="url">
 
-                                    <span class="glyphicon glyphicon-pencil" onclick=editName('1') style="cursor:pointer;"></span>
+                                    <span class="glyphicon glyphicon-pencil" onclick=editName1('1') style="cursor:pointer;"></span>
                                   </div>
                                   <!--2nd text box ends-->
                                   <!-- <button type="submit" class="formSubmit">Submit</button> -->
@@ -1027,26 +1027,31 @@ $.get('../instances/'+urlParams.id,function(data){
   $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
-
+  
   if(data.applicationUrl != 'http://')
   {
     var href = data.applicationUrl;
      var anchor = ""+
      "<a class='app.url' href='"+href+"'' target='_blank' title='"+href+"'>"+
      "WSS</a>";
-
     $('.instance-bootstrap-list').last().append(anchor);
     
      // data.applicationUrl.substring()
     $('#txtapplicationurl').val(data.applicationUrl);
-
+     if(typeof data.applicationUrl == 'undefined')
+        {
+           $("#txtapplicationurl").val('http://' + data.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+        }
     }
     else{
       
        if(data.applicationUrl=="http://"){
-                  $("#txtapplicationurl").val('http://localhost:8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  $("#txtapplicationurl").val('http://' + data.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
                   
                 }
+        alert(typeof data.applicationUrl == 'undefined');
+       
     }
 
     if(data.applicationUrl1 != 'http://')
@@ -1060,14 +1065,19 @@ $.get('../instances/'+urlParams.id,function(data){
     
      // data.applicationUrl.substring()
     $('#txtapplicationurl1').val(data.applicationUrl1);
-
+    if(typeof data.applicationUrl1 == 'undefined')
+        {
+           $("#txtapplicationurl1").val('http://' + data.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+        }
     }
     else{
       
        if(data.applicationUrl1=="http://"){
-                  $("#txtapplicationurl1").val('http://ip:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+        $("#txtapplicationurl1").val('http://' + data.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
                   
                 }
+        
     }
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
@@ -1368,8 +1378,10 @@ $('.goback').click(function(e) {
 function editName(number) {
    // document.getElementById('name' + number).readOnly=false;
     $("#txtapplicationurl").removeAttr('readOnly').focus();
+};
+function editName1(number) {
+   // document.getElementById('name' + number).readOnly=false;
     $("#txtapplicationurl1").removeAttr('readOnly').focus();
-      
 };
 </script>
 <!-- <script>
@@ -1412,7 +1424,7 @@ $('.formSubmit').click(function(e){
                 $('#urlsaved').removeClass('hidden');
                 $("#txtapplicationurl").attr('readOnly','readonly');
                 if(href=="http://" || href==''){
-                  $("#txtapplicationurl").val('http://localhost:8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  /*$("#txtapplicationurl").val('http://localhost:8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
                   $('a[class="app.url"]').detach();
                 }
                 setTimeout(function() {
@@ -1440,11 +1452,11 @@ $('.formSubmit').click(function(e){
           var form2 = $('#myForm31');
 
        }; */   
-       var href1= $("#txtapplicationurl").val();
+       /*var href1= $("#txtapplicationurl").val();
        if(href1=="http://" || href1==''){
                   $("#txtapplicationurl").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
                   
-                }
+                }*/
    
        $('#myForm31').submit(function() {
            var icon = $('.forURL').find(".app.url1");
@@ -1472,7 +1484,7 @@ $('.formSubmit').click(function(e){
                 $('#urlsaved1').removeClass('hidden');
                 $("#txtapplicationurl1").attr('readOnly','readonly');
                 if(href=="http://"){
-                  $("#txtapplicationurl1").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  /*$("#txtapplicationurl1").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
                   $('a[class="app.url1"]').detach();
                 }
                 setTimeout(function() {
