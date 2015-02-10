@@ -38,7 +38,7 @@
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    	<!--left side navbar-->
 			      <ul class="nav navbar-nav" style="margin-top:20px;">
-			        <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1"><a class="active" id="workZoneNew" style="font-size:14px!important" href="javascript:void(0)" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a></li>
+			        <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1"><a class="active" id="workZoneNew" style="font-size:14px!important" href="#ajax/Dev.html" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a></li>
 			        <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
 							<a href="#ajax/Aws-Production.html" style="font-size:14px!important" id="designNew" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
 						</li>
@@ -403,19 +403,20 @@
 		var _env = getUrlParameter('envid');
 		if(_org != '' && _bg != '' && _proj	 != '' && _env != ''){
 			
+			
 			var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
 			if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 			  _orgnode.trigger('click');
-
-			var _bgnode = $('a[itemtype="bg"][orgname="' + _org + '"]:contains("' + _bg + '")').first();
+     
+			var _bgnode = $('a[itemtype="bg"][orgname="' + _org + '"]:contains("' + decodeURIComponent(_bg) + '")').first();
 			if(_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 			  _bgnode.trigger('click');
 
-			var _projnode = $('a[itemtype="proj"][orgname="' + _org + '"][bgname="' + _bg + '"]:contains("' + _proj + '")').first();
+			var _projnode = $('a[itemtype="proj"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"]:contains("' + decodeURIComponent(_proj) + '")').first();
 			if(_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 			  _projnode.trigger('click');
 
-			var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + _bg + '"][projname="' + _proj + '"]:contains("' + _env + '")').first();
+			var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
 			  if(_envnode)
 			      _envnode.first().trigger('click');
 

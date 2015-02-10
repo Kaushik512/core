@@ -650,6 +650,64 @@ function Configmgmt() {
         });
     };
 
+
+    this.getListNew = function(mastername, fieldname, callback) {
+            console.log(mastername);
+            this.getDBModelFromID(mastername, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                var query = {};
+                // query[comparedfieldname] = comparedfieldvalue; //building the query 
+                query['id'] = mastername;
+
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    var d4d = JSON.parse(JSON.stringify(d4dMasterJson));
+                    var jsonlist = '';
+                    //console.log(JSON.stringify(d4dMasterJson));
+                    d4d.forEach(function(k,v){
+                        var ke = Object.keys(k);
+                        console.log(k[fieldname],k['rowid'],v);
+                         if (jsonlist == '')
+                            jsonlist += "{\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"}";
+                        else
+                            jsonlist += ",{\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"}";
+
+                    });
+                    // d4d.forEach(function(k,v){
+                    //         var ke = Object.keys(k);
+                    //         console.log(ke.length + ' ' +k[fieldname]);
+                    //          if (jsonlist == '')
+                    //             jsonlist += "\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
+                    //         else
+                    //             jsonlist += ",\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
+                    //         //ke['']
+                    //         //for(var j = 0; j < ke.length)
+                    //                             // var bodyItems = Object.keys(req.body);
+                    //                             // var saveAsfileName = '';
+                    //                             // for (var i = 0; i < bodyItems.length; i++) {
+                    //                             // if (bodyItems[i].indexOf("_filename") > 0)
+                    //                             // saveAsfileName = req.body[bodyItems[i]];
+                    //                             // }
+
+
+
+                    // });
+                    //console.log(d4d.length);
+                    configmgmt = "[" + jsonlist + "]";
+                    console.log("sent response" + JSON.stringify(configmgmt));
+                    callback(null,configmgmt);
+                    
+                });
+            }
+        });
+    };
+
     this.getListFiltered = function(masterid, fieldname, comparedfieldname, comparedfieldvalue, callback) {
         d4dModel.findOne({
             id: masterid
