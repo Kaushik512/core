@@ -195,7 +195,14 @@ var InstancesDao = function() {
 
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
+         //Kana hack to add application url
+        instanceData.applicationUrl = 'http://' + instanceData.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
+        instanceData.applicationUrl1 = 'http://' + instanceData.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
+
         var instance = new Instances(instanceData);
+       
+        
+
 
         instance.save(function(err, data) {
             if (err) {
