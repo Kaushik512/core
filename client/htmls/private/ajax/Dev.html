@@ -1251,7 +1251,7 @@ $(document).ready(function() {
   $('#Removelinkedcontainersonexitfield').select2();
 });
 $('.Instances').click(function(e){
-    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
     if(getbreadcrumbullength > 0)
@@ -1293,7 +1293,7 @@ $('.Instances').click(function(e){
 });
 
 $('.Blueprints').click(function(e){
-    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
     if(getbreadcrumbullength > 0)
@@ -1334,7 +1334,7 @@ $('.Blueprints').click(function(e){
 });
 
 $('.Orchestration').click(function(e){
-    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
     if(getbreadcrumbullength > 0)
@@ -1375,7 +1375,7 @@ $('.Orchestration').click(function(e){
 });
 
 $('.Containers').click(function(e){
-    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(4)');
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
     if(getbreadcrumbullength > 0)
@@ -2722,7 +2722,7 @@ function addInstanceToDOM(data) {
        $divComponentListContainer.append($anchor);
     }
     if(data.applicationUrl1 != 'http://'){
-       var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;' title='"+data.applicationUrl1+"' class='app.url1' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
+       var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
        $divComponentListContainer.append($anchor1);
     }
     /*else{
