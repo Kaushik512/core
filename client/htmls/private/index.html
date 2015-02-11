@@ -453,6 +453,9 @@
 		  $('#content').addClass('hidden');
 		  $('#noenvwarning').removeClass('hidden');
 		  $('ol.breadcrumb').addClass('hidden');
+		  //alert(window.location);
+		  if(window.location.toString().indexOf('private/index.html#ajax/Aws-Production.html') > 0)
+		  	window.location = '#ajax/Dev.html';
 		  return;
 		}
 		else{
