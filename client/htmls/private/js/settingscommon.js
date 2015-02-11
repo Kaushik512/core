@@ -153,6 +153,71 @@ else{
     }
 }
 
+//function duplicated for kana to be referenced back to readMasterJson
+function readMasterJsontv(id) {
+    // debugger;
+   //alert(url);
+if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
+    // alert('in 1');
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonnewk/" + id,
+        success: function(data) {
+                // alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
+if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
+{
+    //alert('in 1');
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonnewk/" + id,
+        success: function(data) {
+                // alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
+else{
+    
+    $.ajax({
+        type: "get",
+        dataType: "text",
+
+        async: false,
+        url: serviceURL + "readmasterjsonnewk/" + id,
+        success: function(data) {
+            //      alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+    }
+}
+
 $.fn.getType = function() {
     return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
 }
@@ -299,7 +364,8 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         // alert(d4ddata.sections.section[0].name);
         //alert('run');
         var formData = null;
-        readMasterJson(formID);
+        //Revert below call to readMasterJson() done for kana
+        readMasterJsontv(formID);
 
         /*$.each(d4ddata.sections.section, function (i, item) {
             if (item.name == formName) {

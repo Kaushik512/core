@@ -393,6 +393,94 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+    //for kana to be reverted to the original function 
+    app.get('/d4dMasters/readmasterjsonnewk/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+        d4dModelNew.d4dModelMastersOrg.find({
+            id: 1
+        }, function(err, docorgs) {
+            var orgnames = docorgs.map(function(docorgs1) {
+                return docorgs1.orgname;
+            });
+            if(req.params.id == '1' || req.params.id == '2'  || req.params.id == '3'  || req.params.id == '10' ){
+                configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if (dbtype) {
+                        console.log("Master Type: " + dbtype);
+                        eval('d4dModelNew.' + dbtype).find({
+                            id: req.params.id,
+                            orgname: {
+                                $in: orgnames
+                            }
+                        }, function(err, d4dMasterJson) {
+                            if (err) {
+                                console.log("Hit and error:" + err);
+                            }
+                            res.end(JSON.stringify(d4dMasterJson));
+                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        });
+                    }
+                });
+            } //end if (1,2,3,4)
+            else if(req.params.id == '4'){
+                    d4dModelNew.d4dModelMastersProductGroup.find({
+                        id: 2,
+                        orgname:{
+                            $in: orgnames
+                        }
+                    }, function(err, docbgs) {
+                        var bgnames = docbgs.map(function(docbgs1) {
+                            return docbgs1.productgroupname;
+                        });
+                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                            if (err) {
+                                console.log("Hit and error:" + err);
+                            }
+                            if (dbtype) {
+                                console.log("Master Type: " + dbtype);
+                                eval('d4dModelNew.' + dbtype).find({
+                                    id: req.params.id,
+                                    productgroupname: {
+                                        $in: bgnames
+                                    }
+                                }, function(err, d4dMasterJson) {
+                                    if (err) {
+                                        console.log("Hit and error:" + err);
+                                    }
+                                    res.end(JSON.stringify(d4dMasterJson));
+                                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                });
+                            }
+                        });
+
+
+                    });
+            }
+            else{
+                configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if (dbtype) {
+                        console.log("Master Type: " + dbtype);
+                        eval('d4dModelNew.' + dbtype).find({
+                            id: req.params.id
+                        }, function(err, d4dMasterJson) {
+                            if (err) {
+                                console.log("Hit and error:" + err);
+                            }
+                            res.end(JSON.stringify(d4dMasterJson));
+                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        });
+                    }
+                });
+            } //end else
+        });
+    });
+
+
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
         logger.debug('Entered readmasterjsoncounts');
         var ret = [];
