@@ -1526,7 +1526,7 @@ function saveform(formID) {
     var data1 = new FormData();
     var fileNames = '';
     var orgName = $('#orgname').val();
-    var button = $("form[id*='myForm']").find('button');
+    var button = $("form[id*='myForm']").find("div.pull-right > button");
     
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
