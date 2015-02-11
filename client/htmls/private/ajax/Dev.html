@@ -2723,6 +2723,8 @@ function addInstanceToDOM(data) {
        var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
        $divComponentListContainer.append($anchor);
     }
+  }
+    if(typeof data.applicationUrl1 != 'undefined'){
     if(data.applicationUrl1 != 'http://'){
        var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
        $divComponentListContainer.append($anchor1);
