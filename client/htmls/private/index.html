@@ -243,6 +243,8 @@
 		<!-- MAIN CONTENT -->
 	 	<div id="content">
 		</div> 
+		<div id="noenvwarning" style="padding-top:20px;margin-left:20px">Your Organization has not been fully configured yet. Use the SETTINGS tab to configure.
+		</div>
 		<!-- END MAIN CONTENT -->
 	</div>
 	<!-- END MAIN PANEL -->
@@ -326,6 +328,10 @@
 				//selectFirstEnv();
 	 //selecting the first item in the org tree.
 		} else {
+			//Reverting the warning message when no org present
+		$('#content').removeClass('hidden');
+		$('#noenvwarning').addClass('hidden');
+		$('ol.breadcrumb').removeClass('hidden');
 		window.selectedOrgName = breadcrumbHeader;
 		}
 
@@ -401,35 +407,57 @@
 		var _bg = getUrlParameter('bg');
 		var _proj = getUrlParameter('projid');
 		var _env = getUrlParameter('envid');
+		
+		
+
+
 		if(_org != '' && _bg != '' && _proj	 != '' && _env != ''){
 			
-			
 			var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
-			if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-			  _orgnode.trigger('click');
+			if(_orgnode.length > 0)
+			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+						  _orgnode.trigger('click');}
      
 			var _bgnode = $('a[itemtype="bg"][orgname="' + _org + '"]:contains("' + decodeURIComponent(_bg) + '")').first();
-			if(_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-			  _bgnode.trigger('click');
+			if(_bgnode.length > 0)
+			{if(_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+						  _bgnode.trigger('click');}
 
 			var _projnode = $('a[itemtype="proj"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"]:contains("' + decodeURIComponent(_proj) + '")').first();
-			if(_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-			  _projnode.trigger('click');
+			if(_projnode.length > 0)
+			{if(_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+						  _projnode.trigger('click');}
 
 			var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
-			  if(_envnode)
+			  if(_envnode.length > 0)
 			      _envnode.first().trigger('click');
 
 		}
 		else{
-			if($('a[itemtype="org"]') && $('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-				$('a[itemtype="org"]').first().trigger('click');
-			if($('a[itemtype="bg"]') && $('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-				$('a[itemtype="bg"]').first().trigger('click');
-			if($('a[itemtype="proj"]') && $('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-				$('a[itemtype="proj"]').first().trigger('click');
-			if($('a[itemtype="env"]'))
-				$('a[itemtype="env"]').first().trigger('click');
+
+			if($('a[itemtype="org"]').length > 0)
+				{	
+					if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="org"]').first().trigger('click');}
+			if($('a[itemtype="bg"]').length > 0)
+				{if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="bg"]').first().trigger('click');}
+			if($('a[itemtype="proj"]').length > 0 )
+				{if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="proj"]').first().trigger('click');}
+			if($('a[itemtype="env"]').length > 0)
+				{$('a[itemtype="env"]').first().trigger('click');}
+		}
+		//If no env found in tree show warning.
+		if($('a[itemtype="env"]').length <= 0){
+		  $('#content').addClass('hidden');
+		  $('#noenvwarning').removeClass('hidden');
+		  $('ol.breadcrumb').addClass('hidden');
+		  return;
+		}
+		else{
+		  $('#content').removeClass('hidden');
+		  $('#noenvwarning').addClass('hidden');
 		}
 	}
 	loadTreeFuncNew();
