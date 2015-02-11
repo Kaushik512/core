@@ -129,8 +129,20 @@ function Env() {
                         },function(err,data2){
                             if(!err)
                             {
+                                var newenv = '';
                                 if(data2.environmentname != '')
-                                    data2.environmentname +=  ',' ;
+                                    {
+                                        console.log("Env Names found :========> " +data2.environmentname );
+                                        var _data2env = data2.environmentname.split(',');
+                                        if(_data2env.indexOf(name) >= 0){
+                                            //found an env in the list exit
+                                             console.log("In Callback Env found in list");
+                                             callback(null, data2);
+
+                                               return;
+                                        }
+                                        data2.environmentname +=  ',' ;
+                                    }
                                 var newenv = data2.environmentname + name;
                                 d4dModelNew.d4dModelMastersProjects.update({
                                     orgname: orgname,
@@ -168,9 +180,23 @@ function Env() {
                         },function(err,data2){
                             if(!err)
                             {
+                                var newenv = '';
+
                                 if(data2.environmentname != '')
-                                    data2.environmentname +=  ',' ;
-                                var newenv = data2.environmentname + name;
+                                    {
+                                        console.log("Env Names found :========> " +data2.environmentname );
+                                        var _data2env = data2.environmentname.split(',');
+                                        if(_data2env.indexOf(name) >= 0){
+                                            //found an env in the list exit
+                                             console.log("In Callback Env found in list");
+                                             callback(null, data2);
+
+                                               return;
+                                        }
+                                        data2.environmentname +=  ',' ;
+                                    }
+
+                                newenv = data2.environmentname + name;
                                 d4dModelNew.d4dModelMastersProjects.update({
                                     orgname: orgname,
                                     productgroupname: bgname,
