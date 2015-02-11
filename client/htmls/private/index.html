@@ -407,9 +407,10 @@
 		var _bg = getUrlParameter('bg');
 		var _proj = getUrlParameter('projid');
 		var _env = getUrlParameter('envid');
-		
-		
-
+		var hasOrg = true;
+		var hasBg = true;
+		var hasProj = true;
+		var hasEnv = true;
 
 		if(_org != '' && _bg != '' && _proj	 != '' && _env != ''){
 			
@@ -434,21 +435,52 @@
 
 		}
 		else{
-
+			hasOrg = false;
 			if($('a[itemtype="org"]').length > 0)
-				{	
-					if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="org"]').first().trigger('click');}
-			if($('a[itemtype="bg"]').length > 0)
-				{if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="bg"]').first().trigger('click');}
-			if($('a[itemtype="proj"]').length > 0 )
-				{if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="proj"]').first().trigger('click');}
-			if($('a[itemtype="env"]').length > 0)
-				{$('a[itemtype="env"]').first().trigger('click');}
+			{	
+				if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0){
+					$('a[itemtype="org"]').first().trigger('click');
+					hasOrg = true;
+				}								
+			}
+
+			hasProj = false;
+			if($('a[itemtype="bg"]').length > 0){
+				{
+					if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="bg"]').first().trigger('click');
+								hasProj = true;
+								}
+						}
+
+			hasBg = false;
+			if($('a[itemtype="proj"]').length > 0 ){
+				{
+					if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="proj"]').first().trigger('click');
+								hasBg = true;
+							}
+					}
+
+			hasEnv = false;		
+			if($('a[itemtype="env"]').length > 0){
+				{
+					$('a[itemtype="env"]').first().trigger('click');
+					hasEnv = true;
+					}
+				}
 		}
-		//If no env found in tree show warning.
+		if(!hasOrg || !hasProj || !hasBg || !hasEnv){
+			location.hash="ajax/Dev.html";
+			$('#content').addClass('hidden');
+			$('#noenvwarning').removeClass('hidden');
+		    $('ol.breadcrumb').addClass('hidden');
+		    /*var ol = $("#ribbon ol.breadcrumb");
+		    ol.empty();
+		    ol.append("<li>&nbsp;</li>");*/
+		    
+		}
+		/*//If no env found in tree show warning.
 		if($('a[itemtype="env"]').length <= 0){
 		  $('#content').addClass('hidden');
 		  $('#noenvwarning').removeClass('hidden');
@@ -461,152 +493,11 @@
 		else{
 		  $('#content').removeClass('hidden');
 		  $('#noenvwarning').addClass('hidden');
-		}
+		}*/
 	}
 	loadTreeFuncNew();
 	selectFirstEnv();
-	var loadTreeFunc = function(){
-	$.ajax({
-				type: "get",
-				dataType: "json",
-				async: false,
-				url: "../organizations/getTreeNew",
-				success: function (data) {
-					console.log('ajax success');
-				//alert(JSON.stringify(data));
-				
-				var $ulOrgList = $('.orgsList').empty();
-				var $workspace = $('#Workspace').empty();
-				// track tree view
-				var $track = $('#Track').empty();
-				for(var i=0;i<data.length;i++) {
-					var classOrgSelected = '';
-				//	if(i==0) 
-					{
-				classOrgSelected = 'orgSelected';
-					}
-					var $li = $('<li data-id="org'+i+'" class="'+classOrgSelected+' open"></li>').append('<a class="orgsOption" href="javascript:void(0)">  <span style="color:white" orname ><i class="fa fa-building "></i>&nbsp;'+data[i].name+'</span></a>').attr('data-org',data[i].name);
-					//Adding to Track tree Nav
-					var $params = [];
-					$params.push(data[i].name);
-					//alert(JSON.stringify($params));
-					var $TrackerOrgnameli =
-					 $('<li class="tcorg"></li>').append('<a href="#" onclick="loadTrackContent(' + JSON.stringify($params).replace(/\"/g,'\'') + ');" ><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].name+'" style="font-weight:bold">'+data[i].name+'</span></a>');
-					//End Track Adding
-					
-					$li.click(function(e){
-				var $parents = $(this).parents('ul');
-				$parents.children('li').removeClass('orgSelected');
-				$(this).addClass('orgSelected');
-				var id = $(this).attr('data-id');
-				$('.org').hide();
-				$('.'+id).show();
-				});
-				$ulOrgList.append($li);
-
-				//Adding to Track Tree
-				$track.append($TrackerOrgnameli); //orgname added to root
-				//End Track Setting
-				for(var j=0;j<data[i].businessGroups.length;j++) {
-					//alert(data[i].businessGroups[j].name);
-					var $liSideBar = $('<li></li>').data('orgName',data[i].name).hide().data('addToTree',true);
-					console.log('here');
-								$workspace.append($liSideBar);
-							var $projectUl = $('<ul></ul>');
-							//Adding to Track Tree
-							var $TrackerBGUL = $('<ul></ul>');
-							$TrackerOrgnameli.append($TrackerBGUL); //UL added to the org li.
-							var $TrackerBGLI = $('<li class="tcbg"></li>');
-							$TrackerBGUL.append($TrackerBGLI);
-							var $paramsbg = [];
-							$paramsbg.push(data[i].name);
-							$paramsbg.push(data[i].businessGroups[j].name);
-							
-					//alert(JSON.stringify($params));
-							$TrackerBGLI.append($('<a onclick="loadTrackContent(' + JSON.stringify($paramsbg).replace(/\"/g,'\'') + ');" href="#"><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>'));
-							$TrackerProjUL = $('<ul></ul>');
-							$TrackerBGLI.append($TrackerProjUL);
-							//End Track Setting
-				$liSideBar.append($projectUl);
-				
-				// <img src="img/demo/Project.png" alt="Project" style="padding-right:5px;">
-				for(var k=0;k<data[i].businessGroups[j].projects.length;k++) {
-					var $paramsprj = [];
-					$paramsprj.push(data[i].name);
-					$paramsprj.push(data[i].businessGroups[j].name);
-					$paramsprj.push(data[i].businessGroups[j].projects[k].name);
-							//alert(data[i].businessGroups[j].projects[k]);
-					var liProject = $('<li class="referenceliClass"></li>').append('<a href="#"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent Projtextoverflow" title="'+data[i].businessGroups[j].projects[k].name+'" style="font-weight:bold">'+data[i].businessGroups[j].projects[k].name+'</span></a>');
-					//Adding to Track Tree
-					var liTrackerProject = $('<li class="tcproj"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsprj).replace(/\"/g,'\'') + ');" bgname="' + data[i].businessGroups[j].projects[k].name + '" href="#" orgname="' + data[i].name + '"><i class="fa fa-fw fa-1x fa-tasks"></i><span class="menu-item-parent orgtextoverflow" title="'+data[i].businessGroups[j].projects[k].name+'"  style="font-weight:bold">'+data[i].businessGroups[j].projects[k].name.substring(0,15) +'</span></a>');
-					//alert(liTrackerProject);
-					$TrackerProjUL.append(liTrackerProject);
-					$TrackerEnvUL = $('<ul></ul>');
-					$(liTrackerProject).append($TrackerEnvUL);
-									//End Track Setting
-					$projectUl.append(liProject);
-					var $envUl = $('<ul class="referenceulClass"></ul>');
-				liProject.append($envUl);
-					for(var l=0;l<data[i].businessGroups[j].projects[k].environments.length;l++) {
-						var $liEnv = $('<li></li>').append('<a href="ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k].name+'&envid='+data[i].businessGroups[j].projects[k].environments[l]+'" data-link="true" class="Envtextoverflow" title="'+data[i].businessGroups[j].projects[k].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].businessGroups[j].projects[k].environments[l]+'</a>').attr('data-OrgName',data[i].name).attr('data-envName',data[i].businessGroups[j].projects[k].environments[l]);
-						$envUl.append($liEnv);
-						//Adding to Track Tree
-						var $paramsenv = [];
-						$paramsenv.push(data[i].name);
-						$paramsenv.push(data[i].businessGroups[j].name);
-						$paramsenv.push(data[i].businessGroups[j].projects[k].name);
-						$paramsenv.push(data[i].businessGroups[j].projects[k].environments[l]);
-
-						
-						var $liTrackerEnv = $('<li  class="tcenv"></li>').append('<a onclick="loadTrackContent(' + JSON.stringify($paramsenv).replace(/\"/g,'\'') + ');"  href="#" data-link="true" class="Envtextoverflow" title="'+data[i].businessGroups[j].projects[k].environments[l]+'"><i class="fa fa-fw fa-1x fa-desktop paddingEnvTree"></i>'+data[i].businessGroups[j].projects[k].environments[l]+'</a>').attr('data-OrgName',data[i].name);
-						$TrackerEnvUL.append($liTrackerEnv);
-						//End Track Setting
-					$liEnv.click(function(e){
-						window.selectedOrgName = $(this).attr('data-OrgName');
-					});
-					console.log('data==>',$liSideBar.data('addToTree'));
-					if($liSideBar.data('addToTree')) {
-
-						$liSideBar.prepend($('<a><i class="fa fa-fw fa-1x fa-group"></i><span class="menu-item-parent BGtextoverflow" title="'+data[i].businessGroups[j].name+'">'+data[i].businessGroups[j].name+'</span></a>').click(function(e){
-						e.preventDefault();
-						e.stopPropagation();
-						return false;
-					}).attr('href','#ajax/Dev.html?org='+data[i].name+'&projid='+data[i].businessGroups[j].projects[k].name+'&envid='+data[i].businessGroups[j].projects[k].environments[l]+'')).addClass('org').addClass('org'+i);
-						$liSideBar.data('addToTree',false);
-}
-					
-					}
-					}
-				}
-				}
-			// $(function(){
-			var href = window.location.href;
-			var indexOfhash = href.lastIndexOf("#");
-			$('.org').hide();
-			console.log('indexOfhash =>',indexOfhash);
-			var $a;
-			if(indexOfhash!=-1) {
-				var sub =  href.substring(indexOfhash+1);
-				console.log('here',sub);
-				$a = $('a[href="'+sub+'"]');
-				var orgName = $a.parents('.org').data('orgName');
-				window.selectedOrgName = orgName;
-
-				$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
-			} else {
-				$a = $workspace.find('li').find('a[data-link=true]');
-				var orgName = $($a.get(0)).parents('.org').data('orgName');
-				window.selectedOrgName = orgName;
-
-				$ulOrgList.find('[data-org="'+orgName+'"]').trigger('click');
-			}
-
-			},
-			failure: function (data) {
-			alert(data.toString());
-			}
-		});
-	} //function ends
+ //function ends
 </script>
 <script src="js/chefmodalcommon.js"></script>
 <script src="/private/js/settingscommon.js"></script> 
@@ -616,6 +507,7 @@
  $(window).on('hashchange', function() {
 
      var hash = location.hash;
+
      console.log("hashChange", hash);
      console.log("pos ==>", location.hash.indexOf("#ajax/Dev.html?"));
 
