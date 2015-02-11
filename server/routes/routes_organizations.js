@@ -1043,6 +1043,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     port: 22,
                                     cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"]
                                 }
+                                //cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"] ["ls -l","ls -al"]
                                 console.log('decryptCredentials ==>', decryptedCredentials);
                                 if (decryptedCredentials.pemFileLocation) {
                                     opts.privateKey = decryptedCredentials.pemFileLocation;

@@ -153,6 +153,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 role: '[' + req.session.user.rolename + ']'
             }]
         });
+
+
+        // var query = {};
+        // console.log(req.session.user);
+        // query['loginname'] = req.session.user.cn; //building the query 
+        // query['id'] = '7';
+
+        // console.log(req.session.user.cn);
+       
+        // d4dModelNew.d4dModelMastersUsers.find(query, function(err, d4dMasterJson) {
+        //     if (err) {
+        //         console.log("Hit and error:" + err);
+        //     }
+        //     res.end(JSON.stringify(d4dMasterJson));
+        //     console.log("sent response" + JSON.stringify(d4dMasterJson));
+        // });
+            
     });
 
     app.get('/d4dMasters/authorizedfiles', function(req, res) {

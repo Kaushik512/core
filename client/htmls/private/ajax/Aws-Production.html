@@ -511,10 +511,13 @@ $(document).ready(function(){
         $selectedOption = $(this).find('option:selected');
         var supportedInstanceType = $selectedOption.data('supportedInstanceType');
         console.log(supportedInstanceType);
-        for(var i=0;i<supportedInstanceType.length;i++) {
-            var $option = $('<option></option>').val(supportedInstanceType[i]).html(supportedInstanceType[i]);
-            $instanceType.append($option);
-        }
+        if(typeof supportedInstanceType != 'undefined')
+        {
+          for(var i=0;i<supportedInstanceType.length;i++) {
+                    var $option = $('<option></option>').val(supportedInstanceType[i]).html(supportedInstanceType[i]);
+                    $instanceType.append($option);
+                }
+            }
         $instanceType.select2(); 
       
 
