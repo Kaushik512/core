@@ -961,6 +961,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             nodeAlive = 'running';
                         }
                     }
+
+
+                    
+
                     //    console.log('node ===>', node);
                     credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                         if (err) {
@@ -1029,6 +1033,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     chefValidationPemFile: chefDetails.validatorpemfile,
                                     hostedChefUrl: chefDetails.url
                                 });
+
+                                 //removing files on node to facilitate re-bootstrap
+                                var opts = {
+                                    privateKey: decryptedCredentials.pemFileLocation,
+                                    username: decryptedCredentials.username,
+                                    host: instance.instanceIP,
+                                    instanceOS: instance.hardware.os,
+                                    port: 22,
+                                    cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"]
+                                }
+                                console.log('decryptCredentials ==>', decryptedCredentials);
+                                if (decryptedCredentials.pemFileLocation) {
+                                    opts.privateKey = decryptedCredentials.pemFileLocation;
+                                } else {
+                                    opts.password = decryptedCredentials.password;
+                                }
+                                chef.cleanChefonClient(opts,function(err, retCode){
 
                                 chef.bootstrapInstance({
                                     instanceIp: instance.instanceIP,
@@ -1122,6 +1143,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     });
                                 });
                                 res.send(instance);
+                                }); //end of chefcleanup
                             });
                         });
                     });
