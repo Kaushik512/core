@@ -423,12 +423,23 @@ var Chef = function(settings) {
                 return;
             }
         });
+        console.log('knife client delete ' + params.nodeName + ' -y && knife node delete ' + params.nodeName + ' -y');
+        var cmdRemoveChefNode = 'knife client delete ' + params.nodeName + ' -y && knife node delete ' + params.nodeName + ' -y';
+        var procNodeDelete = exec(cmdRemoveChefNode, options, function(err, stdOut, stdErr) {
+                    if (err) {
+                        console.log('Failed in procNodeDelete chef.js', err);
+                        return;
+                    }
+                });
 
         procEnv.on('close', function(code) {
                 console.log('procEnv closed: ');
-                var proc = new Process('knife', argList, options);
-                proc.start();
         });
+        procNodeDelete.on('close', function(code) {
+                    console.log('procNodeDelete closed');
+                    var proc = new Process('knife', argList, options);
+                    proc.start();
+                });
 
        
 
