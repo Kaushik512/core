@@ -153,6 +153,71 @@ else{
     }
 }
 
+//function duplicated for kana to be referenced back to readMasterJson
+function readMasterJsontv(id) {
+    // debugger;
+   //alert(url);
+if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
+    // alert('in 1');
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonnewk/" + id,
+        success: function(data) {
+                // alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
+if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
+{
+    //alert('in 1');
+    $.ajax({
+        type: "get",
+        dataType: "text",
+        async: false,
+        url: serviceURL + "readmasterjsonnewk/" + id,
+        success: function(data) {
+                // alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+}
+else{
+    
+    $.ajax({
+        type: "get",
+        dataType: "text",
+
+        async: false,
+        url: serviceURL + "readmasterjsonnewk/" + id,
+        success: function(data) {
+            //      alert(data.toString());  
+            // debugger;
+            d4ddata = JSON.parse(data);
+        },
+        failure: function(data) {
+            // debugger;
+            //  alert(data.toString());
+        }
+    });
+    return (d4ddata);
+    }
+}
+
 $.fn.getType = function() {
     return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
 }
@@ -299,7 +364,8 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         // alert(d4ddata.sections.section[0].name);
         //alert('run');
         var formData = null;
-        readMasterJson(formID);
+        //Revert below call to readMasterJson() done for kana
+        readMasterJsontv(formID);
 
         /*$.each(d4ddata.sections.section, function (i, item) {
             if (item.name == formName) {
@@ -464,6 +530,7 @@ function readform__(formID) {
                         var targetCtrl = $('#' + item);
                         targetCtrl.html('');
                         var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+
                         $.each(eval(opts), function(j, itm) {
                             if (targetCtrl.attr('multiselect'))
                                 addToSelectList(itm, targetCtrl);
@@ -696,7 +763,7 @@ function readform__(formID) {
 
     //  alert('almost exiting');
     //Setting the unique field with current value
-    $('input[unique="true"]').each(function() {
+    $('input[unique="true"],select[unique="true"]').each(function() {
         // alert($(this).val());
         $(this).attr('initialvalue', $(this).val());
         // alert($(this).attr('initialvalue'));
@@ -706,6 +773,7 @@ function readform__(formID) {
 
 function readform(formID) {
         var formData = null;
+        var button = $("form[id*='myForm']").find('button');
         //    alert("force edit:" + forceEdit);
         //Prefilling dropdowns
         $('select[cdata="catalyst"]').each(function() {
@@ -908,7 +976,8 @@ function readform(formID) {
 
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
-        $('button[onclick*="saveform"]').attr("rowid", rowid);
+        button.attr("rowid", rowid);
+        /*$("button[rowid*='"+"']");*/
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
@@ -1007,13 +1076,16 @@ function readform(formID) {
 
         //  alert('almost exiting');
         //Setting the unique field with current value
-        $('input[unique="true"]').each(function() {
-            // alert($(this).val());
+        $('input[unique="true"],select[unique="true"]').each(function() {
+           
             $(this).attr('initialvalue', $(this).val());
-            // alert($(this).attr('initialvalue'));
+           
         });
         return (true);
-    }
+    }//end readform
+
+
+
     function readformnew(formID) {
         var formData = null;
         //    alert("force edit:" + forceEdit);
@@ -1216,7 +1288,8 @@ function readform(formID) {
 
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
-        $('button[onclick*="saveform"]').attr("rowid", rowid);
+        $('button').attr("rowid", rowid);
+        $("button[rowid*='"+"']");
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
@@ -1315,13 +1388,13 @@ function readform(formID) {
 
         //  alert('almost exiting');
         //Setting the unique field with current value
-        $('input[unique="true"]').each(function() {
+        $('input[unique="true"],select[unique="true"]').each(function() {
             // alert($(this).val());
             $(this).attr('initialvalue', $(this).val());
             // alert($(this).attr('initialvalue'));
         });
         return (true);
-    }
+    }// end readformnew
 
     function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
@@ -1453,6 +1526,7 @@ function saveform(formID) {
     var data1 = new FormData();
     var fileNames = '';
     var orgName = $('#orgname').val();
+    var button = $("form[id*='myForm']").find("div.pull-right > button");
     
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
@@ -1553,13 +1627,16 @@ function saveform(formID) {
     }
 
 
-
+    //alert(button.attr("rowid"));
+    
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
-    if ($('button[onclick*="saveform"]').attr("rowid") != null) {
-        // alert("in edit");
-        data1.append("rowid", $('button[onclick*="saveform"]').attr("rowid"));
+
+    if (button.attr("rowid")) {
+
         
+        data1.append("rowid", button.attr("rowid"));
     }
+
    
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
@@ -1569,8 +1646,9 @@ function saveform(formID) {
     if(typeof(orgname) == 'undefined'){
         orgName = '%2f';
     }
+    //alert('This is the data that gets saved:' + JSON.stringify(data1));
    
-    console.log('This is the data that gets saved:' + JSON.stringify(data1));
+    console.log('This is the data that gets saved:' + data1['rowid']);
    // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,
@@ -1586,8 +1664,8 @@ function saveform(formID) {
             if(parseInt(formID) < 5)
             {
                 loadTreeFuncNew(); //this should refresh the tree
-                
             }
+            button.removeAttr("rowid", "");
         },
         error: function(jqxhr) {
             alert(jqxhr.status);
@@ -2013,6 +2091,52 @@ function getCount(jsonID) {
     return (count);
 }
 
+function getRelatedValuesForUniqueCheck(jsonID,queryconditionedby){
+    var data1 = new FormData();
+   // var queryconditionedby  = 'orgname,productgroupname';
+    var retData = '';
+    if(queryconditionedby != ''){
+            var elems = queryconditionedby.split(',');
+            var query = '';
+            for(var y = 0; y < elems.length; y++){
+                data1.append(elems[y],$('#' + elems[y]).val());
+            }
+        }
+     $.ajax({
+            url: '/d4dMasters/getListFiltered/' + jsonID,
+            data: data1,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            async: false,
+            success: function(data,success){
+             // alert(data == "Not Found");
+              retData = data;
+              // if(data == "Not Found")
+              //       retData('');
+              //   else
+              //       return('found');
+              //$('#loginname').trigger('blur');
+            }
+    });
+     return(retData);
+    // if(queryconditionedby.indexOf('""') < 0){
+    //    var data1 = {queryparams:[]};
+    //    data1.queryparams.push(queryconditionedby);
+    //    // data1.append('queryparams',v);
+
+    //     $.post('/d4dMasters/getListFiltered/' + jsonID,JSON.stringify(data1),function(data){
+    //             if(data == "OK")
+    //                 return('');
+    //             else
+    //                 return('found');
+    //     });
+    // }
+    // else
+    //     return('');
+}
+
+
 function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     readMasterJson(jsonID);
     formData = d4ddata;
@@ -2093,7 +2217,7 @@ function errormessageforInput(id, msg) {
     if (errlabel.length > 0) { //no error label found
         errlabel.html(msg);
     } else {
-        currCtrl.closest('section').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
         errlabel = $('#errmsg_' + id).html(msg);
     }
     //attaching a keydown event to clear the message
@@ -2113,6 +2237,19 @@ function errormessageforInput(id, msg) {
 //run validation tests on inputs 
 function isFormValid() {
     var isValid = true;
+     if ($('input[unique="true"], select[unique="true"]').length > 0) {
+       // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function(){
+             $(this).trigger('blur');
+              
+              if($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0){
+               // alert('pusing isvalid false');
+                isValid = false;
+              }
+        });
+     }
+
+
     $('[cat-validation]').each(function(itm) {
         var currCtrl = $(this);
         var valiarr = $(this).attr('cat-validation').split(',');
@@ -2127,22 +2264,22 @@ function isFormValid() {
                 case "required":
                     if (currCtrl.val() == '') {
                         isValid = false;
-                        errormessageforInput(currCtrl.attr('id'), "required");
+                        errormessageforInput(currCtrl.attr('id'), "Required");
                         currCtrl.focus();
                     }
                     break;
                 case "nospecial":
                     var str = currCtrl.val();
-                    if (/^[a-zA-Z0-9- ]*$/.test(str) == false) {
+                    if (/^[a-zA-Z0-9_-]*$/.test(str) == false) {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "special chars not allowed");
                         currCtrl.focus();
                     }
                     break;
                 case "max15":
-                    if (currCtrl.val().length > 25) {
+                    if (currCtrl.val().length > 15) {
                         isValid = false;
-                        errormessageforInput(currCtrl.attr('id'), "limited to 25 chars");
+                        errormessageforInput(currCtrl.attr('id'), "limited to 15 chars");
                         currCtrl.focus();
                     }
                     break;
@@ -2180,14 +2317,14 @@ function isFormValid() {
 }
 
 function enableUniqueCheckingForInputs(id) {
-
-
+    
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
 
         $('input[unique="true"], select[unique="true"]').blur(function() {
             //Disabling the save button while testing for uniqueness
+            //alert('in blue');
             $('button[onclick*="saveform"]').attr('disabled', 'disabled');
-           // debugger;
+            
             var uni = $('#unique_' + $(this).attr("id"));
             if ($(this).attr("initialvalue") != null) {
                 if ($(this).attr("initialvalue") == $(this).val()) {
@@ -2202,20 +2339,28 @@ function enableUniqueCheckingForInputs(id) {
                 uni.html('');
             else {
                 //alert("in");
-                $(this).closest('section').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
+                $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
-            var getBG = getRelatedValues(id, $(this).attr("id"), $(this).val(), $(this).attr("id"));
-            //alert(getBG != "" && uni.attr("id"));
-            if (getBG != "") { //this ensures that its present
-                uni.css("color", "red");
-                uni.html('selected is already registered');
-                $(this).focus();
-            } else {
-                uni.css("color", "green");
-                uni.html('available');
-            }
-            $('button[onclick*="saveform"]').removeAttr('disabled');
+            var queryconditionedby = $(this).attr("uniqueconditionedby");
+            if(queryconditionedby)
+               { 
+                    
+                  // alert(queryconditionedby);
+                    var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedby);
+                    //alert(getBG);
+                  //  alert('getBG !=' + getBG);
+                   //alert(getBG != "" && uni.attr("id"));
+                   if (getBG != 'Not Found') { //this ensures that its present
+                       uni.css("color", "red");
+                       uni.html('Selected is already registered');
+                       $(this).focus();
+                   } else {
+                       uni.css("color", "green");
+                       uni.html('available');
+                   }
+                }
+                $('button[onclick*="saveform"]').removeAttr('disabled');
         });
     }
 }
@@ -2360,5 +2505,4 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
 
     return obj;
 }
-
 

@@ -1,4 +1,6 @@
 var Process = require("./utils/process");
+var childProcess = require('child_process');
+var exec = childProcess.exec;
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var chefDefaults = require('../config/app_config').chef;
@@ -36,6 +38,30 @@ var Chef = function(settings) {
                 return;
             }
             chefClient.get('/nodes', function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return console.log(err);
+                }
+                console.log("chef status", chefRes.statusCode);
+                if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201) {
+                    callback(true, null);
+                    return;
+                }
+
+                var nodeNames = Object.keys(chefResBody);
+                callback(null, nodeNames);
+            });
+        });
+    }
+
+     this.getEnvironmentsList = function(callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+                return;
+            }
+            chefClient.get('/environments', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
                     return console.log(err);
@@ -296,8 +322,6 @@ var Chef = function(settings) {
         });
     };
 
-
-
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
         console.log('Chef Repo Location : ', settings.userChefRepoLocation)
         var options = {
@@ -379,17 +403,105 @@ var Chef = function(settings) {
             argList.push('-r');
             argList.push(runlist.join());
         }
-
+        console.log('Environment : ' + params.environment);
         argList = argList.concat(['-x',params.instanceUsername, '-N',params.nodeName, '-E',params.environment]);
         
         if (chefDefaults.ohaiHints && chefDefaults.ohaiHints.length) {
             for (var i = 0; i < chefDefaults.ohaiHints.length; i++) {
-                argList.push('--hint');
-                argList.push(chefDefaults.ohaiHints[i]);
+                if (params.instanceOS && params.instanceOS != 'windows') {
+                    argList.push('--hint');
+                    argList.push(chefDefaults.ohaiHints[i]);
+                }
+                
             }
         }
-        var proc = new Process('knife', argList, options);
-        proc.start();
+        var cmdCreateEnv = 'knife environment create ' +  params.environment + ' -d catalystcreated';
+
+        var procEnv = exec(cmdCreateEnv, options, function(err, stdOut, stdErr) {
+            if (err) {
+                console.log('Failed in procEnv', err);
+                return;
+            }
+        });
+        console.log('knife client delete ' + params.nodeName + ' -y && knife node delete ' + params.nodeName + ' -y');
+        var cmdRemoveChefNode = 'knife client delete ' + params.nodeName + ' -y && knife node delete ' + params.nodeName + ' -y';
+        var procNodeDelete = exec(cmdRemoveChefNode, options, function(err, stdOut, stdErr) {
+                    if (err) {
+                        console.log('Failed in procNodeDelete chef.js', err);
+                        return;
+                    }
+                });
+
+        procEnv.on('close', function(code) {
+                console.log('procEnv closed: ');
+        });
+        procNodeDelete.on('close', function(code) {
+                    console.log('procNodeDelete closed');
+                    var proc = new Process('knife', argList, options);
+                    proc.start();
+                });
+
+       
+
+    };
+
+    this.cleanChefonClient = function(options,callback, callbackOnStdOut, callbackOnStdErr) {
+        
+        if (options.instanceOS != 'windows') {
+            var sshParamObj = {
+                host: options.host,
+                port: options.port,
+                username: options.username
+            };
+            var sudoCmd;
+            if (options.privateKey) {
+                sshParamObj.pemFilePath = options.privateKey;
+                if (options.passphrase) {
+                    sshParamObj.passphrase = options.passphrase;
+                }
+            } else {
+                sshParamObj.password = options.password;
+            }
+
+            javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+               // console.log('Run List:' + runlist.join());
+                javaSSh.executeListOfCmds(options.cmds, callback, callbackOnStdOut, callbackOnStdErr);
+            });
+
+        } else {
+
+            var processOptions = {
+                cwd: settings.userChefRepoLocation,
+                onError: function(err) {
+                    callback(err, null);
+                },
+                onClose: function(code) {
+                    callback(null, code);
+                }
+            };
+            if (typeof callbackOnStdOut === 'function') {
+                processOptions.onStdOut = function(data) {
+                    callbackOnStdOut(data);
+                }
+            }
+
+            if (typeof callbackOnStdErr === 'function') {
+                processOptions.onStdErr = function(data) {
+                    callbackOnStdErr(data);
+                }
+            }
+
+            //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
+            console.log('host name ==>', options.host);
+            //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+          //  var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+        //    proc.start();
+
+        }
 
     };
 
@@ -423,6 +535,7 @@ var Chef = function(settings) {
                     callback(err, null);
                     return;
                 }
+                console.log('Run List:' + runlist.join());
                 javaSSh.execChefClient(runlist.join(), overrideRunlist, callback, callbackOnStdOut, callbackOnStdErr);
             });
 

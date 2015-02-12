@@ -48,6 +48,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     $in: orgnames
                 }
             }, function(err, docbgs) {
+                if(docbgs.length <= 0){
+                    res.send(orgTree);
+                    return;
+                }
                 var counter = 0;
                 for (var k = 0; k < docbgs.length; k++) {
                     for (var i = 0; i < orgTree.length; i++) {
@@ -157,6 +161,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/getTreeForbtv', function(req, res) {
+        console.log("Enter /organizations/getTreeForbtv");
         d4dModelNew.d4dModelMastersOrg.find({
             id: 1
         }, function(err, docorgs) {
@@ -182,12 +187,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             });
             orgCount++;
+            console.log("Found Orgs");
             d4dModelNew.d4dModelMastersProductGroup.find({
                 id: 2,
                 orgname: {
                     $in: orgnames
                 }
             }, function(err, docbgs) {
+                if(docbgs.length <= 0){ //no bgs for any org return tree
+                    console.log('Not found any BUs returing empty orgs');
+                    res.send(orgTree);
+                    return;
+                }
                 var counter = 0;
                 for (var k = 0; k < docbgs.length; k++) {
                     for (var i = 0; i < orgTree.length; i++) {
@@ -202,7 +213,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             orgTree[i]['nodes'].push({
                                 name: docbgs[k]['productgroupname'],
-                                text: docbgs[k]['productgroupname'],
+                                text: docbgs[k]['productgroupname'].substring(0, 21),
                                 orgname: orgTree[i]['name'],
                                 icon: 'fa fa-fw fa-1x fa-group',
                                 borderColor: '#000',
@@ -241,16 +252,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             var ttp = '';
                                                             if (envs[nt].length > 12) {
                                                                 ttp = envs[nt];
-                                                                envs[nt] = envs[nt].substring(0, 12);
+                                                                envs[nt] = envs[nt]; //.substring(0, 12);
                                                             }
-                                                            envs_.push({
-                                                                text: envs[nt],
-                                                                href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
-                                                                orgname: orgTree[_i]['name'],
-                                                                itemtype: 'env',
-                                                                tooltip: ttp,
-                                                                icon: 'fa fa-fw fa-1x fa-desktop'
-                                                            });
+                                                            if(envs[nt] != ''){
+                                                                envs_.push({
+                                                                    text: envs[nt],
+                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    orgname: orgTree[_i]['name'],
+                                                                    projname: docprojs[_prj]['projectname'],
+                                                                    bgname : orgTree[_i]['businessGroups'][__i]['name'],
+                                                                    itemtype: 'env',
+                                                                    tooltip: ttp,
+                                                                    icon: 'fa fa-fw fa-1x fa-desktop'
+                                                                });
+                                                            }
                                                         }
                                                         console.log("Env in:" + docprojs);
                                                         orgTree[_i]['businessGroups'][__i]['projects'].push({ //
@@ -259,8 +274,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         });
                                                         orgTree[_i]['nodes'][__i]['nodes'].push({ //
                                                             name: docprojs[_prj]['projectname'],
-                                                            text: docprojs[_prj]['projectname'],
+                                                            text: docprojs[_prj]['projectname'], 
                                                             orgname: orgTree[_i]['name'],
+                                                            bgname: orgTree[_i]['businessGroups'][__i]['name'],
                                                             icon: 'fa fa-fw fa-1x fa-tasks',
                                                             nodes: envs_,
                                                             borderColor: '#000',
@@ -888,7 +904,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         if (!(req.body.fqdn && req.body.os)) {
             res.send(400);
         }
-
+        console.log('Received Users:' + req.body.users);
         if (req.body.credentials && req.body.credentials.username) {
             if (!(req.body.credentials.password || req.body.credentials.pemFileData)) {
                 res.send(400);
@@ -934,12 +950,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var cmd = 'ping -c 1 -w 1 ' + req.body.fqdn;
                 var curl = new Curl();
                 console.log("Pinging Node to check if alive :" + cmd );
+                var executeCount = 0;
                 curl.executecurl(cmd, function(err, stdout) {
+                    if(executeCount > 0){
+                        return;
+                    }
+                    executeCount++;
                     if(stdout){
                         if (stdout.indexOf('1 received') > 0) {
                             nodeAlive = 'running';
                         }
                     }
+
+
+                    
+
                     //    console.log('node ===>', node);
                     credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                         if (err) {
@@ -955,7 +980,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             instanceState: nodeAlive,
                             bootStrapStatus: 'waiting',
                             runlist: [],
-                            users: [req.session.user.cn], //need to change this
+                            users: req.body.users, //[req.session.user.cn], //need to change this
                             hardware: {
                                 platform: 'unknown',
                                 platformVersion: 'unknown',
@@ -1008,6 +1033,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     chefValidationPemFile: chefDetails.validatorpemfile,
                                     hostedChefUrl: chefDetails.url
                                 });
+
+                                 //removing files on node to facilitate re-bootstrap
+                                var opts = {
+                                    privateKey: decryptedCredentials.pemFileLocation,
+                                    username: decryptedCredentials.username,
+                                    host: instance.instanceIP,
+                                    instanceOS: instance.hardware.os,
+                                    port: 22,
+                                    cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"]
+                                }
+                                //cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"] ["ls -l","ls -al"]
+                                console.log('decryptCredentials ==>', decryptedCredentials);
+                                if (decryptedCredentials.pemFileLocation) {
+                                    opts.privateKey = decryptedCredentials.pemFileLocation;
+                                } else {
+                                    opts.password = decryptedCredentials.password;
+                                }
+                                chef.cleanChefonClient(opts,function(err, retCode){
 
                                 chef.bootstrapInstance({
                                     instanceIp: instance.instanceIP,
@@ -1101,6 +1144,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     });
                                 });
                                 res.send(instance);
+                                }); //end of chefcleanup
                             });
                         });
                     });

@@ -36,6 +36,14 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true
     },
+    applicationUrl: {
+        type: String,
+        trim: true
+    },
+    applicationUrl1: {
+        type: String,
+        trim: true
+    },
     instanceState: String,
     bootStrapStatus: String,
     users: [{
@@ -187,7 +195,17 @@ var InstancesDao = function() {
 
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
+         //Kana hack to add application url
+        if(typeof instanceData.instanceIP != 'undefined')
+        {
+            instanceData.applicationUrl = 'http://' + instanceData.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
+            instanceData.applicationUrl1 = 'http://' + instanceData.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
+        }
+
         var instance = new Instances(instanceData);
+       
+        
+
 
         instance.save(function(err, data) {
             if (err) {
@@ -195,7 +213,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit createInstance");
+            logger.debug("Exit createInstance : " + JSON.stringify(data));
             callback(null, data);
         });
     };
@@ -217,6 +235,50 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit updateInstanceIp (%s, %s)", instanceId, ipaddress);
+            callback(null, data);
+        });
+
+    };
+
+    this.updateInstanceAppUrl = function(instanceId, instnaceurl, callback) {
+        logger.debug("Enter updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "applicationUrl": instnaceurl
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateinstnaceurl (%s, %s)", instanceId, instnaceurl, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+            callback(null, data);
+        });
+
+    };
+
+    this.updateInstanceAppUrl1 = function(instanceId, instnaceurl, callback) {
+        logger.debug("Enter updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "applicationUrl1": instnaceurl
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateinstnaceurl (%s, %s)", instanceId, instnaceurl, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
             callback(null, data);
         });
 
@@ -272,7 +334,7 @@ var InstancesDao = function() {
     };
 
     this.updateInstanceBootstrapStatus = function(instanceId, status, callback) {
-        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, state);
+        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -283,11 +345,11 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, state, err);
+                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, status, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, state);
+            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
             callback(null, data);
         });
     };

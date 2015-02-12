@@ -71,156 +71,130 @@
 <div class="modal fade" id="chefImportNodesModal" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
+      <form action="" id="myForm12" autocomplete="off">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Import Nodes</h4>
       </div>
-      <div class="modal-body" style="padding:0px !important">
-         <form role="form" class="smart-form" autocomplete="off">
-          <fieldset style="padding-top:0px;margin-top:10px;">
-          <div class="">
-          <section class="col col-6">
-            <div class="form-group" style="margin-bottom:15px;">
+      <div class="modal-body modalbody-height">
+         
+          
+          <div class="col-lg-6">
+            
               <label for="exampleInputEmail1">Organization</label>
                 <select id="chefImportOrgSelect"  class="width-100 aaa" disabled>
                   
                 </select>
-            </div>
-            <div class="form-group" style="margin-bottom:15px;">
+            
+          </div>
+
+          <div class="col-lg-6 credentialSection">
+        
+            <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="">
+              <b class="tooltip tooltip-top-right">
+              <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+          
+        
+          </div>
+
+          <div class="col-lg-6" style="margin-top:20px;">  
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-              <select id="chefImportBgSelect"  class="width-100 aaaaa" >
+              <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required">
                 
               </select>
-            </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-            <div class="">
-              <select id="chefImportProjectSelect"  class="width-100" >
-                    
-              </select>
-            </div>
+            
           </div>
-          <div class="form-group hidden">
+
+
+          
+          
+        <div class="col-lg-6" style="display:none;">
+          
             <label for="exampleInputEmail1">Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             <div class="">
               <select id="chefImportEnvSelect"  class="width-100" >
                     
               </select>
             </div>
-          </div>
-        </section>
+          
+        </div>
       
-      <section class="col col-6" style="display:none">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Provider</label>
-          <div class="">
-          <select id="chefImportProviderSelect"  class="form-control" >
-                
-          </select>
-        </div>
-        </div>
-      </section>
-      <section class="col col-6 credentialSection" style="margin-bottom:12px;">
-        <div class="form-group">
-          <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <label class="input">
-          <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput">
-            <b class="tooltip tooltip-top-right">
-            <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
-          </label>
-        </div>
-      </section>
-      <section class="col col-6">
-          <div class="form-group">
+          <div class="col-lg-6" style="margin-top:20px;">
             <label for="">Choose Authentication Type</label>
-            <select id="pemFileDropdown"  class="authenticationType width-100" >
+            <select id="pemFileDropdown2"  class="authenticationType width-100" cdata="catalyst" cat-validation="required">
               <option value="password">Password</option>
               <option value="pemFile">Pem File</option>
             </select>
+          
           </div>
-      </section>
-      <section class="col col-6 credentialSection authPassword" style="margin-bottom:18px;">
-        <div class="form-group">
+
+          <div class="col-lg-6" style="margin-top:20px;">
+            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            
+              <select id="chefImportProjectSelect"  class="width-100">
+              </select>
+            
+        </div>
+      
+      <div class="col-lg-6" style="display:none">
+        
+          <label for="exampleInputEmail1">Provider</label>
+          
+          <select id="chefImportProviderSelect"  class="form-control" cat-validation="required">
+                
+          </select>
+        
+        
+      </div>
+      
+      
+      <div class="col-lg-6 credentialSection authPassword" style="margin-top:20px;">
+        
           <label for="exampleInputEmail1">Password</label>
-          <label class="input">
-          <input type="password" class="form-control" id="importPasswordInput" />
+          
+          <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" cat-validation="required"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
             <b class="tooltip tooltip-top-right">
             <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
-          </label>
-        </div>
-      </section>
-      <section class="col col-6 credentialSection authPemFile">
+          
+        
+      </div>
+
+      <div class="col-lg-6 credentialSection authPemFile" style="margin-top:20px;">
         <div class="smart-forms">
             <label for="exampleInputEmail1">Pem File</label>
             <label for="" name="field" class="file">
-                <span class="button btn-primary" style="top:6px;">Browse</span>
+                <span class="button btn-primary">Browse</span>
                 <input id="importPemfileInput" type="file" class="gui-file">
                 <input type="text" readonly="" class="gui-input">
             </label>
         </div>
-        <!-- <div class="form-group">
-          <label for="exampleInputEmail1">Pem File</label>
-          <label class="checkbox" style="display:inline;padding-top:4px;">
-              <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
-          </label>
-          <div class="">
-            
-            <input type="file" id="importPemfileInput" style="display:inline" disabled/>
-        </div>
-        </div> -->
-      </section>
+      </div>
 
-     <!--<div class="smart-forms">
-          <label for="">Icon</label>
-          <label for="templatesicon" name="field" class="file">
-          <div class="imgdiv" value="1"></div>
-          <span class="button btn-primary">Browse</span><input id="templatesicon" type="file" onchange="this.nextSibling.value = this.value" cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
-          </label>
-      </div>-->
-
-      <!-- <label class="input input-file" for="file">
-                <div class="button">
-                  <input type="file" id="importPemfileInput" style="display:inline" disabled>Browse
-                </div>
-                <input type="text" readonly="">
-            </label> -->
-      <!-- <section class="col col-6 credentialSection">
-        <div class="form-group">
-          <div class="smart-forms">
-            <label for="exampleInputEmail1">Pem File</label>
-            <label class="checkbox" style="display:inline;padding-top:4px;">
-                <input type="checkbox" id="pemFileCheckbox" class="smart-form"/><i></i>&nbsp;
-            </label>
-            <label for="importPemfileInput" name="field" class="file">
-                <span class="button btn-primary">Browse</span>
-                <input id="importPemfileInput" type="file" style="display:inline" disabled class="gui-file">
-                <input type="text" readonly="" class="gui-input">
-            </label>
-            
-          </div>
-        </div>
-      </section> -->
-      <section class="col col-6">
+     
+      <div class="col-lg-6" style="margin-top:15px;">
           <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <label class="select select-multiple">
+          
               <div class="userListLoadingContainer"></div>
-              <select class="custom-scroll" multiple="" id="userListSelect" style="display:none">
+              <select class="custom-scroll" multiple="" id="userListSelect" style="display:none" cdata="catalyst" cat-validation="required">
                   <option value="1">User1</option>
                   <option value="2">User2</option>
                   <option value="3">User3</option>
                   <option value="4">User4</option>
                   <option value="5">User5</option>
               </select> 
-          </label>
-      </section>
-    </div>
-    </fieldset>
-         </form>
+          
+      </div>
+    
+    
+         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
         <button type="button" class="btn btn-primary importNodesBtn">Import</button>
       </div>
+      </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -244,7 +218,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-   $('.authenticationType').select2();
+   $('#pemFileDropdown2').select2();
    $('#chefImportBgSelect').select2();
    $('#chefImportProjectSelect').select2();
    $('#chefImportEnvSelect').select2();
@@ -279,23 +253,11 @@ var urlParams ={};
 })();
 $(function(){
 
-
-  // var $pemFileDropdown = $('#pemFileDropdown').change(function(){
-   
-  //   if($(this).is(':checked')) {
-  //     $('#importPemfileInput').attr('disabled',false);
-  //     $('#importPasswordInput').attr('disabled',true);
-  //   } else {
-  //     $('#importPemfileInput').attr('disabled',true);
-  //     $('#importPasswordInput').attr('disabled',false);
-  //   } 
-  // });
-
- //drawBreadCrumb();
 var $orgListInput = $('#chefImportOrgSelect');
 var $bgList = $('#chefImportBgSelect');
 var $projectList = $('#chefImportProjectSelect');
 var $envList = $('#chefImportEnvSelect');
+
 
 $('.nodeListContainer').append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
 
@@ -363,76 +325,103 @@ $.get('../chef/servers/'+urlParams.chefId,function(data){
      
   });
 
-  $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(nodeList){
-    $('.nodeListContainer img').remove();
+  $.get('/chef/servers/' + urlParams.chefId + '/environments',function(envList){ //getting the list of env
+      if(envList){
 
-    var $tableBody = $('.table-hover tbody');
-    
+      var envlist = envList.toString().split(',');
+      var $envselect = $('<select></select>').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
+      for(var j = 0; j < envList.length;j++){
+        $envselect.append('<option value="' + envList[j] + '">' + envList[j] + '</option>');
+      }
+        $.get('../chef/servers/'+urlParams.chefId+'/nodes',function(nodeList){
+          $('.nodeListContainer img').remove();
 
-    for(var i=0;i<nodeList.length;i++) {
-       var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName',nodeList[i]);
-       $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
-       $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $tr.append($('<td></td>').addClass('chef-fqdn').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $tr.append($('<td></td>').addClass('chef-platform').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $tr.append($('<td></td>').addClass('chef-uptime').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-    
-       $tr.append($('<td></td>').addClass('chef-env').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
-       $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
-       $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/><i></i>');
-       $nodecheckboxlabel.append($nodecheckboxinput);
+          var $tableBody = $('.table-hover tbody');
+          
 
-       // $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
-       $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel)); 
-       $tableBody.append($tr);  
+          for(var i=0;i<nodeList.length;i++) {
+             var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName',nodeList[i]);
+             $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
+             $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $tr.append($('<td></td>').addClass('chef-fqdn').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $tr.append($('<td></td>').addClass('chef-platform').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $tr.append($('<td></td>').addClass('chef-uptime').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+          
+             $tr.append($('<td></td>').addClass('chef-env').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+             $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
+             $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/><i></i>');
+             $nodecheckboxlabel.append($nodecheckboxinput);
 
-       $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeList[i],function(node){
-           var $tr = $tableBody.find('tr[data-nodeName="'+node.name+'"]');
-            var ip = 'unknown';
-            if(node.automatic.ipaddress) {
-                ip = node.automatic.ipaddress;
-            }
-            $tr.find('.chef-ip').empty().append('<span>'+ip+'</span>');
+             // $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
+             $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel)); 
+             $tableBody.append($tr);  
 
-            var fqdn = 'unknown';
-            if(node.automatic.fqdn) {
-                fqdn = node.automatic.fqdn;
-            }
-            $tr.find('.chef-fqdn').empty().append('<span>'+fqdn+'</span>');
-            var platform = 'unknown';
-            if(node.automatic.platform) {
-                platform = node.automatic.platform;
-            }
-            $tr.find('.chef-platform').empty().append('<span>'+platform+'</span>');
+             $.get('../chef/servers/'+urlParams.chefId+'/nodes/'+nodeList[i],function(node){
+                 var $tr = $tableBody.find('tr[data-nodeName="'+node.name+'"]');
+                  var ip = 'unknown';
+                  if(node.automatic.ipaddress) {
+                      ip = node.automatic.ipaddress;
+                  }
+                  $tr.find('.chef-ip').empty().append('<span>'+ip+'</span>');
 
-            var uptime = 'unknown';
-            if(node.automatic.uptime) {
-                uptime = node.automatic.uptime;
-            }
-            $tr.find('.chef-uptime').empty().append('<span>'+uptime+'</span>');
+                  var fqdn = 'unknown';
+                  if(node.automatic.fqdn) {
+                      fqdn = node.automatic.fqdn;
+                  }
+                  $tr.find('.chef-fqdn').empty().append('<span>'+fqdn+'</span>');
+                  var platform = 'unknown';
+                  if(node.automatic.platform) {
+                      platform = node.automatic.platform;
+                  }
+                  $tr.find('.chef-platform').empty().append('<span>'+platform+'</span>');
 
-
-           
-            
-            var environment = 'unknown';
-            if(node.chef_environment) {
-                environment = node.chef_environment;
-            }
-
-            $tr.find('.chef-env').empty().append('<span>'+environment+'</span>');
-            $tr.find('.nodeCheckBox').data('node',node);
-            
-            
-         });
+                  var uptime = 'unknown';
+                  if(node.automatic.uptime) {
+                      uptime = node.automatic.uptime;
+                  }
+                  $tr.find('.chef-uptime').empty().append('<span>'+uptime+'</span>');
 
 
-    }
+                 
+                  
+                  var environment = 'unknown';
+                  if(node.chef_environment) {
+                      environment = node.chef_environment;
+                  }
+                  var $tempenv = $envselect.clone();
+                  $tempenv.val(environment).attr('currentEnv',environment);
+                  $tempenv.change(function(){
+                    if($(this).val() == $(this).attr('currentEnv')){
+                      return;
+                    }
+                    $that = $(this);
+                    bootbox.confirm("Are you sure you would want to change the environment?<br/>Note:<br/>Change will done on the chef server.", function(result) {
+                        if (!result) {
+                            $that.val($that.attr('currentEnv'));
+                              return;
+                        }
 
 
-    $('#organiz').show();
+                    });
 
+                  });
+                  
+                  
+                  $tr.find('.chef-env').empty().append($tempenv);//.append('<span>'+environment+'</span>');
+                  $tr.find('.envselect').select2();
+                  $tr.find('.nodeCheckBox').data('node',node);
+
+               });
+
+
+          }
+
+
+          $('#organiz').show();
+
+        }); //end get '../chef/servers/'
+      }
   });
-
 
 
 });
@@ -542,8 +531,12 @@ $('#importPemfileInput').change(function(){
    reqBody.orgId = $orgListInput.val();
    reqBody.bgId = $bgList.val();
    reqBody.projectId = $projectList.val();
-   if(!reqBody.projectId || !reqBody.projectId.length){
+   /*if(!reqBody.bgId || !reqBody.bgId.length){
     alert('Please Select Business Groups & Project');
+    return;
+   }*/
+   if (!reqBody.bgId || !reqBody.bgId.length && reqBody.projectId || reqBody.projectId === 'choose'){
+    alert('Please Select a Business Group & Project');
     return;
    }
    
@@ -553,11 +546,10 @@ $('#importPemfileInput').change(function(){
      reqBody.selectedNodes.push($(this).attr('data-nodeName'));
    });
  
-   //if($('.credentialSection').is(':visible')){
      reqBody.credentials = {};
      reqBody.credentials.username = $('#importUsernameInput').val();
 
-    var $dropdown = $('#pemFileDropdown');
+    var $dropdown = $('#pemFileDropdown2');
     if (!($dropdown.val()==='pemFile')) {
        reqBody.credentials.password = $('#importPasswordInput').val();
        if(!reqBody.credentials.username){
@@ -591,8 +583,6 @@ $('#importPemfileInput').change(function(){
         return;
        }
        var reader = new FileReader();
-
-       // Closure to capture the file information.
        reader.onload = function(e) {
            // Render thumbnail.
             reqBody.credentials.pemFileData = e.target.result;
@@ -604,9 +594,6 @@ $('#importPemfileInput').change(function(){
        reader.readAsText(pemFileInput.files[0]);
  
      }       
-   /*} else {
-     makeRequest();
-   }*/
 
       function makeRequest() {
         console.log(reqBody);
@@ -658,6 +645,7 @@ $('#importPemfileInput').change(function(){
                 var nodeData= $($checkBoxes[0]).data('node');
                 if(nodeData && nodeData.chef_environment) {
                   $chefResultModalContainer.modal('hide');
+                  loadTreeFuncNew();
                    //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
                  }
                }
@@ -667,6 +655,7 @@ $('#importPemfileInput').change(function(){
 
      }
      pollTaskStatus(data.taskId,0);
+     //Refreshing the workzone tree
 
    }).error(function(){
     alert('Unable to import instances. Please try again later');
@@ -683,6 +672,7 @@ $('#importPemfileInput').change(function(){
 var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
 $.get('../users',function(userList){
   var $userListSelect = $('#userListSelect').empty(); 
+  userList = JSON.parse(userList);
   userList.sort(function(a, b){
     var keyA =Object.keys(a);
     var keyB =Object.keys(b);
@@ -726,4 +716,22 @@ $('.tabContent tr').find('input').on('blur', function(){
   $(this).hide();
   $(this).parent().children('span').show().html(inputVal);
 });
+</script>
+
+<script>
+   $(document).ready(function () {
+   
+       $('#myForm12').submit(function() {
+           $(this).validate();
+   
+           if($(this).valid){
+                /*alert('valid form submitted'); // for demo*/
+               if(!saveform('12'))return false;;
+           }else{
+                alert('invalid valid form submitted'); // for demo
+           }
+           return false; // for demo
+       });
+   });
+       
 </script>

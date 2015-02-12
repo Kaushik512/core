@@ -153,6 +153,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 role: '[' + req.session.user.rolename + ']'
             }]
         });
+
+
+        // var query = {};
+        // console.log(req.session.user);
+        // query['loginname'] = req.session.user.cn; //building the query 
+        // query['id'] = '7';
+
+        // console.log(req.session.user.cn);
+       
+        // d4dModelNew.d4dModelMastersUsers.find(query, function(err, d4dMasterJson) {
+        //     if (err) {
+        //         console.log("Hit and error:" + err);
+        //     }
+        //     res.end(JSON.stringify(d4dMasterJson));
+        //     console.log("sent response" + JSON.stringify(d4dMasterJson));
+        // });
+            
     });
 
     app.get('/d4dMasters/authorizedfiles', function(req, res) {
@@ -393,6 +410,94 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+    //for kana to be reverted to the original function 
+    app.get('/d4dMasters/readmasterjsonnewk/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+        d4dModelNew.d4dModelMastersOrg.find({
+            id: 1
+        }, function(err, docorgs) {
+            var orgnames = docorgs.map(function(docorgs1) {
+                return docorgs1.orgname;
+            });
+            if(req.params.id == '1' || req.params.id == '2'  || req.params.id == '3'  || req.params.id == '10' ){
+                configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if (dbtype) {
+                        console.log("Master Type: " + dbtype);
+                        eval('d4dModelNew.' + dbtype).find({
+                            id: req.params.id,
+                            orgname: {
+                                $in: orgnames
+                            }
+                        }, function(err, d4dMasterJson) {
+                            if (err) {
+                                console.log("Hit and error:" + err);
+                            }
+                            res.end(JSON.stringify(d4dMasterJson));
+                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        });
+                    }
+                });
+            } //end if (1,2,3,4)
+            else if(req.params.id == '4'){
+                    d4dModelNew.d4dModelMastersProductGroup.find({
+                        id: 2,
+                        orgname:{
+                            $in: orgnames
+                        }
+                    }, function(err, docbgs) {
+                        var bgnames = docbgs.map(function(docbgs1) {
+                            return docbgs1.productgroupname;
+                        });
+                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                            if (err) {
+                                console.log("Hit and error:" + err);
+                            }
+                            if (dbtype) {
+                                console.log("Master Type: " + dbtype);
+                                eval('d4dModelNew.' + dbtype).find({
+                                    id: req.params.id,
+                                    productgroupname: {
+                                        $in: bgnames
+                                    }
+                                }, function(err, d4dMasterJson) {
+                                    if (err) {
+                                        console.log("Hit and error:" + err);
+                                    }
+                                    res.end(JSON.stringify(d4dMasterJson));
+                                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                });
+                            }
+                        });
+
+
+                    });
+            }
+            else{
+                configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    if (dbtype) {
+                        console.log("Master Type: " + dbtype);
+                        eval('d4dModelNew.' + dbtype).find({
+                            id: req.params.id
+                        }, function(err, d4dMasterJson) {
+                            if (err) {
+                                console.log("Hit and error:" + err);
+                            }
+                            res.end(JSON.stringify(d4dMasterJson));
+                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        });
+                    }
+                });
+            } //end else
+        });
+    });
+
+
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
         logger.debug('Entered readmasterjsoncounts');
         var ret = [];
@@ -585,7 +690,56 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         });
     });
+    app.post('/d4dMasters/getListFiltered/:masterid',function(req,res){
+        configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                var query = {};
+                // query['rowid'] = {
+                //     '$in':req.body.serviceids
+                // }
+                query['id'] = req.params.masterid;
+                console.log('Req.body for glf' + JSON.stringify(req.body));
+                var bodyJson = JSON.parse(JSON.stringify(req.body));
 
+                console.log('Query Build in getListFiltered:' + JSON.stringify(bodyJson));
+                var _keys = Object.keys(bodyJson);
+                _keys.forEach(function(k,v){
+                    console.log(k,bodyJson[k]);
+                    query[k] = bodyJson[k];
+                });
+                // bodyJson.forEach(function(k, v)    {
+                //     console.log('Object call to ' + k);
+                //     var _keys = Object.keys(k);
+                //     console.log(_keys + ' ' + k[_keys]);
+                //     query[_keys] = k[_keys];
+
+                // });
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        console.log("Hit and error:" + err);
+                    }
+                    console.log(' getListFiltered ' + d4dMasterJson.length)
+                    if(d4dMasterJson.length > 0)
+                    {   
+                        console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        res.send("Found");
+
+                    }
+                    else
+                        {
+                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                            res.send("Not Found");
+                        }
+                    
+                });
+            } else {
+                res.send(500);
+            }
+        });
+    });
 
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
 
@@ -1127,6 +1281,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             editMode = false;
             bodyJson["rowid"] = uuid.v4();
         }
+        console.log('EditMode:' + editMode);
         bodyJson["id"] = req.params.id; //storing the form id.
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {

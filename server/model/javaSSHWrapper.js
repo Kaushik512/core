@@ -112,6 +112,66 @@ function JavaSSH(javaSSHInstance, options) {
 
     };
 
+    //included for kana
+    this.executeListOfCmds = function(opts, onComplete, onStdOut, onStdErr) {
+        //opts = opts.toString();
+        var stdOutLogFile = options.tempDir + uuid.v4();
+        var stdErrLogFile = options.tempDir + uuid.v4();
+        var tailStdOut = null;
+        var tailStdErr = null;
+        fs.open(stdOutLogFile, 'w', function(err, fd1) {
+            if (err) {
+                if (typeof onComplete === 'function') {
+                    onComplete(err, null);
+                }
+                return;
+            }
+            fs.close(fd1);
+            fs.open(stdErrLogFile, 'w', function(err, fd2) {
+                if (err) {
+                    if (typeof onComplete === 'function') {
+                        onComplete(err, null);
+                    }
+                    return;
+                }
+                fs.close(fd2);
+                if (typeof onStdOut === 'function') {
+                    tailStdOut = new LogFileTail(stdOutLogFile, onStdOut);
+                    tailStdOut.startTailing();
+                }
+                if (typeof onStdErr === 'function') {
+                    tailStdErr = new LogFileTail(stdErrLogFile, onStdErr);
+                    tailStdErr.startTailing();
+                }
+                var newopts = java.newArray('java.lang.String',opts);
+                java.callMethod(javaSSHInstance, 'executeListOfCmds', newopts, stdOutLogFile, stdErrLogFile, function(err, retCode) {
+                    // deleting log files
+                    if (tailStdOut) {
+                        tailStdOut.stopTailing();
+                        fs.unlink(stdOutLogFile);
+                    }
+                    if (tailStdErr) {
+                        tailStdErr.stopTailing();
+                        fs.unlink(stdErrLogFile);
+                    }
+                    if (err) {
+                        console.log("error in runnnig method");
+                        console.log(err);
+                        if (typeof onComplete === 'function') {
+                            onComplete(err, null);
+                        }
+                        return;
+                    }
+                    if (typeof onComplete === 'function') {
+                        onComplete(err, retCode);
+                    }
+                });
+            });
+
+        });
+
+    };
+
     this.runServiceCmd = function(serviceName, servicAction, onComplete, onStdOut, onStdErr) {
         var stdOutLogFile = options.tempDir + uuid.v4();
         var stdErrLogFile = options.tempDir + uuid.v4();

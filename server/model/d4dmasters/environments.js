@@ -129,7 +129,21 @@ function Env() {
                         },function(err,data2){
                             if(!err)
                             {
-                                var newenv = data2.environmentname + ',' + name;
+                                var newenv = '';
+                                if(data2.environmentname != '')
+                                    {
+                                        console.log("Env Names found :========> " +data2.environmentname );
+                                        var _data2env = data2.environmentname.split(',');
+                                        if(_data2env.indexOf(name) >= 0){
+                                            //found an env in the list exit
+                                             console.log("In Callback Env found in list");
+                                             callback(null, data2);
+
+                                               return;
+                                        }
+                                        data2.environmentname +=  ',' ;
+                                    }
+                                var newenv = data2.environmentname + name;
                                 d4dModelNew.d4dModelMastersProjects.update({
                                     orgname: orgname,
                                     productgroupname: bgname,
@@ -158,7 +172,57 @@ function Env() {
                     });
                 }
                 else{
-                    callback(null,name);
+                    d4dModelNew.d4dModelMastersProjects.findOne({
+                            orgname: orgname,
+                            productgroupname: bgname,
+                            projectname: projname,
+                            id:'4'
+                        },function(err,data2){
+                            if(!err)
+                            {
+                                var newenv = '';
+
+                                if(data2.environmentname != '')
+                                    {
+                                        console.log("Env Names found :========> " +data2.environmentname );
+                                        var _data2env = data2.environmentname.split(',');
+                                        if(_data2env.indexOf(name) >= 0){
+                                            //found an env in the list exit
+                                             console.log("In Callback Env found in list");
+                                             callback(null, data2);
+
+                                               return;
+                                        }
+                                        data2.environmentname +=  ',' ;
+                                    }
+
+                                newenv = data2.environmentname + name;
+                                d4dModelNew.d4dModelMastersProjects.update({
+                                    orgname: orgname,
+                                    productgroupname: bgname,
+                                    projectname: projname,
+                                    id:'4'
+                                },{environmentname:newenv},function(err,data1){
+                                    if(!err)
+                                        { 
+                                            callback(null, data1);
+                                               return;
+                                        }
+                                    else{
+                                        callback(err,null);
+                                        return;
+                                    }
+    
+                                });
+                            }
+                            else
+                            {
+                                callback(err,null);
+                                return;
+                            }
+                        });
+
+                    //callback(null,name);
                 }
         });
     }

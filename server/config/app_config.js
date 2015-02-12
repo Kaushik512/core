@@ -18,7 +18,7 @@ try {
 
 var config = {
     express: {
-        port: 3001,
+        port: 3004,
         express_sid_key: 'express.sid',
         sessionSecret: 'sessionSekret'
     },
@@ -81,7 +81,9 @@ var config = {
     },
     ldap: {
         host: '54.187.120.22',
-        port: 389
+        port: 389,
+        rootuser: 'Admin',
+        rootpass: 'ReleV@ance'
 
     },
 

@@ -1,7 +1,15 @@
 <html>
 <head>
+    <script>
+    $(document).ready(function() {
+    $(".chooseAuthenticationtype").select2();
+    $(".choosetemplateType").select2();
+    $(".pemFileCheck").hide();
+    });
+    </script>
 	<script src="/socket.io/socket.io.js"></script>
 	 <script type="text/javascript" src="js/term.js"></script>
+
      
 <style type="text/css">
 .select2-container .select2-choice .select2-arrow b:before{
@@ -16,6 +24,7 @@
     border-color: #40baf1;
 }
 </style>
+
 
 
 <script type="text/javascript">
@@ -61,7 +70,7 @@
       </div>
       <br>
     <div style="text-align:center" style="margin-top:5%;">
-        <input type="submit" value="Submit" class="btn btn-primary">
+        <button type="button" class="btn btn-primary sshSubmit">Submit</button>
     </div>
 
 
@@ -92,9 +101,9 @@ var urlParams = {};
 
 })();
 $(document).ready(function() {
-    $(".chooseAuthenticationtype").select2();
+    /*$(".chooseAuthenticationtype").select2();
     $(".choosetemplateType").select2();
-    $(".pemFileCheck").hide();
+    $(".pemFileCheck").hide();*/
 
     $('.chooseAuthenticationtype').change(function(e) {
         if (this.value == "Password") {
@@ -187,7 +196,7 @@ $(function() {
          socket.emit('open', reqBody);
     }
 
-    $loginForm.submit(function(e) {
+    $('.sshSubmit').click(function(e) {
         console.log('submitting form');
         var reqBody = {};
         reqBody.id = $('#ssh-instanceId').val();

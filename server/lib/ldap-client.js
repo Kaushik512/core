@@ -23,7 +23,7 @@ function createDnString(username, ou) {
     if (ou) {
         str += 'ou=' + ou + ',';
     }
-    str += 'dc=d4d-ldap,dc=relevancelab,dc=com'
+    str += 'dc=d4d-ldap,dc=relevancelab,dc=com';
     return str;
     //'cn='+username+',ou=SCLT_Group3,dc=d4d-ldap,dc=relevancelab,dc=com';
 }
@@ -35,15 +35,15 @@ var Ldap = function() {
     });
 
     this.authenticate = function(username, password, callback) {
-
+        
         var dnString = createDnString(username);
-
+        console.log('hit authenticate =========>');
         client.bind(dnString, password, function(err, user) {
             if (err) {
                 console.log("err ==> ", err);
                 callback(true, null);
             } else {
-                console.log("User String:" + dnString);
+                console.log("User String:{" + dnString + '}');
                 callback(null, createDnObject(dnString));
             }
         });
@@ -71,7 +71,12 @@ var Ldap = function() {
         });
     }
 
-    this.createUser = function(username, password, fname, lname, callback) {
+    this.createUser = function(ldaproot,ldaprootpass,username, password, fname, lname, callback) {
+        console.log('Entered Create User in Ldap',username, password, fname, lname);
+
+
+
+
         var entry = {
             cn: username,
             gn: fname,
@@ -83,21 +88,29 @@ var Ldap = function() {
             //homeDirectory: '/home/users/' + username
             //dc=['d4d-ldap','relevancelab','com']
         };
-        client.add('cn=' + username + ',dc=d4d-ldap,dc=relevancelab,dc=com', entry, function(err, user) {
-            if (err) {
-                console.log('err in creating client');
-                console.log('dn == >', err.dn);
-                console.log('code == >', err.code);
-                console.log('name == >', err.name);
-                console.log('message == >', err.message);
-
-                callback(err, null);
-            } else {
-                console.log('created');
-                console.log('user ==> ', user);
-                callback(null, user);
+        var dnString = createDnString(ldaproot);
+        client.bind(dnString,ldaprootpass,function(err){
+            if(err){
+                console.log('Error in binding for createuser' + err);
+                return;
             }
+             client.add('cn=' + username + ',dc=d4d-ldap,dc=relevancelab,dc=com', entry, function(err, user) {
+                if (err) {
+                    console.log('err in creating user');
+                    console.log('dn == >', err.dn);
+                    console.log('code == >', err.code);
+                    console.log('name == >', err.name);
+                    console.log('message == >', err.message);
+
+                    callback(err.message, null);
+                } else {
+                    console.log('created');
+                   // console.log('user ==> ', user);
+                    callback(null,200);
+                }
+            });
         });
+       
 
     }
 

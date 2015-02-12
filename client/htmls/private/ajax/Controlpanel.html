@@ -26,7 +26,9 @@
                                           </a>
                                         </span>
                                       </div>
+                                      <div class="forURL">
                                       
+                                      </div>
                                     </div>
                                     <div>
                                       <div class="instance-details-list">
@@ -41,7 +43,7 @@
                                       <div class="instance-bootstrap-ActionChefRun">
 
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a>
-                                      </a>
+                                      
                                       </div>
                                       <div class="actionbutton instance-bootstrap-ActionStart"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
                                         
@@ -104,7 +106,7 @@
     <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
 
             <!-- info tab contents starts here -->
-            <div class="tab-pane fade in active " id="l1" style="height:415px;overflow-y: auto;">
+            <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
 
                  
 
@@ -116,8 +118,8 @@
                                 <a data-toggle="collapse" data-parent="#accordion-Hardware" href="#collapseHardware" > 
                                   <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
                                   <i class="fa fa-fw fa-minus-circle txt-color-red"></i>
-                                  <i class="fa fa-fw fa-wrench" style="font-size:18px;"></i>
-                                  <b style="color:#3a87ad;font-size:13px;"><u>Hardware</u></b>
+                                  <i class="fa fa-fw fa-wrench" style="font-size:14px;"></i>
+                                  <b style="color:#3a87ad;font-size:12px;"><u>Hardware</u></b>
                                 </a>
                              </h4>
                             </div>
@@ -143,7 +145,7 @@
                         <!--Role Attributes Starts here-->
                         <div class="panel panel-default" id="accordion-Software">
                           <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:18px;"></i> <b style="color:#3a87ad;font-size:13px;"><u>Software</u></b></a></h4>
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
                           </div>
                           <div id="collapseSoftware" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -164,7 +166,7 @@
                         <!--Configmgmt Attributes Starts here-->
                         <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:18px;"></i> <b style="color:#3a87ad;font-size:13px;"><u>Configuration Management</u></b></a></h4>
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
                           </div>
                           <div id="collapseConfigmgmt" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -178,6 +180,41 @@
                           </div>
                         </div>
                         <!--Configmgmt Attributes Ends here-->
+
+                        <!--Application URL-->
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
+                          </div>
+                          <div id="collapseAppURL" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <form action="" id="myForm30">
+                                  <!--1st text box-->
+                                  <div class="col-lg-6">
+                                    <label for="">WSS:</label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
+                                    <br>
+                                      <input type="text" id="txtapplicationurl" type="url">
+
+                                    <span class="glyphicon glyphicon-pencil" onclick=editName('1') style="cursor:pointer;"></span>
+                                  </div>
+                                   </form>
+                                  <!--1st text box ends-->
+                                  <!--2nd text box-->
+                                  <form action="" id="myForm31">
+                                  <div class="col-lg-6">
+                                    <label for="">AD:</label><span id="urlsaved1" class="hidden">&nbsp;&nbsp;Saved</span>
+                                    <br>
+                                      <input type="text" id="txtapplicationurl1" type="url">
+
+                                    <span class="glyphicon glyphicon-pencil" onclick=editName1('1') style="cursor:pointer;"></span>
+                                  </div>
+                                  <!--2nd text box ends-->
+                                  <!-- <button type="submit" class="formSubmit">Submit</button> -->
+                               </form>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Application URL Ends here-->
                       </div>
 
             </div> <!-- info tab contents ends here-->
@@ -990,10 +1027,65 @@ $.get('../instances/'+urlParams.id,function(data){
   $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
+  if(typeof data.applicationUrl != 'undefined')
+  {
+  if(data.applicationUrl != 'http://')
+  {
+    var href = data.applicationUrl;
+     var anchor = ""+
+     "<a class='app.url' href='"+href+"'' target='_blank' title='"+href+"'>"+
+     "WSS</a>";
+    $('.instance-bootstrap-list').last().append(anchor);
+    
+     // data.applicationUrl.substring()
+    $('#txtapplicationurl').val(data.applicationUrl);
+     if(typeof data.applicationUrl == 'undefined')
+        {
+           $("#txtapplicationurl").val('http://' + data.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+        }
+    }
+    else{
+      
+       if(data.applicationUrl=="http://"){
+                  $("#txtapplicationurl").val('http://' + data.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+                }
+        /*alert(typeof data.applicationUrl == 'undefined');*/
+       
+    }
+  }
+if(typeof data.applicationUrl1 != 'undefined')
+  {
+    if(data.applicationUrl1 != 'http://')
+  {
+    var href1 = data.applicationUrl1;
+     var anchor1 = ""+
+     "<a style='margin-left:44px;font-size:10px' class='app.url1' href='"+href1+"'' target='_blank' title='"+href1+"'>"+
+     "AD</a>";
 
-
-  $('.loadingControlPanelIndicator').hide();
-  $('#controlPanelContainer').show();
+    $('.forURL').last().append(anchor1);
+    
+     // data.applicationUrl.substring()
+    $('#txtapplicationurl1').val(data.applicationUrl1);
+    if(typeof data.applicationUrl1 == 'undefined')
+        {
+           $("#txtapplicationurl1").val('http://' + data.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+        }
+    }
+    else{
+      
+       if(data.applicationUrl1=="http://"){
+        $("#txtapplicationurl1").val('http://' + data.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+                }
+        
+    }
+  }
+    $('.loadingControlPanelIndicator').hide();
+    $('#controlPanelContainer').show();
+  
 
 
 });
@@ -1284,4 +1376,135 @@ $('.goback').click(function(e) {
         $('.front').show();
         $('.back').hide();
     });
+</script>
+
+<script>
+function editName(number) {
+   // document.getElementById('name' + number).readOnly=false;
+    $("#txtapplicationurl").removeAttr('readOnly').focus();
+};
+function editName1(number) {
+   // document.getElementById('name' + number).readOnly=false;
+    $("#txtapplicationurl1").removeAttr('readOnly').focus();
+};
+</script>
+<!-- <script>
+$('.formSubmit').click(function(e){
+  $('.instance-bootstrap-list').last().append('<a href="#txtapplicationurl" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
+  return false;
+});
+</script>-->
+
+<script>
+   $(document).ready(function () {
+
+       
+
+   
+       $('#myForm30').submit(function() {
+           var icon = $('.instance-bootstrap-list').find(".app.url");
+           
+           if(!icon.length){
+            var href= $("#txtapplicationurl").val();
+
+
+            href = $.trim(href);
+            if(href!=="http://"){
+               if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
+                href = "http://"+href;
+                }  
+            }
+            else{
+                $('a[class="app.url"]').detach();
+            }
+            
+          
+           var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
+           if(instanceidforappurl){
+            $.get('/instances/updateappurl/' + instanceidforappurl + '/0/' + encodeURIComponent(href),function(data){
+                $('a[class="app.url"]').detach();
+                var anchor = "<a class='app.url' title='"+href+"' href='"+href+"'' target='_blank'>WSS</a>";
+                $('.instance-bootstrap-list').last().append(anchor);
+                $('#urlsaved').removeClass('hidden');
+                $("#txtapplicationurl").attr('readOnly','readonly');
+                if(href=="http://" || href==''){
+                  /*$("#txtapplicationurl").val('http://localhost:8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
+                  $('a[class="app.url"]').detach();
+                }
+                setTimeout(function() {
+                  $('#urlsaved').addClass('hidden');
+                }, (2000));
+            } );
+           }
+           
+            // 
+
+           }
+           return false; // for demo
+       });
+   
+   
+   
+   
+   });
+</script>
+<script>
+   $(document).ready(function () {
+
+       /*var app_url_submit = function(url1, url2, callback1, callback2){
+          var form1 = $('#myForm30');
+          var form2 = $('#myForm31');
+
+       }; */   
+       /*var href1= $("#txtapplicationurl").val();
+       if(href1=="http://" || href1==''){
+                  $("#txtapplicationurl").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
+                  
+                }*/
+   
+       $('#myForm31').submit(function() {
+           var icon = $('.forURL').find(".app.url1");
+           
+           if(!icon.length){
+            var href1= $("#txtapplicationurl1").val();
+            href = $.trim(href1);
+            if(href!=="http://"){
+               if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
+                  href = "http://"+href;
+                }  
+            }
+            else{
+                $('a[class="app.url1"]').detach();
+            }
+            
+           // get instance ID
+           var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
+
+           if(instanceidforappurl){
+            $.get('/instances/updateappurl/' + instanceidforappurl + '/1/' + encodeURIComponent(href),function(data){
+                $('a[class="app.url1"]').detach();
+                var anchor1 = "<a style='margin-left:44px;font-size:10px' class='app.url1' title='"+href1+"' href='"+href+"'' target='_blank'>AD</a>";
+                $('.forURL').last().append(anchor1);
+                $('#urlsaved1').removeClass('hidden');
+                $("#txtapplicationurl1").attr('readOnly','readonly');
+                if(href=="http://"){
+                  /*$("#txtapplicationurl1").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
+                  $('a[class="app.url1"]').detach();
+                }
+                setTimeout(function() {
+                  $('#urlsaved1').addClass('hidden');
+                }, (2000));
+            });// end $.get
+           }
+           
+            // 
+
+           }
+           return false; // for demo
+       });
+   
+   
+   
+   
+   });
 </script>

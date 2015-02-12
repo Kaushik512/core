@@ -1,496 +1,470 @@
 <script>
-    $(".login-info").hide();
-
-</script>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-12">
-            <div class="widget-box">
-                <div class="widget-header"><h4 style="color:black;">Create Services</h4></div>
-                <div class="widget-body">
-                    <div class="widget-main" style="min-height:300px">
-                        <div>
-                            <section id="widget-grid" class="">
-                                <!-- START ROW -->
-                                <div class="row">
-                                    <!-- NEW COL START -->
-                                    <article class="col-sm-12 col-md-12 col-lg-12">
-
-                                        <!-- Widget ID (each widget will need unique ID)-->
-                                        <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
-
-                                            <!-- widget div-->
-                                            <div>
-                                                <!-- widget content -->
-                                                <div class="widget-body no-padding">
-
-                                                    <form action="" class="smart-form" novalidate="novalidate">
-
-                                                       
-
-                                                        <div class="row " style="margin:0px;">
-                                                            <fieldset style="padding:0px;">
-                                                              <section class="col col-5">
-                                                                <label for="">Name <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                                <label class="input"> 
-                                                                    <input type="text" id="servicename"  cdata="catalyst" cat-validation="required,nospecial,max15" unique="true">
-                                                                </label>                                        
-                                                              </section>
-                                                              <section class="col col-5 CommandName hidden" style="padding-top:10px;">
-                                                                <label for="">Command Name</label>
-                                                                <label class="input"> 
-                                                                    <input type="text"  id="commandname"  cdata="catalyst">
-                                                                </label>                                        
-                                                              </section>
-                                                                <section class="col col-6">
-                                                                  <label class="">
-                                                                      Service Command Type
-                                                                  </label>
-                                                                  <div class="row">
-                                                                      <div class="col col-10">
-                                                                          <label class="select"> 
-                                                                              <select class="form-control width-100" id="commandtype" cdata="catalyst">
-                                                                                  <option id="Receipe" value="Chef Cookbook/Recepie">Chef Cookbook/Recepie</option>
-                                                                                  <option id="Command" value="Service Command">Service Command</option>
-                                                                              </select>
-                                                                          </label>
-                                                                      </div>  
-                                                                  </div>
-                                                              </section>
-                                                              
-                                                          </fieldset>
-                                                          <fieldset style="padding:0px;">                   
-                                                            
-                                                            <section class="col col-6 chooseChefServer">
-                                                                  <label class="">
-                                                                      Select Chefserver<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                                  </label>
-                                                                  <div class="row">
-                                                                      <div class="col col-10">
-                                                                          <label class="select"> 
-                                                                              <select class="form-control chooseChefServerdropdown width-100" cdata="catalyst"  id="configname"  sourcepath="10" onchange="loadcookbooksinto('servicecookbook','configname');" datapath="masterjson.rows.row">
-                                                                              </select>
-                                                                              <input type="text" id="chefserverid"  cdata="catalyst" style="display:none" />
-                                                                          </label>
-                                                                      </div>  
-                                                                  </div>
-                                                              </section>
-                                                            
-                                                            <section class="col col-5 CommandName" style="padding-top:10px;">
-                                                              <label class="">Choose Operating System</label>
-                                                              <div class="inline-group">
-                                                                <select class="form-control chooseActiontype width-100" id="operatingsystem" cdata="catalyst">
-                                                                                  <option value="linux">Linux</option>
-                                                                                  <option value="windows">Windows</option>
-                                                                 </select>
-                                                              </div>
-                                                            </section>
-                                                            <section class="col col-6 ServiceCookbooks padding-left-10percent">
-                                                                  <label class="">
-                                                                      Service Cookbooks <span style="color:Red;" class="control-label">&nbsp;*</span> <img class="servicecookbookspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif"></img>
-                                                                  </label>
-                                                                  <div class="">
-                                                                      <div>
-                                                                          <label class="select"> 
-                                                                              <select class="form-control chooseServiceCookbooks width-100" id="servicecookbook" cdata="catalyst" onchange="$('#servicecookbookspinner').removeClass('hidden');loadreceipesinto(['servicestart','servicestop','servicerestart','servicekill','servicestatus'],$(this).val(),'configname','loadactioncheckboxes');">
-                                                                                 
-                                                                              </select>
-                                                                          </label>
-                                                                      </div>  
-                                                                  </div>
-                                                            </section>
-                                                          </fieldset> 
-                                                          
-                            <fieldset style="padding:0px;">
-                                
-                              <div id="chefCookbook-dropdown">
-
-                                <label style="padding-left:15px;">Select Actions <img class="receipelistspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif"></img></label>
-
-                                <div style="margin: 0px;" class="row">
-                                    <div class="col col-sm-6">
-                                      <div class="col col-sm-3" style="padding-left: 0px;">
-                                        <label class="checkbox actionTypeContainer">
-                                          <input type="checkbox" value="start" name="checkbox" id="servicestartcheckbox">
-                                          <i></i>Start
-                                        </label>
-                                      </div>
-
-                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
-                                        <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestart" cdata="catalyst">
-                                                <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
-                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
-                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
-                                            </select>
-                                        </label>
-                                       
-                                      </div>
-                                  </div>
-                                  <div class="col col-sm-6">
-                                      <div class="col col-sm-3" style="padding-left: 0px;">
-                                        <label class="checkbox actionTypeContainer">
-                                          <input type="checkbox" value="start" name="checkbox"  id="servicestopcheckbox">
-                                          <i></i>Stop
-                                        </label>
-                                      </div>
-
-                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
-                                        
-                                        <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestop" cdata="catalyst">
-                                                <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
-                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
-                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
-                                            </select>
-                                        </label>
-                                       
-                                      </div>
-                                    </div>
-                                </div>
-                                <br>
-                                <div style="margin: 0px;" class="row">
-                                    <div class="col col-sm-6">
-                                      <div class="col col-sm-3" style="padding-left: 0px;">
-                                        <label class="checkbox actionTypeContainer">
-                                          <input type="checkbox" value="start" name="checkbox"  id="servicerestartcheckbox">
-                                          <i></i>Restart
-                                        </label>
-                                      </div>
-
-                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
-                                        
-                                        <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicerestart" cdata="catalyst">
-                                               <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
-                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
-                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
-                                            </select>
-                                        </label>
-                                      </div>
-                                  </div>
-                                <div style="margin: 0px;" class="row">
-                                    <div class="col col-sm-6">
-                                      <div class="col col-sm-3" style="padding-left: 0px;">
-                                        <label class="checkbox actionTypeContainer">
-                                          <input type="checkbox" value="start" name="checkbox"  id="servicestatuscheckbox">
-                                          <i></i>Status
-                                        </label>
-                                      </div>
-
-                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
-                                        
-                                        <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestatus" cdata="catalyst">
-                                                <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
-                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
-                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
-                                            </select>
-                                        </label>
-                                       
-                                      </div>
-                                  </div>
-                                   
-                                </div>
-                                <br/>
-                                <div class="col col-sm-6 hidden">
-                                      <div class="col col-sm-3" style="padding-left: 0px;">
-                                        <label class="checkbox actionTypeContainer">
-                                          <input type="checkbox" value="start" name="checkbox"  id="servicekillcheckbox">
-                                          <i></i>Kill
-                                        </label>
-                                      </div>
-
-                                      <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
-                                       
-                                        <label class="select Service_Apache"> 
-                                            <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicekill" cdata="catalyst">
-                                               <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
-                                                <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
-                                                <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
-                                                <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
-                                            </select>
-                                        </label>
-                                      </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div id="customScript-dropdown">
-                                <!-- <section class="col col-5" >
-                                  <label>Command</label>
-                                  <label class="textarea">             
-                                    <textarea rows="3" class="custom-scroll"></textarea> 
-                                  </label>
-                                  
-                                </section> -->
-                                <section class="col col-5" style="padding-top:10px;">                                                                                                                                 
-                                    <label>Command<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <label class="input"> 
-                                        <input type="text" id="command" cdata="catalyst">
-                                    </label>                                        
-                                </section>
-                              <section class="col col-12" style="padding-top:10px;">
-                                <label class="">Select Action</label>
-                                <div class="row" cdata="catalyst" ctype="checkbox" id="commandaction">
-                                  <div class="col col-2">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_start" value="start" >
-                                      <i></i>Start</label>
-                                  </div>
-                                  <div class="col col-2">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_stop" value="stop" >
-                                      <i></i>Stop</label>
-                                  </div>
-                                 
-                                  <div class="col col-2 hidden">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox" id="checkbox_kill"  value="kill" >
-                                      <i></i>Kill</label>
-                                  </div>
-                                  <div class="col col-2" style="width:70px">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_restart"  value="restart" >
-                                      <i></i>Restart</label>
-                                  </div>
-                                  <div class="col col-2">
-                                    <label class="checkbox">
-                                      <input type="checkbox" name="checkbox"  id="checkbox_status"  value="status">
-                                      <i></i>Status</label>
-                                  </div>
-
-                                </div>
-                              </section>
-                                <!-- <section class="col col-5 AssignUsers padding-left-10percent">
-                                  <label class="label">Assign Users <span style="color:red">*</span>
-                                  </label>
-                                  <label class="select select-multiple">
-                                      <div class="userListLoadingContainer" style="display: none;">
-                                        <img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block">
-                                      </div>
-                                      <select style="" id="userListSelect" multiple="" class="custom-scroll">
-                                        <option value="Administrator">Administrator
-                                        </option>
-                                        <option value="Designer">Designer
-                                        </option>
-                                        <option value="consumer1">consumer1
-                                        </option>
-                                        <option value="designer1">designer1
-                                        </option>
-                                        <option value="sd1">sd1
-                                        </option>
-                                      </select>
-                                  </label>
-                              </section> -->
-                              </div>
-                                                            
-                                                          </fieldset>
-                                                        </div>
-
-                                                    </form>
-                                                </div>
-                                                <!-- end widget content -->
-
-                                            </div>
-                                            <!-- end widget div -->
-
-                                        </div>
-                                        <!-- end widget -->
-                                    </article>
-                                    <!-- END COL -->
-                                </div>
-                                <!-- END ROW -->
-                            </section>
-                            <!-- end widget grid -->
-
-                        </div>
-                    </div>
-                </div>
-                <div class="widget-toolbox clearfix">
-                    <div class="btn-group pull-right">
-                        <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()){ preprocess();saveform(19);}">
-                            <i class="ace-icon fa fa-check bigger-110"></i>
-                            Save
-                        </button>
-                        <button class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                            <i class="ace-icon fa fa-undo bigger-110"></i>
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript">
-    
-    // $(".chooseActiontype").select2();
-    // $(".chooseChefServerdropdown").select2();
-    // $(".chooseServiceCookbooks").select2();
-    // $(".chooseservicesCookBookRecipeList").select2();
-    
-    $("#customScript-dropdown").hide();
-
-    $('#commandtype').change(function(e) {
-    if(this.value=="Chef Cookbook/Recepie"){
-       $("#customScript-dropdown").hide();
-       $("#chefCookbook-dropdown").show();
-       $(".ServiceCookbooks").show();
-       $(".ServiceName").show();
-       $(".CommandName").hide();
-       $(".chooseChefServer").show();
-       //$(".AssignUsers").show();
-    }else{
-        $("#customScript-dropdown").show();
-       $("#chefCookbook-dropdown").hide();
-       $(".ServiceCookbooks").hide();
-       $(".ServiceName").hide();
-       $(".CommandName").show();
-       $(".chooseChefServer").hide();
-       //$(".AssignUsers").show();
-    }
-  });
-  // $('.chooseServiceCookbooks').change(function(e) {
-  //   if(this.value=="Service_Apache"){
-  //    $(".Service_Mysql").hide();
-  //    $(".Service_Apache").show();
-  //    $(".Service_JBoss").hide();
-  //   }else if(this.value=="Service_Mysql"){
-  //    $(".Service_Mysql").show();
-  //    $(".Service_Apache").hide();
-  //    $(".Service_JBoss").hide();
-  //   }
-  //   else{
-  //     $(".Service_Mysql").hide();
-  //     $(".Service_Apache").hide();
-  //     $(".Service_JBoss").show();
-  //   }
-  // });
-
-  // $( document ).ready(function() {
-  //   $(".Service_Mysql").hide();
-  //   $(".Service_Apache").show();
-  //   $(".Service_JBoss").hide();
-  //   $(".ServiceName").show();
-  //   $(".CommandName").hide();
-  //   $(".chooseChefServer").show();
-  // });
-// $( document ).ready(function() {
-//     $('#data_bag_div2').hide();
-// });
-//   $('.panel-databag').click(function(e){
-//       $('#data_bag_div2').show();
-//   });
-
-
-//   $( document ).ready(function() {
-//     $('#data_bag_div3').hide();
-// });
-//   $('.panel-databag1').click(function(e){
-//       $('#data_bag_div3').show();
-//   });
-
-
-
-//   $( document ).ready(function() {
-//     $('#data_bag_div21').hide();
-// });
-//   $('.panel-databag').click(function(e){
-//       $('#data_bag_div21').show();
-//   });
-
-
-//   $( document ).ready(function() {
-//     $('#data_bag_div31').hide();
-// });
-//   $('.panel-databag1').click(function(e){
-//       $('#data_bag_div31').show();
-//   });
-</script>
-
-
-<script>
-    //Form Name
-    //preprocess() -> will set the dropdown values to "none" if checkbox is not selected.
-    function preprocess(){
-      $('#commandname').val($('#servicename').val());
-      $('select.chooseservicesCookBookRecipeList').each(function(){
-        var cb = $('#' + $(this).attr('id') + 'checkbox');
-        //console.log(cb.val());
-        var $sel = $(this);
-        if(!cb.is(":checked")){
-          $sel.append('<option value="none"></option>');
-          $sel.val('none');
-        }
-         
-      });
-    }
-
-    function inLineReady() {
-        $("input[type='text']").on("click", function () {
-            $(this).select();
-            $("#msgOrgName").hide();
-        });
-        if(readform(19) == false){
-          $('select[cdata="catalyst"]').select2();
-        }
-        $('#content').css("opacity", "1 !important");
-        //$('#iconpicker').iconpicker({
-        //    iconset: 'fontawesome',
-        //    icon: 'fa-key',
-        //    rows: 5,
-        //    cols: 5,
-        //    placement: 'bottom',
-        //});
-
-        //Force opening the left navigation menu
-        $('select[cdata="catalyst"]').trigger('change'); //used for selecting
-        if ($('#navSettings').is(":visible") == false) {
-            $('#navSettings').css("display", '');
-            $('#navSettings > ul > li').first().addClass('open');
-            $('#navSettings > ul > li > ul').css("display", "none");
-            $('#navSettings > ul > li > ul').first().css("display", "block");
-        }
-        //redrawing the breadcrumb and selecting the tree
-        //redrawing the breadcrumb and selecting the tree
-        $('#Settings li').removeClass('active');
-        $('#Settings li').each(function () {
-            //alert($(this).text().trim());
-            if ($(this).text().trim() == "Service Commands")
-                $(this).addClass('active');
-        });
-        drawBreadCrumb1();
-        enableUniqueCheckingForInputs(19);
-    }
-
+   $(".login-info").hide();
    
+</script>
+<div class="row">
+   <div class="col-md-12">
+      <div class="col-md-12">
+         <div class="widget-box">
+            <div class="widget-header">
+               <h4 style="color:black;">Create Services</h4>
+            </div>
+            <div class="widget-body">
+               <div class="widget-main" style="min-height:300px">
+                  <div>
+                     <section id="widget-grid" class="">
+                        <!-- START ROW -->
+                        <div class="row">
+                           <!-- NEW COL START -->
+                           <article class="col-sm-12 col-md-12 col-lg-12">
+                              <!-- Widget ID (each widget will need unique ID)-->
+                              <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                                 <!-- widget div-->
+                                 <div>
+                                    <!-- widget content -->
+                                    <div class="widget-body no-padding">
+                                       <form action="" class="smart-form" novalidate="novalidate">
+                                          <div class="row " style="margin:0px;">
+                                             <fieldset style="padding:0px;">
+                                                <!-- <section class="col col-5">
+                                                   <label for="">Name <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                   <label class="input"> 
+                                                   <input type="text" id="servicename"  cdata="catalyst" cat-validation="required,nospecial,max15" unique="true">
+                                                   </label>                                        
+                                                </section> -->
+                                                <div class="col-lg-4">
+                                    <label for="name">Name:
+                                    <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                    <input  id="servicename" unique="true" class="form-control" cdata="catalyst" type="text" cat-validation="required,max15">
+                                    
+                                 </div>
+                                                <section class="col col-5 CommandName hidden" style="padding-top:10px;">
+                                                   <label for="">Command Name</label>
+                                                   <label class="input"> 
+                                                   <input type="text"  id="commandname"  cdata="catalyst">
+                                                   </label>                                        
+                                                </section>
+                                                <div class="col-lg-6" style="margin-left:20px">
+                                                   <label class="">
+                                                   Service Command Type
+                                                   </label>
+                                                   <div class="row" style="margin-left:10px">
+                                                      <div class="col-lg-10" style="margin-top:-5px">
+                                                        
+                                                            <select class="width-100" id="commandtype" cdata="catalyst">
+                                                               <option id="Receipe" value="Chef Cookbook/Recepie">Chef Cookbook/Recepie</option>
+                                                               <option id="Command" value="Service Command">Service Command</option>
+                                                            </select>
+                                                         
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </fieldset>
+                                             <fieldset style="padding:0px;">
+                                                <div class="col-lg-6 chooseChefServer" style="margin-top:10px">
+                                                   <label class="">
+                                                   Select Chefserver<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                   </label>
+                                                   <div class="row" style="margin-left:3px">
+                                                      <div class="col-lg-10">
+                                                         
+                                                         <select class="chooseChefServerdropdown width-100" cdata="catalyst"  id="configname"  sourcepath="10" onchange="loadcookbooksinto('servicecookbook','configname');" datapath="masterjson.rows.row">
+                                                         </select>
+                                                         <input type="text" id="chefserverid"  cdata="catalyst" style="display:none" />
+                                                         
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                                <div class="col-lg-5 CommandName" style="padding-top:10px;">
+                                                   <label class="">Choose Operating System</label>
+                                                   <div class="inline-group">
+                                                      <select class="chooseActiontype width-100" id="operatingsystem" cdata="catalyst">
+                                                         <option value="linux">Linux</option>
+                                                         <option value="windows">Windows</option>
+                                                      </select>
+                                                   </div>
+                                                </div>
+                                                <div class="col-lg-6 ServiceCookbooks padding-left-10percent" style="margin-top:10px">
+                                                   <label class="">
+                                                   Service Cookbooks <span style="color:Red;" class="control-label">&nbsp;*</span> <img class="servicecookbookspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif">
+                                                   </label>
+                                                   <div class="">
+                                                      <div>
+                                                          
+                                                         <select class="chooseServiceCookbooks width-100" id="servicecookbook" cdata="catalyst" onchange="$('#servicecookbookspinner').removeClass('hidden');loadreceipesinto(['servicestart','servicestop','servicerestart','servicekill','servicestatus'],$(this).val(),'configname','loadactioncheckboxes');">
+                                                         </select>
+                                                         
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </fieldset>
+                                             <fieldset style="padding:0px;">
+                                                <div id="chefCookbook-dropdown" style="margin-top:15px">
+                                                   <label style="padding-left:15px;">Select Actions <img class="receipelistspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif"></img></label>
+                                                   <div style="margin: 0px;" class="row">
+                                                      <div class="col col-sm-6">
+                                                         <div class="col col-sm-3" style="padding-left: 0px;">
+                                                            <label class="checkbox actionTypeContainer">
+                                                            <input type="checkbox" value="start" name="checkbox" id="servicestartcheckbox">
+                                                            <i></i>Start
+                                                            </label>
+                                                         </div>
+                                                         <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
+                                                            <label class="select Service_Apache">
+                                                               <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestart" cdata="catalyst">
+                                                                  <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                                                     <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
+                                                                     <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
+                                                                     <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
+                                                               </select>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col col-sm-6">
+                                                         <div class="col col-sm-3" style="padding-left: 0px;">
+                                                            <label class="checkbox actionTypeContainer">
+                                                            <input type="checkbox" value="start" name="checkbox"  id="servicestopcheckbox">
+                                                            <i></i>Stop
+                                                            </label>
+                                                         </div>
+                                                         <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
+                                                            <label class="select Service_Apache">
+                                                               <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestop" cdata="catalyst">
+                                                                  <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                                                     <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
+                                                                     <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
+                                                                     <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
+                                                               </select>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <br>
+                                                   <div style="margin: 0px;" class="row">
+                                                      <div class="col col-sm-6">
+                                                         <div class="col col-sm-3" style="padding-left: 0px;">
+                                                            <label class="checkbox actionTypeContainer">
+                                                            <input type="checkbox" value="start" name="checkbox"  id="servicerestartcheckbox">
+                                                            <i></i>Restart
+                                                            </label>
+                                                         </div>
+                                                         <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
+                                                            <label class="select Service_Apache">
+                                                               <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicerestart" cdata="catalyst">
+                                                                  <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                                                     <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
+                                                                     <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
+                                                                     <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
+                                                               </select>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+                                                      <div style="margin: 0px;" class="row">
+                                                         <div class="col col-sm-6">
+                                                            <div class="col col-sm-3" style="padding-left: 0px;">
+                                                               <label class="checkbox actionTypeContainer">
+                                                               <input type="checkbox" value="start" name="checkbox"  id="servicestatuscheckbox">
+                                                               <i></i>Status
+                                                               </label>
+                                                            </div>
+                                                            <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
+                                                               <label class="select Service_Apache">
+                                                                  <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicestatus" cdata="catalyst">
+                                                                     <!-- <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                                                        <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
+                                                                        <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
+                                                                        <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
+                                                                  </select>
+                                                               </label>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <br/>
+                                                      <div class="col col-sm-6 hidden">
+                                                         <div class="col col-sm-3" style="padding-left: 0px;">
+                                                            <label class="checkbox actionTypeContainer">
+                                                            <input type="checkbox" value="start" name="checkbox"  id="servicekillcheckbox">
+                                                            <i></i>Kill
+                                                            </label>
+                                                         </div>
+                                                         <div class="col col-sm-7 col-sm-offset-2" style="padding: 0px;">
+                                                            <label class="select Service_Apache">
+                                                               <select class="form-control chooseservicesCookBookRecipeList width-100"  id="servicekill" cdata="catalyst">
+                                                                  <!--  <option value="recipe[Service_Apache::kill]">Service_Apache_kill</option>
+                                                                     <option value="recipe[Service_Apache:restart]">Service_Apache_restart</option>
+                                                                     <option value="recipe[Service_Apache::start]">Service_Apache_start</option>
+                                                                     <option value="recipe[Service_Apache::stop]">Service_Apache_stop</option> -->
+                                                               </select>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                                <div id="customScript-dropdown">
+                                                   <!-- <section class="col col-5" >
+                                                      <label>Command</label>
+                                                      <label class="textarea">             
+                                                        <textarea rows="3" class="custom-scroll"></textarea> 
+                                                      </label>
+                                                      
+                                                      </section> -->
+                                                   <div class="col-lg-5" style="padding-top:10px;">                                                                                                                                 
+                                                      <label>Command<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                       
+                                                      <input type="text" id="command" cdata="catalyst">
+                                                      
 
-    function validateForm() {
-        //Check for required parameter
-      
-        return (true);
-    }
-    function readURL_todelete(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                var imgLogoPreview = "<img src='" + e.target.result + "' style='border:0px;height:25px;width:28px'/>";
-                $('#logoPreview').empty();
-                $('#logoPreview').append(imgLogoPreview);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    
-    inLineReady();
+                                                      <!-- <label>Command:
+                                    <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                    <input id="command" class="form-control" cdata="catalyst" type="text" cat-validation="required"> -->
+                                                                            
+                                                   </div>
+                                                   <section class="col col-12" style="padding-top:10px;">
+                                                      <label class="">Select Action</label>
+                                                      <div class="row" cdata="catalyst" ctype="checkbox" id="commandaction">
+                                                         <div class="col col-2">
+                                                            <label class="checkbox">
+                                                            <input type="checkbox" name="checkbox"  id="checkbox_start" value="start" >
+                                                            <i></i>Start</label>
+                                                         </div>
+                                                         <div class="col col-2">
+                                                            <label class="checkbox">
+                                                            <input type="checkbox" name="checkbox"  id="checkbox_stop" value="stop" >
+                                                            <i></i>Stop</label>
+                                                         </div>
+                                                         <div class="col col-2 hidden">
+                                                            <label class="checkbox">
+                                                            <input type="checkbox" name="checkbox" id="checkbox_kill"  value="kill" >
+                                                            <i></i>Kill</label>
+                                                         </div>
+                                                         <div class="col col-2" style="width:70px">
+                                                            <label class="checkbox">
+                                                            <input type="checkbox" name="checkbox"  id="checkbox_restart"  value="restart" >
+                                                            <i></i>Restart</label>
+                                                         </div>
+                                                         <div class="col col-2">
+                                                            <label class="checkbox">
+                                                            <input type="checkbox" name="checkbox"  id="checkbox_status"  value="status">
+                                                            <i></i>Status</label>
+                                                         </div>
+                                                      </div>
+                                                   </section>
+                                                   <!-- <section class="col col-5 AssignUsers padding-left-10percent">
+                                                      <label class="label">Assign Users <span style="color:red">*</span>
+                                                      </label>
+                                                      <label class="select select-multiple">
+                                                          <div class="userListLoadingContainer" style="display: none;">
+                                                            <img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block">
+                                                          </div>
+                                                          <select style="" id="userListSelect" multiple="" class="custom-scroll">
+                                                            <option value="Administrator">Administrator
+                                                            </option>
+                                                            <option value="Designer">Designer
+                                                            </option>
+                                                            <option value="consumer1">consumer1
+                                                            </option>
+                                                            <option value="designer1">designer1
+                                                            </option>
+                                                            <option value="sd1">sd1
+                                                            </option>
+                                                          </select>
+                                                      </label>
+                                                      </section> -->
+                                                </div>
+                                             </fieldset>
+                                          </div>
+                                       </form>
+                                    </div>
+                                    <!-- end widget content -->
+                                 </div>
+                                 <!-- end widget div -->
+                              </div>
+                              <!-- end widget -->
+                           </article>
+                           <!-- END COL -->
+                        </div>
+                        <!-- END ROW -->
+                     </section>
+                     <!-- end widget grid -->
+                  </div>
+               </div>
+            </div>
+            <div class="widget-toolbox clearfix">
+               <div class="btn-group pull-right">
+                  <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
+                  <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if (validateForm()){ preprocess();saveform(19);}">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  <button class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
+                  <i class="ace-icon fa fa-undo bigger-110"></i>
+                  Cancel
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<script type="text/javascript">
+   // $(".chooseActiontype").select2();
+   // $(".chooseChefServerdropdown").select2();
+   // $(".chooseServiceCookbooks").select2();
+   // $(".chooseservicesCookBookRecipeList").select2();
+   
+   $("#customScript-dropdown").hide();
+   
+   $('#commandtype').change(function(e) {
+   if(this.value=="Chef Cookbook/Recepie"){
+      $("#customScript-dropdown").hide();
+      $("#chefCookbook-dropdown").show();
+      $(".ServiceCookbooks").show();
+      $(".ServiceName").show();
+      $(".CommandName").hide();
+      $(".chooseChefServer").show();
+      //$(".AssignUsers").show();
+   }else{
+       $("#customScript-dropdown").show();
+      $("#chefCookbook-dropdown").hide();
+      $(".ServiceCookbooks").hide();
+      $(".ServiceName").hide();
+      $(".CommandName").show();
+      $(".chooseChefServer").hide();
+      //$(".AssignUsers").show();
+   }
+   });
+   // $('.chooseServiceCookbooks').change(function(e) {
+   //   if(this.value=="Service_Apache"){
+   //    $(".Service_Mysql").hide();
+   //    $(".Service_Apache").show();
+   //    $(".Service_JBoss").hide();
+   //   }else if(this.value=="Service_Mysql"){
+   //    $(".Service_Mysql").show();
+   //    $(".Service_Apache").hide();
+   //    $(".Service_JBoss").hide();
+   //   }
+   //   else{
+   //     $(".Service_Mysql").hide();
+   //     $(".Service_Apache").hide();
+   //     $(".Service_JBoss").show();
+   //   }
+   // });
+   
+   // $( document ).ready(function() {
+   //   $(".Service_Mysql").hide();
+   //   $(".Service_Apache").show();
+   //   $(".Service_JBoss").hide();
+   //   $(".ServiceName").show();
+   //   $(".CommandName").hide();
+   //   $(".chooseChefServer").show();
+   // });
+   // $( document ).ready(function() {
+   //     $('#data_bag_div2').hide();
+   // });
+   //   $('.panel-databag').click(function(e){
+   //       $('#data_bag_div2').show();
+   //   });
+   
+   
+   //   $( document ).ready(function() {
+   //     $('#data_bag_div3').hide();
+   // });
+   //   $('.panel-databag1').click(function(e){
+   //       $('#data_bag_div3').show();
+   //   });
+   
+   
+   
+   //   $( document ).ready(function() {
+   //     $('#data_bag_div21').hide();
+   // });
+   //   $('.panel-databag').click(function(e){
+   //       $('#data_bag_div21').show();
+   //   });
+   
+   
+   //   $( document ).ready(function() {
+   //     $('#data_bag_div31').hide();
+   // });
+   //   $('.panel-databag1').click(function(e){
+   //       $('#data_bag_div31').show();
+   //   });
+</script>
+<script>
+   //Form Name
+   //preprocess() -> will set the dropdown values to "none" if checkbox is not selected.
+   function preprocess(){
+     $('#commandname').val($('#servicename').val());
+     $('select.chooseservicesCookBookRecipeList').each(function(){
+       var cb = $('#' + $(this).attr('id') + 'checkbox');
+       //console.log(cb.val());
+       var $sel = $(this);
+       if(!cb.is(":checked")){
+         $sel.append('<option value="none"></option>');
+         $sel.val('none');
+       }
+        
+     });
+   }
+   
+   function inLineReady() {
+       $("input[type='text']").on("click", function () {
+           $(this).select();
+           $("#msgOrgName").hide();
+       });
+       if(readform(19) == false){
+         $('select[cdata="catalyst"]').select2();
+       }
+       $('#content').css("opacity", "1 !important");
+       //$('#iconpicker').iconpicker({
+       //    iconset: 'fontawesome',
+       //    icon: 'fa-key',
+       //    rows: 5,
+       //    cols: 5,
+       //    placement: 'bottom',
+       //});
+   
+       //Force opening the left navigation menu
+       $('select[cdata="catalyst"]').trigger('change'); //used for selecting
+       if ($('#navSettings').is(":visible") == false) {
+           $('#navSettings').css("display", '');
+           $('#navSettings > ul > li').first().addClass('open');
+           $('#navSettings > ul > li > ul').css("display", "none");
+           $('#navSettings > ul > li > ul').first().css("display", "block");
+       }
+       //redrawing the breadcrumb and selecting the tree
+       //redrawing the breadcrumb and selecting the tree
+       $('#Settings li').removeClass('active');
+       $('#Settings li').each(function () {
+           //alert($(this).text().trim());
+           if ($(this).text().trim() == "Service Commands")
+               $(this).addClass('active');
+       });
+       drawBreadCrumb1();
+       enableUniqueCheckingForInputs(19);
+   }
+   
+   
+   
+   function validateForm() {
+       //Check for required parameter
+     
+       return (true);
+   }
+   function readURL_todelete(input) {
+       if (input.files && input.files[0]) {
+           var reader = new FileReader();
+   
+           reader.onload = function (e) {
+               var imgLogoPreview = "<img src='" + e.target.result + "' style='border:0px;height:25px;width:28px'/>";
+               $('#logoPreview').empty();
+               $('#logoPreview').append(imgLogoPreview);
+           }
+   
+           reader.readAsDataURL(input.files[0]);
+       }
+   }
+   
+   
+   inLineReady();
 </script>

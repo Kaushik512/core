@@ -144,7 +144,10 @@
 					//alert('in');
 					
 					this._setSelectedNode(node);
-					$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','font-size : 14px !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
+					
+					//drawBreadCrumb(this.tree);
+
+					$('li[data-nodeid="' + node.nodeId + '"]').first().addClass('active').attr('style','font-size : 14px !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 
 					//$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : grey !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 
@@ -301,7 +304,8 @@
 						);
 				}
 				else if (node.nodes) {
-					treeItem
+
+					treeItem.addClass('active')
 						.append($(self._template.expandCollapseIcon)
 							.addClass('click-collapse')
 							.addClass(self.options.collapseIcon)
@@ -328,6 +332,8 @@
 						.append($(self._template.link)
 							.attr('href', node.href)
 							.attr('orgname',node.orgname)
+							.attr('bgname',node.bgname)
+							.attr('projname',node.projname)
 							.attr('itemtype',node.itemtype)
 							.attr('title',node.tooltip)
 							.append(node.text)
@@ -434,7 +440,7 @@
 			badge: '<span class="badge"></span>'
 		},
 
-		_css: '.list-group-item{cursor:pointer;}span.indent{margin-left:10px;margin-right:10px}span.expand-collapse{width:1rem;height:1rem}span.icon{margin-left:10px;margin-right:5px}'
+		_css: '.list-group-item{cursor:pointer;}span.indent{margin-left:2px;margin-right:8px}span.expand-collapse{width:1rem;height:1rem}span.icon{margin-left:10px;margin-right:5px}'
 		// _css: '.list-group-item{cursor:pointer;}.list-group-item:hover{background-color:#f5f5f5;}span.indent{margin-left:10px;margin-right:10px}span.icon{margin-right:5px}'
 
 	};

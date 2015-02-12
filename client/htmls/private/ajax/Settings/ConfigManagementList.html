@@ -1,6 +1,6 @@
 
 <script>
-    $(".login-info").hide();   
+    $(".tree-view").hide();   
 </script>
 
 <div class="row">
@@ -90,7 +90,7 @@
                                        
                                         //setting the addnew button to launch popup
                                         $("#addnewitem").attr('data-toggle', 'modal');
-                                        CreateTableFromJsonNew(10,'loginname' , 'CreateConfigManagement.html'); //10 is for config management
+                                        CreateTableFromJson(10,'loginname' , 'CreateConfigManagement.html'); //10 is for config management
                                         var tab = 'envtable';
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',

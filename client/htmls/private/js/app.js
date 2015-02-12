@@ -9,7 +9,7 @@
 	$.menu_speed = 235;
 	
 	// Note: You will also need to change this variable in the "variable.less" file.
-	$.navbar_height = 49; 
+	/*$.navbar_height = 49; */
 
 /*
  * APP DOM REFERENCES
@@ -43,7 +43,7 @@
  */	
 
 /* so far this is covering most hand held devices */
-var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+/*var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
 
 	if (!ismobile) {
 		// Desktop
@@ -61,7 +61,7 @@ var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.tes
 			$('#hide-menu a').noClickDelay();
 		}
 	}
-
+*/
 /* ~ END: CHECK MOBILE DEVICE */
 
 /*
@@ -78,7 +78,7 @@ $(document).ready(function() {
 	}
 
 	//TODO: was moved from window.load due to IE not firing consist
-	nav_page_height()
+	/*nav_page_height()*/
 
 
 	// closedSign : '<em class="fa fa-expand-o"></em>',
@@ -115,6 +115,7 @@ $(document).ready(function() {
            url: "/d4dMasters/getuser",
            success: function (data) {
                var usrdata = JSON.parse(JSON.stringify(data));
+               //$("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata[0]['loginname'] + "</b>&nbsp;[" + usrdata[0]['userrolename'] + "]");
                $("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata.user[0].username.cn.toUpperCase() + "</b>&nbsp;" + usrdata.user[1].role)
            }
        });
@@ -273,8 +274,7 @@ $(document).ready(function() {
 	// LOGOUT BUTTON
 	$('#logout a').click(function(e) {
 		//get the link
-		$.loginURL = $(this).attr('href');
-
+		$.loginURL = $(this).attr('logoutlink');
 		// ask verification
 		$.SmartMessageBox({
 			title : "<i class='fa fa-sign-out txt-color-blue'></i> Logout <span class='txt-color-orangeDark'></span> ?",
@@ -284,12 +284,14 @@ $(document).ready(function() {
 
 		}, function(ButtonPressed) {
 			if (ButtonPressed == "Yes") {
+
 				$.root_.addClass('animated fadeOutUp');
-				setTimeout(logout, 1000)
+				setTimeout(logout, 1000);	
+					
 			}
 
 		});
-		e.preventDefault();
+		
 	});
 
 	/*
@@ -418,7 +420,7 @@ $(document).ready(function() {
 */
 
 // Fix page and nav height
-function nav_page_height() {
+/*function nav_page_height() {
 	setHeight = $('#main').height();
 	menuHeight = $.left_panel.height();
 	windowHeight = $(window).height() - $.navbar_height;
@@ -441,7 +443,7 @@ $('#main').resize(function() {
 
 $('nav').resize(function() {
 	nav_page_height();
-})
+})*/
 
 function check_if_mobile_width() {
 	if ($(window).width() < 979) {
@@ -1281,6 +1283,7 @@ function loadURL(url, container) {
 			
 			if (container[0] == $("#content")[0]) {
 				drawBreadCrumb();
+				
 				// update title with breadcrumb...
 				//document.title = $(".breadcrumb li:last-child").text(); //Removed last page visited title. Issue Fix : 7-Oct : Vinod
 				// scroll up
@@ -1324,15 +1327,45 @@ function drawBreadCrumb() {
 		return;
 	}
 
+
 	//console.log("breadcrumb")
 	$("#ribbon ol.breadcrumb").empty();
 	if(!window.selectedOrgName) {
 		window.selectedOrgName = ' ';
 	}
 	$("#ribbon ol.breadcrumb").append($("<li>"+window.selectedOrgName+"</li>"));
-	$('nav li.active > a').each(function() {
-		$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
-	});
+	var activeClasses = '';
+	//Drawing breadcrumb in design.html
+	if($('#Workspace1').hasClass('hidden')){
+			activeClasses = $('nav li.active > a');
+			activeClasses.each(function() {
+				$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+			});
+
+	}else{
+		//Drawing Breadcrumb in workzone & Control-Panel(Dev.html)
+		activeClasses = $('#Workspace1 li.active > a');		
+		var ol = $("#ribbon ol.breadcrumb");
+		ol.empty();
+		var items = [
+						"Workzone", 
+						localStorage.getItem("orgname"), 
+						localStorage.getItem("bgname"), 
+						localStorage.getItem("projname"),
+						localStorage.getItem("envname"),
+						"Instances"
+					];
+
+		if(items[1] != null){
+			items.forEach(function(item) {
+				ol.append("<li>"+ item+ "</li>");
+			});
+		}
+		
+	}
+	/*activeClasses.each(function() {
+		//$("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
+	});*/
 
 }
 
@@ -1406,7 +1439,7 @@ function pageSetUp() {
 		setup_widgets_desktop();
 	
 		//setup nav height (dynamic)
-		nav_page_height();
+		/*nav_page_height();*/
 	
 		// run form elements
 		runAllForms();
@@ -1430,7 +1463,7 @@ function pageSetUp() {
 		setup_widgets_mobile();
 	
 		//setup nav height (dynamic)
-		nav_page_height();
+		/*nav_page_height();*/
 	
 		// run form elements
 		runAllForms();
