@@ -1041,7 +1041,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     host: instance.instanceIP,
                                     instanceOS: instance.hardware.os,
                                     port: 22,
-                                    cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"]
+                                    cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"],
+                                    cmdswin: ["del "]
                                 }
                                 //cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"] ["ls -l","ls -al"]
                                 console.log('decryptCredentials ==>', decryptedCredentials);
@@ -1050,8 +1051,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 } else {
                                     opts.password = decryptedCredentials.password;
                                 }
+                                console.log("Node OS : " + instance.hardware.os);
                                 chef.cleanChefonClient(opts,function(err, retCode){
-
+                                console.log('Entering chef.bootstarp');
                                 chef.bootstrapInstance({
                                     instanceIp: instance.instanceIP,
                                     pemFilePath: decryptedCredentials.pemFileLocation,
