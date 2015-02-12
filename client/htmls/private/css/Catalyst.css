@@ -1,3 +1,11 @@
+.border-color{
+    /*border-color: #e5e5e5 #eee #eee;*/
+    border: 1px solid #e5e5e5;
+}
+.margintopbottom{
+	margin-top: 4px !important;
+	margin-bottom: 4px !important;
+}
 /*!
  *  Font Awesome 4.2.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -2260,8 +2268,11 @@ nav ul ul>li:hover b {
 .margin-5{
     margin: 5px;
 }
-.margin-top-122{
+/*.margin-top-122{
     margin-top: 122px;
+}*/
+.margin-top-172{
+    margin-top: 172px;
     /*float:right !important;*/
 }
 .padding-bottom-10{
@@ -2277,7 +2288,8 @@ nav ul ul>li:hover b {
 .deploymentSelectedRunListCSS{
     border:1px solid #dddddd;
     list-style:none outside none;
-    height:300px;
+    /*height:300px;*/
+    height: 410px;
     overflow-y:auto;
 }
 
