@@ -42,8 +42,9 @@
  * a class is inserted to $.root_ and the variable $.device is decleard. 
  */	
 
-/* so far this is covering most hand held devices */
-/*var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+/* so far this is covering most hand held devices  */
+// Unchecked due to Tooltip is not coming in the Dev.html
+var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
 
 	if (!ismobile) {
 		// Desktop
@@ -61,7 +62,7 @@
 			$('#hide-menu a').noClickDelay();
 		}
 	}
-*/
+
 /* ~ END: CHECK MOBILE DEVICE */
 
 /*
@@ -1422,7 +1423,10 @@ function pageSetUp() {
 		// is desktop
 		
 		// activate tooltips
-		$("[rel=tooltip]").tooltip();
+		if($("[rel=tooltip]").length){
+$("[rel=tooltip]").tooltip();
+		}
+		
 	
 		// activate popovers
 		/*$("[rel=popover]").popover();
