@@ -68,10 +68,10 @@
                                   </span>
                                   <hr>
                                   <div class="cardBackRunlistContaner">
-                                  <span title="' + data.runlist[j] + '" class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
-                                  width:130px;color:#3a87ad"></span>
-                                  <!-- append(data.runlist[j]) -->
-                                </div>
+                                    <span class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
+                                    width:130px;color:#3a87ad"></span>
+                                    <!-- append(data.runlist[j]) -->
+                                  </div>
                                 <hr>
                                 <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
                                   <a style="color:#333;cursor:pointer">Go Back</a>
@@ -770,6 +770,13 @@ $.get('../instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
+  var $backRunlistContainer = $('.cardBackRunlistContaner');
+  for (var j = 0; j < data.runlist.length; j++) {
+        var $divComponentItem;
+      
+            $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+        $backRunlistContainer.append($divComponentItem);
+    }
   pageSetUp();
 
   
