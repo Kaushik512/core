@@ -2978,10 +2978,11 @@ function addInstanceToDOM(data) {
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
     setTimeout(function(){
-    if($('#divinstancescardview').find('.active').length>1){
-          $('#divinstancescardview').find('.active').not(':first').removeClass('active')
+      var $l=$('#divinstancescardview').find('.active');
+    if($l.length>1){
+          $l.not(':first').removeClass('active');
         }
-    },10);
+    },3);
   }
 
 //Containers table build
