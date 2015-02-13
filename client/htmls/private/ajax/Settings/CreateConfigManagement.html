@@ -178,15 +178,8 @@
            // }else{
            //      alert('invalid valid form submitted'); // for demo
            // }
-           alert('in 1');
-           if(validateForm()) {
-            if($('#unique_loginname')){
-              alert('in');
-              if($('#unique_loginname').text().indexOf('NOT') > 0){
-                return false;
-              }
-            }
-            setfolderpath(); saveform('10');};
+         //  alert('in 1');
+           if(validateForm()) {setfolderpath(); saveform('10');};
            return false; // for demo
        });
    });
