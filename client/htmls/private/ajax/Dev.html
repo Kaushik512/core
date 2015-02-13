@@ -1085,7 +1085,7 @@
                             
                               <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               
-                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus="true" />
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus="autofocus" />
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
                               
@@ -1585,7 +1585,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
 
 //$('#addInstanceBtn').click(function(e) {
   $("#addInstanceForm").submit( function(e) {
-    
+    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; 
     var reqBody = {};
     var $form = $('#addInstanceForm');
     reqBody.fqdn = $form.find('#instanceFQDN').val();
@@ -1599,6 +1599,11 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
        alert('Please enter IP');
         e.preventDefault();
        return false;
+    }
+    if(!reqBody.fqdn.match(ipAddresRegExp)){
+      alert("Please provide a valid IP Address");
+      e.preventDefault();
+      return false;
     }
 
     if(!reqBody.users) {
@@ -3674,8 +3679,12 @@ function loadcarousel() {
 loadcarousel();
 $(function(){
 $('#ipaddressimport').click(function(){
-$('#instanceFQDN').focus()  
+setTimeout(function(){
+ // debugger;
+$('#instanceFQDN').attr("autofocus","autofocus").focus(); 
+},0);
 });
+
 
 });
 </script>
