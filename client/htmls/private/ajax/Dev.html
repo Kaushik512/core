@@ -61,6 +61,7 @@
                                                                         <td>IPAddress</td>
                                                                         <td>Runlists</td>
                                                                         <td>Status</td>
+                                                                        <td>URL Links</td>
                                                                         <td>Log Info</td>
                                                                         <td>Chef Run</td>
                                                                         <td class="widthAdjustment">Action</td>
@@ -347,7 +348,7 @@
                                                 <td  class="dockercontainerid"></td>
                                                 <td  class="dockercontainerimagename"></td>
                                                 <td>
-                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="More-Info" data-toggle="modal">
+                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
                                                     <img class="dockercontainerprogress hidden" style="margin-left:30px" src="img/select2-spinner.gif"></img>
                                                   </a>
                                                  </td>
@@ -1545,11 +1546,28 @@ $('#importPemfileInput').change(function(){
 });
 
 $('#modalContainerimportInstance').on('show.bs.modal',function(e){
+  var _org = getUrlParameter('org');
   $.get('/d4dMasters/readmasterjsonnew/10',function(data){
     if(data && JSON.parse(data).length <= 0){
       $('#modalContainerimportInstance').modal('hide');
       alert('A chef server is required to import an instance. Use settings to add a new one.');
       return false;
+    }
+    else
+    {
+      var found = false;
+      JSON.parse(data).forEach(function(k,v){
+        var kt = Object.keys(k);
+       
+        if(k['orgname'] == _org){
+          found = true;
+        }
+      });
+      
+        if(!found){
+          $('#modalContainerimportInstance').modal('hide');
+          alert('A chef server is required to import an instance. Use settings to add a new one.');
+        }
     }
     importbyipusers();
   });
@@ -1583,7 +1601,9 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
 
 //$('#addInstanceBtn').click(function(e) {
   $("#addInstanceForm").submit( function(e) {
-    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; 
+    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+
+
     var reqBody = {};
     var $form = $('#addInstanceForm');
     reqBody.fqdn = $form.find('#instanceFQDN').val();
@@ -1598,8 +1618,8 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
         e.preventDefault();
        return false;
     }
-    if(!reqBody.fqdn.match(ipAddresRegExp)){
-      alert("Please provide a valid IP Address");
+    if(!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)){
+      alert("Please provide a valid IP Address or Hostname");
       e.preventDefault();
       return false;
     }
@@ -2164,7 +2184,7 @@ $(function() {
     };
 
     function initializeInstanceArea(data) {
-
+        //alert('starting');
         if(data.length) {
             $('#tabInstanceStatus').hide();
         }
@@ -2180,6 +2200,8 @@ $(function() {
                     },
                     null,
                     null, {
+                        "bSortable": false
+                    }, {
                         "bSortable": false
                     }, {
                         "bSortable": false
@@ -2257,11 +2279,25 @@ $(function() {
     }
 
     $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+        
+       // alert('in here' + $('#tree').find('a[itemtype="env"]').length + ' ' + data.instances.length);
+        //
+        selectFirstEnv();
+        if( $('#tree').find('a[itemtype="env"]').length <= 0){
+          $('#content').addClass('hidden');
+          $('#noenvwarning').removeClass('hidden');
+          $('ol.breadcrumb').addClass('hidden');
+        }
+        else{
+          $('#content').removeClass('hidden');
+          $('#noenvwarning').addClass('hidden');
+          $('ol.breadcrumb').removeClass('hidden');
+        }
+
+        //Syncing up the tree view based on url
         initializeBlueprintArea(data.blueprints);
         initializeTaskArea(data.tasks);
         initializeInstanceArea(data.instances);
-        //Syncing up the tree view based on url
-        selectFirstEnv();
 
     });
 });
@@ -2674,7 +2710,7 @@ function addInstanceToDOM(data) {
     var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRight = $('<span></span>').css({
         'float': 'right'
-    }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'More-Info'));
+    }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
 
     $divHeading.append($spanheadingLeft);
     $divHeading.append($spanheadingMiddle);
@@ -2795,8 +2831,10 @@ function addInstanceToDOM(data) {
     $rowContainter.append($('<td></td>').append($tableRunlistDiv));
     //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
     $rowContainter.append($tableInstanceStatusIndicator);
-
-    $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="More Info"></a></td>');
+    var temp=($anchor ? $anchor: "")+""+($anchor1 ? $anchor1 :"");
+    $rowContainter.append('<td>'+temp+'</td>');
+    
+    $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
 
     $divDomainRolesCaption.append($divComponentListContainer);
     var $divInstanceDetails = $('<div></div>')
@@ -2960,10 +2998,11 @@ function addInstanceToDOM(data) {
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
     setTimeout(function(){
-    if($('#divinstancescardview').find('.active').length>1){
-          $('#divinstancescardview').find('.active').not(':first').removeClass('active')
+      var $l=$('#divinstancescardview').find('.active');
+    if($l.length>1){
+          $l.not(':first').removeClass('active');
         }
-    },10);
+    },3);
   }
 
 //Containers table build
@@ -3675,14 +3714,12 @@ function loadcarousel() {
 
 }
 loadcarousel();
-$(function(){
-$('#ipaddressimport').click(function(){
-setTimeout(function(){
- // debugger;
-$('#instanceFQDN').attr("autofocus","autofocus").focus(); 
-},0);
-});
-
-
-});
+// $(function(){
+// $('#ipaddressimport').click(function(){
+// setTimeout(function(){
+//  // debugger;
+// $('#instanceFQDN').attr("autofocus","autofocus").focus(); 
+// },0);
+// });
+// });
 </script>
