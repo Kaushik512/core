@@ -1621,6 +1621,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
           $('#nodeimportipspinner').addClass('hidden');
           $('#addInstanceBtn').removeAttr('disabled');
           $('#addInstanceForm').get(0).reset();
+          $('#pemFileDropdown').change();
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
