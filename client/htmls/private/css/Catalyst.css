@@ -5572,7 +5572,7 @@ span.icon {
 }
 
 .modal-height{
-	height:230px;
+	height:282px;
 }
 
 .modalbody-height
@@ -5586,6 +5586,28 @@ span.icon {
 
 .marginForURL{
 	margin-left:40px;
+}
+
+.marginForButtons{
+	margin-right:15px;
+
+}
+
+@media screen and (max-width:1200px) {
+
+	.modal-height{
+	height:520px;
+}
+.topNew
+{
+	margin-top: 15px;
+}
+
+.modalbody-height{
+	height:640px!important;
+}
+
+
 }
 
 

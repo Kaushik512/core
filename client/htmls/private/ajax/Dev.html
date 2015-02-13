@@ -1072,11 +1072,7 @@
                     <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Import Instance By IP
                 </h4>
             </div>
-            <style>
-            .modal-height{
-              height:290px !important;
-            }
-            </style>
+           
             <div class="modal-body modal-height">
                         
 
@@ -1091,7 +1087,7 @@
                               
                             
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 topNew">
                             
                               <label for="">Choose Operating System<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               <select id="importinstanceOS"  class="width-100" >
@@ -1156,12 +1152,14 @@
             </div>
              <div class="modal-footer">
               <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>
+              <div class="marginForButtons">
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
                  <a class="btn btn-primary" type="submit" data-dismiss="modal">
                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
                 </a>
+              </div>
              </div>
              </form>
         </div><!-- /.modal-content -->
