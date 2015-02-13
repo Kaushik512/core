@@ -1073,11 +1073,7 @@
                     <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Import Instance By IP
                 </h4>
             </div>
-            <style>
-            .modal-height{
-              height:290px !important;
-            }
-            </style>
+           
             <div class="modal-body modal-height">
                         
 
@@ -1092,7 +1088,7 @@
                               
                             
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 topNew">
                             
                               <label for="">Choose Operating System<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               <select id="importinstanceOS"  class="width-100" >
@@ -1157,12 +1153,14 @@
             </div>
              <div class="modal-footer">
               <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>
+              <div class="marginForButtons">
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
                  <a class="btn btn-primary" type="submit" data-dismiss="modal">
                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
                 </a>
+              </div>
              </div>
              </form>
         </div><!-- /.modal-content -->
@@ -1548,11 +1546,28 @@ $('#importPemfileInput').change(function(){
 });
 
 $('#modalContainerimportInstance').on('show.bs.modal',function(e){
+  var _org = getUrlParameter('org');
   $.get('/d4dMasters/readmasterjsonnew/10',function(data){
     if(data && JSON.parse(data).length <= 0){
       $('#modalContainerimportInstance').modal('hide');
       alert('A chef server is required to import an instance. Use settings to add a new one.');
       return false;
+    }
+    else
+    {
+      var found = false;
+      JSON.parse(data).forEach(function(k,v){
+        var kt = Object.keys(k);
+       
+        if(k['orgname'] == _org){
+          found = true;
+        }
+      });
+      
+        if(!found){
+          $('#modalContainerimportInstance').modal('hide');
+          alert('A chef server is required to import an instance. Use settings to add a new one.');
+        }
     }
     importbyipusers();
   });
@@ -3699,14 +3714,12 @@ function loadcarousel() {
 
 }
 loadcarousel();
-$(function(){
-$('#ipaddressimport').click(function(){
-setTimeout(function(){
- // debugger;
-$('#instanceFQDN').attr("autofocus","autofocus").focus(); 
-},0);
-});
-
-
-});
+// $(function(){
+// $('#ipaddressimport').click(function(){
+// setTimeout(function(){
+//  // debugger;
+// $('#instanceFQDN').attr("autofocus","autofocus").focus(); 
+// },0);
+// });
+// });
 </script>

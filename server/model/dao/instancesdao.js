@@ -473,7 +473,7 @@ var InstancesDao = function() {
     };
 
     this.deleteService = function(instanceId, serviceId, callback) {
-        logger.debug("Enter deleteService ", instanceId, serviceIds);
+        logger.debug("Enter deleteService ", instanceId, serviceId);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
@@ -485,11 +485,11 @@ var InstancesDao = function() {
             multi: true
         }, function(err, deleteCount) {
             if (err) {
-                logger.error("Failed to deleteService ", instanceId, serviceIds, err);
+                logger.error("Failed to deleteService ", instanceId, serviceId, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit deleteService ", instanceId, serviceIds);
+            logger.debug("Exit deleteService ", instanceId, serviceId);
             callback(null, deleteCount);
 
         });

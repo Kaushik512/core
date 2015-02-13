@@ -88,7 +88,7 @@
             
           </div>
 
-          <div class="col-lg-6 credentialSection">
+          <div class="col-lg-6 credentialSection topNew">
         
             <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
@@ -120,6 +120,14 @@
             </div>
           
         </div>
+
+          <div class="col-lg-6" style="margin-top:20px;">
+            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            
+              <select id="chefImportProjectSelect"  class="width-100">
+              </select>
+            
+          </div>
       
           <div class="col-lg-6" style="margin-top:20px;">
             <label for="">Choose Authentication Type</label>
@@ -130,13 +138,7 @@
           
           </div>
 
-          <div class="col-lg-6" style="margin-top:20px;">
-            <label for="exampleInputEmail1">Project<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-            
-              <select id="chefImportProjectSelect"  class="width-100">
-              </select>
-            
-        </div>
+          
       
       <div class="col-lg-6" style="display:none">
         
@@ -191,8 +193,10 @@
          
       </div>
       <div class="modal-footer">
-        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-        <button type="button" class="btn btn-primary importNodesBtn">Import</button>
+          <div class="marginForButtons">
+          <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+          <button type="button" class="btn btn-primary importNodesBtn">Import</button>
+        </div>
       </div>
       </form>
     </div><!-- /.modal-content -->
