@@ -2160,7 +2160,7 @@ $(function() {
     };
 
     function initializeInstanceArea(data) {
-
+        //alert('starting');
         if(data.length) {
             $('#tabInstanceStatus').hide();
         }
@@ -2254,11 +2254,25 @@ $(function() {
     }
 
     $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+        
+       // alert('in here' + $('#tree').find('a[itemtype="env"]').length + ' ' + data.instances.length);
+        //
+        selectFirstEnv();
+        if( $('#tree').find('a[itemtype="env"]').length <= 0){
+          $('#content').addClass('hidden');
+          $('#noenvwarning').removeClass('hidden');
+          $('ol.breadcrumb').addClass('hidden');
+        }
+        else{
+          $('#content').removeClass('hidden');
+          $('#noenvwarning').addClass('hidden');
+          $('ol.breadcrumb').removeClass('hidden');
+        }
+
+        //Syncing up the tree view based on url
         initializeBlueprintArea(data.blueprints);
         initializeTaskArea(data.tasks);
         initializeInstanceArea(data.instances);
-        //Syncing up the tree view based on url
-        selectFirstEnv();
 
     });
 });
