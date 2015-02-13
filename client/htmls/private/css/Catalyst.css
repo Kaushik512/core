@@ -1,3 +1,14 @@
+.border-color{
+    /*border-color: #e5e5e5 #eee #eee;*/
+    border: 1px solid #e5e5e5;
+}
+.margintopbottom{
+	margin-top: 4px !important;
+	margin-bottom: 4px !important;
+}
+.hidden-menu .minifyme, .minified #tree {
+    display: none;
+}
 /*!
  *  Font Awesome 4.2.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -1316,7 +1327,8 @@ nav ul ul>li:hover b {
     right: 0;
     color: #A8A8A8;
     position: relative;
-    width: 100%;
+    /*Arab for Minimize the tree*/
+    /*width: 100%;*/
     border-radius: 0;
     margin: 0;
     height: 34px;
@@ -1326,7 +1338,16 @@ nav ul ul>li:hover b {
     content: "\f0a9"}
 
 .minified #main {
-    margin-left: 220px;
+    /*Changed for Minimization of Tree
+    margin-left: 220px;*/
+    margin-left: 38px;
+}
+/*Added for aside minimization*/
+.minified #left-panel{
+	width:38px !important;
+}
+.minified .hiddencollapse{
+	display: none !important;
 }
 .minified #left-panel, .minified nav>ul>li {
     overflow: visible;
@@ -2260,8 +2281,11 @@ nav ul ul>li:hover b {
 .margin-5{
     margin: 5px;
 }
-.margin-top-122{
+/*.margin-top-122{
     margin-top: 122px;
+}*/
+.margin-top-172{
+    margin-top: 172px;
     /*float:right !important;*/
 }
 .padding-bottom-10{
@@ -2277,7 +2301,8 @@ nav ul ul>li:hover b {
 .deploymentSelectedRunListCSS{
     border:1px solid #dddddd;
     list-style:none outside none;
-    height:300px;
+    /*height:300px;*/
+    height: 410px;
     overflow-y:auto;
 }
 
@@ -5289,10 +5314,16 @@ table.dataTable td {
     height: 25px;
 }
 
+/*For new sshIcon 
 .sshIcon{
-    background-position: -206px -9px ;
-    width: 34px;
-    height: 28px;
+	background-position: -212px -12px ;
+	width: 27px;
+	height: 27px;
+}*/
+.sshIcon{
+	background-position: -206px -9px ;
+	width: 34px;
+	height: 28px;
 }
 
 .aws{
