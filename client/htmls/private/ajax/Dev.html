@@ -1155,6 +1155,7 @@
                 
             </div>
              <div class="modal-footer">
+              <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
@@ -1610,10 +1611,14 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
     }
 
     function makeRequest() {
-     
+     $('#nodeimportipspinner').removeClass('hidden');
+     $('#addInstanceBtn').attr('disabled','disabled');
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
+          $('#nodeimportipspinner').addClass('hidden');
+          $('#addInstanceBtn').removeAttr('disabled');
+          $('#addInstanceForm').get(0).reset();
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
