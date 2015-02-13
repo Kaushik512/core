@@ -49,39 +49,45 @@
                                           <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                           <input name="ctl00$MainContent$orgname" value="https://" id="providertemplatepath" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                        </div>
-                                       <div  class="col-lg-6">
-                                          <label for=""  class="forDocker">
-                                          Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
-                                          </label>
-                                          
-                                          <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
-                                          </select>
+                                       <div  class="col-lg-6" style="margin-top:5px;">
+                                          <div class="forDocker">
+                                             <label for="">
+
+                                             Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                             </label>
+                                             
+                                             <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
+                                             </select>
+                                          </div>
                                           
                                        </div>
                                     
                                     
-                                       <div class="col-lg-6" style="margin-top:5px">
+                                       <div class="col-lg-6">
                                           <div class="notforDocker">
                                              <label for="">Chef Server <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          </div>
+                                          
                                           <select id="configname" class="choosechefserver width-100" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadCookbookSelectorControl('configname');" >
                                           </select>
+                                          </div>
                                        </div>
+                                   
                                     
-                                    
-                                       <section class="col-lg-10">
-                                          <div class="col-lg-2 noleftpadding">
+                                       <div class="col-lg-10">
+                                          <div class="col-lg-2 noleftpadding" style="margin-top:5px;">
                                              <div class="forDocker">
+                                                <label for="">
                                                 Title
-                                                <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
-                                             </div>
-                                             <label class="input forDocker">
+                                                <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label></label>
+                                             
+                                             
                                                 <div class="input-group">
                                                    <input name="ctl00$MainContent$costcode" value="" id="dockercontainerstitle" class="form-control" type="text" datavalues="dockercontainerstitle" targetelement="dockercontainerpathstitle"  show="imgCheck" style="min-width:105px;"  maxlength="13">
                                                 </div>
-                                             </label>
+                                             
+                                             </div>
                                           </div>
-                                          <div class="col-lg-8">
+                                          <div class="col-lg-8" style="margin-top:5px;">
                                              <label for="" class="forDocker">
                                              Add  Docker Repo Path
                                              <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
@@ -95,6 +101,7 @@
                                                 </div>
                                              </label>
                                           </div>
+                                       </div>
                                     
                                  
                                  
