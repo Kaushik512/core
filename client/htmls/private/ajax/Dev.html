@@ -45,7 +45,7 @@
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
-                                    <div id="tabInstanceStatus">No instance available</div>
+                                    <div id="tabInstanceStatus">&nbsp;</div> 
                                     <div class="widget-box" id="divinstancestableview">
                                         <div class="widget-body">
                                             <div class="widget-main " style="min-height:300px"> 
@@ -1375,6 +1375,7 @@ $('.Orchestration').click(function(e){
 });
 
 $('.Containers').click(function(e){
+  debugger;
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
@@ -1524,6 +1525,7 @@ $('.dockerinstancestart').click(function(e){
                     if($instancecard.find('.dockerenabledinstacne').length <= 0){
                         $instancecard.find('.componentlistContainer').first().append($dockericon);
                     }
+                    debugger;
                     loadContainersTable(); //Clearing and loading the containers again.                
                 }
                 else
@@ -2244,7 +2246,7 @@ $(function() {
         }
         $divinstancescardview.find('.item').first().addClass('active');
 
-
+debugger;
         loadContainersTable();
 
         $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
@@ -2961,6 +2963,7 @@ function addInstanceToDOM(data) {
 //Containers table build
 function loadContainersTable(){
     //alert('called');
+    debugger;
     console.log('called');
     //Shwoing the loader spinner and clearing the rows.
     $('tr[id*="trfordockercontainer_"]').remove();

@@ -167,7 +167,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="ajax/Settings/ServiceCommandList.html"><i class="fa fa-lg fa-fw fa-terminal"></i>
+							<a href="ajax/Settings/ServiceCommandList.html" id="servicecommand"><i class="fa fa-lg fa-fw fa-terminal"></i>
 								<span class="menu-item-parent" style="font-weight:bold">Service Command</span>
 							</a>
 						</li>
@@ -243,7 +243,8 @@
 		<!-- MAIN CONTENT -->
 	 	<div id="content">
 		</div> 
-		<div id="noenvwarning" style="padding-top:20px;margin-left:20px">Your Organization has not been fully configured yet. Use the SETTINGS tab to configure.
+		<!--hiding the comment for no org available when the organization and environments are present-->
+		<div id="noenvwarning" style="padding-top:20px;margin-left:20px" class="hidden">Your Organization has not been fully configured yet. Use the SETTINGS tab to configure.
 		</div>
 		<!-- END MAIN CONTENT -->
 	</div>

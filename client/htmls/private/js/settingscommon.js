@@ -2025,14 +2025,16 @@ function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
 function loadactioncheckboxes(receipectrls){
      $.each(receipectrls,function(k1,v1){
             var $servicecookbook = $('#' + v1);
-            var $servicecookbookcheckbox = $('#' + v1 +'checkbox');
-            if($servicecookbook && $servicecookbookcheckbox){
-                if($servicecookbook.attr('savedvalue').trim() == 'none' || $servicecookbook.attr('savedvalue').trim() == '')
+            var $servicecookbookcheckbox = $('#' + v1 +'checkbox'),attr=$servicecookbook.attr('savedvalue');
+            if($servicecookbook.length && $servicecookbookcheckbox.length){
+                if(attr && (attr.trim() === 'none' || attr.trim() === ''))
                 {
                     $servicecookbookcheckbox.removeAttr('checked');
                 }
-                else
-                    $servicecookbookcheckbox.attr('checked','checked');
+                else{
+                    //$servicecookbookcheckbox.attr('checked','checked');
+                }
+                    
             }
      });
 }
