@@ -1519,7 +1519,7 @@ function readform(formID) {
 
 function saveform(formID) {
     //Validating the form
-    if (isFormValid() == false)
+    if (isFormValid(formID) == false)
         return (false);
 
 
@@ -2025,14 +2025,16 @@ function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
 function loadactioncheckboxes(receipectrls){
      $.each(receipectrls,function(k1,v1){
             var $servicecookbook = $('#' + v1);
-            var $servicecookbookcheckbox = $('#' + v1 +'checkbox');
-            if($servicecookbook && $servicecookbookcheckbox){
-                if($servicecookbook.attr('savedvalue').trim() == 'none' || $servicecookbook.attr('savedvalue').trim() == '')
+            var $servicecookbookcheckbox = $('#' + v1 +'checkbox'),attr=$servicecookbook.attr('savedvalue');
+            if($servicecookbook.length && $servicecookbookcheckbox.length){
+                if(attr && (attr.trim() === 'none' || attr.trim() === ''))
                 {
                     $servicecookbookcheckbox.removeAttr('checked');
                 }
-                else
-                    $servicecookbookcheckbox.attr('checked','checked');
+                else{
+                    //$servicecookbookcheckbox.attr('checked','checked');
+                }
+                    
             }
      });
 }
@@ -2235,7 +2237,7 @@ function errormessageforInput(id, msg) {
 }
 
 //run validation tests on inputs 
-function isFormValid() {
+function isFormValid(formid) {
     var isValid = true;
      if ($('input[unique="true"], select[unique="true"]').length > 0) {
        // alert('in isFormValid');
@@ -2244,7 +2246,7 @@ function isFormValid() {
               
               if($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0){
                // alert('pusing isvalid false');
-                isValid = false;
+              isValid = false;
               }
         });
      }
@@ -2313,6 +2315,24 @@ function isFormValid() {
         });
 
     });
+if(formid && formid===19){
+    var selectionMode=$('#commandtype').val();
+    if(selectionMode==="Chef Cookbook/Recepie"){
+if($('#servicename').val().trim()){
+    isValid=true;
+}else{
+    isValid=false;
+}
+}else if(selectionMode==="Service Command"){
+if($('#servicename').val().trim() && $('#commandNew').val().trim()){
+    isValid=true;
+}else{
+    isValid=false;
+}
+
+    }
+}
+
     return (isValid);
 }
 
