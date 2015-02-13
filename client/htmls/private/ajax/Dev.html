@@ -61,6 +61,7 @@
                                                                         <td>IPAddress</td>
                                                                         <td>Runlists</td>
                                                                         <td>Status</td>
+                                                                        <td>URL Links</td>
                                                                         <td>Log Info</td>
                                                                         <td>Chef Run</td>
                                                                         <td class="widthAdjustment">Action</td>
@@ -2209,6 +2210,8 @@ $(function() {
                     }, {
                         "bSortable": false
                     }, {
+                        "bSortable": false
+                    }, {
                         "bSortable": false,
                         "sWidth": "20%"
                     }
@@ -2830,7 +2833,9 @@ function addInstanceToDOM(data) {
     $rowContainter.append($('<td></td>').append($tableRunlistDiv));
     //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
     $rowContainter.append($tableInstanceStatusIndicator);
-
+    var temp=($anchor ? $anchor: "")+""+($anchor1 ? $anchor1 :"");
+    $rowContainter.append('<td>'+temp+'</td>');
+    
     $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
 
     $divDomainRolesCaption.append($divComponentListContainer);
