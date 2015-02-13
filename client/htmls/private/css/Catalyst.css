@@ -4316,7 +4316,8 @@ nav ul
     padding: 0 16px;
     position: absolute;
     right: 4px;
-    top: 8px;
+    /*top: 8px;*/
+    top: 11px;
     z-index: 10;
 }
 
