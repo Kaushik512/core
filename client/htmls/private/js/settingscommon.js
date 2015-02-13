@@ -1519,6 +1519,7 @@ function readform(formID) {
 
 function saveform(formID) {
     //Validating the form
+
     if (isFormValid(formID) == false)
         return (false);
 
@@ -1528,6 +1529,11 @@ function saveform(formID) {
     var orgName = $('#orgname').val();
     var button = $("form[id*='myForm']").find("div.pull-right > button");
     
+    if(button){
+        button.attr('disabled','disabled');
+        button.parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif"></img> </label>')
+        //button.parent.prepend('<label id="masterssavespinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>')
+    }
     //alert('orgname' + orgName);
     //Iterate over each input control and get the items
     $('input[cdata="catalyst"],select[cdata="catalyst"]').each(function() {
@@ -1666,8 +1672,13 @@ function saveform(formID) {
                 loadTreeFuncNew(); //this should refresh the tree
             }
             button.removeAttr("rowid", "");
+            $("#masterssavespinner").detach();
+            button.removeAttr('disabled');
         },
         error: function(jqxhr) {
+            $("#masterssavespinner").detach();
+            button.removeAttr('disabled');
+            
             alert(jqxhr.status);
         }
     });
