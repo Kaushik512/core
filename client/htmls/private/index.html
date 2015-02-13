@@ -65,11 +65,12 @@
 	<!-- Left panel : Navigation area -->
 	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
 	<aside id="left-panel">
+
 		<div id="Workspace1">
 			
 			<div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
 				
-				<div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px">WORKZONE</div>
+				<div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">WORKZONE</div>
 				
 			</div>
 			<div id="tree" style="font-size:12px;"></div>
@@ -323,7 +324,6 @@
 			
 		}
 		if(breadcrumbHeader == 'org') {
-				
 				var orgName = $('.orgSelected span').text();
 				window.selectedOrgName = orgName;
 				//selectFirstEnv();
@@ -345,6 +345,7 @@
 	var serviceURL = "../d4dMasters/";
 	window.selectedOrgName = $('.orgSelected').text().trim();
 	//alert('in');
+
 	var loadTreeFuncNew = function(){
 		console.log('Loaded a tree');
 		$.ajax({
@@ -446,7 +447,6 @@
 					hasOrg = true;
 				}								
 			}
-
 			hasProj = false;
 			if($('a[itemtype="bg"]').length > 0){
 				{

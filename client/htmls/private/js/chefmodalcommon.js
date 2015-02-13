@@ -40,12 +40,15 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $section1.append($label1);
     var $row1 = $("<div></div>").addClass('row');
     var $div1 = $("<div></div>").addClass('col col-10 padding-right0');
-    var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
-    var $label2 = $("<label></label>").addClass('label text-align-center').text("Select Cookbooks");
+    var $div1forCookbook = $("<div></div>").addClass('border-color');
+    var $label2 = $("<label></label>").addClass('label text-align-center margintopbottom').text("Select Cookbooks");
     var $inputtypetextCookbooks = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Cookbooks">').addClass('searchoptionforCookbooks form-control padding0');
+    $div1forCookbook.append($label2);
+    $div1forCookbook.append($inputtypetextCookbooks);
+    var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
+    
     var $hr1 = $("<hr>");
-    $ul1.append($label2);
-    $ul1.append($inputtypetextCookbooks);
+    
     $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
         console.log("Cookbooks Query:" + data);
 
@@ -96,19 +99,26 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
 
     //$ul1.append($hr1);
 
-    $div1.append($ul1);
-    var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
-    var $label3 = $("<label></label>").addClass('label text-align-center').text("Select Roles");
-    var $inputtypetextRoles = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Roles">').addClass('searchoptionforRoles form-control padding0');
-    var $hr2 = $("<hr>");
-    $ul2.append($label3);
-    $ul2.append($hr2);
-    $ul2.append($inputtypetextRoles);
+    $div1forCookbook.append($ul1);
+    $div1.append($div1forCookbook);
 
-    $div1.append($ul2);
+
+    var $div1forRoles = $("<div></div>").addClass('border-color');
+    var $label3 = $("<label></label>").addClass('label text-align-center margintopbottom').text("Select Roles");
+    var $inputtypetextRoles = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Roles">').addClass('searchoptionforRoles form-control padding0');
+    //var $hr2 = $("<hr>");
+    var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
+    
+    $div1forRoles.append($label3);
+    //$div1forRoles.append($hr2);
+    $div1forRoles.append($inputtypetextRoles);
+
+    $div1forRoles.append($ul2);
+    
+    $div1.append($div1forRoles);
     $row1.append($div1);
 
-    $div2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $div2 = $("<div></div>").addClass('col col-2 margin-top-172');
     $divinputgroupAddRemove = $("<div></div>").addClass('input-group');
     $divbtngroupAdd = $("<div></div>").addClass('btn-group padding-bottom-10');
 
@@ -186,7 +196,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
 
 
 
-    $divOrder2 = $("<div></div>").addClass('col col-2 margin-top-122');
+    $divOrder2 = $("<div></div>").addClass('col col-2 margin-top-172');
     $divinputgroupUpDown = $("<div></div>").addClass('input-group');
     $divbtngroupUp = $("<div></div>").addClass('btn-group padding-bottom-10');
 

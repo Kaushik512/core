@@ -16,7 +16,7 @@
                     <li class="pull-left Orchestration">
                         <a href="#l3" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
-                     <li class="pull-left Containers">
+                     <li class="pull-left Containers hidden">
                         <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                     </li>
                 </ul>
@@ -347,7 +347,7 @@
                                                 <td  class="dockercontainerid"></td>
                                                 <td  class="dockercontainerimagename"></td>
                                                 <td>
-                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="MoreInfo" data-toggle="modal">
+                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="More Info" data-toggle="modal">
                                                     <img class="dockercontainerprogress hidden" style="margin-left:30px" src="img/select2-spinner.gif"></img>
                                                   </a>
                                                  </td>
@@ -1155,6 +1155,7 @@
                 
             </div>
              <div class="modal-footer">
+              <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
@@ -1612,10 +1613,14 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
     }
 
     function makeRequest() {
-     
+     $('#nodeimportipspinner').removeClass('hidden');
+     $('#addInstanceBtn').attr('disabled','disabled');
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
+          $('#nodeimportipspinner').addClass('hidden');
+          $('#addInstanceBtn').removeAttr('disabled');
+          $('#addInstanceForm').get(0).reset();
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
@@ -2143,7 +2148,7 @@ $(function() {
                 console.log('object ==>', $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a'));
                 $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').click();
             }
-
+            pageSetUp();
         }); //end of readmasterjson to be pushed to the end of the function.
 
         $('#accordion-2').on('show.bs.collapse', function(e) {
@@ -2151,12 +2156,6 @@ $(function() {
             $(e.target).find('.productdiv1').first().click();
         });
         //Expanding the fist Accordion.
-
-
-
-
-        pageSetUp();
-
     };
 
     function initializeInstanceArea(data) {
@@ -2670,7 +2669,7 @@ function addInstanceToDOM(data) {
     var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRight = $('<span></span>').css({
         'float': 'right'
-    }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
+    }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'More-Info'));
 
     $divHeading.append($spanheadingLeft);
     $divHeading.append($spanheadingMiddle);
@@ -2792,7 +2791,7 @@ function addInstanceToDOM(data) {
     //$rowContainter.append('<td><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/aws_logo.png" /></td>');
     $rowContainter.append($tableInstanceStatusIndicator);
 
-    $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
+    $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="More Info"></a></td>');
 
     $divDomainRolesCaption.append($divComponentListContainer);
     var $divInstanceDetails = $('<div></div>')
@@ -2946,7 +2945,6 @@ function addInstanceToDOM(data) {
     var $cardContainer = $li.find('.container').click(function(e) {
         $('.container').removeClass('role-Selectedcard');
         $(this).addClass('role-Selectedcard');
-
     });
     pageSetUp();
     if (data.instanceState == 'stopped'){

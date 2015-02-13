@@ -1145,9 +1145,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         timestamp: new Date().getTime()
                                     });
                                 });
-                                res.send(instance);
+                                
                                 }); //end of chefcleanup
+                                
                             });
+                            res.send(instance);
                         });
                     });
                     
