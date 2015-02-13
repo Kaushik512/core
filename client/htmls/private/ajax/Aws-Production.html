@@ -1094,18 +1094,22 @@ $(document).ready(function(){
                //alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
 
                var getBGs = $selectedOrgOption.data('bglist');
-
-               for (var i = 0; i < getBGs.length; i++) {
-                   $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
+               if(getBGs != null){
+                  for (var i = 0; i < getBGs.length; i++) {
+                     $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                 }
                }
+
                //alert('out');
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
-               $envList.append($('<option></option>').val('choose').html('Choose'));
-               //alert(getEnv.length);
-               for (var i = 0; i < getEnv.length; i++) {
-                   $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
-               }
+               if(getEnv != null){
+                  $envList.append($('<option></option>').val('choose').html('Choose'));
+                      //alert(getEnv.length);
+                      for (var i = 0; i < getEnv.length; i++) {
+                          $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
+                      }
+                }
 
                var $cookbookShow = $('.cookbookShow').empty();
                $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
