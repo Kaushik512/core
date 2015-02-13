@@ -568,9 +568,10 @@ var Chef = function(settings) {
             //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
             console.log('host name ==>', options.host);
             //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
-            var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            //var proc = new Process('knife', ['winrm', options.host, ' " chef-client -o' + ' ' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, ' "chef-client -o ' +  runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.u        sername], processOptions);
             proc.start();
-
+            //[7:04:22 PM] Ashna Abbas:  knife winrm 54.69.130.187 'chef-client -r recipe[apache2-windows]' -P 'Zaq!2wsx' -xadministrator -m
         }
 
     };

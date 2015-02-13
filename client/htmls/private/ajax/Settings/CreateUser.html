@@ -161,6 +161,7 @@
    $(document).ready(function () {
    
        $('#myForm5').submit(function() {
+          
            $(this).validate();
             
            if($(this).valid){
@@ -177,6 +178,13 @@
                     return false;
                   }
                  createUserInLdap();
+                }
+                else{
+                  if($('#unique_loginname')){
+                    if($('#unique_loginname').text().indexOf('NOT') > 0){
+                      return false;
+                    }
+                  }
                 }
 
                 /*alert('valid form submitted'); // for demo*/
