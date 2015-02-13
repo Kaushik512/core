@@ -114,7 +114,7 @@
                      <a class="btn pull-right btn-danger right-button" title="Remove Instance" onClick="removeSelectedInstance()" > 
                         <i class="fa fa-trash-o"></i>
                     </a>&nbsp;
-                    <a class="btn pull-right btn-info right-button" id="" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
+                    <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
                         <i class="fa fa-laptop"/>
                     </a>
                     
@@ -347,7 +347,7 @@
                                                 <td  class="dockercontainerid"></td>
                                                 <td  class="dockercontainerimagename"></td>
                                                 <td>
-                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="More Info" data-toggle="modal">
+                                                  <a href="#modalContainermoreInfo" class="moreInfo btn1 modelcontainermoreinfo" data-actiontype="start" dockercontaineraction="info"  rel="tooltip" data-placement="top" data-original-title="More-Info" data-toggle="modal">
                                                     <img class="dockercontainerprogress hidden" style="margin-left:30px" src="img/select2-spinner.gif"></img>
                                                   </a>
                                                  </td>
@@ -1085,7 +1085,7 @@
                             
                               <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               
-                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN"/>
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus="autofocus" />
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
                               
@@ -1585,7 +1585,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
 
 //$('#addInstanceBtn').click(function(e) {
   $("#addInstanceForm").submit( function(e) {
-    
+    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; 
     var reqBody = {};
     var $form = $('#addInstanceForm');
     reqBody.fqdn = $form.find('#instanceFQDN').val();
@@ -1600,6 +1600,11 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
         e.preventDefault();
        return false;
     }
+    if(!reqBody.fqdn.match(ipAddresRegExp)){
+      alert("Please provide a valid IP Address");
+      e.preventDefault();
+      return false;
+    }
 
     if(!reqBody.users) {
        alert('Please assign atleast one user');
@@ -1613,14 +1618,16 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
     }
 
     function makeRequest() {
-     $('#nodeimportipspinner').removeClass('hidden');
      $('#addInstanceBtn').attr('disabled','disabled');
+     $('#nodeimportipspinner').removeClass('hidden');
+     // $('#addInstanceBtn').attr('disabled','disabled');
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
           $('#nodeimportipspinner').addClass('hidden');
           $('#addInstanceBtn').removeAttr('disabled');
           $('#addInstanceForm').get(0).reset();
+          $('#pemFileDropdown').change();
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
@@ -2245,7 +2252,6 @@ $(function() {
         }
         $divinstancescardview.find('.item').first().addClass('active');
 
-//debugger;
         loadContainersTable();
 
         $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
@@ -2627,11 +2633,13 @@ function addInstanceToDOM(data) {
       if(alreadyAdded) return;
     }
 
-     var $instanceDataTable = $("#tableinstanceview");
+    var $instanceDataTable = $("#tableinstanceview");
     var $divinstancescardview = $('#divinstancescardview .carousel-inner');
     var $carouselItemContainers = $divinstancescardview.find('.item');
-    var $instancesList = null;
-    var $item = null;
+    // var $instancesList = null;
+    // var $item = null;
+    var $instancesList,$item;
+    //alert($carouselItemContainers.length);
     if(!$carouselItemContainers.length) {
         //creating Item tag
         $item = $('<div></div>').addClass('item');
@@ -2647,7 +2655,6 @@ function addInstanceToDOM(data) {
             $instancesList = $('<ul></ul>').addClass("thumbnails marginleft-40 padding-top-30 list-unstyled instancesList");
             $item.append($instancesList);
             $divinstancescardview.append($item);
-
         }
     }
   
@@ -2721,17 +2728,17 @@ function addInstanceToDOM(data) {
     }
     if(typeof data.applicationUrl != 'undefined')
     {
-    if(data.applicationUrl != 'http://'){
-       var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
-       $divComponentListContainer.append($anchor);
+      if(data.applicationUrl != 'http://'){
+         var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
+         $divComponentListContainer.append($anchor);
+      }
     }
-  }
     if(typeof data.applicationUrl1 != 'undefined'){
-    if(data.applicationUrl1 != 'http://'){
-       var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
-       $divComponentListContainer.append($anchor1);
+      if(data.applicationUrl1 != 'http://'){
+         var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
+         $divComponentListContainer.append($anchor1);
+      }
     }
-  }
 
     /*else{
      $divComponentListContainer.detach($anchor1); 
@@ -2954,9 +2961,12 @@ function addInstanceToDOM(data) {
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
-
-
-}
+    setTimeout(function(){
+    if($('#divinstancescardview').find('.active').length>1){
+          $('#divinstancescardview').find('.active').not(':first').removeClass('active')
+        }
+    },10);
+  }
 
 //Containers table build
 function loadContainersTable(){
@@ -3667,4 +3677,14 @@ function loadcarousel() {
 
 }
 loadcarousel();
+$(function(){
+$('#ipaddressimport').click(function(){
+setTimeout(function(){
+ // debugger;
+$('#instanceFQDN').attr("autofocus","autofocus").focus(); 
+},0);
+});
+
+
+});
 </script>
