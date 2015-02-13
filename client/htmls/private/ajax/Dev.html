@@ -114,7 +114,7 @@
                      <a class="btn pull-right btn-danger right-button" title="Remove Instance" onClick="removeSelectedInstance()" > 
                         <i class="fa fa-trash-o"></i>
                     </a>&nbsp;
-                    <a class="btn pull-right btn-info right-button" id="" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
+                    <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal"> 
                         <i class="fa fa-laptop"/>
                     </a>
                     
@@ -1085,7 +1085,7 @@
                             
                               <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               
-                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN"/>
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus="true" />
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
                               
@@ -1613,8 +1613,9 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
     }
 
     function makeRequest() {
-     $('#nodeimportipspinner').removeClass('hidden');
      $('#addInstanceBtn').attr('disabled','disabled');
+     $('#nodeimportipspinner').removeClass('hidden');
+     // $('#addInstanceBtn').attr('disabled','disabled');
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
@@ -2246,7 +2247,6 @@ $(function() {
         }
         $divinstancescardview.find('.item').first().addClass('active');
 
-//debugger;
         loadContainersTable();
 
         $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
@@ -2628,11 +2628,13 @@ function addInstanceToDOM(data) {
       if(alreadyAdded) return;
     }
 
-     var $instanceDataTable = $("#tableinstanceview");
+    var $instanceDataTable = $("#tableinstanceview");
     var $divinstancescardview = $('#divinstancescardview .carousel-inner');
     var $carouselItemContainers = $divinstancescardview.find('.item');
-    var $instancesList = null;
-    var $item = null;
+    // var $instancesList = null;
+    // var $item = null;
+    var $instancesList,$item;
+    //alert($carouselItemContainers.length);
     if(!$carouselItemContainers.length) {
         //creating Item tag
         $item = $('<div></div>').addClass('item');
@@ -2648,7 +2650,6 @@ function addInstanceToDOM(data) {
             $instancesList = $('<ul></ul>').addClass("thumbnails marginleft-40 padding-top-30 list-unstyled instancesList");
             $item.append($instancesList);
             $divinstancescardview.append($item);
-
         }
     }
   
@@ -2722,17 +2723,17 @@ function addInstanceToDOM(data) {
     }
     if(typeof data.applicationUrl != 'undefined')
     {
-    if(data.applicationUrl != 'http://'){
-       var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
-       $divComponentListContainer.append($anchor);
+      if(data.applicationUrl != 'http://'){
+         var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
+         $divComponentListContainer.append($anchor);
+      }
     }
-  }
     if(typeof data.applicationUrl1 != 'undefined'){
-    if(data.applicationUrl1 != 'http://'){
-       var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
-       $divComponentListContainer.append($anchor1);
+      if(data.applicationUrl1 != 'http://'){
+         var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
+         $divComponentListContainer.append($anchor1);
+      }
     }
-  }
 
     /*else{
      $divComponentListContainer.detach($anchor1); 
@@ -2955,9 +2956,12 @@ function addInstanceToDOM(data) {
     if (data.instanceState == 'stopped'){
       $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
     }
-
-
-}
+    setTimeout(function(){
+    if($('#divinstancescardview').find('.active').length>1){
+          $('#divinstancescardview').find('.active').not(':first').removeClass('active')
+        }
+    },10);
+  }
 
 //Containers table build
 function loadContainersTable(){
@@ -3668,4 +3672,10 @@ function loadcarousel() {
 
 }
 loadcarousel();
+$(function(){
+$('#ipaddressimport').click(function(){
+$('#instanceFQDN').focus()  
+});
+
+});
 </script>
