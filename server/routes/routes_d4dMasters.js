@@ -8,6 +8,9 @@ var Chef = require('../lib/chef');
 var Curl = require('../lib/utils/curl.js');
 var appConfig = require('../config/app_config');
 var logger  = require('../lib/logger')(module);
+var childProcess = require('child_process');
+var exec = childProcess.exec;
+
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -979,7 +982,36 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             }
         }
+        console.log('Before ssl fetch');
+        if(req.params.id == '10') //Fix introduced for Kana 
+        { 
+            console.log('In ssl fetch');
+            var options = {
+                    cwd: chefRepoPath + req.params.orgname + folderpath,
+                    onError: function(err) {
+                        callback(err, null);
+                    },
+                    onClose: function(code) {
+                        callback(null, code);
+                    }
+            };
+            var cmdSSLFetch = 'knife ssl fetch';
 
+            var procSSLFetch = exec(cmdSSLFetch, options, function(err, stdOut, stdErr) {
+                if (err) {
+                    console.log('Failed on procSSLFetch routes d4dMasters:', err);
+                    return;
+                }
+            });
+            procSSLFetch.on('close', function(code) {
+                console.log('procSSLFetch done: ');
+            });
+
+            procSSLFetch.stdout.on('data', function(data) {
+                //console.log('stdout: ==> ' + data);
+                console.log('procSSLFetch : ' , data);
+            });
+        }
         return ("200");
     }
 
@@ -1260,7 +1292,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     else
                         res.send(200);
 
+                    if(req.params.id == '10'){
 
+                    }
                     //res.send(200);
                     //callback(null, data);
                 });

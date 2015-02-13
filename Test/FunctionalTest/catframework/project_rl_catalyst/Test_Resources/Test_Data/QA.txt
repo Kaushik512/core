@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                   chrome                           #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/public/login.html
+${ENVIRONMENT SERVER}             http://localhost:3001/public/login.html
 ${ENV}                 QA.txt
 ${VALID USER}             sd1
 ${VALID PASSWORD}         sd1-phoenix
