@@ -2442,7 +2442,7 @@ function checkusernameexistsinldap(inputID) {
 //STandby code to receive docker images. To be updated to receive the url from settings
 function getDockerTags() {
     var returnValue = '';
-    debugger;
+   // debugger;
     $.ajax({
         type: "get",
         dataType: "text/json",
@@ -2462,7 +2462,7 @@ function getDockerTags() {
 
 function getDockerImages() {
     var returnValue = '';
-    debugger;
+   // debugger;
     $.ajax({
         type: "get",
         dataType: "text/json",

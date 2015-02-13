@@ -1376,7 +1376,7 @@ $('.Orchestration').click(function(e){
 });
 
 $('.Containers').click(function(e){
-  debugger;
+  //debugger;
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
@@ -1526,7 +1526,7 @@ $('.dockerinstancestart').click(function(e){
                     if($instancecard.find('.dockerenabledinstacne').length <= 0){
                         $instancecard.find('.componentlistContainer').first().append($dockericon);
                     }
-                    debugger;
+                    //debugger;
                     loadContainersTable(); //Clearing and loading the containers again.                
                 }
                 else
@@ -2245,7 +2245,7 @@ $(function() {
         }
         $divinstancescardview.find('.item').first().addClass('active');
 
-debugger;
+//debugger;
         loadContainersTable();
 
         $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
@@ -2961,7 +2961,7 @@ function addInstanceToDOM(data) {
 //Containers table build
 function loadContainersTable(){
     //alert('called');
-    debugger;
+    //debugger;
     console.log('called');
     //Shwoing the loader spinner and clearing the rows.
     $('tr[id*="trfordockercontainer_"]').remove();
