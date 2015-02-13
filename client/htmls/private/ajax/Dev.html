@@ -1094,7 +1094,7 @@
                         <div class="col-lg-6">
                             
                               <label for="">Choose Operating System</label>
-                              <select id="instanceOS"  class="width-100" >
+                              <select id="importinstanceOS"  class="width-100" >
                                 <option value="linux">linux</option>
                                 <option value="windows">windows</option>
                               </select>
@@ -1235,7 +1235,7 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 
 $(document).ready(function() {
-   $('#instanceOS').select2();
+   $('#importinstanceOS').select2();
    $('#pemFileDropdown').select2();
 
 
@@ -1586,7 +1586,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
     var reqBody = {};
     var $form = $('#addInstanceForm');
     reqBody.fqdn = $form.find('#instanceFQDN').val();
-    reqBody.os = $form.find('#instanceOS').val();
+    reqBody.os = $form.find('#importinstanceOS').val();
     reqBody.users = $('#importbyipuserListSelect').val();
     reqBody.credentials = {
         username: $form.find('#instanceUsername').val()
@@ -2964,6 +2964,7 @@ function loadContainersTable(){
       var $docker = $(this).find('.dockerenabledinstacne');
       if($docker.html() != undefined){
         //Get the instance ID
+        $('li.Containers').removeClass('hidden');
         var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
             $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
                 if(!data){
@@ -3100,6 +3101,10 @@ function loadContainersTable(){
                    }
                 });
             });
+        }
+      else{ //no docker found
+        $('.loadingimagefordockertable').addClass('hidden');
+        $('li.Containers').addClass('hidden');
       }
     });
     //dockercontaineraction

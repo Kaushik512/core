@@ -382,8 +382,9 @@ var Chef = function(settings) {
         //    credentialArg = '-i' + params.pemFilePath;
 
         } else {
-            argList.push('-P');
-            argList.push(params.instancePassword);
+            if (params.instanceOS != 'windows') 
+            {argList.push('-P');
+                        argList.push(params.instancePassword);}
         }
         //If windows box then credetial to be updated to stored password
         if (params.instanceOS == 'windows') {
@@ -437,6 +438,7 @@ var Chef = function(settings) {
         });
         procNodeDelete.on('close', function(code) {
                     console.log('procNodeDelete closed');
+                    console.log('Command : knife ' + argList.join());
                     var proc = new Process('knife', argList, options);
                     proc.start();
                 });
@@ -500,6 +502,7 @@ var Chef = function(settings) {
             //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
           //  var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
         //    proc.start();
+            callback(null,"1");
 
         }
 
