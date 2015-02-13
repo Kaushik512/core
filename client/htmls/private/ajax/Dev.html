@@ -1585,7 +1585,9 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
 
 //$('#addInstanceBtn').click(function(e) {
   $("#addInstanceForm").submit( function(e) {
-    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; 
+    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+
+
     var reqBody = {};
     var $form = $('#addInstanceForm');
     reqBody.fqdn = $form.find('#instanceFQDN').val();
@@ -1600,8 +1602,8 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
         e.preventDefault();
        return false;
     }
-    if(!reqBody.fqdn.match(ipAddresRegExp)){
-      alert("Please provide a valid IP Address");
+    if(!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)){
+      alert("Please provide a valid IP Address or Hostname");
       e.preventDefault();
       return false;
     }
