@@ -1547,11 +1547,28 @@ $('#importPemfileInput').change(function(){
 });
 
 $('#modalContainerimportInstance').on('show.bs.modal',function(e){
+  var _org = getUrlParameter('org');
   $.get('/d4dMasters/readmasterjsonnew/10',function(data){
     if(data && JSON.parse(data).length <= 0){
       $('#modalContainerimportInstance').modal('hide');
       alert('A chef server is required to import an instance. Use settings to add a new one.');
       return false;
+    }
+    else
+    {
+      var found = false;
+      JSON.parse(data).forEach(function(k,v){
+        var kt = Object.keys(k);
+       
+        if(k['orgname'] == _org){
+          found = true;
+        }
+      });
+      
+        if(!found){
+          $('#modalContainerimportInstance').modal('hide');
+          alert('A chef server is required to import an instance. Use settings to add a new one.');
+        }
     }
     importbyipusers();
   });
@@ -3694,14 +3711,12 @@ function loadcarousel() {
 
 }
 loadcarousel();
-$(function(){
-$('#ipaddressimport').click(function(){
-setTimeout(function(){
- // debugger;
-$('#instanceFQDN').attr("autofocus","autofocus").focus(); 
-},0);
-});
-
-
-});
+// $(function(){
+// $('#ipaddressimport').click(function(){
+// setTimeout(function(){
+//  // debugger;
+// $('#instanceFQDN').attr("autofocus","autofocus").focus(); 
+// },0);
+// });
+// });
 </script>
