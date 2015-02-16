@@ -147,7 +147,7 @@
 					
 					//drawBreadCrumb(this.tree);
 
-					$('li[data-nodeid="' + node.nodeId + '"]').first().addClass('active').attr('style','font-size : 14px !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
+					$('li[data-nodeid="' + node.nodeId + '"]').first().addClass('active').attr('style','font-size : 13px !important;font-weight:bold;background-color:#3b4142 !important').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 
 					//$('li[data-nodeid="' + node.nodeId + '"]').first().attr('style','background-color : grey !important;font-weight:bold;').append('<i  class="fa fa-caret-left" rightcarate="yes" style="float:right;margin-top:5px;margin-right:-10px;"></i>');
 					//alert();
