@@ -210,6 +210,24 @@ var InstancesDao = function() {
         });
     };
 
+    this.getInstancesByOrgEnvIdAndIp = function(orgId, envId, ip, callback) {
+        logger.debug("Enter getInstancesByOrgEnvIdAndIp (%s, %s, %s)", orgId, envId, ip);
+        var queryObj = {
+            orgId: orgId,
+            envId: envId,
+            instanceIP: ip
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getInstancesByOrgEnvIdAndIp (%s, %s, %s)", orgId, envId, ip);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesByOrgEnvIdAndIp (%s, %s, %s)", orgId, envId, ip);
+            callback(null, data);
+        });
+    };
+
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
         //Kana hack to add application url
