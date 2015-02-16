@@ -508,10 +508,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var counts = [];
         for(var i =1;i<5;i++)
             counts[i] = 0;
-       
+          d4dModelNew.d4dModelMastersOrg.find({
+            id: 1
+        }, function(err, docorgs) {
+            var orgnames = docorgs.map(function(docorgs1) {
+                return docorgs1.orgname;
+            });
         d4dModelNew.d4dModelMastersOrg.find({
             id: {
-                $in: masts
+                $in: masts,
+            },
+            orgname:{
+                $in:orgnames
             }
         }, function(err, d4dMasterJson) {
             if (err) {
@@ -528,6 +536,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug(d4dMasterJson.length);
                 var i = 0;
                 for(var i=0;i < d4dMasterJson.length;i++){
+                    //Need to do a org check.
+
                     logger.debug(d4dMasterJson[i]["id"]);
                     counts[d4dMasterJson[i]["id"]]++;
                 }
@@ -545,6 +555,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 console.log("none found");
             }
         });
+    });
     });
 
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
