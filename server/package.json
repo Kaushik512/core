@@ -30,7 +30,8 @@
         "mongoose-unique-validator": "0.4.1",
         "mongoose-validator": "1.0.3",
         "winston-logstash": "0.1.11",
-        "jenkins-api":"0.2.6"
+        "jenkins-api":"0.2.6",
+        "wait-for-port":"0.0.1"
     },
     "devDependencies": {
         "grunt": "0.4.5",

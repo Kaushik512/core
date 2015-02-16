@@ -18,6 +18,7 @@ var credentialCryptography = require('../lib/credentialcryptography');
 
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var Curl = require('../lib/utils/curl.js');
+var waitForPort = require('wait-for-port');
 
 
 
@@ -958,25 +959,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         return;
                     }
                     //Verifying if the node is alive
-                    var nodeAlive = 'unknown';
-                    var cmd = 'ping -c 1 -w 1 ' + req.body.fqdn;
-                    var curl = new Curl();
-                    console.log("Pinging Node to check if alive :" + cmd);
-                    var executeCount = 0;
-                    curl.executecurl(cmd, function(err, stdout) {
-                        if (executeCount > 0) {
-                            return;
+                    var nodeAlive = 'running';
+                    waitForPort(req.body.fqdn, 22, function(err) {
+                        if(err) {
+                          console.log(err);
+                          res.send(400,{message:"Instance is not running"});
+                          return;  
                         }
-                        executeCount++;
-                        if (stdout) {
-                            if (stdout.indexOf('1 received') > 0) {
-                                nodeAlive = 'running';
-                            }
-                        }
-
-
-
-
                         //    console.log('node ===>', node);
                         credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                             if (err) {
