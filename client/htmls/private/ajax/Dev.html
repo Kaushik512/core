@@ -2738,7 +2738,14 @@ function addInstanceToDOM(data) {
 
     $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
 
-    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item').append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>').attr('href', 'javascript:void').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'ViewAllRunlist').addClass('instance-bootstrap-list-faimage'));
+    $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item')
+    .append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>')
+    .attr({
+        'href': 'javascript:void',
+        'rel': 'tooltip',
+        'data-placement': 'top',
+        'data-original-title':'ViewAllRunlist'
+      }).addClass('instance-bootstrap-list-faimage'));
 
     $divComponentItem.click(function(e) {
         $(this).parents('.flip-toggle').toggleClass('flip');
@@ -3600,14 +3607,22 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
         $.post('../instances/' + instanceId + '/updateRunlist', {
             runlist: runlist
         }, function(data) {
-            $chefRunModalContainer.modal('hide');
-            var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-            var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
-            console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
-            $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
-            $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
-            $parent.find('.moreInfo').trigger('click');
-            console.log(data);
+          $chefRunModalContainer.modal('hide');
+          var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+          var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
+          //console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
+          $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+          var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
+          for (var j = 0; j < runlist.length; j++) {
+             var $divComponentItem;
+    
+              $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
+              $backRunlistContainer.append($divComponentItem);
+          }
+
+          $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
+          $parent.find('.moreInfo').trigger('click');
+          console.log(data);
         }).fail(function(jxObj){
             
         });
