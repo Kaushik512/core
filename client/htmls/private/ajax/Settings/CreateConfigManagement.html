@@ -37,9 +37,9 @@
                                           <hr>
                                           
                                              <div class="col-lg-6" style="margin-top:25px">
-                                                <label for="link">URL:</label>
+                                                <label for="link">URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" name="ctl00$MainContent$orgname" value="http://opscode.chef.com/_default" id="url" class="form-control" type="url"  name="website"  cdata="catalyst">
+                                                <input type="text" name="ctl00$MainContent$orgname" value="http://opscode.chef.com/_default" id="url" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required">
                                              </div>
                                              <div class="col-lg-6" style="margin-top:25px">
                                                 <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -53,19 +53,19 @@
                                           
                                              <div class="col-lg-6" id="frmconfigmanagement" style="margin-top:20px">
                                                 <div class="smart-forms">
-                                                   <label>User Pem File:</label>
+                                                   <label>User Pem File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                    <label for="userpemfile" class="field file">
                                                       <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="userpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
+                                                      <span class="button btn-primary">Browse</span><input id="userpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file" cat-validation="required"><input type="text" readonly="" class="gui-input">
                                                    </label>
                                                 </div>
                                              </div>
                                              <div class="col-lg-6" style="margin-top:20px">
                                                 <div class="smart-forms">
-                                                   <label>Validator Pem File:</label>
+                                                   <label>Validator Pem File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                    <label for="validatorpemfile" class="field file">
                                                       <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="validatorpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
+                                                      <span class="button btn-primary">Browse</span><input id="validatorpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file" cat-validation="required"><input type="text" readonly="" class="gui-input">
                                                    </label>
                                                 </div>
                                              </div>
@@ -73,10 +73,10 @@
                                           
                                              <div class="col-lg-6" style="margin-top:20px">
                                                 <div class="smart-forms">
-                                                   <label>Knife.rb File:</label>
+                                                   <label>Knife.rb File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                    <label for="kniferbfile" class="field file">
                                                       <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="kniferbfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value" class="gui-file"  cdata="catalyst"><input type="text" readonly="" class="gui-input">
+                                                      <span class="button btn-primary">Browse</span><input id="kniferbfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value" class="gui-file"  cdata="catalyst" cat-validation="required"><input type="text" readonly="" class="gui-input">
                                                       <input id="folderpath"  cdata="catalyst" type="text" value="" style="display:none"/>
                                                    </label>
                                                 </div>
@@ -131,7 +131,7 @@
    }
    
    function inLineReady() {
-   
+       
        $("input[type='text']").on("click", function () {
            $(this).select();
            $("#msgOrgName").hide();
@@ -178,6 +178,7 @@
            // }else{
            //      alert('invalid valid form submitted'); // for demo
            // }
+         //  alert('in 1');
            if(validateForm()) {setfolderpath(); saveform('10');};
            return false; // for demo
        });
