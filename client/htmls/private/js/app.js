@@ -117,6 +117,9 @@ $(document).ready(function() {
            success: function (data) {
                var usrdata = JSON.parse(JSON.stringify(data));
                //$("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata[0]['loginname'] + "</b>&nbsp;[" + usrdata[0]['userrolename'] + "]");
+               if(usrdata.user[1].role.indexOf('undefined') >= 0)
+               	usrdata.user[1].role = '[Not Defined]';
+              // alert('Role:' + usrdata.user[1].role);
                $("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata.user[0].username.cn.toUpperCase() + "</b>&nbsp;" + usrdata.user[1].role)
            }
        });
