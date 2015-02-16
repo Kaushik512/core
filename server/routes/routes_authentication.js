@@ -36,7 +36,7 @@ module.exports.setRoutes = function(app) {
 
 	app.post('/auth/signin', function(req, res) {
 
-		logger.debug("post: /auth/signin :: Request = ", req);
+		//logger.debug("post: /auth/signin :: Request = ", req);
 
 		if (req.body && req.body.username && req.body.pass) {
 			logger.debug("Creating LDAP Client");
@@ -70,12 +70,14 @@ module.exports.setRoutes = function(app) {
 							res.redirect('/private/index.html');
 							res.send(200);
 						} else {
+							console.log('in else --- ' + user.cn); //sd1
 							usersDao.getUser(user.cn, function(err, data) {
 								logger.debug("User is not a Admin.");
 								if (data.length) {
-									user.roleId = data[0].roleId;
-									user.groupId = data[0].groupId;
-									console.log('Just before role');
+									user.roleId = data[0].userrolename;
+
+									//user.groupId = data[0].groupId;
+									console.log('Just before role:',data[0].roleId);
 									configmgmtDao.getAccessFilesForRole(user.cn,user,req,res,function(err,getAccessFiles){
 									if(getAccessFiles){
 										
