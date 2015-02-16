@@ -1153,6 +1153,7 @@
             </div>
              <div class="modal-footer">
               <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>
+              <label id="nodeimportipresultmsg" class=" hidden"></label>
               <div class="marginForButtons">
                 <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
@@ -1546,6 +1547,8 @@ $('#importPemfileInput').change(function(){
 });
 
 $('#modalContainerimportInstance').on('show.bs.modal',function(e){
+   $('#addInstanceBtn').removeAttr('disabled');
+   //$('#addInstanceForm').get(0).reset();
   var _org = getUrlParameter('org');
   $.get('/d4dMasters/readmasterjsonnew/10',function(data){
     if(data && JSON.parse(data).length <= 0){
@@ -1603,7 +1606,8 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
   $("#addInstanceForm").submit( function(e) {
     var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
 
-
+    var $spinner = $('#nodeimportipspinner').addClass('hidden');
+    var $result = $('#nodeimportipresultmsg').addClass('hidden');
     var reqBody = {};
     var $form = $('#addInstanceForm');
     reqBody.fqdn = $form.find('#instanceFQDN').val();
@@ -1637,12 +1641,13 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
 
     function makeRequest() {
      $('#addInstanceBtn').attr('disabled','disabled');
-     $('#nodeimportipspinner').removeClass('hidden');
+     $spinner.removeClass('hidden');
      // $('#addInstanceBtn').attr('disabled','disabled');
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
-          $('#nodeimportipspinner').addClass('hidden');
+          $spinner.addClass('hidden');
+          $result.addClass('hidden');
           $('#addInstanceBtn').removeAttr('disabled');
           $('#addInstanceForm').get(0).reset();
           $('#pemFileDropdown').change();
@@ -1655,6 +1660,21 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
           //Updating the tree
           loadTreeFuncNew();
           selectFirstEnv();
+      }).fail(function(jxhr){
+         $spinner.addClass('hidden');
+         $result.empty();
+         $result.css({color:'red'});
+         if(jxhr.status === 400) {
+           if(jxhr.responseJSON) {
+            $result.html(jxhr.responseJSON.message);
+           } else {
+            $result.html("Invalid request");
+           }
+         } else {
+            $result.html("Server Behaved Unexpectedly");
+         }
+         $result.removeClass('hidden');
+          
       });
 
     }
