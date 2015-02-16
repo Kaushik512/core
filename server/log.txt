@@ -1,0 +1,154 @@
+{ [Error: ENOENT, no such file or directory './config/catalyst-config.json']
+  errno: 34,
+  code: 'ENOENT',
+  path: './config/catalyst-config.json',
+  syscall: 'open' }
+{ host: 'localhost', port: '27017', dbName: 'devops_new' }
+{ host: 'localhost', port: '27017', dbName: 'test' }
+mongodb://localhost:27017/devops_new
+/development/catalyst/D4DFE/D4D/server/
+/development/catalyst/D4DFE/D4D/server/
+hit authenticate =========>
+User String:{cn=sd1,dc=d4d-ldap,dc=relevancelab,dc=com}
+[ 'cn', 'sd1' ]
+[ 'dc', 'd4d-ldap' ]
+[ 'dc', 'relevancelab' ]
+[ 'dc', 'com' ]
+Just before role
+Received Role name: sd1
+7
+Master Type: d4dModelMastersUsers
+7 Catalyst_Admin
+sent response"{\"Catalyst_Admin\":\"7b4d3d19-5570-43e5-acf2-605c04ec6e8e\"}"
+Rolenames for User:"Catalyst_Admin":"7b4d3d19-5570-43e5-acf2-605c04ec6e8e"
+Role 0:Catalyst_Admin
+6
+Master Type: d4dModelMastersUserroles
+6 Designer,Consumer,Monitor,Organiser
+sent response"{\"Designer,Consumer,Monitor,Organiser\":\"61\"}"
+inside globalaccessname : false
+globalaccessname : "Designer,Consumer,Monitor,Organiser":"61"
+Access Type : Designer
+8
+Master Type: d4dModelMastersglobalaccess
+Access Type : Consumer
+8
+Master Type: d4dModelMastersglobalaccess
+Access Type : Monitor
+8
+Master Type: d4dModelMastersglobalaccess
+Access Type : Organiser
+8
+Master Type: d4dModelMastersglobalaccess
+5 blueprints
+sent response"{\"blueprints\":\"91\"}"
+inner loop "blueprints":"91"
+0 1 1 4
+0 1 1 4
+5 Workspace
+sent response"{\"Workspace\":\"92\"}"
+inner loop "Workspace":"92"
+0 1 2 4
+0 1 2 4
+5 Track
+sent response"{\"Track\":\"93\"}"
+inner loop "Track":"93"
+0 1 3 4
+0 1 3 4
+5 Settings
+sent response"{\"Settings\":\"94\"}"
+inner loop "Settings":"94"
+0 1 4 4
+1 1 4 4
+Rcvd in call: blueprints,Workspace,Track,Settings
+Authorized
+req received /private/index.html
+req received /private/css/bootstrap.css
+req received /private/css/Catalyst.css
+req received /private/js/libs/jquery-2.0.2.min.js
+req received /private/js/libs/jquery-ui-1.10.3.min.js
+req received /private/js/libs/modernizr-2.5.3.min.js
+req received /private/js/select2.min.js
+req received /private/js/bootstrap-treeview.js
+req received /private/js/bootstrap/bootstrap.min.js
+req received /private/js/notification/SmartNotification.min.js
+req received /private/js/plugin/bootbox/bootbox.min.js
+req received /private/js/smartwidgets/jarvis.widget.min.js
+req received /private/js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js
+req received /private/js/jquery.dataTables.min.js
+req received /private/js/jquery.tablesorter.min.js
+req received /private/js/jquery.validate.min.js
+req received /private/js/additional-methods.min.js
+req received /private/js/app.js
+req received /private/js/chefmodalcommon.js
+req received /private/js/settingscommon.js
+req received /private/img/version2_22.png
+Enter /organizations/getTreeForbtv
+Found Orgs
+Orgnames:thistesting
+businessGroups:MyBG4Org
+docprojs.length:2
+Orgnames:PhoenixInc
+businessGroups:Phoenix International
+docprojs.length:2
+hit
+Env in:{ _id: 54c1ce0a03aa007d0453764d,
+  projectname: 'Ecommerce',
+  description: 'phoenix ecommerce',
+  orgname: 'PhoenixInc',
+  productgroupname: 'Phoenix International',
+  environmentname: 'DEV,Prod,QA,Stage',
+  rowid: '6f153ffd-9e59-47c8-bf91-ba1759ccd218',
+  id: '4',
+  __v: 0 },{ _id: 54db3b6a020610a36d67f338,
+  projectname: 'MyNewProject',
+  description: 'Default Description',
+  orgname: 'PhoenixInc',
+  productgroupname: 'Phoenix International',
+  environmentname: 'Prod,QA,Stage,DEV',
+  rowid: '70454c2c-93cd-46f0-ab30-1295e5d12343',
+  id: '4',
+  __v: 0 }
+Env in:{ _id: 54c1ce0a03aa007d0453764d,
+  projectname: 'Ecommerce',
+  description: 'phoenix ecommerce',
+  orgname: 'PhoenixInc',
+  productgroupname: 'Phoenix International',
+  environmentname: 'DEV,Prod,QA,Stage',
+  rowid: '6f153ffd-9e59-47c8-bf91-ba1759ccd218',
+  id: '4',
+  __v: 0 },{ _id: 54db3b6a020610a36d67f338,
+  projectname: 'MyNewProject',
+  description: 'Default Description',
+  orgname: 'PhoenixInc',
+  productgroupname: 'Phoenix International',
+  environmentname: 'Prod,QA,Stage,DEV',
+  rowid: '70454c2c-93cd-46f0-ab30-1295e5d12343',
+  id: '4',
+  __v: 0 }
+hit
+OrgTree:[{"name":"thistesting","text":"thistesting","href":"javascript:void(0)","icon":"fa fa-building ","nodes":[{"name":"MyBG4Org","text":"MyBG4Org","orgname":"thistesting","icon":"fa fa-fw fa-1x fa-group","borderColor":"#000","href":"javascript:void(0)","nodes":[],"selectable":false,"itemtype":"bg","projects":[]}],"borderColor":"#000","businessGroups":[{"name":"MyBG4Org","text":"MyBG4Org","href":"javascript:void(0)","nodes":[],"projects":[]}],"selectable":false,"itemtype":"org","environments":[]},{"name":"PhoenixInc","text":"PhoenixInc","href":"javascript:void(0)","icon":"fa fa-building ","nodes":[{"name":"Phoenix International","text":"Phoenix International","orgname":"PhoenixInc","icon":"fa fa-fw fa-1x fa-group","borderColor":"#000","href":"javascript:void(0)","nodes":[{"name":"Ecommerce","text":"Ecommerce","orgname":"PhoenixInc","bgname":"Phoenix International","icon":"fa fa-fw fa-1x fa-tasks","nodes":[{"text":"DEV","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=DEV","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"Prod","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=Prod","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"QA","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=QA","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"Stage","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=Stage","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"}],"borderColor":"#000","selectable":false,"itemtype":"proj","href":"javascript:void(0)","environments":["DEV","Prod","QA","Stage"]},{"name":"MyNewProject","text":"MyNewProject","orgname":"PhoenixInc","bgname":"Phoenix International","icon":"fa fa-fw fa-1x fa-tasks","nodes":[{"text":"Prod","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=Prod","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"QA","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=QA","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"Stage","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=Stage","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"DEV","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=DEV","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"}],"borderColor":"#000","selectable":false,"itemtype":"proj","href":"javascript:void(0)","environments":["Prod","QA","Stage","DEV"]}],"selectable":false,"itemtype":"bg","projects":[]}],"borderColor":"#000","businessGroups":[{"name":"Phoenix International","text":"Phoenix International","href":"javascript:void(0)","nodes":[],"projects":[{"name":"Ecommerce","environments":["DEV","Prod","QA","Stage"]},{"name":"MyNewProject","environments":["Prod","QA","Stage","DEV"]}]}],"selectable":false,"itemtype":"org","environments":[]}]
+Orgnames:thistesting
+businessGroups:MyBG4Org
+docprojs.length:1
+hit
+Env in:{ _id: 54ddde719b40724c48ef76db,
+  projectname: 'MyProject1',
+  description: 'Default Description',
+  orgname: 'thistesting',
+  productgroupname: 'MyBG4Org',
+  environmentname: 'MyEnv1',
+  rowid: 'cf3750b7-43ff-48f1-85ae-ea94fded3804',
+  id: '4',
+  __v: 0 }
+Orgnames:PhoenixInc
+businessGroups:Phoenix International
+docprojs.length:1
+OrgTree:[{"name":"thistesting","text":"thistesting","href":"javascript:void(0)","icon":"fa fa-building ","nodes":[{"name":"MyBG4Org","text":"MyBG4Org","orgname":"thistesting","icon":"fa fa-fw fa-1x fa-group","borderColor":"#000","href":"javascript:void(0)","nodes":[{"name":"MyProject1","text":"MyProject1","orgname":"thistesting","bgname":"MyBG4Org","icon":"fa fa-fw fa-1x fa-tasks","nodes":[{"text":"MyEnv1","href":"#ajax/Dev.html?org=thistesting&bg=MyBG4Org&projid=MyProject1&envid=MyEnv1","orgname":"thistesting","projname":"MyProject1","bgname":"MyBG4Org","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"}],"borderColor":"#000","selectable":false,"itemtype":"proj","href":"javascript:void(0)","environments":["MyEnv1"]}],"selectable":false,"itemtype":"bg","projects":[]}],"borderColor":"#000","businessGroups":[{"name":"MyBG4Org","text":"MyBG4Org","href":"javascript:void(0)","nodes":[],"projects":[{"name":"MyProject1","environments":["MyEnv1"]}]}],"selectable":false,"itemtype":"org","environments":[]},{"name":"PhoenixInc","text":"PhoenixInc","href":"javascript:void(0)","icon":"fa fa-building ","nodes":[{"name":"Phoenix International","text":"Phoenix International","orgname":"PhoenixInc","icon":"fa fa-fw fa-1x fa-group","borderColor":"#000","href":"javascript:void(0)","nodes":[{"name":"Ecommerce","text":"Ecommerce","orgname":"PhoenixInc","bgname":"Phoenix International","icon":"fa fa-fw fa-1x fa-tasks","nodes":[{"text":"DEV","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=DEV","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"Prod","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=Prod","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"QA","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=QA","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"Stage","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=Ecommerce&envid=Stage","orgname":"PhoenixInc","projname":"Ecommerce","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"}],"borderColor":"#000","selectable":false,"itemtype":"proj","href":"javascript:void(0)","environments":["DEV","Prod","QA","Stage"]},{"name":"MyNewProject","text":"MyNewProject","orgname":"PhoenixInc","bgname":"Phoenix International","icon":"fa fa-fw fa-1x fa-tasks","nodes":[{"text":"Prod","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=Prod","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"QA","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=QA","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"Stage","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=Stage","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"},{"text":"DEV","href":"#ajax/Dev.html?org=PhoenixInc&bg=Phoenix International&projid=MyNewProject&envid=DEV","orgname":"PhoenixInc","projname":"MyNewProject","bgname":"Phoenix International","itemtype":"env","tooltip":"","icon":"fa fa-fw fa-1x fa-desktop"}],"borderColor":"#000","selectable":false,"itemtype":"proj","href":"javascript:void(0)","environments":["Prod","QA","Stage","DEV"]}],"selectable":false,"itemtype":"bg","projects":[]}],"borderColor":"#000","businessGroups":[{"name":"Phoenix International","text":"Phoenix International","href":"javascript:void(0)","nodes":[],"projects":[{"name":"Ecommerce","environments":["DEV","Prod","QA","Stage"]},{"name":"MyNewProject","environments":["Prod","QA","Stage","DEV"]}]}],"selectable":false,"itemtype":"org","environments":[]}]
+Authorized
+req received /private/ajax/Dev.html?org=thistesting&bg=MyBG4Org&projid=MyProject1&envid=MyEnv1
+req received /private/img/select2-spinner.gif
+req received /private/img/templateicons/Order-run-list---deployment.png
+received new request 16
+Master Type: d4dModelMastersDesignTemplateTypes
+sent response[{"_id":"54ae6e873ee5487e32ccacb2","templatetypename":"AppFactory","designtemplateicon_filename":"Appfactory.png","rowid":"16ae9c94-19f6-485a-8c17-9af7a0f5f23d","id":"16","__v":0},{"_id":"54af761b8521ec09365b73c0","templatetypename":"DevOpsRoles","designtemplateicon_filename":"DevopsRoles.png","rowid":"9d14d362-493e-4d62-b029-a6761610b017","id":"16","__v":0},{"_id":"54bde11187f86fa0130c7563","templatetypename":"Docker","designtemplateicon_filename":"Docker.png","rowid":"b02de7dd-6101-4f0e-a95e-68d74cec86c0","id":"16","__v":0},{"_id":"54c1ce9203aa007d0453764e","templatetypename":"CloudFormation","designtemplateicon_filename":"Cloudformation.png","rowid":"4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9","id":"16","__v":0},{"_id":"54c1cea203aa007d0453764f","templatetypename":"Desktop","designtemplateicon_filename":"Desktop Provisining.png","rowid":"02fcfdaf-0d35-42c7-aef4-ac0019911e21","id":"16","__v":0},{"_id":"54c1ceb603aa007d04537650","templatetypename":"Environment","designtemplateicon_filename":"Environment.png","rowid":"71e62952-b464-4980-b76b-482a129f5627","id":"16","__v":0}]
