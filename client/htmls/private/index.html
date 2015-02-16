@@ -515,22 +515,22 @@
 
      console.log("hashChange", hash);
      console.log("pos ==>", location.hash.indexOf("#ajax/Dev.html?"));
-
-
+     
      if (location.hash.indexOf("#ajax/Dev.html?") === 0) {
          $(".left-projects-links a").removeClass('active');
          console.log("pos if ==>", location.hash.indexOf("#ajax/Dev.html?"));
          $("#workZoneNew").addClass('active');
-     } else if (location.hash == "#ajax/Aws-Production.html") {
+     } else if (location.hash === "#ajax/Aws-Production.html") {
          $(".left-projects-links a").removeClass('active');
          $("#designNew").addClass('active');
-     } else if (location.hash == "#ajax/Settings/TrackerDashboard.html") {
+     } else if (location.hash === "#ajax/Settings/TrackerDashboard.html") {
          $(".left-projects-links a").removeClass('active');
          $("#trackNew").addClass('active');
      } else if (location.hash.indexOf("#ajax/Settings/") === 0) {
          $(".left-projects-links a").removeClass('active');
          $("#settingsNew").addClass('active');
      }
+
  });
 
     

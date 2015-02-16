@@ -179,7 +179,15 @@
            //      alert('invalid valid form submitted'); // for demo
            // }
          //  alert('in 1');
-           if(validateForm()) {setfolderpath(); saveform('10');};
+         var isEditActivate= location.href.toString().split('?')[1]==="new"?false:true;
+       //  var operationType='';
+
+if(isEditActivate){
+  $('#userpemfile').removeAttr('cat-validation');
+  $('#validatorpemfile').removeAttr('cat-validation');
+  $('#kniferbfile').removeAttr('cat-validation');
+}          
+ if(validateForm()) {setfolderpath(); saveform('10');};
            return false; // for demo
        });
    });
