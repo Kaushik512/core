@@ -52,7 +52,7 @@
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
                                         <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
-                                          <img src="img/galleryIcons/sshIcon.png"/ height="27px" width="27px" >
+                                          <img src="img/galleryIcons/sshIcon.png"/ height="28px" width="28px" >
                                         </a>
                                       </div>
                                     </div>
@@ -979,14 +979,37 @@ $.get('../instances/'+urlParams.id,function(data){
             runlist.push($(this).val());
         });
         console.log('runlist == ',runlist);
+
+        // $.post('../instances/' + instanceId + '/updateRunlist', {
+        //     runlist: runlist
+        // }, function(data) {
+        //     $chefRunModalContainer = $('#controlPanelChefRunModalContainer').modal('hide');
+        //     var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+        //     $parent.find('.moreInfo').trigger('click');
+        //     console.log(data);
+        // });
         $.post('../instances/' + instanceId + '/updateRunlist', {
             runlist: runlist
         }, function(data) {
-            $chefRunModalContainer = $('#controlPanelChefRunModalContainer').modal('hide');
+            $chefRunModalContainer.modal('hide');
             var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+            var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
+            console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
+            $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+            var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
+            for (var j = 0; j < runlist.length; j++) {
+               var $divComponentItem;
+      
+                $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
+                $backRunlistContainer.append($divComponentItem);
+            }
+            $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
             $parent.find('.moreInfo').trigger('click');
             console.log(data);
+        }).fail(function(jxObj){
+            
         });
+
     });
 
 
