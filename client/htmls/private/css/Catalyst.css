@@ -4317,9 +4317,10 @@ nav ul
     position: absolute;
     right: 4px;
     /*top: 8px;*/
-    top: 11px;
+    top: 9px;
     z-index: 10;
 }
+
 
 .smart-forms .button {
     background: none repeat scroll 0 0 #bdc3c7;
@@ -5565,9 +5566,9 @@ span.icon {
     margin-right: 12px;
     border-radius: 50%;
 }
-.importantRule{
+/*.importantRule{
     background: none repeat scroll 0 0 #3b4142 !important;
-}
+}*/
 .node-tree:hover{
     background-color: transparent !important;
 }
@@ -5612,16 +5613,7 @@ span.icon {
 	height:640px!important;
 }
 
-
 }
-
-
-
-
-
-
-
-
-
-
-
+.btn-importbyIP{
+	top:11px !important;
+}
