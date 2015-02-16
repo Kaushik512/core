@@ -993,8 +993,6 @@ $.get('../instances/'+urlParams.id,function(data){
         }, function(data) {
             $chefRunModalContainer.modal('hide');
             var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-            var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
-            console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
             $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
             var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
             for (var j = 0; j < runlist.length; j++) {
