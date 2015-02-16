@@ -68,8 +68,8 @@
                                   </span>
                                   <hr>
                                   <div class="cardBackRunlistContaner">
-                                    <span class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
-                                    width:130px;color:#3a87ad"></span>
+                                    <!-- <span class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
+                                    width:130px;color:#3a87ad"></span> -->
                                     <!-- append(data.runlist[j]) -->
                                   </div>
                                 <hr>
@@ -774,7 +774,7 @@ $.get('../instances/'+urlParams.id,function(data){
   for (var j = 0; j < data.runlist.length; j++) {
         var $divComponentItem;
       
-            $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+            $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad;font-size:13px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
         $backRunlistContainer.append($divComponentItem);
     }
   pageSetUp();
