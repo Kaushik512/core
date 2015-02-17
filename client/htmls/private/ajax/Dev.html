@@ -1205,8 +1205,9 @@ $('.authenticationType').change(function(e) {
 </script>
 <script type="text/javascript">
 $('#ipaddressimport').click(function(e){
-  $('#nodeimportipresultmsg').addClass("hidden"); 
+  $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
+  $('#pemFileDropdown').change();
 });
 
 // $(document.body).on('click', '.card', function () {
@@ -1873,7 +1874,7 @@ $(function() {
             var $tdTime = $('<td></td>').append(timestamp).addClass('taskrunTimestamp');
             $tr.append($tdTime);
 
-            var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+            var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Remove" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
             $tdOptions.find('.btnDeleteTask').click(function(e) {
                 var taskId = $(this).parents('td').attr('data-taskId');
                 var that = this;
@@ -2095,7 +2096,7 @@ $(function() {
                         $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
                     var $liImage = $('<li></li>').append($img);
                     $ul.append($liImage);
-                    //Arabinda changed the css below licardName //.css({"font-size":'12px',"overflow": 'hidden',"padding-left": '7px',"text-overflow": 'ellipsis',"white-space": 'nowrap'})
+                    
                     var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
                     $ul.append($liCardName);
@@ -2298,7 +2299,21 @@ $(function() {
 
         var $divinstancescardview = $('#divinstancescardview');
         if ($divinstancescardview.find('li').length > 0) {
-            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+          //Arab
+          var cardIndexInfo = localStorage.getItem("cardIndex");
+          
+          if(cardIndexInfo) {
+            var li = $divinstancescardview.find('li').get(cardIndexInfo);
+             //console.log('container ==>',li);
+            if(li) {
+              $(li).find('.flip-toggle').trigger('click');
+            } else {
+              $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+            }       
+            
+          } else {
+             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+          }
         }
         $divinstancescardview.find('.item').first().addClass('active');
 
@@ -2771,7 +2786,7 @@ function addInstanceToDOM(data) {
     $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item')
     .append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>')
     .attr({
-        'href': 'javascript:void',
+        'href': 'javascript:void(0)',
         'rel': 'tooltip',
         'data-placement': 'top',
         'data-original-title':'ViewAllRunlist'
@@ -3023,6 +3038,9 @@ function addInstanceToDOM(data) {
     var $cardContainer = $li.find('.container').click(function(e) {
         $('.container').removeClass('role-Selectedcard');
         $(this).addClass('role-Selectedcard');
+        //Arab 
+        localStorage.setItem("cardIndex", $(".container").index($(this)));
+        console.log($(".container").index($(this)));
     });
     pageSetUp();
     if (data.instanceState == 'stopped'){
@@ -3037,7 +3055,9 @@ function addInstanceToDOM(data) {
     if($l.length>1){
           $l.not(':first').removeClass('active');
         }
-    },3);
+    },10);
+
+    $('#divinstancescardview .carousel-inner .item').addClass('active');
   }
 
 //Containers table build
@@ -3693,7 +3713,7 @@ $('.actionControlPanel').click(function(e) {
     if ($('#divinstancescardview').is(':visible')) {
 
         var $selectedCard = $('.role-Selectedcard');
-        console.log($selectedCard.length);
+        //console.log($selectedCard.length);
         if ($selectedCard.length) {
             var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
             if (instanceId) {
@@ -3745,7 +3765,8 @@ function getViewTile(){
     if(locationData)
     {
         showHideControl(locationData);
-        localStorage.clear();
+        //alert("clearing");
+        //localStorage.clear();
     }
 }
 
@@ -3765,4 +3786,8 @@ loadcarousel();
 // },0);
 // });
 // });
+</script>
+<script type="text/javascript">
+
+
 </script>
