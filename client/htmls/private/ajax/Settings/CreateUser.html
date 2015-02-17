@@ -37,7 +37,7 @@
                                           <div id="userrolename" multiselect="multiselect" datatype="select" sourcepath="6" datapath="userrolename" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"  cdata="catalyst">
                                           </div>
                                        </div>
-                                       <div class="col-lg-6 smart-form" style="margin-top:25px">
+                                       <div class="col-lg-6 smart-form divldapcheckbox" style="margin-top:25px">
                                           <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label>
                                           <label id="msgchkadduserldap" style="display:none;color:red;"></label><br/>
                                           <div id="ldappasswordsection" class="hidden">
@@ -94,7 +94,12 @@
        $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
        readform(7); //7 is for users
        //
-      
+      var $subbutton = $('#myForm5').find('button');
+      if(typeof $subbutton.attr('rowid') != "undefined")
+      {
+        $('#loginname').attr('disabled','disabled');
+        $('.divldapcheckbox').first().addClass('hidden');
+      }
        //Force opening the left navigation menu
        if ($('#navSettings').is(":visible") == false) {
            $('#navSettings').css("display", '');

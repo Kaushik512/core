@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('./schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-var logger  = require('../../lib/logger')(module);
+var logger = require('../../lib/logger')(module);
 
 
 var Schema = mongoose.Schema;
@@ -192,19 +192,53 @@ var InstancesDao = function() {
         });
     };
 
+    this.getInstancesByOrgEnvIdAndChefNodeName = function(orgId, envId, nodeName, callback) {
+        logger.debug("Enter getInstancesByOrgEnvIdAndChefNodeName (%s, %s, %s)", orgId, envId, nodeName);
+        var queryObj = {
+            orgId: orgId,
+            envId: envId
+        }
+        queryObj['chef.chefNodeName'] = nodeName;
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getInstancesByOrgEnvIdAndChefNodeName (%s, %s, %s)", orgId, envId, nodeName);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesByOrgEnvIdAndChefNodeName (%s, %s, %s)", orgId, envId, nodeName);
+            callback(null, data);
+        });
+    };
+
+    this.getInstancesByOrgEnvIdAndIp = function(orgId, envId, ip, callback) {
+        logger.debug("Enter getInstancesByOrgEnvIdAndIp (%s, %s, %s)", orgId, envId, ip);
+        var queryObj = {
+            orgId: orgId,
+            envId: envId,
+            instanceIP: ip
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getInstancesByOrgEnvIdAndIp (%s, %s, %s)", orgId, envId, ip);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesByOrgEnvIdAndIp (%s, %s, %s)", orgId, envId, ip);
+            callback(null, data);
+        });
+    };
 
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
-         //Kana hack to add application url
-        if(typeof instanceData.instanceIP != 'undefined')
-        {
+        //Kana hack to add application url
+        if (typeof instanceData.instanceIP != 'undefined') {
             instanceData.applicationUrl = 'http://' + instanceData.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
             instanceData.applicationUrl1 = 'http://' + instanceData.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
         }
 
         var instance = new Instances(instanceData);
-       
-        
+
+
 
 
         instance.save(function(err, data) {
@@ -381,7 +415,7 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateInstanceLog ", instanceId,log, err);
+                logger.error("Failed to updateInstanceLog ", instanceId, log, err);
                 callback(err, null);
                 return;
             }

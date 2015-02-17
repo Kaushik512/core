@@ -1517,7 +1517,7 @@ function readform(formID) {
 
 
 
-function saveform(formID) {
+function saveform(formID,operationTypes) {
     //Validating the form
 
     if (isFormValid(formID) == false)
