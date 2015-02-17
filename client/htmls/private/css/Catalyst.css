@@ -5595,9 +5595,9 @@ span.icon {
 
 }
 /*Change for the blueprint coming up when the user launches an instance and the user moves to Instances from Blueprints*/
-.carousel-inner>.item{
+/*carousel-inner>.item{
 	display:block!important;
-}
+}*/
 
 @media screen and (max-width:1200px) {
 
