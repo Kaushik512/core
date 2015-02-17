@@ -1,4 +1,3 @@
-
 var Chef = require('../lib/chef');
 var EC2 = require('../lib/ec2');
 var instancesDao = require('../model/dao/instancesdao');
@@ -22,11 +21,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 console.log(err);
-                res.send(500,errorResponses.db.error);
+                res.send(500, errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
-                res.send(404,errorResponses.chef.corruptChefData);
+                res.send(404, errorResponses.chef.corruptChefData);
                 return;
             }
             var chef = new Chef({
@@ -38,7 +37,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getNodesList(function(err, nodeList) {
                 if (err) {
-                    res.send(500,errorResponses.chef.connectionError);
+                    res.send(500, errorResponses.chef.connectionError);
                     return;
                 } else {
                     res.send(nodeList);
@@ -47,12 +46,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         });
     });
-    
 
-    app.get('/chef/justtesting/:mastername/:fieldname/:comparedfieldname/:comparedfieldvalue',function(req,res){
-        console.log('test',req.params.mastername, ' ' + req.params.fieldname, ' ' + req.params.comparedfieldname );
-        configmgmtDao.getListFilteredNew(req.params.mastername,req.params.fieldname,req.params.comparedfieldname,req.params.comparedfieldvalue,function(err,outd){
-            if(!err)
+
+    app.get('/chef/justtesting/:mastername/:fieldname/:comparedfieldname/:comparedfieldvalue', function(req, res) {
+        console.log('test', req.params.mastername, ' ' + req.params.fieldname, ' ' + req.params.comparedfieldname);
+        configmgmtDao.getListFilteredNew(req.params.mastername, req.params.fieldname, req.params.comparedfieldname, req.params.comparedfieldvalue, function(err, outd) {
+            if (!err)
                 res.send(outd);
             else
                 res.send(err);
@@ -62,11 +61,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 console.log(err);
-                res.send(500,errorResponses.db.error);
+                res.send(500, errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
-                res.send(404,errorResponses.chef.corruptChefData);
+                res.send(404, errorResponses.chef.corruptChefData);
                 return;
             }
             var chef = new Chef({
@@ -78,7 +77,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getEnvironmentsList(function(err, environmentsList) {
                 if (err) {
-                    res.send(500,errorResponses.chef.connectionError);
+                    res.send(500, errorResponses.chef.connectionError);
                     return;
                 } else {
                     res.send(environmentsList);
@@ -139,7 +138,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             return;
         }
 
-            var insertNodeInMongo = function(node) {
+        var insertNodeInMongo = function(node) {
             var platformId = '';
             if (!node.automatic) {
                 node.automatic = {};
@@ -287,6 +286,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         }
 
         function updateTaskStatusNode(nodeName, msg, err, i) {
+            count++;
             var status = {};
             status.nodeName = nodeName;
             status.message = msg;
@@ -294,7 +294,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
             console.log('taskstatus updated');
 
-            if (i == reqBody.selectedNodes.length) {
+            if (count == reqBody.selectedNodes.length) {
                 console.log('setting complete');
                 taskstatus.endTaskStatus(true, status);
             } else {
@@ -316,7 +316,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     (function(nodeName) {
                         chef.getNode(nodeName, function(err, node) {
                             if (err) {
-                                count++;
                                 console.log(err);
                                 updateTaskStatusNode(nodeName, "Unable to import node " + nodeName, true, count);
                                 return;
@@ -324,16 +323,15 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                 console.log('creating env ==>', node.chef_environment);
                                 console.log('orgId ==>', orgId);
-                                console.log('bgid ==>',bgId);
-                               // console.log('node ===>', node);
-                                environmentsDao.createEnv(node.chef_environment, orgId,bgId,projectId ,function(err, data) {
+                                console.log('bgid ==>', bgId);
+                                // console.log('node ===>', node);
+                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, function(err, data) {
+
                                     if (err) {
-                                        count++;
                                         console.log(err, 'occured in creating environment in mongo');
-                                        updateTaskStatusNode(nodeName, "Unable to import node : " + nodeName, true, count);
+                                        updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                         return;
                                     }
-                                    count++;
 
                                     //fetching the ip of the imported node
                                     var nodeIp = 'unknown';
@@ -345,30 +343,39 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         nodeIp = node.automatic.cloud.public_ipv4;
                                     }
 
-
-                                    if(nodeIp != 'unknown'){
-                                        var cmd = 'ping -c 1 -w 1 ' + nodeIp;
-                                        var curl = new Curl();
-                                        console.log("Pinging Node to check if alive :" + cmd );
-                                        curl.executecurl(cmd, function(err, stdout) {
-                                            if(stdout){
-                                                if (stdout.indexOf('1 received') > 0) {
-                                                    node.isAlive = 'running';
+                                    instancesDao.getInstanceByOrgAndNodeNameOrIP(orgId, node.name, nodeIp, function(err, instances) {
+                                        if (err) {
+                                            console.log('Unable to fetch instance', err);
+                                            updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
+                                            return;
+                                        }
+                                        if (instances.length) {
+                                            updateTaskStatusNode(node.name, "Node exist : " + node.name, true, count);
+                                            return;
+                                        }
+                                        if (nodeIp != 'unknown') {
+                                            var cmd = 'ping -c 1 -w 1 ' + nodeIp;
+                                            var curl = new Curl();
+                                            console.log("Pinging Node to check if alive :" + cmd);
+                                            curl.executecurl(cmd, function(err, stdout) {
+                                                if (stdout) {
+                                                    if (stdout.indexOf('1 received') > 0) {
+                                                        node.isAlive = 'running';
+                                                    }
+                                                    //    console.log('node ===>', node);
+                                                    insertNodeInMongo(node);
+                                                    console.log('importing node ' + node.name);
+                                                    updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
                                                 }
-                                            //    console.log('node ===>', node);
-                                                insertNodeInMongo(node);
-                                                console.log('importing node ' + node.name);
-                                                updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
-                                            }
-                                        });
-                                    }
-                                    else{
-                                       //     console.log('node ===>', node);
+                                            });
+                                        } else {
+                                            //     console.log('node ===>', node);
                                             node.isAlive = 'unknown';
                                             insertNodeInMongo(node);
                                             console.log('importing node ' + node.name);
                                             updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
-                                    }
+                                        }
+                                    });
                                 });
                             }
                         });
@@ -426,9 +433,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    app.post('/chef/updatenodeenv/:serverId/:nodename',function(req,res){
+    app.post('/chef/updatenodeenv/:serverId/:nodename', function(req, res) {
         console.log('hit here');
-         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 console.log(err);
                 res.send(500);
@@ -445,10 +452,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-         //   var settings = appConfig.chef;
-        //    var chef = new Chef(settings);
-            var env = {"chef_environment":req.body.envName};
-            chef.updateNode(req.params.nodename,env, function(err, envName) {
+            //   var settings = appConfig.chef;
+            //    var chef = new Chef(settings);
+            var env = {
+                "chef_environment": req.body.envName
+            };
+            chef.updateNode(req.params.nodename, env, function(err, envName) {
                 if (err) {
                     res.send(500);
                     return;
