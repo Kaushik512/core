@@ -2630,7 +2630,7 @@ var instanceLogsHandler = function(e) {
                 for (var i = 0; i < data.length; i++) {
                     var $rowDiv = $('<div class="row"></div>');
                     var timeString = new Date().setTime(data[i].timestamp);
-                    var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                    var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                     $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                     if (data[i].err) {
@@ -3428,7 +3428,7 @@ $('.launchBtn').click(function(e) {
                         for (var i = 0; i < data.length; i++) {
                             var $rowDiv = $('<div class="row"></div>');
                             var timeString = new Date().setTime(data[i].timestamp);
-                            var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                            var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                             //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                             if (data[i].err) {
@@ -3540,7 +3540,7 @@ $('.desktopProvisioningLaunchBtn').click(function(e) {
                     for (var i = 0; i < data.length; i++) {
                         var $rowDiv = $('<div class="row"></div>');
                         var timeString = new Date().setTime(data[i].timestamp);
-                        var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                        var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                         //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                         if (data[i].err) {
