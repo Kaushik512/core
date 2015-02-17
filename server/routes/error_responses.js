@@ -7,7 +7,8 @@ function getErrMsgObj(msg) {
 
 module.exports = {
     chef: {
-        connectionError: getErrMsgObj('Unable to Connect to Chef Server')
+        connectionError: getErrMsgObj('Unable to Connect to Chef Server'),
+        corruptChefData:getErrMsgObj('Chef server data corrupted. Please add a new chef server.')
     },
     db: {
         error: getErrMsgObj('Server Behaved Unexpectedly')
