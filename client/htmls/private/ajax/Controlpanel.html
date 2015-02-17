@@ -1121,7 +1121,8 @@ $.get('../instances/'+urlParams.id,function(data){
                 $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
                 $backRunlistContainer.append($divComponentItem);
             }
-            $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
+            //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
+            $parent.data('runlist',runlist);
             $parent.find('.moreInfo').trigger('click');
             console.log(data);
         }).fail(function(jxObj){
