@@ -1205,8 +1205,9 @@ $('.authenticationType').change(function(e) {
 </script>
 <script type="text/javascript">
 $('#ipaddressimport').click(function(e){
-  $('#nodeimportipresultmsg').addClass("hidden"); 
+  $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
+  $('#pemFileDropdown').change();
 });
 
 // $(document.body).on('click', '.card', function () {
