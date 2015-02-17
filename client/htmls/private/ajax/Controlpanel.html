@@ -970,6 +970,10 @@ $.get('../instances/'+urlParams.id,function(data){
     });
 
     $('.btnUpdateInstanceRunlist').click(function(e) {
+      bootbox.confirm("Update runlist?", function(result) {
+        if (!result) {
+            return;
+        }
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
         $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
@@ -1011,7 +1015,7 @@ $.get('../instances/'+urlParams.id,function(data){
         });
 
     });
-
+  });
 
 
 
