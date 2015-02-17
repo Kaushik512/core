@@ -48,7 +48,7 @@
                                       <div class="actionbutton instance-bootstrap-ActionStart"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
                                         
                                       
-                                      <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Shutdown"></a></div>
+                                      <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Stop"></a></div>
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
                                         <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
@@ -96,9 +96,7 @@
           <li class="pull-left" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
-          <li class="pull-left" style="margin-right: 30px;">
-              <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-sun-o"></i>Action History</a>
-          </li>
+          
           <li class="pull-left" style="margin-right: 30px;">
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
@@ -285,85 +283,7 @@
               </div>
             </div>
 
-            <!-- Configure tab contents starts here -->
-            <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
-              <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
-
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                              <th style="font-size: 13px;padding-left:4%">
-                                <!-- <i class="fa fa-fw fa-archive "></i> -->
-                                <strong style="color:#3a87ad">Type</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:4%">
-    
-                                <strong style="color:#3a87ad">Status</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:4%">
-                                
-                                <strong style="color:#3a87ad">Timestamp</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:4%">
-                                
-                                <strong style="color:#3a87ad">Users</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:2%">
-                                
-                                <strong style="color:#3a87ad">MoreInfo</strong>
-                              </th> 
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Bootstrap</td>
-                                <td>Success</td>
-                                <td>Fri, 13 Feb 2015 11:52:37 GMT</td>
-                                <td>Admin</td>
-                                <td>
-                                  <a data-toggle="modal" href="#BootstrapmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr> 
-                              <tr>
-                                <td>Chef-Client Run</td>
-                                <td>Fail</td>
-                                <td>Fri, 14 Feb 2015 13:42:21 GMT</td>
-                                <td>Designer</td>
-                                <td>
-                                  <a data-toggle="modal" href="#ccrmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Start</td>
-                                <td>Success</td>
-                                <td>Fri, 09 Feb 2015 19:43:27 GMT</td>
-                                <td>Consumer</td>
-                                <td>
-                                  <a data-toggle="modal" href="#startmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Stop</td>
-                                <td>Fail</td>
-                                <td>Fri, 16 Feb 2015 11:52:37 GMT</td>
-                                <td>Designer</td>
-                                <td>
-                                  <a data-toggle="modal" href="#stopmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>SSH</td>
-                                <td>Success</td>
-                                <td>Fri, 12 Feb 2015 23:52:21 GMT</td>
-                                <td>Admin</td>
-                                <td>
-                                  <a data-toggle="modal" href="#sshmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-
-            </div> <!--Configure tab contents ends here -->
+            
             <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;">
               <div class="logsArea"></div>
             </div>
@@ -1321,8 +1241,9 @@ function getCookbookActionHtml(serviceId,serviceData) {
     console.log(actionBtnClass);
      html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="status" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
   }
-
+  pageSetUp();
   return html;
+  //pageSetUp();
 
 }
 
