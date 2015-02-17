@@ -58,7 +58,7 @@
    <footer class="footer">
       <div style="text-align:center" class="clearfix form-actions">
         <div>
-            <input type="button" style="margin-left:200px;" value="Import Nodes" class="btn btn-primary showChefImportNodesModalBtn">
+            <input type="button" id="buttonForIP" style="margin-left:200px;" value="Import Nodes" class="btn btn-primary showChefImportNodesModalBtn">
         </div>
       </div>
     </footer>
@@ -220,6 +220,12 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+
+$('#buttonForIP').click(function(e){
+  $('#chefImportBgSelect').select2('val', 'All');
+  $('#chefImportProjectSelect').select2('val', 'All');
+  $('#myForm12').trigger("reset");
+});
 
 $(document).ready(function() {
    $('#pemFileDropdown2').select2();
@@ -539,7 +545,7 @@ $('#importPemfileInput').change(function(){
     alert('Please Select Business Groups & Project');
     return;
    }*/
-   if (!reqBody.bgId || !reqBody.bgId.length && reqBody.projectId || reqBody.projectId === 'choose'){
+   if (!((reqBody.bgId && reqBody.bgId.length) && (reqBody.projectId && reqBody.projectId.length) && reqBody.projectId !== 'choose' && reqBody.bgId !== 'choose')){
     alert('Please Select a Business Group & Project');
     return;
    }

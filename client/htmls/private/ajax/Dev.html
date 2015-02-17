@@ -1204,6 +1204,10 @@ $('.authenticationType').change(function(e) {
      });
 </script>
 <script type="text/javascript">
+$('#ipaddressimport').click(function(e){
+  $('#nodeimportipresultmsg').addClass("hidden"); 
+  $('#addInstanceForm').trigger("reset");
+});
 
 // $(document.body).on('click', '.card', function () {
       
