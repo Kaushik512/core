@@ -164,7 +164,7 @@
                 </label>
                 <div class="row">
                     <div class="col-lg-9">
-                        <ul id="selectedNodesChefTask" class="deploymentNodeList" style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;">
+                        <ul id="selectedNodesCustomTask" class="deploymentNodeList" style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;">
                          
                         </ul>
                     </div>
@@ -245,7 +245,7 @@ $(document).ready(function() {
                             checked = true;
                         }
                     }
-                    var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + data[i].chefNodeName + '</label></li>');
+                    var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + data[i].chef.chefNodeName + '</label></li>');
                     if (checked) {
                         $li.find('input')[0].checked = true;
                         //$li.find('label').click();
