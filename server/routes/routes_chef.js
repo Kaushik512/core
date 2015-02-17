@@ -12,6 +12,8 @@ var taskStatusModule = require('../model/taskstatus');
 var credentialCryptography = require('../lib/credentialcryptography');
 var Curl = require('../lib/utils/curl.js');
 
+var errorResponses = require('./error_responses');
+
 module.exports.setRoutes = function(app, verificationFunc) {
 
     app.all('/chef/*', verificationFunc);
@@ -20,11 +22,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 console.log(err);
-                res.send(500);
+                res.send(500,errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
-                res.send(404);
+                res.send(404,errorResponses.chef.corruptChefData);
                 return;
             }
             var chef = new Chef({
@@ -36,7 +38,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getNodesList(function(err, nodeList) {
                 if (err) {
-                    res.send(500);
+                    res.send(500,errorResponses.chef.connectionError);
                     return;
                 } else {
                     res.send(nodeList);
@@ -60,11 +62,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 console.log(err);
-                res.send(500);
+                res.send(500,errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
-                res.send(404);
+                res.send(404,errorResponses.chef.corruptChefData);
                 return;
             }
             var chef = new Chef({
@@ -76,7 +78,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getEnvironmentsList(function(err, environmentsList) {
                 if (err) {
-                    res.send(500);
+                    res.send(500,errorResponses.chef.connectionError);
                     return;
                 } else {
                     res.send(environmentsList);
