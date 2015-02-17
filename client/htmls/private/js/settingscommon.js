@@ -1650,7 +1650,7 @@ function saveform(formID,operationTypes) {
     if (fileNames == '')
         fileNames = 'null';
     if(typeof(orgname) == 'undefined'){
-        orgName = '%2f';
+        orgName = 'null';
     }
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
    

@@ -1,5 +1,5 @@
 //User Migration script
-db = connect("192.168.1.17:27017/devops_new");
+db = connect("localhost:27017/devops_new");
 db.blueprints.update(
 	{users:["sd1"]},
 	{$set: {'users':["superadmin"]}},
