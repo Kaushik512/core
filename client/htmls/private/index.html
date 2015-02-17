@@ -13,12 +13,12 @@
 	<body class="custom-theme">
 		<script type="text/javascript">
 		//Refresh Issue Fix. This function will get executed when there is a refresh and the url is not of the home page.
-		function firstLoad(){
+/*		function firstLoad(){
 		if(window.location.href.indexOf('#') > 0)
 				window.location.href = '/private/index.html';
 		}
 		firstLoad();
-		</script>
+*/		</script>
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 		<!-- HEADER -->
 		<!-- Header starts here -->
@@ -297,6 +297,9 @@
 	<script src="js/jquery.tablesorter.min.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
 	<script src="js/additional-methods.min.js"></script>
+
+	<!--<script src="js/plugin/modalcollapse/modalcollapse.js"></script>-->
+
 	<script src="js/app.js"></script>
 	
 	
@@ -500,21 +503,16 @@
 		}*/
 	}
 	loadTreeFuncNew();
-	selectFirstEnv();
+	//selectFirstEnv();
  //function ends
 </script>
 <script src="js/chefmodalcommon.js"></script>
 <script src="/private/js/settingscommon.js"></script> 
-
-
 <script>
- $(window).on('hashchange', function() {
-
+  $(window).on('hashchange', function() {
      var hash = location.hash;
-
      console.log("hashChange", hash);
      console.log("pos ==>", location.hash.indexOf("#ajax/Dev.html?"));
-
      if (location.hash.indexOf("#ajax/Dev.html?") === 0) {
          $(".left-projects-links a").removeClass('active');
          console.log("pos if ==>", location.hash.indexOf("#ajax/Dev.html?"));
@@ -529,10 +527,48 @@
          $(".left-projects-links a").removeClass('active');
          $("#settingsNew").addClass('active');
      }
-
+     stateManagement.setState();
  });
+    var stateSaveFormat={
+    	href:"",
+    	metadata:""
+    },
+    key="catalystStatus",
+    stateManagement={
+init:function(){
+	var data=this.getState();
+data=data ? JSON.parse(data):null;
+if(data){
+this.changeURL(data.href);
+}else{
+selectFirstEnv();
+}
+$('body').delegate('#bot2-Msg1','click',function(){
+localStorage.removeItem(key);
+});
+},
+changeURL:function(href){
+if(href.indexOf('Setting')>-1){
+	$("#settingsNew").click();
+	drawBreadCrumb();
+//location.href=href.split('#')[0]+ '#' +'ajax/Settings/Dashboard.html'
 
-    
+}else if(href.indexOf('Dev.html')>-1){
+location.href=href;
+}else{
+$("#designNew").click();
+drawBreadCrumb();
+}
+},
+getState:function(){
+	return localStorage.getItem(key);
+},
+setState:function(){
+stateSaveFormat.href=location.href.toString();
+localStorage.setItem(key,JSON.stringify(stateSaveFormat));
+    	}
+    }
+stateManagement.init();
 
 </script>
 </body>
