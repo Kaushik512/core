@@ -20,7 +20,7 @@ ${DELAY}             1
 ${SHORT DELAY}       0
 ${DELAY SECONDS}       2 seconds
 
-${ROOTPATH}             D:/Test/Param/catframework/project_rl_catalyst
+${ROOTPATH}             /home/ubuntu/development/catalyst/D4D/Test/FunctionalTest/catframework/project_rl_catalyst
 ${CATALYST SUITES}           ${ROOTPATH}/Test_Suites
 
 ${COMMON RESOURCES}            ${ROOTPATH}/Common_Resources

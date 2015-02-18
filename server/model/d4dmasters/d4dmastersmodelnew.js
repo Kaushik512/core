@@ -23,7 +23,7 @@ var nameValidator = [
   validate({
     validator: 'is_ValidName',
     passIfEmpty: true,
-    message: 'Name can contain alphabets, numbers,dash, underscore, dot or a space'
+    message: 'Name can contain alphabets, numbers,dash, underscore, dot'
   })
 ];
 
@@ -60,10 +60,10 @@ var d4dModelMastersOrg = mongoose.model('d4dModelMastersOrg',d4dMastersOrg,'d4dm
 
 var d4dMastersProductGroup = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String,trim:true},
+	name: {type:String,trim:true, validate:nameValidator},
 	orgname: {type:String,required:true, trim:true},
 	orgrowid: {type:String, trim:true},
-	productgroupname: {type:String,required:true, trim:true},
+	productgroupname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -84,10 +84,10 @@ var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d
 
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
-	name: {type:String,trim:true},
+	name: {type:String,trim:true, validate:nameValidator},
 	orgname: {type:String,required:true, trim:true},
 	orgrowid: {type:String, trim:true},
-	projectname: {type:String, trim:true},
+	projectname: {type:String, trim:true, validate:nameValidator},
 	productgroupname: {type:String, trim:true},
 	environmentname: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
