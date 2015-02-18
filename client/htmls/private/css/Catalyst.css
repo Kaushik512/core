@@ -1,3 +1,14 @@
+.margin-top40{
+	margin-top: 40px !important;
+}
+.chefClientRunlistImageCP{
+    background-image:url('../img/galleryIcons/Chefimport.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 28px;
+    width: 30px;
+    margin-top:1px;
+}
 .txt-color-white{
 	color:#fff!important;
 }

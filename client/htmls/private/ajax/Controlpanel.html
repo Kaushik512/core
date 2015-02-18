@@ -42,13 +42,14 @@
                                     <div style="width:152px !important;height:30px;" class="instanceActionBtnCtr">
                                       <div class="instance-bootstrap-ActionChefRun">
 
-                                        <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a>
+                                        <!-- <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a> -->
+                                        <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
                                       
                                       </div>
                                       <div class="actionbutton instance-bootstrap-ActionStart"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
                                         
                                       
-                                      <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Shutdown"></a></div>
+                                      <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Stop"></a></div>
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
                                         <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
@@ -289,7 +290,7 @@
             <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
               <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
 
-                        <table class="table table-hover table-bordered">
+                        <table class="table table-hover table-bordered dataTable no-footer text-align-center table-condensed tablesorter margin-top40" id="tableactionHistory">
                             <thead>
                               <th style="font-size: 13px;padding-left:4%">
                                 <!-- <i class="fa fa-fw fa-archive "></i> -->
@@ -890,6 +891,15 @@ $.get('../instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
+
+  if (data.instanceState == 'stopped'){
+    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
+    $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
+  }
+    if (data.instanceState == 'running'){
+      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
+      $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
+  }
   var $backRunlistContainer = $('.cardBackRunlistContaner');
   for (var j = 0; j < data.runlist.length; j++) {
         var $divComponentItem;
@@ -1003,7 +1013,7 @@ $.get('../instances/'+urlParams.id,function(data){
             break;
 
             case 'stopped':
-             cssClasses.ringClass = 'paused';
+             cssClasses.ringClass = 'stopped';
              cssClasses.textClass = 'instance-state-text-stopped';
              cssClasses.tableViewStatusClass ="stopped";
             break;
@@ -1062,6 +1072,14 @@ $.get('../instances/'+urlParams.id,function(data){
                                  var cssClassed = getCssClassFromStatus(data.instanceState); 
                                  $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                  $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                 if (data.instanceState == 'stopped'){
+                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
+                                    $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
+                                    }
+                                    if (data.instanceState == 'running'){
+                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
+                                      $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
+                                    }
                             } 
                         }   
                     })
@@ -1656,4 +1674,27 @@ $('.formSubmit').click(function(e){
    
    
    });
+</script>
+<script type="text/javascript">
+  if (!$.fn.dataTable.isDataTable('#tableactionHistory') ){
+    //var $taskListArea = $('.taskListArea').empty();
+       $taskDatatable =  $('#tableactionHistory').DataTable({
+            "pagingType": "full_numbers",
+            "aoColumns": [
+                null,{
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                },
+                {
+                    "bSortable": false
+                }
+            ]
+
+        });
+     }
 </script>
