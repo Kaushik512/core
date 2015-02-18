@@ -1656,6 +1656,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
       $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
+          
           $spinner.addClass('hidden');
           $result.addClass('hidden');
           $('#addInstanceBtn').removeAttr('disabled');
@@ -1670,6 +1671,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
           //Updating the tree
           loadTreeFuncNew();
           selectFirstEnv();
+          $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
       }).fail(function(jxhr){
          $spinner.addClass('hidden');
          $result.empty();
