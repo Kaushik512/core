@@ -1204,6 +1204,11 @@ $('.authenticationType').change(function(e) {
      });
 </script>
 <script type="text/javascript">
+$('#ipaddressimport').click(function(e){
+  $('#nodeimportipresultmsg').addClass("hidden");
+  $('#addInstanceForm').trigger("reset");
+  $('#pemFileDropdown').change();
+});
 
 // $(document.body).on('click', '.card', function () {
       
@@ -1871,7 +1876,7 @@ $(function() {
             var $tdTime = $('<td></td>').append(timestamp).addClass('taskrunTimestamp');
             $tr.append($tdTime);
 
-            var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+            var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Remove" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
             $tdOptions.find('.btnDeleteTask').click(function(e) {
                 var taskId = $(this).parents('td').attr('data-taskId');
                 var that = this;
@@ -3052,7 +3057,6 @@ function addInstanceToDOM(data) {
     if($l.length>1){
           $l.not(':first').removeClass('active');
         }
-
     },3);
     $('#divinstancescardview .carousel-inner .item').addClass('active');
   }

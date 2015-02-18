@@ -97,9 +97,7 @@
           <li class="pull-left" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
-          <li class="pull-left" style="margin-right: 30px;">
-              <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-sun-o"></i>Action History</a>
-          </li>
+          
           <li class="pull-left" style="margin-right: 30px;">
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
@@ -285,7 +283,7 @@
                 </div>
               </div>
             </div>
-
+            
             <!-- Configure tab contents starts here -->
             <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
               <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
@@ -365,6 +363,7 @@
                     </div>
 
             </div> <!--Configure tab contents ends here -->
+
             <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;">
               <div class="logsArea"></div>
             </div>
@@ -1139,8 +1138,9 @@ $.get('../instances/'+urlParams.id,function(data){
                 $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
                 $backRunlistContainer.append($divComponentItem);
             }
-            $parent.data('runlist',runlist);
 
+            //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
+            $parent.data('runlist',runlist);
             $parent.find('.moreInfo').trigger('click');
             console.log(data);
         }).fail(function(jxObj){
@@ -1339,8 +1339,9 @@ function getCookbookActionHtml(serviceId,serviceData) {
     console.log(actionBtnClass);
      html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="status" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
   }
-
+  pageSetUp();
   return html;
+  //pageSetUp();
 
 }
 
