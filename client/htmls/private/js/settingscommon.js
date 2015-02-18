@@ -1650,7 +1650,7 @@ function saveform(formID,operationTypes) {
     if (fileNames == '')
         fileNames = 'null';
     if(typeof(orgname) == 'undefined'){
-        orgName = 'null';
+        orgName = '%2f'; //When this is updated the upload of image has an issue
     }
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
    
