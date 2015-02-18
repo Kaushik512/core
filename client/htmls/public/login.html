@@ -16,7 +16,11 @@
 <body id="login">
 
 	<header id="header">
-		
+		<div id="logo-group">
+			<span id="logo">
+				<img src="img/logo.png" alt="logo">
+			</span>
+		</div>
 
 	</header>
 
@@ -25,8 +29,8 @@
 		<!-- MAIN CONTENT -->
 		<div id="content" class="container">
 
-			<div class="row" id="row1">
-				<!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 hidden-xs" id="column1">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 hidden-xs">
 					<h1 class="txt-color-red login-header-big">DevOps-Catalyst</h1>
 					<div class="hero">
 						<div class="pull-left login-desc-box-l">
@@ -36,8 +40,8 @@
 						<img src="img/demo/Technology Offerings.png" class="pull-right display-image technologyImage" alt="technology">
 
 					</div>
-				</div> -->
-			<div class="col-lg-4 col-md-4 col-sm-12" style="float:right;">
+				</div>
+			<div class="col-lg-4 col-md-4 col-sm-12">
 				<div class="well no-padding">
 					<form method="POST" action="../auth/signin" id="login-form" class="smart-form client-form">
 						<header>Login</header>
@@ -78,6 +82,28 @@
 				</div>
 			</div>
 
+			<div class="row">
+
+				<div class="col-lg-12">
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 hidden-sm hidden-xs">
+						<div class="plan" ></div><!--plan image coming via sprite.png in customNew.css-->
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 images-margin hidden-sm hidden-xs">
+						<div class="design"></div><!--design image coming via sprite.png in customNew.css-->
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 images-margin hidden-sm hidden-xs">
+						<div class="workzone"></div><!--workzone image coming via sprite.png in customNew.css-->
+					</div>
+
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 images-margin hidden-sm hidden-xs">
+						<div class="track"></div><!--track image coming via sprite.png in customNew.css-->
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 images-margin hidden-sm hidden-xs">
+						<div class="Monitor"></div><!--monitor image coming via sprite.png in customNew.css-->
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</div>
 	</div>
@@ -102,7 +128,6 @@
 	
 	<script type="text/javascript">
 
-
 $(function(){
 	if (window.location.toString().indexOf('o=try') > 0) {
 		var $incorrectloginMsg=$('.incorrectlogin');
@@ -112,7 +137,7 @@ $(function(){
 				$incorrectloginMsg.addClass('hidden');
 			});
 		}
-
+	
 });
 	</script>
 </body>
