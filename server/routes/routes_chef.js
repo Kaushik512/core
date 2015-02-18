@@ -350,7 +350,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             return;
                                         }
                                         if (instances.length) {
-                                            updateTaskStatusNode(node.name, "Node exist : " + node.name, true, count);
+                                            updateTaskStatusNode(node.name, "Node exist in "+instances[0].orgId+"/"+instances[0].projectId+"/"+instances[0].envId +" : " + node.name, true, count);
                                             return;
                                         }
                                         if (nodeIp != 'unknown') {

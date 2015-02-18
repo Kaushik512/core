@@ -548,12 +548,14 @@ localStorage.removeItem(key);
 changeURL:function(href){
 if(href.indexOf('Setting')>-1){
 	$("#settingsNew").click();
+	drawBreadCrumb();
 //location.href=href.split('#')[0]+ '#' +'ajax/Settings/Dashboard.html'
 
 }else if(href.indexOf('Dev.html')>-1){
 location.href=href;
 }else{
 $("#designNew").click();
+drawBreadCrumb();
 }
 },
 getState:function(){

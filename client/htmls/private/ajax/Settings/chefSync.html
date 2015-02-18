@@ -88,18 +88,9 @@
             
           </div>
 
-          <div class="col-lg-6 credentialSection topNew">
-        
-            <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-            
-            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="">
-              <b class="tooltip tooltip-top-right">
-              <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
           
-        
-          </div>
 
-          <div class="col-lg-6" style="margin-top:20px;">  
+          <div class="col-lg-6 topNew">  
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
               <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required">
                 
@@ -127,6 +118,17 @@
               <select id="chefImportProjectSelect"  class="width-100">
               </select>
             
+          </div>
+
+          <div class="col-lg-6 credentialSection" style="margin-top:20px;">
+        
+            <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+            
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="">
+              <b class="tooltip tooltip-top-right">
+              <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+          
+        
           </div>
       
           <div class="col-lg-6" style="margin-top:20px;">
@@ -225,6 +227,7 @@ $('#buttonForIP').click(function(e){
   $('#chefImportBgSelect').select2('val', 'All');
   $('#chefImportProjectSelect').select2('val', 'All');
   $('#myForm12').trigger("reset");
+  $('#pemFileDropdown2').change();
 });
 
 
