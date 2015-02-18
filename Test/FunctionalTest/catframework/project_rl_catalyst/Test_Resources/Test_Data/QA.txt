@@ -9,7 +9,7 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   chrome                           #internetexplorer               #phantomjs
+${BROWSER TYPE}                   firefox                           #internetexplorer               #phantomjs
 ${ENVIRONMENT SERVER}             http://localhost:3001/public/login.html
 ${ENV}                 QA.txt
 ${VALID USER}             sd1

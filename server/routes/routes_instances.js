@@ -329,6 +329,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         //if retCode == 0 //update docker status into instacne
                         instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                             console.log('Instance Docker Status set to Success');
+                            // updateInstanceCardWithDocker(instanceId);
                         });
 
 
@@ -496,6 +497,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             if (retCode == '0') {
                                                 instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
                                                     console.log('Instance Docker Status set to Success');
+                                                   // updateInstanceCardWithDocker(req.params.instanceId);
                                                 });
                                             }
                                         });

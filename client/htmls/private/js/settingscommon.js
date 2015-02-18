@@ -2450,6 +2450,17 @@ function checkusernameexistsinldap(inputID) {
     }
 }
 
+function updateInstanceCardWithDocker(instanceID){
+    alert('in updatecard' + instanceID);
+    var $_cont =$('div[data-instanceid="54e45ed3918d01850c22b474"].domain-roles-caption').find('div.componentlistContainer').first();
+    //alert($_cont.find('img.dockerenabledinstacne').length);
+    if($_cont.find('img.dockerenabledinstacne').length <= 0){
+      $_cont.find('a[class*="app.url"]').detach();
+      $_cont.append('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne">');
+    }
+
+}
+
 //STandby code to receive docker images. To be updated to receive the url from settings
 function getDockerTags() {
     var returnValue = '';
