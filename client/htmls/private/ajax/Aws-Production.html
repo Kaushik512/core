@@ -963,6 +963,7 @@ $(document).ready(function(){
                //alert(reqBody.dockerreponame);
                reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
                reqBody.orgId = $('#orgnameSelect').val();
+               reqBody.bgId = $('#bgListInput').val();
                reqBody.projectId = $('#projectListInput').val();
                reqBody.envId = $('#envList').val();
 
@@ -970,6 +971,10 @@ $(document).ready(function(){
                //alert('in');
                if (!reqBody.name) {
                    alert("Please enter a blueprint name");
+                   return false;
+               }
+               if (!reqBody.bgId || reqBody.bgId === 'choose') {
+                   alert("Please choose a business group");
                    return false;
                }
                if (!reqBody.projectId || reqBody.projectId === 'choose') {
@@ -992,7 +997,7 @@ $(document).ready(function(){
                
                $('.blueprintMsgContainer').hide();
                
-               $.post('../projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
+               $.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);

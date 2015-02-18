@@ -1241,6 +1241,7 @@ console.log(urlParams);
 var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 var orgId = urlParams['org'];
+var bgId = urlParams['bg'];
 
 $(document).ready(function() {
   //$('.modal').modalCollapse();
@@ -1480,7 +1481,7 @@ $(function() {
 $('.createTaskLink').click(function(e){
     setBreadCrumbAndViewOrchestration();
   
-    window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
+    window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&bg='+urlParams['bg']+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
 });
 
 //for Table view
@@ -1653,7 +1654,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
      $('#addInstanceBtn').attr('disabled','disabled');
      $spinner.removeClass('hidden');
      // $('#addInstanceBtn').attr('disabled','disabled');
-      $.post('/organizations/'+urlParams.org+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
+      $.post('../organizations/'+urlParams.org+'/businessgroups/'+urlParams['bg']+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
           $('#tabInstanceStatus').hide();
           addInstanceToDOM(data);
           
@@ -1896,7 +1897,7 @@ $(function() {
 
                 var taskId = $(this).parents('td').attr('data-taskId');
 
-                window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'] + '&taskId=' + taskId;
+                window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg='+urlParams['bg']+'&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'] + '&taskId=' + taskId;
 
             });
             $tr.append($tdOptions);
@@ -2325,7 +2326,7 @@ $(function() {
 
     }
 
-    $.get('../organizations/'+orgId+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+    $.get('../organizations/'+orgId+'/businessgroups/'+urlParams['bg']+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
         
        // alert('in here' + $('#tree').find('a[itemtype="env"]').length + ' ' + data.instances.length);
         //
