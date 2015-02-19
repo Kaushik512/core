@@ -84,7 +84,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
         logger.debug("Enter /blueprints/%s/launch", req.params.blueprintId);
-        
+
         blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
             if (err) {
                 logger.error('Failed to getBlueprint. Error = ', err);
@@ -131,8 +131,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url
                     });
-                    
-                    logger.debug('Chef Repo Location = ' , chefDetails.chefRepoLocation);
+
+                    logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
 
                     function launchInstance() {
                         logger.debug("Enter launchInstance");
@@ -152,7 +152,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
 
                             var ec2 = new EC2(settings.aws);
-                            ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-'+blueprint.name, function(err, instanceData) {
+                            ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
                                 if (err) {
                                     logger.error("launchInstance Failed >> ", err);
                                     res.send(500);
@@ -164,6 +164,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                 var instance = {
                                     orgId: blueprint.orgId,
+                                    bgId: blueprint.bgId,
                                     projectId: blueprint.projectId,
                                     envId: blueprint.envId,
                                     chefNodeName: instanceData.InstanceId,
@@ -409,13 +410,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     chef.getEnvironment(blueprint.envId, function(err, env) {
                         if (err) {
-                            logger.error("Failed chef.getEnvironment",err);
+                            logger.error("Failed chef.getEnvironment", err);
                             res.send(500);
                             return;
                         }
 
                         if (!env) {
-                            logger.debug("Blueprint ID = ",blueprint.envId);
+                            logger.debug("Blueprint ID = ", blueprint.envId);
                             chef.createEnvironment(blueprint.envId, function(err, envName) {
                                 if (err) {
                                     logger.error("Failed chef.createEnvironment", err);
@@ -642,7 +643,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     chef.getEnvironment(blueprint.envId, function(err, env) {
                         if (err) {
-                            logger.error("Error in chef.getEnvironment",err);
+                            logger.error("Error in chef.getEnvironment", err);
                             res.send(500);
                             return;
                         }

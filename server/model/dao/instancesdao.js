@@ -13,6 +13,12 @@ var InstanceSchema = new Schema({
         trim: true,
         validate: schemaValidator.orgIdValidator
     },
+    bgId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.bgIdValidator
+    },
     projectId: {
         type: String,
         required: true,
@@ -188,6 +194,32 @@ var InstancesDao = function() {
             }
 
             logger.debug("Exit getInstancesByOrgProjectAndEnvId (%s, %s, %s, %s, %s)", orgId, projectId, envId, instanceType, userName);
+            callback(null, data);
+        });
+    };
+
+    this.getInstancesByOrgBgProjectAndEnvId = function(orgId, bgId, projectId, envId, instanceType, userName, callback) {
+        logger.debug("Enter getInstancesByOrgBgProjectAndEnvId (%s,%s, %s, %s, %s, %s)", orgId, bgId, projectId, envId, instanceType, userName);
+        var queryObj = {
+            orgId: orgId,
+            bgId: bgId,
+            projectId: projectId,
+            envId: envId
+        }
+        if (instanceType) {
+            queryObj['blueprintData.templateType'] = instanceType;
+        }
+        if (userName) {
+            queryObj.users = userName;
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.error("Failed to getInstancesByOrgBgProjectAndEnvId (%s,%s, %s, %s, %s, %s)", orgId, bgId, projectId, envId, instanceType, userName, err);
+                callback(err, null);
+                return;
+            }
+
+            logger.debug("Exit getInstancesByOrgBgProjectAndEnvId (%s,%s, %s, %s, %s, %s)", orgId, bgId, projectId, envId, instanceType, userName);
             callback(null, data);
         });
     };

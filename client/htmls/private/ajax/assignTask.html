@@ -237,7 +237,7 @@ $(document).ready(function() {
             $('.inputTaskName').val(taskData.name);
         }
         
-        $.get('../organizations/' + urlParams.org + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
+        $.get('../organizations/' + urlParams.org + '/businessgroups/'+urlParams['bg']+'/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
                 if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' ||  data[i].instanceState == 'unknown') {
@@ -325,7 +325,7 @@ $(document).ready(function() {
                 $('.btnBack').click();
            });
         } else {
-          $.post('../organizations/' + urlParams.org + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
+          $.post('../organizations/' + urlParams.org + '/businessgroups/'+urlParams['bg']+'/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
             console.log(data);
             $('.btnBack').click();
           });

@@ -4,10 +4,26 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var Schema = mongoose.Schema;
 
 var taskSchema = new Schema({
-    orgId: {type:String,required:true},
-    projectId: {type:String,required:true},
-    envId: {type:String,required:true},
-    name: {type:String,required:true},
+    orgId: {
+        type: String,
+        required: true
+    },
+    bgId: {
+        type: String,
+        required: true
+    },
+    projectId: {
+        type: String,
+        required: true
+    },
+    envId: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
     nodesIdList: [String],
     runlist: [String],
     lastRunTimestamp: Number,
@@ -20,6 +36,23 @@ var TaskDao = function() {
     this.getTasksByOrgProjectAndEnvId = function(orgId, projectId, envId, callback) {
         var queryObj = {
             orgId: orgId,
+            projectId: projectId,
+            envId: envId
+        }
+
+        Tasks.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    };
+
+    this.getTasksByOrgBgProjectAndEnvId = function(orgId, bgId, projectId, envId, callback) {
+        var queryObj = {
+            orgId: orgId,
+            bgId: bgId,
             projectId: projectId,
             envId: envId
         }
