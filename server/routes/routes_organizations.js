@@ -631,8 +631,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
 
-    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
-        blueprintsDao.getBlueprintsByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -641,9 +641,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.post('/organizations/:orgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
         var blueprintData = req.body.blueprintData;
         blueprintData.orgId = req.params.orgId;
+        blueprintData.bgId = req.params.bgId;
         blueprintData.projectId = req.params.projectId;
         blueprintData.envId = req.params.envId;
         if (!blueprintData.runlist) {
@@ -663,8 +664,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/instances', function(req, res) {
-        instancesDao.getInstancesByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
+
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/instances', function(req, res) {
+        instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -673,8 +675,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
-        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, function(err, data) {
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
+        tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -683,18 +685,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/organizations/:orgId/projects/:projectId/environments/:envId/', function(req, res) {
-        tasksDao.getTasksByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, function(err, tasksData) {
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
+        tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
             if (err) {
                 res.send(500);
                 return;
             }
-            instancesDao.getInstancesByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
+            instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
                 if (err) {
                     res.send(500);
                     return;
                 }
-                blueprintsDao.getBlueprintsByOrgProjectAndEnvId(req.params.orgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
+                blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
+                    console.log(req.params.orgId, req.params.projectId, req.params.envId);
                     if (err) {
                         res.send(500);
                         return;
@@ -711,9 +714,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.post('/organizations/:orgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
         var taskData = req.body.taskData;
         taskData.orgId = req.params.orgId;
+        taskData.bgId = req.params.bgId;
         taskData.projectId = req.params.projectId;
         taskData.envId = req.params.envId;
         if (!taskData.runlist) {
@@ -901,7 +905,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
 
-    app.post('/organizations/:orgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
 
         if (!(req.body.fqdn && req.body.os)) {
             res.send(400);
@@ -978,6 +982,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             var instance = {
                                 orgId: req.params.orgId,
+                                bgId: req.params.bgId,
                                 projectId: req.params.projectId,
                                 envId: req.params.envId,
                                 instanceIP: req.body.fqdn,
