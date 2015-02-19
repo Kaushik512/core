@@ -2542,10 +2542,14 @@ function pollInstanceState(instanceId, state, delay) {
                     if (data.instanceState == 'stopped'){
                     $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').hide();
                     $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').hide();
-                    }
+                    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImage').css({'opacity': '0.5'});
+                    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImage').css({'opacity': '0.5'});
+                     }
                     if (data.instanceState == 'running'){
                       $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').show();
                       $('.instancestatusindicator.started').parent().find('.chefClientRunlistImage').show();
+                      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImage').css({'opacity': '1.0'});
+                      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImage').css({'opacity': '1.0'});
                     
                     }
                 }
@@ -2894,6 +2898,12 @@ function addInstanceToDOM(data) {
     var $divInstanceDetails = $('<div></div>')
     var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
     var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong class="instanceip">' + data.instanceIP + '</strong>');
+    //Arab
+    // var $instanceDetailItemIdTest = $('<span style="float:right"><a data-content="TestPopover" data-original-title="CardInformation" data-placement="right" rel="popover" class="btn btn-primary moreinfoactionHistory" href="javascript:void(0);"></a></span>');
+    
+    // $instanceDetailsList.append($instanceDetailItemIdTest);
+
+
     $instanceDetailsList.append($instanceDetailItemId);
     var $instanceDetailItemStatus;
     if (data.instanceState == 'running') {
