@@ -1,5 +1,5 @@
 <script>
-   $(".login-info").hide();
+   $(".tree-view").hide();
    
 </script>
 <div class="row">
@@ -27,7 +27,7 @@
                                           <div class="col-lg-6">
                                              <label for="">
                                              Reference Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                             <input name="ctl00$MainContent$orgname" value="_default" id="jenkinsname" class="form-control" type="text"  cdata="catalyst" unique="true"  cat-validation="required,max15">
+                                             <input name="ctl00$MainContent$orgname" value="" id="jenkinsname" class="form-control" type="text"  cdata="catalyst" unique="true"  cat-validation="required,max15">
                                           </div>
                                           <div class="col-lg-6">
                                              <label for="">
@@ -148,7 +148,7 @@
 </script>
 <script>
    $(document).ready(function () {
-   
+      $("#jenkinsname").focus();
        $('#frmconfigmanagement').submit(function() {
            $(this).validate();
    

@@ -328,6 +328,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         //if retCode == 0 //update docker status into instacne
                         instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                             console.log('Instance Docker Status set to Success');
+                            
                         });
 
 
