@@ -1084,7 +1084,7 @@
                             
                               <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               
-                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus="autofocus" />
+                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus="autofocus"/>
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
                               
@@ -1246,6 +1246,12 @@ var bgId = urlParams['bg'];
 $(document).ready(function() {
   //$('.modal').modalCollapse();
  
+
+    $(document).on('shown.bs.modal', function(e) {
+        $('[autofocus]', e.target).focus();
+    });
+
+
 
    $('#importinstanceOS').select2();
    $('#pemFileDropdown').select2();
