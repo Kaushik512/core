@@ -74,7 +74,7 @@
 							</fieldset>
 							<footer>
 								<div class="pull-left hidden incorrectlogin" style="color:red;font-size:9pt;margin-top:17px">The Username or Password is incorrect.</div>
-									<button type="submit" class="btn btn-primary">Login</button>
+									<button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
 							</footer>
 						</form>
 
@@ -137,7 +137,9 @@ $(function(){
 				$incorrectloginMsg.addClass('hidden');
 			});
 		}
-	
+	$('#loginBtn').click(function(){
+		localStorage.clear();
+	});
 });
 	</script>
 </body>
