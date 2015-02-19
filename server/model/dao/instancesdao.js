@@ -823,6 +823,25 @@ var InstancesDao = function() {
         return log;
     };
 
+    this.insertChefClientRunActionLog = function(instanceId, runlist, user, timestampStarted, callback) {
+        logger.debug("Enter insertChefClientRunActionLog ", instanceId, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.CHEF_RUN.type,
+            name: ACTION_LOG_TYPES.CHEF_RUN.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
+            actionData : {
+                runlist : runlist
+            }
+
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
+
 
 
 };
