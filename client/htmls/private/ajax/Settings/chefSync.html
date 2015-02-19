@@ -92,7 +92,7 @@
 
           <div class="col-lg-6 topNew">  
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-              <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required">
+              <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required" autofocus>
                 
               </select>
             
@@ -124,7 +124,7 @@
         
             <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
-            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="">
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="" autofocus>
               <b class="tooltip tooltip-top-right">
               <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
           
@@ -236,6 +236,9 @@ $(document).ready(function() {
     $('#chefImportBgSelect').select2();
     $('#chefImportProjectSelect').select2();
     $('#chefImportEnvSelect').select2();
+    $(document).on('shown.bs.modal', function(e) {
+      $('[autofocus]', e.target).focus();
+    });
 });
 
 $(".authPassword").show();

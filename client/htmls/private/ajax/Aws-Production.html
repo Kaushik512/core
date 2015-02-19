@@ -197,7 +197,7 @@
                                   <div class="col-lg-6">
                                     <label for="name">Blueprint Name:
                                     <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <input  id="blueprintNameInput" class="form-control" type="text">
+                                    <input  id="blueprintNameInput" class="form-control" type="text" autofocus="autofocus">
                                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                  </div>
  
@@ -497,6 +497,7 @@ function loadLaunchParams(){
 
    
 $(document).ready(function(){
+
     $('.chooseSelect').select2();
     console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
@@ -971,6 +972,8 @@ $(document).ready(function(){
                if (!reqBody.name) {
                    alert("Please enter a blueprint name");
                    return false;
+                   $('#blueprintNameInput').focus();
+
                }
                if (!reqBody.projectId || reqBody.projectId === 'choose') {
                    alert("Please choose a project");
@@ -1189,6 +1192,7 @@ $(document).ready(function(){
        });
    })();
 
-
+$(document).ready(function () {
+      $("#blueprintNameInput").focus();
+   });
 </script>
-
