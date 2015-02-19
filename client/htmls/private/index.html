@@ -9,16 +9,26 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
+		<style>
+#clickdisabler{
+	width:100%;
+	position:absolute;
+	z-index: 100;
+	height:100px;
+}
+		</style>
+		<script>
+
+function showLoader(){
+	$('#clickdisabler').show();
+}
+function hideLoader(){
+$('#clickdisabler').hide();	
+}
+		</script>
 	</head>
 	<body class="custom-theme">
-		<script type="text/javascript">
-		//Refresh Issue Fix. This function will get executed when there is a refresh and the url is not of the home page.
-/*		function firstLoad(){
-		if(window.location.href.indexOf('#') > 0)
-				window.location.href = '/private/index.html';
-		}
-		firstLoad();
-*/		</script>
+	<div id="clickdisabler"></div>
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 		<!-- HEADER -->
 		<!-- Header starts here -->
@@ -309,7 +319,10 @@
 
 
 	function setleftnavigation(toplink,breadcrumbHeader){
-	
+		if($(toplink).hasClass('active')){
+			return ;
+		}
+		showLoader();
 		//$('a[onclick*="setleftnavigation"]').removeClass('active').find("i").removeClass('txt-color-blue');
 		$('.navigationTab').removeClass('active').find("i").removeClass('txt-color-blue');
 		$(toplink).addClass('active').find('i').addClass('txt-color-blue');
@@ -324,8 +337,7 @@
 			
 		}
 		if(breadcrumbHeader == 'org') {
-				var orgName = $('.orgSelected').find('span').text();
-				window.selectedOrgName = orgName;
+			window.selectedOrgName = $('.orgSelected').find('span').text();
 				//selectFirstEnv();
 	 //selecting the first item in the org tree.
 		} else {
@@ -507,6 +519,7 @@
 <script src="/private/js/settingscommon.js"></script> 
 <script>
   $(window).on('hashchange', function() {
+  	
      var hash = location.hash;
    	 $(".left-projects-links a").removeClass('active');
      if (hash.indexOf("#ajax/Dev.html?") === 0) {        
@@ -563,6 +576,7 @@ localStorage.setItem(key,JSON.stringify(stateSaveFormat));
     	}
     }
 stateManagement.init();
+
 </script>
 </body>
 </html>
