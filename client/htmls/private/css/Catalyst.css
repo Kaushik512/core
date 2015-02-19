@@ -3668,6 +3668,7 @@ background-image:url('../img/rsz_inactive.png');
 }
 .rowcustomselected{
     font-weight: bold;
+    font-size:14px;
 }
 
 
