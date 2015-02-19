@@ -1,3 +1,17 @@
+.margin-top40{
+	margin-top: 40px !important;
+}
+.chefClientRunlistImageCP{
+    background-image:url('../img/galleryIcons/Chefimport.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 28px;
+    width: 30px;
+    margin-top:1px;
+}
+.txt-color-white{
+	color:#fff!important;
+}
 .border-color{
     /*border-color: #e5e5e5 #eee #eee;*/
     border: 1px solid #e5e5e5;
@@ -3599,6 +3613,13 @@ body
     width: 30px;
     margin-top:0px;
 }
+.moreinfoactionHistory{
+	background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    width: 30px;
+    margin-top:0px;
+}
 .descriptionMoreInfo{
     height:30%;width:30%;
     background-image:url('../img/galleryIcons/moreinfo.png');
@@ -5288,7 +5309,7 @@ table.dataTable td {
 }
 
 
-.moreInfo, .actionbuttonChefClientRun, .actionbuttonStart,.actionbuttonStartContainer,.actionbuttonCPStart, .actionbuttonShutdown,.actionbuttonShutdownContainer, .sshIcon, .aws, .azure, .rl, .openstack, .cloudstack, .dock, .logo{
+.moreInfo,.moreinfoactionHistory, .actionbuttonChefClientRun, .actionbuttonStart,.actionbuttonStartContainer,.actionbuttonCPStart, .actionbuttonShutdown,.actionbuttonShutdownContainer, .sshIcon, .aws, .azure, .rl, .openstack, .cloudstack, .dock, .logo{
     background: url(../img/sprites.png) no-repeat;
 }
 
@@ -5297,7 +5318,11 @@ table.dataTable td {
     width: 25px;
     height: 25px;
 }
-
+.moreinfoactionHistory{
+    background-position: -15px -12px ;
+    width: 25px;
+    height: 25px;
+}
 .actionbuttonChefClientRun{
     background-position: -59px -10px ;
     width: 28px;
@@ -5598,6 +5623,7 @@ span.icon {
 /*.carousel-inner>.item{
 	display:block!important;
 }*/
+
 
 @media screen and (max-width:1200px) {
 
