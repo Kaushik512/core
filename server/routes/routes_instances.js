@@ -71,23 +71,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     //updateInstanceIp
     app.get('/instances/updateappurl/:instanceId/:appurlid/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
-        if(req.params.appurlid == '0')
-        instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            res.end('OK');
-        });
-        else
-        {
+        if (req.params.appurlid == '0')
+            instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.end('OK');
+            });
+        else {
             instancesDao.updateInstanceAppUrl1(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            res.end('OK');
-        });
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.end('OK');
+            });
         }
     });
 
@@ -520,7 +519,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logsDao.insertLog({
                                         referenceId: req.params.instanceId,
                                         err: true,
-                                        log: 'Unknown error occured. ret code = '+retCode,
+                                        log: 'Unknown error occured. ret code = ' + retCode,
                                         timestamp: new Date().getTime()
                                     });
                                 }
@@ -566,24 +565,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
+                var timestampStarted = new Date().getTime();
 
+                var actionLog = instancesDao.insertStopActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                var logReferenceIds = [req.params.instanceId];
+                if (actionLog) {
+                    logReferenceIds.push(actionLog._id);
+                }
                 logsDao.insertLog({
-                    referenceId: req.params.instanceId,
+                    referenceId: logReferenceIds,
                     err: false,
                     log: "Instance Stopping",
-                    timestamp: new Date().getTime()
+                    timestamp: timestampStarted
                 });
 
                 var settings = appConfig.aws;
                 var ec2 = new EC2(settings);
                 ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
                     if (err) {
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: "Unable to stop instance",
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                         res.send(500);
                         return;
                     }
@@ -599,9 +607,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         console.log('instance state upadated');
                     });
 
-
-
-
                 }, function(err, state) {
                     if (err) {
                         return;
@@ -613,23 +618,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         console.log('instance state upadated');
                     });
+                    var timestampEnded = new Date().getTime();
 
 
                     logsDao.insertLog({
-                        referenceId: req.params.instanceId,
+                        referenceId: logReferenceIds,
                         err: false,
                         log: "Instance Stopped",
-                        timestamp: new Date().getTime()
-                    }, function(err, data) {
-                        if (err) {
-                            console.log('unable to update log');
-                            return;
-                        }
-                        console.log('log updated');
+                        timestamp: timestampEnded
                     });
-
+                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
 
                 });
+
 
 
 
@@ -647,25 +648,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
+                var timestampStarted = new Date().getTime();
+
+                var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                var logReferenceIds = [req.params.instanceId];
+                if (actionLog) {
+                    logReferenceIds.push(actionLog._id);
+                }
+
 
                 logsDao.insertLog({
-                    referenceId: req.params.instanceId,
+                    referenceId: logReferenceIds,
                     err: false,
                     log: "Instance Starting",
-                    timestamp: new Date().getTime()
+                    timestamp: timestampStarted
                 });
 
                 var settings = appConfig.aws;
                 var ec2 = new EC2(settings);
                 ec2.startInstance([data[0].platformId], function(err, startingInstances) {
                     if (err) {
-
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: "Unable to start instance",
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                         res.send(500);
                         return;
                     }
@@ -692,13 +703,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         console.log('instance state upadated');
                     });
-
+                    var timestampEnded = new Date().getTime()
                     logsDao.insertLog({
-                        referenceId: req.params.instanceId,
+                        referenceId: logReferenceIds,
                         err: false,
                         log: "Instance Started",
-                        timestamp: new Date().getTime()
+                        timestamp: timestampEnded
                     });
+                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
 
                     ec2.describeInstances([data[0].platformId], function(err, data) {
                         if (err) {
@@ -717,8 +730,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                     });
                 });
-
-
 
             } else {
                 res.send(404);
@@ -850,7 +861,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             logsDao.insertLog({
                                 referenceId: req.params.instanceId,
                                 err: true,
-                                log: 'Unknown error occured. ret code = '+retCode,
+                                log: 'Unknown error occured. ret code = ' + retCode,
                                 timestamp: new Date().getTime()
                             });
                         }
