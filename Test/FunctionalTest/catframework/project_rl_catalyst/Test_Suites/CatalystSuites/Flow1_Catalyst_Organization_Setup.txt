@@ -17,3 +17,10 @@ Catalyst new organization setup
     Create New Environments
     Catalyst Logout
     [Teardown]     Close Browser
+
+
+Catalyst login with vaild user
+    [Tags]       Sanity               Login
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Logout
+    [Teardown]     Close Browser

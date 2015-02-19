@@ -92,7 +92,9 @@
 
           <div class="col-lg-6 topNew">  
               <label for="exampleInputEmail1">Business Groups<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-              <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required">
+
+              <select id="chefImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required" autofocus>
+
                 
               </select>
             
@@ -124,7 +126,7 @@
         
             <label for="exampleInputEmail1">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             
-            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="">
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="" autofocus>
               <b class="tooltip tooltip-top-right">
               <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
           
@@ -230,12 +232,14 @@ $('#buttonForIP').click(function(e){
   $('#pemFileDropdown2').change();
 });
 
-
 $(document).ready(function() {
     $('#pemFileDropdown2').select2();
     $('#chefImportBgSelect').select2();
     $('#chefImportProjectSelect').select2();
     $('#chefImportEnvSelect').select2();
+    $(document).on('shown.bs.modal', function(e) {
+      $('[autofocus]', e.target).focus();
+    });
 });
 
 $(".authPassword").show();
@@ -574,10 +578,12 @@ $(function() {
     alert('Please Select Business Groups & Project');
     return;
    }*/
-        if (!((reqBody.bgId && reqBody.bgId.length) && (reqBody.projectId && reqBody.projectId.length) && reqBody.projectId !== 'choose' && reqBody.bgId !== 'choose')) {
+
+      if (!((reqBody.bgId && reqBody.bgId.length) && (reqBody.projectId && reqBody.projectId.length) && reqBody.projectId !== 'choose' && reqBody.bgId !== 'choose')) {
             alert('Please Select a Business Group & Project');
-            return;
+        return;
         }
+
 
 
         reqBody.selectedNodes = [];
