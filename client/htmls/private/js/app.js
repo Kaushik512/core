@@ -1319,7 +1319,7 @@ function loadURL(url, container) {
 		error : function(xhr, ajaxOptions, thrownError) {
 			container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! Page not found.</h4>');
 		},
-		async : false
+		async : true // by anshul
 	});
 
 	//console.log("ajax request sent");

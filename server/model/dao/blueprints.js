@@ -1,62 +1,145 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
-var logger  = require('../../lib/logger')(module);
+var logger = require('../../lib/logger')(module);
+var schemaValidator = require('./schema-validator');
 
-var extend = require('mongoose-validator').extend;
-extend('isValidName', function (val) {
-    var pattern = /^[a-zA-Z0-9-_.\s]+$/;
-    return pattern.test(val);
-}, 'Name can contain alphabets, numbers,dash, underscore, dot or a space');
 
-var nameValidator = [
-  validate({
-    validator: 'isLength',
-    arguments: [3, 50],
-    message: 'Name should be between 3 and 50 characters'
-  }),
-  validate({
-    validator: 'isValidName',
-    passIfEmpty: true,
-    message: 'Name can contain alphabets, numbers,dash, underscore, dot or a space'
-  })
-];
-// Must add length validator
 
 var Schema = mongoose.Schema;
 
 var BlueprintSchema = new Schema({
-    orgId: {type:String,required:true, trim:true},
-    projectId: {type:String,required:true, trim:true},
-    envId: {type:String,required:true, trim:true},
-    iconpath: {type:String,trim:true},
-    name: {type:String,required:true, trim:true, validate:nameValidator},
-    templateId: {type:String,required:true, trim:true},
-    templateType: {type:String,required:true, trim:true},
-    dockercontainerpathstitle: {type:String,trim:true},
-    dockercontainerpaths: {type:String,trim:true},
-    dockerrepotags: {type:String,trim:true},
-    dockerreponame: {type:String,trim:true},
-    dockerlaunchparameters: {type:String,trim:true},
-    dockerimagename: {type:String,trim:true},
-    templateComponents: [{type:String,required:true}],
-    instanceType: {type:String,required:true},
-    instanceOS: {type:String,required:true},
-    instanceAmiid: {type:String,required:true},
-    instanceUsername: {type:String,required:true},
-    importInstance: {type:Boolean},
-    chefServerId: {type:String,required:true},
-    users: [{type:String,required:true, trim:true}],
-    versionsList: [{
-        ver: {type:String,required:true},
-        runlist: [{type:String,required:true}],
-        expirationDays: {type:Number},
+    orgId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.orgIdValidator
+    },
+    bgId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.bgIdValidator
+    },
+    projectId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.projIdValidator
+    },
+    envId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.envIdValidator
+    },
+    iconpath: {
+        type: String,
+        trim: true
+    },
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.blueprintNameValidator
+    },
+    templateId: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    templateType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    dockercontainerpathstitle: {
+        type: String,
+        trim: true
+    },
+    dockercontainerpaths: {
+        type: String,
+        trim: true
+    },
+    dockerrepotags: {
+        type: String,
+        trim: true
+    },
+    dockerreponame: {
+        type: String,
+        trim: true
+    },
+    dockerlaunchparameters: {
+        type: String,
+        trim: true
+    },
+    dockerimagename: {
+        type: String,
+        trim: true
+    },
+    templateComponents: [{
+        type: String,
+        required: true
     }],
-    latestVersion: {type:String,trim:true},
-    cloudFormationStackName: {type:String,trim:true},
+    instanceType: {
+        type: String,
+        required: true
+    },
+    instanceOS: {
+        type: String,
+        required: true
+    },
+    instanceAmiid: {
+        type: String,
+        required: true
+    },
+    instanceUsername: {
+        type: String,
+        required: true
+    },
+    importInstance: {
+        type: Boolean
+    },
+    chefServerId: {
+        type: String,
+        required: true
+    },
+    users: [{
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.catalystUsernameValidator
+    }],
+    versionsList: [{
+        ver: {
+            type: String,
+            required: true
+        },
+        runlist: [{
+            type: String,
+            required: true
+        }],
+        expirationDays: {
+            type: Number
+        },
+    }],
+    latestVersion: {
+        type: String,
+        trim: true
+    },
+    cloudFormationStackName: {
+        type: String,
+        trim: true
+    },
     cloudFormationStackParameters: [{
-        ParameterKey: {type:String,trim:true},
-        ParameterValue: {type:String,trim:true}
+        ParameterKey: {
+            type: String,
+            trim: true
+        },
+        ParameterValue: {
+            type: String,
+            trim: true
+        }
     }]
 
 });
@@ -103,7 +186,7 @@ var BlueprintsDao = function() {
 
     this.getBlueprintsByProjectAndEnvId = function(projectId, envId, blueprintType, userName, callback) {
         logger.debug("Enter getBlueprintsByProjectAndEnvId (%s, %s, %s, %s)", projectId, envId, blueprintType, userName);
-        
+
         var queryObj = {
             projectId: projectId,
             envId: envId
@@ -138,7 +221,7 @@ var BlueprintsDao = function() {
         if (userName) {
             queryObj.users = userName;
         }
-        
+
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
                 callback(err, null);
@@ -149,10 +232,35 @@ var BlueprintsDao = function() {
         });
     };
 
+    this.getBlueprintsByOrgBgProjectAndEnvId = function(orgId, bgId, projectId, envId, blueprintType, userName, callback) {
+        logger.debug("Enter getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
+        var queryObj = {
+            orgId: orgId,
+            bgId: bgId,
+            projectId: projectId,
+            envId: envId
+        }
+        if (blueprintType) {
+            queryObj.templateType = blueprintType;
+        }
+        if (userName) {
+            queryObj.users = userName;
+        }
+
+        Blueprint.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
+            callback(null, data);
+        });
+    };
     this.createBlueprint = function(blueprintData, callback) {
         logger.debug("Enter createBlueprint >> " + JSON.stringify(blueprintData));
         var blueprint = new Blueprint({
             orgId: blueprintData.orgId,
+            bgId: blueprintData.bgId,
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             name: blueprintData.name,
@@ -281,7 +389,7 @@ var BlueprintsDao = function() {
                 callback(err, null);
                 return;
             }
-          
+
             if (data.length) {
                 logger.debug("Exit getBlueprintVersionData");
                 callback(null, data[0].versionsList);

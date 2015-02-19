@@ -19,11 +19,13 @@ function getRegExValidator(regEx, message) {
 
 var validators = {
 
-    orgIdValidator: [getLengthValidator(1, 100, 'Invalid Org Id')],
-    projIdValidator: [getLengthValidator(1, 100, 'Invalid Project Id ')],
-    envIdValidator: [getLengthValidator(1, 100, 'Invalid Environment Id ')],
+    orgIdValidator: [getLengthValidator(1, 100, 'Invalid Org Id'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Org Id')],
+    bgIdValidator: [getLengthValidator(1, 100, 'Invalid Business Id '),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Business Id')],
+    projIdValidator: [getLengthValidator(1, 100, 'Invalid Project Id '),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Project Id')],
+    envIdValidator: [getLengthValidator(1, 100, 'Invalid Environment Id '),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Environment Id')],
     recipeValidator: [getRegExValidator(/^recipe[|role[.*]$/i, "Invalid Runlist format")], // need to investigate further
-    catalystUsernameValidator: [getLengthValidator(1, 100, 'Invalid Catalyst Username')]
+    catalystUsernameValidator: [getLengthValidator(1, 100, 'Invalid Catalyst Username'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Catalyst Username')],
+    blueprintNameValidator : [getLengthValidator(1, 100, 'Invalid Blueprint Name'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Blueprint Name')],
 
 };
 
