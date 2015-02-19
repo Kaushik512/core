@@ -904,12 +904,30 @@ $.get('../instances/'+urlParams.id,function(data){
   }
 
   if (data.instanceState == 'stopped'){
-    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
-    $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
+    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
+    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
+    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').addClass('isStopedInstance');
+    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').addClass('isStopedInstance');
+    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').addClass('isStopedInstance');
+    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').removeClass('isStopedInstance');
+    //Opacity Settings
+    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').css('opacity','0.5');
+    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').css({'opacity':'0.5'});
+    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').css({'opacity':'0.5'});
+    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').css({'opacity':'1.0'});
   }
     if (data.instanceState == 'running'){
-      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
-      $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
+      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
+      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
+      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').removeClass('isStopedInstance');
+      $('.componentlistContainer.started').parent().find('.sshShellBtn').removeClass('isStopedInstance');
+      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').removeClass('isStopedInstance');
+      $('.componentlistContainer.started').parent().find('.actionbuttonStart').addClass('isStopedInstance');
+      //Opacity Settings
+      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').css('opacity','1.0');
+      $('.componentlistContainer.started').parent().find('.sshShellBtn').css({'opacity':'1.0'});
+      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
+      $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
   }
   var $backRunlistContainer = $('.cardBackRunlistContaner');
   for (var j = 0; j < data.runlist.length; j++) {
@@ -1000,6 +1018,9 @@ $.get('../instances/'+urlParams.id,function(data){
 
 
     $('.sshShellBtn').click(function() {
+      if($(this).hasClass('isStopedInstance')){
+        return false;
+      }
         var $sshModal = $('#modalSSHShellContainer');
         var instanceId = $(this).parents('.domain-roles-caption').attr('data-instanceId');
         $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -1048,6 +1069,9 @@ $.get('../instances/'+urlParams.id,function(data){
 
 
   $('.instanceActionBtn').click(function(e){
+        if($(this).hasClass('isStopedInstance')){
+          return false;
+        }
         var $this = $(this);
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
@@ -1084,12 +1108,30 @@ $.get('../instances/'+urlParams.id,function(data){
                                  $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                  $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                  if (data.instanceState == 'stopped'){
-                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
-                                    $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
+                                    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
+                                    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
+                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').addClass('isStopedInstance');
+                                    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').addClass('isStopedInstance');
+                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').addClass('isStopedInstance');
+                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').removeClass('isStopedInstance');
+                                    //Opacity Settings
+                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').css('opacity','0.5');
+                                    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').css({'opacity':'0.5'});
+                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').css({'opacity':'0.5'});
+                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').css({'opacity':'1.0'});
                                     }
                                     if (data.instanceState == 'running'){
-                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
-                                      $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
+                                      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
+                                      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
+                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').removeClass('isStopedInstance');
+                                      $('.componentlistContainer.started').parent().find('.sshShellBtn').removeClass('isStopedInstance');
+                                      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').removeClass('isStopedInstance');
+                                      $('.componentlistContainer.started').parent().find('.actionbuttonStart').addClass('isStopedInstance');
+                                      //Opacity Settings
+                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').css('opacity','1.0');
+                                      $('.componentlistContainer.started').parent().find('.sshShellBtn').css({'opacity':'1.0'});
+                                      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
+                                      $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
                                     }
                             } 
                         }   
@@ -1102,6 +1144,9 @@ $.get('../instances/'+urlParams.id,function(data){
 
   
     $('.instanceActionBtnUpdateRunlist').click(function(e){
+        if($(this).hasClass('isStopedInstance')){
+          return false;
+        }
          var $this = $(this);
          var $parent = $('.domain-roles-caption');
          var instanceId = $parent.attr('data-instanceId');
@@ -1117,6 +1162,9 @@ $.get('../instances/'+urlParams.id,function(data){
     });
 
     $('.btnUpdateInstanceRunlist').click(function(e) {
+      if($(this).hasClass('isStopedInstance')){
+        return false;
+      }
       bootbox.confirm("Update runlist?", function(result) {
         if (!result) {
             return;

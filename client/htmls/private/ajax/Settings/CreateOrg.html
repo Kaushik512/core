@@ -26,7 +26,6 @@
                                     <label for="name">Name:
                                     <span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-
                                     <input autofocus name="ctl00$MainContent$orgname" value="" id="orgname" unique="true"  uniqueconditionedby="orgname" class="form-control" cdata="catalyst" type="text" cat-validation="required,nospecial,max15,nospace"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
 
                                     <input id="orgid" type="hidden" />
@@ -293,7 +292,7 @@
 </script>
 <script>
    $(document).ready(function () {
-   
+    $("#orgname").focus();
        $('#myForm').submit(function() {
          console.log('serialize ==> ',$(this).serialize());
            $(this).validate();
