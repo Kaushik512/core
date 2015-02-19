@@ -65,7 +65,7 @@ module.exports.setRoutes = function(socketIo) {
                         });
                     } else if(retCode === -5001) {
                         socket.emit('conErr', {
-                            message: "Invalid Credentials"
+                            message: "The username or password/pemfile you entered is incorrect"
                         });
                     } else {
                         socket.emit('conErr', {
