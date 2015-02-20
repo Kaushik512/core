@@ -1677,6 +1677,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
           $('#modalContainerimportInstance').modal('hide');
           //Updating the tree
           loadTreeFuncNew();
+          console.log('success---3---3');
           selectFirstEnv();
           $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
       }).fail(function(jxhr){
@@ -2332,28 +2333,42 @@ $(function() {
 
     }
 
-    $.get('../organizations/'+orgId+'/businessgroups/'+urlParams['bg']+'/projects/' + projectId + '/environments/' + envId + '/', function(data) {
-        
-       // alert('in here' + $('#tree').find('a[itemtype="env"]').length + ' ' + data.instances.length);
-        //
+    if (orgId && urlParams['bg'] && projectId && envId) {
+
+        $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+
+            // alert('in here' + $('#tree').find('a[itemtype="env"]').length + ' ' + data.instances.length);
+            //
+            console.log('success---3---4');
+            selectFirstEnv();
+            if ($('#tree').find('a[itemtype="env"]').length <= 0) {
+                $('#content').addClass('hidden');
+                $('#noenvwarning').removeClass('hidden');
+                $('ol.breadcrumb').addClass('hidden');
+            } else {
+                $('#content').removeClass('hidden');
+                $('#noenvwarning').addClass('hidden');
+                $('ol.breadcrumb').removeClass('hidden');
+            }
+
+            //Syncing up the tree view based on url
+            initializeBlueprintArea(data.blueprints);
+            initializeTaskArea(data.tasks);
+            initializeInstanceArea(data.instances);
+
+        });
+    } else {
         selectFirstEnv();
-        if( $('#tree').find('a[itemtype="env"]').length <= 0){
-          $('#content').addClass('hidden');
-          $('#noenvwarning').removeClass('hidden');
-          $('ol.breadcrumb').addClass('hidden');
+        if ($('#tree').find('a[itemtype="env"]').length <= 0) {
+            $('#content').addClass('hidden');
+            $('#noenvwarning').removeClass('hidden');
+            $('ol.breadcrumb').addClass('hidden');
+        } else {
+            $('#content').removeClass('hidden');
+            $('#noenvwarning').addClass('hidden');
+            $('ol.breadcrumb').removeClass('hidden');
         }
-        else{
-          $('#content').removeClass('hidden');
-          $('#noenvwarning').addClass('hidden');
-          $('ol.breadcrumb').removeClass('hidden');
-        }
-
-        //Syncing up the tree view based on url
-        initializeBlueprintArea(data.blueprints);
-        initializeTaskArea(data.tasks);
-        initializeInstanceArea(data.instances);
-
-    });
+    }
 });
 function generateDockerLaunchParams(){
   if($('#Containernamefield').val() == ''){

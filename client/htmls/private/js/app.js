@@ -1223,6 +1223,9 @@ if($.navAsAjax)
 
     // DO on hash change
     $(window).on('hashchange', function() {
+    //	debugger;
+    console.log(location.href);
+    console.log('success111111111111111111111111111');
 	    checkURL();
     });
 }
@@ -1232,7 +1235,7 @@ function checkURL() {
 
 	//get the url by removing the hash
 	url = location.hash.replace(/^#/, '');
-
+//debugger;
 	var container = $('#content');
 	// Do this if url exists (for page refresh, etc...)
 	if (url) {
@@ -1263,9 +1266,10 @@ function checkURL() {
 
 		// grab the first URL from nav
 	var $this = $('nav > ul > li:first-child > a[href!="#"]');
-
+//alert('href');
 		//update hash
 		if($this.attr('href')) {
+			console.log('success 2');
 		  window.location.hash = $this.attr('href');
         }
 	}
@@ -1312,9 +1316,9 @@ function loadURL(url, container) {
 		success : function(data) {
 			// cog replaced here...
 			// alert("success")
-			setTimeout(function(){
+			/*setTimeout(function(){
 			hideLoader();
-		},400);
+		},400);*/
 			container.css({
 				opacity : '0.0'
 			}).html(data).delay(50).animate({
@@ -1325,7 +1329,7 @@ function loadURL(url, container) {
 		},
 		error : function(xhr, ajaxOptions, thrownError) {
 			container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! Page not found.</h4>');
-			hideLoader();
+			//hideLoader();
 		},
 		async : true // by anshul
 	});
