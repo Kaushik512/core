@@ -3667,8 +3667,9 @@ background-image:url('../img/aws_logo_paused.png');
 background-image:url('../img/rsz_inactive.png');
 }
 .rowcustomselected{
-    font-weight: bold;
-    font-size:14px;
+    /*font-weight: bold datatabledefaultcolor #b0bed9;
+    font-size:14px;  c8b3c6*/
+    background-color: #c8b3c6 !important;
 }
 
 
