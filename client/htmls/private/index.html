@@ -15,6 +15,7 @@
 	position:absolute;
 	z-index: 100;
 	height:100px;
+	display: none;
 }
 		</style>
 		<script>
@@ -322,7 +323,7 @@ $('#clickdisabler').hide();
 		if($(toplink).hasClass('active')){
 			return ;
 		}
-		showLoader();
+		//showLoader();
 		//$('a[onclick*="setleftnavigation"]').removeClass('active').find("i").removeClass('txt-color-blue');
 		$('.navigationTab').removeClass('active').find("i").removeClass('txt-color-blue');
 		$(toplink).addClass('active').find('i').addClass('txt-color-blue');
@@ -429,7 +430,7 @@ $('#clickdisabler').hide();
 		var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
 
 		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
-			
+			console.log('in if');
 			
 			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 						  _orgnode.trigger('click');}
@@ -450,7 +451,7 @@ $('#clickdisabler').hide();
 
 		}
 		else{
-
+            console.log('in else');
 			hasOrg = false;
 
 			if($('a[itemtype="org"]').length > 0)
@@ -519,78 +520,78 @@ $('#clickdisabler').hide();
 <script src="/private/js/settingscommon.js"></script> 
 <script>
   $(window).on('hashchange', function() {
-  	
-     var hash = location.hash;
-   	 $(".left-projects-links a").removeClass('active');
-     if (hash.indexOf("#ajax/Dev.html?") === 0) {        
-         console.log("pos if ==>", hash.indexOf("#ajax/Dev.html?"));
-         $("#workZoneNew").addClass('active');
-     } else if (hash === "#ajax/Aws-Production.html") {
-         
-         $("#designNew").addClass('active');
-     } else if (hash === "#ajax/Settings/TrackerDashboard.html") {
-       
-         $("#trackNew").addClass('active');
-     } else if (hash.indexOf("#ajax/Settings/") === 0) {
-        
-         $("#settingsNew").addClass('active');
-     }
-     stateManagement.setState();
- });
-    var stateSaveFormat={
-    	href:"",
-    	metadata:""
-    },
-    key="catalystStatus",
-    stateManagement={
-init:function(){
-	var data=this.getState();
-data=data ? JSON.parse(data):null;
-if(data){
-this.changeURL(data.href);
-}else{
-console.log('success---3---1');
-selectFirstEnv();
-}
-$('body').delegate('#bot2-Msg1','click',function(){
-//localStorage.removeItem(key);
-localStorage.clear();
-});
-},
-changeURL:function(href){
-var params;
-	console.log('URL from LocalStorage:: '+href);
-if(href.indexOf('Setting')>-1){
-	$("#settingsNew").click();
-	drawBreadCrumb();
-	console.log('URL from LocalStorage:: Moved to setting Tab');
-}else if(href.indexOf('Dev.html')>-1){
-	params=href.split('?');
+
+      var hash = location.hash;
+      $(".left-projects-links a").removeClass('active');
+      if (hash.indexOf("#ajax/Dev.html?") === 0) {
+          console.log("pos if ==>", hash.indexOf("#ajax/Dev.html?"));
+          $("#workZoneNew").addClass('active');
+      } else if (hash === "#ajax/Aws-Production.html") {
+
+          $("#designNew").addClass('active');
+      } else if (hash === "#ajax/Settings/TrackerDashboard.html") {
+
+          $("#trackNew").addClass('active');
+      } else if (hash.indexOf("#ajax/Settings/") === 0) {
+
+          $("#settingsNew").addClass('active');
+      }
+      stateManagement.setState();
+  });
+  var stateSaveFormat = {
+          href: "",
+          metadata: ""
+      },
+      key = "catalystStatus",
+      stateManagement = {
+          init: function() {
+              var data = this.getState();
+              data = data ? JSON.parse(data) : null;
+              if (data) {
+                  this.changeURL(data.href);
+              } else {
+                  console.log('success---3---1');
+                  selectFirstEnv();
+              }
+              $('body').delegate('#bot2-Msg1', 'click', function() {
+                  //localStorage.removeItem(key);
+                  localStorage.clear();
+              });
+          },
+          changeURL: function(href) {
+              var params;
+              console.log('URL from LocalStorage:: ' + href);
+              if (href.indexOf('Setting') > -1) {
+                  $("#settingsNew").click();
+                  drawBreadCrumb();
+                  console.log('URL from LocalStorage:: Moved to setting Tab');
+              } else if (href.indexOf('Dev.html') > -1) {
+                  params = href.split('?');
 
 
-	if(params.length===2 && href.indexOf('org=')>-1 && href.indexOf('bg=')>-1 && href.indexOf('projid=')>-1 &&href.indexOf('envid=')>-1){
-        console.log('params' , params[1]);
-        location.hash=params[1];
-	}else{
-		console.log('success---3---1');
-		selectFirstEnv();
-//location.hash=href.split('#')[1];
-	}
-}else{
-$("#designNew").click();
-drawBreadCrumb();
-console.log('URL from LocalStorage:: Moved to Design Tab');
-}
-},
-getState:function(){
-	return localStorage.getItem(key);
-},
-setState:function(){
-stateSaveFormat.href=location.href.toString();
-localStorage.setItem(key,JSON.stringify(stateSaveFormat));
-    	}
-    }
-stateManagement.init();
+                  if (params.length === 2 && href.indexOf('org=') > -1 && href.indexOf('bg=') > -1 && href.indexOf('projid=') > -1 && href.indexOf('envid=') > -1) {
+                      console.log('params', params[1]);
+                      location.href = href
+                  } else {
+                      console.log('success---3---1');
+                      selectFirstEnv();
+                      //location.hash=href.split('#')[1];
+                  }
+              } else {
+                  $("#designNew").click();
+                  drawBreadCrumb();
+                  console.log('URL from LocalStorage:: Moved to Design Tab');
+              }
+          },
+          getState: function() {
+              return localStorage.getItem(key);
+          },
+          setState: function() {
+              stateSaveFormat.href = location.href.toString();
+              localStorage.setItem(key, JSON.stringify(stateSaveFormat));
+          }
+      }
+  stateManagement.init();
 
 </script>
 </body>
