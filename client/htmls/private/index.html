@@ -531,6 +531,10 @@ $('#clickdisabler').hide();
      } else if (hash === "#ajax/Settings/TrackerDashboard.html") {
        
          $("#trackNew").addClass('active');
+     }
+     else if (hash.indexOf("#ajax/Controlpanel.html?") === 0) {
+       
+         $("#workZoneNew").addClass('active');
      } else if (hash.indexOf("#ajax/Settings/") === 0) {
         
          $("#settingsNew").addClass('active');

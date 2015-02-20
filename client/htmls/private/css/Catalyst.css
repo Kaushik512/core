@@ -3667,8 +3667,9 @@ background-image:url('../img/aws_logo_paused.png');
 background-image:url('../img/rsz_inactive.png');
 }
 .rowcustomselected{
-    font-weight: bold;
-    font-size:14px;
+    /*font-weight: bold datatabledefaultcolor #b0bed9;
+    font-size:14px;  c8b3c6*/
+    background-color: #c8b3c6 !important;
 }
 
 
@@ -4856,8 +4857,11 @@ table.dataTable thead .sorting {
 table.dataTable thead .sorting_asc {
   background: url("../images/sort_asc.png") no-repeat center right;
 }
-table.dataTable thead .sorting_desc {
+/*table.dataTable thead .sorting_desc {
   background: url("../images/sort_desc.png") no-repeat center right;
+}*/
+table.dataTable thead .sorting_desc {
+  background: url("../img/sort_desc.png") no-repeat center right;
 }
 table.dataTable thead .sorting_asc_disabled {
   background: url("../images/sort_asc_disabled.png") no-repeat center right;
