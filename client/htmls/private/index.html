@@ -487,14 +487,14 @@ $('#clickdisabler').hide();
 				}
 		}
 		if(!hasOrg || !hasProj || !hasBg || !hasEnv){
-			location.hash="ajax/Dev.html";
+			console.log('success 3');
+			//location.hash="ajax/Dev.html";
 			$('#content').addClass('hidden');
 			$('#noenvwarning').removeClass('hidden');
 		    $('ol.breadcrumb').addClass('hidden');
 		    /*var ol = $("#ribbon ol.breadcrumb");
 		    ol.empty();
 		    ol.append("<li>&nbsp;</li>");*/
-		    
 		}
 		/*//If no env found in tree show warning.
 		if($('a[itemtype="env"]').length <= 0){
@@ -549,6 +549,7 @@ data=data ? JSON.parse(data):null;
 if(data){
 this.changeURL(data.href);
 }else{
+console.log('success---3---1');
 selectFirstEnv();
 }
 $('body').delegate('#bot2-Msg1','click',function(){
@@ -557,14 +558,28 @@ localStorage.clear();
 });
 },
 changeURL:function(href){
+var params;
+	console.log('URL from LocalStorage:: '+href);
 if(href.indexOf('Setting')>-1){
 	$("#settingsNew").click();
 	drawBreadCrumb();
+	console.log('URL from LocalStorage:: Moved to setting Tab');
 }else if(href.indexOf('Dev.html')>-1){
-location.href=href;
+	params=href.split('?');
+
+
+	if(params.length===2 && href.indexOf('org=')>-1 && href.indexOf('bg=')>-1 && href.indexOf('projid=')>-1 &&href.indexOf('envid=')>-1){
+        console.log('params' , params[1]);
+        location.hash=params[1];
+	}else{
+		console.log('success---3---1');
+		selectFirstEnv();
+//location.hash=href.split('#')[1];
+	}
 }else{
 $("#designNew").click();
 drawBreadCrumb();
+console.log('URL from LocalStorage:: Moved to Design Tab');
 }
 },
 getState:function(){
