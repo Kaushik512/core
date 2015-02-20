@@ -687,7 +687,7 @@
 
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    Ã—
+                    X
                 </button>
                 <h4 class="modal-title">
                     <i class="fa fa-line-chart fa-lg txt-color-blue"></i>&nbsp;&nbsp;Monitoring Container
@@ -696,6 +696,7 @@
             <div class="modal-body no-padding"  style="height:480px">
                 <form class="smart-form" id="login-form" action="" novalidate="novalidate">
                     <fieldset style="padding-top:7px !important;height:366px;">
+                        <div id="cadvisorloadingicon" class="" style="text-align:center"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;margin-left:50%" src="img/loading.gif" /></div>                        
                         <iframe id="cAdvisorPageFrame"  style="width:100%;height:100%;border:0px;">
                         </iframe>
                     </fieldset>
@@ -1263,6 +1264,9 @@ $(document).ready(function() {
       $('#myTab3').click();
   }
   $('#Removelinkedcontainersonexitfield').select2();
+  $('#cAdvisorPageFrame').on('load', function () {
+            $('#cadvisorloadingicon').hide();
+        });
 });
 $('.Instances').click(function(e){
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
@@ -3343,11 +3347,20 @@ function createdockercontainerrow(dockerContainerItem, instanceid){
     //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
     $cadvisor.click(function(e){
         $('#cadvisorpopup').modal('show');
+        
+        if(typeof $('#cAdvisorPageFrame').attr('src') != 'undefined'){
+          $('#cadvisorloadingicon').hide();
+        }
+        else{
+          $('#cadvisorloadingicon').show();
+        }
+        $('#cAdvisorPageFrame').attr('src', "");
         $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
         //$('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
         e.preventDefault();
         return(false);
     });
+    
 
     $docctr.attr('instanceid',instanceid);
     $docctr.attr('containerid',dockerContainerItem.Id.substring(0,12));
