@@ -5,7 +5,7 @@
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
-         <form action="" id="frmconfigmanagement">
+         <form action="" id="myForm45">
             <div class="widget-box">
                <div class="widget-header">
                   <h4 class="widget-margin" style="color:black;">New Docker  <span id="spndocker"></span></h4>
@@ -41,7 +41,7 @@
                                        </div>
                                        <div class="col-lg-6" style="margin-top:25px">
                                           <label for="">Email ID:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <input name="ctl00$MainContent$orgname" value="" id="dockeremailid" class="form-control" type="email"  cdata="catalyst" cat-validation="required">
+                                          <input name="ctl00$MainContent$orgname" value="" id="dockeremailid" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
                                        </div>
                                        <div class="col-lg-6" style="margin-top:25px">
                                           <label for="">Password: <span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -120,7 +120,7 @@
        });
        $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
        var ten = 10;
-       readformnew(18); //6 is for role
+       readform(18); //6 is for role
        //
       
        $('#content').css("opacity", "1 !important");

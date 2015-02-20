@@ -9,16 +9,26 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
+		<style>
+#clickdisabler{
+	width:100%;
+	position:absolute;
+	z-index: 100;
+	height:100px;
+}
+		</style>
+		<script>
+
+function showLoader(){
+	$('#clickdisabler').show();
+}
+function hideLoader(){
+$('#clickdisabler').hide();	
+}
+		</script>
 	</head>
 	<body class="custom-theme">
-		<script type="text/javascript">
-		//Refresh Issue Fix. This function will get executed when there is a refresh and the url is not of the home page.
-/*		function firstLoad(){
-		if(window.location.href.indexOf('#') > 0)
-				window.location.href = '/private/index.html';
-		}
-		firstLoad();
-*/		</script>
+	<div id="clickdisabler"></div>
 		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 		<!-- HEADER -->
 		<!-- Header starts here -->
@@ -38,9 +48,9 @@
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			    	<!--left side navbar-->
 			      <ul class="nav navbar-nav" style="margin-top:20px;margin-left:28px">
-			        <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1"><a class="active" id="workZoneNew" style="font-size:14px!important" href="#ajax/Dev.html" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a></li>
+			        <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1"><a class="active navigationTab" id="workZoneNew" style="font-size:14px!important" href="#ajax/Dev.html" onclick="setleftnavigation(this,'org');"><i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE</a></li>
 			        <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
-							<a href="#ajax/Aws-Production.html" style="font-size:14px!important" id="designNew" onclick="setleftnavigation(this,'Design');"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
+							<a href="#ajax/Aws-Production.html" style="font-size:14px!important" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab"><i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN</a>
 						</li>
 			        
 			      </ul>
@@ -49,7 +59,7 @@
 			      	<li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
 			      	<!-- <li class="left-projects-links"></li> -->
 			        <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
-								<a class="dropdown-toggle" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+								<a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
 							</li>
 
 						<li id="logout" class="btn-header transparent pull-right logouttop">
@@ -282,7 +292,7 @@
 	<script src="js/libs/jquery-2.0.2.min.js"></script>
 	<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
 	<script src="js/libs/modernizr-2.5.3.min.js"></script>
-	<script type="text/javascript" src="js/select2.min.js"></script>
+	<script src="js/select2.min.js"></script>
 	<script src="js/bootstrap-treeview.js"></script>
 	
 	<script src="js/bootstrap/bootstrap.min.js"></script>
@@ -290,8 +300,8 @@
 	<script src="js/notification/SmartNotification.min.js"></script>
 	<!-- JARVIS WIDGETS -->
 	<script src="js/smartwidgets/jarvis.widget.min.js"></script>
-	<script type="text/javascript" src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
-	<script type="text/javascript" src="js/plugin/bootbox/bootbox.min.js"></script>
+	<script src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
+	<script src="js/plugin/bootbox/bootbox.min.js"></script>
 	
 	<script src="/private/js/jquery.dataTables.min.js"></script>
 	<script src="js/jquery.tablesorter.min.js"></script>
@@ -309,25 +319,25 @@
 
 
 	function setleftnavigation(toplink,breadcrumbHeader){
-	
-		$('a[onclick*="setleftnavigation"]').removeClass('active');
-		$('a[onclick*="setleftnavigation"]').find("i").removeClass('txt-color-blue');
-		$(toplink).addClass('active');
-		$(toplink).find('i').addClass('txt-color-blue');
+		if($(toplink).hasClass('active')){
+			return ;
+		}
+		showLoader();
+		//$('a[onclick*="setleftnavigation"]').removeClass('active').find("i").removeClass('txt-color-blue');
+		$('.navigationTab').removeClass('active').find("i").removeClass('txt-color-blue');
+		$(toplink).addClass('active').find('i').addClass('txt-color-blue');
 		$('nav > ul').addClass('hidden'); //hiding all navigation elements
 		var navbar = $(toplink).closest("li").attr('navigation');
 		$('#Workspace1').addClass('hidden');
 		if(navbar.length){
 			var navs = navbar.split(',');
 			for(var i = 0; i< navs.length;i++){
-				$('#' + navs[i]).removeClass('hidden');
-				$('#' + navs[i]).css('display','');
+				$('#' + navs[i]).removeClass('hidden').css('display','');
 			}
 			
 		}
 		if(breadcrumbHeader == 'org') {
-				var orgName = $('.orgSelected span').text();
-				window.selectedOrgName = orgName;
+			window.selectedOrgName = $('.orgSelected').find('span').text();
 				//selectFirstEnv();
 	 //selecting the first item in the org tree.
 		} else {
@@ -418,8 +428,7 @@
 
 		var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
 
-		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){
-			
+		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
 			
 			
 			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
@@ -510,21 +519,20 @@
 <script src="/private/js/settingscommon.js"></script> 
 <script>
   $(window).on('hashchange', function() {
+  	
      var hash = location.hash;
-     console.log("hashChange", hash);
-     console.log("pos ==>", location.hash.indexOf("#ajax/Dev.html?"));
-     if (location.hash.indexOf("#ajax/Dev.html?") === 0) {
-         $(".left-projects-links a").removeClass('active');
-         console.log("pos if ==>", location.hash.indexOf("#ajax/Dev.html?"));
+   	 $(".left-projects-links a").removeClass('active');
+     if (hash.indexOf("#ajax/Dev.html?") === 0) {        
+         console.log("pos if ==>", hash.indexOf("#ajax/Dev.html?"));
          $("#workZoneNew").addClass('active');
-     } else if (location.hash === "#ajax/Aws-Production.html") {
-         $(".left-projects-links a").removeClass('active');
+     } else if (hash === "#ajax/Aws-Production.html") {
+         
          $("#designNew").addClass('active');
-     } else if (location.hash === "#ajax/Settings/TrackerDashboard.html") {
-         $(".left-projects-links a").removeClass('active');
+     } else if (hash === "#ajax/Settings/TrackerDashboard.html") {
+       
          $("#trackNew").addClass('active');
-     } else if (location.hash.indexOf("#ajax/Settings/") === 0) {
-         $(".left-projects-links a").removeClass('active');
+     } else if (hash.indexOf("#ajax/Settings/") === 0) {
+        
          $("#settingsNew").addClass('active');
      }
      stateManagement.setState();
@@ -544,15 +552,14 @@ this.changeURL(data.href);
 selectFirstEnv();
 }
 $('body').delegate('#bot2-Msg1','click',function(){
-localStorage.removeItem(key);
+//localStorage.removeItem(key);
+localStorage.clear();
 });
 },
 changeURL:function(href){
 if(href.indexOf('Setting')>-1){
 	$("#settingsNew").click();
 	drawBreadCrumb();
-//location.href=href.split('#')[0]+ '#' +'ajax/Settings/Dashboard.html'
-
 }else if(href.indexOf('Dev.html')>-1){
 location.href=href;
 }else{

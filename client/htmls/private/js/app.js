@@ -74,8 +74,9 @@ $(document).ready(function() {
 	/*
 	 * Fire tooltips
 	 */
-	if ($("[rel=tooltip]").length) {
-		$("[rel=tooltip]").tooltip();
+	 var $tool=$("[rel=tooltip]")
+	if ($tool.length) {
+		$tool.tooltip();
 	}
 
 	//TODO: was moved from window.load due to IE not firing consist
@@ -198,23 +199,26 @@ $(document).ready(function() {
 	// ACTIVITY
 	// ajax drop
 	$('#activity').click(function(e) {
-		$this = $(this);
+		var $this = $(this),
+		$badge=$this.find('.badge'),
+		$next;
 
-		if ($this.find('.badge').hasClass('bg-color-red')) {
-			$this.find('.badge').removeClassPrefix('bg-color-');
-			$this.find('.badge').text("0");
+		if ($badge.hasClass('bg-color-red')) {
+			$badge.removeClassPrefix('bg-color-');
+			$badge.text("0");
 			// console.log("Ajax call for activity")
 		}
+		$next=$this.next('.ajax-dropdown');
 
-		if (!$this.next('.ajax-dropdown').is(':visible')) {
-			$this.next('.ajax-dropdown').fadeIn(150);
+		if (!$next.is(':visible')) {
+			$next.fadeIn(150);
 			$this.addClass('active');
 		} else {
-			$this.next('.ajax-dropdown').fadeOut(150);
+			$next.fadeOut(150);
 			$this.removeClass('active')
 		}
 
-		var mytest = $this.next('.ajax-dropdown').find('.btn-group > .active > input').attr('id');
+		var mytest = $next.find('.btn-group > .active > input').attr('id');
 		//console.log(mytest)
 
 		e.preventDefault();
@@ -222,20 +226,20 @@ $(document).ready(function() {
 
 	$('input[name="activity"]').change(function() {
 		//alert($(this).val())
-		$this = $(this);
-
+		var $this = $(this);
 		url = $this.attr('id');
-		container = $('.ajax-notifications');
+		var container = $('.ajax-notifications');
 
 		loadURL(url, container);
 
 	});
 
 	$(document).mouseup(function(e) {
-		if (!$('.ajax-dropdown').is(e.target)// if the target of the click isn't the container...
-		&& $('.ajax-dropdown').has(e.target).length === 0) {
-			$('.ajax-dropdown').fadeOut(150);
-			$('.ajax-dropdown').prev().removeClass("active")
+		var $ajax=$('.ajax-dropdown');
+		if (!$ajax.is(e.target)// if the target of the click isn't the container...
+		&& $ajax.has(e.target).length === 0) {
+			$ajax.fadeOut(150);
+			$ajax.prev().removeClass("active")
 		}
 	});
 
@@ -250,7 +254,7 @@ $(document).ready(function() {
 	// NOTIFICATION IS PRESENT
 
 	function notification_check() {
-		$this = $('#activity > .badge');
+		var $this = $('#activity > .badge');
 
 		if (parseInt($this.text()) > 0) {
 			$this.addClass("bg-color-red bounceIn animated")
@@ -260,7 +264,7 @@ $(document).ready(function() {
 	notification_check();
 
 	// RESET WIDGETS
-	$('#refresh').click(function(e) {
+/*	$('#refresh').click(function(e) {
 		$.SmartMessageBox({
 			title : "<i class='fa fa-refresh' style='color:green'></i> Clear Local Storage",
 			content : "Would you like to RESET all your saved widgets and clear LocalStorage?",
@@ -274,7 +278,7 @@ $(document).ready(function() {
 		});
 		e.preventDefault();
 	});
-
+*/
 	// LOGOUT BUTTON
 	$('#logout a').click(function(e) {
 		//get the link
@@ -1173,9 +1177,9 @@ if($.navAsAjax)
     };
 
     $(document).on('click', 'nav a[href!="#"]', function(e) {
-    	console.log(this)
+    	//console.log(this)
 	    e.preventDefault();
-	    $this = $(e.currentTarget);
+	 var $this = $(e.currentTarget);
 
 	    // if parent is not active then get hash, or else page is assumed to be loaded
 	    if (!$this.parent().hasClass("active") && !$this.attr('target')) {
@@ -1199,7 +1203,7 @@ if($.navAsAjax)
     // fire links with targets on different window
     $(document).on('click', 'nav a[target="_blank"]', function(e) {
 	    e.preventDefault();
-	    $this = $(e.currentTarget);
+	  var $this = $(e.currentTarget);
 
 	    window.open($this.attr('href'));
     });
@@ -1207,7 +1211,7 @@ if($.navAsAjax)
     // fire links with targets on same window
     $(document).on('click', 'nav a[target="_top"]', function(e) {
 	    e.preventDefault();
-	    $this = $(e.currentTarget);
+	  var  $this = $(e.currentTarget);
 
 	    window.location = ($this.attr('href'));
     });
@@ -1229,14 +1233,14 @@ function checkURL() {
 	//get the url by removing the hash
 	url = location.hash.replace(/^#/, '');
 
-	container = $('#content');
+	var container = $('#content');
 	// Do this if url exists (for page refresh, etc...)
 	if (url) {
 		// remove all active class
 		$('nav li.active').removeClass("active");
 		// match the url and add the active class
 		$('nav li:has(a[href="' + url + '"])').addClass("active");
-		title = ($('nav a[href="' + url + '"]').attr('title'))
+	//	title = ($('nav a[href="' + url + '"]').attr('title'))
     
 		// change page title from global var
 		//document.title = (title || document.title);
@@ -1258,7 +1262,7 @@ function checkURL() {
 	} else {
 
 		// grab the first URL from nav
-		$this = $('nav > ul > li:first-child > a[href!="#"]');
+	var $this = $('nav > ul > li:first-child > a[href!="#"]');
 
 		//update hash
 		if($this.attr('href')) {
@@ -1294,6 +1298,7 @@ function loadURL(url, container) {
 				$("html, body").animate({
 					scrollTop : 0
 				}, "fast");
+
 			} else {
 				container.animate({
 					scrollTop : 0
@@ -1307,7 +1312,9 @@ function loadURL(url, container) {
 		success : function(data) {
 			// cog replaced here...
 			// alert("success")
-			
+			setTimeout(function(){
+			hideLoader();
+		},400);
 			container.css({
 				opacity : '0.0'
 			}).html(data).delay(50).animate({
@@ -1318,6 +1325,7 @@ function loadURL(url, container) {
 		},
 		error : function(xhr, ajaxOptions, thrownError) {
 			container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! Page not found.</h4>');
+			hideLoader();
 		},
 		async : true // by anshul
 	});
@@ -1374,7 +1382,7 @@ function drawBreadCrumb() {
 }
 
 function drawBreadCrumb1() {
-    
+    var href=window.location.href;
     //console.log("breadcrumb")
    /* $("#ribbon ol.breadcrumb").empty();
     if (window.location.href.indexOf("Settings") > 0) {
@@ -1393,16 +1401,16 @@ function drawBreadCrumb1() {
         $(".breadcrumb").show();
     }
     //force setting the visibility
-    if ($('#navWorkspace').is(":visible") == false && window.location.href.indexOf("Settings") < 0) {
+    if ($('#navWorkspace').is(":visible") == false && href.indexOf("Settings") < 0) {
         $('#navWorkspace').css("display", '');
     }
-    if (window.location.href.indexOf("Settings") > 0 && window.location.href.indexOf("Tracker") < 0) {
+    if (href.indexOf("Settings") > 0 && href.indexOf("Tracker") < 0) {
         $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
             $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
         });
 
     }
-    if (window.location.href.indexOf("Settings") > 0 && window.location.href.indexOf("Tracker") > 0) {
+    if (href.indexOf("Settings") > 0 && href.indexOf("Tracker") > 0) {
         $('#navSettings li.active > a, #navSettings li.open > a').each(function () {
             $("#ribbon ol.breadcrumb").append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text())));
         });
