@@ -824,7 +824,7 @@ var InstancesDao = function() {
     };
 
     this.insertChefClientRunActionLog = function(instanceId, runlist, user, timestampStarted, callback) {
-        logger.debug("Enter insertChefClientRunActionLog ", instanceId, user, timestampStarted);
+        logger.debug("Enter insertChefClientRunActionLog ", instanceId, runlist, user, timestampStarted);
         var log = {
             type: ACTION_LOG_TYPES.CHEF_RUN.type,
             name: ACTION_LOG_TYPES.CHEF_RUN.name,
@@ -832,8 +832,8 @@ var InstancesDao = function() {
             success: false,
             user: user,
             timeStarted: timestampStarted,
-            actionData : {
-                runlist : runlist
+            actionData: {
+                runlist: runlist
             }
 
         };
@@ -842,6 +842,40 @@ var InstancesDao = function() {
         return log;
     };
 
+    this.insertServiceActionLog = function(instanceId, serviceData, user, timestampStarted, callback) {
+        logger.debug("Enter insertServiceActionLog ", instanceId, serviceData, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.SERVICE.type,
+            name: ACTION_LOG_TYPES.SERVICE.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
+            actionData: serviceData
+
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
+
+    this.insertBootstrapActionLog = function(instanceId, runlist, user, timestampStarted, callback) {
+        logger.debug("Enter insertBootstrapActionLog ", instanceId, runlist, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.BOOTSTRAP.type,
+            name: ACTION_LOG_TYPES.BOOTSTRAP.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
+            actionData: {
+                runlist: runlist
+            }
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
 
 
 };

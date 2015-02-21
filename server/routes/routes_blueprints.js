@@ -210,21 +210,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         return;
                                     }
                                     instance.id = data._id;
-
+                                    var timestampStarted = new Date().getTime();
+                                    var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                    var logsReferenceIds = [instance.id, actionLog._id];
                                     logsDao.insertLog({
-                                        referenceId: instance.id,
+                                        referenceId: logsReferenceIds,
                                         err: false,
                                         log: "Starting instance",
-                                        timestamp: new Date().getTime()
-                                    }, function(err, data) {
-                                        if (err) {
-                                            logger.error('Unable to update log after creating instance', err);
-                                            return;
-                                        }
-                                        logger.debug('log updated after creating instance');
+                                        timestamp: timestampStarted
                                     });
                                     //For windows instance handle another check..
-
 
                                     ec2.waitForInstanceRunnnigState(instance.platformId, function(err, instanceData) {
                                         if (err) {
@@ -267,12 +262,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         logger.debug("Instance bootstrap status set to failed");
                                                     }
                                                 });
+                                                var timestampEnded = new Date().getTime();
                                                 logsDao.insertLog({
-                                                    referenceId: instance.id,
+                                                    referenceId: logsReferenceIds,
                                                     err: true,
                                                     log: "Unable to decrpt pem file. Bootstrap failed",
-                                                    timestamp: new Date().getTime()
+                                                    timestamp: timestampEnded
                                                 });
+                                                instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
                                                 if (instance.hardware.os != 'windows')
                                                     return;
                                             }
@@ -301,6 +299,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
 
                                                     });
+                                                    var timestampEnded = new Date().getTime();
+                                                    logsDao.insertLog({
+                                                        referenceId: logsReferenceIds,
+                                                        err: true,
+                                                        log: "Bootstrap failed",
+                                                        timestamp: timestampEnded
+                                                    });
+                                                    instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
 
                                                 } else {
                                                     if (code == 0) {
@@ -311,6 +318,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 logger.debug("Instance bootstrap status set to success");
                                                             }
                                                         });
+                                                        var timestampEnded = new Date().getTime();
+                                                        logsDao.insertLog({
+                                                            referenceId: logsReferenceIds,
+                                                            err: false,
+                                                            log: "Instance Bootstraped successessfully",
+                                                            timestamp: timestampEnded
+                                                        });
+                                                        instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
 
                                                         chef.getNode(instance.chefNodeName, function(err, nodeData) {
                                                             if (err) {
@@ -364,6 +380,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 logger.debug("Instance bootstrap status set to failed");
                                                             }
                                                         });
+                                                        var timestampEnded = new Date().getTime();
+                                                        logsDao.insertLog({
+                                                            referenceId: logsReferenceIds,
+                                                            err: false,
+                                                            log: "Bootstraped Failed",
+                                                            timestamp: timestampEnded
+                                                        });
+                                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
 
                                                     }
                                                 }
@@ -371,7 +396,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }, function(stdOutData) {
 
                                                 logsDao.insertLog({
-                                                    referenceId: instance.id,
+                                                    referenceId: logsReferenceIds,
                                                     err: false,
                                                     log: stdOutData.toString('ascii'),
                                                     timestamp: new Date().getTime()
@@ -380,10 +405,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }, function(stdErrData) {
 
                                                 //retrying 4 times before giving up.
-
-
                                                 logsDao.insertLog({
-                                                    referenceId: instance.id,
+                                                    referenceId: logsReferenceIds,
                                                     err: true,
                                                     log: stdErrData.toString('ascii'),
                                                     timestamp: new Date().getTime()
