@@ -1017,7 +1017,12 @@ function readform(formID) {
                 }
                 if (inputC.getType().toLowerCase() == "select") {
                   //alert(v[k1]);
-                    $(inputC).val(v);
+                     $(inputC).val(v);
+                    //Get the rowid for the control
+                    // $('#' + k);
+                    // var selectedrowid = formData['k' + '_rowid'];
+                    // var selectval = $(inputC).find('option[rowid="' + selectedrowid + '"').val();
+                    // $(inputC).val(selectval);
                     $(inputC).attr('savedvalue', v);
                     //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
                     $(inputC).select2();

@@ -62,7 +62,7 @@ var d4dMastersProductGroup = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
 	orgname: {type:String,required:true, trim:true},
-	orgrowid: {type:String, trim:true},
+	orgname_rowid: {type:String, trim:true},
 	productgroupname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}

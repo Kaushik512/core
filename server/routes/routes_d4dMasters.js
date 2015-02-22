@@ -393,111 +393,164 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
-        console.log('received new request ' + req.params.id);
-        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-            if (err) {
-                console.log("Hit and error:" + err);
-            }
-            if (dbtype) {
-                console.log("Master Type: " + dbtype);
-                eval('d4dModelNew.' + dbtype).find({
-                    id: req.params.id
-                }, function(err, d4dMasterJson) {
-                    if (err) {
-                        console.log("Hit and error:" + err);
-                    }
-                    res.end(JSON.stringify(d4dMasterJson));
-                    console.log("sent response" + JSON.stringify(d4dMasterJson));
-                });
-            }
-        });
-    });
-    //for kana to be reverted to the original function 
     app.get('/d4dMasters/readmasterjsonnewk/:id', function(req, res) {
         console.log('received new request ' + req.params.id);
-        d4dModelNew.d4dModelMastersOrg.find({
-            id: 1
-        }, function(err, docorgs) {
-            var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.orgname;
+         configmgmtDao.getRowids(function(err,rowidlist){
+
+            console.log("Rowid List-->" + rowidlist);
+            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                if (err) {
+                    console.log("Hit and error:" + err);
+                }
+                if (dbtype) {
+                    console.log("Master Type: " + dbtype);
+                    eval('d4dModelNew.' + dbtype).find({
+                        id: req.params.id
+                    }, function(err, d4dMasterJson) {
+                        if (err) {
+                            console.log("Hit and error:" + err);
+                        }
+                        //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
+                            var _keys = Object.keys(d4dMasterJson);
+                            _keys.forEach(function(k,v){
+                                //var __keys = Object.keys(d4dMasterJson[k]);
+                               
+                                //console.log('OBject:' + d4dMasterJson[k]);
+                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                            
+                                for(var k1 in jobj){
+                                    //if any key has _rowid then update corresponding field
+                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                    if(k1.indexOf('_rowid') > 0){
+                                        var flds = k1.split('_');
+                                        d4dMasterJson[k][flds[0]] = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
+                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
+                                        console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
+                                    }
+                                    console.log("key**:",k1," val**:",jobj[k1]);
+                                   
+                                }
+                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                res.end(JSON.stringify(d4dMasterJson));
+                                
+                                console.log(k,d4dMasterJson[k],v);
+                            });
+                        
+                    });
+                }
             });
-            if(req.params.id == '1' || req.params.id == '2'  || req.params.id == '3'  || req.params.id == '10' ){
-                configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                    if (err) {
-                        console.log("Hit and error:" + err);
-                    }
-                    if (dbtype) {
-                        console.log("Master Type: " + dbtype);
-                        eval('d4dModelNew.' + dbtype).find({
-                            id: req.params.id,
-                            orgname: {
+        }); //rowidlist
+    });
+    //for kana to be reverted to the original function 
+    app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+        configmgmtDao.getRowids(function(err,rowidlist){
+
+            console.log("Rowid List-->" + rowidlist);
+            d4dModelNew.d4dModelMastersOrg.find({
+                id: 1
+            }, function(err, docorgs) {
+                var orgnames = docorgs.map(function(docorgs1) {
+                    return docorgs1.rowid;
+                });
+                if(req.params.id == '2'  || req.params.id == '3'  || req.params.id == '10' ){
+                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                        if (err) {
+                            console.log("Hit and error:" + err);
+                        }
+                        if (dbtype) {
+                            console.log("Master Type: " + dbtype);
+                            eval('d4dModelNew.' + dbtype).find({
+                                id: req.params.id,
+                                orgname_rowid: {
+                                    $in: orgnames
+                                }
+                            }, function(err, d4dMasterJson) {
+                                if (err) {
+                                    console.log("Hit and error:" + err);
+                                }
+                                //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
+                                var _keys = Object.keys(d4dMasterJson);
+                                _keys.forEach(function(k,v){
+                                    //var __keys = Object.keys(d4dMasterJson[k]);
+                                   
+                                    //console.log('OBject:' + d4dMasterJson[k]);
+                                    var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                                    for(var k1 in jobj){
+                                        //if any key has _rowid then update corresponding field
+                                        //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                        if(k1.indexOf('_rowid')){
+                                            var flds = k1.split('_');
+                                            jobj[flds[0]] = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
+                                        }
+                                        console.log("key:",k1," val:",jobj[k1]);
+
+                                    }
+                                    console.log(k,d4dMasterJson[k],v);
+                                });
+                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                res.end(JSON.stringify(d4dMasterJson));
+                                
+                                console.log();
+                            });
+                        }
+                    });
+                } //end if (1,2,3,4)
+                else if(req.params.id == '1' || req.params.id == '4'){
+                        d4dModelNew.d4dModelMastersProductGroup.find({
+                            id: 2,
+                            rowid:{
                                 $in: orgnames
                             }
-                        }, function(err, d4dMasterJson) {
-                            if (err) {
-                                console.log("Hit and error:" + err);
-                            }
-                            res.end(JSON.stringify(d4dMasterJson));
-                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        }, function(err, docbgs) {
+                            var bgnames = docbgs.map(function(docbgs1) {
+                                return docbgs1.productgroupname;
+                            });
+                            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                                if (err) {
+                                    console.log("Hit and error:" + err);
+                                }
+                                if (dbtype) {
+                                    console.log("Master Type: " + dbtype);
+                                    eval('d4dModelNew.' + dbtype).find({
+                                        id: req.params.id,
+                                        productgroupname: {
+                                            $in: bgnames
+                                        }
+                                    }, function(err, d4dMasterJson) {
+                                        if (err) {
+                                            console.log("Hit and error:" + err);
+                                        }
+                                        res.end(JSON.stringify(d4dMasterJson));
+                                        console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                    });
+                                }
+                            });
+
+
                         });
-                    }
-                });
-            } //end if (1,2,3,4)
-            else if(req.params.id == '4'){
-                    d4dModelNew.d4dModelMastersProductGroup.find({
-                        id: 2,
-                        orgname:{
-                            $in: orgnames
+                }
+                else{
+                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                        if (err) {
+                            console.log("Hit and error:" + err);
                         }
-                    }, function(err, docbgs) {
-                        var bgnames = docbgs.map(function(docbgs1) {
-                            return docbgs1.productgroupname;
-                        });
-                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                            if (err) {
-                                console.log("Hit and error:" + err);
-                            }
-                            if (dbtype) {
-                                console.log("Master Type: " + dbtype);
-                                eval('d4dModelNew.' + dbtype).find({
-                                    id: req.params.id,
-                                    productgroupname: {
-                                        $in: bgnames
-                                    }
-                                }, function(err, d4dMasterJson) {
-                                    if (err) {
-                                        console.log("Hit and error:" + err);
-                                    }
-                                    res.end(JSON.stringify(d4dMasterJson));
-                                    console.log("sent response" + JSON.stringify(d4dMasterJson));
-                                });
-                            }
-                        });
-
-
+                        if (dbtype) {
+                            console.log("Master Type: " + dbtype);
+                            eval('d4dModelNew.' + dbtype).find({
+                                id: req.params.id
+                            }, function(err, d4dMasterJson) {
+                                if (err) {
+                                    console.log("Hit and error:" + err);
+                                }
+                                res.end(JSON.stringify(d4dMasterJson));
+                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                            });
+                        }
                     });
-            }
-            else{
-                configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                    if (err) {
-                        console.log("Hit and error:" + err);
-                    }
-                    if (dbtype) {
-                        console.log("Master Type: " + dbtype);
-                        eval('d4dModelNew.' + dbtype).find({
-                            id: req.params.id
-                        }, function(err, d4dMasterJson) {
-                            if (err) {
-                                console.log("Hit and error:" + err);
-                            }
-                            res.end(JSON.stringify(d4dMasterJson));
-                            console.log("sent response" + JSON.stringify(d4dMasterJson));
-                        });
-                    }
-                });
-            } //end else
-        });
+                } //end else
+            });
+        });//get rowid list
     });
 
 
@@ -1436,6 +1489,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else {
                         console.log("Rowid: " + bodyJson["rowid"]);
                         var currowid = bodyJson["rowid"];
+                        delete rowtoedit._id; //fixing the issue of 
                         eval('d4dModelNew.' + dbtype).update({
                             rowid: bodyJson["rowid"]
                         }, {
