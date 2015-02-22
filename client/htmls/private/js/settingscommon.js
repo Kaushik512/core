@@ -1540,6 +1540,11 @@ function saveform(formID,operationTypes) {
 
         if (($(this).prop("type") == "password" || $(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '') {
             data1.append($(this).prop("id"), $(this).val());
+            if($(this).prop("type").indexOf("select") >= 0){
+                alert('found one ' + $(this).prop("id") + '_rowid' + ' ' + $(this).find('option:selected').attr('rowid'));
+                //debugger;
+                data1.append($(this).prop("id") + '_rowid', $(this).find('option:selected').attr('rowid'));
+            }
         }
         if ($(this).prop("type") == "file" && orgName != '') {
             if ($(this).get(0).files[0]) {
