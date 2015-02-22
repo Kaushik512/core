@@ -4,7 +4,7 @@ var logger = require('../../lib/logger')(module);
 
 var Schema = mongoose.Schema;
 var LogSchema = new Schema({
-    referenceId: String,
+    referenceId: [String],
     err: Boolean,
     log: String,
     timestamp: Number
@@ -36,8 +36,10 @@ var LogsDao = function() {
     this.getLogsByReferenceId = function(referenceId, timestamp, callback) {
         logger.debug("Enter getLogsByReferenceId ", referenceId, timestamp);
         var queryObj = {
-            referenceId: referenceId
-        };
+            referenceId: {
+                $in: [referenceId]
+            }
+        }
 
         if (timestamp) {
 
