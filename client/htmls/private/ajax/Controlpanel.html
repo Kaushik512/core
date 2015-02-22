@@ -599,6 +599,7 @@ $.get('../instances/'+urlParams.id,function(data){
     // setting up action logs
 
     console.log('loadin logs',data.actionLogs) 
+
     for(var i=0;i<data.actionLogs.length;i++) {
         var $tr = $(document.createElement('tr'));
         var $tdName = $('<td></td>').append(data.actionLogs[i].name);
@@ -1535,12 +1536,14 @@ $('.formSubmit').click(function(e){
     //var $taskListArea = $('.taskListArea').empty();
        $actionhistoryDatatable =  $('#tableactionHistory').DataTable({
             "pagingType": "full_numbers",
-            "aoColumns": [
-                null,{
+            "aaSorting": [],
+            "aoColumns": [{
+                    "bSortable": false
+                },{
                     "bSortable": false
                 },
                 {
-                    "bSortable": false
+                    "bSortable": true
                 },
                 {
                     "bSortable": false
