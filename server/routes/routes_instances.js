@@ -1038,7 +1038,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
+    app.get('/instances/:instanceId/actionLog/:logId', function(req, res) {
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!instances.length) {
+                res.send(400);
+                return;
+            }
+
+            logsDao.getLogsByReferenceId(req.params.logId,null,function(err,data){
+                if(err) {
+                    res.send(500);
+                    return;
+                }
+
+                res.send(data);
+            });
+
+        });
+
+    });
+
     app.post('/instances/bootstrap', function(req, res) {
+
 
     });
 

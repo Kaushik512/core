@@ -1171,9 +1171,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     });
                                                     instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
-
-
-
                                                 }
                                             }
 

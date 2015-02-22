@@ -877,6 +877,24 @@ var InstancesDao = function() {
         return log;
     };
 
+    this.insertOrchestrationActionLog = function(instanceId, runlist, user, timestampStarted, callback) {
+        logger.debug("Enter insertOrchestrationActionLog ", instanceId, runlist, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.TASK.type,
+            name: ACTION_LOG_TYPES.TASK.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
+            actionData: {
+                runlist: runlist
+            }
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
+
 
 };
 
