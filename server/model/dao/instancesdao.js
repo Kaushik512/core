@@ -731,7 +731,6 @@ var InstancesDao = function() {
 
 
     //action logs 
-
     function insertActionLog(instanceId, logData, callback) {
         var actionLog = new ActionLog(logData);
         Instances.update({
@@ -764,6 +763,28 @@ var InstancesDao = function() {
         });
         return actionLog._id;
     }
+
+    this.getActionLog = function(instanceId, logId, callback) {
+        logger.debug("Enter getActionLog ", instanceId, logId);
+        Instances.find({
+            "_id": new ObjectId(instanceId),
+            "actionLogs._id": new ObjectId(logId),
+        }, {
+            "actionLogs": {
+                "$elemMatch": {
+                    "_id": new ObjectId(logId),
+                }
+            }
+        }, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getActionLog ", instanceId, logId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getActionLog ", instanceId, logId);
+            callback(null, data);
+        });
+    };
 
     this.updateActionLog = function(instanceId, logId, success, timestampEnded, callback) {
         logger.debug("Enter updateActionLog ", instanceId, logId, success, timestampEnded);

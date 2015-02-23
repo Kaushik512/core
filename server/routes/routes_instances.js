@@ -616,6 +616,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                     res.send(200, {
                         instanceCurrentState: stoppingInstances[0].CurrentState.Name,
+                        actionLogId: actionLog._id
                     });
 
                     instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
@@ -701,6 +702,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                     res.send(200, {
                         instanceCurrentState: startingInstances[0].CurrentState.Name,
+                        actionLogId: actionLog._id
                     });
 
                     instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
@@ -1038,10 +1040,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 });
             });
         });
-
     });
 
     app.get('/instances/:instanceId/actionLog/:logId', function(req, res) {
+        instancesDao.getActionLog(req.params.instanceId, req.params.logId, function(err, instances) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            console.log(instances);
+            if (!(instances.length && instances[0].actionLog && instances[0].actionLog.length)) {
+                res.send(400);
+                return;
+            } else {
+                res.send(instances[0].actionLog[0]);
+            }
+
+        });
+
+    });
+
+    app.get('/instances/:instanceId/actionLog/:logId/logs', function(req, res) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 res.send(500);

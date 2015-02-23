@@ -566,14 +566,14 @@ $.get('../instances/'+urlParams.id,function(data){
         var $tr = $('<tr></tr>').attr('data-listServiceId',services[i].rowid);
         var $tdName = $('<td></td>').append(name);
         $tr.append($tdName);
-        console.log(services[i]);
+        
         var commandType = services[i].commandtype;
         if(commandType === 'Chef Cookbook/Recepie') {
           var html =  getCookbookActionHtml(services[i].rowid,services[i]);
         } else {
            var html =  getCommandActionHtml(services[i].rowid,services[i]);
         }
-        console.log('here');
+        
         var $tdActions = $('<td></td>').append(html);
         $tr.append($tdActions);
         var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData',services[i]);
@@ -601,87 +601,9 @@ $.get('../instances/'+urlParams.id,function(data){
     }
 
     // setting up action logs
+    addActionLogsToTable(data.actionLogs);
 
-    console.log('loadin logs',data.actionLogs) 
-
-    for(var i=0;i<data.actionLogs.length;i++) {
-        var $tr = $(document.createElement('tr'));
-        var $tdName = $('<td></td>').append(data.actionLogs[i].name);
-        $tr.append($tdName);
-        var status = 'failed';
-        if (!data.actionLogs[i].completed) {
-            status = 'running';
-        } else {
-            if (data.actionLogs[i].success) {
-                status = 'success';
-            }
-        }
-        
-        var $tdStatus = $('<td></td>').append(status);
-        $tr.append($tdStatus);
-
-        var $tdData = $('<td></td>');
-        var actionData = data.actionLogs[i].actionData;
-        if(actionData) {
-          var keys = Object.keys(actionData);
-          for(var j=0;j<keys.length;j++) {
-            if(actionData[keys[j]] && actionData[keys[j]].length) {
-             $tdData.append($('<span></span>').append(keys[j]+' : ').append(actionData[keys[j]]));
-             $tdData.append('<br/>');
-            }
-           
-          }
-        } else {
-              $tdData.append($('<span> - </span>'));
-        }
-        $tr.append($tdData);
-
-
-        var timeString = new Date().setTime(data.actionLogs[i].timeStarted);
-        var dateStarted = new Date(timeString).toLocaleString();//converts to human readable strings
-        var $tdTimeStarted = $('<td></td>').append(dateStarted);
-        $tr.append($tdTimeStarted);
-
-        var $tdUser = $('<td></td>').append(data.actionLogs[i].user);
-        $tr.append($tdUser);
-
-        var $tdMorInfo = $('<td></td>').append($('<a data-toggle="modal" href="javascript:void(0)" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>').data('actionLogId',data.actionLogs[i]._id).click(function(e) {
-            var actionId  = $(this).data('actionLogId');   
-            var $actionLogMoreInfo = $('#actionLogMoreInfo');
-            $.get('/instances/'+data._id+'/actionLog/'+actionId, function(data) {
-                var $table = $('<div></div>').css({
-                  'height': '400px',
-                  'overflow-x': 'hidden',
-                  'overflow-y': 'auto',
-                });
-
-                for (var i = 0; i < data.length; i++) {
-                    var $rowDiv = $('<div class="row"></div>');
-                    var timeString = new Date().setTime(data[i].timestamp);
-                    var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                    $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
-
-                    if (data[i].err) {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>' + data[i].log + '</span>'));
-                    } else {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
-                    }
-
-                    $table.append($rowDiv);
-                    $table.append('<hr/>');
-
-                }
-
-                $actionLogMoreInfo.find('.modal-body').empty().append($table);  
-                $actionLogMoreInfo.modal('show');
-
-            });
-        }));
-
-       $tr.append($tdMorInfo);
-       $actionhistoryDatatable.row.add($tr).draw();
-      
-    }
+    
 
   
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
@@ -897,6 +819,13 @@ $.get('../instances/'+urlParams.id,function(data){
         
         $parent.find('.moreInfo').trigger('click');
         $.get(url,function(data){
+
+
+            if(data.actionLogId) {
+              $.get('../instances/'+instanceId+'/actionLog/'+data.actionLogId,function(actionLog){
+                  console.log(actionLog);
+              });
+            }
             
             console.log($parent.length,$parent);
 
@@ -947,7 +876,9 @@ $.get('../instances/'+urlParams.id,function(data){
                                       $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
                                       $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
                                     }
-                            } 
+                            }
+
+
                         }   
                     })
                 }, delay);                
@@ -961,7 +892,7 @@ $.get('../instances/'+urlParams.id,function(data){
         if($(this).hasClass('isStopedInstance')){
           return false;
         }
-         var $this = $(this);
+        var $this = $(this);
          var $parent = $('.domain-roles-caption');
          var instanceId = $parent.attr('data-instanceId');
          var chefServerId = $parent.attr('data-chefServerId');
@@ -1291,6 +1222,94 @@ function addServiceToDom(serviceData) {
 
   $servicesDatatable.row.add($tr).draw(); 
 
+}
+
+function addActionLogRow(actionLog) {
+    var $tr = $(document.createElement('tr'));
+    var $tdName = $('<td></td>').append(actionLog.name);
+    $tr.append($tdName);
+    var status = 'failed';
+    if (!actionLog.completed) {
+        status = 'running';
+    } else {
+        if (actionLog.success) {
+            status = 'success';
+        }
+    }
+
+    var $tdStatus = $('<td></td>').append(status);
+    $tr.append($tdStatus);
+
+    var $tdData = $('<td></td>');
+    var actionData = actionLog.actionData;
+    if (actionData) {
+        var keys = Object.keys(actionData);
+        for (var j = 0; j < keys.length; j++) {
+            if (actionData[keys[j]] && actionData[keys[j]].length) {
+                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(actionData[keys[j]]));
+                $tdData.append('<br/>');
+            }
+        }
+    } else {
+        $tdData.append($('<span> - </span>'));
+    }
+    $tr.append($tdData);
+
+
+    var timeString = new Date().setTime(actionLog.timeStarted);
+    var dateStarted = new Date(timeString).toLocaleString(); //converts to human readable strings
+    var $tdTimeStarted = $('<td></td>').append(dateStarted);
+    $tr.append($tdTimeStarted);
+
+    var $tdUser = $('<td></td>').append(actionLog.user);
+    $tr.append($tdUser);
+
+    var $tdMorInfo = $('<td></td>').append($('<a data-toggle="modal" href="javascript:void(0)" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>').data('actionLogId', actionLog._id).click(function(e) {
+        var actionId = $(this).data('actionLogId');
+        var $actionLogMoreInfo = $('#actionLogMoreInfo');
+        $.get('/instances/' + urlParams['id'] + '/actionLog/' + actionId+'/logs', function(data) {
+            var $table = $('<div></div>').css({
+                'height': '400px',
+                'overflow-x': 'hidden',
+                'overflow-y': 'auto',
+            });
+
+            for (var i = 0; i < data.length; i++) {
+                var $rowDiv = $('<div class="row"></div>');
+                var timeString = new Date().setTime(data[i].timestamp);
+                var date = new Date(timeString).toLocaleString(); //converts to human readable strings
+                $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                if (data[i].err) {
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>' + data[i].log + '</span>'));
+                } else {
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                }
+
+                $table.append($rowDiv);
+                $table.append('<hr/>');
+
+            }
+
+            $actionLogMoreInfo.find('.modal-body').empty().append($table);
+            $actionLogMoreInfo.modal('show');
+
+        });
+    }));
+
+    $tr.append($tdMorInfo);
+    $actionhistoryDatatable.row.add($tr).draw();
+}
+
+function addActionLogsToTable(actionLogs) {
+    console.log('loadin logs',actionLogs);
+    if(!(actionLogs && actionLogs.length)) {
+      return;
+    }
+
+    for (var i = 0; i < actionLogs.length; i++) {
+        addActionLogRow(actionLogs[i]);
+    }
 }
 
 $('.btnSaveService').click(function(e) {
