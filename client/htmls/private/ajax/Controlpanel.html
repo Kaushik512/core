@@ -53,7 +53,7 @@
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
                                         <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
-                                          <img src="img/galleryIcons/sshIcon.png" style="height:28px;width:28px">
+                                          <!-- <img src="img/galleryIcons/sshIcon.png" style="height:28px;width:28px"> -->
                                         </a>
                                       </div>
                                     </div>
@@ -517,9 +517,33 @@ var urlParams ={};
      
 })();
 
+function enableInstanceActionStartBtn(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
+function enableInstanceActionStopBtn(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
+}
+function disableInstanceActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
 
 var logTimeout;
-   var stateTimeout;
+var stateTimeout;
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
@@ -691,33 +715,16 @@ $.get('../instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
-
   if (data.instanceState == 'stopped'){
-    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
-    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
-    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').addClass('isStopedInstance');
-    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').addClass('isStopedInstance');
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').addClass('isStopedInstance');
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').removeClass('isStopedInstance');
-    //Opacity Settings
-    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').css('opacity','0.5');
-    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').css({'opacity':'0.5'});
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').css({'opacity':'0.5'});
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').css({'opacity':'1.0'});
+    enableInstanceActionStopBtn(data._id);
   }
-    if (data.instanceState == 'running'){
-      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
-      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
-      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').removeClass('isStopedInstance');
-      $('.componentlistContainer.started').parent().find('.sshShellBtn').removeClass('isStopedInstance');
-      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').removeClass('isStopedInstance');
-      $('.componentlistContainer.started').parent().find('.actionbuttonStart').addClass('isStopedInstance');
-      //Opacity Settings
-      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').css('opacity','1.0');
-      $('.componentlistContainer.started').parent().find('.sshShellBtn').css({'opacity':'1.0'});
-      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
-      $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
+  if (data.instanceState == 'running'){
+    enableInstanceActionStartBtn(data._id);
   }
+  if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
+    disableInstanceActionBtns(data._id);
+  }
+  
   var $backRunlistContainer = $('.cardBackRunlistContaner');
   for (var j = 0; j < data.runlist.length; j++) {
         var $divComponentItem;
@@ -793,7 +800,7 @@ $.get('../instances/'+urlParams.id,function(data){
         pollLogs(lastTimestamp,0,true);
         // $.get('../instances/' + data.id, function(data) {
         //     //$('#tabInstanceStatus').hide();
-        //     addInstanceToDOM(data);
+        //     addInstanceToDaddInstanceToDOMOMaddInstanceToDOM(data);
         // });
     };
 
@@ -896,32 +903,16 @@ $.get('../instances/'+urlParams.id,function(data){
                                  var cssClassed = getCssClassFromStatus(data.instanceState); 
                                  $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                  $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+
                                  if (data.instanceState == 'stopped'){
-                                    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
-                                    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
-                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').addClass('isStopedInstance');
-                                    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').addClass('isStopedInstance');
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').addClass('isStopedInstance');
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').removeClass('isStopedInstance');
-                                    //Opacity Settings
-                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').css('opacity','0.5');
-                                    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').css({'opacity':'0.5'});
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').css({'opacity':'0.5'});
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').css({'opacity':'1.0'});
-                                    }
-                                    if (data.instanceState == 'running'){
-                                      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
-                                      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
-                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').removeClass('isStopedInstance');
-                                      $('.componentlistContainer.started').parent().find('.sshShellBtn').removeClass('isStopedInstance');
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').removeClass('isStopedInstance');
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonStart').addClass('isStopedInstance');
-                                      //Opacity Settings
-                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').css('opacity','1.0');
-                                      $('.componentlistContainer.started').parent().find('.sshShellBtn').css({'opacity':'1.0'});
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
-                                    }
+                                  enableInstanceActionStopBtn(data._id);
+                                }
+                                if (data.instanceState == 'running'){
+                                  enableInstanceActionStartBtn(data._id);
+                                }
+                                if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
+                                  disableInstanceActionBtns(data._id);
+                                }
                             } 
                         }   
                     })

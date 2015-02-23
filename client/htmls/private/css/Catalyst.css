@@ -1,3 +1,46 @@
+.sshShellBtn{
+    background-image:url('../img/galleryIcons/sshIcon.png');
+    background-repeat:no-repeat;
+    float: left;
+    height:28px;
+    width:32px;
+}
+.actionbuttonStartdisable{
+    background-image:url('../img/galleryIcons/rsz_start_icon.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    width: 100%;
+    margin-top:0px;
+}
+.sshIcondisable{
+    background-image:url('../img/galleryIcons/rsz_sshicon.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 28px;
+    width: 32px;
+}
+.actionbuttonChefClientRundisable{
+    background-image: url("../img/galleryIcons/rsz_chefimport.png");
+    background-repeat: no-repeat;
+    float: left;
+    height: 28px;
+    margin-left: 4px;
+    width: 28px;
+}
+.actionbuttonShutdowndisable{
+    background-image:url('../img/galleryIcons/rsz_shut_down.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    width: 100%;
+}
+.opacityDisable{
+    opacity: 0.5;
+}
+.opacityEnable{
+    opacity: 1.0;
+}
 .margin-top40{
 	margin-top: 40px !important;
 }
