@@ -45,25 +45,56 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 for (var i = 0; i < instances.length; i++) {
                     (function(instance) {
+                        var timestampStarted = new Date().getTime();
+
+                        var actionLog = instancesDao.insertOrchestrationActionLog(instance._id, task.runlist, req.session.user.cn, timestampStarted);
+                        var logsReferenceIds = [instance._id, actionLog._id];
                         if (!instance.instanceIP) {
+                            var timestampEnded = new Date().getTime();
+                            logsDao.insertLog({
+                                referenceId: logsReferenceIds,
+                                err: true,
+                                log: "Instance IP is not defined. Chef Client run failed",
+                                timestamp: timestampEnded
+                            });
+                            instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                             return;
                         }
                         configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                             if (err) {
+                                var timestampEnded = new Date().getTime();
+                                logsDao.insertLog({
+                                    referenceId: logsReferenceIds,
+                                    err: true,
+                                    log: "Chef Data Corrupted. Chef Client run failed",
+                                    timestamp: timestampEnded
+                                });
+                                instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+
                                 return;
                             }
                             if (!chefDetails) {
+                                var timestampEnded = new Date().getTime();
+                                logsDao.insertLog({
+                                    referenceId: logsReferenceIds,
+                                    err: true,
+                                    log: "Chef Data Corrupted. Chef Client run failed",
+                                    timestamp: timestampEnded
+                                });
+                                instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                                 return;
                             }
                             //decrypting pem file
                             credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                                 if (err) {
+                                    var timestampEnded = new Date().getTime();
                                     logsDao.insertLog({
-                                        referenceId: instance.id,
+                                        referenceId: logsReferenceIds,
                                         err: true,
                                         log: "Unable to decrypt pem file. Chef run failed",
-                                        timestamp: new Date().getTime()
+                                        timestamp: timestampEnded
                                     });
+                                    instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                                     return;
                                 }
                                 var chef = new Chef({
@@ -100,70 +131,74 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         });
                                     }
                                     if (err) {
+                                        var timestampEnded = new Date().getTime();
                                         logsDao.insertLog({
-                                            referenceId: instance._id,
+                                            referenceId: logsReferenceIds,
                                             err: true,
                                             log: 'Unable to run chef-client',
-                                            timestamp: new Date().getTime()
+                                            timestamp: timestampEnded
                                         });
+                                        instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                                         return;
                                     }
                                     console.log("knife ret code", retCode);
                                     if (retCode == 0) {
+                                        var timestampEnded = new Date().getTime();
                                         logsDao.insertLog({
-                                            referenceId: instance._id,
+                                            referenceId: logsReferenceIds,
                                             err: false,
                                             log: 'Task execution success',
-                                            timestamp: new Date().getTime()
+                                            timestamp: timestampEnded
                                         });
+                                        instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
                                     } else {
                                         if (retCode === -5000) {
                                             logsDao.insertLog({
-                                                referenceId:  instance._id,
+                                                referenceId: logsReferenceIds,
                                                 err: true,
                                                 log: 'Host Unreachable',
                                                 timestamp: new Date().getTime()
                                             });
                                         } else if (retCode === -5001) {
                                             logsDao.insertLog({
-                                                referenceId:  instance._id,
+                                                referenceId: logsReferenceIds,
                                                 err: true,
                                                 log: 'Invalid credentials',
                                                 timestamp: new Date().getTime()
                                             });
                                         } else {
                                             logsDao.insertLog({
-                                                referenceId:  instance._id,
+                                                referenceId: logsReferenceIds,
                                                 err: true,
-                                                log: 'Unknown error occured. ret code = '+retCode,
+                                                log: 'Unknown error occured. ret code = ' + retCode,
                                                 timestamp: new Date().getTime()
                                             });
                                         }
+                                        var timestampEnded = new Date().getTime();
                                         logsDao.insertLog({
-                                            referenceId: instance._id,
+                                            referenceId: logsReferenceIds,
                                             err: true,
                                             log: 'Error in running chef-client',
-                                            timestamp: new Date().getTime()
+                                            timestamp: timestampEnded
                                         });
+                                        instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                                     }
                                 }, function(stdOutData) {
                                     logsDao.insertLog({
-                                        referenceId: instance._id,
+                                        referenceId: logsReferenceIds,
                                         err: false,
                                         log: stdOutData.toString('ascii'),
                                         timestamp: new Date().getTime()
                                     });
-
                                 }, function(stdOutErr) {
                                     logsDao.insertLog({
-                                        referenceId: instance._id,
+                                        referenceId: logsReferenceIds,
                                         err: true,
                                         log: stdOutErr.toString('ascii'),
                                         timestamp: new Date().getTime()
                                     });
                                 });
                             });
-
 
                         });
 

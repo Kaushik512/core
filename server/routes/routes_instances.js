@@ -71,23 +71,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     //updateInstanceIp
     app.get('/instances/updateappurl/:instanceId/:appurlid/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
-        if(req.params.appurlid == '0')
-        instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            res.end('OK');
-        });
-        else
-        {
+        if (req.params.appurlid == '0')
+            instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.end('OK');
+            });
+        else {
             instancesDao.updateInstanceAppUrl1(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            res.end('OK');
-        });
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.end('OK');
+            });
         }
     });
 
@@ -329,7 +328,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         //if retCode == 0 //update docker status into instacne
                         instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                             console.log('Instance Docker Status set to Success');
-                            
+
                         });
 
 
@@ -383,24 +382,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             if (data.length) {
                 var instance = data[0];
+                var actionLog = instancesDao.insertChefClientRunActionLog(instance.id, req.body.runlist, req.session.user.cn, new Date().getTime());
+                var logReferenceIds = [instance.id, actionLog._id];
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: instance.id,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: "Unable to get chef data. Chef run failed",
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
                         res.send(200);
                         return;
                     }
                     if (!chefDetails) {
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: instance.id,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: "Chef data in null. Chef run failed",
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
                         res.send(200);
                         return;
                     }
@@ -408,12 +414,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     //decrypting pem file
                     credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                         if (err) {
+                            var timestampEnded = new Date().getTime();
                             logsDao.insertLog({
-                                referenceId: instance.id,
+                                referenceId: logReferenceIds,
                                 err: true,
                                 log: "Unable to decrypt pem file. Chef run failed",
-                                timestamp: new Date().getTime()
+                                timestamp: timestampEnded
                             });
+                            instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
                             return;
                         }
 
@@ -440,8 +448,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         } else {
                             chefClientOptions.password = decryptedCredentials.password;
                         }
+
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: false,
                             log: 'Running chef-client',
                             timestamp: new Date().getTime()
@@ -460,12 +469,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             if (err) {
                                 //console.log(err);
+                                var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
+                                    referenceId: logReferenceIds,
                                     err: true,
-                                    log: 'Unable to run chef-client',
-                                    timestamp: new Date().getTime()
+                                    log: "Unable to run chef-client",
+                                    timestamp: timestampEnded
                                 });
+                                instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
                                 return;
                             }
                             console.log("knife ret code", retCode);
@@ -475,12 +486,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     if (err) {
                                         return;
                                     }
+
+                                    var timestampEnded = new Date().getTime();
                                     logsDao.insertLog({
-                                        referenceId: req.params.instanceId,
+                                        referenceId: logReferenceIds,
                                         err: false,
                                         log: 'instance runlist updated',
-                                        timestamp: new Date().getTime()
+                                        timestamp: timestampEnded
                                     });
+                                    instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
 
                                     //Checking docker status and updating
                                     var _docker = new Docker();
@@ -505,38 +519,41 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             } else {
                                 if (retCode === -5000) {
                                     logsDao.insertLog({
-                                        referenceId: req.params.instanceId,
+                                        referenceId: logReferenceIds,
                                         err: true,
                                         log: 'Host Unreachable',
                                         timestamp: new Date().getTime()
                                     });
                                 } else if (retCode === -5001) {
                                     logsDao.insertLog({
-                                        referenceId: req.params.instanceId,
+                                        referenceId: logReferenceIds,
                                         err: true,
                                         log: 'Invalid credentials',
                                         timestamp: new Date().getTime()
                                     });
+
                                 } else {
                                     logsDao.insertLog({
-                                        referenceId: req.params.instanceId,
+                                        referenceId: logReferenceIds,
                                         err: true,
-                                        log: 'Unknown error occured. ret code = '+retCode,
+                                        log: 'Unknown error occured. ret code = ' + retCode,
                                         timestamp: new Date().getTime()
                                     });
+
                                 }
+                                var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
-                                    referenceId: req.params.instanceId,
+                                    referenceId: logReferenceIds,
                                     err: true,
                                     log: 'Unable to run chef-client',
-                                    timestamp: new Date().getTime()
+                                    timestamp: timestampEnded
                                 });
-
+                                instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
                                 return;
                             }
                         }, function(stdOutData) {
                             logsDao.insertLog({
-                                referenceId: req.params.instanceId,
+                                referenceId: logReferenceIds,
                                 err: false,
                                 log: stdOutData.toString('ascii'),
                                 timestamp: new Date().getTime()
@@ -544,7 +561,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                         }, function(stdOutErr) {
                             logsDao.insertLog({
-                                referenceId: req.params.instanceId,
+                                referenceId: logReferenceIds,
                                 err: true,
                                 log: stdOutErr.toString('ascii'),
                                 timestamp: new Date().getTime()
@@ -567,24 +584,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
+                var timestampStarted = new Date().getTime();
 
+                var actionLog = instancesDao.insertStopActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                var logReferenceIds = [req.params.instanceId];
+                if (actionLog) {
+                    logReferenceIds.push(actionLog._id);
+                }
                 logsDao.insertLog({
-                    referenceId: req.params.instanceId,
+                    referenceId: logReferenceIds,
                     err: false,
                     log: "Instance Stopping",
-                    timestamp: new Date().getTime()
+                    timestamp: timestampStarted
                 });
 
                 var settings = appConfig.aws;
                 var ec2 = new EC2(settings);
                 ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
                     if (err) {
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: "Unable to stop instance",
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                         res.send(500);
                         return;
                     }
@@ -600,9 +626,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         console.log('instance state upadated');
                     });
 
-
-
-
                 }, function(err, state) {
                     if (err) {
                         return;
@@ -614,23 +637,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         console.log('instance state upadated');
                     });
+                    var timestampEnded = new Date().getTime();
 
 
                     logsDao.insertLog({
-                        referenceId: req.params.instanceId,
+                        referenceId: logReferenceIds,
                         err: false,
                         log: "Instance Stopped",
-                        timestamp: new Date().getTime()
-                    }, function(err, data) {
-                        if (err) {
-                            console.log('unable to update log');
-                            return;
-                        }
-                        console.log('log updated');
+                        timestamp: timestampEnded
                     });
-
+                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
 
                 });
+
 
 
 
@@ -648,25 +667,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (data.length) {
+                var timestampStarted = new Date().getTime();
+
+                var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                var logReferenceIds = [req.params.instanceId];
+                if (actionLog) {
+                    logReferenceIds.push(actionLog._id);
+                }
+
 
                 logsDao.insertLog({
-                    referenceId: req.params.instanceId,
+                    referenceId: logReferenceIds,
                     err: false,
                     log: "Instance Starting",
-                    timestamp: new Date().getTime()
+                    timestamp: timestampStarted
                 });
 
                 var settings = appConfig.aws;
                 var ec2 = new EC2(settings);
                 ec2.startInstance([data[0].platformId], function(err, startingInstances) {
                     if (err) {
-
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: "Unable to start instance",
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                         res.send(500);
                         return;
                     }
@@ -693,13 +722,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         console.log('instance state upadated');
                     });
-
+                    var timestampEnded = new Date().getTime()
                     logsDao.insertLog({
-                        referenceId: req.params.instanceId,
+                        referenceId: logReferenceIds,
                         err: false,
                         log: "Instance Started",
-                        timestamp: new Date().getTime()
+                        timestamp: timestampEnded
                     });
+                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
 
                     ec2.describeInstances([data[0].platformId], function(err, data) {
                         if (err) {
@@ -718,8 +749,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                     });
                 });
-
-
 
             } else {
                 res.send(404);
@@ -813,60 +842,75 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 var serviceData = services[0];
                 console.log(serviceData);
+                var timestampStarted = new Date().getTime();
+                var actionLog = instancesDao.insertServiceActionLog(req.params.instanceId, {
+                    serviceName: serviceData.servicename,
+                    type: req.params.actionType
+                }, req.session.user.cn, timestampStarted);
+                var logReferenceIds = [req.params.instanceId, actionLog._id];
 
                 function onComplete(err, retCode) {
                     if (err) {
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: 'Unable to run services',
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                         return;
                     }
                     console.log("ret code", retCode);
+
                     if (retCode == 0) {
+                        var timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: false,
                             log: 'Service run success',
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
                     } else {
+                        var timestampEnded = new Date().getTime();
                         if (retCode === -5000) {
                             logsDao.insertLog({
-                                referenceId: req.params.instanceId,
+                                referenceId: logReferenceIds,
                                 err: true,
                                 log: 'Host Unreachable',
-                                timestamp: new Date().getTime()
+                                timestamp: timestampEnded
                             });
                         } else if (retCode === -5001) {
                             logsDao.insertLog({
-                                referenceId: req.params.instanceId,
+                                referenceId: logReferenceIds,
                                 err: true,
                                 log: 'Invalid credentials',
-                                timestamp: new Date().getTime()
+                                timestamp: timestampEnded
                             });
                         } else {
                             logsDao.insertLog({
-                                referenceId: req.params.instanceId,
+                                referenceId: logReferenceIds,
                                 err: true,
-                                log: 'Unknown error occured. ret code = '+retCode,
-                                timestamp: new Date().getTime()
+                                log: 'Unknown error occured. ret code = ' + retCode,
+                                timestamp: timestampEnded
                             });
                         }
+                        timestampEnded = new Date().getTime();
                         logsDao.insertLog({
-                            referenceId: req.params.instanceId,
+                            referenceId: logReferenceIds,
                             err: true,
                             log: 'Unable to run services',
-                            timestamp: new Date().getTime()
+                            timestamp: timestampEnded
                         });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+
                     }
                 }
 
                 function onStdOut(stdOutData) {
                     logsDao.insertLog({
-                        referenceId: req.params.instanceId,
+                        referenceId: logReferenceIds,
                         err: false,
                         log: stdOutData.toString('ascii'),
                         timestamp: new Date().getTime()
@@ -875,7 +919,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 function onStdErr(stdOutErr) {
                     logsDao.insertLog({
-                        referenceId: req.params.instanceId,
+                        referenceId: logReferenceIds,
                         err: true,
                         log: stdOutErr.toString('ascii'),
                         timestamp: new Date().getTime()
@@ -894,12 +938,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             //decrypting pem file
                             if (err) {
+                                var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
-                                    referenceId: instance.id,
+                                    referenceId: logReferenceIds,
                                     err: true,
                                     log: "Unable to decrypt pem file. Chef run failed",
-                                    timestamp: new Date().getTime()
+                                    timestamp: timestampEnded
                                 });
+                                instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                                 return;
                             }
                             var chef = new Chef({
@@ -908,7 +954,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 chefUserPemFile: chefDetails.userpemfile,
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
-
                             });
                             console.log('instance IP ==>', instance.instanceIP);
                             var actionType = req.params.actionType;
@@ -996,7 +1041,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
+    app.get('/instances/:instanceId/actionLog/:logId', function(req, res) {
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!instances.length) {
+                res.send(400);
+                return;
+            }
+
+            logsDao.getLogsByReferenceId(req.params.logId, null, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+
+                res.send(data);
+            });
+
+        });
+
+    });
+
     app.post('/instances/bootstrap', function(req, res) {
+
 
     });
 
