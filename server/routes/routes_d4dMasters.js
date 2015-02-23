@@ -387,10 +387,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                         
                                         d4dMasterJson[flds[0]] = names; //configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
-                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                        console.log('jobj[flds[0]]',d4dMasterJson[flds[0]],flds[0],k1);
+                                       
+                                       // console.log('jobj[flds[0]]',d4dMasterJson[flds[0]],flds[0],k1);
                                     }
-                                    console.log("key***:",k1," val***:",jobj[k1]);
+                                    //console.log("key***:",k1," val***:",jobj[k1]);
                                    
                                 }
                                 //console.log("sent response" + JSON.stringify(d4dMasterJson));

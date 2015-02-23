@@ -242,7 +242,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 var prjids = docprojs.map(function(docprojs1) {
                                     return docprojs1.rowid;
                                 });
-
+                                console.log('Projects found:' + prjids.length);
                                 for (var _i = 0; _i < orgTree.length; _i++) {
                                     console.log('Orgnames:' + orgTree[_i]['name']);
                                     for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
@@ -250,7 +250,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         console.log('docprojs.length:' + docprojs.length);
                                         for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
-                                            if (docprojs[_bg]['orgname'] == orgTree[_i]['name'] && docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']) {
+                                            if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
                                                 console.log('hit');
                                                 if (orgTree[_i]['businessGroups'][__i]['projects'].length <= 0) {
                                                     for (var _prj = 0; _prj < docprojs.length; _prj++) {
@@ -267,7 +267,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             if (envs[nt] != '') {
                                                                 envs_.push({
                                                                     text: envname,
-                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['name'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['name'] + '&projid=' + docprojs[_prj]['projectname'] + '&envid=' + envs[nt],
+                                                                    href: '#ajax/Dev.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'] + '&envid=' + envs[nt],
                                                                     orgname: orgTree[_i]['name'],
                                                                     rowid: envs[nt],
                                                                     projname: docprojs[_prj]['projectname'],
