@@ -91,6 +91,7 @@ var d4dMastersProjects = new mongoose.Schema(
 	productgroupname: {type:String, trim:true},
 	productgroupname_rowid: {type:String, trim:true},
 	environmentname: {type:String, trim:true},
+	environmentname_rowid: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );

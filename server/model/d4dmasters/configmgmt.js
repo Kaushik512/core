@@ -669,10 +669,11 @@ function Configmgmt() {
             { 
                 if(k2 == rowid)
                     toreturn = jobj[k1][k2];
-              //  console.log("key:",k2," val:",jobj[k1][k2]);
+                console.log("key##:",k2," val:##",jobj[k1][k2]);
             }
 
         }
+        console.log('returned convertRowIDToValue',toreturn,rowid);
         return(toreturn);
     };
 
@@ -725,7 +726,12 @@ function Configmgmt() {
                     }
                     d4dModelNew.d4dModelMastersEnvironments.find({id:"3"},function(err,envdata){
                         if(envdata){
+
                             var envdata_ = JSON.parse(JSON.stringify(envdata));
+                             if(envdata_.length <= 0){
+                                console.log('rowidval' + JSON.stringify(rowidval));
+                                callback(null,rowidval); 
+                             }
                                 var i = 0;
                                 envdata_.forEach(function(k,v){
                                    // rowidval[k['rowid']] = k['environmentname'];

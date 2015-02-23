@@ -163,7 +163,7 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnewk/" + id,
+        url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
                 // alert(data.toString());  
             // debugger;
@@ -183,7 +183,7 @@ if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnewk/" + id,
+        url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
                 // alert(data.toString());  
             // debugger;
@@ -203,7 +203,7 @@ else{
         dataType: "text",
 
         async: false,
-        url: serviceURL + "readmasterjsonnewk/" + id,
+        url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
             //      alert(data.toString());  
             // debugger;
@@ -828,7 +828,7 @@ function readform(formID) {
                             var targetCtrl = $('#' + item);
                             targetCtrl.html('');
                             var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
-                            alert(JSON.stringify(opts));
+                            //alert(JSON.stringify(opts));
                             $.each(eval(opts), function(j, itm) {
                                 var itmrowid = '';
                                 if(itm.indexOf('##') > 0)
@@ -1554,7 +1554,7 @@ function saveform(formID,operationTypes) {
         if (($(this).prop("type") == "password" || $(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '') {
             data1.append($(this).prop("id"), $(this).val());
             if($(this).prop("type").indexOf("select") >= 0){
-                alert('found one ' + $(this).prop("id") + '_rowid' + ' ' + $(this).find('option:selected').attr('rowid'));
+                //alert('found one ' + $(this).prop("id") + '_rowid' + ' ' + $(this).find('option:selected').attr('rowid'));
                 //debugger;
                 data1.append($(this).prop("id") + '_rowid', $(this).find('option:selected').attr('rowid'));
             }
@@ -1581,13 +1581,18 @@ function saveform(formID,operationTypes) {
     $('div[cdata="catalyst"]').each(function() {
         var v = [];
         var k = '';
+        var k_rowid = '';
+        var v_rowid = [];
+
         k = $(this).attr("id");
+        k_rowid = $(this).attr("id") + "_rowid";
        // alert('id:' + k);
         $(this).find("input").each(function() {
            // alert($(this).val());
             if ($(this).is(":checked")) {
                 //    v.push("\"" + $(this).val() + "\"");
                 v.push($(this).val());
+                v_rowid.push($(this).attr('rowid'));
             }
         });
         //bg-success
@@ -1615,6 +1620,7 @@ function saveform(formID,operationTypes) {
             //data1.append(k,"[" + v.toString() + "]");
            // alert(v);
             data1.append(k, v);
+            data1.append(k_rowid, v_rowid);
         }
     });
 
