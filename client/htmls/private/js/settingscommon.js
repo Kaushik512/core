@@ -93,7 +93,7 @@ function readMasterJson(id) {
     // debugger;
    //alert(url);
 if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
-    // alert('in 1');
+    //alert('in 1');
     $.ajax({
         type: "get",
         dataType: "text",
@@ -103,6 +103,7 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
                 // alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
+            alert(JSON.stringify(d4ddata));
         },
         failure: function(data) {
             // debugger;
@@ -165,7 +166,7 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
         async: false,
         url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
-                // alert(data.toString());  
+           // alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
         },
@@ -379,6 +380,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         // alert(JSON.stringify(formData));
         //Reading row to get schema
         formData = d4ddata;
+        //alert(JSON.stringify(formData));
 
         var formSchema = null;
         $.each(d4ddata, function(i, item) { 
@@ -1430,6 +1432,7 @@ function readform(formID) {
         // alert(JSON.stringify(formData));
         //Reading row to get schema
         formData = d4ddata;
+        alert(JSON.stringify(formData));
 
         var formSchema = null;
         $.each(d4ddata, function(i, item) { 

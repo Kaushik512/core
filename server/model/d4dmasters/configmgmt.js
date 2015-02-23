@@ -724,6 +724,20 @@ function Configmgmt() {
                             });
                          
                     }
+                    d4dModelNew.d4dModelMastersConfigManagement.find({id:"10"},function(err,cfgdata){
+                    if(cfgdata){
+                        var cfgdata_ = JSON.parse(JSON.stringify(cfgdata));
+                            
+                            cfgdata_.forEach(function(k,v){
+                               // rowidval[k['rowid']] = k['projectname'];
+                               // rowidval += '{\"' +k['rowid'] + '\" : \"' + k['projectname'] + '\"}';
+                               // console.log(k['rowid'], k['projectname']);
+                               var rid = {};
+                               rid[k['rowid']] = k['configname'];
+                               rowidval.push(rid);
+                            });
+                         
+                    }
                     d4dModelNew.d4dModelMastersEnvironments.find({id:"3"},function(err,envdata){
                         if(envdata){
 
@@ -754,9 +768,9 @@ function Configmgmt() {
                             console.log('this called');
                             callback(null,rowidval);
                         }
-
                     }); //env
-                }); // proj
+                }); //config management
+               }); // proj
             }); //bg
         }); //org
     };

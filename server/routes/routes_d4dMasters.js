@@ -470,6 +470,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 console.log("sent response" + JSON.stringify(d4dMasterJson));
                                 res.end(JSON.stringify(d4dMasterJson));
                             }
+                            var counter = 0;
                             _keys.forEach(function(k,v){
                                 //var __keys = Object.keys(d4dMasterJson[k]);
                                
@@ -510,11 +511,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
-                                console.log("sent response 484" + JSON.stringify(d4dMasterJson));
-                                res.end(JSON.stringify(d4dMasterJson));
-                                
-                                console.log(k,d4dMasterJson[k],v);
+                                if(counter >= _keys.length - 1){
+                                    console.log("sent response 484" + JSON.stringify(d4dMasterJson));
+                                    res.end(JSON.stringify(d4dMasterJson));
+                                    console.log(k,d4dMasterJson[k],v);
+                                }
+                                counter++;
                             });
+                            
                         
                     });
                 }
@@ -1050,7 +1054,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var chefRepoPath = settings.chefReposLocation;
 
         console.log('Type of org : ' + typeof req.params.orgname);
-
+       console.log('Org ID: ' + req.params.orgid);
         console.log(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
         console.log('Orgname : #' + req.params.orgname.toString() + '#' + (req.params.orgname == ''));
 
@@ -1063,7 +1067,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 req.params.orgname = "catalyst_files";
             }
         }
-        var path = chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1);
+        var path = chefRepoPath + req.params.orgid + folderpath.substring(0, folderpath.length - 1);
 
 
 
@@ -1102,18 +1106,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
                 } else {
                     if (folderpath.indexOf('.chef') > 0) { //identifying if its a chef config file
-                        console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgname + folderpath + fil.name);
-                        fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + fil.name, data);
+                        console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgid + folderpath + fil.name);
+                        fs.writeFileSync(chefRepoPath + req.params.orgid + folderpath + fil.name, data);
                     } else //not a a chef config file
                     {
                         console.log("Folderpath rcvd:" + folderpath);
 
                         if (fil.name == saveAsfileName) {
-                            console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+                            console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgid + '/' + suffix + controlName + '__' + fil.name);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
 
                         } else {
-                            console.log('this is where file gets saved as (with folderpath) fixed name: ' + chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName);
+                            console.log('this is where file gets saved as (with folderpath) fixed name: ' + chefRepoPath + req.params.orgid + folderpath + '/' + saveAsfileName);
                             //fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
                         }
@@ -1482,6 +1486,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //  console.log("Edited Row:" + rowtoedit);
 
                     var frmkeys = Object.keys(bodyJson);
+                    var orgid = '';
+                    if(frmkeys.indexOf('orgname_rowid') >= 0){ //
+                        req.params['orgid'] = bodyJson['orgname_rowid'];
+                    }
 
                     //var frmvals = Object.keys(bodyJson);
                     var rowFLD = [];
