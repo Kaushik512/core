@@ -843,7 +843,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 var serviceData = services[0];
                 console.log(serviceData);
                 var timestampStarted = new Date().getTime();
-                var actionLog = instancesDao.insertServiceActionLog(req.params.instanceId, serviceData, req.session.user.cn, timestampStarted);
+                var actionLog = instancesDao.insertServiceActionLog(req.params.instanceId, {
+                    serviceName: serviceData.servicename,
+                    type: req.params.actionType
+                }, req.session.user.cn, timestampStarted);
                 var logReferenceIds = [req.params.instanceId, actionLog._id];
 
                 function onComplete(err, retCode) {
@@ -1049,8 +1052,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
 
-            logsDao.getLogsByReferenceId(req.params.logId,null,function(err,data){
-                if(err) {
+            logsDao.getLogsByReferenceId(req.params.logId, null, function(err, data) {
+                if (err) {
                     res.send(500);
                     return;
                 }

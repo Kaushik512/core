@@ -311,6 +311,10 @@
                                 <strong style="color:#3a87ad">Status</strong>
                               </th>
                               <th style="font-size: 13px;padding-left:4%">
+    
+                                <strong style="color:#3a87ad">Data</strong>
+                              </th>
+                              <th style="font-size: 13px;padding-left:4%">
                                 
                                 <strong style="color:#3a87ad">Timestamp</strong>
                               </th>
@@ -605,12 +609,33 @@ $.get('../instances/'+urlParams.id,function(data){
         var $tdName = $('<td></td>').append(data.actionLogs[i].name);
         $tr.append($tdName);
         var status = 'failed';
-        if (data.actionLogs[i].success) {
-            status = 'success';
+        if (!data.actionLogs[i].completed) {
+            status = 'running';
+        } else {
+            if (data.actionLogs[i].success) {
+                status = 'success';
+            }
         }
-
+        
         var $tdStatus = $('<td></td>').append(status);
         $tr.append($tdStatus);
+
+        var $tdData = $('<td></td>');
+        var actionData = data.actionLogs[i].actionData;
+        if(actionData) {
+          var keys = Object.keys(actionData);
+          for(var j=0;j<keys.length;j++) {
+            if(actionData[keys[j]] && actionData[keys[j]].length) {
+             $tdData.append($('<span></span>').append(keys[j]+' : ').append(actionData[keys[j]]));
+             $tdData.append('<br/>');
+            }
+           
+          }
+        } else {
+              $tdData.append($('<span> - </span>'));
+        }
+        $tr.append($tdData);
+
 
         var timeString = new Date().setTime(data.actionLogs[i].timeStarted);
         var dateStarted = new Date(timeString).toLocaleString();//converts to human readable strings
