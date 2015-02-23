@@ -1022,7 +1022,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 instance.id = data._id;
                                 instance._id = data._id;
                                 var timestampStarded = new Date().getTime();
-                                var actionLog = instancesdao.insertBootstrapActionLog(instance.id, [], req.session.user.cn, timestampStarded);
+                                var actionLog = instancesDao.insertBootstrapActionLog(instance.id, [], req.session.user.cn, timestampStarded);
                                 var logsRefernceIds = [instance.id, actionLog._id];
                                 logsDao.insertLog({
                                     referenceId: logsRefernceIds,
