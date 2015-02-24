@@ -965,7 +965,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                     //Verifying if the node is alive
                     var nodeAlive = 'running';
-                    waitForPort(req.body.fqdn, 22, function(err) {
+                    var openport = 22;
+                    if(req.body.os === 'windows') {
+                        openport = 5985;
+                    } 
+                    waitForPort(req.body.fqdn, openport, function(err) {
                         if (err) {
                             console.log(err);
                             res.send(400, {

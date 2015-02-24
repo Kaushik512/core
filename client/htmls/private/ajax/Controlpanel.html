@@ -601,8 +601,10 @@ $.get('../instances/'+urlParams.id,function(data){
     }
 
     // setting up action logs
-    addActionLogsToTable(data.actionLogs);
-
+    $.get('/instances/'+urlParams.id+'/actionLogs',function(actionLogs){
+      addActionLogsToTable(actionLogs);
+    });
+    
     
 
   
@@ -822,8 +824,8 @@ $.get('../instances/'+urlParams.id,function(data){
 
 
             if(data.actionLogId) {
-              $.get('../instances/'+instanceId+'/actionLog/'+data.actionLogId,function(actionLog){
-                  console.log(actionLog);
+              $.get('../instances/'+instanceId+'/actionLogs/'+data.actionLogId,function(actionLog){
+                  addActionLogRow(actionLog);
               });
             }
             
@@ -884,6 +886,14 @@ $.get('../instances/'+urlParams.id,function(data){
                 }, delay);                
             }
             pollInstanceState(oldState,2000);                        
+        }).fail(function(jxObj){
+          console.log(jxObj);
+          if(jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+              console.log('calling actionLog');
+              $.get('../instances/'+instanceId+'/actionLogs/'+jxObj.responseJSON.actionLogId,function(actionLog){
+                  addActionLogRow(actionLog);
+              });
+          }
         }); 
     });
 
@@ -937,6 +947,7 @@ $.get('../instances/'+urlParams.id,function(data){
         $.post('../instances/' + instanceId + '/updateRunlist', {
             runlist: runlist
         }, function(data) {
+
             $chefRunModalContainer.modal('hide');
             var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
             $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
@@ -952,8 +963,17 @@ $.get('../instances/'+urlParams.id,function(data){
             $parent.data('runlist',runlist);
             $parent.find('.moreInfo').trigger('click');
             console.log(data);
+            if (data.actionLogId) {
+                $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                    addActionLogRow(actionLog);
+                });
+            }
         }).fail(function(jxObj){
-            
+            if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+              $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                addActionLogRow(actionLog);
+              });
+            }
         });
 
     });
@@ -1174,7 +1194,18 @@ function addActionToServiceDom(serviceId,serviceData,$tr) {
             var $parent = $('.domain-roles-caption[data-instanceId="' + urlParams.id + '"]');
             console.log($parent.length,$parent.find('.moreInfo').length);
             $parent.find('.moreInfo').trigger('click');
+            if (data.actionLogId) {
+                $.get('../instances/' + urlParams.id + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                    addActionLogRow(actionLog);
+                });
+            }
 
+        }).fail(function(jxhr){
+            if(jxhr.responseJSON && jxhr.responseJSON.actionLogId) {
+              $.get('../instances/'+urlParams.id+'/actionLogs/'+jxhr.responseJSON.actionLogId,function(actionLog){
+                  addActionLogRow(actionLog);
+              });
+            }
         });
     });
 
@@ -1224,20 +1255,48 @@ function addServiceToDom(serviceData) {
 
 }
 
+ var actionLogsPollTimeouts = []; 
+function pollActionLogCompleteStatus(instanceId,actionLogId,$td) {
+  $.get('../instances/'+instanceId+'/actionLogs/'+actionLogId,function(actionLog){
+      if(!actionLog.completed) {
+        var timeout = setTimeout(function(){
+          pollActionLogCompleteStatus(instanceId,actionLogId,$td);
+          var indexTimeout = actionLogsPollTimeouts.indexOf(timeout);
+          if(indexTimeout) {
+            actionLogsPollTimeouts.splice(indexTimeout,1);
+          }
+        },2000);
+        actionLogsPollTimeouts.push(timeout);
+      } else {
+        var status = 'failed'
+        if (actionLog.success) {
+            status = 'success';
+        }
+        $td.html(status);
+      }
+  });
+}
+
 function addActionLogRow(actionLog) {
     var $tr = $(document.createElement('tr'));
     var $tdName = $('<td></td>').append(actionLog.name);
     $tr.append($tdName);
+    
+    var $tdStatus = $('<td></td>');
     var status = 'failed';
     if (!actionLog.completed) {
         status = 'running';
+        //polling
+      if(actionLog.type !== 8) {
+        pollActionLogCompleteStatus(urlParams['id'],actionLog._id,$tdStatus);          
+      }
+ 
     } else {
         if (actionLog.success) {
             status = 'success';
         }
     }
-
-    var $tdStatus = $('<td></td>').append(status);
+    $tdStatus.append(status);
     $tr.append($tdStatus);
 
     var $tdData = $('<td></td>');
@@ -1267,7 +1326,7 @@ function addActionLogRow(actionLog) {
     var $tdMorInfo = $('<td></td>').append($('<a data-toggle="modal" href="javascript:void(0)" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>').data('actionLogId', actionLog._id).click(function(e) {
         var actionId = $(this).data('actionLogId');
         var $actionLogMoreInfo = $('#actionLogMoreInfo');
-        $.get('/instances/' + urlParams['id'] + '/actionLog/' + actionId+'/logs', function(data) {
+        $.get('/instances/' + urlParams['id'] + '/actionLogs/' + actionId+'/logs', function(data) {
             var $table = $('<div></div>').css({
                 'height': '400px',
                 'overflow-x': 'hidden',
@@ -1396,6 +1455,13 @@ $('.addServiceBtn').click(function(){
        console.log('clearint log state timeout');
       clearTimeout(stateTimeout);
     }
+    for(var i=0;i<actionLogsPollTimeouts.length;i++) {
+       if(actionLogsPollTimeouts[i]) {
+        console.log('clearing timeout');
+        clearTimeout(actionLogsPollTimeouts[i]);
+       }
+    }
+
    var getURL = localStorage.getItem("dataEx");
     var x= location.href;
     var z= x.lastIndexOf("=");
@@ -1576,29 +1642,27 @@ $('.formSubmit').click(function(e){
    });
 </script>
 <script type="text/javascript">
-  if (!$.fn.dataTable.isDataTable('#tableactionHistory') ){
-    //var $taskListArea = $('.taskListArea').empty();
-       $actionhistoryDatatable =  $('#tableactionHistory').DataTable({
-            "pagingType": "full_numbers",
-            "aaSorting": [],
-            "aoColumns": [{
-                    "bSortable": false
-                },{
-                    "bSortable": false
-                },
-                {
-                    "bSortable": true
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                }
-            ]
+  if (!$.fn.dataTable.isDataTable('#tableactionHistory')) {
+      //var $taskListArea = $('.taskListArea').empty();
+      $actionhistoryDatatable = $('#tableactionHistory').DataTable({
+          "pagingType": "full_numbers",
+          "aaSorting": [],
+          "aoColumns": [{
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }]
 
-        });
-     }
+      });
+  }
   if (!$.fn.dataTable.isDataTable('#tableServices') ){
     //var $taskListArea = $('.taskListArea').empty();
        $servicesDatatable =  $('#tableServices').DataTable({

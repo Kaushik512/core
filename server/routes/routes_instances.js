@@ -394,7 +394,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             timestamp: timestampEnded
                         });
                         instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-                        res.send(200);
+                        res.send(200, {
+                            actionLogId: actionLog._id
+                        });
                         return;
                     }
                     if (!chefDetails) {
@@ -407,7 +409,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
-                        res.send(200);
+                        res.send(200, {
+                            actionLogId: actionLog._id
+                        });
                         return;
                     }
 
@@ -567,7 +571,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 timestamp: new Date().getTime()
                             });
                         });
-                        res.send(200);
+                        res.send(200, {
+                            actionLogId: actionLog._id
+                        });
 
                     });
                 });
@@ -611,7 +617,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             timestamp: timestampEnded
                         });
                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                        res.send(500);
+                        res.send(500, {
+                            actionLogId: actionLog._id
+                        });
                         return;
                     }
                     res.send(200, {
@@ -697,7 +705,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             timestamp: timestampEnded
                         });
                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                        res.send(500);
+                        res.send(500, {
+                            actionLogId: actionLog._id
+                        });
                         return;
                     }
                     res.send(200, {
@@ -928,28 +938,55 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     });
                 }
                 credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                    //decrypting pem file
+                    if (err) {
+                        var timestampEnded = new Date().getTime();
+                        logsDao.insertLog({
+                            referenceId: logReferenceIds,
+                            err: true,
+                            log: 'Unable to decrypt credentials. Unable to run service',
+                            timestamp: timestampEnded
+                        });
+                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+
+                        res.send(500, {
+                            actionLogId: actionLog._id
+                        });
+                        return;
+                    }
                     if (serviceData.commandtype === "Chef Cookbook/Recepie") {
                         configmgmtDao.getChefServerDetails(serviceData.chefserverid, function(err, chefDetails) {
-                            if (err) {
-                                res.send(500);
-                                return;
-                            }
-                            if (!chefDetails) {
-                                res.send(500);
-                                return;
-                            }
-                            //decrypting pem file
                             if (err) {
                                 var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
                                     referenceId: logReferenceIds,
                                     err: true,
-                                    log: "Unable to decrypt pem file. Chef run failed",
+                                    log: 'Chef Data corrupted. Unable to run service',
                                     timestamp: timestampEnded
                                 });
                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+
+                                res.send(500, {
+                                    actionLogId: actionLog._id
+                                });
                                 return;
                             }
+                            if (!chefDetails) {
+                                var timestampEnded = new Date().getTime();
+                                logsDao.insertLog({
+                                    referenceId: logReferenceIds,
+                                    err: true,
+                                    log: 'Chef Data corrupted. Unable to run service',
+                                    timestamp: timestampEnded
+                                });
+                                instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+
+                                res.send(500, {
+                                    actionLogId: actionLog._id
+                                });
+                                return;
+                            }
+
                             var chef = new Chef({
                                 userChefRepoLocation: chefDetails.chefRepoLocation,
                                 chefUserName: chefDetails.loginname,
@@ -998,7 +1035,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                                 onComplete(err, ret);
                             }, onStdOut, onStdErr);
-                            res.send(200);
+                            res.send(200, {
+                                actionLogId: actionLog._id
+                            });
 
                         });
 
@@ -1034,7 +1073,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                                 onComplete(err, ret);
                             }, onStdOut, onStdErr);
-                            res.send(200);
+                            res.send(200, {
+                                actionLogId: actionLog._id
+                            });
                         });
                     }
                 });
@@ -1042,25 +1083,43 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/instances/:instanceId/actionLog/:logId', function(req, res) {
-        instancesDao.getActionLog(req.params.instanceId, req.params.logId, function(err, instances) {
+
+    app.get('/instances/:instanceId/actionLogs', function(req, res) {
+        instancesDao.getAllActionLogs(req.params.instanceId, function(err, actionLogs) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log(instances);
-            if (!(instances.length && instances[0].actionLog && instances[0].actionLog.length)) {
-                res.send(400);
-                return;
+
+            if (actionLogs && actionLogs.length) {
+                res.send(actionLogs);
             } else {
-                res.send(instances[0].actionLog[0]);
+                res.send([]);
             }
 
         });
 
     });
 
-    app.get('/instances/:instanceId/actionLog/:logId/logs', function(req, res) {
+    app.get('/instances/:instanceId/actionLogs/:logId', function(req, res) {
+        instancesDao.getActionLogById(req.params.instanceId, req.params.logId, function(err, instances) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+
+            if (!(instances.length && instances[0].actionLogs && instances[0].actionLogs.length)) {
+                res.send(400);
+                return;
+            } else {
+                res.send(instances[0].actionLogs[0]);
+            }
+
+        });
+
+    });
+
+    app.get('/instances/:instanceId/actionLogs/:logId/logs', function(req, res) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 res.send(500);
