@@ -1,3 +1,5 @@
+function initializeControlPanel(){
+
 
 $('.actionControlPanel').click(function(e) {
     //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
@@ -53,3 +55,6 @@ $('.actionControlPanel').click(function(e) {
         }
     }
 }); 
+
+}
+

@@ -1,7 +1,15 @@
 
 /*Binding Click events to Blueprints*/
 
-$('.Blueprints').click(function(e){
+function initializeBluePrints(){
+bindClick_bluePrintTab();
+bindClick_LaunchBtn();
+bindClick_bluePrintUpdate();
+bindClick_updateInstanceRunList();
+}
+
+function bindClick_bluePrintTab(){
+    $('.Blueprints').click(function(e){
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
@@ -41,6 +49,8 @@ $('.Blueprints').click(function(e){
   }
 
 });
+
+}
 
 /*Initialsing blueprints */
     function initializeBlueprintArea(data) {
@@ -292,8 +302,8 @@ function removeSelectedBlueprint() {
 }
 
 //Launching Blueprints
-
-$('.launchBtn').click(function(e) {
+function bindClick_LaunchBtn(){
+   $('.launchBtn').click(function(e) {
     var $selectedItems = $('.role-Selected1');
     if(!$selectedItems.length) {
       return;
@@ -463,10 +473,12 @@ $('.launchBtn').click(function(e) {
         });
     }
 });
+ 
+}
 
 //Updating blueprints
-
-$('.blueprintUpdateBtn').click(function(e) {
+function bindClick_bluePrintUpdate(){
+    $('.blueprintUpdateBtn').click(function(e) {
 
     var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
     var $selectedRunlist =  $blueprintEditResultContainer.find('.deploymentSelectedRunList');
@@ -493,7 +505,10 @@ $('.blueprintUpdateBtn').click(function(e) {
 
     }
 });
-// Blueprint runtlist updation
+}
+
+function bindClick_updateInstanceRunList(){
+    // Blueprint runtlist updation
 $('.btnUpdateInstanceRunlist').click(function(e) {
     bootbox.confirm("Update runlist?", function(result) {
         if (!result) {
@@ -537,3 +552,4 @@ $('.btnUpdateInstanceRunlist').click(function(e) {
 
 
 });
+}

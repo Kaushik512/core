@@ -1,5 +1,8 @@
 
 /*Binding Click events to Containers*/
+
+function initializeContainer(){
+   
 $('.Containers').click(function(e){
   //debugger;
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
@@ -40,4 +43,5 @@ $('.Containers').click(function(e){
     //alert(DummyBreadCrumb);
   }
 
-});
+}); 
+}

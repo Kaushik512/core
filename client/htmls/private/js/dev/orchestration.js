@@ -1,5 +1,6 @@
 /*Binding Click events to Orchestration*/
-$('.Orchestration').click(function(e){
+function initializingOrchestration(){
+   $('.Orchestration').click(function(e){
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
@@ -35,7 +36,9 @@ $('.Orchestration').click(function(e){
     }
 }
 
-});
+}); 
+}
+
 /*Initialising the data table in orchestration*/
  function initializeTaskArea(data) {
       if (!$.fn.dataTable.isDataTable('#tableOrchestration') ){

@@ -1,11 +1,22 @@
-    $('#ipaddressimport').click(function(e){
+   function initializeInstance(){
+bindClick_ipaddressImport();
+bindClick_instnaceTab();
+registerModelEventForImportInstance();
+bindChange_importPemFile();
+bindSubmit_AddInstance();
+
+}
+
+function bindClick_ipaddressImport(){
+  $('#ipaddressimport').click(function(e){
   $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
   $('#pemFileDropdown').change();
 });
+}
 
-/*Binding Click events to Instance*/
-    $('.Instances').click(function(e){
+function bindClick_instnaceTab(){
+	  $('.Instances').click(function(e){
     var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
     var getbreadcrumbullength = getbreadcrumbul.length;
     var DummyBreadCrumb;
@@ -41,15 +52,17 @@
             }
         }
     }
-    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
-    //alert(DummyBreadCrumb);
   }
 
 });
 
-/*Showing the dialog for import instance by IP*/
+}
+/*Binding Click events to Instance*/
+  
 
-$('#modalContainerimportInstance').on('show.bs.modal',function(e){
+/*Showing the dialog for import instance by IP*/
+function registerModelEventForImportInstance(){
+	$('#modalContainerimportInstance').on('show.bs.modal',function(e){
    $('#addInstanceBtn').removeAttr('disabled');
    //$('#addInstanceForm').get(0).reset();
   var _org = getUrlParameter('org');
@@ -78,13 +91,17 @@ $('#modalContainerimportInstance').on('show.bs.modal',function(e){
     importbyipusers();
   });
 });
+}
 
+function bindChange_importPemFile(){
 $('#importPemfileInput').change(function(){
     //console.log(this.files);
     $(this).next().val(this.files[0].name);
 });
+}
 
-/* Add Instance by IP form submission */
+function bindSubmit_AddInstance(){
+	/* Add Instance by IP form submission */
   $("#addInstanceForm").submit( function(e) {
     var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
 
@@ -205,6 +222,9 @@ $('#importPemfileInput').change(function(){
     return false;
 
 });// end form.submit
+
+}
+
 
 /*import instance by ip we are checking for the user*/
 function importbyipusers(){

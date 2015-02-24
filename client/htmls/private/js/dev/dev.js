@@ -1,17 +1,3 @@
-/*First part of script*/
-
-$(".authPassword").show();
-$(".authPemFile").hide();
-$('.authenticationType').change(function(e) {
-    if (this.value == "password") {
-        $(".authPassword").show();
-        $(".authPemFile").hide();
-    } else {
-        $(".authPassword").hide();
-        $(".authPemFile").show();
-    }
-});
-
 var wzlink = window.location.href.split('#')[1];
 //alert(wzlink);
 $('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
@@ -37,6 +23,113 @@ var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 var bgId = urlParams['bg'];
 
+/*First part of script*/
+$(document).ready(function(){
+
+$(".authPassword").show();
+$(".authPemFile").hide();
+$('.authenticationType').change(function(e) {
+    if (this.value == "password") {
+        $(".authPassword").show();
+        $(".authPemFile").hide();
+    } else {
+        $(".authPassword").hide();
+        $(".authPemFile").show();
+    }
+});
+
+ //$('.modal').modalCollapse();
+  $(document).on('shown.bs.modal', function(e) {
+    $('[autofocus]', e.target).focus();
+  });
+
+   $('#importinstanceOS').select2();
+   $('#pemFileDropdown').select2();
+
+
+  if(localStorage.getItem("SelectedClass") == "Orchestration")
+  {
+      localStorage.removeItem("SelectedClass");
+      $('#myTab3').find('.Instances').removeClass('active');
+      $('#myTab3').find('.Orchestration').addClass('active');
+      $('#myTabContent3').find('#l1').removeClass('active');
+      $('#myTabContent3').find('#l3').addClass('active'); 
+      $('#myTab3').click();
+  }
+  $('#Removelinkedcontainersonexitfield').select2();
+
+
+  var $createTaskBtn = $('.createTaskLink');
+    // var $instanceList = $('.instancesList');
+    $('a[data-toggle="tab"][href="#l3"]').on('show.bs.tab', function() {
+        var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
+       
+        if (cardCount === 0) {
+            $createTaskBtn[0].disabled = true;
+        } else {
+            $createTaskBtn[0].disabled = false;
+        }
+    });
+
+
+$('.createTaskLink').click(function(e){
+    setBreadCrumbAndViewOrchestration();
+  
+    window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&bg='+urlParams['bg']+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
+});
+
+//This will enable table view by default.
+
+
+$('#defaultViewButton').click(); //setting the detault view
+
+
+function enableTree(){
+     selectFirstEnv();
+            if ($('#tree').find('a[itemtype="env"]').length <= 0) {
+                $('#content').addClass('hidden');
+                $('#noenvwarning').removeClass('hidden');
+                $('ol.breadcrumb').addClass('hidden');
+            } else {
+                $('#content').removeClass('hidden');
+                $('#noenvwarning').addClass('hidden');
+                $('ol.breadcrumb').removeClass('hidden');
+            } 
+}
+
+    if (orgId && urlParams['bg'] && projectId && envId) {
+
+        $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+
+console.log('success---3---4');
+         
+enableTree();
+            //Syncing up the tree view based on url
+            initializeBlueprintArea(data.blueprints);
+            initializeTaskArea(data.tasks);
+            initializeInstanceArea(data.instances);
+
+        });
+    } else {
+    
+        enableTree();
+    }
+
+
+getViewTile();
+
+
+
+initializeControlPanel();
+
+initializeContainer();
+
+initializingOrchestration();
+initializeInstance();
+initializeBluePrints();
+});
+
+/*
 $(document).ready(function() {
   //$('.modal').modalCollapse();
   $(document).on('shown.bs.modal', function(e) {
@@ -58,7 +151,7 @@ $(document).ready(function() {
   }
   $('#Removelinkedcontainersonexitfield').select2();
 });
-
+*/
 function setBreadCrumbAndViewOrchestration() {
     localStorage.setItem("SelectedClass","Orchestration");
 
@@ -94,7 +187,7 @@ function setBreadCrumbAndViewOrchestration() {
 }
 
 //event for orchatration tab show 
-$(function() {
+/*$(function() {
      var $createTaskBtn = $('.createTaskLink');
     // var $instanceList = $('.instancesList');
     $('a[data-toggle="tab"][href="#l3"]').on('show.bs.tab', function() {
@@ -107,18 +200,7 @@ $(function() {
         }
     });
 
-});
-
-$('.createTaskLink').click(function(e){
-    setBreadCrumbAndViewOrchestration();
-  
-    window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&bg='+urlParams['bg']+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
-});
-
-//This will enable table view by default.
-
-
-$('#defaultViewButton').click(); //setting the detault view
+});*/
 
 
 
@@ -184,7 +266,7 @@ $('.dockerinstancestart').click(function(e){
       }
     });
 });
-
+/*
 $(function() {
 
 function enableTree(){
@@ -217,7 +299,7 @@ enableTree();
         enableTree();
     }
 
-});
+});*/
 function generateDockerLaunchParams(){
   if($('#Containernamefield').val() == ''){
     $('.dockerparamrequired').removeClass('hidden');
@@ -681,7 +763,7 @@ function showHideControl(objID)
         //localStorage.clear();
     }
 }
-window.onload= getViewTile();
+//window.onload= getViewTile();
 
 function getViewTile(){
     var locationData = localStorage.getItem("ControlID");
