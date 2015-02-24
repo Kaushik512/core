@@ -126,6 +126,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var projectId = reqBody.projectId;
         var orgId = reqBody.orgId;
         var bgId = reqBody.bgId;
+        var envId = reqBody.envId;
         var count = 0;
 
         var users = reqBody.users;
@@ -326,7 +327,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 console.log('orgId ==>', orgId);
                                 console.log('bgid ==>', bgId);
                                 // console.log('node ===>', node);
-                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, function(err, data) {
+                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId,envId, function(err, data) {
 
                                     if (err) {
                                         console.log(err, 'occured in creating environment in mongo');
@@ -409,7 +410,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             if (reqBody.selectedNodes.length) {
                 importNodes(reqBody.selectedNodes);
-
             } else {
                 res.send(400);
             }
@@ -589,7 +589,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 //var chefDetails = JSON.parse(chefJson);
                 res.send({
                     serverId: chefDetails.rowid,
-                    orgname: chefDetails.orgname
+                    orgname: chefDetails.orgname,
+                    orgname_new: chefDetails.orgname_new,
+                    orgname_rowid: chefDetails.orgname_rowid
                 });
             } else {
                 res.send(404);

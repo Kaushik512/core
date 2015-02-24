@@ -103,7 +103,7 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
                 // alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
-            alert(JSON.stringify(d4ddata));
+            //alert(JSON.stringify(d4ddata));
         },
         failure: function(data) {
             // debugger;
@@ -2479,7 +2479,7 @@ function checkusernameexistsinldap(inputID) {
 }
 
 function updateInstanceCardWithDocker(instanceID){
-    alert('in updatecard' + instanceID);
+   // alert('in updatecard' + instanceID);
     var $_cont =$('div[data-instanceid="54e45ed3918d01850c22b474"].domain-roles-caption').find('div.componentlistContainer').first();
     //alert($_cont.find('img.dockerenabledinstacne').length);
     if($_cont.find('img.dockerenabledinstacne').length <= 0){

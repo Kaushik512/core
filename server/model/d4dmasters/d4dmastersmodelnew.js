@@ -73,7 +73,7 @@ var d4dModelMastersProductGroup = mongoose.model('d4dModelMastersProductGroup',d
 var d4dMastersEnvironments = new mongoose.Schema(
 	{id: {type:String, trim:true},
 	name: {type:String,trim:true},
-	orgname: {type:String,required:true, trim:true},
+	orgname: {type:String,required:false, trim:true},
 	orgname_rowid: {type:String, trim:true},
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
@@ -85,7 +85,7 @@ var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
-	orgname: {type:String,required:true, trim:true},
+	orgname: {type:String,required:false, trim:true},
 	orgname_rowid: {type:String, trim:true},
 	projectname: {type:String, trim:true, validate:nameValidator},
 	productgroupname: {type:String, trim:true},

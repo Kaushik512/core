@@ -142,6 +142,7 @@ function Configmgmt() {
     };
 
     this.getChefServerDetails = function(rowid, callback) {
+        var that = this;
         this.getDBModelFromID("10", function(err, dbtype) {
             if (err) {
                 console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
@@ -149,60 +150,76 @@ function Configmgmt() {
             }
             if (dbtype) {
                 console.log("Master Type: " + dbtype + ' rowid : ' + rowid);
-                eval('d4dModelNew.' + dbtype).findOne({
-                    rowid: rowid
-                }, function(err, d4dMasterJson) {
-                    if (err) {
-                        console.log("Hit and error @ getChefServerDetails:" + err);
-                    }
-                    var chefRepoPath = '';
-                    var configmgmt = '';
-                    var settings = chefSettings;
+                that.getRowids(function(err,rowidlist){
+                    eval('d4dModelNew.' + dbtype).findOne({
+                        rowid: rowid
+                    }, function(err, d4dMasterJson) {
+                        if (err) {
+                            console.log("Hit and error @ getChefServerDetails:" + err);
+                        }
+                        var chefRepoPath = '';
+                        var configmgmt = '';
+                        var settings = chefSettings;
 
-                    chefRepoPath = settings.chefReposLocation;
-                    console.log("Repopath:" + chefRepoPath);
+                        chefRepoPath = settings.chefReposLocation;
+                        console.log("Repopath:" + chefRepoPath);
 
-                    var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
-                    console.log('outJson:' + JSON.stringify(d4dMasterJson));
-                    var keys = Object.keys(outJson);
-                    var orgname = '';
-                    var loginname = '';
-                    for (i = 0; i < keys.length; i++) {
-                        var k = keys[i];
-                        if (keys[i].indexOf("login") >= 0)
-                            loginname = outJson[k] + "/";
-                        if (keys[i].indexOf("orgname") >= 0)
-                            orgname = outJson[k] + "/";
-                    }
-                    if (loginname != '' && orgname != '') {
+                        var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                        console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                        var keys = Object.keys(outJson);
+                        var orgname = '';
+                        var liveorgname = '';
+                        var loginname = '';
                         for (i = 0; i < keys.length; i++) {
                             var k = keys[i];
-                            if (keys[i].indexOf('_filename') > 0) {
-                                keys[i] = keys[i].replace('_filename', '');
-                                outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                            if (keys[i].indexOf("login") >= 0)
+                                loginname = outJson[k] + "/";
+                            // if (keys[i].indexOf("orgname") >= 0)
+                            //     orgname = outJson[k] + "/";
+                            if (keys[i].indexOf("orgname_rowid") >= 0){
+                                liveorgname = that.convertRowIDToValue(outJson[k],rowidlist);
+                                orgname = outJson[k] + "/";
+                             }
+                        }
+                        if (loginname != '' && orgname != '') {
+                            for (i = 0; i < keys.length; i++) {
+                                var k = keys[i];
+                                if (keys[i].indexOf('_filename') > 0) {
+                                    keys[i] = keys[i].replace('_filename', '');
+                                    outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                                }
+                                // if (keys[i].indexOf('orgname') >= 0) {
+
+                                //     outJson[k]  =  liveorgname;
+                                //     console.log('>>>>>>>>>>>>>>>>>>>>>>>> Hit Here <<<<<<<<<<<<<<<<' + outJson[k]);
+                                // }
+
+                                if (configmgmt == '')
+                                    configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+                                else
+                                    configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+
+                                //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
                             }
-                            if (configmgmt == '')
-                                configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
-                            else
-                                configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
-
-                            //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
+                            if (configmgmt != '') {
+                                configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
+                                if(liveorgname != ''){
+                                    configmgmt += ',\"orgname_new\":\"' + liveorgname + '\"';
+                                }
+                            }
                         }
-                        if (configmgmt != '') {
-                            configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
-                        }
-                    }
-                    console.log('configmgmt: ' + configmgmt);
-                    callback(null, JSON.parse('{' + configmgmt + '}'));
+                        //console.log('configmgmt: ' + configmgmt);
+                        callback(null, JSON.parse('{' + configmgmt + '}'));
 
-                    // for (var j = 0; j < outJson.length; j++) {
-                    //     console.log('Out:' + outJson[j]);
-                    // }
-                    // for(var itm in d4dMasterJson){
-                    //     console.log(itm);
-                    // }
+                        // for (var j = 0; j < outJson.length; j++) {
+                        //     console.log('Out:' + outJson[j]);
+                        // }
+                        // for(var itm in d4dMasterJson){
+                        //     console.log(itm);
+                        // }
 
-                });
+                    });
+                }); //end getRowids
             }
         });
     };
