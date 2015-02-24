@@ -53,6 +53,7 @@ var d4dMastersOrg = new mongoose.Schema(
 	orgname: {type:String,required:true, trim:true, validate:nameValidator},
 	domainname: {type:String, trim:true},
 	description: {type:String, trim:true},
+	active: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersOrg = mongoose.model('d4dModelMastersOrg',d4dMastersOrg,'d4dmastersnew');
