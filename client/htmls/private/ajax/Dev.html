@@ -1209,6 +1209,7 @@ $('#ipaddressimport').click(function(e){
   $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
   $('#pemFileDropdown').change();
+  $('#importinstanceOS').change();
 });
 
 // $(document.body).on('click', '.card', function () {
@@ -1668,6 +1669,7 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
           $result.addClass('hidden');
           $('#addInstanceBtn').removeAttr('disabled');
           $('#addInstanceForm').get(0).reset();
+          $('#importinstanceOS').change();
           $('#pemFileDropdown').change();
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
