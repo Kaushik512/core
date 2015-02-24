@@ -669,7 +669,7 @@ function Configmgmt() {
             { 
                 if(k2 == rowid)
                     toreturn = jobj[k1][k2];
-                console.log("key##:",k2," val:##",jobj[k1][k2]);
+                //console.log("key##:",k2," val:##",jobj[k1][k2]);
             }
 
         }
@@ -755,7 +755,7 @@ function Configmgmt() {
                                    rowidval.push(rid);
                                     if(i >= envdata_.length - 1)
                                        {
-                                            console.log('rowidval' + JSON.stringify(rowidval));
+                                         //   console.log('rowidval' + JSON.stringify(rowidval));
                                             callback(null,rowidval); 
                                        }
                                    i++;
@@ -765,7 +765,7 @@ function Configmgmt() {
                              
                         }
                         else{
-                            console.log('this called');
+                        //    console.log('this called');
                             callback(null,rowidval);
                         }
                     }); //env

@@ -1432,7 +1432,7 @@ function readform(formID) {
         // alert(JSON.stringify(formData));
         //Reading row to get schema
         formData = d4ddata;
-        alert(JSON.stringify(formData));
+       // alert(JSON.stringify(formData));
 
         var formSchema = null;
         $.each(d4ddata, function(i, item) { 
