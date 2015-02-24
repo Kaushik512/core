@@ -9,6 +9,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 		<style>
 #clickdisabler{
 	width:100%;
@@ -308,6 +309,7 @@ $('#clickdisabler').hide();
 	<script src="js/jquery.tablesorter.min.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
 	<script src="js/additional-methods.min.js"></script>
+	<script src="js/jquery.dialogextend.min.js"></script>
 
 	<!--<script src="js/plugin/modalcollapse/modalcollapse.js"></script>-->
 
@@ -553,7 +555,7 @@ $('#clickdisabler').hide();
               if (data) {
                   this.changeURL(data.href);
               } else {
-                  console.log('success---3---1');
+                  //console.log('success---3---1');
                   selectFirstEnv();
               }
               $('body').delegate('#bot2-Msg1', 'click', function() {
@@ -576,7 +578,7 @@ $('#clickdisabler').hide();
                       console.log('params', params[1]);
                       location.href = href
                   } else {
-                      console.log('success---3---1');
+                      //console.log('success---3---1');
                       selectFirstEnv();
                       //location.hash=href.split('#')[1];
                   }
