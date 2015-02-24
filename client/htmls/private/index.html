@@ -554,7 +554,7 @@ $('#clickdisabler').hide();
                   this.changeURL(data.href);
               } else {
                   console.log('success---3---1');
-                  selectFirstEnv();
+                 // selectFirstEnv(); //commented because of id
               }
               $('body').delegate('#bot2-Msg1', 'click', function() {
                   //localStorage.removeItem(key);
@@ -577,7 +577,7 @@ $('#clickdisabler').hide();
                       location.href = href
                   } else {
                       console.log('success---3---1');
-                      selectFirstEnv();
+                      // selectFirstEnv(); //commented because of id
                       //location.hash=href.split('#')[1];
                   }
               } else {

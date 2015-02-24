@@ -323,7 +323,9 @@
 				treeItem
 					.append($(self._template.icon)
 						.addClass(node.icon ? node.icon : self.options.nodeIcon)
+
 					);
+				
 
 				// Add text
 				if (self.options.enableLinks) {
@@ -336,6 +338,7 @@
 							.attr('projname',node.projname)
 							.attr('itemtype',node.itemtype)
 							.attr('title',node.tooltip)
+							.attr('rowid',node.rowid)
 							.append(node.text)
 						);
 				}

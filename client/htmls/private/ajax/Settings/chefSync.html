@@ -372,7 +372,7 @@ $(function() {
                     var $tableBody = $('.table-hover tbody');
 
                     //restricting to first 5 to change the below to nodeList.length
-                    for (var i = 0; i < 5; i++) {
+                    for (var i = 5; i < 8; i++) {
                         var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName', nodeList[i]);
                         $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
                         $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
@@ -513,7 +513,12 @@ $(function() {
             $.each(d4ddata, function(k, v) {
                 
                 if (v[comparedField] == filterByValue && v[outputField]) {
-                    result.push(v[outputField + '_rowid'] + '|' + v[outputField]);
+                    var rowids = v[outputField + '_rowid'].split(',');
+                    var txts = v[outputField].split(',');
+                    for(var i =0; i < txts.length;i++){
+                      result.push(rowids[i] + '|' + txts[i]);
+                    }
+                    
                 }
 
             });

@@ -102,12 +102,13 @@ function Env() {
         // var query = {};
         // query[fieldname] = fieldvalue; //building the query 
         // query['id'] = masterid;
-
+       // console.log('envname:' + envname);
         d4dModelNew.d4dModelMastersEnvironments.findOne({
-            rowid : envname,
+            environmentname : name,
             orgname_rowid: orgname,
             id:'3'
         },function(err,envdata){
+                console.log(JSON.stringify(envdata));
                 if(!envdata)
                 {
                     var mastersrdb =  new d4dModelNew.d4dModelMastersEnvironments(FLD);
@@ -136,7 +137,7 @@ function Env() {
                                         if(_data2env.indexOf(uuid1) >= 0){
                                             //found an env in the list exit
                                              console.log("In Callback Env found in list");
-                                             callback(null, data2);
+                                             callback(null, uuid1);
 
                                                return;
                                         }
@@ -153,7 +154,8 @@ function Env() {
                                 },{environmentname_rowid:newenv},function(err,data1){
                                     if(!err)
                                         { 
-                                            callback(null, data1);
+                                            //data2.environmentname_rowid
+                                            callback(null, uuid1);
                                                return;
                                         }
                                     else{
@@ -186,11 +188,12 @@ function Env() {
                                 if(data2.environmentname_rowid != '')
                                     {
                                         console.log("Env Names found :========> " +data2.environmentname_rowid );
+                                        console.log("Env rowid rcvd :========> " +envdata.rowid);
                                         var _data2env = data2.environmentname_rowid.split(',');
-                                        if(_data2env.indexOf(envdata) >= 0){
+                                        if(_data2env.indexOf(envdata.rowid) >= 0){
                                             //found an env in the list exit
                                              console.log("In Callback Env found in list");
-                                             callback(null, data2);
+                                             callback(null, envdata.rowid);
 
                                                return;
                                         }
@@ -206,7 +209,7 @@ function Env() {
                                 },{environmentname_rowid:newenv},function(err,data1){
                                     if(!err)
                                         { 
-                                            callback(null, data1);
+                                            callback(null, name);
                                                return;
                                         }
                                     else{

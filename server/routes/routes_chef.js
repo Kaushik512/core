@@ -247,7 +247,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         orgId: orgId,
                         bgId: bgId,
                         projectId: projectId,
-                        envId: node.chef_environment,
+                        envId: node.envId,
                         chefNodeName: node.name,
                         runlist: runlist,
                         platformId: platformId,
@@ -334,7 +334,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                         return;
                                     }
-
+                                    console.log('Env ID Received before instance create:' + data);
+                                    node.envId = data;
                                     //fetching the ip of the imported node
                                     var nodeIp = 'unknown';
                                     if (node.automatic.ipaddress) {
