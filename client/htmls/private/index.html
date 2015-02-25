@@ -428,6 +428,7 @@ $('#clickdisabler').hide();
 		var hasEnv = true;
 
 		var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
+		//var _orgnode = $('a[rowid="'+_org+'"]');
 
 		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
 			console.log('in if');
@@ -512,6 +513,99 @@ $('#clickdisabler').hide();
 		  $('#noenvwarning').addClass('hidden');
 		}*/
 	}
+/*Created a new Method for selecting any enviornment*/
+var selectAnyEnviornment = function(orgNo,enviornmentId){
+		
+	
+		var _org = getUrlParameter('org');
+		var _bg = getUrlParameter('bg');
+		var _proj = getUrlParameter('projid');
+		var _env = getUrlParameter('envid');
+		var hasOrg = true;
+		var hasBg = true;
+		var hasProj = true;
+		var hasEnv = true;
+
+		//var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
+		var _orgnode = $('a[rowid="'+_org+'"]');
+
+		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
+			console.log('in if');
+			
+			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+						  _orgnode.trigger('click');}
+     
+			//var _bgnode = $('a[itemtype="bg"][orgname="' + _org + '"]:contains("' + decodeURIComponent(_bg) + '")').first();
+			var _bgnode = $('a[rowid="'+_bg+'"]');
+
+			if(_bgnode.length > 0)
+			{if(_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+						  _bgnode.trigger('click');}
+
+		//	var _projnode = $('a[itemtype="proj"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"]:contains("' + decodeURIComponent(_proj) + '")').first();
+var _projnode = $('a[rowid="'+_proj+'"]');
+
+
+			if(_projnode.length > 0)
+			{if(_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+						  _projnode.trigger('click');}
+
+		//	var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
+
+		var _envnode = $('a[rowid="'+_env+'"]');
+
+			  if(_envnode.length > 0)
+			      _envnode.first().trigger('click');
+
+		}
+		else{
+            console.log('in else');
+			hasOrg = false;
+
+			if($('a[itemtype="org"]').length > 0)
+			{	
+				if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0){
+					$('a[itemtype="org"]').first().trigger('click');
+					hasOrg = true;
+				}								
+			}
+			hasProj = false;
+			if($('a[itemtype="bg"]').length > 0){
+				{
+					if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="bg"]').first().trigger('click');
+								hasProj = true;
+								}
+						}
+
+			hasBg = false;
+			if($('a[itemtype="proj"]').length > 0 ){
+				{
+					if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
+									$('a[itemtype="proj"]').first().trigger('click');
+								hasBg = true;
+							}
+					}
+
+			hasEnv = false;		
+			if($('a[itemtype="env"]').length > 0){
+				{
+					$('a[itemtype="env"]').first().trigger('click');
+					hasEnv = true;
+					}
+				}
+		}
+		if(!hasOrg || !hasProj || !hasBg || !hasEnv){
+			console.log('success 3');
+			//location.hash="ajax/Dev.html";
+			$('#content').addClass('hidden');
+			$('#noenvwarning').removeClass('hidden');
+		    $('ol.breadcrumb').addClass('hidden');
+		   
+		}
+		
+	}
+/*End of selectAnyEnviornment*/
 	loadTreeFuncNew();
 	//selectFirstEnv();
  //function ends
@@ -554,7 +648,7 @@ $('#clickdisabler').hide();
                   this.changeURL(data.href);
               } else {
                   console.log('success---3---1');
-                 // selectFirstEnv(); //commented because of id
+                 selectFirstEnv(); //commented because of id
               }
               $('body').delegate('#bot2-Msg1', 'click', function() {
                   //localStorage.removeItem(key);
@@ -577,9 +671,8 @@ $('#clickdisabler').hide();
                       location.href = href
                   } else {
                       console.log('success---3---1');
-                      // selectFirstEnv(); //commented because of id
-                      //location.hash=href.split('#')[1];
-                  }
+                       selectFirstEnv(); //commented because of id
+               }
               } else {
                   $("#designNew").click();
                   drawBreadCrumb();
