@@ -414,12 +414,23 @@ $(function() {
                                 }
                                 $that = $(this);
                                 bootbox.confirm("Are you sure you would want to change the environment?<br/>Note:<br/>Change will done on the chef server.", function(result) {
-                                    if (!result) {
-                                        $that.val($that.attr('currentEnv'));
+                                    if (result) {
+                                        var nodeName = $that.parents('tr').attr('data-nodeName'); 
+                                        $.post('/chef/servers/'+urlParams.chefId+'/nodes/'+nodeName+'1/updateEnv',{
+                                          envName:$that.val()
+                                        },function(res){
+                                           console.log(res);  
+                                           $that.attr('currentEnv', $that.val());
+                                        }).fail(function(){
+                                          bootbox.alert('Unable to change environment. Please try again later');
+                                          $that.val($that.attr('currentEnv'));
+                                          $that.change();
+                                        });
                                         return;
+                                    } else {
+                                        $that.val($that.attr('currentEnv'));
+                                        $that.change();
                                     }
-
-
                                 });
 
                             });

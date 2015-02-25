@@ -1191,7 +1191,11 @@
   $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
   $('#pemFileDropdown').change();
+
 });*/
+  //$('#importinstanceOS').change();
+//});
+
 
 // $(document.body).on('click', '.card', function () {
       
@@ -1575,6 +1579,130 @@ function importbyipusers(){
 }
 
 //$('#addInstanceBtn').click(function(e) {
+/*<<<<<<< HEAD
+=======
+  $("#addInstanceForm").submit( function(e) {
+    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+
+    var $spinner = $('#nodeimportipspinner').addClass('hidden');
+    var $result = $('#nodeimportipresultmsg').addClass('hidden');
+    var reqBody = {};
+    var $form = $('#addInstanceForm');
+    reqBody.fqdn = $form.find('#instanceFQDN').val();
+    reqBody.os = $form.find('#importinstanceOS').val();
+    reqBody.users = $('#importbyipuserListSelect').val();
+    reqBody.credentials = {
+        username: $form.find('#instanceUsername').val()
+    };
+
+    if(!reqBody.fqdn) {
+       alert('Please enter IP');
+        e.preventDefault();
+       return false;
+    }
+    if(!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)){
+      alert("Please provide a valid IP Address or Hostname");
+      e.preventDefault();
+      return false;
+    }
+
+    if(!reqBody.users) {
+       alert('Please assign atleast one user');
+        e.preventDefault();
+       return false;
+    }
+    if(!reqBody.os) {
+       alert('Please choose OS');
+        e.preventDefault();
+       return false;
+    }
+
+    function makeRequest() {
+     $('#addInstanceBtn').attr('disabled','disabled');
+     $spinner.removeClass('hidden');
+     // $('#addInstanceBtn').attr('disabled','disabled');
+      $.post('../organizations/'+urlParams.org+'/businessgroups/'+urlParams['bg']+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
+          $('#tabInstanceStatus').hide();
+          addInstanceToDOM(data);
+          
+          $spinner.addClass('hidden');
+          $result.addClass('hidden');
+          $('#addInstanceBtn').removeAttr('disabled');
+          $('#addInstanceForm').get(0).reset();
+          $('#importinstanceOS').change();
+          $('#pemFileDropdown').change();
+          var $divinstancescardview = $('#divinstancescardview');
+          if ($divinstancescardview.find('li').length > 0) {
+            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+          }
+          $divinstancescardview.find('.item').first().addClass('active');
+          $('#modalContainerimportInstance').modal('hide');
+          //Updating the tree
+          loadTreeFuncNew();
+          console.log('success---3---3');
+          selectFirstEnv();
+          $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
+      }).fail(function(jxhr){
+         $spinner.addClass('hidden');
+         $result.empty();
+         $result.css({color:'red'});
+         if(jxhr.status === 400) {
+           if(jxhr.responseJSON) {
+            $result.html(jxhr.responseJSON.message);
+           } else {
+            $result.html("Invalid request");
+           }
+         } else {
+            $result.html("Server Behaved Unexpectedly");
+         }
+         $result.removeClass('hidden');
+         $('#addInstanceBtn').removeAttr('disabled');
+          
+      });
+
+    }
+
+    var $dropdown = $('#pemFileDropdown');
+    if ($dropdown.val()==='pemFile') {
+        
+       var pemFileInput = $form.find('#importPemfileInput').get(0);
+       if(!reqBody.credentials.username){
+          alert('Please Enter Username');
+           e.preventDefault();
+          return false;
+       }
+       if(!pemFileInput.files.length) {
+         alert('Please Choose a Pem file');
+          e.preventDefault();
+         return false;
+       }
+       var reader = new FileReader();
+       // Closure to capture the file information.
+       reader.onload = function(e) {
+           // Render thumbnail.
+            reqBody.credentials.pemFileData = e.target.result;
+           
+            makeRequest();
+           
+       };
+       // Read in the image file as a data URL.
+       
+       reader.readAsText(pemFileInput.files[0]);
+    } else {
+        reqBody.credentials.password = $form.find('#instancePassword').val();
+        if(!reqBody.credentials.password) {
+           alert("Please enter password");
+            e.preventDefault();
+           return false;
+        }
+        makeRequest();
+    }
+
+    e.preventDefault();
+    return false;
+
+});// end form.submit
+>>>>>>> origin/feature_engineered*/
 
 
 /**
