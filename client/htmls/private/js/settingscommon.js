@@ -1079,6 +1079,7 @@ function readform(formID) {
                     var ctrl = $("#" + ctrls[i]);
                     if (ctrl.getType() == "select") {
                         ctrl.val(ctrl.attr('savedvalue'));
+                        ctrl.trigger('change');
                     }
                     if (ctrl.getType() == "div") {
                         var divselect = ctrl.attr('savedvalue').split(',');
