@@ -516,8 +516,13 @@ $('#clickdisabler').hide();
 	}
 /*Created a new Method for selecting any enviornment*/
 var selectAnyEnviornment = function(orgNo,enviornmentId){
+
+		var executed = $(document).data('selectAnyEnviornment');
+		if(typeof executed!='undefined'){
+			return;
+		}
+		$(document).data('selectAnyEnviornment', "true");
 		
-	
 		var _org = getUrlParameter('org');
 		var _bg = getUrlParameter('bg');
 		var _proj = getUrlParameter('projid');
@@ -604,6 +609,7 @@ var _projnode = $('a[rowid="'+_proj+'"]');
 		    $('ol.breadcrumb').addClass('hidden');
 		   
 		}
+
 		
 	}
 /*End of selectAnyEnviornment*/
@@ -649,7 +655,7 @@ var _projnode = $('a[rowid="'+_proj+'"]');
                   this.changeURL(data.href);
               } else {
                   console.log('success---3---1');
-                 selectFirstEnv(); //commented because of id
+                 //selectFirstEnv(); //commented because of id
               }
               $('body').delegate('#bot2-Msg1', 'click', function() {
                   //localStorage.removeItem(key);
@@ -672,7 +678,7 @@ var _projnode = $('a[rowid="'+_proj+'"]');
                       location.href = href
                   } else {
                       console.log('success---3---1');
-                       selectFirstEnv(); //commented because of id
+                       //selectFirstEnv(); //commented because of id
                }
               } else {
                   $("#designNew").click();
