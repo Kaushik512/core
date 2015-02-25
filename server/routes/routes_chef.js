@@ -351,7 +351,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             return;
                                         }
                                         if (instances.length) {
-                                            updateTaskStatusNode(node.name, "Node exist in " + instances[0].orgId + "/"+instances[0].bgId+"/" + instances[0].projectId + "/" + instances[0].envId + " : " + node.name, true, count);
+                                            updateTaskStatusNode(node.name, "Node exist in " + instances[0].orgId + "/" + instances[0].bgId + "/" + instances[0].projectId + "/" + instances[0].envId + " : " + node.name, true, count);
                                             return;
                                         }
                                         if (nodeIp != 'unknown') {
@@ -434,41 +434,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    app.post('/chef/updatenodeenv/:serverId/:nodename', function(req, res) {
-        console.log('hit here');
-        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
-            if (err) {
-                console.log(err);
-                res.send(500);
-                return;
-            }
-            if (!chefDetails) {
-                res.send(404);
-                return;
-            }
-            var chef = new Chef({
-                userChefRepoLocation: chefDetails.chefRepoLocation,
-                chefUserName: chefDetails.loginname,
-                chefUserPemFile: chefDetails.userpemfile,
-                chefValidationPemFile: chefDetails.validatorpemfile,
-                hostedChefUrl: chefDetails.url,
-            });
-            //   var settings = appConfig.chef;
-            //    var chef = new Chef(settings);
-            var env = {
-                "chef_environment": req.body.envName
-            };
-            chef.updateNode(req.params.nodename, env, function(err, envName) {
-                if (err) {
-                    res.send(500);
-                    return;
-                } else {
-                    res.send(envName);
-                }
-            });
-        });
-    });
-
     app.get('/chef/servers/:serverId/cookbooks', function(req, res) {
 
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -541,9 +506,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.get('/chef/servers/:serverId/receipeforcookbooks/:cookbookName', function(req, res) {
 
-
-
-
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
@@ -600,5 +562,36 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
 
-
+    app.post('/chef/servers/:serverId/nodes/:nodename/updateEnv', function(req, res) {
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                console.log(err);
+                res.send(500, errorResponses.chef.corruptChefData);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(500, errorResponses.chef.corruptChefData);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            chef.updateNodeEnvironment(req.params.nodename, req.body.envName, function(err, success) {
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    if (success) {
+                        res.send(200);
+                    } else {
+                        res.send(500);
+                    }
+                }
+            });
+        });
+    });
 };

@@ -197,6 +197,8 @@ var InstancesDao = function() {
 
         Instances.find({
             "_id": new ObjectId(instanceId)
+        }, {
+            'actionLogs': false
         }, function(err, data) {
             if (err) {
                 logger.error("Failed getInstanceById (%s)", instanceId, err);
@@ -218,7 +220,9 @@ var InstancesDao = function() {
             }
         }
 
-        Instances.find(queryObj, function(err, data) {
+        Instances.find(queryObj, {
+            'actionLogs': false
+        }, function(err, data) {
             if (err) {
                 logger.error("Failed to getInstances :: ", instanceIds, err);
                 callback(err, null);
@@ -244,7 +248,9 @@ var InstancesDao = function() {
         if (userName) {
             queryObj.users = userName;
         }
-        Instances.find(queryObj, function(err, data) {
+        Instances.find(queryObj, {
+            'actionLogs': false
+        }, function(err, data) {
             if (err) {
                 logger.error("Failed to getInstancesByProjectAndEnvId(%s, %s, %s, %s)", projectId, envId, instanceType, userName, err);
                 callback(err, null);
@@ -268,7 +274,9 @@ var InstancesDao = function() {
         if (userName) {
             queryObj.users = userName;
         }
-        Instances.find(queryObj, function(err, data) {
+        Instances.find(queryObj, {
+            'actionLogs': false
+        }, function(err, data) {
             if (err) {
                 logger.error("Failed to getInstancesByOrgProjectAndEnvId (%s, %s, %s, %s, %s)", orgId, projectId, envId, instanceType, userName, err);
                 callback(err, null);
@@ -294,7 +302,9 @@ var InstancesDao = function() {
         if (userName) {
             queryObj.users = userName;
         }
-        Instances.find(queryObj, function(err, data) {
+        Instances.find(queryObj, {
+            'actionLogs': false
+        }, function(err, data) {
             if (err) {
                 logger.error("Failed to getInstancesByOrgBgProjectAndEnvId (%s,%s, %s, %s, %s, %s)", orgId, bgId, projectId, envId, instanceType, userName, err);
                 callback(err, null);
@@ -731,7 +741,6 @@ var InstancesDao = function() {
 
 
     //action logs 
-
     function insertActionLog(instanceId, logData, callback) {
         var actionLog = new ActionLog(logData);
         Instances.update({
@@ -764,6 +773,48 @@ var InstancesDao = function() {
         });
         return actionLog._id;
     }
+
+    this.getAllActionLogs = function(instanceId, callback) {
+        logger.debug("Enter getAllActionLogs (%s)", instanceId);
+        Instances.find({
+            "_id": new ObjectId(instanceId)
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getAllActionLogs (%s)", instanceId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getAllActionLogs (%s)", instanceId);
+            if(data.length && data[0].actionLogs && data[0].actionLogs.length) {
+                callback(null, data[0].actionLogs);
+            } else {
+                callback(null,[]);
+            }
+            
+        });
+    };
+
+    this.getActionLogById = function(instanceId, logId, callback) {
+        logger.debug("Enter getActionLogById ", instanceId, logId);
+        Instances.find({
+            "_id": new ObjectId(instanceId),
+            "actionLogs._id": new ObjectId(logId),
+        }, {
+            "actionLogs": {
+                "$elemMatch": {
+                    "_id": new ObjectId(logId),
+                }
+            }
+        }, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getActionLogById ", instanceId, logId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getActionLogById ", instanceId, logId);
+            callback(null, data);
+        });
+    };
 
     this.updateActionLog = function(instanceId, logId, success, timestampEnded, callback) {
         logger.debug("Enter updateActionLog ", instanceId, logId, success, timestampEnded);
@@ -889,6 +940,21 @@ var InstancesDao = function() {
             actionData: {
                 runlist: runlist
             }
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
+
+    this.insertSSHActionLog = function(instanceId, user, timestampStarted, callback) {
+        logger.debug("Enter insertSSHActionLog ", instanceId, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.SSH.type,
+            name: ACTION_LOG_TYPES.SSH.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
         };
         var logId = insertActionLog(instanceId, log, callback);
         log._id = logId;
