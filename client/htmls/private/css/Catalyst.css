@@ -1821,7 +1821,7 @@ nav ul ul>li:hover b {
 .select2-container .select2-choice>.select2-chosen {
     margin-right: 26px;
     display: block;
-    overflow: hidden;
+    overflow: visible;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
