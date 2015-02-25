@@ -897,6 +897,7 @@ function readform(formID) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                  //   debugger;
+                    //alert(JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
                     $.each(tempJSON, function(i, item) {
@@ -906,7 +907,8 @@ function readform(formID) {
                           //  if (item.field[k].name == curInput.attr("id")) {
                                 // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
                                 // alert("Added:" + item.field[i].values.value);
-                                addToSelectList(item[curInput.attr('datapath')], curInput);
+                              //  alert(item.rowid);
+                                addToSelectList(item[curInput.attr('datapath')],item.rowid, curInput);
                          //   }
                        
                     });

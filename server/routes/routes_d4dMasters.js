@@ -673,13 +673,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
             id: 1
         }, function(err, docorgs) {
             var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.orgname;
+                return docorgs1.rowid;
             });
         d4dModelNew.d4dModelMastersOrg.find({
             id: {
                 $in: masts,
             },
-            orgname:{
+            orgname_rowid:{
                 $in:orgnames
             }
         }, function(err, d4dMasterJson) {
