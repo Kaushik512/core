@@ -1118,7 +1118,7 @@ $(document).ready(function(){
                   $envList.append($('<option></option>').val('choose').html('Choose'));
                       //alert(getEnv.length);
                       for (var i = 0; i < getEnv.length; i++) {
-                          $envList.append($('<option></option>').val(getEnv[i]).html(getEnv[i]));
+                          $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
                       }
                 }
 
@@ -1164,7 +1164,7 @@ $(document).ready(function(){
               // alert(getProjs.length);
                for (var i = 0; i < getProjs.length; i++) {
 
-                   $projectList.append($('<option></option>').val(getProjs[i].name).html(getProjs[i].name));
+                   $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
                }
            });
 
