@@ -53,6 +53,7 @@ var d4dMastersOrg = new mongoose.Schema(
 	orgname: {type:String,required:true, trim:true, validate:nameValidator},
 	domainname: {type:String, trim:true},
 	description: {type:String, trim:true},
+	active: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersOrg = mongoose.model('d4dModelMastersOrg',d4dMastersOrg,'d4dmastersnew');
@@ -62,7 +63,7 @@ var d4dMastersProductGroup = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
 	orgname: {type:String,required:true, trim:true},
-	orgrowid: {type:String, trim:true},
+	orgname_rowid: {type:String, trim:true},
 	productgroupname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
@@ -73,8 +74,8 @@ var d4dModelMastersProductGroup = mongoose.model('d4dModelMastersProductGroup',d
 var d4dMastersEnvironments = new mongoose.Schema(
 	{id: {type:String, trim:true},
 	name: {type:String,trim:true},
-	orgname: {type:String,required:true, trim:true},
-	orgrowid: {type:String, trim:true},
+	orgname: {type:String,required:false, trim:true},
+	orgname_rowid: {type:String, trim:true},
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
@@ -85,11 +86,13 @@ var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
-	orgname: {type:String,required:true, trim:true},
-	orgrowid: {type:String, trim:true},
+	orgname: {type:String,required:false, trim:true},
+	orgname_rowid: {type:String, trim:true},
 	projectname: {type:String, trim:true, validate:nameValidator},
 	productgroupname: {type:String, trim:true},
+	productgroupname_rowid: {type:String, trim:true},
 	environmentname: {type:String, trim:true},
+	environmentname_rowid: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -99,6 +102,7 @@ var d4dMastersConfigManagement = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
 	orgname: {type:String,required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:String, trim:true},
 	orgrowid: {type:String, trim:true},
 	configname: {type:String,required:true, trim:true},
 	loginname: {type:String,required:true, trim:true},
@@ -162,6 +166,7 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 	templatetypename: {type:String, trim:true},
 	dockerreponame: {type:String, trim:true},
 	configname: {type:String, trim:true},
+	configname_rowid: {type:String, trim:true},
 	dockercontainerpathstitle: {type:String, trim:true},
 	dockercontainerpaths: {type:String, trim:true},
 	templatescookbooks: {type:String, trim:true},
@@ -177,6 +182,7 @@ var d4dMastersServicecommands = new mongoose.Schema(
 	commandname: {type:String, trim:true},
 	commandtype: {type:String, trim:true},
 	configname: {type:String, trim:true},
+	configname_rowid: {type:String, trim:true},
 	chefserverid: {type:String, trim:true},
 	operatingsystem: {type:String, trim:true},
 	servicecookbook: {type:String, trim:true},

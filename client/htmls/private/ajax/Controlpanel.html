@@ -854,25 +854,24 @@ $.get('../instances/'+urlParams.id,function(data){
                 stateTimeout = setTimeout(function() {
                     $.get('../instances/'+instanceId,function(data){
                         if(data) {
-                            if(data.instanceState === state) {
-                                pollInstanceState(state,5000);
+                            if (data.instanceState == 'stopped') {
+
+                                enableInstanceActionStopBtn(data._id);
+                            }
+                            if (data.instanceState == 'running') {
+                                enableInstanceActionStartBtn(data._id);
+                            }
+                            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                                disableInstanceActionBtns(data._id);
+                            }
+                            if (data.instanceState === state) {
+                                pollInstanceState(state, 5000);
                             } else {
                                 console.log('polling complete');
-                                 var cssClassed = getCssClassFromStatus(data.instanceState); 
-                                 $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                                 $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-
-                                 if (data.instanceState == 'stopped'){
-                                  
-                                  enableInstanceActionStopBtn(data._id);
-                                }
-                                if (data.instanceState == 'running'){
-                                  enableInstanceActionStartBtn(data._id);
-                                }
-                                if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
-                                  disableInstanceActionBtns(data._id);
-                                }
-                            } 
+                                var cssClassed = getCssClassFromStatus(data.instanceState);
+                                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                            }
                         }   
                     })
                 }, delay);                
@@ -1006,7 +1005,7 @@ $.get('../instances/'+urlParams.id,function(data){
   $cfmwareTbody.empty();
   var $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Environment</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.envId+'</td>');
-  $cfmwareTbody.append($tr);
+  // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
   
   $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.bootStrapStatus+'</td>');

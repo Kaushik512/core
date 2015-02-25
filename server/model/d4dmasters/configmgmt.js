@@ -142,6 +142,7 @@ function Configmgmt() {
     };
 
     this.getChefServerDetails = function(rowid, callback) {
+        var that = this;
         this.getDBModelFromID("10", function(err, dbtype) {
             if (err) {
                 console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
@@ -149,60 +150,76 @@ function Configmgmt() {
             }
             if (dbtype) {
                 console.log("Master Type: " + dbtype + ' rowid : ' + rowid);
-                eval('d4dModelNew.' + dbtype).findOne({
-                    rowid: rowid
-                }, function(err, d4dMasterJson) {
-                    if (err) {
-                        console.log("Hit and error @ getChefServerDetails:" + err);
-                    }
-                    var chefRepoPath = '';
-                    var configmgmt = '';
-                    var settings = chefSettings;
+                that.getRowids(function(err,rowidlist){
+                    eval('d4dModelNew.' + dbtype).findOne({
+                        rowid: rowid
+                    }, function(err, d4dMasterJson) {
+                        if (err) {
+                            console.log("Hit and error @ getChefServerDetails:" + err);
+                        }
+                        var chefRepoPath = '';
+                        var configmgmt = '';
+                        var settings = chefSettings;
 
-                    chefRepoPath = settings.chefReposLocation;
-                    console.log("Repopath:" + chefRepoPath);
+                        chefRepoPath = settings.chefReposLocation;
+                        console.log("Repopath:" + chefRepoPath);
 
-                    var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
-                    console.log('outJson:' + JSON.stringify(d4dMasterJson));
-                    var keys = Object.keys(outJson);
-                    var orgname = '';
-                    var loginname = '';
-                    for (i = 0; i < keys.length; i++) {
-                        var k = keys[i];
-                        if (keys[i].indexOf("login") >= 0)
-                            loginname = outJson[k] + "/";
-                        if (keys[i].indexOf("orgname") >= 0)
-                            orgname = outJson[k] + "/";
-                    }
-                    if (loginname != '' && orgname != '') {
+                        var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                        console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                        var keys = Object.keys(outJson);
+                        var orgname = '';
+                        var liveorgname = '';
+                        var loginname = '';
                         for (i = 0; i < keys.length; i++) {
                             var k = keys[i];
-                            if (keys[i].indexOf('_filename') > 0) {
-                                keys[i] = keys[i].replace('_filename', '');
-                                outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                            if (keys[i].indexOf("login") >= 0)
+                                loginname = outJson[k] + "/";
+                            // if (keys[i].indexOf("orgname") >= 0)
+                            //     orgname = outJson[k] + "/";
+                            if (keys[i].indexOf("orgname_rowid") >= 0){
+                                liveorgname = that.convertRowIDToValue(outJson[k],rowidlist);
+                                orgname = outJson[k] + "/";
+                             }
+                        }
+                        if (loginname != '' && orgname != '') {
+                            for (i = 0; i < keys.length; i++) {
+                                var k = keys[i];
+                                if (keys[i].indexOf('_filename') > 0) {
+                                    keys[i] = keys[i].replace('_filename', '');
+                                    outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                                }
+                                // if (keys[i].indexOf('orgname') >= 0) {
+
+                                //     outJson[k]  =  liveorgname;
+                                //     console.log('>>>>>>>>>>>>>>>>>>>>>>>> Hit Here <<<<<<<<<<<<<<<<' + outJson[k]);
+                                // }
+
+                                if (configmgmt == '')
+                                    configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+                                else
+                                    configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+
+                                //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
                             }
-                            if (configmgmt == '')
-                                configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
-                            else
-                                configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
-
-                            //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
+                            if (configmgmt != '') {
+                                configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
+                                if(liveorgname != ''){
+                                    configmgmt += ',\"orgname_new\":\"' + liveorgname + '\"';
+                                }
+                            }
                         }
-                        if (configmgmt != '') {
-                            configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
-                        }
-                    }
-                    console.log('configmgmt: ' + configmgmt);
-                    callback(null, JSON.parse('{' + configmgmt + '}'));
+                        //console.log('configmgmt: ' + configmgmt);
+                        callback(null, JSON.parse('{' + configmgmt + '}'));
 
-                    // for (var j = 0; j < outJson.length; j++) {
-                    //     console.log('Out:' + outJson[j]);
-                    // }
-                    // for(var itm in d4dMasterJson){
-                    //     console.log(itm);
-                    // }
+                        // for (var j = 0; j < outJson.length; j++) {
+                        //     console.log('Out:' + outJson[j]);
+                        // }
+                        // for(var itm in d4dMasterJson){
+                        //     console.log(itm);
+                        // }
 
-                });
+                    });
+                }); //end getRowids
             }
         });
     };
@@ -445,7 +462,7 @@ function Configmgmt() {
 
 
         d4dModelNew.d4dModelMastersConfigManagement.findOne({
-            orgname: paramorgname,
+            orgname_rowid: paramorgname,
             id: 10
         }, function(err, d4dMasterJson) {
             if (err) {
@@ -465,7 +482,7 @@ function Configmgmt() {
                 var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
                 console.log('outJson:' + JSON.stringify(d4dMasterJson));
                 var keys = Object.keys(outJson);
-                var orgname = outJson['orgname'];
+                var orgname = outJson['orgname_rowid'];
                 var loginname = outJson['loginname'];
                 for (i = 0; i < keys.length; i++) {
                     var k = keys[i];
@@ -650,7 +667,130 @@ function Configmgmt() {
         });
     };
 
+    this.convertRowIDToValue = function(rowid,rowidcont){
+        // if(rowidcont.length > 0)
+        // { 
+        //     rowidcont.forEach(function(k,v){
+        //            var k1 = Object.keys(k);
+        //            if(k1[0] == rowid)
+        //                callback(null,rowidcont[v]);
+        //        });
+        // }
+        // else
+        //     callback(null,[]);
+        var toreturn = '';
+       var jobj = JSON.parse(JSON.stringify(rowidcont));
+        for(var k1 in jobj){
+            //if any key has _rowid then update corresponding field
+            for(var k2 in jobj[k1])
+            { 
+                if(k2 == rowid)
+                    toreturn = jobj[k1][k2];
+                //console.log("key##:",k2," val:##",jobj[k1][k2]);
+            }
 
+        }
+        console.log('returned convertRowIDToValue',toreturn,rowid);
+        return(toreturn);
+    };
+
+    this.getRowids = function(callback){
+        var rowidval = [];
+        console.log('getRowids in');
+        d4dModelNew.d4dModelMastersOrg.find({id:"1"},function(err,orgdata){
+            if(orgdata){
+                var orgdata_ = JSON.parse(JSON.stringify(orgdata));
+                    
+                    orgdata_.forEach(function(k,v){
+                        //rowidval[k['rowid']] = k['orgname'];
+                       // rowidval += '{\"' + k['rowid'] + '\" : \"' +  k['orgname'] + '\"}';
+                       var rid = {};
+                       rid[k['rowid']] = k['orgname'];
+                       rowidval.push(rid);
+                      //  console.log(k['rowid'], k['orgname']);
+                    });
+                 
+            }
+            console.log('finised orgdata' + JSON.stringify(rowidval));
+            d4dModelNew.d4dModelMastersProductGroup.find({id:"2"},function(err,bgdata){
+                if(bgdata){
+                    var bgdata_ = JSON.parse(JSON.stringify(bgdata));
+                        
+                        bgdata_.forEach(function(k,v){
+                           // rowidval[k['rowid']] = k['productgroupname'];
+                           // rowidval += '{\"' + k['rowid'] + '\" : \"' + k['productgroupname'] + '\"}';
+                          //  console.log(k['rowid'], k['productgroupname']);
+                          
+                           var rid = {};
+                           rid[k['rowid']] = k['productgroupname'];
+                           rowidval.push(rid);
+                        });
+                     
+                }
+                d4dModelNew.d4dModelMastersProjects.find({id:"4"},function(err,prjdata){
+                    if(prjdata){
+                        var prjdata_ = JSON.parse(JSON.stringify(prjdata));
+                            
+                            prjdata_.forEach(function(k,v){
+                               // rowidval[k['rowid']] = k['projectname'];
+                               // rowidval += '{\"' +k['rowid'] + '\" : \"' + k['projectname'] + '\"}';
+                               // console.log(k['rowid'], k['projectname']);
+                               var rid = {};
+                               rid[k['rowid']] = k['projectname'];
+                               rowidval.push(rid);
+                            });
+                         
+                    }
+                    d4dModelNew.d4dModelMastersConfigManagement.find({id:"10"},function(err,cfgdata){
+                    if(cfgdata){
+                        var cfgdata_ = JSON.parse(JSON.stringify(cfgdata));
+                            
+                            cfgdata_.forEach(function(k,v){
+                               // rowidval[k['rowid']] = k['projectname'];
+                               // rowidval += '{\"' +k['rowid'] + '\" : \"' + k['projectname'] + '\"}';
+                               // console.log(k['rowid'], k['projectname']);
+                               var rid = {};
+                               rid[k['rowid']] = k['configname'];
+                               rowidval.push(rid);
+                            });
+                         
+                    }
+                    d4dModelNew.d4dModelMastersEnvironments.find({id:"3"},function(err,envdata){
+                        if(envdata){
+
+                            var envdata_ = JSON.parse(JSON.stringify(envdata));
+                             if(envdata_.length <= 0){
+                                console.log('rowidval' + JSON.stringify(rowidval));
+                                callback(null,rowidval); 
+                             }
+                                var i = 0;
+                                envdata_.forEach(function(k,v){
+                                   // rowidval[k['rowid']] = k['environmentname'];
+                                    //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
+                                    var rid = {};
+                                   rid[k['rowid']] = k['environmentname'];
+                                   rowidval.push(rid);
+                                    if(i >= envdata_.length - 1)
+                                       {
+                                         //   console.log('rowidval' + JSON.stringify(rowidval));
+                                            callback(null,rowidval); 
+                                       }
+                                   i++;
+                                 //  console.log(k['rowid'], k['environmentname'],envdata_.length);
+                                });
+
+                             
+                        }
+                        else{
+                        //    console.log('this called');
+                            callback(null,rowidval);
+                        }
+                    }); //env
+                }); //config management
+               }); // proj
+            }); //bg
+        }); //org
+    };
     this.getListNew = function(mastername, fieldname, callback) {
             console.log(mastername);
             this.getDBModelFromID(mastername, function(err, dbtype) {

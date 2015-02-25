@@ -25,7 +25,7 @@ var validators = {
     envIdValidator: [getLengthValidator(1, 100, 'Invalid Environment Id '),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Environment Id')],
     recipeValidator: [getRegExValidator(/^recipe[|role[.*]$/i, "Invalid Runlist format")], // need to investigate further
     catalystUsernameValidator: [getLengthValidator(1, 100, 'Invalid Catalyst Username'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Catalyst Username')],
-    blueprintNameValidator : [getLengthValidator(1, 100, 'Invalid Blueprint Name'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Blueprint Name')],
+    blueprintNameValidator : [getLengthValidator(1, 100, 'Invalid Blueprint Name')],
 
 };
 
