@@ -2487,7 +2487,10 @@ function getCssClassFromStatus(status) {
 
 function removeSelectedInstance(){
     var instanceid = $('.container.role-Selectedcard').find('[data-instanceid]').attr('data-instanceid');
-    if(instanceid){
+    var tableInstanceId = $('#tableinstanceview').find('.rowcustomselected').attr('data-instanceid');
+
+    if ($('#divinstancescardview').is(':visible')) {
+      if(instanceid){
         //found now delete
          bootbox.confirm("Are you sure you would like to remove this instance?<br/>Note:<br/>This will not terminate the instance from the provider.", function(result) {
             if (!result) {
@@ -2500,8 +2503,56 @@ function removeSelectedInstance(){
                 var table = $('#tableinstanceview').DataTable();
                 console.log();
                 table.row('[data-instanceid='+instanceid+']').remove().draw( false );
+                //table.row('[data-instanceid='+instanceid+']').remove();
+                //table.order([[ 1, 'asc' ]]).draw( false );
+              }
+              else
+                alert(data);
+            });
+        });
+    }else
+    {
+      alert('Please select an instance to remove.');
+    }
+    }else{
+      if(tableInstanceId){
+        //found now delete
+         bootbox.confirm("Are you sure you would like to remove this instance?<br/>Note:<br/>This will not terminate the instance from the provider.", function(result) {
+            if (!result) {
+                return;
+            }
+            $.get('/instances/delete/' + instanceid,function(data){
+            //  alert(data);
+              if(data == 'OK'){
+                $('#tableinstanceview').find('.rowcustomselected').remove().draw(false);
+                $('.container').find('[data-instanceid]').attr('data-instanceid').parents('.domain-role-thumbnail').detach();
+              }
+              else
+                alert(data);
+            });
+        });
+    }else
+    {
+        alert('Please select an instance to remove.');
+    }
 
-               
+    }
+    if(instanceid){
+    //if(instanceid || tableInstanceId){
+        //found now delete
+         bootbox.confirm("Are you sure you would like to remove this instance?<br/>Note:<br/>This will not terminate the instance from the provider.", function(result) {
+            if (!result) {
+                return;
+            }
+            $.get('/instances/delete/' + instanceid,function(data){
+            //  alert(data);
+              if(data == 'OK'){
+                $('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
+                var table = $('#tableinstanceview').DataTable();
+                console.log();
+                table.row('[data-instanceid='+instanceid+']').remove().draw( false );
+                //table.row('[data-instanceid='+instanceid+']').remove();
+                //table.order([[ 1, 'asc' ]]).draw( false );
               }
               else
                 alert(data);
