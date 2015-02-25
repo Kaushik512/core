@@ -897,6 +897,7 @@ function readform(formID) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                  //   debugger;
+                    //alert(JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
                     $.each(tempJSON, function(i, item) {
@@ -906,7 +907,8 @@ function readform(formID) {
                           //  if (item.field[k].name == curInput.attr("id")) {
                                 // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
                                 // alert("Added:" + item.field[i].values.value);
-                                addToSelectList(item[curInput.attr('datapath')], curInput);
+                              //  alert(item.rowid);
+                                addToSelectList(item[curInput.attr('datapath')],item.rowid, curInput);
                          //   }
                        
                     });
@@ -1077,6 +1079,7 @@ function readform(formID) {
                     var ctrl = $("#" + ctrls[i]);
                     if (ctrl.getType() == "select") {
                         ctrl.val(ctrl.attr('savedvalue'));
+                        ctrl.trigger('change');
                     }
                     if (ctrl.getType() == "div") {
                         var divselect = ctrl.attr('savedvalue').split(',');
@@ -1214,6 +1217,7 @@ function readform(formID) {
             if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    alert('Multi:' + JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id"));
                     $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
@@ -1913,15 +1917,12 @@ function addToCodeList() {
 }
 
 function addToSelectList(txtVal,rowidval, inp) {
-
-
     var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px;visibility:hidden\' ></i>";
     var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ></button>";
-    if (txtVal != '') {
+    if (txtVal != '' && typeof inp != "undefined") {
         inp.append('<label class=\"toggle font-sm\" ><input onclick=\'if($(this).is(\":checked\")) {$(this).closest(\"label\").css(\"background-color\",\"#eeeeee\");$(this).css(\"border-color\",\"#3b9ff3\");}else{$(this).closest(\"label\").css(\"background-color\",\"#ffffff\");$(this).css(\"border-color\",\"red\");}\' type=\"checkbox\" name=\"checkbox-toggle\" rowid=\"' + rowidval + '\" value=\"' + txtVal + '\" style=\"width:100%\"><i data-swchoff-text=\"NO\" data-swchon-text=\"YES\"></i>' + txtVal + '</label>');
         //inp.append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;width:100%;cursor:pointer\'><p class=\'bg-success\'>' + imgCheck + txtVal + '</p></div>');
         $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
-
     }
 
 }

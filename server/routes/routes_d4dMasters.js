@@ -471,7 +471,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 res.end(JSON.stringify(d4dMasterJson));
                             }
                             var counter = 0;
-                            _keys.forEach(function(k,v){
+                            var todelete = [];
+                            //_keys.forEach(function(k,v){
+                            for(var k=0,v=0;k<_keys.length;k++,v++) {
                                 //var __keys = Object.keys(d4dMasterJson[k]);
                                
                                 //console.log('OBject:' + d4dMasterJson[k]);
@@ -507,21 +509,39 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         else{
                                             names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
                                         }
-                                        //console.log('names:',names);
+                                        console.log('names:',names,(names == ''));
+
                                         d4dMasterJson[k][flds[0]] = names;
+
+                                        if(names == '')
+                                            todelete.push(k);
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
                                   //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
-                                if(counter >= _keys.length - 1){
-                                    console.log("sent response 484" + JSON.stringify(d4dMasterJson));
-                                    res.end(JSON.stringify(d4dMasterJson));
-                                    console.log(k,d4dMasterJson[k],v);
-                                }
+                                console.log("Orgname check:" + d4dMasterJson[k]['orgname']);
+                                
+                                
                                 counter++;
-                            });
+                            };//);
+                                    console.log("To Delete Array:", todelete.toString());
+                                    var collection = [];
+                                    
+                                    for(var i = 0; i < d4dMasterJson.length;i++){
+                                        if(todelete.indexOf(i) === -1) {
+                                            collection.push(d4dMasterJson[i]);
+                                        }
+                                        
+                                    }
+                                    console.log("sent response 484" + JSON.stringify(collection));
+                                    res.end(JSON.stringify(collection));
+                                    //console.log(k,d4dMasterJson[k],v);
+
+                        
+
+
                             
                         
                     });
@@ -645,7 +665,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
         logger.debug('Entered readmasterjsoncounts');
         var ret = [];
-        var masts = ['1', '2', '3', '4'];
+        var masts = ['2', '3', '4'];
         var counts = [];
         for(var i =1;i<5;i++)
             counts[i] = 0;
@@ -653,15 +673,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
             id: 1
         }, function(err, docorgs) {
             var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.orgname;
+                return docorgs1.rowid;
             });
         d4dModelNew.d4dModelMastersOrg.find({
             id: {
                 $in: masts,
             },
-            orgname:{
-                $in:orgnames
-            }
+            orgname_rowid:{$in:orgnames}
         }, function(err, d4dMasterJson) {
             if (err) {
                 console.log("Hit and error:" + err);
@@ -682,9 +700,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     logger.debug(d4dMasterJson[i]["id"]);
                     counts[d4dMasterJson[i]["id"]]++;
                 }
-                for(var i =1;i<5;i++){
+                for(var i =2;i<5;i++){
                     ret.push('{"' + i + '":"' + counts[i] + '"}');
                 }
+                ret.push('{"1":"' + orgnames.length + '"}');
                 res.end('[' + ret.join(',') + ']');
                 //res.end();
                 return;

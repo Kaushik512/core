@@ -36,13 +36,13 @@
             </div>
             <div class="col-lg-4">
                 <label>
-                    <strong>Chef Server URL</strong>
+                    <strong>Chef Server Name</strong>
                 </label>
                 <div class="row">
                     <div class="col-lg-10">
                         
                             
-                            <input type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control" name="ctl00$MainContent$orgname" placeholder="https://api.opscode.com/organizations/pjlab">
+                            <input type="text" class="form-control chefServerName" placeholder="" disabled>
                         
                     </div>  
                 </div>
@@ -256,6 +256,9 @@ $(document).ready(function() {
                 }
             }
         });
+
+
+
         var runlist = null;
         if(taskData) {
             runlist = taskData.runlist;
@@ -263,6 +266,16 @@ $(document).ready(function() {
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
         }, runlist);
+
+        $.get('/organizations/'+urlParams.org+'/chefserver',function(data){
+           console.log('chef logs ==> ',data);
+           if(data && data.configname) {
+            $('.chefServerName').val(data.configname);
+           }
+        });
+
+
+
         $('.runlistContainer').append($ccrs);
 
     }
