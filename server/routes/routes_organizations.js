@@ -26,139 +26,164 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
 
     app.get('/organizations/getTreeNew', function(req, res) {
-        d4dModelNew.d4dModelMastersOrg.find({
-            id: 1
-        }, function(err, docorgs) {
-            var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.orgname;
-            });
-
-            var orgTree = [];
-            var orgCount = 0;
-            orgnames.forEach(function(k, v) {
-                //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
-                orgTree.push({
-                    name: k,
-                    businessGroups: [],
-                    environments: []
+        configmgmtDao.getRowids(function(err,rowidlist){
+            console.log("Rowid List /organizations/getTreeNew -->" + rowidlist);
+            d4dModelNew.d4dModelMastersOrg.find({
+                id: 1
+            }, function(err, docorgs) {
+                var orgids = docorgs.map(function(docorgs1) {
+                    return docorgs1.rowid;
                 });
-            });
-            orgCount++;
-            d4dModelNew.d4dModelMastersProductGroup.find({
-                id: 2,
-                orgname: {
-                    $in: orgnames
-                }
-            }, function(err, docbgs) {
-                if (docbgs.length <= 0) {
-                    res.send(orgTree);
-                    return;
-                }
-                var counter = 0;
-                for (var k = 0; k < docbgs.length; k++) {
-                    for (var i = 0; i < orgTree.length; i++) {
-                        if (orgTree[i]['name'] == docbgs[k]['orgname']) {
-                            //  console.log('found' );
-                            orgTree[i]['businessGroups'].push({
-                                name: docbgs[k]['productgroupname'],
-                                projects: []
-                            });
-                            d4dModelNew.d4dModelMastersProjects.find({
-                                id: 4,
-                                orgname: orgTree[i]['name'],
-                                productgroupname: docbgs[k]['productgroupname']
-                            }, function(err, docprojs) {
-                                // console.log('Projects:' + docprojs);
 
-                                var prjnames = docprojs.map(function(docprojs1) {
-                                    return docprojs1.projectname;
+                var orgTree = [];
+                var orgCount = 0;
+                orgids.forEach(function(k, v) {
+                    //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
+                    //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                    console.log('Org v:' + JSON.stringify(v));
+                    orgname = configmgmtDao.convertRowIDToValue(k,rowidlist);
+                    orgTree.push({
+                        name: orgname,
+                        orgid:k,
+                        rowid:k,
+                        businessGroups: [],
+                        environments: []
+                    });
+                });
+                orgCount++;
+                d4dModelNew.d4dModelMastersProductGroup.find({
+                    id: 2,
+                    orgname_rowid: {
+                        $in: orgids
+                    }
+                }, function(err, docbgs) {
+                    if (docbgs.length <= 0) {
+                        res.send(orgTree);
+                        return;
+                    }
+                    var counter = 0;
+                    for (var k = 0; k < docbgs.length; k++) {
+                        for (var i = 0; i < orgTree.length; i++) {
+                            if (orgTree[i]['orgid'] == docbgs[k]['orgname_rowid']) {
+                                //  console.log('found' );
+                                bgname = configmgmtDao.convertRowIDToValue(docbgs[k]['rowid'],rowidlist);
+                                orgTree[i]['businessGroups'].push({
+                                    name: bgname,
+                                    rowid: docbgs[k]['rowid'],
+                                    projects: []
                                 });
+                                d4dModelNew.d4dModelMastersProjects.find({
+                                    id: 4,
+                                    orgname_rowid: orgTree[i]['rowid'],
+                                    productgroupname_rowid: docbgs[k]['rowid']
+                                }, function(err, docprojs) {
+                                    console.log('Projects:' + docprojs);
 
-                                for (var _i = 0; _i < orgTree.length; _i++) {
-                                    console.log('Orgnames:' + orgTree[_i]['name']);
-                                    for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                        console.log('businessGroups:' + orgTree[_i]['businessGroups'][__i]['name']);
-                                        console.log('docprojs.length:' + docprojs.length);
-                                        for (var _bg = 0; _bg < docprojs.length; _bg++) {
+                                    var prjids = docprojs.map(function(docprojs1) {
+                                        return docprojs1.rowid;
+                                    });
 
-                                            if (docprojs[_bg]['orgname'] == orgTree[_i]['name'] && docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']) {
-                                                console.log('hit');
-                                                if (orgTree[_i]['businessGroups'][__i]['projects'].length <= 0) {
-                                                    for (var _prj = 0; _prj < docprojs.length; _prj++) {
-                                                        var envs = docprojs[_prj]['environmentname'].split(',');
-                                                        console.log("Env in:" + docprojs);
-                                                        orgTree[_i]['businessGroups'][__i]['projects'].push({ //
-                                                            name: docprojs[_prj]['projectname'],
-                                                            environments: envs
-                                                        });
+                                    for (var _i = 0; _i < orgTree.length; _i++) {
+                                        console.log('Orgid:' + orgTree[_i]['rowid']);
+                                        for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
+                                            console.log('businessGroups rowid:' + orgTree[_i]['businessGroups'][__i]['rowid']);
+                                            console.log('docprojs.length:' + docprojs.length);
+                                            for (var _bg = 0; _bg < docprojs.length; _bg++) {
+
+                                                if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
+                                                    console.log('hit');
+                                                    if (orgTree[_i]['businessGroups'][__i]['projects'].length <= 0) {
+                                                        for (var _prj = 0; _prj < docprojs.length; _prj++) {
+                                                            var envsids = docprojs[_prj]['environmentname_rowid'].split(',');
+                                                            var envs = '';
+                                                            for(var _envid in envsids){
+                                                                var tempenvname = configmgmtDao.convertRowIDToValue(_envid,rowidlist);
+                                                                if(envs == ''){
+                                                                    envs += tempenvname;
+                                                                }
+                                                                else{
+                                                                    envs += ',' + tempenvname;
+                                                                }
+                                                            }
+                                                            console.log("Env in:" + docprojs);
+                                                            prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'],rowidlist);
+                                                            orgTree[_i]['businessGroups'][__i]['projects'].push({ //
+                                                                name: prjname,
+                                                                rowid: docprojs[_prj]['rowid'],
+                                                                environments: envs
+                                                            });
+                                                        }
+
                                                     }
 
+                                                    //   console.log("Env:" + docprojs[_bg]['environmentname']);
+                                                    // if(orgTree[_i]['environments'].length <=0){
+                                                    //     for(var envname in docprojs[_bg]['environmentname'])
+                                                    //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
+                                                    // }
                                                 }
-
-                                                //   console.log("Env:" + docprojs[_bg]['environmentname']);
-                                                // if(orgTree[_i]['environments'].length <=0){
-                                                //     for(var envname in docprojs[_bg]['environmentname'])
-                                                //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
-                                                // }
                                             }
                                         }
                                     }
-                                }
-                                console.log("OrgTree:" + JSON.stringify(orgTree));
-                                if (counter >= docbgs.length - 1) {
-                                    d4dModelNew.d4dModelMastersEnvironments.find({
-                                        id: 3,
-                                        orgname: {
-                                            $in: orgnames
-                                        }
-                                    }, function(err, docenvs) {
-                                        for (var _i = 0; _i < orgTree.length; _i++) {
-                                            for (var _env = 0; _env < docenvs.length; _env++) {
-                                                if (orgTree[_i]['name'] == docenvs[_env]['orgname']) {
-                                                    orgTree[_i]['environments'].push(docenvs[_env]['environmentname']);
+                                    console.log("OrgTree:" + JSON.stringify(orgTree));
+                                    if (counter >= docbgs.length - 1) {
+                                        d4dModelNew.d4dModelMastersEnvironments.find({
+                                            id: 3,
+                                            orgname_rowid: {
+                                                $in: orgids
+                                            }
+                                        }, function(err, docenvs) {
+                                            for (var _i = 0; _i < orgTree.length; _i++) {
+                                                for (var _env = 0; _env < docenvs.length; _env++) {
+                                                    if (orgTree[_i]['rowid'] == docenvs[_env]['orgname_rowid']) {
+                                                        var tenv = configmgmtDao.convertRowIDToValue(docenvs[_env]['rowid'],rowidlist)
+                                                        orgTree[_i]['environments'].push({
+                                                            name:tenv,
+                                                            rowid:docenvs[_env]['rowid']
+                                                        });
+                                                    }
+                                                }
+                                                if (_i >= orgTree.length - 1) {
+                                                    res.send(orgTree);
+                                                    return;
                                                 }
                                             }
-                                            if (_i >= orgTree.length - 1) {
-                                                res.send(orgTree);
-                                                return;
-                                            }
-                                        }
-                                    });
+                                        });
 
-                                    //res.send(orgTree);
-                                    // return;
+                                        //res.send(orgTree);
+                                        // return;
 
-                                }
-                                counter++;
-                            });
+                                    }
+                                    counter++;
+                                });
+
+                            }
 
                         }
 
                     }
+                    //finding the current bg
+                    // orgTree.forEach(function(k1,v1){
 
-                }
-                //finding the current bg
-                // orgTree.forEach(function(k1,v1){
+                    //     // orgTree[v1].forEach(function(k2,v2){
+                    //     //         console.log(orgTree[v1][v2]);
+                    //     // });
 
-                //     // orgTree[v1].forEach(function(k2,v2){
-                //     //         console.log(orgTree[v1][v2]);
-                //     // });
+                    // });
+                    //     var orgj = JSON.parse(k1);
+                    //     Object.keys(orgj).forEach(function(vals,keys){
+                    //        console.log('key' + keys + ' ' + vals);
 
-                // });
-                //     var orgj = JSON.parse(k1);
-                //     Object.keys(orgj).forEach(function(vals,keys){
-                //        console.log('key' + keys + ' ' + vals);
+                    //    });
+                    //    // console.log("orgTree:" + JSON.stringify(orgTree));
+                    // });
 
-                //    });
-                //    // console.log("orgTree:" + JSON.stringify(orgTree));
-                // });
+                    // orgTree.businessGroups.push(docbgs.)
+                });
 
-                // orgTree.businessGroups.push(docbgs.)
+
             });
-
-
         });
-
 
     });
 
@@ -223,6 +248,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 name: bgname,
                                 text: bgname.substring(0, 21),
                                 orgname: orgTree[i]['name'],
+                                orgid: orgTree[i]['rowid'],
                                 icon: 'fa fa-fw fa-1x fa-group',
                                 rowid: docbgs[k]['rowid'],
                                 borderColor: '#000',
@@ -269,6 +295,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     text: envname,
                                                                     href: '#ajax/Dev.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'] + '&envid=' + envs[nt],
                                                                     orgname: orgTree[_i]['name'],
+                                                                    orgid: orgTree[_i]['rowid'],
                                                                     rowid: envs[nt],
                                                                     projname: docprojs[_prj]['projectname'],
                                                                     bgname: orgTree[_i]['businessGroups'][__i]['name'],
@@ -289,6 +316,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             text:  prjname,
                                                             rowid: docprojs[_prj]['rowid'],
                                                             orgname: orgTree[_i]['name'],
+                                                            orgid: orgTree[_i]['rowid'],
                                                             bgname: orgTree[_i]['businessGroups'][__i]['name'],
                                                             icon: 'fa fa-fw fa-1x fa-tasks',
                                                             nodes: envs_,

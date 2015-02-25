@@ -790,7 +790,7 @@ $(document).ready(function(){
                }
                //Selection of Orgname from localstorage 
             //   $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
-               $('#orgnameSelect').val(localStorage.getItem('selectedOrgName'));
+               $('#orgnameSelect').val(localStorage.getItem('selectedOrgId'));
                console.log('role-Selected before ==> ',$('#tab2 .role-Selected').length);
                if ($('.productdiv2.role-Selected').length > 0) {
                    //Setting controls connected to docker to hidden
@@ -1089,7 +1089,7 @@ $(document).ready(function(){
            for (var i = 0; i < data.length; i++) {
              // alert('BG:' + JSON.stringify(data[i].businessGroups));
                console.log(data[i].businessGroups);
-               $orgListInput.append($('<option></option>').val(data[i].name).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+               $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
            }
            $orgListInput.change(function(e) {
                // alert('trigged org selection');
@@ -1106,7 +1106,7 @@ $(document).ready(function(){
                var getBGs = $selectedOrgOption.data('bglist');
                if(getBGs != null){
                   for (var i = 0; i < getBGs.length; i++) {
-                     $bgList.append($('<option></option>').val(getBGs[i].name).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                     $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
                  }
                }
 
@@ -1114,6 +1114,7 @@ $(document).ready(function(){
                $envList.empty();
                var getEnv = $selectedOrgOption.data('envList');
                if(getEnv != null){
+                alert(JSON.stringify(getEnv));
                   $envList.append($('<option></option>').val('choose').html('Choose'));
                       //alert(getEnv.length);
                       for (var i = 0; i < getEnv.length; i++) {

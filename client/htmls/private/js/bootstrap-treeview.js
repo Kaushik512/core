@@ -334,6 +334,7 @@
 						.append($(self._template.link)
 							.attr('href', node.href)
 							.attr('orgname',node.orgname)
+							.attr('orgid',node.orgid)
 							.attr('bgname',node.bgname)
 							.attr('projname',node.projname)
 							.attr('itemtype',node.itemtype)

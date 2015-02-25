@@ -512,7 +512,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
-                                    console.log("key**:",k1," val**:",jobj[k1]);
+                                  //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
                                 if(counter >= _keys.length - 1){

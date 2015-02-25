@@ -462,7 +462,7 @@ function Configmgmt() {
 
 
         d4dModelNew.d4dModelMastersConfigManagement.findOne({
-            orgname: paramorgname,
+            orgname_rowid: paramorgname,
             id: 10
         }, function(err, d4dMasterJson) {
             if (err) {

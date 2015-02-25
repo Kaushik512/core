@@ -380,6 +380,7 @@ $('#clickdisabler').hide();
 							window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
 							//console.log("Org Selected:" + window.selectedOrgName );
 							localStorage.setItem('selectedOrgName',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
+							localStorage.setItem('selectedOrgId',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
 							/*Description from the node*/
 							localStorage.setItem("orgname", node.orgname);
 							localStorage.setItem("projname", node.projname);
