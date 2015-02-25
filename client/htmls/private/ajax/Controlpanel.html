@@ -53,7 +53,7 @@
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
                                         <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
-                                          <img src="img/galleryIcons/sshIcon.png" style="height:28px;width:28px">
+                                          <!-- <img src="img/galleryIcons/sshIcon.png" style="height:28px;width:28px"> -->
                                         </a>
                                       </div>
                                     </div>
@@ -300,75 +300,37 @@
             <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
               <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
 
-                        <table class="table table-hover table-bordered dataTable no-footer text-align-center table-condensed tablesorter margin-top40" id="tableactionHistory">
-                            <thead>
-                              <th style="font-size: 13px;padding-left:4%">
+                        <table id="tableactionHistory" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                            <thead style="font-size: 13px">
+                              <tr>
+                              <td>
                                 <!-- <i class="fa fa-fw fa-archive "></i> -->
-                                <strong style="color:#3a87ad">Type</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:4%">
+                                <strong style="color:#3a87ad";>Type</strong>
+                              </td>
+                              <td>
     
-                                <strong style="color:#3a87ad">Status</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:4%">
+                                <strong style="color:#3a87ad;">Status</strong>
+                              </td>
+                              <td>
+    
+                                <strong style="color:#3a87ad;">Data</strong>
+                              </td>
+                              <td>
                                 
-                                <strong style="color:#3a87ad">Timestamp</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:4%">
+                                <strong style="color:#3a87ad;">Timestamp</strong>
+                              </td>
+                              <td>
                                 
-                                <strong style="color:#3a87ad">Users</strong>
-                              </th>
-                              <th style="font-size: 13px;padding-left:2%">
+                                <strong style="color:#3a87ad;">Users</strong>
+                              </td>
+                              <td>
                                 
-                                <strong style="color:#3a87ad">MoreInfo</strong>
-                              </th> 
+                                <strong style="color:#3a87ad;">MoreInfo</strong>
+                              </td> 
+                            </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>Bootstrap</td>
-                                <td>Success</td>
-                                <td>Fri, 13 Feb 2015 11:52:37 GMT</td>
-                                <td>Admin</td>
-                                <td>
-                                  <a data-toggle="modal" href="#BootstrapmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr> 
-                              <tr>
-                                <td>Chef-Client Run</td>
-                                <td>Fail</td>
-                                <td>Fri, 14 Feb 2015 13:42:21 GMT</td>
-                                <td>Designer</td>
-                                <td>
-                                  <a data-toggle="modal" href="#ccrmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Start</td>
-                                <td>Success</td>
-                                <td>Fri, 09 Feb 2015 19:43:27 GMT</td>
-                                <td>Consumer</td>
-                                <td>
-                                  <a data-toggle="modal" href="#startmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Stop</td>
-                                <td>Fail</td>
-                                <td>Fri, 16 Feb 2015 11:52:37 GMT</td>
-                                <td>Designer</td>
-                                <td>
-                                  <a data-toggle="modal" href="#stopmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>SSH</td>
-                                <td>Success</td>
-                                <td>Fri, 12 Feb 2015 23:52:21 GMT</td>
-                                <td>Admin</td>
-                                <td>
-                                  <a data-toggle="modal" href="#sshmoreInfo" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                                </td>
-                              </tr>
+                             
                                 
                             </tbody>
                         </table>
@@ -509,251 +471,20 @@
   </div>
 </div>
 
-<div class="modal fade" id="BootstrapmoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog " style="">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="">
-          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;BootstrapmoreInfo
-        </h4>
-      </div>
-      <div class="modal-body" style="height:430px">
-        <div class="logsArea">
-          <div>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Fri, 13 Feb 2015 11:52:37 GMT</div>
-              </div>
-              <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-                <span>Bootstrapping instance</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Fri, 13 Feb 2015 11:53:41 GMT</div>
-              </div>
-              <div class="col-lg-8 col-sm-8">
-                <span>Connecting to 1.1.1.1</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Fri, 13 Feb 2015 11:53:41 GMT</div>
-              </div>
-              <div class="col-lg-8 col-sm-8"><span></span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Fri, 13 Feb 2015 11:55:48 GMT</div>
-              </div>
-              <div class="col-lg-8 col-sm-8">
-                <span>ERROR: Network Error: Connection timed out - connect(2) for "1.1.1.1" port 22 Check your knife configuration and network settings
-                </span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-              </div>
-              <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-                <span>Instance Starting</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-              </div>
-              <div class="col-lg-8 col-sm-8">
-                <span>Unable to start instance</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Mon, 16 Feb 2015 14:12:20 GMT</div>
-              </div>
-              <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-                <span>Instance Starting</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Mon, 16 Feb 2015 14:12:20 GMT</div>
-              </div>
-              <div class="col-lg-8 col-sm-8">
-                <span>Unable to start instance</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Mon, 16 Feb 2015 14:12:21 GMT</div>
-              </div>
-              <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-                <span>Instance Stopping</span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-4 col-sm-4">
-                <div>Mon, 16 Feb 2015 14:12:21 GMT</div>
-              </div>
-              <div class="col-lg-8 col-sm-8">
-                <span>Unable to stop instance</span>
-              </div>
-            </div>
-            <hr>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!--ccrmoreInfo modal for Chef-client Run-->
-<div class="modal fade" id="ccrmoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog " style="">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="">
-          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;CCRmoreInfo
-        </h4>
-      </div>
-      <div class="modal-body" style="height:430px">
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-            <span>ChefClientRun Starting</span>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div class="col-lg-8 col-sm-8">
-            <span>Unable to run Chefclient</span>
-          </div>
-        </div>  
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!--startmoreInfo modal for Chef-client Run-->
-<div class="modal fade" id="startmoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog " style="">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="">
-          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;StartmoreInfo
-        </h4>
-      </div>
-      <div class="modal-body" style="height:430px">
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-            <span>Instance Starting</span>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div class="col-lg-8 col-sm-8">
-            <span>Unable to start instance</span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!--stopmoreInfo modal for Chef-client Run-->
-<div class="modal fade" id="stopmoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog " style="">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="">
-          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;StopmoreInfo
-        </h4>
-      </div>
-      <div class="modal-body" style="height:430px">
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-            <span>Instance Stopping</span>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div class="col-lg-8 col-sm-8">
-            <span>Unable to stop instance</span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="modal fade" id="sshmoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="actionLogMoreInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog " style="">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="">
-          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;SSHmoreInfo
+          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Logs
         </h4>
       </div>
       <div class="modal-body" style="height:430px">
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div style="color:DarkBlue;" class="col-lg-8 col-sm-8 ">
-            <span>SSH to root@192.168.32.64</span>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <div>Mon, 16 Feb 2015 13:50:56 GMT</div>
-          </div>
-          <div class="col-lg-8 col-sm-8">
-            <span>Unable to launch SSH for instance</span>
-          </div>
-        </div>    
+
+           
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -792,9 +523,33 @@ var urlParams ={};
      
 })();
 
+function enableInstanceActionStartBtn(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
+function enableInstanceActionStopBtn(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
+}
+function disableInstanceActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
 
 var logTimeout;
-   var stateTimeout;
+var stateTimeout;
 $.get('../instances/'+urlParams.id,function(data){
 
    //setting tree and drawing breadcrumb
@@ -837,14 +592,14 @@ $.get('../instances/'+urlParams.id,function(data){
         var $tr = $('<tr></tr>').attr('data-listServiceId',services[i].rowid);
         var $tdName = $('<td></td>').append(name);
         $tr.append($tdName);
-        console.log(services[i]);
+        
         var commandType = services[i].commandtype;
         if(commandType === 'Chef Cookbook/Recepie') {
           var html =  getCookbookActionHtml(services[i].rowid,services[i]);
         } else {
            var html =  getCommandActionHtml(services[i].rowid,services[i]);
         }
-        console.log('here');
+        
         var $tdActions = $('<td></td>').append(html);
         $tr.append($tdActions);
         var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData',services[i]);
@@ -859,15 +614,24 @@ $.get('../instances/'+urlParams.id,function(data){
       
 
     });
-    $.post('/d4dMasters/getrows/19', {
-        serviceids: data.serviceIds
-    }, function(services) {
-        services = JSON.parse(services);
-        for (var i = 0; i < services.length; i++) {
-            console.log("sd1 = ",services[i]);
-            addServiceToDom(services[i]);
-        }
+    if (data.serviceIds && data.serviceIds.length) {
+        $.post('/d4dMasters/getrows/19', {
+            serviceids: data.serviceIds
+        }, function(services) {
+            services = JSON.parse(services);
+            for (var i = 0; i < services.length; i++) {
+                console.log("sd1 = ", services[i]);
+                addServiceToDom(services[i]);
+            }
+        });
+    }
+
+    // setting up action logs
+    $.get('/instances/'+urlParams.id+'/actionLogs',function(actionLogs){
+      addActionLogsToTable(actionLogs);
     });
+    
+    
 
   
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
@@ -902,33 +666,16 @@ $.get('../instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
-
   if (data.instanceState == 'stopped'){
-    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
-    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
-    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').addClass('isStopedInstance');
-    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').addClass('isStopedInstance');
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').addClass('isStopedInstance');
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').removeClass('isStopedInstance');
-    //Opacity Settings
-    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').css('opacity','0.5');
-    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').css({'opacity':'0.5'});
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').css({'opacity':'0.5'});
-    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').css({'opacity':'1.0'});
+    enableInstanceActionStopBtn(data._id);
   }
-    if (data.instanceState == 'running'){
-      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
-      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
-      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').removeClass('isStopedInstance');
-      $('.componentlistContainer.started').parent().find('.sshShellBtn').removeClass('isStopedInstance');
-      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').removeClass('isStopedInstance');
-      $('.componentlistContainer.started').parent().find('.actionbuttonStart').addClass('isStopedInstance');
-      //Opacity Settings
-      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').css('opacity','1.0');
-      $('.componentlistContainer.started').parent().find('.sshShellBtn').css({'opacity':'1.0'});
-      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
-      $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
+  if (data.instanceState == 'running'){
+    enableInstanceActionStartBtn(data._id);
   }
+  if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
+    disableInstanceActionBtns(data._id);
+  }
+  
   var $backRunlistContainer = $('.cardBackRunlistContaner');
   for (var j = 0; j < data.runlist.length; j++) {
         var $divComponentItem;
@@ -1004,7 +751,7 @@ $.get('../instances/'+urlParams.id,function(data){
         pollLogs(lastTimestamp,0,true);
         // $.get('../instances/' + data.id, function(data) {
         //     //$('#tabInstanceStatus').hide();
-        //     addInstanceToDOM(data);
+        //     addInstanceToDaddInstanceToDOMOMaddInstanceToDOM(data);
         // });
     };
 
@@ -1083,6 +830,13 @@ $.get('../instances/'+urlParams.id,function(data){
         
         $parent.find('.moreInfo').trigger('click');
         $.get(url,function(data){
+
+
+            if(data.actionLogId) {
+              $.get('../instances/'+instanceId+'/actionLogs/'+data.actionLogId,function(actionLog){
+                  addActionLogRow(actionLog);
+              });
+            }
             
             console.log($parent.length,$parent);
 
@@ -1100,45 +854,37 @@ $.get('../instances/'+urlParams.id,function(data){
                 stateTimeout = setTimeout(function() {
                     $.get('../instances/'+instanceId,function(data){
                         if(data) {
-                            if(data.instanceState === state) {
-                                pollInstanceState(state,5000);
+                            if (data.instanceState == 'stopped') {
+
+                                enableInstanceActionStopBtn(data._id);
+                            }
+                            if (data.instanceState == 'running') {
+                                enableInstanceActionStartBtn(data._id);
+                            }
+                            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                                disableInstanceActionBtns(data._id);
+                            }
+                            if (data.instanceState === state) {
+                                pollInstanceState(state, 5000);
                             } else {
                                 console.log('polling complete');
-                                 var cssClassed = getCssClassFromStatus(data.instanceState); 
-                                 $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                                 $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                                 if (data.instanceState == 'stopped'){
-                                    // $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').hide();
-                                    // $('.instancestatusindicator.stopped').parent().find('.chefClientRunlistImageCP').hide();
-                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').addClass('isStopedInstance');
-                                    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').addClass('isStopedInstance');
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').addClass('isStopedInstance');
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').removeClass('isStopedInstance');
-                                    //Opacity Settings
-                                    $('.componentlistContainer.stopped').parent().find('.chefClientRunlistImageCP').css('opacity','0.5');
-                                    $('.componentlistContainer.stopped').parent().find('.sshShellBtn').css({'opacity':'0.5'});
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonShutdown').css({'opacity':'0.5'});
-                                    $('.componentlistContainer.stopped').parent().find('.actionbuttonStart').css({'opacity':'1.0'});
-                                    }
-                                    if (data.instanceState == 'running'){
-                                      // $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').show();
-                                      // $('.instancestatusindicator.started').parent().find('.chefClientRunlistImageCP').show();
-                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').removeClass('isStopedInstance');
-                                      $('.componentlistContainer.started').parent().find('.sshShellBtn').removeClass('isStopedInstance');
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').removeClass('isStopedInstance');
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonStart').addClass('isStopedInstance');
-                                      //Opacity Settings
-                                      $('.componentlistContainer.started').parent().find('.chefClientRunlistImageCP').css('opacity','1.0');
-                                      $('.componentlistContainer.started').parent().find('.sshShellBtn').css({'opacity':'1.0'});
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonShutdown').css({'opacity':'1.0'});
-                                      $('.componentlistContainer.started').parent().find('.actionbuttonStart').css({'opacity':'0.5'});
-                                    }
-                            } 
+                                var cssClassed = getCssClassFromStatus(data.instanceState);
+                                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                            }
                         }   
                     })
                 }, delay);                
             }
             pollInstanceState(oldState,2000);                        
+        }).fail(function(jxObj){
+          console.log(jxObj);
+          if(jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+              console.log('calling actionLog');
+              $.get('../instances/'+instanceId+'/actionLogs/'+jxObj.responseJSON.actionLogId,function(actionLog){
+                  addActionLogRow(actionLog);
+              });
+          }
         }); 
     });
 
@@ -1147,7 +893,7 @@ $.get('../instances/'+urlParams.id,function(data){
         if($(this).hasClass('isStopedInstance')){
           return false;
         }
-         var $this = $(this);
+        var $this = $(this);
          var $parent = $('.domain-roles-caption');
          var instanceId = $parent.attr('data-instanceId');
          var chefServerId = $parent.attr('data-chefServerId');
@@ -1192,6 +938,7 @@ $.get('../instances/'+urlParams.id,function(data){
         $.post('../instances/' + instanceId + '/updateRunlist', {
             runlist: runlist
         }, function(data) {
+
             $chefRunModalContainer.modal('hide');
             var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
             $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
@@ -1207,8 +954,17 @@ $.get('../instances/'+urlParams.id,function(data){
             $parent.data('runlist',runlist);
             $parent.find('.moreInfo').trigger('click');
             console.log(data);
+            if (data.actionLogId) {
+                $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                    addActionLogRow(actionLog);
+                });
+            }
         }).fail(function(jxObj){
-            
+            if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+              $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                addActionLogRow(actionLog);
+              });
+            }
         });
 
     });
@@ -1429,7 +1185,18 @@ function addActionToServiceDom(serviceId,serviceData,$tr) {
             var $parent = $('.domain-roles-caption[data-instanceId="' + urlParams.id + '"]');
             console.log($parent.length,$parent.find('.moreInfo').length);
             $parent.find('.moreInfo').trigger('click');
+            if (data.actionLogId) {
+                $.get('../instances/' + urlParams.id + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                    addActionLogRow(actionLog);
+                });
+            }
 
+        }).fail(function(jxhr){
+            if(jxhr.responseJSON && jxhr.responseJSON.actionLogId) {
+              $.get('../instances/'+urlParams.id+'/actionLogs/'+jxhr.responseJSON.actionLogId,function(actionLog){
+                  addActionLogRow(actionLog);
+              });
+            }
         });
     });
 
@@ -1477,6 +1244,122 @@ function addServiceToDom(serviceData) {
 
   $servicesDatatable.row.add($tr).draw(); 
 
+}
+
+ var actionLogsPollTimeouts = []; 
+function pollActionLogCompleteStatus(instanceId,actionLogId,$td) {
+  $.get('../instances/'+instanceId+'/actionLogs/'+actionLogId,function(actionLog){
+      if(!actionLog.completed) {
+        var timeout = setTimeout(function(){
+          pollActionLogCompleteStatus(instanceId,actionLogId,$td);
+          var indexTimeout = actionLogsPollTimeouts.indexOf(timeout);
+          if(indexTimeout) {
+            actionLogsPollTimeouts.splice(indexTimeout,1);
+          }
+        },2000);
+        actionLogsPollTimeouts.push(timeout);
+      } else {
+        var status = 'failed'
+        if (actionLog.success) {
+            status = 'success';
+        }
+        $td.html(status);
+      }
+  });
+}
+
+function addActionLogRow(actionLog) {
+    var $tr = $(document.createElement('tr'));
+    var $tdName = $('<td></td>').append(actionLog.name);
+    $tr.append($tdName);
+    
+    var $tdStatus = $('<td></td>');
+    var status = 'failed';
+    if (!actionLog.completed) {
+        status = 'running';
+        //polling
+      if(actionLog.type !== 8) {
+        pollActionLogCompleteStatus(urlParams['id'],actionLog._id,$tdStatus);          
+      }
+ 
+    } else {
+        if (actionLog.success) {
+            status = 'success';
+        }
+    }
+    $tdStatus.append(status);
+    $tr.append($tdStatus);
+
+    var $tdData = $('<td></td>');
+    var actionData = actionLog.actionData;
+    if (actionData) {
+        var keys = Object.keys(actionData);
+        for (var j = 0; j < keys.length; j++) {
+            if (actionData[keys[j]] && actionData[keys[j]].length) {
+                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(actionData[keys[j]]));
+                $tdData.append('<br/>');
+            }
+        }
+    } else {
+        $tdData.append($('<span> - </span>'));
+    }
+    $tr.append($tdData);
+
+
+    var timeString = new Date().setTime(actionLog.timeStarted);
+    var dateStarted = new Date(timeString).toLocaleString(); //converts to human readable strings
+    var $tdTimeStarted = $('<td></td>').append(dateStarted);
+    $tr.append($tdTimeStarted);
+
+    var $tdUser = $('<td></td>').append(actionLog.user);
+    $tr.append($tdUser);
+
+    var $tdMorInfo = $('<td></td>').append($('<a data-toggle="modal" href="javascript:void(0)" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>').data('actionLogId', actionLog._id).click(function(e) {
+        var actionId = $(this).data('actionLogId');
+        var $actionLogMoreInfo = $('#actionLogMoreInfo');
+        $.get('/instances/' + urlParams['id'] + '/actionLogs/' + actionId+'/logs', function(data) {
+            var $table = $('<div></div>').css({
+                'height': '400px',
+                'overflow-x': 'hidden',
+                'overflow-y': 'auto',
+            });
+
+            for (var i = 0; i < data.length; i++) {
+                var $rowDiv = $('<div class="row"></div>');
+                var timeString = new Date().setTime(data[i].timestamp);
+                var date = new Date(timeString).toLocaleString(); //converts to human readable strings
+                $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                if (data[i].err) {
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>' + data[i].log + '</span>'));
+                } else {
+                    $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                }
+
+                $table.append($rowDiv);
+                $table.append('<hr/>');
+
+            }
+
+            $actionLogMoreInfo.find('.modal-body').empty().append($table);
+            $actionLogMoreInfo.modal('show');
+
+        });
+    }));
+
+    $tr.append($tdMorInfo);
+    $actionhistoryDatatable.row.add($tr).draw();
+}
+
+function addActionLogsToTable(actionLogs) {
+    console.log('loadin logs',actionLogs);
+    if(!(actionLogs && actionLogs.length)) {
+      return;
+    }
+
+    for (var i = 0; i < actionLogs.length; i++) {
+        addActionLogRow(actionLogs[i]);
+    }
 }
 
 $('.btnSaveService').click(function(e) {
@@ -1563,6 +1446,13 @@ $('.addServiceBtn').click(function(){
        console.log('clearint log state timeout');
       clearTimeout(stateTimeout);
     }
+    for(var i=0;i<actionLogsPollTimeouts.length;i++) {
+       if(actionLogsPollTimeouts[i]) {
+        console.log('clearing timeout');
+        clearTimeout(actionLogsPollTimeouts[i]);
+       }
+    }
+
    var getURL = localStorage.getItem("dataEx");
     var x= location.href;
     var z= x.lastIndexOf("=");
@@ -1743,27 +1633,27 @@ $('.formSubmit').click(function(e){
    });
 </script>
 <script type="text/javascript">
-  if (!$.fn.dataTable.isDataTable('#tableactionHistory') ){
-    //var $taskListArea = $('.taskListArea').empty();
-       $actionhistoryDatatable =  $('#tableactionHistory').DataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [
-                null,{
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                }
-            ]
+  if (!$.fn.dataTable.isDataTable('#tableactionHistory')) {
+      //var $taskListArea = $('.taskListArea').empty();
+      $actionhistoryDatatable = $('#tableactionHistory').DataTable({
+          "pagingType": "full_numbers",
+          "aaSorting": [],
+          "aoColumns": [{
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }]
 
-        });
-     }
+      });
+  }
   if (!$.fn.dataTable.isDataTable('#tableServices') ){
     //var $taskListArea = $('.taskListArea').empty();
        $servicesDatatable =  $('#tableServices').DataTable({

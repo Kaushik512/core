@@ -83,6 +83,7 @@
     </div>
 </form>
  <input type="button" id='ssh-terminateBtn' style="display:none"/>
+ <input type="hidden" id="ssh-actionLogId" />
 
 
 
@@ -142,6 +143,7 @@ $(function() {
     var $terminalContainer = $('#ssh-terminalContainer'); 
     var $loginForm = $('#ssh-login-form');
     var $terminateBtn = $('#ssh-terminateBtn'); 
+    var $sshActionLogIdInput = $('#ssh-actionLogId');
      
 
     console.log($loginForm)
@@ -160,10 +162,13 @@ $(function() {
         $loginForm.show();
         $terminalContainer.hide();
         $loadingContainer.hide();
+        if(data.actionLogId) {
+            $sshActionLogIdInput.val(data.actionLogId);
+        }
      
     });
 
-    socket.on('opened', function() {
+    socket.on('opened', function(data) {
         console.log('connected');
         $errorArea.hide();
         $loginForm.hide();
@@ -187,6 +192,10 @@ $(function() {
         });
 
         term.open($terminalContainer.get(0));
+
+        if(data.actionLogId) {
+            $sshActionLogIdInput.val(data.actionLogId);
+        }
 
 
 

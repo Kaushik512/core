@@ -965,7 +965,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                     //Verifying if the node is alive
                     var nodeAlive = 'running';
-                    waitForPort(req.body.fqdn, 22, function(err) {
+                    var openport = 22;
+                    if(req.body.os === 'windows') {
+                        openport = 5985;
+                    } 
+                    waitForPort(req.body.fqdn, openport, function(err) {
                         if (err) {
                             console.log(err);
                             res.send(400, {
@@ -1021,17 +1025,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 instance.id = data._id;
                                 instance._id = data._id;
-
+                                var timestampStarded = new Date().getTime();
+                                var actionLog = instancesDao.insertBootstrapActionLog(instance.id, [], req.session.user.cn, timestampStarded);
+                                var logsRefernceIds = [instance.id, actionLog._id];
                                 logsDao.insertLog({
-                                    referenceId: instance.id,
+                                    referenceId: logsRefernceIds,
                                     err: false,
                                     log: "Bootstrapping instance",
-                                    timestamp: new Date().getTime()
+                                    timestamp: timestampStarded
                                 });
 
                                 credentialCryptography.decryptCredential(encryptedCredentials, function(err, decryptedCredentials) {
                                     if (err) {
                                         logger.error("unable to decrypt credentials", err);
+                                        var timestampEnded = new Date().getTime();
+                                        logsDao.insertLog({
+                                            referenceId: logsRefernceIds,
+                                            err: true,
+                                            log: "Unable to decrypt credentials. Bootstrap Failed",
+                                            timestamp: timestampEnded
+                                        });
+                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
                                         res.send(500);
                                         return;
                                     }
@@ -1086,6 +1100,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
 
                                                 });
+                                                var timestampEnded = new Date().getTime();
+                                                logsDao.insertLog({
+                                                    referenceId: logsRefernceIds,
+                                                    err: true,
+                                                    log: "Bootstrap Failed",
+                                                    timestamp: timestampEnded
+                                                });
+                                                instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
+
 
                                             } else {
                                                 if (code == 0) {
@@ -1096,6 +1120,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             logger.debug("Instance bootstrap status set to success");
                                                         }
                                                     });
+                                                    var timestampEnded = new Date().getTime();
+                                                    logsDao.insertLog({
+                                                        referenceId: logsRefernceIds,
+                                                        err: false,
+                                                        log: "Instance Bootstrapped Successessfully",
+                                                        timestamp: timestampEnded
+                                                    });
+                                                    instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
 
                                                     chef.getNode(instance.chef.chefNodeName, function(err, nodeData) {
                                                         if (err) {
@@ -1133,13 +1166,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         }
                                                     });
 
+                                                    var timestampEnded = new Date().getTime();
+                                                    logsDao.insertLog({
+                                                        referenceId: logsRefernceIds,
+                                                        err: true,
+                                                        log: "Bootstrapped Failed",
+                                                        timestamp: timestampEnded
+                                                    });
+                                                    instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
                                                 }
                                             }
 
                                         }, function(stdOutData) {
 
                                             logsDao.insertLog({
-                                                referenceId: instance.id,
+                                                referenceId: logsRefernceIds,
                                                 err: false,
                                                 log: stdOutData.toString('ascii'),
                                                 timestamp: new Date().getTime()
@@ -1148,13 +1190,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }, function(stdErrData) {
 
                                             logsDao.insertLog({
-                                                referenceId: instance.id,
+                                                referenceId: logsRefernceIds,
                                                 err: true,
                                                 log: stdErrData.toString('ascii'),
                                                 timestamp: new Date().getTime()
                                             });
                                         });
-
                                     }); //end of chefcleanup
 
                                 });
