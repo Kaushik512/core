@@ -545,7 +545,7 @@ function disableInstanceActionBtns(instanceId){
   $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
 
 var logTimeout;
