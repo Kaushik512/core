@@ -773,6 +773,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.get('/organizations/:orgId/chefserver', function(req, res) {
+        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            logger.debug("chefdata", chefDetails);
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            } else {
+                res.send(chefDetails);
+            }
+        });
+    });
+
     app.get('/organizations/:orgname/cookbooks', function(req, res) {
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
@@ -1006,9 +1022,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //Verifying if the node is alive
                     var nodeAlive = 'running';
                     var openport = 22;
-                    if(req.body.os === 'windows') {
+                    if (req.body.os === 'windows') {
                         openport = 5985;
-                    } 
+                    }
                     waitForPort(req.body.fqdn, openport, function(err) {
                         if (err) {
                             console.log(err);
