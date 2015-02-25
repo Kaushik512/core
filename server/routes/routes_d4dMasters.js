@@ -1532,10 +1532,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     folderpath = ''
                                 else
                                     folderpath = bodyJson["folderpath"];
+                                var fldadded = false;
                                 for (var myval in rowtoedit) {
                                     if (itm == myval)
-                                        rowtoedit[myval] = bodyJson[myval];
+                                        {
+                                            rowtoedit[myval] = bodyJson[myval];
+                                            fldadded = true;
+                                        }
                                     console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
+                                }
+                                if(!fldadded){
+                                    //
+                                    //console.log("");
                                 }
                                 // for(var myval in d4dMasterJson){
                                 //      console.log("key:"+myval+", value:");
@@ -1582,6 +1590,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         console.log("Rowid: " + bodyJson["rowid"]);
                         var currowid = bodyJson["rowid"];
                         delete rowtoedit._id; //fixing the issue of 
+                        console.log('Rowtoedit:' + JSON.stringify(rowtoedit));
                         eval('d4dModelNew.' + dbtype).update({
                             rowid: bodyJson["rowid"]
                         }, {

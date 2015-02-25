@@ -1006,7 +1006,7 @@ $.get('../instances/'+urlParams.id,function(data){
   $cfmwareTbody.empty();
   var $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Environment</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.envId+'</td>');
-  $cfmwareTbody.append($tr);
+  // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
   
   $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.bootStrapStatus+'</td>');
