@@ -1580,15 +1580,15 @@ $('#modalContainerimportInstance').on('show.bs.modal',function(e){
       JSON.parse(data).forEach(function(k,v){
         var kt = Object.keys(k);
        
-        if(k['orgname'] == _org){
+        if(k['orgname_rowid'] == _org){
           found = true;
         }
       });
       
-        if(!found){
-          $('#modalContainerimportInstance').modal('hide');
-          alert('A chef server is required to import an instance. Use settings to add a new one.');
-        }
+      if(!found){
+        $('#modalContainerimportInstance').modal('hide');
+        alert('A chef server is required to import an instance. Use settings to add a new one.');
+      }
     }
     importbyipusers();
   });

@@ -482,7 +482,7 @@ function Configmgmt() {
                 var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
                 console.log('outJson:' + JSON.stringify(d4dMasterJson));
                 var keys = Object.keys(outJson);
-                var orgname = outJson['orgname'];
+                var orgname = outJson['orgname_rowid'];
                 var loginname = outJson['loginname'];
                 for (i = 0; i < keys.length; i++) {
                     var k = keys[i];
