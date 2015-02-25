@@ -241,7 +241,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     }
 
                     console.log('nodeip ==> ', nodeIp);
-
+                    console.log('alive ==> ', node.isAlive);
                     var instance = {
                         orgId: orgId,
                         bgId: bgId,
@@ -362,6 +362,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                                 if (stdout) {
                                                     if (stdout.indexOf('1 received') > 0) {
                                                         node.isAlive = 'running';
+                                                    } else {
+                                                        node.isAlive = 'unknown';
                                                     }
                                                     //    console.log('node ===>', node);
                                                     insertNodeInMongo(node);

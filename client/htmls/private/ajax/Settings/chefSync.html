@@ -416,7 +416,7 @@ $(function() {
                                 bootbox.confirm("Are you sure you would want to change the environment?<br/>Note:<br/>Change will done on the chef server.", function(result) {
                                     if (result) {
                                         var nodeName = $that.parents('tr').attr('data-nodeName'); 
-                                        $.post('/chef/servers/'+urlParams.chefId+'/nodes/'+nodeName+'1/updateEnv',{
+                                        $.post('/chef/servers/'+urlParams.chefId+'/nodes/'+nodeName+'/updateEnv',{
                                           envName:$that.val()
                                         },function(res){
                                            console.log(res);  
@@ -704,8 +704,9 @@ $(function() {
                                     var nodeData = $($checkBoxes[0]).data('node');
                                     if (nodeData && nodeData.chef_environment) {
                                         //$chefResultModalContainer.modal('hide');
-                                        //loadTreeFuncNew();
+                                        loadTreeFuncNew();
                                         //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
+
                                     }
                                 }
                             }
