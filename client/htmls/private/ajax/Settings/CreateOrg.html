@@ -35,6 +35,10 @@
                                     <input name="ctl00$MainContent$domainname" value="" id="domainname" class="form-control" type="text"  cdata="catalyst">
                                     <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                  </div>
+                                 <div class="col-lg-6 orgactive hidden">
+                                    <label for="active" style="width:20%">Active:<input name="ctl00$MainContent$domainname" value="" id="active" class="form-control" type="checkbox" checked="checked"  cdata="catalyst" style="margin-top:-25px"></label>
+                                    
+                                 </div>
                               </div>
                               <!-- end widget content -->
                            </div>
@@ -292,6 +296,10 @@
 </script>
 <script>
    $(document).ready(function () {
+    var rowid = $('#myForm').find('button').first().attr('rowid');
+    if(typeof rowid != "undefined"){
+      $('.orgactive').removeClass('hidden');
+    }
     $("#orgname").focus();
        $('#myForm').submit(function() {
          console.log('serialize ==> ',$(this).serialize());
