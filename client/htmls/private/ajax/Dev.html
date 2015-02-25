@@ -851,7 +851,7 @@
 
 
 <!-- Modal SSH Shell-->
-<div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" class="hidden">
   <div class="modal-dialog " style="">
     <div class="modal-content">
       <div class="modal-header">
@@ -1063,27 +1063,18 @@
 </div><!-- /.modal for Container tab ended-->
 
 <!-- Modal for Container tab started-->
-<button class="demo"></button>
 <!-- <div class="modal fade" id="modalContainerimportInstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">-->
-          <form role="form" id="addInstanceForm" autocomplete="off" class="hidden">
-            <div class="modal-header">
-                
-                <h4 class="modal-title">
-                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Import Instance By IP
-                </h4>
-            </div>
-           
+          <div title="Import Instance by IP" class="hidden dialogImportByIp" >
+  <form role="form" class="addInstanceForm" autocomplete="off">
             <div class="modal-body modal-height">
-                        
-
                         <span id="spanforshefserverfound"></span>
                         <div class="col-lg-6">
                             
                               <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                              <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus/>
+                              <input type="text" name="ipaddressInput" class="instanceFQDN form-control" autofocus/>
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
                               
@@ -1092,7 +1083,7 @@
                         <div class="col-lg-6 topNew">
                             
                               <label for="">Choose Operating System<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                              <select id="importinstanceOS"  class="width-100" >
+                              <select  class="importinstanceOS width-100" >
                                 <option value="linux">linux</option>
                                 <option value="windows">windows</option>
                               </select>
@@ -1104,7 +1095,7 @@
                             
                               <label for="">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               
-                              <input type="text" name="usernameInput" class="form-control" id="instanceUsername">
+                              <input type="text" name="usernameInput" class="form-control instanceUsername">
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
                               
@@ -1113,7 +1104,7 @@
                         <div class="col-lg-6" style="margin-top:15px">
                             
                               <label for="">Choose Authentication Type<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                              <select id="pemFileDropdown"  class="authenticationType width-100" >
+                              <select class="authenticationType width-100 pemFileDropdown" >
                                 <option value="password">Password</option>
                                 <option value="pemFile">Pem File</option>
                               </select>
@@ -1125,18 +1116,18 @@
                             
                               <label for="">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                               
-                              <input type="password" class="form-control" id="instancePassword" />
+                              <input type="password" class="form-control instancePassword" />
                                 <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
                               
                          
                         </div>
-                        <div class="col-lg-6 authPemFile" style="margin-top:15px">
+                        <div class="col-lg-6 authPemFile" style="margin-top:15px;display:none">
                             <div class="smart-forms">
                                 <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                 <label for="templatesicon" name="field" class="file">
                                     <span class="button btn-primary btn-importbyIP">Browse</span>
-                                    <input id="importPemfileInput" type="file" class="gui-file">
+                                    <input type="file" class="importPemfileInput gui-file">
                                     <input type="text" readonly="" class="gui-input">
                                 </label>
                             </div>
@@ -1145,7 +1136,7 @@
                             <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                             
                                 <div class="userListLoadingContainer"></div>
-                                <select class="custom-scroll" multiple="" id="importbyipuserListSelect" style="display:none" cat-validation="required">
+                                <select class="custom-scroll importbyipuserListSelect" multiple=""   cat-validation="required">
                                 </select> 
                             
                         </div>
@@ -1153,10 +1144,10 @@
                 
             </div>
              <div class="modal-footer">
-              <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"> </label>
-              <label id="nodeimportipresultmsg" class=" hidden"></label>
+              <label class="hidden nodeimportipspinner"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"> </label>
+              <label class="hidden nodeimportipresultmsg"></label>
               <div class="marginForButtons">
-                <button id="addInstanceBtn" class="btn btn-primary" type="submit">
+                <button class="btn btn-primary addInstanceIpBtn" type="submit">
                    <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                 </button>
                  <a class="btn btn-primary" type="submit" data-dismiss="modal">
@@ -1164,7 +1155,9 @@
                 </a>
               </div>
              </div>
-             </form><!--
+             </form>
+</div>
+          <!--
         </div><!-- /.modal-content -->
    <!-- </div><!-- /.modal-dialog -->
 <!--</div><!-- /.modal for Container tab --> <!--ended-->
@@ -1173,17 +1166,8 @@
 
 </script>
 <script type="text/javascript">
-$(".authPassword").show();
-$(".authPemFile").hide();
-$('.authenticationType').change(function(e) {
-    if (this.value == "password") {
-        $(".authPassword").show();
-        $(".authPemFile").hide();
-    } else {
-        $(".authPassword").hide();
-        $(".authPemFile").show();
-    }
-});
+
+
 
     $('.searchInstances').keyup(function(e){
         var searchText = $(this).val();
@@ -1203,11 +1187,11 @@ $('.authenticationType').change(function(e) {
      });
 </script>
 <script type="text/javascript">
-$('#ipaddressimport').click(function(e){
+/*$('#ipaddressimport').click(function(e){
   $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
   $('#pemFileDropdown').change();
-});
+});*/
 
 // $(document.body).on('click', '.card', function () {
       
@@ -1248,8 +1232,8 @@ $(document).ready(function() {
     $('[autofocus]', e.target).focus();
   });
 
-   $('#importinstanceOS').select2();
-   $('#pemFileDropdown').select2();
+   $('.importinstanceOS').select2();
+   $('.pemFileDropdown').select2();
 
 
   if(localStorage.getItem("SelectedClass") == "Orchestration")
@@ -1553,10 +1537,7 @@ $('.dockerinstancestart').click(function(e){
     });
 });
 
-$('#importPemfileInput').change(function(){
-    //console.log(this.files);
-    $(this).next().val(this.files[0].name);
-});
+
 
 $('#modalContainerimportInstance').on('show.bs.modal',function(e){
    $('#addInstanceBtn').removeAttr('disabled');
@@ -1590,151 +1571,10 @@ $('#modalContainerimportInstance').on('show.bs.modal',function(e){
 
 function importbyipusers(){
 
-var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
-    $.get('../users',function(userList){
-      userList = JSON.parse(userList);
-      var $importbyipuserListSelect = $('#importbyipuserListSelect').empty(); 
-      userList.sort(function(a, b){
-        var keyA =Object.keys(a);
-        var keyB =Object.keys(b);
-        
-        if(keyA[0] < keyB[0]) return -1;
-        if(keyA[0] > keyB[0]) return 1;
-        return 0;
-      }); 
-      for(var i=0;i<userList.length;i++) {
-        var keys = Object.keys(userList[i]);
-        var $option = $('<option></option>').append(keys[0]).val(keys[0]);
-        $importbyipuserListSelect.append($option);
-      }
-      $loadingContainer.hide();
-      $importbyipuserListSelect.show();
-    }).error(function(){
-        $loadingContainer.empty().append('Unable to load users. Please try again later.');
-    });
+
 }
 
 //$('#addInstanceBtn').click(function(e) {
-  $("#addInstanceForm").submit( function(e) {
-    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
-
-    var $spinner = $('#nodeimportipspinner').addClass('hidden');
-    var $result = $('#nodeimportipresultmsg').addClass('hidden');
-    var reqBody = {};
-    var $form = $('#addInstanceForm');
-    reqBody.fqdn = $form.find('#instanceFQDN').val();
-    reqBody.os = $form.find('#importinstanceOS').val();
-    reqBody.users = $('#importbyipuserListSelect').val();
-    reqBody.credentials = {
-        username: $form.find('#instanceUsername').val()
-    };
-
-    if(!reqBody.fqdn) {
-       alert('Please enter IP');
-        e.preventDefault();
-       return false;
-    }
-    if(!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)){
-      alert("Please provide a valid IP Address or Hostname");
-      e.preventDefault();
-      return false;
-    }
-
-    if(!reqBody.users) {
-       alert('Please assign atleast one user');
-        e.preventDefault();
-       return false;
-    }
-    if(!reqBody.os) {
-       alert('Please choose OS');
-        e.preventDefault();
-       return false;
-    }
-
-    function makeRequest() {
-     $('#addInstanceBtn').attr('disabled','disabled');
-     $spinner.removeClass('hidden');
-     // $('#addInstanceBtn').attr('disabled','disabled');
-      $.post('../organizations/'+urlParams.org+'/businessgroups/'+urlParams['bg']+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
-          $('#tabInstanceStatus').hide();
-          addInstanceToDOM(data);
-          
-          $spinner.addClass('hidden');
-          $result.addClass('hidden');
-          $('#addInstanceBtn').removeAttr('disabled');
-          $('#addInstanceForm').get(0).reset();
-          $('#pemFileDropdown').change();
-          var $divinstancescardview = $('#divinstancescardview');
-          if ($divinstancescardview.find('li').length > 0) {
-            $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
-          }
-          $divinstancescardview.find('.item').first().addClass('active');
-          $('#modalContainerimportInstance').modal('hide');
-          //Updating the tree
-          loadTreeFuncNew();
-          console.log('success---3---3');
-          selectFirstEnv();
-          $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
-      }).fail(function(jxhr){
-         $spinner.addClass('hidden');
-         $result.empty();
-         $result.css({color:'red'});
-         if(jxhr.status === 400) {
-           if(jxhr.responseJSON) {
-            $result.html(jxhr.responseJSON.message);
-           } else {
-            $result.html("Invalid request");
-           }
-         } else {
-            $result.html("Server Behaved Unexpectedly");
-         }
-         $result.removeClass('hidden');
-         $('#addInstanceBtn').removeAttr('disabled');
-          
-      });
-
-    }
-
-    var $dropdown = $('#pemFileDropdown');
-    if ($dropdown.val()==='pemFile') {
-        
-       var pemFileInput = $form.find('#importPemfileInput').get(0);
-       if(!reqBody.credentials.username){
-          alert('Please Enter Username');
-           e.preventDefault();
-          return false;
-       }
-       if(!pemFileInput.files.length) {
-         alert('Please Choose a Pem file');
-          e.preventDefault();
-         return false;
-       }
-       var reader = new FileReader();
-       // Closure to capture the file information.
-       reader.onload = function(e) {
-           // Render thumbnail.
-            reqBody.credentials.pemFileData = e.target.result;
-           
-            makeRequest();
-           
-       };
-       // Read in the image file as a data URL.
-       
-       reader.readAsText(pemFileInput.files[0]);
-    } else {
-        reqBody.credentials.password = $form.find('#instancePassword').val();
-        if(!reqBody.credentials.password) {
-           alert("Please enter password");
-            e.preventDefault();
-           return false;
-        }
-        makeRequest();
-    }
-
-    e.preventDefault();
-    return false;
-
-});// end form.submit
 
 
 /**
@@ -3893,37 +3733,194 @@ loadcarousel();
 
 </script>
 <script>
-$(function(){
-$("#ipaddressimport").click(function(){
-$("#addInstanceForm").removeClass('hidden')
-.dialog({
-"buttons" : { "Cancel" : function(){ $(this).dialog("close"); } }
-})
-.dialogExtend({
-"closable" : true, // enable/disable close button
-//"maximizable" : true, // enable/disable maximize button
-"minimizable" : true, // enable/disable minimize button
-//"collapsable" : true, // enable/disable collapse button
-"dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-"titlebar" : "transparent", // false, 'none', 'transparent'
-"minimizeLocation" : "right", // sets alignment of minimized dialogues
-"icons" : { // jQuery UI icon class
-  "close" : "ui-icon-circle-close",
-  //"maximize" : "ui-icon-circle-plus",
-  "minimize" : "ui-icon-circle-minus",
-  "collapse" : "ui-icon-triangle-1-s",
-  "restore" : "ui-icon-bullet"
-},
-"load" : function(evt, dlg){ alert(evt.type); }, // event
-"beforeCollapse" : function(evt, dlg){ alert(evt.type); }, // event
-//"beforeMaximize" : function(evt, dlg){ alert(evt.type); }, // event
-"beforeMinimize" : function(evt, dlg){ alert(evt.type); }, // event
-//"beforeRestore" : function(evt, dlg){ alert(evt.type); }, // event
-"collapse" : function(evt, dlg){ alert(evt.type); }, // event
-//"maximize" : function(evt, dlg){ alert(evt.type); }, // event
-"minimize" : function(evt, dlg){ alert(evt.type); }, // event
-"restore" : function(evt, dlg){ alert(evt.type); } // event
+$(function() {
+  // import by IP modal
+
+  $('.importPemfileInput').change(function(){
+    //console.log(this.files);
+    $(this).next().val(this.files[0].name);
+  });
+
+  $('.authenticationType').change(function(e) {
+    var $form  = $(this).parents('form'); 
+    if (this.value == "password") {
+        $(".authPassword",$form).show();
+        $(".authPemFile",$form).hide();
+    } else {
+        $(".authPassword",$form).hide();
+        $(".authPemFile",$form).show();
+    }
+ });
+   
+  function getUsers($context) {
+    var $loadingContainer = $('.userListLoadingContainer',$context).empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();    
+    $.get('../users',function(userList){
+      userList = JSON.parse(userList);
+      var $importbyipuserListSelect = $('.importbyipuserListSelect',$context).empty(); 
+      userList.sort(function(a, b){
+        var keyA =Object.keys(a);
+        var keyB =Object.keys(b);
+        
+        if(keyA[0] < keyB[0]) return -1;
+        if(keyA[0] > keyB[0]) return 1;
+        return 0;
+      }); 
+      for(var i=0;i<userList.length;i++) {
+        var keys = Object.keys(userList[i]);
+        var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+        $importbyipuserListSelect.append($option);
+      }
+      $loadingContainer.hide();
+      $importbyipuserListSelect.show();
+    }).error(function(){
+        $loadingContainer.empty().append('Unable to load users. Please try again later.');
+    });
+  } 
+
+  $(".addInstanceForm").submit(function(e) {
+    var ipAddresRegExp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var hostname = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+    $this = $(this);
+    var $spinner = $('.nodeimportipspinner',$this).addClass('hidden');
+    var $result = $('.nodeimportipresultmsg',$this).addClass('hidden');
+    var reqBody = {};
+    var $form = $this;
+    reqBody.fqdn = $form.find('.instanceFQDN').val();
+    reqBody.os = $form.find('.importinstanceOS').val();
+    reqBody.users = $('.importbyipuserListSelect',$this).val();
+    reqBody.credentials = {
+      username: $form.find('.instanceUsername').val()
+    };
+
+    if (!reqBody.fqdn) {
+      alert('Please enter IP');
+      e.preventDefault();
+      return false;
+    }
+    if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
+      alert("Please provide a valid IP Address or Hostname");
+      e.preventDefault();
+      return false;
+    }
+
+    if (!reqBody.users) {
+      alert('Please assign atleast one user');
+      e.preventDefault();
+      return false;
+    }
+    if (!reqBody.os) {
+      alert('Please choose OS');
+      e.preventDefault();
+      return false;
+    }
+
+    function makeRequest() {
+      $('.addInstanceIpBtn',$this).attr('disabled', 'disabled');
+      $spinner.removeClass('hidden');
+      // $('#addInstanceBtn').attr('disabled','disabled');
+      $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/addInstance', reqBody, function(data) {
+        $('#tabInstanceStatus').hide();
+        addInstanceToDOM(data);
+
+        $spinner.addClass('hidden');
+        $result.addClass('hidden');
+        var $divinstancescardview = $('#divinstancescardview');
+        if ($divinstancescardview.find('li').length > 0) {
+          $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+        }
+        $divinstancescardview.find('.item').first().addClass('active');
+        //Updating the tree
+        loadTreeFuncNew();
+        console.log('success---3---3');
+        selectFirstEnv();
+        $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
+        $result.empty();
+        $result.css({
+          color: 'blue'
+        });
+        $result.html("Node Imported Successfully");
+
+      }).fail(function(jxhr) {
+        $('.addInstanceIpBtn',$this).removeAttr('disabled');
+        $spinner.addClass('hidden');
+        $result.empty();
+        $result.css({
+          color: 'red'
+        });
+        if (jxhr.status === 400) {
+          if (jxhr.responseJSON) {
+            $result.html(jxhr.responseJSON.message);
+          } else {
+            $result.html("Invalid request");
+          }
+        } else {
+          $result.html("Server Behaved Unexpectedly");
+        }
+        $result.removeClass('hidden');
       });
-});
+
+    }
+
+    var $dropdown = $('.pemFileDropdown',$this);
+    if ($dropdown.val() === 'pemFile') {
+
+      var pemFileInput = $form.find('.importPemfileInput',$this).get(0);
+      if (!reqBody.credentials.username) {
+        alert('Please Enter Username');
+        e.preventDefault();
+        return false;
+      }
+      if (!pemFileInput.files.length) {
+        alert('Please Choose a Pem file');
+        e.preventDefault();
+        return false;
+      }
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = function(e) {
+        // Render thumbnail.
+        reqBody.credentials.pemFileData = e.target.result;
+
+        makeRequest();
+
+      };
+      // Read in the image file as a data URL.
+
+      reader.readAsText(pemFileInput.files[0]);
+    } else {
+      reqBody.credentials.password = $form.find('.instancePassword',$this).val();
+      if (!reqBody.credentials.password) {
+        alert("Please enter password");
+        e.preventDefault();
+        return false;
+      }
+      makeRequest();
+    }
+
+    e.preventDefault();
+    return false;
+
+  }); // end form.submit
+
+
+  $("#ipaddressimport").click(function() {
+    $(".dialogImportByIp").clone(true).removeClass('hidden').dialog({}).dialogExtend({
+      "closable": true, // enable/disable close button
+      "minimizable": true, // enable/disable minimize button
+      "titlebar": "transparent", // false, 'none', 'transparent'
+      "minimizeLocation": "right", // sets alignment of minimized dialogues
+      "icons": { // jQuery UI icon class
+        "close": "ui-icon-closethick",
+        "minimize": "ui-icon-circle-minus",
+        "restore": "ui-icon-bullet"
+      },
+      load: function(evt, dlg) {
+        var $this = $this;
+        getUsers($this);
+        console.log('obj',dlg);
+      }
+    });
+  });
 });
 </script>
+
