@@ -264,7 +264,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 ttp = envname;
                                                                 //envs[nt] = envname; //.substring(0, 12);
                                                             }
-                                                            if (envs[nt] != '') {
+                                                            if (envname != '') { //was envs[nt].trim() != ''
                                                                 envs_.push({
                                                                     text: envname,
                                                                     href: '#ajax/Dev.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'] + '&envid=' + envs[nt],

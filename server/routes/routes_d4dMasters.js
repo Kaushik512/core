@@ -489,14 +489,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             var itms = jobj[k1].split(',');
                                             for(_itms in itms){
                                                 console.log("in items");
-                                                if(names == '')
+                                                var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                if(_itmsName != '')
                                                 {
-                                                    names = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        if(names == '')
+                                                        {
+                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        }
+                                                        else{
+                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        }
+                                                        console.log('names:',names);
                                                 }
-                                                else{
-                                                    names += ',' + configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                }
-                                                console.log('names:',names);
                                             }
                                             
                                         }
