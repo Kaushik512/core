@@ -1678,9 +1678,10 @@ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img clas
           $divinstancescardview.find('.item').first().addClass('active');
           $('#modalContainerimportInstance').modal('hide');
           //Updating the tree
-          loadTreeFuncNew();
+          //loadTreeFuncNew();
           console.log('success---3---3');
-          selectFirstEnv();
+          //selectFirstEnv();
+          //selectAnyEnviornment(urlParams.org,urlParams.envid);
           $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
       }).fail(function(jxhr){
          $spinner.addClass('hidden');

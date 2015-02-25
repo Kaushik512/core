@@ -471,7 +471,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 res.end(JSON.stringify(d4dMasterJson));
                             }
                             var counter = 0;
-                            _keys.forEach(function(k,v){
+                            var todelete = [];
+                            //_keys.forEach(function(k,v){
+                            for(var k=0,v=0;k<_keys.length;k++,v++) {
                                 //var __keys = Object.keys(d4dMasterJson[k]);
                                
                                 //console.log('OBject:' + d4dMasterJson[k]);
@@ -507,21 +509,39 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         else{
                                             names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
                                         }
-                                        //console.log('names:',names);
+                                        console.log('names:',names,(names == ''));
+
                                         d4dMasterJson[k][flds[0]] = names;
+
+                                        if(names == '')
+                                            todelete.push(k);
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
                                   //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
-                                if(counter >= _keys.length - 1){
-                                    console.log("sent response 484" + JSON.stringify(d4dMasterJson));
-                                    res.end(JSON.stringify(d4dMasterJson));
-                                    console.log(k,d4dMasterJson[k],v);
-                                }
+                                console.log("Orgname check:" + d4dMasterJson[k]['orgname']);
+                                
+                                
                                 counter++;
-                            });
+                            };//);
+                                    console.log("To Delete Array:", todelete.toString());
+                                    var collection = [];
+                                    
+                                    for(var i = 0; i < d4dMasterJson.length;i++){
+                                        if(todelete.indexOf(i) === -1) {
+                                            collection.push(d4dMasterJson[i]);
+                                        }
+                                        
+                                    }
+                                    console.log("sent response 484" + JSON.stringify(collection));
+                                    res.end(JSON.stringify(collection));
+                                    //console.log(k,d4dMasterJson[k],v);
+
+                        
+
+
                             
                         
                     });
