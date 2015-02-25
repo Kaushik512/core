@@ -12,6 +12,7 @@ function bindClick_ipaddressImport(){
   $('#nodeimportipresultmsg').addClass("hidden");
   $('#addInstanceForm').trigger("reset");
   $('#pemFileDropdown').change();
+  $('#importinstanceOS').change();
 });
 }
 
@@ -150,6 +151,7 @@ function bindSubmit_AddInstance(){
           $result.addClass('hidden');
           $('#addInstanceBtn').removeAttr('disabled');
           $('#addInstanceForm').get(0).reset();
+          $('#importinstanceOS').change();
           $('#pemFileDropdown').change();
           var $divinstancescardview = $('#divinstancescardview');
           if ($divinstancescardview.find('li').length > 0) {
