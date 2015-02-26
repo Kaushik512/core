@@ -816,6 +816,8 @@ $.get('../instances/'+urlParams.id,function(data){
 
 
   $('.instanceActionBtn').click(function(e){
+
+   
         if($(this).hasClass('isStopedInstance')){
           return false;
         }
@@ -823,69 +825,81 @@ $.get('../instances/'+urlParams.id,function(data){
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
         var type = $this.attr('data-actionType');
-        url = '../instances/'+instanceId+'/startInstance';
+        var url = '../instances/'+instanceId+'/startInstance';
         if(type==='stop') {
             url = '../instances/'+instanceId+'/stopInstance'
         }
+        function makeRequest(url) {
+           $parent.find('.moreInfo').trigger('click');
+            $.get(url, function(data) {
+                if (data.actionLogId) {
+                    $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                        addActionLogRow(actionLog);
+                    });
+                }
+
+                console.log($parent.length, $parent);
+
+                var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
+
+                var oldState = data.instanceCurrentState;
+
+                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+
+                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
+
+                function pollInstanceState(state, delay) {
+                    stateTimeout = setTimeout(function() {
+                        $.get('../instances/' + instanceId, function(data) {
+                            if (data) {
+                                if (data.instanceState == 'stopped') {
+
+                                    enableInstanceActionStopBtn(data._id);
+                                }
+                                if (data.instanceState == 'running') {
+                                    enableInstanceActionStartBtn(data._id);
+                                }
+                                if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                                    disableInstanceActionBtns(data._id);
+                                }
+                                if (data.instanceState === state) {
+                                    pollInstanceState(state, 5000);
+                                } else {
+                                    console.log('polling complete');
+                                    var cssClassed = getCssClassFromStatus(data.instanceState);
+                                    $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                    $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                }
+                            }
+                        })
+                    }, delay);
+                }
+                pollInstanceState(oldState, 2000);
+            }).fail(function(jxObj) {
+                console.log(jxObj);
+                if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+                    console.log('calling actionLog');
+                    $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                        addActionLogRow(actionLog);
+                    });
+                }
+            });
+
+        }
+
+        if(type==='stop') {
+          bootbox.confirm("Stop Instance ?",function(result){
+            if(result) {
+               makeRequest(url);
+            } 
+          });
+        } else {
+          makeRequest(url);
+        }
         
-        $parent.find('.moreInfo').trigger('click');
-        $.get(url,function(data){
+       
 
-
-            if(data.actionLogId) {
-              $.get('../instances/'+instanceId+'/actionLogs/'+data.actionLogId,function(actionLog){
-                  addActionLogRow(actionLog);
-              });
-            }
-            
-            console.log($parent.length,$parent);
-
-            
-           
-            var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
-            
-            var oldState = data.instanceCurrentState;
-
-            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-
-            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
-            
-            function pollInstanceState(state,delay) {
-                stateTimeout = setTimeout(function() {
-                    $.get('../instances/'+instanceId,function(data){
-                        if(data) {
-                            if (data.instanceState == 'stopped') {
-
-                                enableInstanceActionStopBtn(data._id);
-                            }
-                            if (data.instanceState == 'running') {
-                                enableInstanceActionStartBtn(data._id);
-                            }
-                            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
-                                disableInstanceActionBtns(data._id);
-                            }
-                            if (data.instanceState === state) {
-                                pollInstanceState(state, 5000);
-                            } else {
-                                console.log('polling complete');
-                                var cssClassed = getCssClassFromStatus(data.instanceState);
-                                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                            }
-                        }   
-                    })
-                }, delay);                
-            }
-            pollInstanceState(oldState,2000);                        
-        }).fail(function(jxObj){
-          console.log(jxObj);
-          if(jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
-              console.log('calling actionLog');
-              $.get('../instances/'+instanceId+'/actionLogs/'+jxObj.responseJSON.actionLogId,function(actionLog){
-                  addActionLogRow(actionLog);
-              });
-          }
-        }); 
+         
     });
 
   
@@ -1645,7 +1659,7 @@ $('.formSubmit').click(function(e){
           }, {
               "bSortable": false
           }, {
-              "bSortable": false
+              "bSortable": true
           }, {
               "bSortable": false
           }, {
