@@ -1821,7 +1821,7 @@ nav ul ul>li:hover b {
 .select2-container .select2-choice>.select2-chosen {
     margin-right: 26px;
     display: block;
-    overflow: hidden;
+    overflow: visible;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -5689,4 +5689,11 @@ span.icon {
 }
 .btn-importbyIP{
 	top:11px !important;
+}
+.forBootBox{
+    margin-top: 6px;
+    margin-left: -20px;
+}
+.forBootBox1{
+    margin-left: 24px;
 }
