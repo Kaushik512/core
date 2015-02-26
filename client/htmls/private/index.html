@@ -321,7 +321,7 @@ $('#clickdisabler').hide();
 
 	function setleftnavigation(toplink,breadcrumbHeader){
 		if($(toplink).hasClass('active')){
-			alert('about to return setleftnavigation:' + $(toplink).attr('href'));
+			//alert('about to return setleftnavigation:' + $(toplink).attr('href'));
 			if($(toplink).attr('id') == 'workZoneNew'){
 				selectFirstEnv();
 			}
@@ -467,9 +467,9 @@ $('#clickdisabler').hide();
 		console.log('called');
 		var _orgnode = $('a[itemtype="org"][rowid="' + _org + '"]').first();
 		//var _orgnode = $('a[rowid="'+_org+'"]');
-		alert('orgnode:' + _orgnode.length + ',' + _org + ' ; ' +_bg  + ' ; ' +_proj	 + ' ; ' + _env );
+		//alert('orgnode:' + _orgnode.length + ',' + _org + ' ; ' +_bg  + ' ; ' +_proj	 + ' ; ' + _env );
 		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
-			alert('in if');
+			//alert('in if');
 			
 			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 						  _orgnode.trigger('click');}
@@ -488,13 +488,13 @@ $('#clickdisabler').hide();
 			var _envnode = $('a[itemtype="env"][orgid="' + _org + '"][rowid="' + _env + '"]').first();
 			  if(_envnode.length > 0)
 			      {
-			      	alert('in here');
+			      	//alert('in here');
 			      	_envnode.first().trigger('click');
 			      }
 
 		}
 		else{
-            alert('in else');
+            //alert('in else');
 			hasOrg = false;
 
 			if($('a[itemtype="org"]').length > 0)
@@ -567,7 +567,7 @@ $('#clickdisabler').hide();
 		//alert(ltab);
 		if(ltab){
 			//trigger click on tab
-			alert('about to click on ' + ltab);
+			//alert('about to click on ' + ltab);
 			$('#' + ltab).trigger('click');
 		}
 		else{ //will be a first time load
@@ -575,8 +575,6 @@ $('#clickdisabler').hide();
 		}
 	};
 	checkandnavigatetotab();
-
-	
  //function ends
 </script>
 <script src="js/chefmodalcommon.js"></script>
