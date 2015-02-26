@@ -2487,31 +2487,80 @@ function getCssClassFromStatus(status) {
 }
 
 function removeSelectedInstance(){
-    var instanceid = $('.container.role-Selectedcard').find('[data-instanceid]').attr('data-instanceid');
-    if(instanceid){
+    
+    var instanceId = null;
+    var blueprintName = null;
+    if ($('#divinstancescardview').is(':visible')) {
+         var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
+        instanceId = $selectedCard.attr('data-instanceid');
+        blueprintName = $selectedCard.attr('data-blueprintName');
+    } else if ($('#divinstancestableview').is(':visible')) {
+         var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+         instanceId=$selectedRow.attr('data-instanceId');
+         blueprintName = $selectedRow.attr('data-blueprintName');
+    } else {
+      instanceId = null;
+    }
+    if(instanceId){
         //found now delete
-         bootbox.confirm("Are you sure you would like to remove this instance?<br/>Note:<br/>This will not terminate the instance from the provider.", function(result) {
-            if (!result) {
-                return;
-            }
-            $.get('/instances/delete/' + instanceid,function(data){
-            //  alert(data);
-              if(data == 'OK'){
-                $('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
-                var table = $('#tableinstanceview').DataTable();
-                console.log();
-                table.row('[data-instanceid='+instanceid+']').remove().draw( false );
+        bootbox.dialog({
+            title: "Remove Instance.",
+            message: '<div class="row">  ' +
+                '<div class="col-md-12"> ' +
+                '<form class="form-horizontal"> ' +
+                '<input type="hidden" id="deleteInstanceIdInput" value="'+instanceId+'"/>'+
+                '<div class="form-group"> ' +
+                '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+                '</div>' +
+                '<div class="form-group"> ' +
+                '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
+                '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
+                '</div> ' +
+                '<div class="form-group"> ' +
+                '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+                '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
+                '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
+                'Delete this node from chef server </label> ' +
+                '</div>' +
+                '</div>' +
+                '</form> </div>  </div>',
+            buttons: {
+                success: {
+                    label: "Delete",
+                    className: "btn-primary",
+                    callback: function() {
+                        var url  = '/instances/' + instanceId;
+                        if($('#ckbChefDelete').is(':checked')) {
+                          url = url+'?chefRemove=true';
+                        }
 
-               
-              }
-              else
-                alert(data);
-            });
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            success: function() {
+                              $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                var table = $('#tableinstanceview').DataTable();
+                                console.log();
+                                table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                            }
+                        }).fail(function(){
+                          bootbox.alert('Server Behaved Unexpectedly. Unable to delete instance');
+                        });
+                    }
+                },
+                cancel: {
+                    label: "Close",
+                    className: "btn-primary",
+                    callback: function() {
+                        
+                    }
+                }
+            }
         });
     }
     else
     {
-        alert('Please select an instance to remove.');
+         bootbox.alert('Please select an instance to remove.');
     }
 }
 
@@ -2808,7 +2857,10 @@ function addInstanceToDOM(data) {
         }
     }
   
-    var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
+    var $rowContainter = $('<tr></tr>').attr({
+        'data-instanceId': data._id,
+        'data-blueprintName': data.blueprintData.blueprintName
+    });
     
 
 
@@ -2817,7 +2869,10 @@ function addInstanceToDOM(data) {
     var $card = $('<div></div>').addClass('card'); //<div class="card">
     var $front = $('<div></div>').addClass('front'); //<div class="front">
     var $div = $('<div></div>').addClass('domain-roles ');
-    var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId', data._id);
+    var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr({
+        'data-instanceId': data._id,
+        'data-blueprintName': data.blueprintData.blueprintName
+    });
     var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
 

@@ -59,15 +59,48 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/instances/delete/:instanceId', function(req, res) {
-        instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
+    app.delete('/instances/:instanceId', function(req, res) {
+        function removeInstanceFromDb() {
+            instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
+                if (err) {
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                res.send(200);
+            });
+        }
+        if (req.query.chefRemove && req.query.chefRemove === 'true') {
+            instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+                if (err) {
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                var instance = data[0];
+                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500, errorResponses.chef.corruptChefData);
+                        return;
+                    }
+                    var chef = new Chef({
+                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                        chefUserName: chefDetails.loginname,
+                        chefUserPemFile: chefDetails.userpemfile,
+                        chefValidationPemFile: chefDetails.validatorpemfile,
+                        hostedChefUrl: chefDetails.url,
+                    });
+                    chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
+                        if (err) {
+                            res.send(500);
+                        } else {
+                            removeInstanceFromDb();
+                        }
+                    });
 
-            res.end('OK');
-        });
+                });
+            });
+        } else {
+            removeInstanceFromDb();
+        }
     });
     //updateInstanceIp
     app.get('/instances/updateappurl/:instanceId/:appurlid/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
