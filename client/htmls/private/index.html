@@ -469,7 +469,7 @@ $('#clickdisabler').hide();
 		//var _orgnode = $('a[rowid="'+_org+'"]');
 		//alert('orgnode:' + _orgnode.length + ',' + _org + ' ; ' +_bg  + ' ; ' +_proj	 + ' ; ' + _env );
 		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
-			//alert('in if');
+			//alert('in if' + _org + _bg + _proj + _env);
 			
 			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 						  _orgnode.trigger('click');}
@@ -491,6 +491,8 @@ $('#clickdisabler').hide();
 			      	//alert('in here');
 			      	_envnode.first().trigger('click');
 			      }
+			   else
+			   		loaddefaultenv();
 
 		}
 		else{
