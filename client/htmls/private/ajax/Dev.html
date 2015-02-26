@@ -2514,11 +2514,12 @@ function removeSelectedInstance(){
     }
     if(instanceId){
         //found now delete
-        bootbox.dialog({
+        var dialog = bootbox.dialog({
             title: "Remove Instance.",
             message: '<div class="row">  ' +
                 '<div class="col-md-12"> ' +
-                '<form class="form-horizontal"> ' +
+                '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>'+
+                '<form id="deleteInstanceForm" class="form-horizontal"> ' +
                 '<input type="hidden" id="deleteInstanceIdInput" value="'+instanceId+'"/>'+
                 '<div class="form-group"> ' +
                 '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
@@ -2539,24 +2540,30 @@ function removeSelectedInstance(){
                 success: {
                     label: "Delete",
                     className: "btn-primary",
-                    callback: function() {
-                        var url  = '/instances/' + instanceId;
-                        if($('#ckbChefDelete').is(':checked')) {
-                          url = url+'?chefRemove=true';
+                    callback: function(evt,arg2) {
+                        $('#deleteInstanceForm').hide();
+                        $('#deleteInstanceWorkingIndicator').show();
+                        $(evt.target).attr('disabled', 'disabled');
+                       
+                       
+                        var url = '/instances/' + instanceId;
+                        if ($('#ckbChefDelete').is(':checked')) {
+                            url = url + '?chefRemove=true';
                         }
 
                         $.ajax({
                             url: url,
                             type: 'DELETE',
                             success: function() {
-                              $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
                                 var table = $('#tableinstanceview').DataTable();
-                                console.log();
                                 table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                                dialog.modal('hide');
                             }
-                        }).fail(function(){
-                          bootbox.alert('Server Behaved Unexpectedly. Unable to delete instance');
+                        }).fail(function() {
+                            $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
                         });
+                        return false;
                     }
                 },
                 cancel: {
