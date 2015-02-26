@@ -2261,7 +2261,11 @@ $(function() {
                         "bSortable": false,
                         "sWidth": "20%"
                     }
-                ]
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                    $("td:first", nRow).html(iDisplayIndex + 1);
+                    return nRow;
+                }
 
             });
         }
@@ -2980,11 +2984,11 @@ function addInstanceToDOM(data) {
    
 
     //For Table View
-     var dataTableCount = $instanceDataTable.dataTable();
-    var numberOfRows = dataTableCount.fnGetData().length;
-    console.log('rows ==>',dataTableCount.fnGetData().length);
+    // var dataTableCount = $instanceDataTable.dataTable();
+    //var numberOfRows = dataTableCount.fnGetData().length;
+    //console.log('rows ==>',dataTableCount.fnGetData().length);
 
-    $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
+    $rowContainter.append('<td></td>');
     $rowContainter.append('<td><img src="'+data.blueprintData.iconPath+'" style="width:auto;height:30px;" /></td>');
 
 
