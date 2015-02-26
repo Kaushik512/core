@@ -572,46 +572,56 @@ $.get('../instances/'+urlParams.id,function(data){
 
     //fetching services list
     //alert(data.chef.serverId);
-    $.get('/d4dMasters/19/chefserverid/'+data.chef.serverId,function(services){
-      //console.log('hi ==>',serviceList);
-      services = JSON.parse(services);
-      //alert('Out json :' + JSON.stringify(services)+ services.length);
-      var $serviceList = $('#serviceList');
-      console.log(services,"length==>",services.length);
-      var serviceIds = [];
-      if(data.serviceIds && data.serviceIds.length) {
-        serviceIds = data.serviceIds;
-      }
+    $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
+        $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
+            
+            servicesCmd = JSON.parse(servicesCmd);
+            services = JSON.parse(services);
+            for(var k=0;k<servicesCmd.length;k++) {
+              if(servicesCmd[k].chefserverid !==data.chef.serverId ) {
+                services.push(servicesCmd[k]);
+              }
+            }
+            //alert('Out json :' + JSON.stringify(services)+ services.length);
+            var $serviceList = $('#serviceList');
+            console.log(services, "length==>", services.length);
+            var serviceIds = [];
+            if (data.serviceIds && data.serviceIds.length) {
+                serviceIds = data.serviceIds;
+            }
 
-      for(var i=0;i<services.length;i++){
-        
-        var name = services[i].servicename;
-        if(!name) {
-           name = services[i].commandname;
-        }
-        var $tr = $('<tr></tr>').attr('data-listServiceId',services[i].rowid);
-        var $tdName = $('<td></td>').append(name);
-        $tr.append($tdName);
-        
-        var commandType = services[i].commandtype;
-        if(commandType === 'Chef Cookbook/Recepie') {
-          var html =  getCookbookActionHtml(services[i].rowid,services[i]);
-        } else {
-           var html =  getCommandActionHtml(services[i].rowid,services[i]);
-        }
-        
-        var $tdActions = $('<td></td>').append(html);
-        $tr.append($tdActions);
-        var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData',services[i]);
-        var $tdCheckBox = $('<td></td>').append($checkBox);
-        $tr.append($tdCheckBox);
-        if(serviceIds.indexOf(services[i].rowid) !== -1) {
-          $tr.addClass('hidden');
-        }
-        
-        $serviceList.append($tr);
-      }
-      
+            for (var i = 0; i < services.length; i++) {
+
+                var name = services[i].servicename;
+                if (!name) {
+                    name = services[i].commandname;
+                }
+                var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                var $tdName = $('<td></td>').append(name);
+                $tr.append($tdName);
+
+                var commandType = services[i].commandtype;
+                if (commandType === 'Chef Cookbook/Recepie') {
+                    var html = getCookbookActionHtml(services[i].rowid, services[i]);
+                } else {
+                    var html = getCommandActionHtml(services[i].rowid, services[i]);
+                }
+
+                var $tdActions = $('<td></td>').append(html);
+                $tr.append($tdActions);
+                var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                var $tdCheckBox = $('<td></td>').append($checkBox);
+                $tr.append($tdCheckBox);
+                if (serviceIds.indexOf(services[i].rowid) !== -1) {
+                    $tr.addClass('hidden');
+                }
+
+                $serviceList.append($tr);
+            }
+        })
+        //console.log('hi ==>',serviceList);
+
+
 
     });
     if (data.serviceIds && data.serviceIds.length) {
