@@ -547,6 +547,14 @@ function disableInstanceActionBtns(instanceId){
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
+function disableInstanceStartStopActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
 
 var logTimeout;
 var stateTimeout;
@@ -684,6 +692,9 @@ $.get('../instances/'+urlParams.id,function(data){
   }
   if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
     disableInstanceActionBtns(data._id);
+  }
+  if (data.instanceState == 'unknown'){
+    disableInstanceStartStopActionBtns(data._id);
   }
   
   var $backRunlistContainer = $('.cardBackRunlistContaner');
@@ -871,6 +882,9 @@ $.get('../instances/'+urlParams.id,function(data){
                                 }
                                 if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
                                     disableInstanceActionBtns(data._id);
+                                }
+                                if (data.instanceState == 'unknown'){
+                                  disableInstanceStartStopActionBtns(data._id);
                                 }
                                 if (data.instanceState === state) {
                                     pollInstanceState(state, 5000);
