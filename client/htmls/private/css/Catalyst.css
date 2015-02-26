@@ -5690,3 +5690,10 @@ span.icon {
 .btn-importbyIP{
 	top:11px !important;
 }
+.forBootBox{
+    margin-top: 6px;
+    margin-left: -20px;
+}
+.forBootBox1{
+    margin-left: 24px;
+}
