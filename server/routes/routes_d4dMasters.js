@@ -514,7 +514,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                         d4dMasterJson[k][flds[0]] = names;
 
-                                        if(names == '')
+                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
                                             todelete.push(k);
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
