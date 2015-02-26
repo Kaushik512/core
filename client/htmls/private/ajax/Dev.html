@@ -2498,7 +2498,6 @@ function getCssClassFromStatus(status) {
 }
 
 function removeSelectedInstance(){
-    
     var instanceId = null;
     var blueprintName = null;
     if ($('#divinstancescardview').is(':visible')) {
@@ -2618,6 +2617,9 @@ function pollInstanceState(instanceId, state, delay) {
               }
               if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
                disableInstanceActionBtns(instanceId);
+              }
+              if (data.instanceState == 'unknown'){
+                disableInstanceStartStopActionBtns(data._id);
               }
               if (data.instanceState === state) {
                 pollInstanceState(instanceId, state, 5000);
@@ -2819,7 +2821,6 @@ function enableInstanceActionStopBtn(instanceId){
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
   $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
-  
 }
 function disableInstanceActionBtns(instanceId){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
@@ -2828,6 +2829,18 @@ function disableInstanceActionBtns(instanceId){
   $tableViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
+function disableInstanceStartStopActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+  var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
+  $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
+  $tableViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
@@ -3208,6 +3221,9 @@ function addInstanceToDOM(data) {
     }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
       disableInstanceActionBtns(data._id);
+    }
+    if (data.instanceState == 'unknown'){
+      disableInstanceStartStopActionBtns(data._id);
     }
     
 
