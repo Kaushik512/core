@@ -2374,7 +2374,7 @@ if($('#servicename').val().trim()){
     isValid=false;
 }
 }else if(selectionMode==="Service Command"){
-if($('#servicename').val().trim() && $('#commandNew').val().trim()){
+if($('#servicename').val().trim() && $('#command').val().trim()){
     isValid=true;
 }else{
     isValid=false;
