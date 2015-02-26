@@ -32,8 +32,8 @@ function deleteItem(docid, key, value, button) {
                 $('#' + tab).dataTable();
                 if(parseInt(docid) < 5){
                     loadTreeFuncNew();
-                    alert('in saved');
-                    selectFirstEnv();
+                  //  alert('in saved');
+                 //   selectFirstEnv();
                 }
             },
             failure: function(data) {
@@ -2259,7 +2259,10 @@ function errormessageforInput(id, msg) {
     if (errlabel.length > 0) { //no error label found
         errlabel.html(msg);
     } else {
-        currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        if(currCtrl.get(0).tagName != 'DIV')
+            currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        else
+            currCtrl.closest('div').parent().find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
         errlabel = $('#errmsg_' + id).html(msg);
     }
     //attaching a keydown event to clear the message
@@ -2307,6 +2310,13 @@ function isFormValid(formid) {
                     if (currCtrl.val() == '') {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "onechecked":
+                    if (currCtrl.find('input:checked').length <= 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast one required");
                         currCtrl.focus();
                     }
                     break;
