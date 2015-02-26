@@ -32,6 +32,8 @@ function deleteItem(docid, key, value, button) {
                 $('#' + tab).dataTable();
                 if(parseInt(docid) < 5){
                     loadTreeFuncNew();
+                    alert('in saved');
+                    selectFirstEnv();
                 }
             },
             failure: function(data) {
@@ -1669,8 +1671,6 @@ function saveform(formID,operationTypes) {
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
 
     if (button.attr("rowid")) {
-
-        
         data1.append("rowid", button.attr("rowid"));
     }
 
