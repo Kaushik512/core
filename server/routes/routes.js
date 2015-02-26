@@ -39,7 +39,7 @@ module.exports.setRoutes = function(app) {
   var adminSessionVerificationFunc = verificationFunctions.adminSessionVerificationFunc;
 
 
-  d4dMasters.setRoutes(app, adminSessionVerificationFunc);
+  d4dMasters.setRoutes(app, sessionVerificationFunc);
   
   organizations.setRoutes(app,sessionVerificationFunc);
   projects.setRoutes(app,sessionVerificationFunc);

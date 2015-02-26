@@ -14,7 +14,8 @@ var exec = childProcess.exec;
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
-    app.all('/d4dMasters',sessionVerification);
+    app.all('/d4dMasters/*',sessionVerification);
+
 
     /*app.get('/d4dMasters/saveTest', function(req, res) {
         var m = new d4dModel();
