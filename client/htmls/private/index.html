@@ -494,52 +494,9 @@ $('#clickdisabler').hide();
 
 		}
 		else{
+			loaddefaultenv();
             //alert('in else');
-			hasOrg = false;
-
-			if($('a[itemtype="org"]').length > 0)
-			{	
-				if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0){
-					$('a[itemtype="org"]').first().trigger('click');
-					hasOrg = true;
-				}								
-			}
-			hasProj = false;
-			if($('a[itemtype="bg"]').length > 0){
-				{
-					if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="bg"]').first().trigger('click');
-								hasProj = true;
-								}
-						}
-
-			hasBg = false;
-			if($('a[itemtype="proj"]').length > 0 ){
-				{
-					if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="proj"]').first().trigger('click');
-								hasBg = true;
-							}
-					}
-
-			hasEnv = false;		
-			if($('a[itemtype="env"]').length > 0){
-				{
-					$('a[itemtype="env"]').first().trigger('click');
-					hasEnv = true;
-					}
-				}
-		}
-		if(!hasOrg || !hasProj || !hasBg || !hasEnv){
-			console.log('success 3');
-			//location.hash="ajax/Dev.html";
-			$('#content').addClass('hidden');
-			$('#noenvwarning').removeClass('hidden');
-		    $('ol.breadcrumb').addClass('hidden');
-		    /*var ol = $("#ribbon ol.breadcrumb");
-		    ol.empty();
-		    ol.append("<li>&nbsp;</li>");*/
-		}
+			
 		/*//If no env found in tree show warning.
 		if($('a[itemtype="env"]').length <= 0){
 		  $('#content').addClass('hidden');
@@ -555,10 +512,59 @@ $('#clickdisabler').hide();
 		  $('#noenvwarning').addClass('hidden');
 		}*/
 	}
+
+	};
+
+
 /*Created a new Method for selecting any enviornment*/
 
 /*End of selectAnyEnviornment*/
 	loadTreeFuncNew();
+
+	var loaddefaultenv = function(){
+			alert('loading default');
+			if($('#tree').find('.fa-angle-down').length > 0) //reload the tree only if it has been expanded to refresh.
+				loadTreeFuncNew();
+			var hasOrg = false;
+			var	hasBg = false;
+			var	hasProj = false;
+			var	hasEnv = false;
+			var iteratetree = function(){
+			  for(var o = 0;o < $('a[itemtype="org"]').length;o++){
+			    $('a[itemtype="org"]').eq(o).trigger('click');
+
+			   // alert($('a[itemtype="bg"]').length);
+			    for(var b = 0; b < $('a[itemtype="bg"]').length;b++){
+			      hasOrg = true;
+			      $('a[itemtype="bg"]').eq(b).trigger('click');
+			      for(var p = 0; p < $('a[itemtype="proj"]').length;p++){
+			        //alert("in");
+			        hasBg = true;
+			        $('a[itemtype="proj"]').eq(p).trigger('click');
+			        if($('a[itemtype="env"]').length > 0)
+			        {
+			          hasProj = true;
+			          hasEnv = true;
+			          $('a[itemtype="env"]').first().trigger('click');
+			          return;
+			        }
+			      }
+			    }
+			  }
+			}
+			iteratetree();
+			if((!hasEnv || !hasProj || !hasBg || !hasOrg) && (window.location.href.indexOf('Dev.html') > 0)){
+				 $('#content').addClass('hidden');
+				  $('#noenvwarning').removeClass('hidden');
+				  $('ol.breadcrumb').addClass('hidden');
+			}
+			else
+			{
+				$('#content').removeClass('hidden');
+	  			$('#noenvwarning').addClass('hidden');
+			}
+
+	};
 
 	//Renavigate to the tab that was previously selected.
 	checkandnavigatetotab = function(){
