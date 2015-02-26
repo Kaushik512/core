@@ -200,6 +200,7 @@ module.exports.setRoutes = function(app) {
 
 	var adminVerificationFunc = function(req, res, next) {
 		//logger.debug("Enter adminVerificationFunc");
+		console.log('here ==>',req.session);
 		if (req.session && req.session.user) {
 			//logger.debug("Has Session && Session Has User");
 			if (req.session.user.cn == 'admin') {
