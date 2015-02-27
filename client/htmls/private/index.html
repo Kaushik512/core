@@ -555,7 +555,7 @@ $('#clickdisabler').hide();
 			  }
 			}
 			iteratetree();
-			if((!hasEnv || !hasProj || !hasBg || !hasOrg) && (window.location.href.indexOf('Dev.html') > 0)){
+			if(!hasEnv || !hasProj || !hasBg || !hasOrg)){
 				 $('#content').addClass('hidden');
 				  $('#noenvwarning').removeClass('hidden');
 				  $('ol.breadcrumb').addClass('hidden');
