@@ -126,6 +126,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var projectId = reqBody.projectId;
         var orgId = reqBody.orgId;
         var bgId = reqBody.bgId;
+        var envId = reqBody.envId;
         var count = 0;
 
         var users = reqBody.users;
@@ -241,12 +242,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     }
 
                     console.log('nodeip ==> ', nodeIp);
-
+                    console.log('alive ==> ', node.isAlive);
                     var instance = {
                         orgId: orgId,
                         bgId: bgId,
                         projectId: projectId,
-                        envId: node.chef_environment,
+                        envId: node.envId,
                         chefNodeName: node.name,
                         runlist: runlist,
                         platformId: platformId,
@@ -326,14 +327,15 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 console.log('orgId ==>', orgId);
                                 console.log('bgid ==>', bgId);
                                 // console.log('node ===>', node);
-                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, function(err, data) {
+                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId,envId, function(err, data) {
 
                                     if (err) {
                                         console.log(err, 'occured in creating environment in mongo');
                                         updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                         return;
                                     }
-
+                                    console.log('Env ID Received before instance create:' + data);
+                                    node.envId = data;
                                     //fetching the ip of the imported node
                                     var nodeIp = 'unknown';
                                     if (node.automatic.ipaddress) {
@@ -351,7 +353,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             return;
                                         }
                                         if (instances.length) {
-                                            updateTaskStatusNode(node.name, "Node exist in " + instances[0].orgId + "/" + instances[0].bgId + "/" + instances[0].projectId + "/" + instances[0].envId + " : " + node.name, true, count);
+                                            configmgmtDao.getOrgBgProjEnvNameFromIds(instances[0].orgId,instances[0].bgId,instances[0].projectId,instances[0].envId,function(err,names){
+                                             if(err) {
+                                                updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
+                                                return;
+                                             }
+                                             updateTaskStatusNode(node.name, "Node exist in " + names.orgName + "/" + names.bgName + "/" + names.projName + "/" + names.envName + " : " + node.name, true, count);
+                                            });
                                             return;
                                         }
                                         if (nodeIp != 'unknown') {
@@ -362,6 +370,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                                 if (stdout) {
                                                     if (stdout.indexOf('1 received') > 0) {
                                                         node.isAlive = 'running';
+                                                    } else {
+                                                        node.isAlive = 'unknown';
                                                     }
                                                     //    console.log('node ===>', node);
                                                     insertNodeInMongo(node);
@@ -409,7 +419,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             if (reqBody.selectedNodes.length) {
                 importNodes(reqBody.selectedNodes);
-
             } else {
                 res.send(400);
             }
@@ -551,7 +560,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 //var chefDetails = JSON.parse(chefJson);
                 res.send({
                     serverId: chefDetails.rowid,
-                    orgname: chefDetails.orgname
+                    orgname: chefDetails.orgname,
+                    orgname_new: chefDetails.orgname_new,
+                    orgname_rowid: chefDetails.orgname_rowid
                 });
             } else {
                 res.send(404);

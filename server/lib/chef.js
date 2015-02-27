@@ -101,6 +101,34 @@ var Chef = function(settings) {
         });
     };
 
+    this.deleteNode = function(nodeName, callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chefClient.delete('/nodes/' + nodeName, function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefResBody);
+                } else if (chefRes.statusCode === 404) {
+                    callback({
+                        err: "not found",
+                        chefStatusCode: chefRes.statusCode
+                    }, null);
+                } else {
+                    callback({
+                        err: "error",
+                        chefStatusCode: chefRes.statusCode
+                    }, null);
+                }
+            });
+        });
+    };
+
     this.getNodesDetailsForEachEnvironment = function(callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
@@ -622,7 +650,7 @@ var Chef = function(settings) {
                 if (code === 0) {
                     callback(null, true);
                 } else {
-                    callback(null,false);
+                    callback(null, false);
                 }
 
             }

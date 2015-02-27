@@ -321,6 +321,10 @@ $('#clickdisabler').hide();
 
 	function setleftnavigation(toplink,breadcrumbHeader){
 		if($(toplink).hasClass('active')){
+			//alert('about to return setleftnavigation:' + $(toplink).attr('href'));
+			if($(toplink).attr('id') == 'workZoneNew'){
+				selectFirstEnv();
+			}
 			return ;
 		}
 		//showLoader();
@@ -348,7 +352,13 @@ $('#clickdisabler').hide();
 		$('ol.breadcrumb').removeClass('hidden');
 		window.selectedOrgName = breadcrumbHeader;
 		}
-
+		//Setting local storage with last selected tab
+		localStorage.setItem("lasttabselected", $(toplink).attr('id'));
+		if($(toplink).attr('id') == 'workZoneNew'){
+			//alert('about to call selectFirstEnv');
+			selectFirstEnv();
+		}
+		//alert($(toplink).attr('id'));
 	}
 			
 			//Expanding the providers tree
@@ -380,6 +390,7 @@ $('#clickdisabler').hide();
 							window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
 							//console.log("Org Selected:" + window.selectedOrgName );
 							localStorage.setItem('selectedOrgName',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
+							localStorage.setItem('selectedOrgId',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
 							/*Description from the node*/
 							localStorage.setItem("orgname", node.orgname);
 							localStorage.setItem("projname", node.projname);
@@ -398,9 +409,10 @@ $('#clickdisabler').hide();
 	}
 	function getUrlParameter(sParam)
 	{
-		var u = window.location.href.split('?');
+		//var u = window.location.href.split('?');
+		var u  = $('#workZoneNew').attr('href').split('?');
 	    var sPageURL = u[1];
-	    
+	    //alert(sPageURL);
 	    if(typeof sPageURL != 'undefined')
 	    {
 	    	var sURLVariables = sPageURL.split('&');
@@ -414,6 +426,32 @@ $('#clickdisabler').hide();
     	    }
 	    }
 	    else
+	    {
+	    	//check local storage for last env clicked.
+	    	var lastwzurl = localStorage.getItem("lastworkzoneurl");
+	    	if(lastwzurl){
+	    		//alert('in lastwzurl' + lastwzurl);
+	    		u  = lastwzurl.split('?');
+			    sPageURL = u[1];
+			    if(typeof sPageURL != 'undefined')
+			    {
+			    	var sURLVariables = sPageURL.split('&');
+		    	    for (var i = 0; i < sURLVariables.length; i++) 
+		    	    {
+		    	        var sParameterName = sURLVariables[i].split('=');
+		    	        if (sParameterName[0] == sParam) 
+		    	        {
+		    	            return sParameterName[1];
+		    	        }
+		    	    }
+			    }
+			    else
+	    			return('');
+
+	    	}
+	    	else
+	    		return('');
+	    }
 	    	return('');
 	}     
 	var selectFirstEnv = function(){
@@ -426,77 +464,41 @@ $('#clickdisabler').hide();
 		var hasBg = true;
 		var hasProj = true;
 		var hasEnv = true;
-
-		var _orgnode = $('a[itemtype="org"]:contains("' + _org + '")').first();
-
+		console.log('called');
+		var _orgnode = $('a[itemtype="org"][rowid="' + _org + '"]').first();
+		//var _orgnode = $('a[rowid="'+_org+'"]');
+		//alert('orgnode:' + _orgnode.length + ',' + _org + ' ; ' +_bg  + ' ; ' +_proj	 + ' ; ' + _env );
 		if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj	 != '' && _env != ''){	
-			console.log('in if');
+			//alert('in if' + _org + _bg + _proj + _env);
 			
 			{if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 						  _orgnode.trigger('click');}
      
-			var _bgnode = $('a[itemtype="bg"][orgname="' + _org + '"]:contains("' + decodeURIComponent(_bg) + '")').first();
+			var _bgnode = $('a[itemtype="bg"][orgid="' + _org + '"][rowid="' + decodeURIComponent(_bg) + '"]').first();
 			if(_bgnode.length > 0)
 			{if(_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-						  _bgnode.trigger('click');}
+				_bgnode.trigger('click');}
 
-			var _projnode = $('a[itemtype="proj"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"]:contains("' + decodeURIComponent(_proj) + '")').first();
+			var _projnode = $('a[itemtype="proj"][orgid="' + _org + '"][rowid="' + _proj + '"]').first();
 			if(_projnode.length > 0)
 			{if(_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
 						  _projnode.trigger('click');}
 
-			var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
+			//var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
+			var _envnode = $('a[itemtype="env"][orgid="' + _org + '"][rowid="' + _env + '"]').first();
 			  if(_envnode.length > 0)
-			      _envnode.first().trigger('click');
+			      {
+			      	//alert('in here');
+			      	_envnode.first().trigger('click');
+			      }
+			   else
+			   		loaddefaultenv();
 
 		}
 		else{
-            console.log('in else');
-			hasOrg = false;
-
-			if($('a[itemtype="org"]').length > 0)
-			{	
-				if($('a[itemtype="org"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0){
-					$('a[itemtype="org"]').first().trigger('click');
-					hasOrg = true;
-				}								
-			}
-			hasProj = false;
-			if($('a[itemtype="bg"]').length > 0){
-				{
-					if($('a[itemtype="bg"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="bg"]').first().trigger('click');
-								hasProj = true;
-								}
-						}
-
-			hasBg = false;
-			if($('a[itemtype="proj"]').length > 0 ){
-				{
-					if($('a[itemtype="proj"]').first().parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-									$('a[itemtype="proj"]').first().trigger('click');
-								hasBg = true;
-							}
-					}
-
-			hasEnv = false;		
-			if($('a[itemtype="env"]').length > 0){
-				{
-					$('a[itemtype="env"]').first().trigger('click');
-					hasEnv = true;
-					}
-				}
-		}
-		if(!hasOrg || !hasProj || !hasBg || !hasEnv){
-			console.log('success 3');
-			//location.hash="ajax/Dev.html";
-			$('#content').addClass('hidden');
-			$('#noenvwarning').removeClass('hidden');
-		    $('ol.breadcrumb').addClass('hidden');
-		    /*var ol = $("#ribbon ol.breadcrumb");
-		    ol.empty();
-		    ol.append("<li>&nbsp;</li>");*/
-		}
+			loaddefaultenv();
+            //alert('in else');
+			
 		/*//If no env found in tree show warning.
 		if($('a[itemtype="env"]').length <= 0){
 		  $('#content').addClass('hidden');
@@ -512,91 +514,76 @@ $('#clickdisabler').hide();
 		  $('#noenvwarning').addClass('hidden');
 		}*/
 	}
-	loadTreeFuncNew();
-	//selectFirstEnv();
+
+	};
+
+
+
+	var loaddefaultenv = function(){
+			//alert('loading default');
+			if($('#tree').find('.fa-angle-down').length > 0) //reload the tree only if it has been expanded to refresh.
+				loadTreeFuncNew();
+			var hasOrg = false;
+			var	hasBg = false;
+			var	hasProj = false;
+			var	hasEnv = false;
+			var iteratetree = function(){
+			  for(var o = 0;o < $('a[itemtype="org"]').length;o++){
+			    $('a[itemtype="org"]').eq(o).trigger('click');
+
+			   // alert($('a[itemtype="bg"]').length);
+			    for(var b = 0; b < $('a[itemtype="bg"]').length;b++){
+			      hasOrg = true;
+			      $('a[itemtype="bg"]').eq(b).trigger('click');
+			      for(var p = 0; p < $('a[itemtype="proj"]').length;p++){
+			        //alert("in");
+			        hasBg = true;
+			        $('a[itemtype="proj"]').eq(p).trigger('click');
+			        if($('a[itemtype="env"]').length > 0)
+			        {
+			          hasProj = true;
+			          hasEnv = true;
+			          $('a[itemtype="env"]').first().trigger('click');
+			          return;
+			        }
+			      }
+			    }
+			  }
+			}
+			iteratetree();
+			if((!hasEnv || !hasProj || !hasBg || !hasOrg) && (window.location.href.indexOf('Dev.html') > 0)){
+				 $('#content').addClass('hidden');
+				  $('#noenvwarning').removeClass('hidden');
+				  $('ol.breadcrumb').addClass('hidden');
+			}
+			else
+			{
+				$('#content').removeClass('hidden');
+	  			$('#noenvwarning').addClass('hidden');
+			}
+
+	};
+
+	//Renavigate to the tab that was previously selected.
+	checkandnavigatetotab = function(){
+		//has tab in LS
+		var ltab = localStorage.getItem("lasttabselected");
+		//alert(ltab);
+		if(ltab){
+			//trigger click on tab
+			//alert('about to click on ' + ltab);
+			$('#' + ltab).trigger('click');
+			drawBreadCrumb();
+		}
+		else{ //will be a first time load
+			selectFirstEnv();
+		}
+	};
+	checkandnavigatetotab();
  //function ends
 </script>
 <script src="js/chefmodalcommon.js"></script>
 <script src="/private/js/settingscommon.js"></script> 
-<script>
-  $(window).on('hashchange', function() {
 
-      var hash = location.hash;
-      $(".left-projects-links a").removeClass('active');
-      if (hash.indexOf("#ajax/Dev.html?") === 0) {
-          console.log("pos if ==>", hash.indexOf("#ajax/Dev.html?"));
-          $("#workZoneNew").addClass('active');
-      } else if (hash === "#ajax/Aws-Production.html") {
-
-          $("#designNew").addClass('active');
-      } else if (hash === "#ajax/Settings/TrackerDashboard.html") {
-
-          $("#trackNew").addClass('active');
-      }	else if (hash.indexOf("#ajax/Controlpanel.html?") === 0) {
-       
-         $("#workZoneNew").addClass('active');
-      } else if (hash.indexOf("#ajax/Settings/") === 0) {
-
-          $("#settingsNew").addClass('active');
-      }
-      stateManagement.setState();
-  });
-  var stateSaveFormat = {
-          href: "",
-          metadata: ""
-      },
-      key = "catalystStatus",
-      stateManagement = {
-          init: function() {
-              var data = this.getState();
-              data = data ? JSON.parse(data) : null;
-              if (data) {
-                  this.changeURL(data.href);
-              } else {
-                  console.log('success---3---1');
-                  selectFirstEnv();
-              }
-              $('body').delegate('#bot2-Msg1', 'click', function() {
-                  //localStorage.removeItem(key);
-                  localStorage.clear();
-              });
-          },
-          changeURL: function(href) {
-              var params;
-              console.log('URL from LocalStorage:: ' + href);
-              if (href.indexOf('Setting') > -1) {
-                  $("#settingsNew").click();
-                  drawBreadCrumb();
-                  console.log('URL from LocalStorage:: Moved to setting Tab');
-              } else if (href.indexOf('Dev.html') > -1 || href.indexOf('Controlpanel.html')>-1) {
-                  params = href.split('?');
-
-
-                  if (params.length === 2 && href.indexOf('org=') > -1 && href.indexOf('bg=') > -1 && href.indexOf('projid=') > -1 && href.indexOf('envid=') > -1) {
-                      console.log('params', params[1]);
-                      location.href = href
-                  } else {
-                      console.log('success---3---1');
-                      selectFirstEnv();
-                      //location.hash=href.split('#')[1];
-                  }
-              } else {
-                  $("#designNew").click();
-                  drawBreadCrumb();
-                  console.log('URL from LocalStorage:: Moved to Design Tab');
-              }
-          },
-          getState: function() {
-              return localStorage.getItem(key);
-          },
-          setState: function() {
-              stateSaveFormat.href = location.href.toString();
-              localStorage.setItem(key, JSON.stringify(stateSaveFormat));
-          }
-      }
-  stateManagement.init();
-
-
-</script>
 </body>
 </html>

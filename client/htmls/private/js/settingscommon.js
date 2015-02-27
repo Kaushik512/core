@@ -32,6 +32,8 @@ function deleteItem(docid, key, value, button) {
                 $('#' + tab).dataTable();
                 if(parseInt(docid) < 5){
                     loadTreeFuncNew();
+                  //  alert('in saved');
+                 //   selectFirstEnv();
                 }
             },
             failure: function(data) {
@@ -93,7 +95,7 @@ function readMasterJson(id) {
     // debugger;
    //alert(url);
 if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
-    // alert('in 1');
+    //alert('in 1');
     $.ajax({
         type: "get",
         dataType: "text",
@@ -103,6 +105,7 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
                 // alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
+            //alert(JSON.stringify(d4ddata));
         },
         failure: function(data) {
             // debugger;
@@ -163,9 +166,9 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnewk/" + id,
+        url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
-                // alert(data.toString());  
+           // alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
         },
@@ -183,7 +186,7 @@ if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnewk/" + id,
+        url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
                 // alert(data.toString());  
             // debugger;
@@ -203,7 +206,7 @@ else{
         dataType: "text",
 
         async: false,
-        url: serviceURL + "readmasterjsonnewk/" + id,
+        url: serviceURL + "readmasterjsonnew/" + id,
         success: function(data) {
             //      alert(data.toString());  
             // debugger;
@@ -379,6 +382,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         // alert(JSON.stringify(formData));
         //Reading row to get schema
         formData = d4ddata;
+        //alert(JSON.stringify(formData));
 
         var formSchema = null;
         $.each(d4ddata, function(i, item) { 
@@ -828,11 +832,19 @@ function readform(formID) {
                             var targetCtrl = $('#' + item);
                             targetCtrl.html('');
                             var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+                            //alert(JSON.stringify(opts));
                             $.each(eval(opts), function(j, itm) {
+                                var itmrowid = '';
+                                if(itm.indexOf('##') > 0)
+                                {
+                                    var breakid = itm.split('##');
+                                    itm = breakid[0];
+                                    itmrowid = breakid[1];
+                                }
                                 if (targetCtrl.attr('multiselect'))
-                                    addToSelectList(itm, targetCtrl);
+                                    addToSelectList(itm,itmrowid, targetCtrl);
                                 else
-                                    targetCtrl.append('<option value="' + itm + '">' + itm + '</option>');
+                                    targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
                             });
                             //fix for select2 control - Vinod 
@@ -887,6 +899,7 @@ function readform(formID) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                  //   debugger;
+                    //alert(JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
                     $.each(tempJSON, function(i, item) {
@@ -896,7 +909,8 @@ function readform(formID) {
                           //  if (item.field[k].name == curInput.attr("id")) {
                                 // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
                                 // alert("Added:" + item.field[i].values.value);
-                                addToSelectList(item[curInput.attr('datapath')], curInput);
+                              //  alert(item.rowid);
+                                addToSelectList(item[curInput.attr('datapath')],item.rowid, curInput);
                          //   }
                        
                     });
@@ -1009,7 +1023,12 @@ function readform(formID) {
                 }
                 if (inputC.getType().toLowerCase() == "select") {
                   //alert(v[k1]);
-                    $(inputC).val(v);
+                     $(inputC).val(v);
+                    //Get the rowid for the control
+                    // $('#' + k);
+                    // var selectedrowid = formData['k' + '_rowid'];
+                    // var selectval = $(inputC).find('option[rowid="' + selectedrowid + '"').val();
+                    // $(inputC).val(selectval);
                     $(inputC).attr('savedvalue', v);
                     //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
                     $(inputC).select2();
@@ -1062,6 +1081,7 @@ function readform(formID) {
                     var ctrl = $("#" + ctrls[i]);
                     if (ctrl.getType() == "select") {
                         ctrl.val(ctrl.attr('savedvalue'));
+                        ctrl.trigger('change');
                     }
                     if (ctrl.getType() == "div") {
                         var divselect = ctrl.attr('savedvalue').split(',');
@@ -1199,6 +1219,7 @@ function readform(formID) {
             if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    alert('Multi:' + JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id"));
                     $.each(eval('tempJSON.' + curInput.attr('datapath')), function(i, item) {
@@ -1417,6 +1438,7 @@ function readform(formID) {
         // alert(JSON.stringify(formData));
         //Reading row to get schema
         formData = d4ddata;
+       // alert(JSON.stringify(formData));
 
         var formSchema = null;
         $.each(d4ddata, function(i, item) { 
@@ -1540,6 +1562,11 @@ function saveform(formID,operationTypes) {
 
         if (($(this).prop("type") == "password" || $(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '') {
             data1.append($(this).prop("id"), $(this).val());
+            if($(this).prop("type").indexOf("select") >= 0){
+                //alert('found one ' + $(this).prop("id") + '_rowid' + ' ' + $(this).find('option:selected').attr('rowid'));
+                //debugger;
+                data1.append($(this).prop("id") + '_rowid', $(this).find('option:selected').attr('rowid'));
+            }
         }
         if ($(this).prop("type") == "file" && orgName != '') {
             if ($(this).get(0).files[0]) {
@@ -1563,13 +1590,18 @@ function saveform(formID,operationTypes) {
     $('div[cdata="catalyst"]').each(function() {
         var v = [];
         var k = '';
+        var k_rowid = '';
+        var v_rowid = [];
+
         k = $(this).attr("id");
+        k_rowid = $(this).attr("id") + "_rowid";
        // alert('id:' + k);
         $(this).find("input").each(function() {
            // alert($(this).val());
             if ($(this).is(":checked")) {
                 //    v.push("\"" + $(this).val() + "\"");
                 v.push($(this).val());
+                v_rowid.push($(this).attr('rowid'));
             }
         });
         //bg-success
@@ -1597,6 +1629,7 @@ function saveform(formID,operationTypes) {
             //data1.append(k,"[" + v.toString() + "]");
            // alert(v);
             data1.append(k, v);
+            data1.append(k_rowid, v_rowid);
         }
     });
 
@@ -1638,8 +1671,6 @@ function saveform(formID,operationTypes) {
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
 
     if (button.attr("rowid")) {
-
-        
         data1.append("rowid", button.attr("rowid"));
     }
 
@@ -1885,19 +1916,17 @@ function addToCodeList() {
     }
 }
 
-function addToSelectList(txtVal, inp) {
-
-
+function addToSelectList(txtVal,rowidval, inp) {
     var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px;visibility:hidden\' ></i>";
     var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ></button>";
-    if (txtVal != '') {
-        inp.append('<label class=\"toggle font-sm\" ><input onclick=\'if($(this).is(\":checked\")) {$(this).closest(\"label\").css(\"background-color\",\"#eeeeee\");$(this).css(\"border-color\",\"#3b9ff3\");}else{$(this).closest(\"label\").css(\"background-color\",\"#ffffff\");$(this).css(\"border-color\",\"red\");}\' type=\"checkbox\" name=\"checkbox-toggle\" value=\"' + txtVal + '\" style=\"width:100%\"><i data-swchoff-text=\"NO\" data-swchon-text=\"YES\"></i>' + txtVal + '</label>');
+    if (txtVal != '' && typeof inp != "undefined") {
+        inp.append('<label class=\"toggle font-sm\" ><input onclick=\'if($(this).is(\":checked\")) {$(this).closest(\"label\").css(\"background-color\",\"#eeeeee\");$(this).css(\"border-color\",\"#3b9ff3\");}else{$(this).closest(\"label\").css(\"background-color\",\"#ffffff\");$(this).css(\"border-color\",\"red\");}\' type=\"checkbox\" name=\"checkbox-toggle\" rowid=\"' + rowidval + '\" value=\"' + txtVal + '\" style=\"width:100%\"><i data-swchoff-text=\"NO\" data-swchon-text=\"YES\"></i>' + txtVal + '</label>');
         //inp.append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;width:100%;cursor:pointer\'><p class=\'bg-success\'>' + imgCheck + txtVal + '</p></div>');
         $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
-
     }
 
 }
+
 
 function addToCodeList(txtVal, inp) {
 
@@ -2175,7 +2204,7 @@ function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     // });
     $.each(d4ddata, function(i, item) { 
         if(item[comparedField] == filterByValue){
-            result.push(item[outputField]);
+            result.push(item[outputField] + '##' + item["rowid"]);
         }
     });
     return (result);
@@ -2230,7 +2259,10 @@ function errormessageforInput(id, msg) {
     if (errlabel.length > 0) { //no error label found
         errlabel.html(msg);
     } else {
-        currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        if(currCtrl.get(0).tagName != 'DIV')
+            currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        else
+            currCtrl.closest('div').parent().find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
         errlabel = $('#errmsg_' + id).html(msg);
     }
     //attaching a keydown event to clear the message
@@ -2278,6 +2310,13 @@ function isFormValid(formid) {
                     if (currCtrl.val() == '') {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "onechecked":
+                    if (currCtrl.find('input:checked').length <= 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast one required");
                         currCtrl.focus();
                     }
                     break;
@@ -2335,7 +2374,7 @@ if($('#servicename').val().trim()){
     isValid=false;
 }
 }else if(selectionMode==="Service Command"){
-if($('#servicename').val().trim() && $('#commandNew').val().trim()){
+if($('#servicename').val().trim() && $('#command').val().trim()){
     isValid=true;
 }else{
     isValid=false;
@@ -2451,7 +2490,7 @@ function checkusernameexistsinldap(inputID) {
 }
 
 function updateInstanceCardWithDocker(instanceID){
-    alert('in updatecard' + instanceID);
+   // alert('in updatecard' + instanceID);
     var $_cont =$('div[data-instanceid="54e45ed3918d01850c22b474"].domain-roles-caption').find('div.componentlistContainer').first();
     //alert($_cont.find('img.dockerenabledinstacne').length);
     if($_cont.find('img.dockerenabledinstacne').length <= 0){
