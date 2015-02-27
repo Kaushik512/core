@@ -14,11 +14,15 @@
                     <strong>Organizations</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
-                        <div>
+                        <div style="width:223px">
                             <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a> 
-                            <input type="checkbox" id="filteractive" style="margin-right:10px" onclick="filterColumn();"><label for="filteractive" style="padding-right:10px" >Include Inactive</label>
+                            <!-- <input type="checkbox" id="filteractive" style="margin-right:10px" onclick="filterColumn();"><label for="filteractive" style="padding-right:10px" >Include Inactive</label> -->
+                            <select id="filteractive" class="" onchange="filterColumn();" style="width:66%;margin-right:5px;">
+                                <option value="true" selected>Active</option>
+                                <option value="">All</option>
+                            </select>
                             <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
@@ -93,10 +97,11 @@
                                 <script>
 
                                     function filterColumn () {
-                                        var filter = true;
-                                        if($("#filteractive").is(':checked')){
-                                            filter = '';
-                                        }
+                                       // alert('hi ' + $("#filteractive").val());
+                                        var filter = $("#filteractive").val();
+                                        // if( == ''){
+                                        //     filter = '';
+                                        // }
                                         //alert(filter);
                                         $('#envtable').DataTable().column(2).search(
                                             filter,
@@ -121,7 +126,7 @@
                                             "pagingType": "full_numbers",
                                         });
                                         filterColumn();
-                                        
+                                        $("#filteractive").select2();
                                         $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
                                         $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
                                         /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');

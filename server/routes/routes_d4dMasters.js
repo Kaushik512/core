@@ -451,7 +451,124 @@ module.exports.setRoutes = function(app, sessionVerification) {
         console.log('received new request ' + req.params.id);
          configmgmtDao.getRowids(function(err,rowidlist){
 
-            console.log("Rowid List-------->" + rowidlist);
+            console.log("Rowid List----&&&&---->" + rowidlist);
+            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                if (err) {
+                    console.log("Hit and error:" + err);
+                }
+                if (dbtype) {
+                    console.log("Master Type: " + dbtype);
+                    
+                    var query = {};
+                query['id'] = req.params.id;
+                
+                    
+                    
+                    console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
+                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                        query['active'] = 'true';
+                    }
+
+
+                    eval('d4dModelNew.' + dbtype).find(
+                        query
+                        
+                    , function(err, d4dMasterJson) {
+                        if (err) {
+                            console.log("Hit and error:" + err);
+                        }
+                        //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
+                            var _keys = Object.keys(d4dMasterJson);
+                            console.log("Master Length:" + _keys.length);
+                            if(_keys.length <= 0){
+                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                res.end(JSON.stringify(d4dMasterJson));
+                            }
+                            var counter = 0;
+                            var todelete = [];
+                            //_keys.forEach(function(k,v){
+                            for(var k=0,v=0;k<_keys.length;k++,v++) {
+                                //var __keys = Object.keys(d4dMasterJson[k]);
+                               
+                                //console.log('OBject:' + d4dMasterJson[k]);
+                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                            
+                                for(var k1 in jobj){
+                                    //if any key has _rowid then update     corresponding field
+                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                    if(k1.indexOf('_rowid') > 0){
+                                        //check if its an array of rowid's
+                                        var flds = k1.split('_');
+                                        var names = '';
+                                        if(jobj[k1].indexOf(',') > 0){
+                                            //Will handle this seperately : Vinod to Do
+                                            var itms = jobj[k1].split(',');
+                                            for(_itms in itms){
+                                                console.log("in items");
+                                                var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                if(_itmsName != '')
+                                                {
+                                                        if(names == '')
+                                                        {
+                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        }
+                                                        else{
+                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        }
+                                                        console.log('names:',names);
+                                                }
+                                            }
+                                            
+                                        }
+                                        else{
+                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
+                                        }
+                                        console.log('names:',names,(names == ''));
+
+                                        d4dMasterJson[k][flds[0]] = names;
+
+                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
+                                            todelete.push(k);
+                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
+                                        console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
+                                    }
+                                  //  console.log("key**:",k1," val**:",jobj[k1]);
+                                   
+                                }
+                                console.log("Orgname check:" + d4dMasterJson[k]['orgname']);
+                                
+                                
+                                counter++;
+                            };//);
+                                    console.log("To Delete Array:", todelete.toString());
+                                    var collection = [];
+                                    
+                                    for(var i = 0; i < d4dMasterJson.length;i++){
+                                        if(todelete.indexOf(i) === -1) {
+                                            collection.push(d4dMasterJson[i]);
+                                        }
+                                        
+                                    }
+                                    console.log("sent response 484" + JSON.stringify(collection));
+                                    res.end(JSON.stringify(collection));
+                                    //console.log(k,d4dMasterJson[k],v);
+
+                        
+
+
+                            
+                        
+                    });
+                }
+            });
+        }); //rowidlist
+    });
+
+     app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+         configmgmtDao.getRowids(function(err,rowidlist){
+
+            console.log("Rowid List----&&&&---->" + rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
                     console.log("Hit and error:" + err);
@@ -462,13 +579,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     var query = {};
                     
                     query['id'] = req.params.id;
+                    console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
                     if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
                         query['active'] = true;
                     }
 
 
                     eval('d4dModelNew.' + dbtype).find(
-                        query
+                        {id:req.params.id
+                        }
                     , function(err, d4dMasterJson) {
                         if (err) {
                             console.log("Hit and error:" + err);

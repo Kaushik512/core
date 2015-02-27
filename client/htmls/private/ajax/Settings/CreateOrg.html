@@ -46,10 +46,14 @@
                                             <span class="pull-left">Current Status </span>: <span id="currentorgstatus">Active</span>
                                             </div>
                                             <label for="name"><span style="margin-top:5px" class="control-label"><br/>Note:<br/>Deactivating is cascading and would deactivate all entities depending on this organization.</span></label>
-                                            <a class="btn btn-primary btn-mini pull-right" onclick="" id="btnenablement">
+                                            <div>
+                                            <a class="btn btn-primary btn-mini pull-right hidden" onclick="" id="btnenablement">
                                             <i class="ace-icon fa fa-check bigger-110"></i>
                                             Change
                                             </a>
+                                            <input type="radio" id="activateradio" name="activateradio"><label for="activateradio">Activate </label>&nbsp;&nbsp;&nbsp;<input type="radio" id="deactivateradio" name="activateradio"><label for="deactivateradio">Deactivate </label>
+
+                                          </div>
                                       </div>
                                     </div>
                                     
@@ -115,8 +119,59 @@
           $('#myForm').find('.orgactive').first().removeClass('hidden');
        else
           $('#myForm').find('.orgactive').first().addClass('hidden');
-   }
 
+      if($('#active').val() == "false"){
+        $('#currentorgstatus').text('Deactive');
+      }
+   }
+   
+   var btnenablement = function(){
+    var data1 = new FormData();
+    if (confirm('You have selected to change the status of this organization. Proceed?')) {
+      var $deactivatebtn = $(this);
+      $deactivatebtn.attr('disabled','disabled');
+      var orgid__ = $('#myForm').find('button').first().attr('rowid');
+      var action = "true";
+      if($('#deactivateradio').is(':checked'))
+        action = "false";
+      var retVal = false;
+     // alert(action);
+    if(orgid__)
+      {
+        $deactivatebtn.parent().prepend('<label id="masterativatessavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif"></img> </label>');
+            
+             data1.append("orgid", orgid__);
+
+      
+
+           $.ajax({
+              url: '/d4dMasters/deactivateorg/' + action,
+              data: data1,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              async: false,
+              success: function(data, success) {
+                $('#masterativatessavespinner').detach();
+                $deactivatebtn.removeAttr('disabled');
+                if(action == "false")
+                  $('#currentorgstatus').html('Deactive');
+                else
+                  $('#currentorgstatus').html('Active');
+               // alert('done');
+                retVal = true;
+              },
+              error: function(jqxhr) {
+                  $('#masterativatessavespinner').detach();
+                  $deactivatebtn.removeAttr('disabled');
+                  alert(jqxhr.status);
+                  retVal = false;
+              }
+        });
+      }
+    }
+    return retVal;
+   };
 
 
    function readform_todelete(formName) {
@@ -324,6 +379,14 @@
     }
     $("#orgname").focus();
        $('#myForm').submit(function() {
+        $('#active').detach(); //do not save this 
+          if($('#activateradio').is(':checked') || $('#deactivateradio').is(':checked')  ){
+            if(!btnenablement()){
+             // alert('in return');
+              return false;
+            }
+              
+          }
          console.log('serialize ==> ',$(this).serialize());
            $(this).validate();
    
