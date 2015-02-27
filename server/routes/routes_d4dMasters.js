@@ -680,7 +680,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         for(var i =1;i<5;i++)
             counts[i] = 0;
           d4dModelNew.d4dModelMastersOrg.find({
-            id: 1
+            id: 1,
+            active:true
         }, function(err, docorgs) {
             var orgnames = docorgs.map(function(docorgs1) {
                 return docorgs1.rowid;
@@ -1482,11 +1483,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
-    app.post('/d4dMasters/deactivateorg',function(req,res){
+    app.post('/d4dMasters/deactivateorg/:action',function(req,res){
         var bodyJson = JSON.parse(JSON.stringify(req.body));
+
         if(!req.orgid){
             console.log('Org ID found ' + bodyJson.orgid);
-            configmgmtDao.deactivateOrg(bodyJson.orgid,function(err,data){
+            configmgmtDao.deactivateOrg(bodyJson.orgid,req.params.action,function(err,data){
                  if(err){
                     console.log('Error:' + err);
                     res.send(500);

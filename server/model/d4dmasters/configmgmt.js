@@ -982,39 +982,31 @@ function Configmgmt() {
         }
     };
 
-    this.deactivateOrg = function(orgid,callback){
-        d4dModelNew.d4dModelMastersGeneric.find({orgname_rowid:orgid},function(err,data){
-
-            console.log(JSON.stringify(data));
-            data.active = false;
-            data.save(function(err){
-                if(err){
-                    callback(err, null);
+    this.deactivateOrg = function(orgid,action,callback){
+        
+        console.log("Orgid:" + orgid + ' action: ' + action );
+        d4dModelNew.d4dModelMastersGeneric.update(
+                {
+                    $or : [{orgname_rowid: orgid},{rowid:orgid}]
+                }                    
+                , {
+                    $set: {
+                        active:action
+                    }
+                }, {
+                    upsert: false,
+                    multi: true   
+                }, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        callback(err, null);
+                        return;
+                    }
+                    console.log('Deactivated ' + orgid + ' in masters. Count: ' + data);
+                    callback(null,"done");
                     return;
-                }
-                callback(null,"done");
-            });
-        // d4dModelNew.d4dModelMastersGeneric.update(
-        //         {
-        //             orgname_rowid: orgid
-        //         }                    
-        //         , {
-        //             $set: {
-        //                 active:'false'
-        //             }
-        //         }, {
-        //             upsert: false    
-        //         }, function(err, data) {
-        //             if (err) {
-        //                 console.log(err);
-        //                 callback(err, null);
-        //                 return;
-        //             }
-        //             console.log('Deactivated ' + orgid + ' in masters. Count: ' + data);
-        //             callback(null,"done");
-        //             return;
-        //         });
-        });
+                });
+    
     };
 
     this.getServiceFromId = function(serviceId, callback) {
