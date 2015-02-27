@@ -2261,7 +2261,11 @@ $(function() {
                         "bSortable": false,
                         "sWidth": "20%"
                     }
-                ]
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                    $("td:first", nRow).html(iDisplayIndex + 1);
+                    return nRow;
+                }
 
             });
         }
@@ -2494,7 +2498,6 @@ function getCssClassFromStatus(status) {
 }
 
 function removeSelectedInstance(){
-    
     var instanceId = null;
     var blueprintName = null;
     if ($('#divinstancescardview').is(':visible')) {
@@ -2510,11 +2513,12 @@ function removeSelectedInstance(){
     }
     if(instanceId){
         //found now delete
-        bootbox.dialog({
+        var dialog = bootbox.dialog({
             title: "Remove Instance.",
             message: '<div class="row">  ' +
                 '<div class="col-md-12"> ' +
-                '<form class="form-horizontal"> ' +
+                '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>'+
+                '<form id="deleteInstanceForm" class="form-horizontal"> ' +
                 '<input type="hidden" id="deleteInstanceIdInput" value="'+instanceId+'"/>'+
                 '<div class="form-group"> ' +
                 '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
@@ -2535,24 +2539,30 @@ function removeSelectedInstance(){
                 success: {
                     label: "Delete",
                     className: "btn-primary",
-                    callback: function() {
-                        var url  = '/instances/' + instanceId;
-                        if($('#ckbChefDelete').is(':checked')) {
-                          url = url+'?chefRemove=true';
+                    callback: function(evt,arg2) {
+                        $('#deleteInstanceForm').hide();
+                        $('#deleteInstanceWorkingIndicator').show();
+                        $(evt.target).attr('disabled', 'disabled');
+                       
+                       
+                        var url = '/instances/' + instanceId;
+                        if ($('#ckbChefDelete').is(':checked')) {
+                            url = url + '?chefRemove=true';
                         }
 
                         $.ajax({
                             url: url,
                             type: 'DELETE',
                             success: function() {
-                              $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
                                 var table = $('#tableinstanceview').DataTable();
-                                console.log();
                                 table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                                dialog.modal('hide');
                             }
-                        }).fail(function(){
-                          bootbox.alert('Server Behaved Unexpectedly. Unable to delete instance');
+                        }).fail(function() {
+                            $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
                         });
+                        return false;
                     }
                 },
                 cancel: {
@@ -2614,6 +2624,9 @@ function pollInstanceState(instanceId, state, delay) {
               }
               if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
                disableInstanceActionBtns(instanceId);
+              }
+              if (data.instanceState == 'unknown'){
+                disableInstanceStartStopActionBtns(data._id);
               }
               if (data.instanceState === state) {
                 pollInstanceState(instanceId, state, 5000);
@@ -2815,7 +2828,6 @@ function enableInstanceActionStopBtn(instanceId){
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
   $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
-  
 }
 function disableInstanceActionBtns(instanceId){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
@@ -2824,6 +2836,18 @@ function disableInstanceActionBtns(instanceId){
   $tableViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
+function disableInstanceStartStopActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+  var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
+  $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
+  $tableViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
@@ -2980,11 +3004,11 @@ function addInstanceToDOM(data) {
    
 
     //For Table View
-     var dataTableCount = $instanceDataTable.dataTable();
-    var numberOfRows = dataTableCount.fnGetData().length;
-    console.log('rows ==>',dataTableCount.fnGetData().length);
+    // var dataTableCount = $instanceDataTable.dataTable();
+    //var numberOfRows = dataTableCount.fnGetData().length;
+    //console.log('rows ==>',dataTableCount.fnGetData().length);
 
-    $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
+    $rowContainter.append('<td></td>');
     $rowContainter.append('<td><img src="'+data.blueprintData.iconPath+'" style="width:auto;height:30px;" /></td>');
 
 
@@ -3204,6 +3228,9 @@ function addInstanceToDOM(data) {
     }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
       disableInstanceActionBtns(data._id);
+    }
+    if (data.instanceState == 'unknown'){
+      disableInstanceStartStopActionBtns(data._id);
     }
     
 
