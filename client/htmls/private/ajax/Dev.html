@@ -1209,6 +1209,10 @@
 var wzlink = window.location.href.split('#')[1];
 //alert(wzlink);
 $('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
+//Set localstorage to hold the last wz href
+//update lastworkzone only when you have ? in url
+if(window.location.href.indexOf('?') > 0)
+  localStorage.setItem("lastworkzoneurl", window.location.href);
 
 var urlParams = {};
 (window.onpopstate = function() {
@@ -2222,7 +2226,11 @@ $(function() {
                         "bSortable": false,
                         "sWidth": "20%"
                     }
-                ]
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                    $("td:first", nRow).html(iDisplayIndex + 1);
+                    return nRow;
+                }
 
             });
         }
@@ -2300,11 +2308,11 @@ $(function() {
         $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
     }
-    if (orgId && urlParams['bg'] && projectId && envId) {
-        $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+
+     $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
             console.log('success---3---4');
             /*selecting the environment which is already having values in the url intstead of the 1st*/
-            selectAnyEnviornment();
+           /* selectAnyEnviornment();
             if ($('#tree').find('a[itemtype="env"]').length <= 0) {
                 $('#content').addClass('hidden');
                 $('#noenvwarning').removeClass('hidden');
@@ -2313,7 +2321,7 @@ $(function() {
                 $('#content').removeClass('hidden');
                 $('#noenvwarning').addClass('hidden');
                 $('ol.breadcrumb').removeClass('hidden');
-            }
+            }*/
 
             //Syncing up the tree view based on url
             initializeBlueprintArea(data.blueprints);
@@ -2321,18 +2329,21 @@ $(function() {
             initializeInstanceArea(data.instances);
 
         });
-    } else {
-        selectFirstEnv();
-        if ($('#tree').find('a[itemtype="env"]').length <= 0) {
-            $('#content').addClass('hidden');
-            $('#noenvwarning').removeClass('hidden');
-            $('ol.breadcrumb').addClass('hidden');
-        } else {
-            $('#content').removeClass('hidden');
-            $('#noenvwarning').addClass('hidden');
-            $('ol.breadcrumb').removeClass('hidden');
-        }
-    }
+
+    // if (orgId && urlParams['bg'] && projectId && envId) {
+       
+    // } else {
+    //     selectFirstEnv();
+    //     if ($('#tree').find('a[itemtype="env"]').length <= 0) {
+    //         $('#content').addClass('hidden');
+    //         $('#noenvwarning').removeClass('hidden');
+    //         $('ol.breadcrumb').addClass('hidden');
+    //     } else {
+    //         $('#content').removeClass('hidden');
+    //         $('#noenvwarning').addClass('hidden');
+    //         $('ol.breadcrumb').removeClass('hidden');
+    //     }
+    // }
 });
 function generateDockerLaunchParams(){
   if($('#Containernamefield').val() == ''){
@@ -2452,31 +2463,86 @@ function getCssClassFromStatus(status) {
 }
 
 function removeSelectedInstance(){
-    var instanceid = $('.container.role-Selectedcard').find('[data-instanceid]').attr('data-instanceid');
-    if(instanceid){
+    var instanceId = null;
+    var blueprintName = null;
+    if ($('#divinstancescardview').is(':visible')) {
+         var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
+        instanceId = $selectedCard.attr('data-instanceid');
+        blueprintName = $selectedCard.attr('data-blueprintName');
+    } else if ($('#divinstancestableview').is(':visible')) {
+         var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+         instanceId=$selectedRow.attr('data-instanceId');
+         blueprintName = $selectedRow.attr('data-blueprintName');
+    } else {
+      instanceId = null;
+    }
+    if(instanceId){
         //found now delete
-         bootbox.confirm("Are you sure you would like to remove this instance?<br/>Note:<br/>This will not terminate the instance from the provider.", function(result) {
-            if (!result) {
-                return;
-            }
-            $.get('/instances/delete/' + instanceid,function(data){
-            //  alert(data);
-              if(data == 'OK'){
-                $('.container.role-Selectedcard').parents('.domain-role-thumbnail').detach();
-                var table = $('#tableinstanceview').DataTable();
-                console.log();
-                table.row('[data-instanceid='+instanceid+']').remove().draw( false );
+        var dialog = bootbox.dialog({
+            title: "Remove Instance.",
+            message: '<div class="row">  ' +
+                '<div class="col-md-12"> ' +
+                '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>'+
+                '<form id="deleteInstanceForm" class="form-horizontal"> ' +
+                '<input type="hidden" id="deleteInstanceIdInput" value="'+instanceId+'"/>'+
+                '<div class="form-group"> ' +
+                '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+                '</div>' +
+                '<div class="form-group"> ' +
+                '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
+                '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
+                '</div> ' +
+                '<div class="form-group"> ' +
+                '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+                '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
+                '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
+                'Delete this node from chef server </label> ' +
+                '</div>' +
+                '</div>' +
+                '</form> </div>  </div>',
+            buttons: {
+                success: {
+                    label: "Delete",
+                    className: "btn-primary",
+                    callback: function(evt,arg2) {
+                        $('#deleteInstanceForm').hide();
+                        $('#deleteInstanceWorkingIndicator').show();
+                        $(evt.target).attr('disabled', 'disabled');
+                       
+                       
+                        var url = '/instances/' + instanceId;
+                        if ($('#ckbChefDelete').is(':checked')) {
+                            url = url + '?chefRemove=true';
+                        }
 
-               
-              }
-              else
-                alert(data);
-            });
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            success: function() {
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                var table = $('#tableinstanceview').DataTable();
+                                table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                                dialog.modal('hide');
+                            }
+                        }).fail(function() {
+                            $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
+                        });
+                        return false;
+                    }
+                },
+                cancel: {
+                    label: "Close",
+                    className: "btn-primary",
+                    callback: function() {
+                        
+                    }
+                }
+            }
         });
     }
     else
     {
-        alert('Please select an instance to remove.');
+         bootbox.alert('Please select an instance to remove.');
     }
 }
 
@@ -2523,6 +2589,9 @@ function pollInstanceState(instanceId, state, delay) {
               }
               if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
                disableInstanceActionBtns(instanceId);
+              }
+              if (data.instanceState == 'unknown'){
+                disableInstanceStartStopActionBtns(data._id);
               }
               if (data.instanceState === state) {
                 pollInstanceState(instanceId, state, 5000);
@@ -2724,7 +2793,6 @@ function enableInstanceActionStopBtn(instanceId){
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
   $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
-  
 }
 function disableInstanceActionBtns(instanceId){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
@@ -2733,6 +2801,18 @@ function disableInstanceActionBtns(instanceId){
   $tableViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
+function disableInstanceStartStopActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+  var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
+  $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
+  $tableViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
@@ -2773,7 +2853,10 @@ function addInstanceToDOM(data) {
         }
     }
   
-    var $rowContainter = $('<tr data-instanceId="' + data._id + '"></tr>');
+    var $rowContainter = $('<tr></tr>').attr({
+        'data-instanceId': data._id,
+        'data-blueprintName': data.blueprintData.blueprintName
+    });
     
 
 
@@ -2782,7 +2865,10 @@ function addInstanceToDOM(data) {
     var $card = $('<div></div>').addClass('card'); //<div class="card">
     var $front = $('<div></div>').addClass('front'); //<div class="front">
     var $div = $('<div></div>').addClass('domain-roles ');
-    var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr('data-instanceId', data._id);
+    var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr({
+        'data-instanceId': data._id,
+        'data-blueprintName': data.blueprintData.blueprintName
+    });
     var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
 
@@ -2883,11 +2969,11 @@ function addInstanceToDOM(data) {
    
 
     //For Table View
-     var dataTableCount = $instanceDataTable.dataTable();
-    var numberOfRows = dataTableCount.fnGetData().length;
-    console.log('rows ==>',dataTableCount.fnGetData().length);
+    // var dataTableCount = $instanceDataTable.dataTable();
+    //var numberOfRows = dataTableCount.fnGetData().length;
+    //console.log('rows ==>',dataTableCount.fnGetData().length);
 
-    $rowContainter.append('<td>' + (numberOfRows + 1) + '</td>');
+    $rowContainter.append('<td></td>');
     $rowContainter.append('<td><img src="'+data.blueprintData.iconPath+'" style="width:auto;height:30px;" /></td>');
 
 
@@ -3107,6 +3193,9 @@ function addInstanceToDOM(data) {
     }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
       disableInstanceActionBtns(data._id);
+    }
+    if (data.instanceState == 'unknown'){
+      disableInstanceStartStopActionBtns(data._id);
     }
     
 

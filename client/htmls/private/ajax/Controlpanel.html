@@ -547,6 +547,14 @@ function disableInstanceActionBtns(instanceId){
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
+function disableInstanceStartStopActionBtns(instanceId){
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+
+  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
 
 var logTimeout;
 var stateTimeout;
@@ -572,46 +580,56 @@ $.get('../instances/'+urlParams.id,function(data){
 
     //fetching services list
     //alert(data.chef.serverId);
-    $.get('/d4dMasters/19/chefserverid/'+data.chef.serverId,function(services){
-      //console.log('hi ==>',serviceList);
-      services = JSON.parse(services);
-      //alert('Out json :' + JSON.stringify(services)+ services.length);
-      var $serviceList = $('#serviceList');
-      console.log(services,"length==>",services.length);
-      var serviceIds = [];
-      if(data.serviceIds && data.serviceIds.length) {
-        serviceIds = data.serviceIds;
-      }
+    $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
+        $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
+            
+            servicesCmd = JSON.parse(servicesCmd);
+            services = JSON.parse(services);
+            for(var k=0;k<servicesCmd.length;k++) {
+              if(servicesCmd[k].chefserverid !==data.chef.serverId ) {
+                services.push(servicesCmd[k]);
+              }
+            }
+            //alert('Out json :' + JSON.stringify(services)+ services.length);
+            var $serviceList = $('#serviceList');
+            console.log(services, "length==>", services.length);
+            var serviceIds = [];
+            if (data.serviceIds && data.serviceIds.length) {
+                serviceIds = data.serviceIds;
+            }
 
-      for(var i=0;i<services.length;i++){
-        
-        var name = services[i].servicename;
-        if(!name) {
-           name = services[i].commandname;
-        }
-        var $tr = $('<tr></tr>').attr('data-listServiceId',services[i].rowid);
-        var $tdName = $('<td></td>').append(name);
-        $tr.append($tdName);
-        
-        var commandType = services[i].commandtype;
-        if(commandType === 'Chef Cookbook/Recepie') {
-          var html =  getCookbookActionHtml(services[i].rowid,services[i]);
-        } else {
-           var html =  getCommandActionHtml(services[i].rowid,services[i]);
-        }
-        
-        var $tdActions = $('<td></td>').append(html);
-        $tr.append($tdActions);
-        var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData',services[i]);
-        var $tdCheckBox = $('<td></td>').append($checkBox);
-        $tr.append($tdCheckBox);
-        if(serviceIds.indexOf(services[i].rowid) !== -1) {
-          $tr.addClass('hidden');
-        }
-        
-        $serviceList.append($tr);
-      }
-      
+            for (var i = 0; i < services.length; i++) {
+
+                var name = services[i].servicename;
+                if (!name) {
+                    name = services[i].commandname;
+                }
+                var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                var $tdName = $('<td></td>').append(name);
+                $tr.append($tdName);
+
+                var commandType = services[i].commandtype;
+                if (commandType === 'Chef Cookbook/Recepie') {
+                    var html = getCookbookActionHtml(services[i].rowid, services[i]);
+                } else {
+                    var html = getCommandActionHtml(services[i].rowid, services[i]);
+                }
+
+                var $tdActions = $('<td></td>').append(html);
+                $tr.append($tdActions);
+                var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                var $tdCheckBox = $('<td></td>').append($checkBox);
+                $tr.append($tdCheckBox);
+                if (serviceIds.indexOf(services[i].rowid) !== -1) {
+                    $tr.addClass('hidden');
+                }
+
+                $serviceList.append($tr);
+            }
+        })
+        //console.log('hi ==>',serviceList);
+
+
 
     });
     if (data.serviceIds && data.serviceIds.length) {
@@ -674,6 +692,9 @@ $.get('../instances/'+urlParams.id,function(data){
   }
   if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
     disableInstanceActionBtns(data._id);
+  }
+  if (data.instanceState == 'unknown'){
+    disableInstanceStartStopActionBtns(data._id);
   }
   
   var $backRunlistContainer = $('.cardBackRunlistContaner');
@@ -816,6 +837,8 @@ $.get('../instances/'+urlParams.id,function(data){
 
 
   $('.instanceActionBtn').click(function(e){
+
+   
         if($(this).hasClass('isStopedInstance')){
           return false;
         }
@@ -823,69 +846,84 @@ $.get('../instances/'+urlParams.id,function(data){
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
         var type = $this.attr('data-actionType');
-        url = '../instances/'+instanceId+'/startInstance';
+        var url = '../instances/'+instanceId+'/startInstance';
         if(type==='stop') {
             url = '../instances/'+instanceId+'/stopInstance'
         }
+        function makeRequest(url) {
+           $parent.find('.moreInfo').trigger('click');
+            $.get(url, function(data) {
+                if (data.actionLogId) {
+                    $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                        addActionLogRow(actionLog);
+                    });
+                }
+
+                console.log($parent.length, $parent);
+
+                var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
+
+                var oldState = data.instanceCurrentState;
+
+                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+
+                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
+
+                function pollInstanceState(state, delay) {
+                    stateTimeout = setTimeout(function() {
+                        $.get('../instances/' + instanceId, function(data) {
+                            if (data) {
+                                if (data.instanceState == 'stopped') {
+
+                                    enableInstanceActionStopBtn(data._id);
+                                }
+                                if (data.instanceState == 'running') {
+                                    enableInstanceActionStartBtn(data._id);
+                                }
+                                if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                                    disableInstanceActionBtns(data._id);
+                                }
+                                if (data.instanceState == 'unknown'){
+                                  disableInstanceStartStopActionBtns(data._id);
+                                }
+                                if (data.instanceState === state) {
+                                    pollInstanceState(state, 5000);
+                                } else {
+                                    console.log('polling complete');
+                                    var cssClassed = getCssClassFromStatus(data.instanceState);
+                                    $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                    $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                }
+                            }
+                        })
+                    }, delay);
+                }
+                pollInstanceState(oldState, 2000);
+            }).fail(function(jxObj) {
+                console.log(jxObj);
+                if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+                    console.log('calling actionLog');
+                    $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                        addActionLogRow(actionLog);
+                    });
+                }
+            });
+
+        }
+
+        if(type==='stop') {
+          bootbox.confirm("Stop Instance ?",function(result){
+            if(result) {
+               makeRequest(url);
+            } 
+          });
+        } else {
+          makeRequest(url);
+        }
         
-        $parent.find('.moreInfo').trigger('click');
-        $.get(url,function(data){
+       
 
-
-            if(data.actionLogId) {
-              $.get('../instances/'+instanceId+'/actionLogs/'+data.actionLogId,function(actionLog){
-                  addActionLogRow(actionLog);
-              });
-            }
-            
-            console.log($parent.length,$parent);
-
-            
-           
-            var cssClassed = getCssClassFromStatus(data.instanceCurrentState); 
-            
-            var oldState = data.instanceCurrentState;
-
-            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-
-            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
-            
-            function pollInstanceState(state,delay) {
-                stateTimeout = setTimeout(function() {
-                    $.get('../instances/'+instanceId,function(data){
-                        if(data) {
-                            if (data.instanceState == 'stopped') {
-
-                                enableInstanceActionStopBtn(data._id);
-                            }
-                            if (data.instanceState == 'running') {
-                                enableInstanceActionStartBtn(data._id);
-                            }
-                            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
-                                disableInstanceActionBtns(data._id);
-                            }
-                            if (data.instanceState === state) {
-                                pollInstanceState(state, 5000);
-                            } else {
-                                console.log('polling complete');
-                                var cssClassed = getCssClassFromStatus(data.instanceState);
-                                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                            }
-                        }   
-                    })
-                }, delay);                
-            }
-            pollInstanceState(oldState,2000);                        
-        }).fail(function(jxObj){
-          console.log(jxObj);
-          if(jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
-              console.log('calling actionLog');
-              $.get('../instances/'+instanceId+'/actionLogs/'+jxObj.responseJSON.actionLogId,function(actionLog){
-                  addActionLogRow(actionLog);
-              });
-          }
-        }); 
+         
     });
 
   
@@ -1645,7 +1683,7 @@ $('.formSubmit').click(function(e){
           }, {
               "bSortable": false
           }, {
-              "bSortable": false
+              "bSortable": true
           }, {
               "bSortable": false
           }, {

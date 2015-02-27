@@ -32,6 +32,8 @@ function deleteItem(docid, key, value, button) {
                 $('#' + tab).dataTable();
                 if(parseInt(docid) < 5){
                     loadTreeFuncNew();
+                  //  alert('in saved');
+                 //   selectFirstEnv();
                 }
             },
             failure: function(data) {
@@ -897,6 +899,7 @@ function readform(formID) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                  //   debugger;
+                    //alert(JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
                     $.each(tempJSON, function(i, item) {
@@ -906,7 +909,8 @@ function readform(formID) {
                           //  if (item.field[k].name == curInput.attr("id")) {
                                 // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
                                 // alert("Added:" + item.field[i].values.value);
-                                addToSelectList(item[curInput.attr('datapath')], curInput);
+                              //  alert(item.rowid);
+                                addToSelectList(item[curInput.attr('datapath')],item.rowid, curInput);
                          //   }
                        
                     });
@@ -1077,6 +1081,7 @@ function readform(formID) {
                     var ctrl = $("#" + ctrls[i]);
                     if (ctrl.getType() == "select") {
                         ctrl.val(ctrl.attr('savedvalue'));
+                        ctrl.trigger('change');
                     }
                     if (ctrl.getType() == "div") {
                         var divselect = ctrl.attr('savedvalue').split(',');
@@ -1666,8 +1671,6 @@ function saveform(formID,operationTypes) {
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
 
     if (button.attr("rowid")) {
-
-        
         data1.append("rowid", button.attr("rowid"));
     }
 
@@ -2256,7 +2259,10 @@ function errormessageforInput(id, msg) {
     if (errlabel.length > 0) { //no error label found
         errlabel.html(msg);
     } else {
-        currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        if(currCtrl.get(0).tagName != 'DIV')
+            currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
+        else
+            currCtrl.closest('div').parent().find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
         errlabel = $('#errmsg_' + id).html(msg);
     }
     //attaching a keydown event to clear the message
@@ -2304,6 +2310,13 @@ function isFormValid(formid) {
                     if (currCtrl.val() == '') {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "onechecked":
+                    if (currCtrl.find('input:checked').length <= 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast one required");
                         currCtrl.focus();
                     }
                     break;
@@ -2361,7 +2374,7 @@ if($('#servicename').val().trim()){
     isValid=false;
 }
 }else if(selectionMode==="Service Command"){
-if($('#servicename').val().trim() && $('#commandNew').val().trim()){
+if($('#servicename').val().trim() && $('#command').val().trim()){
     isValid=true;
 }else{
     isValid=false;

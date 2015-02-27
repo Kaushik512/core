@@ -353,7 +353,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             return;
                                         }
                                         if (instances.length) {
-                                            updateTaskStatusNode(node.name, "Node exist in " + instances[0].orgId + "/" + instances[0].bgId + "/" + instances[0].projectId + "/" + instances[0].envId + " : " + node.name, true, count);
+                                            configmgmtDao.getOrgBgProjEnvNameFromIds(instances[0].orgId,instances[0].bgId,instances[0].projectId,instances[0].envId,function(err,names){
+                                             if(err) {
+                                                updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
+                                                return;
+                                             }
+                                             updateTaskStatusNode(node.name, "Node exist in " + names.orgName + "/" + names.bgName + "/" + names.projName + "/" + names.envName + " : " + node.name, true, count);
+                                            });
                                             return;
                                         }
                                         if (nodeIp != 'unknown') {

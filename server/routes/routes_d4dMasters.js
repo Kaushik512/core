@@ -14,7 +14,8 @@ var exec = childProcess.exec;
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
-    //app.all('/d4dMasters',sessionVerification);
+    app.all('/d4dMasters/*',sessionVerification);
+
 
     /*app.get('/d4dMasters/saveTest', function(req, res) {
         var m = new d4dModel();
@@ -513,7 +514,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                         d4dMasterJson[k][flds[0]] = names;
 
-                                        if(names == '')
+                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
                                             todelete.push(k);
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
@@ -665,7 +666,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
         logger.debug('Entered readmasterjsoncounts');
         var ret = [];
-        var masts = ['1', '2', '3', '4'];
+        var masts = ['2', '3', '4'];
         var counts = [];
         for(var i =1;i<5;i++)
             counts[i] = 0;
@@ -673,15 +674,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
             id: 1
         }, function(err, docorgs) {
             var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.orgname;
+                return docorgs1.rowid;
             });
         d4dModelNew.d4dModelMastersOrg.find({
             id: {
                 $in: masts,
             },
-            orgname:{
-                $in:orgnames
-            }
+            orgname_rowid:{$in:orgnames}
         }, function(err, d4dMasterJson) {
             if (err) {
                 console.log("Hit and error:" + err);
@@ -702,9 +701,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     logger.debug(d4dMasterJson[i]["id"]);
                     counts[d4dMasterJson[i]["id"]]++;
                 }
-                for(var i =1;i<5;i++){
+                for(var i =2;i<5;i++){
                     ret.push('{"' + i + '":"' + counts[i] + '"}');
                 }
+                ret.push('{"1":"' + orgnames.length + '"}');
                 res.end('[' + ret.join(',') + ']');
                 //res.end();
                 return;
