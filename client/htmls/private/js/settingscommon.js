@@ -160,7 +160,7 @@ else{
 function readMasterJsontv(id) {
     // debugger;
    //alert(url);
-if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
+if((url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ) && url.indexOf('OrgList.html') < 0){
     // alert('in 1');
     $.ajax({
         type: "get",
@@ -179,14 +179,14 @@ if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
     });
     return (d4ddata);
 }
-if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
+if(url.indexOf('OrgList.html') > 0)
 {
     //alert('in 1');
     $.ajax({
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnew/" + id,
+        url: serviceURL + "readmasterjsonneworglist/" + id,
         success: function(data) {
                 // alert(data.toString());  
             // debugger;
@@ -1553,7 +1553,7 @@ function saveform(formID,operationTypes) {
     
     if(button){
         button.attr('disabled','disabled');
-        button.parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif"></img> </label>')
+        button.parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif"></img> </label>');
         //button.parent.prepend('<label id="masterssavespinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>')
     }
     //alert('orgname' + orgName);
