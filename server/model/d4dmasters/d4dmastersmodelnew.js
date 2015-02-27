@@ -66,6 +66,7 @@ var d4dMastersProductGroup = new mongoose.Schema(
 	orgname_rowid: {type:String, trim:true},
 	productgroupname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProductGroup = mongoose.model('d4dModelMastersProductGroup',d4dMastersProductGroup,'d4dmastersnew');
@@ -78,9 +79,19 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	orgname_rowid: {type:String, trim:true},
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d4dMastersEnvironments,'d4dmastersnew');
+
+var d4dMastersGeneric = new mongoose.Schema(
+	{
+	active: {type:Boolean, trim:true,default:true},
+	orgname: {type:String, trim:true},
+	orgname_rowid: {type:String, trim:true}
+	},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersGeneric = mongoose.model('d4dModelMastersGeneric',d4dMastersGeneric,'d4dmastersnew');
 
 
 var d4dMastersProjects = new mongoose.Schema(
@@ -94,6 +105,7 @@ var d4dMastersProjects = new mongoose.Schema(
 	environmentname: {type:String, trim:true},
 	environmentname_rowid: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProjects = mongoose.model('d4dModelMastersProjects',d4dMastersProjects,'d4dmastersnew');
@@ -111,6 +123,7 @@ var d4dMastersConfigManagement = new mongoose.Schema(
 	validatorpemfile_filename: {type:String, trim:true},
 	kniferbfile_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersConfigManagement = mongoose.model('d4dModelMastersConfigManagement',d4dMastersConfigManagement,'d4dmastersnew');
@@ -124,6 +137,7 @@ var d4dMastersDockerConfig = new mongoose.Schema(
 	dockeremailid: {type:String, trim:true},
 	dockerpassword: {type:String,required:true, trim:true},
 	folderpath: {type:String,trim:true},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersDockerConfig = mongoose.model('d4dModelMastersDockerConfig',d4dMastersDockerConfig,'d4dmastersnew');
@@ -134,6 +148,7 @@ var d4dMastersUsers = new mongoose.Schema(
 	loginname: {type:String, trim:true, validate:nameValidator},
 	email: {type:String, trim:true},
 	userrolename: {type:String, trim:true},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersUsers = mongoose.model('d4dModelMastersUsers',d4dMastersUsers,'d4dmastersnew');
@@ -170,6 +185,7 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 	dockercontainerpathstitle: {type:String, trim:true},
 	dockercontainerpaths: {type:String, trim:true},
 	templatescookbooks: {type:String, trim:true},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersTemplatesList = mongoose.model('d4dModelMastersTemplatesList',d4dMastersTemplatesList,'d4dmastersnew');
@@ -193,6 +209,7 @@ var d4dMastersServicecommands = new mongoose.Schema(
 	servicekill: {type:String, trim:true},
 	command: {type:String, trim:true},
 	commandaction: {type:String, trim:true},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersServicecommands = mongoose.model('d4dModelMastersServicecommands',d4dMastersServicecommands,'d4dmastersnew');
@@ -213,6 +230,7 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 	jenkinspassword: {type:String,required:true, trim:true},
 	jenkinstoken: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
+	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelJenkinsConfig = mongoose.model('d4dModelJenkinsConfig',d4dMastersJenkinsConfig,'d4dmastersnew');
@@ -231,4 +249,5 @@ module.exports.d4dModelMastersServicecommands  = d4dModelMastersServicecommands;
 module.exports.d4dModelMastersUsers  = d4dModelMastersUsers;
 module.exports.d4dModelMastersUserroles  = d4dModelMastersUserroles;
 module.exports.d4dModelMastersglobalaccess  = d4dModelMastersglobalaccess;
-module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;
+module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//
+module.exports.d4dModelMastersGeneric  = d4dModelMastersGeneric;

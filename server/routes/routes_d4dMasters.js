@@ -451,16 +451,25 @@ module.exports.setRoutes = function(app, sessionVerification) {
         console.log('received new request ' + req.params.id);
          configmgmtDao.getRowids(function(err,rowidlist){
 
-            console.log("Rowid List-->" + rowidlist);
+            console.log("Rowid List-------->" + rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
                     console.log("Hit and error:" + err);
                 }
                 if (dbtype) {
                     console.log("Master Type: " + dbtype);
-                    eval('d4dModelNew.' + dbtype).find({
-                        id: req.params.id
-                    }, function(err, d4dMasterJson) {
+                    
+                    var query = {};
+                    
+                    query['id'] = req.params.id;
+                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                        query['active'] = true;
+                    }
+
+
+                    eval('d4dModelNew.' + dbtype).find(
+                        query
+                    , function(err, d4dMasterJson) {
                         if (err) {
                             console.log("Hit and error:" + err);
                         }
@@ -1473,7 +1482,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
-
+    app.post('/d4dMasters/deactivateorg',function(req,res){
+        var bodyJson = JSON.parse(JSON.stringify(req.body));
+        if(!req.orgid){
+            console.log('Org ID found ' + bodyJson.orgid);
+            configmgmtDao.deactivateOrg(bodyJson.orgid,function(err,data){
+                 if(err){
+                    console.log('Error:' + err);
+                    res.send(500);
+                 }
+                 console.log(data);
+                 res.send(200);
+            });
+        }
+       
+    });
     app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
         console.log('received new save request ' + req.params.id);
         var bodyJson = JSON.parse(JSON.stringify(req.body));

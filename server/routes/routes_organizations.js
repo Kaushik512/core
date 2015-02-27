@@ -322,7 +322,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 borderColor: '#000',
                                                                 selectable: false,
                                                                 itemtype: 'proj',
-                                                                href: 'javascript:void(0)',
+                                                                href: '#ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid'],
                                                                 environments: envs
                                                             });
 
