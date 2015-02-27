@@ -35,20 +35,51 @@ var Jenkins = function(options) {
         });
     };
 
-    this.buildJobWithParams = function(jobname, params, callback) {
-        jenkins.build(jobname, params, function(err, data) {
+    this.buildJobWithParams = function(jobName, params, callback) {
+        jenkins.build(jobName, params, function(err, data) {
             if (err) {
                 logger.error(err);
                 callback(err, null);
                 return;
             }
-            callback(null,data);
+            callback(null, data);
         });
     };
 
-    this.getJobOutput = function() {
-
+    this.getBuildInfo = function(jobName, buildNumber, callback) {
+        jenkins.build_info(jobName, buildNumber, function(err, data) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
     };
+
+    this.getJobReport = function(jobName) {
+        jenkins.last_build_report(jobName, function(err, data) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    }
+
+    this.getJobOutput = function(jobName, buildName, callback) {
+        jenkins.job_output(jobName, buildName, function(err, data) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    };
+
+
 
 
 }
