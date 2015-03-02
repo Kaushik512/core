@@ -180,9 +180,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
         res.send('[' + req.session.user.authorizedfiles + ']');
     });
 
-    app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
+    app.get('/d4dMasters/candelete/:rowid/:formid',function(req,res){
+         
+         // swtich(req.params.formid){
+         //    case "1": //this will be org
 
-        console.log('received request ' + req.params.id);
+         // }
+         // configmgmtDao.deleteCheck(req.params.rowid,formids,fieldname,function(err,data){
+            
+         // });
+         
+    });
+
+    app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
+        console.log("REceived request for delete chk." + req.params.fieldvalue +  ' : ' + req.params.id + ' : ' + req.params.fieldname);
+       // console.log('received request ' + req.params.id);
+       //Referntial integrity check 
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {
                 console.log("Hit and error:" + err);
@@ -206,76 +219,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }); //end findOne
             }
         }); //end configmgmtDao
-
-
-
-
-        // d4dModel.findOne({
-        //  id: req.params.id
-        // }, function(err, d4dMasterJson) {
-        //  if (err) {
-        //      console.log("Hit and error:" + err);
-        //  }
-        //  if (d4dMasterJson) {
-        //      /*res.writeHead(200, { 'Content-Type': 'application/json' });
-        //           res.end(JSON.stringify(d4dMasterJson));*/
-        //      console.log("Before splice" + JSON.stringify(d4dMasterJson));
-        //      d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-        //          //console.log("found" + itm.field.length);
-        //          for (var j = 0; j < itm.field.length; j++) {
-        //              if (itm.field[j]["name"] == req.params.fieldname) {
-        //                  //console.log("found:" + itm.field[j]["values"].value);
-        //                  if (itm.field[j]["values"].value == req.params.fieldvalue) {
-        //                      console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-        //                      d4dMasterJson.masterjson.rows.row.splice(i, 1);
-        //                      // d4dMasterJson.masterjson.changed = true;
-
-        //                      return;
-        //                  }
-        //              }
-
-        //              // console.log();
-        //          }
-        //          JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
-        //                   console.log(" Innner: " + JSON.stringify(itmjson));
-        //               });
-
-        //      });
-
-        //      // d4dMasterJson.content = JSON.stringify(d4dMasterJson);
-
-        //      d4dMasterJson.markModified('masterjson');
-
-        //      d4dMasterJson.save(function(err, d4dMasterJson) {
-        //          if (err) {
-        //              console.log("Hit and error:" + err)
-        //              res.send(500);
-        //          };
-        //          console.log('saved');
-        //      });
-
-        //      //  console.log("After splice" + JSON.stringify(d4dMasterJson));
-        //      /*d4dMasterJson.save(function (err, d4dMasterJson) {
-        //               if (err) {
-        //                   console.log("Hit and error:" + err)
-        //                   res.send(500);
-        //               };
-        //               console.log('saved');
-        //           });*/
-        //      res.end(JSON.stringify(d4dMasterJson));
-        //      console.log("sent response" + JSON.stringify(d4dMasterJson));
-
-        //  } else {
-        //      res.send(400, {
-        //          "error": err
-        //      });
-        //      console.log("none found");
-        //  }
-
-
-        // });
-
-
 
     });
 
@@ -465,7 +408,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     
                     
                     console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
-                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                    if(req.params.id == '1' || req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
                         query['active'] = 'true';
                     }
 
@@ -647,6 +590,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
+                                    
                                   //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
