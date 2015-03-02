@@ -197,20 +197,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
        // console.log('received request ' + req.params.id);
        //Referntial integrity check to be done.
        var tocheck = [];
+       var fieldname = '';
         switch (req.params.id){
             case "1":
                 tocheck.push('2');
                 tocheck.push('3');
+                tocheck.push('10');
+                fieldname = "orgname_rowid";
                 break;
             case "2":
                 tocheck.push('4');
+                fieldname = "productgroupname_rowid";
                 break;
             case "3":
                 tocheck.push('4');
+                fieldname = "environmentname_rowid";
                 break;
         }
-        configmgmtDao.deleteCheck(req.params.rowid,formids,fieldname,function(err,data){
-        if(data == "none"){
+        // configmgmtDao.deleteCheck(req.params.fieldvalue,tocheck,fieldname,function(err,data){
+        // console.log('Delete check returned:' + data);
+        // if(data == "none"){
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
                     console.log("Hit and error:" + err);
@@ -234,13 +240,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }); //end findOne
                 }
             }); //end configmgmtDao
-        }
-        else{
-            console.log('There are dependent elements cannot delete');
-            res.send(500);
-            return;
-        }
-        });
+        // }
+        // else{
+        //     console.log('There are dependent elements cannot delete');
+        //     res.send(500,"dependent elements found");
+        //     return;
+        // }
+        // });
 
     });
 

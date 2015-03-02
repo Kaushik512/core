@@ -38,7 +38,7 @@ function deleteItem(docid, key, value, button) {
             },
             failure: function(data) {
                 // debugger;
-                //  alert(data.toString());
+                 alert(data.toString());
             }
         });
     }

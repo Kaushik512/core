@@ -1010,11 +1010,13 @@ function Configmgmt() {
     };
 
     this.deleteCheck = function(rowid,formids,fieldname,callback){
-        console.log("Delete Check request rcvd." + rowid +  ' : ' + formid + ' : ' + fieldname);
+        console.log("Delete Check request rcvd." + rowid +  ' : ' + formids + ' : ' + fieldname);
         var count = 0;
 
-         for(var formid in formids){
-            this.getDBModelFromID(formid, function(err, dbtype) {
+         for(var u =0;u< formids.length;u++){
+           
+            this.getDBModelFromID(formids[u], function(err, dbtype) {
+                 console.log('formid:' + formids[u]);
                 if (err) {
                     callback(err, null);
                     return;
@@ -1022,8 +1024,8 @@ function Configmgmt() {
                 }
                 if (dbtype) {
                     var query = {};
-                    query[fieldname] = fieldname;
-                    query['id'] = formid;
+                    query[fieldname] = {$regex : ".*" + rowid + "*"};
+                    query['id'] = formids[u];
                     eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
                         if (err) {
                             callback(err, null);
@@ -1034,13 +1036,18 @@ function Configmgmt() {
                             callback(null, 'found');
                             return;
                         }
+                        console.log('d4dMasterJson length:' + d4dMasterJson.length);
+                        console.log('count : ' + count + ' formid length ' + formids.toString() + ' formid ' + formids[u]);
+                        if(u >= formids.length - 1){
+                            callback(null,'none');
+                            return;
+                        }
+                        count++;
+
                     });
 
                 }
-                if(count >= formids.length - 1){
-                    callback(null,'none');
-                    return;
-                }
+                
              });
          }
     };
