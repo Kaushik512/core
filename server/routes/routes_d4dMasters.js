@@ -195,30 +195,52 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
         console.log("REceived request for delete chk." + req.params.fieldvalue +  ' : ' + req.params.id + ' : ' + req.params.fieldname);
        // console.log('received request ' + req.params.id);
-       //Referntial integrity check 
-        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-            if (err) {
-                console.log("Hit and error:" + err);
-            }
-            if (dbtype) {
-                //Currently rowid is hardcoded since variable declaration was working
-                var item = '\"' + req.params.fieldname + '\"';
-                console.log("Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
-                eval('d4dModelNew.' + dbtype).remove({
-                    rowid: req.params.fieldvalue
-                }, function(err) {
-                    if (err) {
-                        console.log('Hit an errror on delete : ' + err);
-                        res.send(500);
-                        return;
-                    } else {
-                        console.log('Document deleted : ' + req.params.fieldvalue);
-                        res.send(200);
-                        return;
-                    }
-                }); //end findOne
-            }
-        }); //end configmgmtDao
+       //Referntial integrity check to be done.
+       var tocheck = [];
+        switch (req.params.id){
+            case "1":
+                tocheck.push('2');
+                tocheck.push('3');
+                break;
+            case "2":
+                tocheck.push('4');
+                break;
+            case "3":
+                tocheck.push('4');
+                break;
+        }
+        configmgmtDao.deleteCheck(req.params.rowid,formids,fieldname,function(err,data){
+        if(data == "none"){
+            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                if (err) {
+                    console.log("Hit and error:" + err);
+                }
+                if (dbtype) {
+                    //Currently rowid is hardcoded since variable declaration was working
+                    var item = '\"' + req.params.fieldname + '\"';
+                    console.log("Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
+                    eval('d4dModelNew.' + dbtype).remove({
+                        rowid: req.params.fieldvalue
+                    }, function(err) {
+                        if (err) {
+                            console.log('Hit an errror on delete : ' + err);
+                            res.send(500);
+                            return;
+                        } else {
+                            console.log('Document deleted : ' + req.params.fieldvalue);
+                            res.send(200);
+                            return;
+                        }
+                    }); //end findOne
+                }
+            }); //end configmgmtDao
+        }
+        else{
+            console.log('There are dependent elements cannot delete');
+            res.send(500);
+            return;
+        }
+        });
 
     });
 
