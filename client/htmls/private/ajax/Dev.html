@@ -33,15 +33,19 @@
                     <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse">Instance</a>
+                                <h4 class="panel-title searchTableView">
+                                    <a data-toggle="collapse">Instances</a>
                                 </h4>
-
+                                <h4 class="panel-title searchCardView" style="display: inline-flex;height:40px;">
+                                  <a data-toggle="collapse">Search</a>
+                                  <input type="text" class="searchInstances form-control" style="margin-left: 10px; margin-top: 10px;height:24px !important;padding:0px !important;">
+                                </h4>
 
                                 <span class="pull-right swap-view">
                                     
-                                    <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;
-                                    <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                  <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;
+                                  <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a>
+                                </span>
                             </div>
                             <div id="collapseOne-1" class="panel-collapse collapse in">
                                 <div class="panel-body" style="padding:0px !important;">
@@ -1186,23 +1190,6 @@ $('.authenticationType').change(function(e) {
         $(".authPemFile").show();
     }
 });
-
-    $('.searchInstances').keyup(function(e){
-        var searchText = $(this).val();
-        //alert(searchText);
-        $allListElements = $('#divinstancescardview ul li .domain-roles-heading .cardHeadingTextoverflow');
-        //alert($allListElements.length);
-        $matchingListElements = $allListElements.filter(function(i,el){
-            //alert(el);
-            return $(el).text().indexOf(searchText) !== -1;
-        });
-        // $allListElements.parents().eq(6).hide();
-        // $matchingListElements.parents().eq(6).show();
-        $allListElements.parents(".domain-role-thumbnail").hide();
-        $matchingListElements.parents(".domain-role-thumbnail").show();
-        // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
-        // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
-     });
 </script>
 <script type="text/javascript">
 $('#ipaddressimport').click(function(e){
@@ -3934,18 +3921,21 @@ function showHideControl(objID)
     {
         if(objID == "divinstancescardview" || objID == "defaultViewButton")
         {
-            $("#divinstancestableview").removeClass("visibleClass");
-            $("#divinstancescardview").addClass("visibleClass");
-            $("#divinstancestableview").hide();
-            $("#divinstancescardview").show();
+          $("#divinstancestableview").removeClass("visibleClass");
+          $("#divinstancescardview").addClass("visibleClass");
+          $("#divinstancestableview").hide();
+          $("#divinstancescardview").show();
+          $(".searchTableView").hide();
+          $(".searchCardView").show();
         }
         else
         {   
-
-            $("#divinstancestableview").addClass("visibleClass");
-            $("#divinstancescardview").removeClass("visibleClass");
-            $("#divinstancestableview").show();
-            $("#divinstancescardview").hide();
+          $("#divinstancestableview").addClass("visibleClass");
+          $("#divinstancescardview").removeClass("visibleClass");
+          $("#divinstancestableview").show();
+          $("#divinstancescardview").hide();          
+          $(".searchCardView").hide();
+          $(".searchTableView").show();
         }
         //localStorage.clear();
     }
@@ -3978,5 +3968,22 @@ loadcarousel();
 //       $(this).toggleClass('selected');
 //   });
 // });
-
+</script>
+<script type="text/javascript">
+  $('.searchInstances').keyup(function(e){
+   var searchText = $(this).val();
+   //alert(searchText);
+   $allListElements = $('#divinstancescardview ul li .domain-roles-heading .cardHeadingTextoverflow');
+   //alert($allListElements.length);
+   $matchingListElements = $allListElements.filter(function(i,el){
+   //alert(el);
+   return $(el).text().indexOf(searchText) !== -1;
+   });
+   // $allListElements.parents().eq(6).hide();
+   // $matchingListElements.parents().eq(6).show();
+   $allListElements.parents(".domain-role-thumbnail").hide();
+   $matchingListElements.parents(".domain-role-thumbnail").show();
+   // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
+   // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
+   });
 </script>
