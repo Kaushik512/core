@@ -20,7 +20,8 @@
                             </a> 
                             <!-- <input type="checkbox" id="filteractive" style="margin-right:10px" onclick="filterColumn();"><label for="filteractive" style="padding-right:10px" >Include Inactive</label> -->
                             <select id="filteractive" class="" onchange="filterColumn();" style="width:66%;margin-right:5px;">
-                                <option value="true" selected>Active</option>
+                                <option value="Active" selected>Active</option>
+                                <option value="Inactive">Inactive</option>
                                 <option value="">All</option>
                             </select>
                             <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
@@ -39,7 +40,7 @@
                                     <tr class="rowCustomStyle">
                                         <td>Name</td>
                                         <td>Domain</td>
-                                        <td>Active</td>
+                                        <td>Status</td>
                                         <!-- <td>Logo</td> -->
                                         <!-- <td>Cost Code</td> -->
                                         <td>Action</td>
@@ -81,7 +82,7 @@
                                             
                                             <td>Name</td>
                                             <td>Domain</td>
-                                            <td>Active</td>
+                                            <td>Status</td>
                                             <!-- <td>Logo</td> -->
                                             <!-- <td>Cost Code</td> -->
                                             <td class="">Action</td>
@@ -106,7 +107,8 @@
                                         $('#envtable').DataTable().column(2).search(
                                             filter,
                                             false,
-                                            true
+                                            true,
+                                            false
                                         ).draw();
                                     }
 
@@ -124,6 +126,9 @@
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
                                             "pagingType": "full_numbers",
+                                             "search": {
+                                                "caseInsensitive": false
+                                              }
                                         });
                                         filterColumn();
                                         $("#filteractive").select2();
