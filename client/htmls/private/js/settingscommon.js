@@ -121,7 +121,7 @@ if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnew/" + id,
+        url: serviceURL + "readmasterjsonneworglist/" + id,
         success: function(data) {
                 // alert(data.toString());  
             // debugger;

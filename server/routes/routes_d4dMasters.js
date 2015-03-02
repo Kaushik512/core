@@ -408,7 +408,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     
                     
                     console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
-                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                    if(req.params.id == '1' || req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
                         query['active'] = 'true';
                     }
 
