@@ -418,7 +418,8 @@ var Chef = function(settings) {
         //If windows box then credetial to be updated to stored password
         if (params.instanceOS == 'windows') {
             argList.push('-P');
-            argList.push('Zaq!2wsx');
+            argList.push(params.instancePassword);
+            //argList.push('Zaq!2wsx');
         }
 
         if (params.instanceOS == 'windows') {
