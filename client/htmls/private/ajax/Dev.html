@@ -2745,18 +2745,18 @@ var instanceLogsHandler = function(e) {
                 if (clearData) {
                     $modalBody.empty();
                 }
-                var $table = $('<div></div>');
+                var $table = $('<table></table>');
 
                 for (var i = 0; i < data.length; i++) {
-                    var $rowDiv = $('<div class="row"></div>');
+                    var $rowDiv = $('<tr class="row"></tr>');
                     var timeString = new Date().setTime(data[i].timestamp);
                     var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                    $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+                    /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
 
                     if (data[i].err) {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                        $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">'+ date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' +data[i].log + '</span>'));
                     } else {
-                        $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                        $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">'+ date + '</span>' + '&nbsp;&nbsp;&nbsp;'+ '<span>' + data[i].log + '</span>'));
                     }
 
                     $table.append($rowDiv);
