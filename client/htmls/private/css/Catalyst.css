@@ -6921,3 +6921,9 @@ body .ui-tooltip {
     margin-left: 24px;
 
 }
+
+/*CUSTOM FOR LOGS*/
+.textLogs{
+    font-weight:normal;
+    color:#A6A2A6
+}
