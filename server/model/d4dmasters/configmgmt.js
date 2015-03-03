@@ -982,6 +982,69 @@ function Configmgmt() {
         }
     };
 
+    this.deactivateOrg = function(orgid,action,callback){
+        
+        console.log("Orgid:" + orgid + ' action: ' + action );
+        d4dModelNew.d4dModelMastersGeneric.update(
+                {
+                    $or : [{orgname_rowid: orgid},{rowid:orgid}]
+                }                    
+                , {
+                    $set: {
+                        active:action
+                    }
+                }, {
+                    upsert: false,
+                    multi: true   
+                }, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        callback(err, null);
+                        return;
+                    }
+                    console.log('Deactivated ' + orgid + ' in masters. Count: ' + data);
+                    callback(null,"done");
+                    return;
+                });
+    
+    };
+
+    this.deleteCheck = function(rowid,formids,fieldname,callback){
+        console.log("Delete Check request rcvd." + rowid +  ' : ' + formid + ' : ' + fieldname);
+        var count = 0;
+
+         for(var formid in formids){
+            this.getDBModelFromID(formid, function(err, dbtype) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                    //console.log("Hit and error:" + err);
+                }
+                if (dbtype) {
+                    var query = {};
+                    query[fieldname] = fieldname;
+                    query['id'] = formid;
+                    eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                        if (err) {
+                            callback(err, null);
+                            return;
+                        }
+                        //check if d4dMasterJson has some rows. if found we can return intimating found
+                        if(d4dMasterJson.length > 0){
+                            callback(null, 'found');
+                            return;
+                        }
+                    });
+
+                }
+                if(count >= formids.length - 1){
+                    callback(null,'none');
+                    return;
+                }
+             });
+         }
+    };
+
     this.getServiceFromId = function(serviceId, callback) {
         this.getDBModelFromID('19', function(err, dbtype) {
             if (err) {

@@ -1596,7 +1596,7 @@ function importbyipusers(){
     var $result = $('#nodeimportipresultmsg').addClass('hidden');
     var reqBody = {};
     var $form = $('#addInstanceForm');
-    reqBody.fqdn = $form.find('#instanceFQDN').val();
+    reqBody.fqdn = $form.find('#instanceFQDN').val().trim();
     reqBody.os = $form.find('#importinstanceOS').val();
     reqBody.users = $('#importbyipuserListSelect').val();
     reqBody.credentials = {
@@ -2526,6 +2526,9 @@ function removeSelectedInstance(){
                             }
                         }).fail(function() {
                             $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
+                            $('#deleteInstanceWorkingIndicator').hide();
+                            $('#deleteInstanceForm').show();
+                            
                         });
                         return false;
                     }

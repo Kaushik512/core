@@ -14,10 +14,16 @@
                     <strong>Organizations</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
-                        <div>
+                        <div style="width:221px">
                             <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                            </a>                       
+                            </a> 
+                            <!-- <input type="checkbox" id="filteractive" style="margin-right:10px" onclick="filterColumn();"><label for="filteractive" style="padding-right:10px" >Include Inactive</label> -->
+                            Show: <select id="filteractive" class="" onchange="filterColumn();" style="width:46%;margin-right:5px;">
+                                <option value="Active" selected>Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="">All</option>
+                            </select>
                             <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
@@ -34,6 +40,7 @@
                                     <tr class="rowCustomStyle">
                                         <td>Name</td>
                                         <td>Domain</td>
+                                        <td>Status</td>
                                         <!-- <td>Logo</td> -->
                                         <!-- <td>Cost Code</td> -->
                                         <td>Action</td>
@@ -44,6 +51,7 @@
                                         
                                         <td datafield="orgname"></td>
                                         <td datafield="domainname"></td>
+                                        <td datafield="active"></td>
                                         <!-- <td>
                                             <div class="input-icon-left" style="height:30px" title="Preview">
                                                 <p class="logoPreview" style="padding:2px; text-align:center;"> -->
@@ -74,6 +82,7 @@
                                             
                                             <td>Name</td>
                                             <td>Domain</td>
+                                            <td>Status</td>
                                             <!-- <td>Logo</td> -->
                                             <!-- <td>Cost Code</td> -->
                                             <td class="">Action</td>
@@ -85,7 +94,24 @@
                                     </tbody>
                                     
                                 </table>
+                                <div id="envtable_tools1"></div>
                                 <script>
+
+                                    function filterColumn () {
+                                       // alert('hi ' + $("#filteractive").val());
+                                        var filter = $("#filteractive").val();
+                                        // if( == ''){
+                                        //     filter = '';
+                                        // }
+                                        //alert(filter);
+                                        $('#envtable').DataTable().column(2).search(
+                                            filter,
+                                            false,
+                                            true,
+                                            false
+                                        ).draw();
+                                    }
+
                                     function inLineReady() {
                                         /* $('#envtable').dataTable({
                                         "paging": false,
@@ -99,12 +125,18 @@
                                         var tab = 'envtable';
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
-                                            "pagingType": "full_numbers"
+                                            "pagingType": "full_numbers",
+                                             "search": {
+                                                "caseInsensitive": false
+                                              }
                                         });
+                                        filterColumn();
+                                        $("#filteractive").select2();
                                         $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
                                         $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
                                         /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
+                                        $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
 

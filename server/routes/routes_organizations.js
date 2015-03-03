@@ -29,7 +29,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         configmgmtDao.getRowids(function(err, rowidlist) {
             console.log("Rowid List /organizations/getTreeNew -->" + rowidlist);
             d4dModelNew.d4dModelMastersOrg.find({
-                id: 1
+                id: 1,
+                active:true
             }, function(err, docorgs) {
                 var orgids = docorgs.map(function(docorgs1) {
                     return docorgs1.rowid;
@@ -190,7 +191,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         console.log("Enter /organizations/getTreeForbtv");
         configmgmtDao.getRowids(function(err, rowidlist) {
             d4dModelNew.d4dModelMastersOrg.find({
-                id: 1
+                id: 1,
+                active: true
             }, function(err, docorgs) {
                 var orgids = docorgs.map(function(docorgs1) {
                     return docorgs1.rowid;
@@ -325,7 +327,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 href: 'javascript:void(0)',
                                                                 environments: envs
                                                             });
-
+                                                            //#ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
                                                         }
 
                                                     }

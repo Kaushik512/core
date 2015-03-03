@@ -180,9 +180,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
         res.send('[' + req.session.user.authorizedfiles + ']');
     });
 
-    app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
+    app.get('/d4dMasters/candelete/:rowid/:formid',function(req,res){
+         
+         // swtich(req.params.formid){
+         //    case "1": //this will be org
 
-        console.log('received request ' + req.params.id);
+         // }
+         // configmgmtDao.deleteCheck(req.params.rowid,formids,fieldname,function(err,data){
+            
+         // });
+         
+    });
+
+    app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
+        console.log("REceived request for delete chk." + req.params.fieldvalue +  ' : ' + req.params.id + ' : ' + req.params.fieldname);
+       // console.log('received request ' + req.params.id);
+       //Referntial integrity check 
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {
                 console.log("Hit and error:" + err);
@@ -206,76 +219,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }); //end findOne
             }
         }); //end configmgmtDao
-
-
-
-
-        // d4dModel.findOne({
-        //  id: req.params.id
-        // }, function(err, d4dMasterJson) {
-        //  if (err) {
-        //      console.log("Hit and error:" + err);
-        //  }
-        //  if (d4dMasterJson) {
-        //      /*res.writeHead(200, { 'Content-Type': 'application/json' });
-        //           res.end(JSON.stringify(d4dMasterJson));*/
-        //      console.log("Before splice" + JSON.stringify(d4dMasterJson));
-        //      d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-        //          //console.log("found" + itm.field.length);
-        //          for (var j = 0; j < itm.field.length; j++) {
-        //              if (itm.field[j]["name"] == req.params.fieldname) {
-        //                  //console.log("found:" + itm.field[j]["values"].value);
-        //                  if (itm.field[j]["values"].value == req.params.fieldvalue) {
-        //                      console.log("found: " + i + " -- " + itm.field[j]["values"].value);
-        //                      d4dMasterJson.masterjson.rows.row.splice(i, 1);
-        //                      // d4dMasterJson.masterjson.changed = true;
-
-        //                      return;
-        //                  }
-        //              }
-
-        //              // console.log();
-        //          }
-        //          JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
-        //                   console.log(" Innner: " + JSON.stringify(itmjson));
-        //               });
-
-        //      });
-
-        //      // d4dMasterJson.content = JSON.stringify(d4dMasterJson);
-
-        //      d4dMasterJson.markModified('masterjson');
-
-        //      d4dMasterJson.save(function(err, d4dMasterJson) {
-        //          if (err) {
-        //              console.log("Hit and error:" + err)
-        //              res.send(500);
-        //          };
-        //          console.log('saved');
-        //      });
-
-        //      //  console.log("After splice" + JSON.stringify(d4dMasterJson));
-        //      /*d4dMasterJson.save(function (err, d4dMasterJson) {
-        //               if (err) {
-        //                   console.log("Hit and error:" + err)
-        //                   res.send(500);
-        //               };
-        //               console.log('saved');
-        //           });*/
-        //      res.end(JSON.stringify(d4dMasterJson));
-        //      console.log("sent response" + JSON.stringify(d4dMasterJson));
-
-        //  } else {
-        //      res.send(400, {
-        //          "error": err
-        //      });
-        //      console.log("none found");
-        //  }
-
-
-        // });
-
-
 
     });
 
@@ -451,16 +394,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
         console.log('received new request ' + req.params.id);
          configmgmtDao.getRowids(function(err,rowidlist){
 
-            console.log("Rowid List-->" + rowidlist);
+            console.log("Rowid List----&&&&---->" + rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
                     console.log("Hit and error:" + err);
                 }
                 if (dbtype) {
                     console.log("Master Type: " + dbtype);
-                    eval('d4dModelNew.' + dbtype).find({
-                        id: req.params.id
-                    }, function(err, d4dMasterJson) {
+                    
+                    var query = {};
+                query['id'] = req.params.id;
+                
+                    
+                    
+                    console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
+                    if(req.params.id == '1' || req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                        query['active'] = 'true';
+                    }
+
+
+                    eval('d4dModelNew.' + dbtype).find(
+                        query
+                        
+                    , function(err, d4dMasterJson) {
                         if (err) {
                             console.log("Hit and error:" + err);
                         }
@@ -519,6 +475,122 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
                                         console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
+                                  //  console.log("key**:",k1," val**:",jobj[k1]);
+                                   
+                                }
+                                console.log("Orgname check:" + d4dMasterJson[k]['orgname']);
+                                
+                                
+                                counter++;
+                            };//);
+                                    console.log("To Delete Array:", todelete.toString());
+                                    var collection = [];
+                                    
+                                    for(var i = 0; i < d4dMasterJson.length;i++){
+                                        if(todelete.indexOf(i) === -1) {
+                                            collection.push(d4dMasterJson[i]);
+                                        }
+                                        
+                                    }
+                                    console.log("sent response 484" + JSON.stringify(collection));
+                                    res.end(JSON.stringify(collection));
+                                    //console.log(k,d4dMasterJson[k],v);
+
+                        
+
+
+                            
+                        
+                    });
+                }
+            });
+        }); //rowidlist
+    });
+
+     app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
+        console.log('received new request ' + req.params.id);
+         configmgmtDao.getRowids(function(err,rowidlist){
+
+            console.log("Rowid List----&&&&---->" + rowidlist);
+            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                if (err) {
+                    console.log("Hit and error:" + err);
+                }
+                if (dbtype) {
+                    console.log("Master Type: " + dbtype);
+                    
+                    var query = {};
+                    
+                    query['id'] = req.params.id;
+                    console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
+                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                        query['active'] = true;
+                    }
+
+
+                    eval('d4dModelNew.' + dbtype).find(
+                        {id:req.params.id
+                        }
+                    , function(err, d4dMasterJson) {
+                        if (err) {
+                            console.log("Hit and error:" + err);
+                        }
+                        //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
+                            var _keys = Object.keys(d4dMasterJson);
+                            console.log("Master Length:" + _keys.length);
+                            if(_keys.length <= 0){
+                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                res.end(JSON.stringify(d4dMasterJson));
+                            }
+                            var counter = 0;
+                            var todelete = [];
+                            //_keys.forEach(function(k,v){
+                            for(var k=0,v=0;k<_keys.length;k++,v++) {
+                                //var __keys = Object.keys(d4dMasterJson[k]);
+                               
+                                //console.log('OBject:' + d4dMasterJson[k]);
+                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                            
+                                for(var k1 in jobj){
+                                    //if any key has _rowid then update     corresponding field
+                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                    if(k1.indexOf('_rowid') > 0){
+                                        //check if its an array of rowid's
+                                        var flds = k1.split('_');
+                                        var names = '';
+                                        if(jobj[k1].indexOf(',') > 0){
+                                            //Will handle this seperately : Vinod to Do
+                                            var itms = jobj[k1].split(',');
+                                            for(_itms in itms){
+                                                console.log("in items");
+                                                var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                if(_itmsName != '')
+                                                {
+                                                        if(names == '')
+                                                        {
+                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        }
+                                                        else{
+                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        }
+                                                        console.log('names:',names);
+                                                }
+                                            }
+                                            
+                                        }
+                                        else{
+                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
+                                        }
+                                        console.log('names:',names,(names == ''));
+
+                                        d4dMasterJson[k][flds[0]] = names;
+
+                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
+                                            todelete.push(k);
+                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
+                                        console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
+                                    }
+                                    
                                   //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
@@ -671,7 +743,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         for(var i =1;i<5;i++)
             counts[i] = 0;
           d4dModelNew.d4dModelMastersOrg.find({
-            id: 1
+            id: 1,
+            active:true
         }, function(err, docorgs) {
             var orgnames = docorgs.map(function(docorgs1) {
                 return docorgs1.rowid;
@@ -1473,7 +1546,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+    app.post('/d4dMasters/deactivateorg/:action',function(req,res){
+        var bodyJson = JSON.parse(JSON.stringify(req.body));
 
+        if(!req.orgid){
+            console.log('Org ID found ' + bodyJson.orgid);
+            configmgmtDao.deactivateOrg(bodyJson.orgid,req.params.action,function(err,data){
+                 if(err){
+                    console.log('Error:' + err);
+                    res.send(500);
+                 }
+                 console.log(data);
+                 res.send(200);
+            });
+        }
+       
+    });
     app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
         console.log('received new save request ' + req.params.id);
         var bodyJson = JSON.parse(JSON.stringify(req.body));

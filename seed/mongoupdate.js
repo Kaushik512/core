@@ -21,5 +21,11 @@ db.d4dmastersnew.remove({userrolename:"SUPERADMIN",id:"6"},true);
 // 	{multi:true}
 // );
 db.d4dmastersnew.update({loginname:"sd1"},{$set :{loginname:"superadmin"}});
+//The below code will set all masters to active.
+db.d4dmastersnew.update(
+	{},
+	{$set: {'active':true}},
+	{multi:true}
+);
 
 
