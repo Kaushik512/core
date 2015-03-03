@@ -231,19 +231,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //Currently rowid is hardcoded since variable declaration was working
                     var item = '\"' + req.params.fieldname + '\"';
                     console.log("About to delete Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
-                    // eval('d4dModelNew.' + dbtype).remove({
-                    //     rowid: req.params.fieldvalue
-                    // }, function(err) {
-                    //     if (err) {
-                    //         console.log('Hit an errror on delete : ' + err);
-                    //         res.send(500);
-                    //         return;
-                    //     } else {
-                    //         console.log('Document deleted : ' + req.params.fieldvalue);
-                    //         res.send(200);
-                    //         return;
-                    //     }
-                    // }); //end findOne
+                    eval('d4dModelNew.' + dbtype).remove({
+                        rowid: req.params.fieldvalue
+                    }, function(err) {
+                        if (err) {
+                            console.log('Hit an errror on delete : ' + err);
+                            res.send(500);
+                            return;
+                        } else {
+                            console.log('Document deleted : ' + req.params.fieldvalue);
+                            res.send(200);
+                            return;
+                        }
+                    }); //end findOne
                 }
             }); //end configmgmtDao
         }
