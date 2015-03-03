@@ -1573,6 +1573,7 @@ $('#modalContainerimportInstance').on('show.bs.modal',function(e){
    //$('#addInstanceForm').get(0).reset();
   var _org = getUrlParameter('org');
   $.get('/d4dMasters/readmasterjsonnew/10',function(data){
+    //alert(_org);
     if(data && JSON.parse(data).length <= 0){
       $('#modalContainerimportInstance').modal('hide');
       alert('A chef server is required to import an instance. Use settings to add a new one.');
@@ -3545,7 +3546,7 @@ $('.launchBtn').click(function(e) {
         
 
         $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
+          var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
           var $newinstancetbody = $('<tbody></tbody>');
           $newinstancetable.append($newinstancetbody);
           var $instancetable = $('#tableinstanceview').clone();
@@ -3555,15 +3556,17 @@ $('.launchBtn').click(function(e) {
                   $newinstancetr.append('<td>' + v +  $(this).html() + '</td>');
               });
               $newinstancetbody.append($newinstancetr);
+             // 
           });
 
           $instancetable.attr('id','dockerintsancestab');
           $('.dockerinstances').first().append($instancetable);
 
           $('#dockerintsancestab thead td').each(function(k,v){
-              if(k > 3 )
+              if(k > 3)
                   $(this).detach();
             });
+          $('#dockerintsancestab thead').append('<td>Log Info</td>');
            $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
             $('#dockerintsancestab tbody tr').each(function(k,v){
 
@@ -3580,7 +3583,9 @@ $('.launchBtn').click(function(e) {
                     $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                 }
               });
+              $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo"></a></td>');
              $(this).append('<td  class="hidden"><input type="checkbox"></td>');
+             $(this).find('.moreInfo').click(instanceLogsHandler);
 
             });
             $('.launchdockerinstance').click(function(){
@@ -3590,7 +3595,7 @@ $('.launchBtn').click(function(e) {
             });
             $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
             $launchDockerInstanceSelector.modal('show');
-            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td  class="hidden">Add Docker Engine</td></tr>');
+            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
             $('#dockerintsancestab').dataTable({
                 "bPaginate": false
             });
