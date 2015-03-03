@@ -231,6 +231,20 @@ var BlueprintsDao = function() {
             callback(null, data);
         });
     };
+    this.getBlueprintsByProjectId = function(projectId,callback) {
+        logger.debug("Enter getBlueprintsByProjectId(%s)", projectId);
+        var queryObj = {
+            projectId: projectId,
+        }
+        Blueprint.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintsByProjectId(%s)", projectId);
+            callback(null, data);
+        });
+    };
 
     this.getBlueprintsByOrgBgProjectAndEnvId = function(orgId, bgId, projectId, envId, blueprintType, userName, callback) {
         logger.debug("Enter getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);

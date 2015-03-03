@@ -7,6 +7,8 @@ var codelist = require('../../codelist.json');
 var appConfig = require('../../config/app_config');
 var chefSettings = appConfig.chef;
 var logger = require('../../lib/logger')(module);
+var blueprintdao = require('../dao/blueprints.js');
+var instancedao = require('../dao/instancesdao.js');
 
 function Configmgmt() {
     this.getDBModelFromID = function(id, callback) {
@@ -1010,46 +1012,141 @@ function Configmgmt() {
     };
 
     this.deleteCheck = function(rowid,formids,fieldname,callback){
-        console.log("Delete Check request rcvd." + rowid +  ' : ' + formids + ' : ' + fieldname);
+        console.log("Delete Check request rcvd." + rowid +  ' : ' + formids.toString() + ' : ' + fieldname);
         var count = 0;
+        var exitloop  = false;
+        //Building dynamic schema
 
-         for(var u =0;u< formids.length;u++){
-           
-            this.getDBModelFromID(formids[u], function(err, dbtype) {
-                 console.log('formid:' + formids[u]);
-                if (err) {
-                    callback(err, null);
-                    return;
-                    //console.log("Hit and error:" + err);
-                }
-                if (dbtype) {
-                    var query = {};
-                    query[fieldname] = {$regex : ".*" + rowid + "*"};
-                    query['id'] = formids[u];
-                    eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
-                        if (err) {
-                            callback(err, null);
-                            return;
-                        }
-                        //check if d4dMasterJson has some rows. if found we can return intimating found
+        if(formids.indexOf('blueprints') < 0 && formids.indexOf('instances') < 0)
+            {
+                var delcheckquery = {};
+                delcheckquery.id = {$in:formids};
+
+                delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
+                //delcheckschema.rowid = {type:String};
+                //var dynaschema = new d4dModelNew.d4dModelMastersGeneric(delcheckschema);
+                d4dModelNew.d4dModelMastersGeneric.find(delcheckquery,function(err,d4dMasterJson){
+                    if(!err)
+                    {
+                        console.log(JSON.stringify(d4dMasterJson));
                         if(d4dMasterJson.length > 0){
-                            callback(null, 'found');
+                            console.log('Found in ' + d4dMasterJson[0]['id'] + ' returning : ');
+                            callback(null,'found');
                             return;
                         }
-                        console.log('d4dMasterJson length:' + d4dMasterJson.length);
-                        console.log('count : ' + count + ' formid length ' + formids.toString() + ' formid ' + formids[u]);
-                        if(u >= formids.length - 1){
+
+                        else{
                             callback(null,'none');
                             return;
                         }
-                        count++;
 
-                    });
-
+                    }
+                    else{
+                        console.log("Hit an error in deleteCheck:" + err);
+                        callback(err,null);
+                        return;
+                    }
+                        
+                });
+            }
+        else{
+            if(formids.indexOf('blueprints') >= 0)
+            {
+                blueprintdao.getBlueprintsByProjectId(rowid,function(err,data){
+                if(!err){
+                    console.log(JSON.stringify(data));
+                        if(data.length > 0){
+                            console.log('Found in ' + data['name'] + ' returning : ');
+                            callback(null,'found');
+                            return;
+                        }
+                        else{
+                            callback(null,'none');
+                            return;
+                        }
                 }
+                else
+                {
+                    console.log("Hit an error in deleteCheck getBlueprintsByProjectId:" + err);
+                    callback(err,null);
+                    return;
+                }
+                });
+            }
+            if(formids.indexOf('instances') >= 0){
+                instancedao.getInstanceByProjectId(rowid,function(err,data){
+                    if(!err){
+                        console.log(JSON.stringify(data));
+                            if(data.length > 0){
+                                console.log('Found in ' + data['name'] + ' returning : ');
+                                callback(null,'found');
+                                return;
+                            }
+                            else{
+                                callback(null,'none');
+                                return;
+                            }
+                    }
+                    else
+                    {
+                        console.log("Hit an error in deleteCheck getBlueprintsByProjectId:" + err);
+                        callback(err,null);
+                        return;
+                    }
+                });
+            }
+
+        }
+
+        // {id: {type:String},
+        //             name: {type:String},
+        //             orgname: {type:String},
+
+         // for(var u =0;u< formids.length;u++){
+         //    if(exitloop){
+         //        return;
+         //    }
+         //    this.getDBModelFromID(formids[u], function(err, dbtype) {
+         //         console.log('formid:' + formids[u]);
+         //        if (err) {
+         //            callback(err, null);
+         //            exitloop = true;
+         //            return;
+         //            //console.log("Hit and error:" + err);
+         //        }
+         //        if (dbtype) {
+         //            var query = {};
+         //            query[fieldname] = {$regex : ".*" + rowid + "*"};
+         //            query['id'] = formids[u];
+         //            eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+         //                if (err) {
+         //                    callback(err, null);
+         //                    exitloop = true;
+         //                    return;
+         //                }
+         //                //check if d4dMasterJson has some rows. if found we can return intimating found
+         //                if(d4dMasterJson.length > 0){
+         //                    console.log('Found in ' + u + ' returning');
+         //                    callback(null, 'found');
+         //                    exitloop = true;
+         //                    return;
+         //                }
+         //                console.log('d4dMasterJson length:' + d4dMasterJson.length);
+         //                console.log('count : ' + count + ' formid length ' + formids.toString() + ' formid ' + formids[u]);
+         //                if(u >= formids.length - 1){
+         //                    console.log('None Found returning' + u);
+         //                    callback(null,'none');
+         //                    exitloop = true;
+         //                    return;
+         //                }
+         //                count++;
+
+         //            });
+
+         //        }
                 
-             });
-         }
+         //     });
+         // }
     };
 
     this.getServiceFromId = function(serviceId, callback) {
