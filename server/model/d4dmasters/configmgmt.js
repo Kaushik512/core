@@ -982,6 +982,33 @@ function Configmgmt() {
         }
     };
 
+    this.deactivateOrg = function(orgid,action,callback){
+        
+        console.log("Orgid:" + orgid + ' action: ' + action );
+        d4dModelNew.d4dModelMastersGeneric.update(
+                {
+                    $or : [{orgname_rowid: orgid},{rowid:orgid}]
+                }                    
+                , {
+                    $set: {
+                        active:action
+                    }
+                }, {
+                    upsert: false,
+                    multi: true   
+                }, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        callback(err, null);
+                        return;
+                    }
+                    console.log('Deactivated ' + orgid + ' in masters. Count: ' + data);
+                    callback(null,"done");
+                    return;
+                });
+    
+    };
+
     this.getServiceFromId = function(serviceId, callback) {
         this.getDBModelFromID('19', function(err, dbtype) {
             if (err) {

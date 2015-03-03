@@ -1,10 +1,236 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
 
-</body>
-</html>
+
+<!--tab for instances-->
+ <div class="tab-pane fade in active" id="l1"> 
+                   <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                        <div>
+
+                            <div class="widget-body no-padding">
+
+                                <div class="panel-group smart-accordion-default" id="accordion-1" style="height:444px;overflow-y: auto;">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse">Instance</a>
+                                            </h4>
+
+
+                                <span class="pull-right swap-view">
+                                    
+                                    <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-blue" title="Card View"/></a>&nbsp;
+                                    <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-blue" title="Table View"/></a></span>
+                                        </div>
+                                        <div id="collapseOne-1" class="panel-collapse collapse in">
+                                            <div class="panel-body" style="padding:0px !important;">
+                                                <div id="tabInstanceStatus">&nbsp;</div>
+                                                <div class="widget-box" id="divinstancestableview">
+                                                    <div class="widget-body">
+                                                        <div class="widget-main " style="min-height:300px">
+                                                            <div class="col-md-12" style="padding-left:0px; padding-right:0px;padding-top:50px">
+                                                                <div class="table-responsive table-div" >
+
+                                                                    <table id="tableinstanceview" class="table table-bordered dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important; text-align:center;">
+                                                                        <thead>
+                                                                        <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                                            <td>S.No.</td>
+                                                                            <td>Logo</td>
+                                                                            <td>Name</td>
+                                                                            <td>IPAddress</td>
+                                                                            <td>Runlists</td>
+                                                                            <td>Status</td>
+                                                                            <td>URL Links</td>
+                                                                            <td>Log Info</td>
+                                                                            <td>Chef Run</td>
+                                                                            <td class="widthAdjustment">Action</td>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+
+                                                                        </tbody>
+
+                                                                    </table>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div id="divinstancescardview" class="carousel slide">
+                                                    <div class="carousel-inner">
+                                                        <!-- Slide 1 -->
+
+                                                    </div>
+                                                    <a class="left carousel-control" href="#divinstancescardview" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left txt-color-blue"></span> </a>
+                                                    <a class="right carousel-control" href="#divinstancescardview" data-slide="next"> <span class="glyphicon glyphicon-chevron-right txt-color-blue"></span> </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer class="footer">
+                        <div class="clearfix form-actions" style="text-align:center;">
+                            <div class="btn-group">
+
+                                <button class="btn btn-primary actionControlPanel" style="margin-left:200px">
+                                    <i class="fa fa-gears"></i>
+                                    Control Panel
+                                </button>
+
+
+
+                            </div>
+                            <a class="btn pull-right btn-danger right-button" title="Remove Instance" onClick="removeSelectedInstance()" >
+                                <i class="fa fa-trash-o"></i>
+                            </a>&nbsp;
+                            <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal">
+                                <i class="fa fa-laptop"/>
+                            </a>
+
+                            &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px;"> <i class="fa fa-plug"></i></a>
+
+                        </div>
+                    </footer>
+
+
+
+                </div> <!--tab-pane l1 gets over-->
+
+                <!--ssh container-->
+<!-- Modal SSH Shell-->
+<div class="modal fade" id="modalSSHShellContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <i class="fa fa-terminal txt-color-blue"></i>Terminal
+                </h4>
+            </div>
+            <div class="modal-body" style="height:430px;">
+
+            </div>
+            <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+        </div>
+    </div>
+</div><!--SSH container ends here-->
+
+<!-- Modal for Import By IP tab started-->
+<div class="modal fade" id="modalContainerimportInstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="addInstanceForm" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Import Instance By IP
+                    </h4>
+                </div>
+
+                <div class="modal-body modal-height">
+                        
+
+                        <span id="spanforshefserverfound">
+                        <div class="col-lg-6">
+
+                            <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus/>
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
+
+
+                        </div>
+                        <div class="col-lg-6 topNew">
+
+                            <label for="">Choose Operating System<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                            <select id="importinstanceOS"  class="width-100" >
+                                <option value="linux">linux</option>
+                                <option value="windows">windows</option>
+                            </select>
+
+                        </div>
+                    
+                    
+                        <div class="col-lg-6" style="margin-top:15px">
+
+                            <label for="">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="usernameInput" class="form-control" id="instanceUsername">
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
+
+                        </div>
+                        <div class="col-lg-6" style="margin-top:15px">
+
+                            <label for="">Choose Authentication Type<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                            <select id="pemFileDropdown"  class="authenticationType width-100" >
+                                <option value="password">Password</option>
+                                <option value="pemFile">Pem File</option>
+                            </select>
+
+                        </div>
+                    
+                       
+                        <div class="col-lg-6 authPassword" style="margin-top:15px">
+
+                            <label for="">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="password" class="form-control" id="instancePassword" />
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
+
+
+                        </div>
+                        <div class="col-lg-6 authPemFile" style="margin-top:15px">
+                            <div class="smart-forms">
+                                <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                <label for="templatesicon" name="field" class="file">
+                                    <span class="button btn-primary btn-importbyIP">Browse</span>
+                                    <input id="importPemfileInput" type="file" class="gui-file">
+                                    <input type="text" readonly="" class="gui-input">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" style="margin-top:15px;">
+                            <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <div class="userListLoadingContainer"></div>
+                            <select class="custom-scroll" multiple="" id="importbyipuserListSelect" style="display:none" cat-validation="required">
+                            </select>
+
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                    <label id="nodeimportipresultmsg" class=" hidden"></label>
+                    <div class="marginForButtons">
+                        <button id="addInstanceBtn" class="btn btn-primary" type="submit">
+                            <i class="fa fa-upload fa-1x"></i>&nbsp;Import
+                        </button>
+                        <a class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal for Import by IP ended-->
