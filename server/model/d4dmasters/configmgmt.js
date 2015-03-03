@@ -1076,9 +1076,9 @@ function Configmgmt() {
             if(formids.indexOf('instances') >= 0){
                 instancedao.getInstanceByProjectId(rowid,function(err,data){
                     if(!err){
-                        console.log(JSON.stringify(data));
+                        //console.log(JSON.stringify(data));
                             if(data.length > 0){
-                                console.log('Found in ' + data['name'] + ' returning : ');
+                                console.log('Found in ' + data['chefNodeName'] + ' returning : ');
                                 callback(null,'found');
                                 return;
                             }
@@ -1089,7 +1089,7 @@ function Configmgmt() {
                     }
                     else
                     {
-                        console.log("Hit an error in deleteCheck getBlueprintsByProjectId:" + err);
+                        console.log("Hit an error in deleteCheck getInstanceByProjectId:" + err);
                         callback(err,null);
                         return;
                     }

@@ -234,7 +234,7 @@ var BlueprintsDao = function() {
     this.getBlueprintsByProjectId = function(projectId,callback) {
         logger.debug("Enter getBlueprintsByProjectId(%s)", projectId);
         var queryObj = {
-            projectId: projectId,
+            $or:[{projectId: projectId},{chefServerId: projectId}]
         }
         Blueprint.find(queryObj, function(err, data) {
             if (err) {

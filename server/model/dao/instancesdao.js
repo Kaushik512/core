@@ -376,7 +376,7 @@ var InstancesDao = function() {
     this.getInstanceByProjectId = function(ProjectId, callback) {
         logger.debug("Enter getInstanceByOrgAndNodeNameOrIP (%s,)", ProjectId);
         var queryObj = {
-            projectId:ProjectId
+            $or:[{projectId: ProjectId},{'chef.serverId': ProjectId}]
         }
         Instances.find(queryObj, function(err, data) {
             if (err) {
@@ -384,6 +384,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
+            console.log(JSON.stringify(data));
             logger.debug("Exit getInstanceByOrgAndNodeNameOrIP (%s)", ProjectId);
             callback(null, data);
         });
