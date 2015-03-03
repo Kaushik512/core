@@ -129,7 +129,7 @@
 
 $(function(){
 
-window.counter=0;
+
 var basePath='dev_html/';
 var htmlTabs={
 docker:'docker.html',
@@ -139,6 +139,7 @@ orchestration:'orchestration.html'
 };
 window.count=0;
 
+/**/
 $(document).on('devPagesLoaded',function(){
 window.count++;
 if(window.count===3){
@@ -162,14 +163,12 @@ $('#l3-a').load(basePath+htmlTabs.orchestration,callback);//orchestration
 */
 
 function loadHTMLFile(url,parentToAppend){
-
     $.ajax({
         type : "GET",
         url : url,
         dataType : 'html',
         cache : true, // (warning: this will cause a timestamp and will call the request twice)
-        success : function(data) {
-        
+        success : function(data) {        
         $(parentToAppend).append(data);
             $(document).trigger('devPagesLoaded');
         },
@@ -179,8 +178,6 @@ function loadHTMLFile(url,parentToAppend){
         },
         async : false // by anshul
     });
-
-    //console.log("ajax request sent");
 }
 });
 </script>

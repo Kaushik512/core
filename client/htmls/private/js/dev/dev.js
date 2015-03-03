@@ -1,15 +1,151 @@
-$(document).ready(function(){   
-/*********************************Instance.js********************/
+
+function showHideControl(objID)
+{
+  if(objID)
+  {
+    if(objID == "divinstancescardview" || objID == "defaultViewButton")
+    {
+      $("#divinstancestableview").removeClass("visibleClass");
+      $("#divinstancescardview").addClass("visibleClass");
+      $("#divinstancestableview").hide();
+      $("#divinstancescardview").show();
+    }
+    else
+    {
+
+      $("#divinstancestableview").addClass("visibleClass");
+      $("#divinstancescardview").removeClass("visibleClass");
+      $("#divinstancestableview").show();
+      $("#divinstancescardview").hide();
+    }
+            //localStorage.clear();
+          }
+        }
+        
+        function removeSelectedBlueprint() {
+          var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+          if (blueprintId) {
+        //found now delete
+        bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+          if (!result) {
+            return;
+          }
+          $.get('/blueprints/delete/' + blueprintId, function(data) {
+                //  alert(data);
+                if (data == 'OK') {
+                  var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                  $('.productdiv1.role-Selected1').parent().detach();
+                    //Check if the closest bluprintcontainer is empty, if empty then hide it.
+                    // alert($bcc.find('.panel-body').children().length);
+                    if ($bcc.find('.panel-body').children().length <= 0) {
+                      $bcc.addClass('hidden');
+                    }
+                  } else
+                  alert(data);
+                });
+        });
+      } else {
+        alert('Please select a blueprint to remove.');
+      }
+    }
+
+function removeSelectedInstance(){
+ var instanceId = null;
+ var blueprintName = null;
+ if ($('#divinstancescardview').is(':visible')) {
+   var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
+   instanceId = $selectedCard.attr('data-instanceid');
+   blueprintName = $selectedCard.attr('data-blueprintName');
+ } else if ($('#divinstancestableview').is(':visible')) {
+   var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+   instanceId=$selectedRow.attr('data-instanceId');
+   blueprintName = $selectedRow.attr('data-blueprintName');
+ } else {
+   instanceId = null;
+ }
+ if(instanceId){
+           //found now delete
+           var dialog = bootbox.dialog({
+             title: "Remove Instance.",
+             message: '<div class="row">  ' +
+             '<div class="col-md-12"> ' +
+             '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>'+
+             '<form id="deleteInstanceForm" class="form-horizontal"> ' +
+             '<input type="hidden" id="deleteInstanceIdInput" value="'+instanceId+'"/>'+
+             '<div class="form-group"> ' +
+             '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+             '</div>' +
+             '<div class="form-group"> ' +
+             '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
+             '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
+             '</div> ' +
+             '<div class="form-group"> ' +
+             '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+             '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
+             '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
+             'Delete this node from chef server </label> ' +
+             '</div>' +
+             '</div>' +
+             '</form> </div>  </div>',
+             buttons: {
+               success: {
+                 label: "Delete",
+                 className: "btn-primary",
+                 callback: function(evt,arg2) {
+                   $('#deleteInstanceForm').hide();
+                   $('#deleteInstanceWorkingIndicator').show();
+                   $(evt.target).attr('disabled', 'disabled');
+
+
+                   var url = '/instances/' + instanceId;
+                   if ($('#ckbChefDelete').is(':checked')) {
+                     url = url + '?chefRemove=true';
+                   }
+
+                   $.ajax({
+                     url: url,
+                     type: 'DELETE',
+                     success: function() {
+                       $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                       var table = $('#tableinstanceview').DataTable();
+                       table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                       dialog.modal('hide');
+                     }
+                   }).fail(function() {
+                    $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
+                    $('#deleteInstanceWorkingIndicator').hide();
+                    $('#deleteInstanceForm').show();
+                  });
+                   return false;
+                 }
+               },
+               cancel: {
+                 label: "Close",
+                 className: "btn-primary",
+                 callback: function() {
+
+                 }
+               }
+             }
+           });
+}
+else
+{
+ bootbox.alert('Please select an instance to remove.');
+}
+}
+    $(document).ready(function(){   
+      /*********************************Instance.js********************/
 /*
 This is the entry method for initialising the instance Stuff in Dev.html.
 */
 
 function initializeInstance(){
-bindClick_ipaddressImport();
-bindClick_instnaceTab();
-registerModelEventForImportInstance();
-bindChange_importPemFile();
-bindSubmit_AddInstance();
+  bindClick_ipaddressImport();
+  bindClick_instnaceTab();
+  registerModelEventForImportInstance();
+  bindChange_importPemFile();
+  bindSubmit_AddInstance();
 
 }
 
@@ -17,200 +153,203 @@ bindSubmit_AddInstance();
 Attach Click Event on IP Address Import, which will reset instance form.
 */
 function bindClick_ipaddressImport(){
-    $('#ipaddressimport').click(function(e){
-        $('#nodeimportipresultmsg').addClass("hidden");
-        $('#addInstanceForm').trigger("reset");
-        $('#pemFileDropdown').change();
-        $('#importinstanceOS').change();
-    });
+  $('#ipaddressimport').click(function(e){
+    $('#nodeimportipresultmsg').addClass("hidden");
+    $('#addInstanceForm').trigger("reset");
+    $('#pemFileDropdown').change();
+    $('#importinstanceOS').change();
+  });
 }
 
+/*
+Attaching Click event on instances tab which will set BreadCrum for Instances
+*/
 function bindClick_instnaceTab(){
-    $('.Instances').click(function(e){
-        var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
-        var getbreadcrumbullength = getbreadcrumbul.length;
-        var DummyBreadCrumb;
-        if(getbreadcrumbullength > 0)
-        {
+  $('.Instances').click(function(e){
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
             //alert(getbreadcrumbullength);
             for(var counter=0;counter<getbreadcrumbullength;counter++){
-                var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
                 //alert(getbreadcrumbulname);
                 if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
                 {
-                    DummyBreadCrumb += '>' + getbreadcrumbulname;
+                  DummyBreadCrumb += '>' + getbreadcrumbulname;
                 }
                 else
                 {
-                    DummyBreadCrumb = getbreadcrumbulname;
+                  DummyBreadCrumb = getbreadcrumbulname;
                 }
-            }
-            DummyBreadCrumb += '>' + 'Instances';
+              }
+              DummyBreadCrumb += '>' + 'Instances';
 
-            if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined'
-            )
-            {
+              if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined'
+                )
+              {
                 localStorage.removeItem("breadcrumb");
                 splitBread = DummyBreadCrumb.split('>');
                 if(splitBread.length > 0)
                 {
-                    $('#ribbon').find('.breadcrumb').find('li').detach();
-                    for(var arraycount=0;arraycount< splitBread.length;arraycount++){
-                        var liNew = document.createElement('li');
-                        liNew.innerHTML = splitBread[arraycount];
-                        $('#ribbon').find('.breadcrumb').append(liNew);
-                    }
+                  $('#ribbon').find('.breadcrumb').find('li').detach();
+                  for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+                    var liNew = document.createElement('li');
+                    liNew.innerHTML = splitBread[arraycount];
+                    $('#ribbon').find('.breadcrumb').append(liNew);
+                  }
                 }
-            }
+              }
             //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
             //alert(DummyBreadCrumb);
-        }
+          }
 
-    });
+        });
 
 }
 /*Binding Click events to Instance*/
-  
+
 
 /*Showing the dialog for import instance by IP*/
 function registerModelEventForImportInstance(){
-    $('#modalContainerimportInstance').on('show.bs.modal',function(e){
-        $('#addInstanceBtn').removeAttr('disabled');
+  $('#modalContainerimportInstance').on('show.bs.modal',function(e){
+    $('#addInstanceBtn').removeAttr('disabled');
         //$('#addInstanceForm').get(0).reset();
         var _org = getUrlParameter('org');
         $.get('/d4dMasters/readmasterjsonnew/10',function(data){
-            if(data && JSON.parse(data).length <= 0){
-                $('#modalContainerimportInstance').modal('hide');
-                alert('A chef server is required to import an instance. Use settings to add a new one.');
-                return false;
-            }
-            else
-            {
-                var found = false;
-                JSON.parse(data).forEach(function(k,v){
-                    var kt = Object.keys(k);
+          if(data && JSON.parse(data).length <= 0){
+            $('#modalContainerimportInstance').modal('hide');
+            alert('A chef server is required to import an instance. Use settings to add a new one.');
+            return false;
+          }
+          else
+          {
+            var found = false;
+            JSON.parse(data).forEach(function(k,v){
+              var kt = Object.keys(k);
 
-                    if(k['orgname_rowid'] == _org){
-                        found = true;
-                    }
-                });
+              if(k['orgname_rowid'] == _org){
+                found = true;
+              }
+            });
 
-                if(!found){
-                    $('#modalContainerimportInstance').modal('hide');
-                    alert('A chef server is required to import an instance. Use settings to add a new one.');
-                }
+            if(!found){
+              $('#modalContainerimportInstance').modal('hide');
+              alert('A chef server is required to import an instance. Use settings to add a new one.');
             }
-            importbyipusers();
+          }
+          importbyipusers();
         });
-    });
+      });
 }
 
 function bindChange_importPemFile(){
-    $('#importPemfileInput').change(function(){
+  $('#importPemfileInput').change(function(){
     //console.log(this.files);
     $(this).next().val(this.files[0].name);
-});
+  });
 }
 
 function bindSubmit_AddInstance(){
-    /* Add Instance by IP form submission */
-    $("#addInstanceForm").submit( function(e) {
-        var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+  /* Add Instance by IP form submission */
+  $("#addInstanceForm").submit( function(e) {
+    var ipAddresRegExp=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; var hostname=/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
 
-        var $spinner = $('#nodeimportipspinner').addClass('hidden');
-        var $result = $('#nodeimportipresultmsg').addClass('hidden');
-        var reqBody = {};
-        var $form = $('#addInstanceForm');
-        reqBody.fqdn = $form.find('#instanceFQDN').val().trim();
-        reqBody.os = $form.find('#importinstanceOS').val();
-        reqBody.users = $('#importbyipuserListSelect').val();
-        reqBody.credentials = {
-            username: $form.find('#instanceUsername').val()
-        };
+    var $spinner = $('#nodeimportipspinner').addClass('hidden');
+    var $result = $('#nodeimportipresultmsg').addClass('hidden');
+    var reqBody = {};
+    var $form = $('#addInstanceForm');
+    reqBody.fqdn = $form.find('#instanceFQDN').val().trim();
+    reqBody.os = $form.find('#importinstanceOS').val();
+    reqBody.users = $('#importbyipuserListSelect').val();
+    reqBody.credentials = {
+      username: $form.find('#instanceUsername').val()
+    };
 
-        if(!reqBody.fqdn) {
-            alert('Please enter IP');
-            e.preventDefault();
-            return false;
-        }
-        if(!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)){
-            alert("Please provide a valid IP Address or Hostname");
-            e.preventDefault();
-            return false;
-        }
+    if(!reqBody.fqdn) {
+      alert('Please enter IP');
+      e.preventDefault();
+      return false;
+    }
+    if(!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)){
+      alert("Please provide a valid IP Address or Hostname");
+      e.preventDefault();
+      return false;
+    }
 
-        if(!reqBody.users) {
-            alert('Please assign atleast one user');
-            e.preventDefault();
-            return false;
-        }
-        if(!reqBody.os) {
-            alert('Please choose OS');
-            e.preventDefault();
-            return false;
-        }
+    if(!reqBody.users) {
+      alert('Please assign atleast one user');
+      e.preventDefault();
+      return false;
+    }
+    if(!reqBody.os) {
+      alert('Please choose OS');
+      e.preventDefault();
+      return false;
+    }
 
-        function makeRequest() {
-            $('#addInstanceBtn').attr('disabled','disabled');
-            $spinner.removeClass('hidden');
+    function makeRequest() {
+      $('#addInstanceBtn').attr('disabled','disabled');
+      $spinner.removeClass('hidden');
             // $('#addInstanceBtn').attr('disabled','disabled');
             $.post('../organizations/'+urlParams.org+'/businessgroups/'+urlParams['bg']+'/projects/'+urlParams.projid+'/environments/'+urlParams.envid+'/addInstance',reqBody,function(data){
-                $('#tabInstanceStatus').hide();
-                addInstanceToDOM(data);
+              $('#tabInstanceStatus').hide();
+              addInstanceToDOM(data);
 
-                $spinner.addClass('hidden');
-                $result.addClass('hidden');
-                $('#addInstanceBtn').removeAttr('disabled');
-                $('#addInstanceForm').get(0).reset();
-                $('#importinstanceOS').change();
-                $('#pemFileDropdown').change();
-                var $divinstancescardview = $('#divinstancescardview');
-                if ($divinstancescardview.find('li').length > 0) {
-                    $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
-                }
-                $divinstancescardview.find('.item').first().addClass('active');
-                $('#modalContainerimportInstance').modal('hide');
+              $spinner.addClass('hidden');
+              $result.addClass('hidden');
+              $('#addInstanceBtn').removeAttr('disabled');
+              $('#addInstanceForm').get(0).reset();
+              $('#importinstanceOS').change();
+              $('#pemFileDropdown').change();
+              var $divinstancescardview = $('#divinstancescardview');
+              if ($divinstancescardview.find('li').length > 0) {
+                $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+              }
+              $divinstancescardview.find('.item').first().addClass('active');
+              $('#modalContainerimportInstance').modal('hide');
                 //Updating the tree
                 //loadTreeFuncNew();
                 console.log('success---3---3');
                 //selectFirstEnv();
                 //selectAnyEnviornment(urlParams.org,urlParams.envid);
                 $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
-            }).fail(function(jxhr){
+              }).fail(function(jxhr){
                 $spinner.addClass('hidden');
                 $result.empty();
                 $result.css({color:'red'});
                 if(jxhr.status === 400) {
-                    if(jxhr.responseJSON) {
-                        $result.html(jxhr.responseJSON.message);
-                    } else {
-                        $result.html("Invalid request");
-                    }
+                  if(jxhr.responseJSON) {
+                    $result.html(jxhr.responseJSON.message);
+                  } else {
+                    $result.html("Invalid request");
+                  }
                 } else {
-                    $result.html("Server Behaved Unexpectedly");
+                  $result.html("Server Behaved Unexpectedly");
                 }
                 $result.removeClass('hidden');
                 $('#addInstanceBtn').removeAttr('disabled');
 
-            });
+              });
 
-        }
+            }
 
-        var $dropdown = $('#pemFileDropdown');
-        if ($dropdown.val()==='pemFile') {
+            var $dropdown = $('#pemFileDropdown');
+            if ($dropdown.val()==='pemFile') {
 
-            var pemFileInput = $form.find('#importPemfileInput').get(0);
-            if(!reqBody.credentials.username){
+              var pemFileInput = $form.find('#importPemfileInput').get(0);
+              if(!reqBody.credentials.username){
                 alert('Please Enter Username');
                 e.preventDefault();
                 return false;
-            }
-            if(!pemFileInput.files.length) {
+              }
+              if(!pemFileInput.files.length) {
                 alert('Please Choose a Pem file');
                 e.preventDefault();
                 return false;
-            }
-            var reader = new FileReader();
+              }
+              var reader = new FileReader();
             // Closure to capture the file information.
             reader.onload = function(e) {
                 // Render thumbnail.
@@ -218,378 +357,295 @@ function bindSubmit_AddInstance(){
 
                 makeRequest();
 
-            };
+              };
             // Read in the image file as a data URL.
 
             reader.readAsText(pemFileInput.files[0]);
-        } else {
+          } else {
             reqBody.credentials.password = $form.find('#instancePassword').val();
             if(!reqBody.credentials.password) {
-                alert("Please enter password");
-                e.preventDefault();
-                return false;
+              alert("Please enter password");
+              e.preventDefault();
+              return false;
             }
             makeRequest();
-        }
+          }
 
-        e.preventDefault();
-        return false;
+          e.preventDefault();
+          return false;
 
-    });
+        });
 
 }
 
 
 /*import instance by ip we are checking for the user*/
-   function importbyipusers(){
+function importbyipusers(){
 
-       var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
-       $.get('../users',function(userList){
-           userList = JSON.parse(userList);
-           var $importbyipuserListSelect = $('#importbyipuserListSelect').empty();
-           userList.sort(function(a, b){
-               var keyA =Object.keys(a);
-               var keyB =Object.keys(b);
+ var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+ $.get('../users',function(userList){
+   userList = JSON.parse(userList);
+   var $importbyipuserListSelect = $('#importbyipuserListSelect').empty();
+   userList.sort(function(a, b){
+     var keyA =Object.keys(a);
+     var keyB =Object.keys(b);
 
-               if(keyA[0] < keyB[0]) return -1;
-               if(keyA[0] > keyB[0]) return 1;
-               return 0;
-           });
-           for(var i=0;i<userList.length;i++) {
-               var keys = Object.keys(userList[i]);
-               var $option = $('<option></option>').append(keys[0]).val(keys[0]);
-               $importbyipuserListSelect.append($option);
-           }
-           $loadingContainer.hide();
-           $importbyipuserListSelect.show();
-       }).error(function(){
-           $loadingContainer.empty().append('Unable to load users. Please try again later.');
-       });
+     if(keyA[0] < keyB[0]) return -1;
+     if(keyA[0] > keyB[0]) return 1;
+     return 0;
+   });
+   for(var i=0;i<userList.length;i++) {
+     var keys = Object.keys(userList[i]);
+     var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+     $importbyipuserListSelect.append($option);
    }
+   $loadingContainer.hide();
+   $importbyipuserListSelect.show();
+ }).error(function(){
+   $loadingContainer.empty().append('Unable to load users. Please try again later.');
+ });
+}
 
 //table view instances
-   function initializeInstanceArea(data) {
+function initializeInstanceArea(data) {
        //alert('starting');
        if(data.length) {
-           $('#tabInstanceStatus').hide();
+         $('#tabInstanceStatus').hide();
        }
 
        //var $instancesList = $('.instancesList').empty();
        if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
            //alert('loading table');
            tableinstanceview = $('#tableinstanceview').DataTable({
-               "pagingType": "full_numbers",
-               "aoColumns": [
-                   null, {
-                       "bSortable": false
-                   },
-                   null,
-                   null, {
-                       "bSortable": false
-                   }, {
-                       "bSortable": false
-                   }, {
-                       "bSortable": false
-                   }, {
-                       "bSortable": false
-                   }, {
-                       "bSortable": false
-                   }, {
-                       "bSortable": false,
-                       "sWidth": "20%"
-                   }
-               ],
-               "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-                   $("td:first", nRow).html(iDisplayIndex + 1);
-                   return nRow;
-               }
+             "pagingType": "full_numbers",
+             "aoColumns": [
+             null, {
+               "bSortable": false
+             },
+             null,
+             null, {
+               "bSortable": false
+             }, {
+               "bSortable": false
+             }, {
+               "bSortable": false
+             }, {
+               "bSortable": false
+             }, {
+               "bSortable": false
+             }, {
+               "bSortable": false,
+               "sWidth": "20%"
+             }
+             ],
+             "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+               $("td:first", nRow).html(iDisplayIndex + 1);
+               return nRow;
+             }
 
            });
-       }
+         }
 
 
-       for (var i = 0; i < data.length; i++) {
+         for (var i = 0; i < data.length; i++) {
 
            addInstanceToDOM(data[i]);
 
-       }
+         }
 
 
 
-       $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
+         $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
 
-       function tableupdownRow(evt) {
+         function tableupdownRow(evt) {
            evt = evt || window.event;
            var key = evt.keyCode;
            switch (key) {
                case 38: // UP arrow
-                   var $selectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected");
-                   if ($('#tableinstanceview tbody').find(".rowcustomselected").prev().length == 1) {
-                       var $newSelectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected").prev();
-                       $newSelectedRowPre.addClass('rowcustomselected');
-                       $selectedRowPre.removeClass('rowcustomselected');
-                       break;
-                   }
-                   break;
+               var $selectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected");
+               if ($('#tableinstanceview tbody').find(".rowcustomselected").prev().length == 1) {
+                 var $newSelectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected").prev();
+                 $newSelectedRowPre.addClass('rowcustomselected');
+                 $selectedRowPre.removeClass('rowcustomselected');
+                 break;
+               }
+               break;
                case 40: // DOWN arrow
-                   var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
-                   if ($('#tableinstanceview tbody').find(".rowcustomselected").next().length == 1) {
-                       var $newSelectedRow = $('#tableinstanceview tbody').find(".rowcustomselected").next();
-                       $newSelectedRow.addClass('rowcustomselected');
-                       $selectedRow.removeClass('rowcustomselected');
-                       break;
-                   }
-                   break;
+               var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
+               if ($('#tableinstanceview tbody').find(".rowcustomselected").next().length == 1) {
+                 var $newSelectedRow = $('#tableinstanceview tbody').find(".rowcustomselected").next();
+                 $newSelectedRow.addClass('rowcustomselected');
+                 $selectedRow.removeClass('rowcustomselected');
+                 break;
+               }
+               break;
+             }
            }
-       }
-       document.onkeydown = tableupdownRow;
-       $('#tableinstanceview tbody').on('click', 'tr', function() {
-           if ($(this).hasClass('rowcustomselected')) {
+           document.onkeydown = tableupdownRow;
+           $('#tableinstanceview tbody').on('click', 'tr', function() {
+             if ($(this).hasClass('rowcustomselected')) {
                $(this).removeClass('rowcustomselected');
-           } else {
+             } else {
                tableinstanceview.$('tr').removeClass('rowcustomselected');
                $(this).addClass('rowcustomselected');
-           }
+             }
 
-       });
+           });
 
 
 
-       var $divinstancescardview = $('#divinstancescardview');
-       if ($divinstancescardview.find('li').length > 0) {
+           var $divinstancescardview = $('#divinstancescardview');
+           if ($divinstancescardview.find('li').length > 0) {
            //Arab
            var cardIndexInfo = localStorage.getItem("cardIndex");
 
            if(cardIndexInfo) {
-               var li = $divinstancescardview.find('li').get(cardIndexInfo);
+             var li = $divinstancescardview.find('li').get(cardIndexInfo);
                //console.log('container ==>',li);
                if(li) {
-                   $(li).find('.flip-toggle').trigger('click');
+                 $(li).find('.flip-toggle').trigger('click');
                } else {
-                   $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+                 $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
                }
 
-           } else {
+             } else {
                $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+             }
            }
-       }
-       $divinstancescardview.find('.item').first().addClass('active');
+           $divinstancescardview.find('.item').first().addClass('active');
 
-       loadContainersTable();
+           loadContainersTable();
 
-       $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
+           $(".appFactoryPanel").find(".productdiv1").first().trigger('click');
 
-   }
+         }
 
 
 //stages of instances(start,stop,terminated etc.)
-   function getCssClassFromStatus(status) {
-       var cssClasses = {
+function getCssClassFromStatus(status) {
+ var cssClasses = {
 
-       };
-       switch (status) {
+ };
+ switch (status) {
 
-           case 'running':
-               cssClasses.ringClass = 'started';
-               cssClasses.textClass = 'instance-state-text-started';
-               cssClasses.tableViewStatusClass = "started";
-               break;
+   case 'running':
+   cssClasses.ringClass = 'started';
+   cssClasses.textClass = 'instance-state-text-started';
+   cssClasses.tableViewStatusClass = "started";
+   break;
 
-           case 'stopped':
-               cssClasses.ringClass = 'stopped';
-               cssClasses.textClass = 'instance-state-text-stopped';
-               cssClasses.tableViewStatusClass = "stopped";
-               break;
+   case 'stopped':
+   cssClasses.ringClass = 'stopped';
+   cssClasses.textClass = 'instance-state-text-stopped';
+   cssClasses.tableViewStatusClass = "stopped";
+   break;
 
-           case 'terminated':
-               cssClasses.ringClass = 'stopped';
-               cssClasses.textClass = 'instance-state-text-stopped';
-               cssClasses.tableViewStatusClass = "stopped";
-               break;
+   case 'terminated':
+   cssClasses.ringClass = 'stopped';
+   cssClasses.textClass = 'instance-state-text-stopped';
+   cssClasses.tableViewStatusClass = "stopped";
+   break;
 
-           default:
-               cssClasses.ringClass = 'pending';
-               cssClasses.textClass = 'instance-state-text-pending';
-               cssClasses.tableViewStatusClass = "pending";
+   default:
+   cssClasses.ringClass = 'pending';
+   cssClasses.textClass = 'instance-state-text-pending';
+   cssClasses.tableViewStatusClass = "pending";
 
-       }
+ }
 
-       return cssClasses;
-   }
+ return cssClasses;
+}
 
 //removing instances from instances tab(both from grid view and table)
 
-   function removeSelectedInstance(){
-       var instanceId = null;
-       var blueprintName = null;
-       if ($('#divinstancescardview').is(':visible')) {
-           var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
-           instanceId = $selectedCard.attr('data-instanceid');
-           blueprintName = $selectedCard.attr('data-blueprintName');
-       } else if ($('#divinstancestableview').is(':visible')) {
-           var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
-           instanceId=$selectedRow.attr('data-instanceId');
-           blueprintName = $selectedRow.attr('data-blueprintName');
+
+function pollInstanceState(instanceId, state, delay) {
+ var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+ var timeout = setTimeout(function() {
+   $.get('../instances/' + instanceId, function(data) {
+     if (data) {
+       if (data.instanceState == 'stopped'){
+         enableInstanceActionStopBtn(instanceId);
+       }
+       if (data.instanceState == 'running'){
+         enableInstanceActionStartBtn(instanceId);
+       }
+       if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
+         disableInstanceActionBtns(instanceId);
+       }
+       if (data.instanceState == 'unknown'){
+         disableInstanceStartStopActionBtns(data._id);
+       }
+       if (data.instanceState === state) {
+         pollInstanceState(instanceId, state, 5000);
        } else {
-           instanceId = null;
+         console.log('polling complete');
+         var cssClassed = getCssClassFromStatus(data.instanceState);
+         $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+         $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+         $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+         $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
+         $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
        }
-       if(instanceId){
-           //found now delete
-           var dialog = bootbox.dialog({
-               title: "Remove Instance.",
-               message: '<div class="row">  ' +
-               '<div class="col-md-12"> ' +
-               '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>'+
-               '<form id="deleteInstanceForm" class="form-horizontal"> ' +
-               '<input type="hidden" id="deleteInstanceIdInput" value="'+instanceId+'"/>'+
-               '<div class="form-group"> ' +
-               '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
-               '</div>' +
-               '<div class="form-group"> ' +
-               '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
-               '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
-               '</div> ' +
-               '<div class="form-group"> ' +
-               '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
-               '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
-               '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
-               'Delete this node from chef server </label> ' +
-               '</div>' +
-               '</div>' +
-               '</form> </div>  </div>',
-               buttons: {
-                   success: {
-                       label: "Delete",
-                       className: "btn-primary",
-                       callback: function(evt,arg2) {
-                           $('#deleteInstanceForm').hide();
-                           $('#deleteInstanceWorkingIndicator').show();
-                           $(evt.target).attr('disabled', 'disabled');
+     }
+   })
+}, delay);
+}
+
+var startStopInstanceHandler = function(e) {
+ if($(this).hasClass('isStopedInstance')){
+   return false;
+ }
+ var $this = $(this);
+ var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
+ var type = $this.attr('data-actionType');
+
+ function makeRequest(url) {
+   var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+   $parent.find('.moreInfo').trigger('click');
+   $.get(url, function(data) {
+
+     console.log($parent.length, $parent);
+     var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
+
+     var oldState = data.instanceCurrentState;
 
 
-                           var url = '/instances/' + instanceId;
-                           if ($('#ckbChefDelete').is(':checked')) {
-                               url = url + '?chefRemove=true';
-                           }
+     $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
 
-                           $.ajax({
-                               url: url,
-                               type: 'DELETE',
-                               success: function() {
-                                   $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
-                                   var table = $('#tableinstanceview').DataTable();
-                                   table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
-                                   dialog.modal('hide');
-                               }
-                           }).fail(function() {
-                               $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
-                           });
-                           return false;
-                       }
-                   },
-                   cancel: {
-                       label: "Close",
-                       className: "btn-primary",
-                       callback: function() {
+     $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
 
-                       }
-                   }
-               }
-           });
-       }
-       else
-       {
-           bootbox.alert('Please select an instance to remove.');
-       }
-   }
+     $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
 
-   function pollInstanceState(instanceId, state, delay) {
-       var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-       var timeout = setTimeout(function() {
-           $.get('../instances/' + instanceId, function(data) {
-               if (data) {
-                   if (data.instanceState == 'stopped'){
-                       enableInstanceActionStopBtn(instanceId);
-                   }
-                   if (data.instanceState == 'running'){
-                       enableInstanceActionStartBtn(instanceId);
-                   }
-                   if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
-                       disableInstanceActionBtns(instanceId);
-                   }
-                   if (data.instanceState == 'unknown'){
-                       disableInstanceStartStopActionBtns(data._id);
-                   }
-                   if (data.instanceState === state) {
-                       pollInstanceState(instanceId, state, 5000);
-                   } else {
-                       console.log('polling complete');
-                       var cssClassed = getCssClassFromStatus(data.instanceState);
-                       $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                       $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                       $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-                       $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip',data.instanceIP);
-                       $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
-                   }
-               }
-           })
-       }, delay);
-   }
+     pollInstanceState(instanceId, oldState, 2000);
+   });
 
-   var startStopInstanceHandler = function(e) {
-       if($(this).hasClass('isStopedInstance')){
-           return false;
-       }
-       var $this = $(this);
-       var instanceId = $this.parents('.instanceActionBtnCtr').attr('data-instanceId');;
-       var type = $this.attr('data-actionType');
-
-       function makeRequest(url) {
-           var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-           $parent.find('.moreInfo').trigger('click');
-           $.get(url, function(data) {
-
-               console.log($parent.length, $parent);
-               var cssClassed = getCssClassFromStatus(data.instanceCurrentState);
-
-               var oldState = data.instanceCurrentState;
-
-
-               $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-
-               $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceCurrentState);
-
-               $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-
-               pollInstanceState(instanceId, oldState, 2000);
-           });
-
-       }
-       var url = '../instances/' + instanceId + '/startInstance';
-       if (type === 'Stop') {
-           url = '../instances/' + instanceId + '/stopInstance'
-       }
-       if (type === 'Stop') {
-           bootbox.confirm(type + " instance?", function(result) {
-               if (!result) {
-                   return;
-               }
-               makeRequest(url);
-           });
-       } else {
-           makeRequest(url);
-       }
-   }
+ }
+ var url = '../instances/' + instanceId + '/startInstance';
+ if (type === 'Stop') {
+   url = '../instances/' + instanceId + '/stopInstance'
+ }
+ if (type === 'Stop') {
+   bootbox.confirm(type + " instance?", function(result) {
+     if (!result) {
+       return;
+     }
+     makeRequest(url);
+   });
+ } else {
+   makeRequest(url);
+ }
+}
 
 
 
 
 
-   var instanceUpdateRunlistHandler = function(e) {
-       if($(this).hasClass('isStopedInstance')){
-           return false;
-       }
-       var $this = $(this);
+var instanceUpdateRunlistHandler = function(e) {
+ if($(this).hasClass('isStopedInstance')){
+   return false;
+ }
+ var $this = $(this);
        //alert($this);
        var instanceId = $this.attr('data-instanceId');
        //alert(instanceId);
@@ -609,96 +665,96 @@ function bindSubmit_AddInstance(){
        $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
        $chefRunModalContainer.modal('show');
 
-   };
+     };
 
 
-   var instanceLogsHandler = function(e) {
+     var instanceLogsHandler = function(e) {
        var instanceId = $(this).attr('data-instanceId');
        var timeout;
        var $instanceLogModalContainer = $('#instanceLogModalContainer');
        $instanceLogModalContainer.on('hidden.bs.modal', function(e) {
-           $instanceLogModalContainer.off('hidden.bs.modal');
-           if (timeout) {
-               clearTimeout(timeout);
-           }
+         $instanceLogModalContainer.off('hidden.bs.modal');
+         if (timeout) {
+           clearTimeout(timeout);
+         }
        });
        $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
        $instanceLogModalContainer.modal('show');
        var lastTimestamp;
 
        function pollLogs(timestamp, delay, clearData) {
-           var url = '../instances/' + instanceId + '/logs';
-           if (timestamp) {
-               url = url + '?timestamp=' + timestamp;
-           }
+         var url = '../instances/' + instanceId + '/logs';
+         if (timestamp) {
+           url = url + '?timestamp=' + timestamp;
+         }
 
-           timeout = setTimeout(function() {
-               $.get(url, function(data) {
-                   var $modalBody = $instanceLogModalContainer.find('.logsArea')
-                   if (clearData) {
-                       $modalBody.empty();
-                   }
-                   var $table = $('<div></div>');
+         timeout = setTimeout(function() {
+           $.get(url, function(data) {
+             var $modalBody = $instanceLogModalContainer.find('.logsArea')
+             if (clearData) {
+               $modalBody.empty();
+             }
+             var $table = $('<div></div>');
 
-                   for (var i = 0; i < data.length; i++) {
-                       var $rowDiv = $('<div class="row"></div>');
-                       var timeString = new Date().setTime(data[i].timestamp);
+             for (var i = 0; i < data.length; i++) {
+               var $rowDiv = $('<div class="row"></div>');
+               var timeString = new Date().setTime(data[i].timestamp);
                        var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                        $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                        if (data[i].err) {
-                           $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                         $rowDiv.append($('<div class="col-lg-8 col-sm-8" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
                        } else {
-                           $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
+                         $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
                        }
 
                        $table.append($rowDiv);
                        $table.append('<hr/>');
 
-                   }
+                     }
 
 
-                   if (data.length) {
+                     if (data.length) {
                        lastTimestamp = data[data.length - 1].timestamp;
                        console.log(lastTimestamp);
                        $modalBody.append($table);
                        $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
-                   }
+                     }
 
 
-                   console.log('polling again');
-                   if ($instanceLogModalContainer.data()['bs.modal'].isShown) {
+                     console.log('polling again');
+                     if ($instanceLogModalContainer.data()['bs.modal'].isShown) {
                        pollLogs(lastTimestamp, 1000, false);
-                   } else {
+                     } else {
                        console.log('not polling again');
-                   }
-               });
-           }, delay);
-       }
-       pollLogs(lastTimestamp, 0, true);
-   };
+                     }
+                   });
+}, delay);
+}
+pollLogs(lastTimestamp, 0, true);
+};
 
 
    //emptying ssh container
    $('#modalSSHShellContainer').on('hide.bs.modal',function(e){
-       $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
-       $('#modalSSHShellContainer').find('.modal-body').empty();
+     $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
+     $('#modalSSHShellContainer').find('.modal-body').empty();
    });
 
 
    function showSSHModal() {
-       if($(this).hasClass('isStopedInstance')){
-           return false;
-       }
-       var $sshModal = $('#modalSSHShellContainer');
-       var instanceId = $(this).attr('data-instanceId');
-       $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-       $sshModal.modal('show');
-       $.get('sshShell.html?id=' + instanceId,function(data){
+     if($(this).hasClass('isStopedInstance')){
+       return false;
+     }
+     var $sshModal = $('#modalSSHShellContainer');
+     var instanceId = $(this).attr('data-instanceId');
+     $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+     $sshModal.modal('show');
+     $.get('sshShell.html?id=' + instanceId,function(data){
 
-           $sshModal.find('.modal-body').empty().append(data);
-           $sshModal.find('#ssh-instanceId').val(instanceId);
-       });
+       $sshModal.find('.modal-body').empty().append(data);
+       $sshModal.find('#ssh-instanceId').val(instanceId);
+     });
    }
 
    function addInstanceToDOM(data) {
@@ -706,14 +762,14 @@ function bindSubmit_AddInstance(){
        // TEMP Hack for the multiple cards issue.
        // Import also needs to be fixed as it inserts 2 records in the db..
        if(data._id){// instanceId
-           var alreadyAdded = $("#content").find("div[data-instanceid='"+data._id+"']").length;
+         var alreadyAdded = $("#content").find("div[data-instanceid='"+data._id+"']").length;
            //alert(">>>>>" data._id  " >>>>>> " alreadyAdded);
            if(alreadyAdded) return;
-       }
+         }
 
-       var $instanceDataTable = $("#tableinstanceview");
-       var $divinstancescardview = $('#divinstancescardview .carousel-inner');
-       var $carouselItemContainers = $divinstancescardview.find('.item');
+         var $instanceDataTable = $("#tableinstanceview");
+         var $divinstancescardview = $('#divinstancescardview .carousel-inner');
+         var $carouselItemContainers = $divinstancescardview.find('.item');
        // var $instancesList = null;
        // var $item = null;
        var $instancesList,$item;
@@ -724,33 +780,33 @@ function bindSubmit_AddInstance(){
            $instancesList = $('<ul></ul>').addClass("thumbnails marginleft-40 padding-top-30 list-unstyled instancesList");
            $item.append($instancesList);
            $divinstancescardview.append($item);
-       } else {
+         } else {
            var $item = $($carouselItemContainers.get($carouselItemContainers.length -1));
            var $instancesList = $item.find('ul');
            if($instancesList.children().length === 5) {
 
-               $item = $('<div></div>').addClass('item');
-               $instancesList = $('<ul></ul>').addClass("thumbnails marginleft-40 padding-top-30 list-unstyled instancesList");
-               $item.append($instancesList);
-               $divinstancescardview.append($item);
+             $item = $('<div></div>').addClass('item');
+             $instancesList = $('<ul></ul>').addClass("thumbnails marginleft-40 padding-top-30 list-unstyled instancesList");
+             $item.append($instancesList);
+             $divinstancescardview.append($item);
            }
-       }
+         }
 
-       var $rowContainter = $('<tr></tr>').attr({
+         var $rowContainter = $('<tr></tr>').attr({
            'data-instanceId': data._id,
            'data-blueprintName': data.blueprintData.blueprintName
-       });
+         });
 
 
 
-       var $li = $('<li></li>').addClass('domain-role-thumbnail');
+         var $li = $('<li></li>').addClass('domain-role-thumbnail');
        var $container = $('<div class="flip-toggle"></div>').addClass('container'); //<div class="container" id="flip-toggle">
        var $card = $('<div></div>').addClass('card'); //<div class="card">
        var $front = $('<div></div>').addClass('front'); //<div class="front">
        var $div = $('<div></div>').addClass('domain-roles ');
        var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr({
-           'data-instanceId': data._id,
-           'data-blueprintName': data.blueprintData.blueprintName
+         'data-instanceId': data._id,
+         'data-blueprintName': data.blueprintData.blueprintName
        });
        var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
@@ -759,7 +815,7 @@ function bindSubmit_AddInstance(){
 
        var $spanheadingMiddle = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
        var $spanheadingRight = $('<span></span>').css({
-           'float': 'right'
+         'float': 'right'
        }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
 
        $divHeading.append($spanheadingLeft);
@@ -771,17 +827,17 @@ function bindSubmit_AddInstance(){
        var $tdInstanceStatusIndicator;
 
        if (data.instanceState == 'running') {
-           $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
-           $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
+         $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
+         $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
        } else if (data.instanceState == 'terminated') {
-           $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
-           $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+         $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+         $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
        } else if (data.instanceState == 'stopped') {
-           $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
-           $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
+         $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
+         $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
        } else {
-           $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
-           $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
+         $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
+         $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
        }
        $tableInstanceStatusIndicator.attr('data-instanceId', data._id);
 
@@ -789,30 +845,30 @@ function bindSubmit_AddInstance(){
        $divComponentList = $('<div></div>').addClass('instance-bootstrap-list');
 
        $divComponentItem = $('<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;"></span>').addClass('instance-details-item')
-           .append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>')
-               .attr({
-                   'href': 'javascript:void(0)',
-                   'rel': 'tooltip',
-                   'data-placement': 'top',
-                   'data-original-title':'ViewAllRunlist'
-               }).addClass('instance-bootstrap-list-faimage'));
+       .append($('<a class="btn"><i class="fa fa-2x fa-exchange txt-color-blue"></i></a>')
+         .attr({
+           'href': 'javascript:void(0)',
+           'rel': 'tooltip',
+           'data-placement': 'top',
+           'data-original-title':'ViewAllRunlist'
+         }).addClass('instance-bootstrap-list-faimage'));
 
        $divComponentItem.click(function(e) {
 
-           var $par= $(this).parents('.flip-toggle');
+         var $par= $(this).parents('.flip-toggle');
 
-           $par.find('.tooltip').remove();
+         $par.find('.tooltip').remove();
 
-           if($par.length && $par.hasClass('flip')){
-               $par.removeClass('flip');
-           }else{
-               $par.addClass('flip');
-           }
+         if($par.length && $par.hasClass('flip')){
+           $par.removeClass('flip');
+         }else{
+           $par.addClass('flip');
+         }
            //   alert(1);
            // debugger;
 
            //  $(this).parents('.flip-toggle').find('fa-exchange').tooltip('hide');
-       });
+         });
 
 
        $divComponentList.append($divComponentItem);
@@ -826,27 +882,27 @@ function bindSubmit_AddInstance(){
 
        //Check if the docker status is succeeded
        if(data.docker != null){
-           var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+         var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
 
-           $divComponentListContainer.append($dockerStatus);
+         $divComponentListContainer.append($dockerStatus);
        }
        if(typeof data.applicationUrl != 'undefined')
        {
-           if(data.applicationUrl != 'http://'){
-               var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
-               $divComponentListContainer.append($anchor);
-           }
+         if(data.applicationUrl != 'http://'){
+           var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='"+data.applicationUrl+"' href='"+data.applicationUrl+"'' target='_blank' >WSS</a>";
+           $divComponentListContainer.append($anchor);
+         }
        }
        if(typeof data.applicationUrl1 != 'undefined'){
-           if(data.applicationUrl1 != 'http://'){
-               var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
-               $divComponentListContainer.append($anchor1);
-           }
+         if(data.applicationUrl1 != 'http://'){
+           var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='"+data.applicationUrl1+"' class='app.url1 forURL' href='"+data.applicationUrl1+"'' target='_blank'>AD</a>";
+           $divComponentListContainer.append($anchor1);
+         }
        }
 
        /*else{
         $divComponentListContainer.detach($anchor1);
-        }*/
+      }*/
 
 
 
@@ -868,31 +924,31 @@ function bindSubmit_AddInstance(){
        var $viewAllA;
        //alert(data.runlist);
        if (data.runlist.length) {
-           $viewAllA  = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist");
-           $viewAllA.click(function(e) {
-               e.preventDefault();
-               e.stopPropagation();
+         $viewAllA  = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist");
+         $viewAllA.click(function(e) {
+           e.preventDefault();
+           e.stopPropagation();
 
-               var $modal = $('#modalTableRunlist');
-               var $modalBody = $('#modalTableRunlist .modal-body').empty();
-               var runlist =  $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
-               for (var j = 0; j < runlist.length; j++) {
-                   var $divComponentItem;
-                   if (j == 0) {
+           var $modal = $('#modalTableRunlist');
+           var $modalBody = $('#modalTableRunlist .modal-body').empty();
+           var runlist =  $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
+           for (var j = 0; j < runlist.length; j++) {
+             var $divComponentItem;
+             if (j == 0) {
 
-                       $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+               $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
 
-                   } else {
-                       $divComponentItem = $('<span title="' + runlist[j] + '" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
-                   }
+             } else {
+               $divComponentItem = $('<span title="' + runlist[j] + '" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+             }
 
-                   $modalBody.append($divComponentItem);
-               }
-               $modal.modal('show');
-               return false;
-           });
+             $modalBody.append($divComponentItem);
+           }
+           $modal.modal('show');
+           return false;
+         });
        } else {
-           $viewAllA  = $('<span></span>').append("View All Runlist");
+         $viewAllA  = $('<span></span>').append("View All Runlist");
        }
        var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
        $tableRunlistDiv.append($divComponentItem);
@@ -919,13 +975,13 @@ function bindSubmit_AddInstance(){
        $instanceDetailsList.append($instanceDetailItemId);
        var $instanceDetailItemStatus;
        if (data.instanceState == 'running') {
-           $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">' + data.instanceState + '</strong>');
+         $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">' + data.instanceState + '</strong>');
        } else if (data.instanceState == 'terminated') {
-           $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">' + data.instanceState + '</strong>');
+         $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">' + data.instanceState + '</strong>');
        } else if (data.instanceState == 'stopped') {
-           $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">' + data.instanceState + '</strong>');
+         $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-stopped">' + data.instanceState + '</strong>');
        } else {
-           $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">' + data.instanceState + '</strong>');
+         $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-pending">' + data.instanceState + '</strong>');
        }
 
        $instanceDetailsList.append($instanceDetailItemStatus);
@@ -950,7 +1006,7 @@ function bindSubmit_AddInstance(){
        var $divActionStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
        $divActionBtnContainer.append($divActionStartContainer);
        if (!data.chef) {
-           data.chef = {};
+         data.chef = {};
        }
        // var $divActionReStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionRestart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonRestart instanceActionBtnUpdateRunlist').attr('data-chefServerId', data.chef.serverId).attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Restart'));
        // $divActionBtnContainer.append($divActionReStartContainer);
@@ -982,10 +1038,10 @@ function bindSubmit_AddInstance(){
        //rrr alert(data.runlist);
 
        for (var j = 0; j < data.runlist.length; j++) {
-           var $divComponentItem;
+         var $divComponentItem;
 
-           $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
-           $backRunlistContainer.append($divComponentItem);
+         $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+         $backRunlistContainer.append($divComponentItem);
        }
 
        //console.log($backRunlistContainer);
@@ -997,7 +1053,7 @@ function bindSubmit_AddInstance(){
        $back.append($flipbackdivaspanhr);
        var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href', 'javascript:void(0)').append("Go Back"));
        $flipbackdivaspan.click(function(e) {
-           $(this).parents('.flip-toggle').toggleClass('flip');
+         $(this).parents('.flip-toggle').toggleClass('flip');
        });
        $back.append($flipbackdivaspan);
 
@@ -1037,9 +1093,9 @@ function bindSubmit_AddInstance(){
 
 
        if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
-           pollInstanceState(data._id, data.instanceState, 2000);
+         pollInstanceState(data._id, data.instanceState, 2000);
            // To be removed from comment later - Vinod
-       }
+         }
 
 
 
@@ -1060,41 +1116,41 @@ function bindSubmit_AddInstance(){
        $li.find('.moreInfo').click(instanceLogsHandler);
 
        var $cardContainer = $li.find('.container').click(function(e) {
-           $('.container').removeClass('role-Selectedcard');
-           $(this).addClass('role-Selectedcard');
+         $('.container').removeClass('role-Selectedcard');
+         $(this).addClass('role-Selectedcard');
            //Arab
            localStorage.setItem("cardIndex", $(".container").index($(this)));
            console.log($(".container").index($(this)));
-       });
+         });
        pageSetUp();
 
        if (data.instanceState == 'stopped'){
-           enableInstanceActionStopBtn(data._id);
+         enableInstanceActionStopBtn(data._id);
        }
        if (data.instanceState == 'running'){
-           enableInstanceActionStartBtn(data._id);
+         enableInstanceActionStartBtn(data._id);
        }
        if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
-           disableInstanceActionBtns(data._id);
+         disableInstanceActionBtns(data._id);
        }
        if (data.instanceState == 'unknown'){
-           disableInstanceStartStopActionBtns(data._id);
+         disableInstanceStartStopActionBtns(data._id);
        }
 
 
        setTimeout(function(){
-           var $l=$('#divinstancescardview').find('.active');
-           if($l.length>1){
-               $l.not(':first').removeClass('active');
-           }
+         var $l=$('#divinstancescardview').find('.active');
+         if($l.length>1){
+           $l.not(':first').removeClass('active');
+         }
        },3);
        $('#divinstancescardview .carousel-inner .item').addClass('active');
-   }
+     }
 
 
 
 
-   function enableInstanceActionStartBtn(instanceId){
+     function enableInstanceActionStartBtn(instanceId){
        var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
        var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
        $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
@@ -1105,8 +1161,8 @@ function bindSubmit_AddInstance(){
        $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
        $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
        $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
-   }
-   function enableInstanceActionStopBtn(instanceId){
+     }
+     function enableInstanceActionStopBtn(instanceId){
        var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
        var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
        $cardViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
@@ -1117,8 +1173,8 @@ function bindSubmit_AddInstance(){
        $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
        $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
        $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
-   }
-   function disableInstanceActionBtns(instanceId){
+     }
+     function disableInstanceActionBtns(instanceId){
        var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
        var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
        $cardViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
@@ -1129,8 +1185,8 @@ function bindSubmit_AddInstance(){
        $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
        $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
        $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
-   }
-   function disableInstanceStartStopActionBtns(instanceId){
+     }
+     function disableInstanceStartStopActionBtns(instanceId){
        var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
        var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
        $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
@@ -1141,22 +1197,22 @@ function bindSubmit_AddInstance(){
        $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
        $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
        $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
-   }
+     }
 
-/**************************************Blueprint.js*************************************/
+     /**************************************Blueprint.js*************************************/
 
-/*Binding Click events to Blueprints*/
+     /*Binding Click events to Blueprints*/
 
-function initializeBluePrints(){
-bindClick_bluePrintTab();
-bindClick_LaunchBtn();
-bindClick_bluePrintUpdate();
-bindClick_updateInstanceRunList();
-}
+     function initializeBluePrints(){
+      bindClick_bluePrintTab();
+      bindClick_LaunchBtn();
+      bindClick_bluePrintUpdate();
+      bindClick_updateInstanceRunList();
+    }
 
-function bindClick_bluePrintTab(){
+    function bindClick_bluePrintTab(){
 
-    $('.Blueprints').click(function(e){
+      $('.Blueprints').click(function(e){
         var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
         var getbreadcrumbullength = getbreadcrumbul.length;
         var DummyBreadCrumb;
@@ -1164,58 +1220,58 @@ function bindClick_bluePrintTab(){
         {
             //alert(getbreadcrumbullength);
             for(var counter=0;counter<getbreadcrumbullength;counter++){
-                var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
                 //alert(getbreadcrumbulname);
                 if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
                 {
-                    DummyBreadCrumb += '>' + getbreadcrumbulname;
+                  DummyBreadCrumb += '>' + getbreadcrumbulname;
                 }
                 else
                 {
-                    DummyBreadCrumb = getbreadcrumbulname;
+                  DummyBreadCrumb = getbreadcrumbulname;
                 }
-            }
-            DummyBreadCrumb += '>' + 'Blueprints';
+              }
+              DummyBreadCrumb += '>' + 'Blueprints';
 
-            if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
-            {
+              if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+              {
                 localStorage.removeItem("breadcrumb");
                 splitBread = DummyBreadCrumb.split('>');
                 if(splitBread.length > 0)
                 {
-                    $('#ribbon').find('.breadcrumb').find('li').detach();
-                    for(var arraycount=0;arraycount< splitBread.length;arraycount++){
-                        var liNew = document.createElement('li');
-                        liNew.innerHTML = splitBread[arraycount];
-                        $('#ribbon').find('.breadcrumb').append(liNew);
-                    }
+                  $('#ribbon').find('.breadcrumb').find('li').detach();
+                  for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+                    var liNew = document.createElement('li');
+                    liNew.innerHTML = splitBread[arraycount];
+                    $('#ribbon').find('.breadcrumb').append(liNew);
+                  }
                 }
-            }
+              }
             //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
             //alert(DummyBreadCrumb);
-        }
+          }
 
-    });
+        });
 
 
 }
 function initializeBlueprintArea(data) {
 
-    var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
-    $AppFactpanelBody.empty();
+  var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
+  $AppFactpanelBody.empty();
 
-    var $devopsRolepanelBody = $('.devopsRolePanel').find('.panel-body');
-    $devopsRolepanelBody.empty();
+  var $devopsRolepanelBody = $('.devopsRolePanel').find('.panel-body');
+  $devopsRolepanelBody.empty();
 
-    var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
-    $devopsRolepanelBody.empty();
+  var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
+  $devopsRolepanelBody.empty();
 
     //alert(orgId + "/" + projectId + "/" + envId + data.length);
 
     //Displaying the Template Types.
     $.get("/d4dMasters/readmasterjsonnew/16", function(tdata) {
-        tdata = JSON.parse(tdata);
-        var rowLength = tdata.length;
+      tdata = JSON.parse(tdata);
+      var rowLength = tdata.length;
         //alert(rowLength);
         var $containerTemp = "";
         var selectedrow = false;
@@ -1225,9 +1281,9 @@ function initializeBlueprintArea(data) {
         $('#accordion-2').empty();
         console.log(tdata);
         for (var i = 0; i < rowLength; i += 1) {
-            getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
-            getDesignTypeRowID = tdata[i]['rowid'];
-            getDesignTypeName = tdata[i]['templatetypename'];
+          getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
+          getDesignTypeRowID = tdata[i]['rowid'];
+          getDesignTypeName = tdata[i]['templatetypename'];
             // for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
             //     if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
             //         getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
@@ -1245,30 +1301,30 @@ function initializeBlueprintArea(data) {
             var $currRolePanel = null;
             //alert(getDesignTypeName);
             switch (getDesignTypeName) {
-                case "AppFactory":
-                    $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
-                    $currRolePanel = $AppFactpanelBody;
-                    break;
-                case "DevopsRoles":
-                    $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles"></div>');
-                    $currRolePanel = $DevopsRolespanelBody;
-                    break;
-                case "CloudFormation":
-                    $CloudFormationBody = $('<div class="panel-body CloudFormation"></div>');
-                    $currRolePanel = $CloudFormationBody;
-                    break;
-                case "Docker":
-                    $DockerpanelBody = $('<div class="panel-body Docker"></div>');
-                    $currRolePanel = $DockerpanelBody;
-                    break;
-                case "Desktop":
-                    $DesktopProvisioningPanelBody = $('<div class="panel-body Desktop"></div>');
-                    $currRolePanel = $DesktopProvisioningPanelBody;
-                    break;
-                case "Environment":
-                    $EnvironmentpanelBody = $('<div class="panel-body Environment"></div>');
-                    $currRolePanel = $EnvironmentpanelBody;
-                    break;
+              case "AppFactory":
+              $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
+              $currRolePanel = $AppFactpanelBody;
+              break;
+              case "DevopsRoles":
+              $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles"></div>');
+              $currRolePanel = $DevopsRolespanelBody;
+              break;
+              case "CloudFormation":
+              $CloudFormationBody = $('<div class="panel-body CloudFormation"></div>');
+              $currRolePanel = $CloudFormationBody;
+              break;
+              case "Docker":
+              $DockerpanelBody = $('<div class="panel-body Docker"></div>');
+              $currRolePanel = $DockerpanelBody;
+              break;
+              case "Desktop":
+              $DesktopProvisioningPanelBody = $('<div class="panel-body Desktop"></div>');
+              $currRolePanel = $DesktopProvisioningPanelBody;
+              break;
+              case "Environment":
+              $EnvironmentpanelBody = $('<div class="panel-body Environment"></div>');
+              $currRolePanel = $EnvironmentpanelBody;
+              break;
 
             }
 
@@ -1287,10 +1343,10 @@ function initializeBlueprintArea(data) {
             /*if($('#accordion-2').find('#collapse' + i).length > 0){
              alert('in');
              $('#accordion-2').find('#collapse' + i).first().append($containerTemp);
-             }*/
-            $('#accordion-2').append($containerTemp);
+           }*/
+           $('#accordion-2').append($containerTemp);
 
-        }
+         }
         //To fix template id and template type
         // alert('in' + data.length);
         for (var i = 0; i < data.length; i++) {
@@ -1299,31 +1355,31 @@ function initializeBlueprintArea(data) {
             var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
             //   alert($currRolePanel.length);
             if ($currRolePanel.length > 0) {
-                var $itemContainer = $('<div></div>').addClass("productdiv4");
+              var $itemContainer = $('<div></div>').addClass("productdiv4");
 
-                var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
-                var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
-                    'text-align': 'center'
-                });
-                var $img
-                if (data[i].iconpath)
-                    $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
-                else
-                    $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
-                var $liImage = $('<li></li>').append($img);
-                $ul.append($liImage);
+              var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
+              var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
+                'text-align': 'center'
+              });
+              var $img
+              if (data[i].iconpath)
+                $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
+              else
+                $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
+              var $liImage = $('<li></li>').append($img);
+              $ul.append($liImage);
 
-                var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
+              var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
-                $ul.append($liCardName);
-                var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-                if (data[i].versionsList) {
-                    var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
-                    var $selectVer = null;
-                    var tagLabel = '';
+              $ul.append($liCardName);
+              var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
+              if (data[i].versionsList) {
+                var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
+                var $selectVer = null;
+                var tagLabel = '';
                     //Docker Check
                     if (data[i].templateType == "Docker") {
-                        console.log("data[i}" + JSON.stringify(data[i]));
+                      console.log("data[i}" + JSON.stringify(data[i]));
                         //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                         $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
                         $itemBody.attr('dockerreponame', data[i].dockerreponame);
@@ -1331,66 +1387,66 @@ function initializeBlueprintArea(data) {
                         $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
 
                         if(data[i].dockerlaunchparameters)
-                            $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
+                          $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
                         var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                         $ul.append($liDockerRepoName);
                         if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
-                            $selectVer.empty();
-                            var dockerrepostags = data[i].dockerrepotags.split(',');
-                            $.each(dockerrepostags, function(k) {
-                                $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
-                            });
+                          $selectVer.empty();
+                          var dockerrepostags = data[i].dockerrepotags.split(',');
+                          $.each(dockerrepostags, function(k) {
+                            $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
+                          });
                         }
 
                         $selectVerEdit.hide();
                         tagLabel = '<span>Tags&nbsp;</span';
                         //alert(JSON.stringify(data[i]));
-                    } else {
+                      } else {
                         $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                         $selectVerEdit.click(function(e) {
 
-                            var $parent = $(this).parents('.cardimage');
-                            var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+                          var $parent = $(this).parents('.cardimage');
+                          var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
 
 
-                            $blueprintEditResultContainer.modal('show');
+                          $blueprintEditResultContainer.modal('show');
 
-                            var projectId = $parent.attr('data-projectId');
-                            var envId = $parent.attr('data-envId');
-                            var blueprintId = $parent.attr('data-blueprintId');
-                            var chefServerId = $parent.attr('data-chefServerId');
-                            var version = $parent.find('.blueprintVersionDropDown').val();
-                            $.get('../blueprints/' + blueprintId + '/versions/' + version, function(versionData) {
-                                console.log('blueprint data', versionData);
-                                var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+                          var projectId = $parent.attr('data-projectId');
+                          var envId = $parent.attr('data-envId');
+                          var blueprintId = $parent.attr('data-blueprintId');
+                          var chefServerId = $parent.attr('data-chefServerId');
+                          var version = $parent.find('.blueprintVersionDropDown').val();
+                          $.get('../blueprints/' + blueprintId + '/versions/' + version, function(versionData) {
+                            console.log('blueprint data', versionData);
+                            var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-                                }, versionData.runlist);
-                                $ccrs.find('.deploymentSelectedRunList').attr('data-blueprintId', blueprintId);
-                                $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs);
+                            }, versionData.runlist);
+                            $ccrs.find('.deploymentSelectedRunList').attr('data-blueprintId', blueprintId);
+                            $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs);
 
 
-                            }).error(function() {
-                                $blueprintEditResultContainer.find('.modal-body').empty();
-                                $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
-                            });
+                          }).error(function() {
+                            $blueprintEditResultContainer.find('.modal-body').empty();
+                            $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                          });
 
                         });
-                    }
-                    var $li = $('<li></li>').css({
-                        "font-size": '10px'
-                    }).append(tagLabel, $selectVer, $selectVerEdit);
-                    if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
-                    {
-                        for (var j = 0; j < data[i].versionsList.length; j++) {
-                            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-                            $selectVer.append($options);
-                        }
-                    }
-                    $selecteditBtnContainer.append($li);
-                }
-                $itemBody.append($ul);
-                $itemBody.append($selecteditBtnContainer);
-                $itemContainer.append($itemBody);
+}
+var $li = $('<li></li>').css({
+  "font-size": '10px'
+}).append(tagLabel, $selectVer, $selectVerEdit);
+if($selectVer.attr('class').indexOf('dockerrepotagselect') < 0)
+{
+  for (var j = 0; j < data[i].versionsList.length; j++) {
+    var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+    $selectVer.append($options);
+  }
+}
+$selecteditBtnContainer.append($li);
+}
+$itemBody.append($ul);
+$itemBody.append($selecteditBtnContainer);
+$itemContainer.append($itemBody);
 
                 //Find the template type container and add to it.
                 //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
@@ -1402,35 +1458,36 @@ function initializeBlueprintArea(data) {
                 $currRolePanel.parent().parent().show();
                 //Attaching the selection event.
                 if (i == (data.length - 1)) {
-                    var $productdiv1 = $('.productdiv1');
+                  var $productdiv1 = $('.productdiv1');
 
-                    $productdiv1.click(function(e) {
+                  $productdiv1.click(function(e) {
 
-                        $productdiv1.removeClass('role-Selected1');
-                        $(this).addClass('role-Selected1');
-                    });
+                    $productdiv1.removeClass('role-Selected1');
+                    $(this).addClass('role-Selected1');
+                  });
                 }
 
+              }
             }
-        }
 
         // $("#myTabContent3").append(containerTemp);
         // $("#templateContent #grid0").addClass("role-Selected");
         if ($('#accordion-2').length > 0) {
-            console.log('object ==>', $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a'));
-            $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').click();
+          console.log('object ==>', $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a'));
+          $('#accordion-2').find('.blueprintContainer:not(.hidden)').first().find('.panel-heading a').click();
         }
         pageSetUp();
     }); //end of readmasterjson to be pushed to the end of the function.
 
-    $('#accordion-2').on('show.bs.collapse', function(e) {
-        console.log(e.target);
-        $(e.target).find('.productdiv1').first().click();
-    });
+$('#accordion-2').on('show.bs.collapse', function(e) {
+  console.log(e.target);
+  $(e.target).find('.productdiv1').first().click();
+});
     //Expanding the fist Accordion.
-};
+  };
 
 //removig blueprints from blueprints tab
+/*
 function removeSelectedBlueprint() {
     var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
     if (blueprintId) {
@@ -1453,35 +1510,34 @@ function removeSelectedBlueprint() {
                     alert(data);
             });
         });
-
     } else {
         alert('Please select a blueprint to remove.');
     }
-}
+  }*/
 
 //Launching Blueprints
 function bindClick_LaunchBtn(){
 
-    $('.launchBtn').click(function(e) {
-        var $selectedItems = $('.role-Selected1');
-        if(!$selectedItems.length) {
-            return;
-        }
-        if($selectedItems.attr('data-templateType') === 'desktopProvisioning') {
-            var $modalDesktopProvisioning =$('#modalDesktopProvisioningLaunch');
-            var blueprintId = $selectedItems.attr('data-blueprintId');
-            var version = $selectedItems.find('.blueprintVersionDropDown').val();
-            $modalDesktopProvisioning.data('blueprintId',blueprintId);
-            $modalDesktopProvisioning.data('blueprintVersion',version);
-            $modalDesktopProvisioning.modal('show');
-            return;
-        }
-        if($selectedItems.attr('data-templateType') === 'Docker') {
-            loadLaunchParams();
-            var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
-            var blueprintId = $selectedItems.attr('data-blueprintId');
-            var dockerreponame = $selectedItems.attr('dockerreponame');
-            $launchDockerInstanceSelector.data('blueprintId',blueprintId);
+  $('.launchBtn').click(function(e) {
+    var $selectedItems = $('.role-Selected1');
+    if(!$selectedItems.length) {
+      return;
+    }
+    if($selectedItems.attr('data-templateType') === 'desktopProvisioning') {
+      var $modalDesktopProvisioning =$('#modalDesktopProvisioningLaunch');
+      var blueprintId = $selectedItems.attr('data-blueprintId');
+      var version = $selectedItems.find('.blueprintVersionDropDown').val();
+      $modalDesktopProvisioning.data('blueprintId',blueprintId);
+      $modalDesktopProvisioning.data('blueprintVersion',version);
+      $modalDesktopProvisioning.modal('show');
+      return;
+    }
+    if($selectedItems.attr('data-templateType') === 'Docker') {
+      loadLaunchParams();
+      var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
+      var blueprintId = $selectedItems.attr('data-blueprintId');
+      var dockerreponame = $selectedItems.attr('dockerreponame');
+      $launchDockerInstanceSelector.data('blueprintId',blueprintId);
             //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
 
 
@@ -1492,59 +1548,59 @@ function bindClick_LaunchBtn(){
             $newinstancetable.append($newinstancetbody);
             var $instancetable = $('#tableinstanceview').clone();
             $instancetable.find('tbody tr').each(function(){
-                var $newinstancetr = $("<tr><tr>");
-                $(this).find('td').each(function(k,v){
-                    $newinstancetr.append('<td>' + v +  $(this).html() + '</td>');
-                });
-                $newinstancetbody.append($newinstancetr);
+              var $newinstancetr = $("<tr><tr>");
+              $(this).find('td').each(function(k,v){
+                $newinstancetr.append('<td>' + v +  $(this).html() + '</td>');
+              });
+              $newinstancetbody.append($newinstancetr);
             });
 
             $instancetable.attr('id','dockerintsancestab');
             $('.dockerinstances').first().append($instancetable);
 
             $('#dockerintsancestab thead td').each(function(k,v){
-                if(k > 3 )
-                    $(this).detach();
+              if(k > 3 )
+                $(this).detach();
             });
             $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
             $('#dockerintsancestab tbody tr').each(function(k,v){
 
-                $(this).removeClass('rowcustomselected');
-                $(this).click(function(){
-                    $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
-                    $(this).addClass('rowcustomselected');
-                });
-                $(this).find('td').each(function(k1,v1){
-                    if(k1 > 3 )
-                        $(this).detach();
+              $(this).removeClass('rowcustomselected');
+              $(this).click(function(){
+                $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
+                $(this).addClass('rowcustomselected');
+              });
+              $(this).find('td').each(function(k1,v1){
+                if(k1 > 3 )
+                  $(this).detach();
                     //inserting a checkbox to select instance
                     if(k1 == 0){
-                        $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
+                      $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                     }
-                });
-                $(this).append('<td  class="hidden"><input type="checkbox"></td>');
+                  });
+              $(this).append('<td  class="hidden"><input type="checkbox"></td>');
 
             });
             $('.launchdockerinstance').click(function(){
-                $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
-                $('#myModalLabel').first().html('Launching Blueprint');
+              $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
+              $('#myModalLabel').first().html('Launching Blueprint');
 
             });
             $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
             $launchDockerInstanceSelector.modal('show');
             $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td  class="hidden">Add Docker Engine</td></tr>');
             $('#dockerintsancestab').dataTable({
-                "bPaginate": false
+              "bPaginate": false
             });
             return;
-        }
+          }
 
 
-        var $launchResultContainer = $('#launchResultContainer');
-        $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-        $launchResultContainer.find('.modal-title').html('Launching Blueprint');
-        $launchResultContainer.modal('show');
-        for (var i = 0; i < $selectedItems.length; i++) {
+          var $launchResultContainer = $('#launchResultContainer');
+          $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+          $launchResultContainer.find('.modal-title').html('Launching Blueprint');
+          $launchResultContainer.modal('show');
+          for (var i = 0; i < $selectedItems.length; i++) {
             var projectId = $($selectedItems.get(i)).attr('data-projectId');
             var envId = $($selectedItems.get(i)).attr('data-envId');
             var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
@@ -1552,80 +1608,80 @@ function bindClick_LaunchBtn(){
             // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
             $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
-                var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
+              var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
-                $launchResultContainer.find('.modal-body').empty();
-                $launchResultContainer.find('.modal-body').append($msg);
+              $launchResultContainer.find('.modal-body').empty();
+              $launchResultContainer.find('.modal-body').append($msg);
 
-                var instanceId = data.id;
-                var timeout;
+              var instanceId = data.id;
+              var timeout;
 
-                $launchResultContainer.on('hidden.bs.modal', function(e) {
-                    $launchResultContainer.off('hidden.bs.modal');
-                    if (timeout) {
-                        clearTimeout(timeout);
+              $launchResultContainer.on('hidden.bs.modal', function(e) {
+                $launchResultContainer.off('hidden.bs.modal');
+                if (timeout) {
+                  clearTimeout(timeout);
+                }
+              });
+              $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
+
+              $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
+
+              var lastTimestamp;
+
+              function pollLogs(timestamp, delay, clearData) {
+                var url = '../instances/' + instanceId + '/logs';
+                if (timestamp) {
+                  url = url + '?timestamp=' + timestamp;
+                }
+
+                timeout = setTimeout(function() {
+                  $.get(url, function(data) {
+                    var $modalBody = $divBootstrapLogArea;
+                    if (clearData) {
+                      $modalBody.empty();
                     }
-                });
-                $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
+                    var $table = $('<div></div>');
 
-                $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
-
-                var lastTimestamp;
-
-                function pollLogs(timestamp, delay, clearData) {
-                    var url = '../instances/' + instanceId + '/logs';
-                    if (timestamp) {
-                        url = url + '?timestamp=' + timestamp;
-                    }
-
-                    timeout = setTimeout(function() {
-                        $.get(url, function(data) {
-                            var $modalBody = $divBootstrapLogArea;
-                            if (clearData) {
-                                $modalBody.empty();
-                            }
-                            var $table = $('<div></div>');
-
-                            for (var i = 0; i < data.length; i++) {
-                                var $rowDiv = $('<div class="row"></div>');
-                                var timeString = new Date().setTime(data[i].timestamp);
+                    for (var i = 0; i < data.length; i++) {
+                      var $rowDiv = $('<div class="row"></div>');
+                      var timeString = new Date().setTime(data[i].timestamp);
                                 var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                                 //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                                 if (data[i].err) {
-                                    $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                                  $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
                                 } else {
-                                    $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
+                                  $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
                                 }
 
                                 $table.append($rowDiv);
-                            }
+                              }
 
 
-                            if (data.length) {
+                              if (data.length) {
                                 lastTimestamp = data[data.length - 1].timestamp;
                                 console.log(lastTimestamp);
                                 $modalBody.append($table);
                                 $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
-                            }
+                              }
 
 
-                            console.log('polling again');
-                            if ($launchResultContainer.data()['bs.modal'].isShown) {
+                              console.log('polling again');
+                              if ($launchResultContainer.data()['bs.modal'].isShown) {
                                 pollLogs(lastTimestamp, 1000, false);
-                            } else {
+                              } else {
                                 console.log('not polling again');
-                            }
-                        });
-                    }, delay);
-                }
-                pollLogs(lastTimestamp, 0, true);
+                              }
+                            });
+}, delay);
+}
+pollLogs(lastTimestamp, 0, true);
 
-                $.get('../instances/' + data.id, function(data) {
-                    $('#tabInstanceStatus').hide();
-                    addInstanceToDOM(data);
+$.get('../instances/' + data.id, function(data) {
+  $('#tabInstanceStatus').hide();
+  addInstanceToDOM(data);
 
-                });
+});
 
                 // //Check if docker has been added.
                 // $.get('/instances/dockercontainerdetails/' + data.id,function(data){
@@ -1640,236 +1696,236 @@ function bindClick_LaunchBtn(){
                 // });
 
 
-            }).error(function() {
-                $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
-            });
-        }
-    });
- 
+}).error(function() {
+  $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+});
+}
+});
+
 }
 
 //Updating blueprints
 function bindClick_bluePrintUpdate(){
-    $('.blueprintUpdateBtn').click(function(e) {
+  $('.blueprintUpdateBtn').click(function(e) {
 
-        var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-        var $selectedRunlist =  $blueprintEditResultContainer.find('.deploymentSelectedRunList');
-        var blueprintId = $selectedRunlist.attr('data-blueprintId');
-        if (blueprintId) {
-            var runlist = [];
-            var $inputs = $selectedRunlist.find('input');
-            $inputs.each(function(){
-                runlist.push($(this).val());
-            });
+    var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+    var $selectedRunlist =  $blueprintEditResultContainer.find('.deploymentSelectedRunList');
+    var blueprintId = $selectedRunlist.attr('data-blueprintId');
+    if (blueprintId) {
+      var runlist = [];
+      var $inputs = $selectedRunlist.find('input');
+      $inputs.each(function(){
+        runlist.push($(this).val());
+      });
 
-            var blueprintData = {
-                runlist: runlist,
-                expirationDays: 0,
-            };
+      var blueprintData = {
+        runlist: runlist,
+        expirationDays: 0,
+      };
 
-            $.post('../blueprints/' + blueprintId + '/update', {
-                blueprintUpdateData: blueprintData
-            }, function(data) {
-                $('.blueprintVersionDropDown[data-blueprintId="' + blueprintId + '"]').append($('<option value="' + data.version + '">' + data.version + '</option>').attr('selected', true));
-                console.log(data);
-                $blueprintEditResultContainer.modal('hide');
-            });
+      $.post('../blueprints/' + blueprintId + '/update', {
+        blueprintUpdateData: blueprintData
+      }, function(data) {
+        $('.blueprintVersionDropDown[data-blueprintId="' + blueprintId + '"]').append($('<option value="' + data.version + '">' + data.version + '</option>').attr('selected', true));
+        console.log(data);
+        $blueprintEditResultContainer.modal('hide');
+      });
 
-        }
-    });
+    }
+  });
 }
 
 function bindClick_updateInstanceRunList(){
     // Blueprint runtlist updation
     $('.btnUpdateInstanceRunlist').click(function(e) {
-        bootbox.confirm("Update runlist?", function(result) {
-            if (!result) {
-                return;
-            }
-            $chefRunModalContainer = $('#chefRunModalContainer');
-            var $selectedRunlist = $chefRunModalContainer.find('.deploymentSelectedRunList');
-            var instanceId = $selectedRunlist.attr('data-instanceId');
+      bootbox.confirm("Update runlist?", function(result) {
+        if (!result) {
+          return;
+        }
+        $chefRunModalContainer = $('#chefRunModalContainer');
+        var $selectedRunlist = $chefRunModalContainer.find('.deploymentSelectedRunList');
+        var instanceId = $selectedRunlist.attr('data-instanceId');
 
-            var runlist = [];
-            var $inputs = $selectedRunlist.find('input');
-            $inputs.each(function() {
-                runlist.push($(this).val());
-            });
+        var runlist = [];
+        var $inputs = $selectedRunlist.find('input');
+        $inputs.each(function() {
+          runlist.push($(this).val());
+        });
 
 
-            console.log(runlist);
-            $.post('../instances/' + instanceId + '/updateRunlist', {
-                runlist: runlist
-            }, function(data) {
-                $chefRunModalContainer.modal('hide');
-                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
+        console.log(runlist);
+        $.post('../instances/' + instanceId + '/updateRunlist', {
+          runlist: runlist
+        }, function(data) {
+          $chefRunModalContainer.modal('hide');
+          var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+          var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
                 //console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
                 $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
                 var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
                 for (var j = 0; j < runlist.length; j++) {
-                    var $divComponentItem;
+                  var $divComponentItem;
 
-                    $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
-                    $backRunlistContainer.append($divComponentItem);
+                  $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
+                  $backRunlistContainer.append($divComponentItem);
                 }
 
                 $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
                 $parent.find('.moreInfo').trigger('click');
                 console.log(data);
-            }).fail(function(jxObj){
+              }).fail(function(jxObj){
 
+              });
             });
-        });
 
 
-    });
+});
 }
 
 /*********************************************Orchestration.js*************************************/
 /*Binding Click events to Orchestration*/
 function initializingOrchestration(){
 
-    $('.Orchestration').click(function(e){
-        var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
-        var getbreadcrumbullength = getbreadcrumbul.length;
-        var DummyBreadCrumb;
-        if(getbreadcrumbullength > 0)
-        {
+  $('.Orchestration').click(function(e){
+    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
+    var getbreadcrumbullength = getbreadcrumbul.length;
+    var DummyBreadCrumb;
+    if(getbreadcrumbullength > 0)
+    {
             //alert(getbreadcrumbullength);
             for(var counter=0;counter<getbreadcrumbullength;counter++){
-                var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
                 //alert(getbreadcrumbulname);
                 if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
                 {
-                    DummyBreadCrumb += '>' + getbreadcrumbulname;
+                  DummyBreadCrumb += '>' + getbreadcrumbulname;
                 }
                 else
                 {
-                    DummyBreadCrumb = getbreadcrumbulname;
+                  DummyBreadCrumb = getbreadcrumbulname;
                 }
-            }
-            DummyBreadCrumb += '>' + 'Orchestration';
+              }
+              DummyBreadCrumb += '>' + 'Orchestration';
 
-            if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
-            {
+              if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+              {
                 localStorage.removeItem("breadcrumb");
                 splitBread = DummyBreadCrumb.split('>');
                 if(splitBread.length > 0)
                 {
-                    $('#ribbon').find('.breadcrumb').find('li').detach();
-                    for(var arraycount=0;arraycount< splitBread.length;arraycount++){
-                        var liNew = document.createElement('li');
-                        liNew.innerHTML = splitBread[arraycount];
-                        $('#ribbon').find('.breadcrumb').append(liNew);
-                    }
+                  $('#ribbon').find('.breadcrumb').find('li').detach();
+                  for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+                    var liNew = document.createElement('li');
+                    liNew.innerHTML = splitBread[arraycount];
+                    $('#ribbon').find('.breadcrumb').append(liNew);
+                  }
                 }
-            }
+              }
             //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
             //alert(DummyBreadCrumb);
-        }
+          }
 
-    });
+        });
 }
 
 /*Initialising the data table in orchestration*/
 function initializeTaskArea(data) {
-    if (!$.fn.dataTable.isDataTable('#tableOrchestration') ){
+  if (!$.fn.dataTable.isDataTable('#tableOrchestration') ){
         //var $taskListArea = $('.taskListArea').empty();
         $taskDatatable =  $('#tableOrchestration').DataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [
-                null,{
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                }, null,
-                {
-                    "bSortable": false
-                }
-            ]
+          "pagingType": "full_numbers",
+          "aoColumns": [
+          null,{
+            "bSortable": false
+          },
+          {
+            "bSortable": false
+          },
+          {
+            "bSortable": false
+          }, null,
+          {
+            "bSortable": false
+          }
+          ]
 
         });
-    }
+      }
 
 
-    for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i < data.length; i++) {
         var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
         var $tdName = $('<td></td>').append(data[i].name);
         $tr.append($tdName);
         var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
         $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
-            $.post('../instances/', {
-                instanceIds: $(this).data('nodeList')
-            }, function(instances) {
-                var $taskNodeListContainer = $('.taskNodeListContainer').empty();
-                for (var i = 0; i < instances.length; i++) {
-                    var $tr = $('<tr></tr>').css({
-                        'line-height': '2.1'
-                    });
-                    var $tdInstanceName = $('<td></td>').append(instances[i].chef.chefNodeName).css({
-                        'font-size': '12px'
-                    });
-                    var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
-                        'font-size': '12px'
-                    });
-                    var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
-                        'font-size': '12px'
-                    });
-                    $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
-                    $taskNodeListContainer.append($tr);
-                }
-                $('#assignedNode').modal('show');
-            });
-        });
-        $tr.append($tdNodeList);
-
-        var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-        $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
-            var $taskRunListContainer = $('.taskRunListContainer').empty();
-            var runlist = $(this).data('taskRunlist');
-            if (runlist && runlist.length) {
-                for (var i = 0; i < runlist.length; i++) {
-                    $li = $('<li></li>').append(runlist[i]).css({
-                        "font-size": "12px"
-                    });
-                    $taskRunListContainer.append($li);
-                }
+          $.post('../instances/', {
+            instanceIds: $(this).data('nodeList')
+          }, function(instances) {
+            var $taskNodeListContainer = $('.taskNodeListContainer').empty();
+            for (var i = 0; i < instances.length; i++) {
+              var $tr = $('<tr></tr>').css({
+                'line-height': '2.1'
+              });
+              var $tdInstanceName = $('<td></td>').append(instances[i].chef.chefNodeName).css({
+                'font-size': '12px'
+              });
+              var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
+                'font-size': '12px'
+              });
+              var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
+                'font-size': '12px'
+              });
+              $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
+              $taskNodeListContainer.append($tr);
             }
-            $('#assignedRunlist').modal('show');
+            $('#assignedNode').modal('show');
+          });
         });
-        $tr.append($tdRunlist);
+$tr.append($tdNodeList);
 
-        var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-        $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
-            var taskId = $(this).data('taskId');
-            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-            $.get('../tasks/' + taskId + '/run', function(data) {
-                var instances = data.instances;
-                var date = new Date().setTime(data.timestamp);
+var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
+$tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
+  var $taskRunListContainer = $('.taskRunListContainer').empty();
+  var runlist = $(this).data('taskRunlist');
+  if (runlist && runlist.length) {
+    for (var i = 0; i < runlist.length; i++) {
+      $li = $('<li></li>').append(runlist[i]).css({
+        "font-size": "12px"
+      });
+      $taskRunListContainer.append($li);
+    }
+  }
+  $('#assignedRunlist').modal('show');
+});
+$tr.append($tdRunlist);
+
+var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+$tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
+  var taskId = $(this).data('taskId');
+  var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+  var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+  $.get('../tasks/' + taskId + '/run', function(data) {
+    var instances = data.instances;
+    var date = new Date().setTime(data.timestamp);
                 var taskTimestamp = new Date(date).toUTCString(); //converts to human readable strings
                 $('tr[data-taskId="'+taskId+'"] .taskrunTimestamp').html(taskTimestamp);
                 for (var i = 0; i < instances.length; i++) {
-                    var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
-                    if (i === 4) {
-                        var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
+                  var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                  if (i === 4) {
+                    var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
-                        $taskExecuteTabsHeaderContainer.append($liMoreHeader);
+                    $taskExecuteTabsHeaderContainer.append($liMoreHeader);
 
-                        $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
+                    $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
 
-                    }
+                  }
 
-                    $taskExecuteTabsHeaderContainer.append($liHeader);
+                  $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                  var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
 
-                    $taskExecuteTabsContent.append($tabContent);
+                  $taskExecuteTabsContent.append($tabContent);
 
 
                 }
@@ -1878,150 +1934,150 @@ function initializeTaskArea(data) {
 
 
                 $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each( function(e) {
-                    $(this).attr('data-taskPolling', 'true');
-                    $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
-                    var tabId = $(this).attr('href')
-                    pollTaskLogs($(this), $(tabId), null, 0, false);
+                  $(this).attr('data-taskPolling', 'true');
+                  $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
+                  var tabId = $(this).attr('href')
+                  pollTaskLogs($(this), $(tabId), null, 0, false);
                     //e.relatedTarget // previous active tab
-                });
+                  });
 
                 $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
-                    $(e.target).attr('data-taskPolling', 'true');
+                  $(e.target).attr('data-taskPolling', 'true');
                     //e.relatedTarget // previous active tab
-                }).first().click();
+                  }).first().click();
 
                 $('#assignedExecute').modal('show');
 
 
 
-            });
+              });
 
 
 
-        });
-        $tr.append($tdExecute);
-        var timestamp = "-";
-        if (data[i].lastRunTimestamp) {
-            var date = new Date().setTime(data[i].lastRunTimestamp);
+});
+$tr.append($tdExecute);
+var timestamp = "-";
+if (data[i].lastRunTimestamp) {
+  var date = new Date().setTime(data[i].lastRunTimestamp);
             timestamp = new Date(date).toUTCString(); //converts to human readable strings
-        }
+          }
 
-        var $tdTime = $('<td></td>').append(timestamp).addClass('taskrunTimestamp');
-        $tr.append($tdTime);
+          var $tdTime = $('<td></td>').append(timestamp).addClass('taskrunTimestamp');
+          $tr.append($tdTime);
 
-        var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Remove" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
-        $tdOptions.find('.btnDeleteTask').click(function(e) {
+          var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Remove" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+          $tdOptions.find('.btnDeleteTask').click(function(e) {
             var taskId = $(this).parents('td').attr('data-taskId');
             var that = this;
             $.ajax({
-                url: '../tasks/' + taskId,
-                method: 'DELETE',
-                success: function(data) {
+              url: '../tasks/' + taskId,
+              method: 'DELETE',
+              success: function(data) {
                     //$(that).parents('tr').remove();
                     //var totalTask = $taskListArea.children('tr').length;
                     //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
                     $taskDatatable.row($(that).parents('tr')).remove().draw( false );
-                }
-            })
-        });
-        $tdOptions.find('.btnEditTask').click(function(e) {
+                  }
+                })
+          });
+          $tdOptions.find('.btnEditTask').click(function(e) {
             setBreadCrumbAndViewOrchestration();
 
             var taskId = $(this).parents('td').attr('data-taskId');
 
             window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg='+urlParams['bg']+'&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'] + '&taskId=' + taskId;
 
-        });
-        $tr.append($tdOptions);
+          });
+          $tr.append($tdOptions);
 
-        $taskDatatable.row.add($tr).draw();
+          $taskDatatable.row.add($tr).draw();
         //$taskListArea.append($tr);
 
         //aaaa
         if($("#sorttableheader").length){
             //alert(1);
             $("#sorttableheader").tablesorter();
-        }
+          }
         //     $("#sorttableheader").tablesorter();
         pageSetUp();
 
-    }
+      }
 
-    function pollTaskLogs($tabLink, $tab, timestamp, delay, clearData) {
+      function pollTaskLogs($tabLink, $tab, timestamp, delay, clearData) {
         var instanceId = $tabLink.attr('data-taskInstanceId');
         var timestamp = $tabLink.attr('data-taskPollLastTimestamp');
         var poll = $tabLink.attr('data-taskPolling');
 
         if (poll !== 'true') {
-            console.log('not polling');
-            return;
+          console.log('not polling');
+          return;
         }
 
 
         var url = '../instances/' + instanceId + '/logs';
         if (timestamp) {
-            url = url + '?timestamp=' + timestamp;
+          url = url + '?timestamp=' + timestamp;
         }
 
         timeout = setTimeout(function() {
-            $.get(url, function(data) {
-                var $modalBody = $tab.find('.taskLogArea')
-                if (clearData) {
-                    $modalBody.empty();
-                }
-                var $table = $('<div></div>');
+          $.get(url, function(data) {
+            var $modalBody = $tab.find('.taskLogArea')
+            if (clearData) {
+              $modalBody.empty();
+            }
+            var $table = $('<div></div>');
 
-                for (var i = 0; i < data.length; i++) {
-                    var $rowDiv = $('<div class="row"></div>');
-                    var timeString = new Date().setTime(data[i].timestamp);
+            for (var i = 0; i < data.length; i++) {
+              var $rowDiv = $('<div class="row"></div>');
+              var timeString = new Date().setTime(data[i].timestamp);
                     var date = new Date(timeString).toUTCString(); //converts to human readable strings
                     $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                     if (data[i].err) {
-                        $rowDiv.append($('<div class="col-lg-7 col-sm-7" style="color:red;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
+                      $rowDiv.append($('<div class="col-lg-7 col-sm-7" style="color:red;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
                     } else {
-                        $rowDiv.append($('<div class="col-lg-7 col-sm-7 " style="color:DarkBlue;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
+                      $rowDiv.append($('<div class="col-lg-7 col-sm-7 " style="color:DarkBlue;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
                     }
 
                     $table.append($rowDiv);
                     $table.append('<hr/>');
 
-                }
+                  }
 
 
-                if (data.length) {
+                  if (data.length) {
                     lastTimestamp = data[data.length - 1].timestamp;
                     console.log(lastTimestamp);
                     $modalBody.append($table);
                     $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
                     $tabLink.attr('data-taskPollLastTimestamp', data[data.length - 1].timestamp);
 
-                }
+                  }
 
 
-                console.log('polling again');
-                if ($tabLink.attr('data-taskPolling') === 'true' && $('#assignedExecute').data()['bs.modal'].isShown) {
+                  console.log('polling again');
+                  if ($tabLink.attr('data-taskPolling') === 'true' && $('#assignedExecute').data()['bs.modal'].isShown) {
 
                     pollTaskLogs($tabLink, $tab, $tabLink.attr('data-taskPollLastTimestamp'), 1000, false);
 
-                } else {
+                  } else {
                     console.log('not polling again');
-                }
-            });
-        }, delay);
-    }
+                  }
+                });
+}, delay);
+}
 
     //updating footer
     $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
     pageSetUp();
-};
+  };
 
 
-/************************************************Container.js************************************************/
+  /************************************************Container.js************************************************/
 
-/*Binding Click events to Containers*/
+  /*Binding Click events to Containers*/
 
-function initializeContainer(){
+  function initializeContainer(){
     $('.Containers').click(function(e){
         //debugger;
         var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
@@ -2031,42 +2087,42 @@ function initializeContainer(){
         {
             //alert(getbreadcrumbullength);
             for(var counter=0;counter<getbreadcrumbullength;counter++){
-                var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
                 //alert(getbreadcrumbulname);
                 if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
                 {
-                    DummyBreadCrumb += '>' + getbreadcrumbulname;
+                  DummyBreadCrumb += '>' + getbreadcrumbulname;
                 }
                 else
                 {
-                    DummyBreadCrumb = getbreadcrumbulname;
+                  DummyBreadCrumb = getbreadcrumbulname;
                 }
-            }
-            DummyBreadCrumb += '>' + 'Containers';
+              }
+              DummyBreadCrumb += '>' + 'Containers';
 
-            if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
-            {
+              if(DummyBreadCrumb != null && DummyBreadCrumb != 'undefined')
+              {
                 localStorage.removeItem("breadcrumb");
                 splitBread = DummyBreadCrumb.split('>');
                 if(splitBread.length > 0)
                 {
-                    $('#ribbon').find('.breadcrumb').find('li').detach();
-                    for(var arraycount=0;arraycount< splitBread.length;arraycount++){
-                        var liNew = document.createElement('li');
-                        liNew.innerHTML = splitBread[arraycount];
-                        $('#ribbon').find('.breadcrumb').append(liNew);
-                    }
+                  $('#ribbon').find('.breadcrumb').find('li').detach();
+                  for(var arraycount=0;arraycount< splitBread.length;arraycount++){
+                    var liNew = document.createElement('li');
+                    liNew.innerHTML = splitBread[arraycount];
+                    $('#ribbon').find('.breadcrumb').append(liNew);
+                  }
                 }
-            }
+              }
             //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
             //alert(DummyBreadCrumb);
-        }
+          }
 
-    });
+        });
 }
 /************************************ControlPanel.js*****************************************************/
 function initializeControlPanel(){
-    $('.actionControlPanel').click(function(e) {
+  $('.actionControlPanel').click(function(e) {
         //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
         var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
         var getbreadcrumbullength = getbreadcrumbul.length;
@@ -2079,17 +2135,17 @@ function initializeControlPanel(){
                 var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
                 if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
                 {
-                    DummyBreadCrumb += '>' + getbreadcrumbulname;
+                  DummyBreadCrumb += '>' + getbreadcrumbulname;
                 }
                 else
                 {
-                    DummyBreadCrumb = getbreadcrumbulname;
+                  DummyBreadCrumb = getbreadcrumbulname;
                 }
+              }
+              localStorage.setItem("breadcrumb", DummyBreadCrumb);
             }
-            localStorage.setItem("breadcrumb", DummyBreadCrumb);
-        }
 
-        var controlId = $(".visibleClass").attr("id");
+            var controlId = $(".visibleClass").attr("id");
         //alert(controlId);
         var urlText;
         localStorage.setItem("dataEx", location.href);
@@ -2097,91 +2153,91 @@ function initializeControlPanel(){
 
         if ($('#divinstancescardview').is(':visible')) {
 
-            var $selectedCard = $('.role-Selectedcard');
+          var $selectedCard = $('.role-Selectedcard');
             //console.log($selectedCard.length);
             if ($selectedCard.length) {
-                var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
-                if (instanceId) {
-                    urlText = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId + '&visibleControlid=' + controlId ;
-                    window.location.href = urlText;
+              var instanceId = $selectedCard.find('.domain-roles-caption').attr('data-instanceId');
+              if (instanceId) {
+                urlText = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId + '&visibleControlid=' + controlId ;
+                window.location.href = urlText;
                     // window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
+                  }
                 }
-            }
-        } else {
-            var $selectedCard = $('.rowcustomselected');
-            if ($selectedCard.length) {
-                var instanceId = $selectedCard.attr('data-instanceId');
-                if (instanceId) {
+              } else {
+                var $selectedCard = $('.rowcustomselected');
+                if ($selectedCard.length) {
+                  var instanceId = $selectedCard.attr('data-instanceId');
+                  if (instanceId) {
                     urlText = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId + '&visibleControlid=' + controlId ;
                     //localStorage.setItem("dataEx", urlText);
                     window.location.href = urlText;
                     // window.location.href = 'index.html#ajax/Controlpanel.html?org='+urlParams.org+'&id=' + instanceId;
+                  }
                 }
-            }
-        }
-    });
+              }
+            });
 }
 
 
 
 /***************************************Dev.js***************************************/
-    function registerEventsForPemFile(){
-     $(".authPassword").show();
+function registerEventsForPemFile(){
+ $(".authPassword").show();
+ $(".authPemFile").hide();
+ $('.authenticationType').change(function(e) {
+  if (this.value == "password") {
+    $(".authPassword").show();
     $(".authPemFile").hide();
-    $('.authenticationType').change(function(e) {
-        if (this.value == "password") {
-            $(".authPassword").show();
-            $(".authPemFile").hide();
-        } else {
-            $(".authPassword").hide();
-            $(".authPemFile").show();
-        }
-    });     
-    }
+  } else {
+    $(".authPassword").hide();
+    $(".authPemFile").show();
+  }
+});     
+}
 
-  
+
 function registerEventsForSearchInstances(){
-       $('.searchInstances').keyup(function(e){
-        var searchText = $(this).val();
+ $('.searchInstances').keyup(function(e){
+  var searchText = $(this).val();
         //alert(searchText);
         $allListElements = $('#divinstancescardview ul li .domain-roles-heading .cardHeadingTextoverflow');
         //alert($allListElements.length);
         $matchingListElements = $allListElements.filter(function(i,el){
             //alert(el);
             return $(el).text().indexOf(searchText) !== -1;
-        });
+          });
         // $allListElements.parents().eq(6).hide();
         // $matchingListElements.parents().eq(6).show();
         $allListElements.parents(".domain-role-thumbnail").hide();
         $matchingListElements.parents(".domain-role-thumbnail").show();
         // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
         // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
-    });
+      });
 }
- 
 
 
- var wzlink = window.location.href.split('#')[1];
+
+var wzlink = window.location.href.split('#')[1];
     //alert(wzlink);
     $('li[navigation*="Workspace"]').find('a').attr('href','#' + wzlink);
     //Set localstorage to hold the last wz href
     //update lastworkzone only when you have ? in url
     if(window.location.href.indexOf('?') > 0)
-        localStorage.setItem("lastworkzoneurl", window.location.href);
+      localStorage.setItem("lastworkzoneurl", window.location.href);
 
     var urlParams = {};
     (window.onpopstate = function() {
-        var url = window.location.href;
-        var indexOfQues = url.lastIndexOf("?");
-        if (indexOfQues != -1) {
-            var sub = url.substring(indexOfQues + 1);
-            console.log(sub);
-            var params = sub.split('&')
-            for (var i = 0; i < params.length; i++) {
-                var paramParts = params[i].split('=');
-                urlParams[paramParts[0]] = paramParts[1];
-            }
+      var url = window.location.href;
+      var indexOfQues = url.lastIndexOf("?");
+      if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+          var paramParts = params[i].split('=');
+          urlParams[paramParts[0]] = paramParts[1];
         }
+      }
 
     })();
     console.log(urlParams);
@@ -2193,7 +2249,7 @@ function registerEventsForSearchInstances(){
    // $(document).ready(function() {
         //$('.modal').modalCollapse();
         $(document).on('shown.bs.modal', function(e) {
-            $('[autofocus]', e.target).focus();
+          $('[autofocus]', e.target).focus();
         });
 
         $('#importinstanceOS').select2();
@@ -2202,22 +2258,22 @@ function registerEventsForSearchInstances(){
 
         if(localStorage.getItem("SelectedClass") == "Orchestration")
         {
-            localStorage.removeItem("SelectedClass");
-            $('#myTab3').find('.Instances').removeClass('active');
-            $('#myTab3').find('.Orchestration').addClass('active');
-            $('#myTabContent3').find('#l1').removeClass('active');
-            $('#myTabContent3').find('#l3').addClass('active');
-            $('#myTab3').click();
+          localStorage.removeItem("SelectedClass");
+          $('#myTab3').find('.Instances').removeClass('active');
+          $('#myTab3').find('.Orchestration').addClass('active');
+          $('#myTabContent3').find('#l1').removeClass('active');
+          $('#myTabContent3').find('#l3').addClass('active');
+          $('#myTab3').click();
         }
         $('#Removelinkedcontainersonexitfield').select2();
         $('#cAdvisorPageFrame').on('load', function () {
-            $('#cadvisorloadingicon').hide();
+          $('#cadvisorloadingicon').hide();
         });
     //});
 
 
-    function setBreadCrumbAndViewOrchestration() {
-        localStorage.setItem("SelectedClass","Orchestration");
+function setBreadCrumbAndViewOrchestration() {
+  localStorage.setItem("SelectedClass","Orchestration");
 
         //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
         var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li');
@@ -2227,51 +2283,51 @@ function registerEventsForSearchInstances(){
         {
             //alert(getbreadcrumbullength);
             for(var counter=0;counter<getbreadcrumbullength;counter++){
-                var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
                 //alert(getbreadcrumbulname);
                 if(DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb !="undefined")
                 {
-                    DummyBreadCrumb += '>' + getbreadcrumbulname;
+                  DummyBreadCrumb += '>' + getbreadcrumbulname;
                 }
                 else
                 {
-                    DummyBreadCrumb = getbreadcrumbulname;
+                  DummyBreadCrumb = getbreadcrumbulname;
                 }
+              }
+              localStorage.setItem("breadcrumb", DummyBreadCrumb);
             }
-            localStorage.setItem("breadcrumb", DummyBreadCrumb);
-        }
 
-        var getmyTab3selectedli = $('#myTab3').find('.pull-left.active');
-        var getmyTab3selectedlilength = getmyTab3selectedli.length;
+            var getmyTab3selectedli = $('#myTab3').find('.pull-left.active');
+            var getmyTab3selectedlilength = getmyTab3selectedli.length;
         //alert(getmyTab3selectedlilength);
         if(getmyTab3selectedlilength > 0){
-            var myTabContent3 = $('#myTabContent3').find('tab-pane.active').innerHTML;
+          var myTabContent3 = $('#myTabContent3').find('tab-pane.active').innerHTML;
             //alert(myTabContent3);
+          }
         }
-    }
 
     //event for orchatration tab show 
  //   $(function() {
 
-        var $createTaskBtn = $('.createTaskLink');
+  var $createTaskBtn = $('.createTaskLink');
         // var $instanceList = $('.instancesList');
         $('a[data-toggle="tab"][href="#l3"]').on('show.bs.tab', function() {
-            var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
+          var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
 
-            if (cardCount === 0) {
-                $createTaskBtn[0].disabled = true;
-            } else {
-                $createTaskBtn[0].disabled = false;
-            }
+          if (cardCount === 0) {
+            $createTaskBtn[0].disabled = true;
+          } else {
+            $createTaskBtn[0].disabled = false;
+          }
         });
 
    // });
 
-    $('.createTaskLink').click(function(e){
-        setBreadCrumbAndViewOrchestration();
+$('.createTaskLink').click(function(e){
+  setBreadCrumbAndViewOrchestration();
 
-        window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&bg='+urlParams['bg']+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
-    });
+  window.location.href = 'index.html#ajax/assignTask.html?org='+urlParams.org+'&bg='+urlParams['bg']+'&projid='+urlParams['projid']+'&envid='+urlParams['envid'];
+});
 
     //for Table view
     $('#defaultViewButton').click(); //setting the detault view
@@ -2281,70 +2337,70 @@ function registerEventsForSearchInstances(){
 
 
     $('.dockerinstancestart').click(function(e){
-        $('.instanceselectedfordocker').each(function(){
-            if($(this).is(':checked')){
+      $('.instanceselectedfordocker').each(function(){
+        if($(this).is(':checked')){
 
-                var instid = $(this).closest('tr').attr('data-instanceid');
-                if(instid)
-                    var $that = $(this);
-                var $td =$that.closest('td');
-                var tdtext = $td.text();
-                $td.find('.dockerspinner').detach();
-                $td.find('.dockermessage').detach();
-                $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
-                $td.attr('title','Pulling in Images');
-                var imagename = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
-                var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
+          var instid = $(this).closest('tr').attr('data-instanceid');
+          if(instid)
+            var $that = $(this);
+          var $td =$that.closest('td');
+          var tdtext = $td.text();
+          $td.find('.dockerspinner').detach();
+          $td.find('.dockermessage').detach();
+          $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
+          $td.attr('title','Pulling in Images');
+          var imagename = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
+          var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
 
-                var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
+          var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
 
                 // var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
                 var dockerlaunchparameters = generateDockerLaunchParams();
                 if(!dockerlaunchparameters)
-                    dockerlaunchparameters = 'null';
+                  dockerlaunchparameters = 'null';
                 var lp = 'null'; //launch parameter
                 var sp = 'null'; //start parameter
                 if(dockerlaunchparameters)
                 {
-                    if(dockerlaunchparameters[0])
-                        lp = dockerlaunchparameters[0];
-                    if(dockerlaunchparameters[1])
-                        sp = dockerlaunchparameters[1];
+                  if(dockerlaunchparameters[0])
+                    lp = dockerlaunchparameters[0];
+                  if(dockerlaunchparameters[1])
+                    sp = dockerlaunchparameters[1];
                 }
                 // alert(lp + ' ' + sp);
                 // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
                 $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp),function(data){
-                    if(data == "OK"){
-                        var $statmessage = $td.find('.dockerspinner').parent();
-                        $td.find('.dockerspinner').detach();
-                        $td.find('.dockermessage').detach();
-                        $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                  if(data == "OK"){
+                    var $statmessage = $td.find('.dockerspinner').parent();
+                    $td.find('.dockerspinner').detach();
+                    $td.find('.dockermessage').detach();
+                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
                         //Updating instance card to show the docker icon.
                         $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
                         //find the instance card - to do instance table view update
                         var $instancecard = $('div[data-instanceid="' + instid + '"]');
                         if($instancecard.find('.dockerenabledinstacne').length <= 0){
-                            $instancecard.find('.componentlistContainer').first().append($dockericon);
+                          $instancecard.find('.componentlistContainer').first().append($dockericon);
                         }
                         //debugger;
                         loadContainersTable(); //Clearing and loading the containers again.                
-                    }
-                    else
-                    {
+                      }
+                      else
+                      {
                         var $statmessage = $('.dockerspinner').parent();
                         $('.dockerspinner').detach();
                         $td.find('.dockermessage').detach();
                         $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                    }
-                });
-            }
-        });
-    });
+                      }
+                    });
+}
+});
+});
 
 
 //$(function() {
 
-          function removeSelectedBlueprint(data) {
+      /*    function removeSelectedBlueprint(data) {
 
             var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
             $AppFactpanelBody.empty();
@@ -2416,11 +2472,7 @@ function registerEventsForSearchInstances(){
                     '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
                     '<div class="panel-body ' + getDesignTypeName + '"></div>' +
                     '</div>';
-                    // $($containerTemp).find('#collapse' + i).append($currRolePanel);
-                    /*if($('#accordion-2').find('#collapse' + i).length > 0){
-                     alert('in');
-                     $('#accordion-2').find('#collapse' + i).first().append($containerTemp);
-                     }*/
+                  
                     $('#accordion-2').append($containerTemp);
 
                 }
@@ -2561,78 +2613,78 @@ function registerEventsForSearchInstances(){
                 $(e.target).find('.productdiv1').first().click();
             });
             //Expanding the fist Accordion.
-        };
+          };*/
 
 
-        $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+          $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
             console.log('success---3---4');
-           
+            
             //Syncing up the tree view based on url
             initializeBlueprintArea(data.blueprints);
             initializeTaskArea(data.tasks);
             initializeInstanceArea(data.instances);
 
-        });
+          });
 
-      
+          
     //});
-    function generateDockerLaunchParams(){
-        if($('#Containernamefield').val() == ''){
-            $('.dockerparamrequired').removeClass('hidden');
-            return('');
-        }
+function generateDockerLaunchParams(){
+  if($('#Containernamefield').val() == ''){
+    $('.dockerparamrequired').removeClass('hidden');
+    return('');
+  }
 
-        var launchparams = [];
-        var preparams = '';
-        var startparams = '';
-        $('[dockerparamkey]').each(function(){
-            if($(this).val() != ''){
-                var itms = $(this).val().split(',');
-                for(itm in itms)
-                {
+  var launchparams = [];
+  var preparams = '';
+  var startparams = '';
+  $('[dockerparamkey]').each(function(){
+    if($(this).val() != ''){
+      var itms = $(this).val().split(',');
+      for(itm in itms)
+      {
                     if($(this).attr('dockerparamkey') != '-c') //checking for start parameter
-                        preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+                      preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
                     else
-                        startparams += ' ' + itms[itm];
+                      startparams += ' ' + itms[itm];
+                  }
+                  launchparams[0] = preparams;
+                  launchparams[1] = startparams;
                 }
-                launchparams[0] = preparams;
-                launchparams[1] = startparams;
-            }
-        });
-        return(launchparams);
-    }
+              });
+  return(launchparams);
+}
 
-    function loadLaunchParams(){
-        var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
-        if(lparam != ''){
+function loadLaunchParams(){
+  var lparam =  $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+  if(lparam != ''){
             $('[dockerparamkey]').val(''); //clearing the popup input boxes
             //split by -c to get startup and other parameters
             var preparams = lparam.split('-c');
             var cparams = ''; //this is the startup parameters
             if(preparams.length > 1){
-                lparam = preparams[0];
-                cparams = preparams[1];
+              lparam = preparams[0];
+              cparams = preparams[1];
             }
             console.log(lparam + ' ' + cparams);
             var params = lparam.split(' -');
             for(para in params){
-                var subparam = params[para].split(' ');
-                if(subparam.length > 0){
-                    $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
-                    if($inp.val() != '')
-                        $inp.val($inp.val() + ',' + subparam[1]);
-                    else
-                        $inp.val(subparam[1]);
-                }
+              var subparam = params[para].split(' ');
+              if(subparam.length > 0){
+                $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+                if($inp.val() != '')
+                  $inp.val($inp.val() + ',' + subparam[1]);
+                else
+                  $inp.val(subparam[1]);
+              }
                 //alert(params[para]);
-            }
+              }
             //Updating the startup parameter
             $('[dockerparamkey="-c"]').first().val(cparams);
-        }
-        else
+          }
+          else
             $('[dockerparamkey]').val('');
-        $('#myModalLabelDockerContainer').modal('show');
-    }
+          $('#myModalLabelDockerContainer').modal('show');
+        }
 
 
  //   $(document).ready(function(){
@@ -2642,24 +2694,24 @@ function registerEventsForSearchInstances(){
         $('.dockerrepotagselect').parent().prepend('Tags&nbsp;');
 
         $('#rootwizard').bootstrapWizard({
-            'tabClass': 'nav nav-pills',
-            'onNext': function(tab, navigation, index) {
+          'tabClass': 'nav nav-pills',
+          'onNext': function(tab, navigation, index) {
 
-                $('.dockerinstancestart').first().removeClass('hidden');
-                var $valid = $("#commentForm").valid();
-                if(!$valid) {
-                    $validator.focusInvalid();
-                    return false;
-                }
-            },
-            'onPrevious' : function(tab,navigation,index){
-                $('.dockerinstancestart').first().addClass('hidden');
+            $('.dockerinstancestart').first().removeClass('hidden');
+            var $valid = $("#commentForm").valid();
+            if(!$valid) {
+              $validator.focusInvalid();
+              return false;
             }
+          },
+          'onPrevious' : function(tab,navigation,index){
+            $('.dockerinstancestart').first().addClass('hidden');
+          }
 
         });
    // });
 
-      function removeSelectedBlueprint() {
+   /*   function removeSelectedBlueprint() {
         var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
         if (blueprintId) {
             //found now delete
@@ -2685,8 +2737,8 @@ function registerEventsForSearchInstances(){
         } else {
             alert('Please select a blueprint to remove.');
         }
-    }
-    function loadContainersTable(){
+      }*/
+      function loadContainersTable(){
         //alert('called');
         //debugger;
         console.log('called');
@@ -2696,24 +2748,24 @@ function registerEventsForSearchInstances(){
         $dockercontainertable = $('#dockercontainertable tbody');
 
         $('.container').each(function(){
-            var $docker = $(this).find('.dockerenabledinstacne');
-            if($docker.html() != undefined){
+          var $docker = $(this).find('.dockerenabledinstacne');
+          if($docker.html() != undefined){
                 //Get the instance ID
                 $('li.Containers').removeClass('hidden');
                 var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
                 $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
-                    if(!data){
-                        $('.loadingimagefordockertable').addClass('hidden');
-                        return;
-                    }
-                    if(data){
-                        $('.loadingimagefordockertable').addClass('hidden');
-                    }
-                    var dockerContainerData = JSON.parse(data);
+                  if(!data){
+                    $('.loadingimagefordockertable').addClass('hidden');
+                    return;
+                  }
+                  if(data){
+                    $('.loadingimagefordockertable').addClass('hidden');
+                  }
+                  var dockerContainerData = JSON.parse(data);
                     //   alert(JSON.stringify(dockerContainerData));
 
                     $.each(dockerContainerData,function(i,item){
-                        var $docctr = createdockercontainerrow(item,instanceid);
+                      var $docctr = createdockercontainerrow(item,instanceid);
                         // alert($docctr.html());
 
                         $dockercontainertable.append($docctr);
@@ -2722,10 +2774,10 @@ function registerEventsForSearchInstances(){
                             // alert('in' + i);
                             $('.dockeractionbutton').unbind("click");
                             $('.cadvisorenablebase').each(function(j,itm){
-                                if($(this).attr('cadvisorip')){
-                                    var cadip = $(this).attr('cadvisorip');
-                                    $('a[cadvisorip="' + cadip +'"]').removeClass('hidden');
-                                }
+                              if($(this).attr('cadvisorip')){
+                                var cadip = $(this).attr('cadvisorip');
+                                $('a[cadvisorip="' + cadip +'"]').removeClass('hidden');
+                              }
 
                             });
 
@@ -2741,12 +2793,12 @@ function registerEventsForSearchInstances(){
                                 var $thistr = $(this);
                                 // alert('Url : ' + '/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action);
                                 var performAction = function(){
-                                    $thistr.closest('tr').fadeTo('slow',0.5);
-                                    var $progressicon = $thistr.closest('tr').find('.dockercontainerprogress').first();
+                                  $thistr.closest('tr').fadeTo('slow',0.5);
+                                  var $progressicon = $thistr.closest('tr').find('.dockercontainerprogress').first();
 
-                                    $progressicon.removeClass('hidden');
-                                    if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5' || action == '6'){
-                                        $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
+                                  $progressicon.removeClass('hidden');
+                                  if(action == '1' || action == '2' || action == '3' || action == '4' || action == '5' || action == '6'){
+                                    $.get('/instances/dockercontainerdetails/' + instanceid + '/' + containerid + '/' + action,function(data){
                                             // alert(data);
                                             if(data == 'OK'){
                                                 //$(this).parents('.flip-toggle').toggleClass('flip1');
@@ -2755,10 +2807,10 @@ function registerEventsForSearchInstances(){
                                                 //alert($thistr.closest('.dockercontainertabletemplatetr').html());
                                                 if(action == '6'){
                                                     $contextRow.detach(); //removing the row on terminate.
-                                                }
-                                                else{
+                                                  }
+                                                  else{
                                                     $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
-                                                        var dockerContainerData = JSON.parse(data);
+                                                      var dockerContainerData = JSON.parse(data);
                                                         //alert(JSON.stringify(dockerContainerData));
                                                         //Updating More Info dialog
                                                         // $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
@@ -2777,79 +2829,79 @@ function registerEventsForSearchInstances(){
                                                                 $updatedContainerRow.find('td').each(function(i,k){
                                                                     //alert(i + ':' + k);
                                                                     if(i > 0 && i < 7){
-                                                                        $contextRow.find('td:eq(' + i + ')').html('').append($(k).html());
+                                                                      $contextRow.find('td:eq(' + i + ')').html('').append($(k).html());
                                                                     }
 
-                                                                });
+                                                                  });
                                                                 $thistr.closest('.container1').find('.flipper').toggleClass('hidden');
                                                                 //Managing the pause and unpause buttons
                                                                 if(item.Status.indexOf('Exited') >= 0){
                                                                     //  alert('in');
                                                                     $thistr.closest('.container1').find('.pause').addClass('hidden');
                                                                     $thistr.closest('.container1').find('.unpause').addClass('hidden');
+                                                                  }
+
                                                                 }
-
-                                                            }
-                                                        });
+                                                              });
 
 
 
-                                                        $thistr.closest('tr').fadeTo('slow',1);
-                                                        $progressicon.addClass('hidden');
-                                                    });
-                                                }
+$thistr.closest('tr').fadeTo('slow',1);
+$progressicon.addClass('hidden');
+});
+}
 
-                                            }
-                                            else
-                                                $progressicon.addClass('hidden');
+}
+else
+  $progressicon.addClass('hidden');
 
-                                        });
-                                    }
-                                    return(false);
-                                }
-
-
-
-                                if(action == '6'){
-                                    bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-                                        if (!result) {
-                                            return;
-                                        }
-                                        performAction();
-                                    });
-                                }
-                                else if(action == '2'){
-                                    bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-                                        if (!result) {
-                                            return;
-                                        }
-                                        performAction();
-                                    });
-                                }
-                                else{
-                                    performAction();
-                                }
+});
+}
+return(false);
+}
 
 
-                            });
-                            return;
-                        }
-                    });
-                });
-            }
+
+if(action == '6'){
+  bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+    if (!result) {
+      return;
+    }
+    performAction();
+  });
+}
+else if(action == '2'){
+  bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+    if (!result) {
+      return;
+    }
+    performAction();
+  });
+}
+else{
+  performAction();
+}
+
+
+});
+return;
+}
+});
+});
+}
             else{ //no docker found
-                $('.loadingimagefordockertable').addClass('hidden');
-                $('li.Containers').addClass('hidden');
+              $('.loadingimagefordockertable').addClass('hidden');
+              $('li.Containers').addClass('hidden');
             }
-        });
+          });
         //dockercontaineraction
 
 
-    }
+      }
 
 
 
-    function createdockercontainerrow(dockerContainerItem, instanceid){
+      function createdockercontainerrow(dockerContainerItem, instanceid){
         // <td class="dockercontainerstatus"></td>
         // <td  class="dockercontainerstartedon"></td>
         // <td  class="dockercontainername"></td>
@@ -2877,20 +2929,20 @@ function registerEventsForSearchInstances(){
 
         //Once CORS is enabled in cAdvisor uncomment below function to load in a frame
         $cadvisor.click(function(e){
-            $('#cadvisorpopup').modal('show');
+          $('#cadvisorpopup').modal('show');
 
-            if(typeof $('#cAdvisorPageFrame').attr('src') != 'undefined'){
-                $('#cadvisorloadingicon').hide();
-            }
-            else{
-                $('#cadvisorloadingicon').show();
-            }
-            $('#cAdvisorPageFrame').attr('src', "");
-            $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
+          if(typeof $('#cAdvisorPageFrame').attr('src') != 'undefined'){
+            $('#cadvisorloadingicon').hide();
+          }
+          else{
+            $('#cadvisorloadingicon').show();
+          }
+          $('#cAdvisorPageFrame').attr('src', "");
+          $('#cAdvisorPageFrame').attr('src','http://' + instanceip + ':8080');
             //$('#cAdvisorPageFrame').load('http://' + instanceip + ':8080/docker/');
             e.preventDefault();
             return(false);
-        });
+          });
 
 
         $docctr.attr('instanceid',instanceid);
@@ -2900,16 +2952,16 @@ function registerEventsForSearchInstances(){
         $docctr.find('.dockercontainerimagename').html(dockerContainerItem.Image);
         //Updating the more info popup event
         $docctr.find('.modelcontainermoreinfo').click(function(){
-            $.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id,function(data){
-                var dockerContainerData = JSON.parse(data);
+          $.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id,function(data){
+            var dockerContainerData = JSON.parse(data);
                 //alert(JSON.stringify(dockerContainerData));
                 $('#modalContainermoreInfo').find('td[containerdata]').each(function(){
-                    console.log("dockerContainerData." +  $(this).attr('containerdata'));
-                    if($(this).attr('containerdata') != '')
-                        $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
+                  console.log("dockerContainerData." +  $(this).attr('containerdata'));
+                  if($(this).attr('containerdata') != '')
+                    $(this).html(eval("dockerContainerData." +  $(this).attr('containerdata')));
                 });
 
-            });
+              });
         });
         //Analysing the status cell 
         if(dockerContainerItem.Status.indexOf('Up') >= 0)
@@ -2917,8 +2969,8 @@ function registerEventsForSearchInstances(){
             //Show Stop
             //If the container is of type cadvisor show the link
             if(dockerContainerItem.Image.indexOf('cadvisor') >= 0){
-                $cadvisor.removeClass('hidden');
-                $cadvisor.addClass('cadvisorenablebase');
+              $cadvisor.removeClass('hidden');
+              $cadvisor.addClass('cadvisorenablebase');
             }
 
             $docctr.find('.stop').removeClass('hidden');
@@ -2926,135 +2978,135 @@ function registerEventsForSearchInstances(){
 
 
             if(dockerContainerItem.Status.indexOf('Paused') >= 0){
-                $docctr.find('.pause').addClass('hidden');
-                $docctr.find('.unpause').removeClass('hidden');
+              $docctr.find('.pause').addClass('hidden');
+              $docctr.find('.unpause').removeClass('hidden');
             }else
             {
-                $docctr.find('.unpause').addClass('hidden');
-                $docctr.find('.pause').removeClass('hidden');
+              $docctr.find('.unpause').addClass('hidden');
+              $docctr.find('.pause').removeClass('hidden');
             }
 
-        }
-        else if(dockerContainerItem.Status.indexOf('Exited') >= 0){
+          }
+          else if(dockerContainerItem.Status.indexOf('Exited') >= 0){
             $docctr.find('.stop').addClass('hidden');
             $docctr.find('.start').removeClass('hidden');
             $docctr.find('.pause').addClass('hidden');
             $docctr.find('.unpause').addClass('hidden');
-        }
-        else if(dockerContainerItem.Status.indexOf('Paused') >= 0){
+          }
+          else if(dockerContainerItem.Status.indexOf('Paused') >= 0){
             $docctr.find('.pause').addClass('hidden');
             $docctr.find('.unpause').removeClass('hidden');
-        }
-        else
-        {
+          }
+          else
+          {
             $docctr.find('.stop').addClass('hidden');
             $docctr.find('.start').removeClass('hidden');
+          }
+
+          return($docctr);
+
         }
-
-        return($docctr);
-
-    }
 
     //End Containers table build
     var tableinstanceview = null;
 
-  $('.desktopProvisioningLaunchBtn').click(function(e) {
-        var $modalDesktopProvisioning = $('#modalDesktopProvisioningLaunch');
-        var blueprintId = $modalDesktopProvisioning.data('blueprintId');
-        var version = $modalDesktopProvisioning.data('blueprintVersion');;
-        var reqBody = {};
-        reqBody.version = version;
-        reqBody.username = $('#instanceUsernameInput').val();
-        reqBody.password = $('#instancePasswordInput').val();
-        reqBody.instanceIP = $('#instanceIPInput').val();
+    $('.desktopProvisioningLaunchBtn').click(function(e) {
+      var $modalDesktopProvisioning = $('#modalDesktopProvisioningLaunch');
+      var blueprintId = $modalDesktopProvisioning.data('blueprintId');
+      var version = $modalDesktopProvisioning.data('blueprintVersion');;
+      var reqBody = {};
+      reqBody.version = version;
+      reqBody.username = $('#instanceUsernameInput').val();
+      reqBody.password = $('#instancePasswordInput').val();
+      reqBody.instanceIP = $('#instanceIPInput').val();
 
-        $modalDesktopProvisioning.modal('hide');
-        var $launchResultContainer = $('#launchResultContainer');
-        $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-        $launchResultContainer.find('.modal-title').html('Provisioning Instance');
-        $launchResultContainer.modal('show');
+      $modalDesktopProvisioning.modal('hide');
+      var $launchResultContainer = $('#launchResultContainer');
+      $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+      $launchResultContainer.find('.modal-title').html('Provisioning Instance');
+      $launchResultContainer.modal('show');
 
 
-        $.post('/blueprints/' + blueprintId + '/provision', reqBody, function(data) {
-            var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
+      $.post('/blueprints/' + blueprintId + '/provision', reqBody, function(data) {
+        var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
-            $launchResultContainer.find('.modal-body').empty();
-            $launchResultContainer.find('.modal-body').append($msg);
+        $launchResultContainer.find('.modal-body').empty();
+        $launchResultContainer.find('.modal-body').append($msg);
 
-            var instanceId = data.id;
-            var timeout;
+        var instanceId = data.id;
+        var timeout;
 
-            $launchResultContainer.on('hidden.bs.modal', function(e) {
-                $launchResultContainer.off('hidden.bs.modal');
-                if (timeout) {
-                    clearTimeout(timeout);
-                }
-            });
-            $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
+        $launchResultContainer.on('hidden.bs.modal', function(e) {
+          $launchResultContainer.off('hidden.bs.modal');
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+        });
+        $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
 
-            $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
+        $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
 
-            var lastTimestamp;
+        var lastTimestamp;
 
-            function pollLogs(timestamp, delay, clearData) {
-                var url = '/instances/' + instanceId + '/logs';
-                if (timestamp) {
-                    url = url + '?timestamp=' + timestamp;
-                }
+        function pollLogs(timestamp, delay, clearData) {
+          var url = '/instances/' + instanceId + '/logs';
+          if (timestamp) {
+            url = url + '?timestamp=' + timestamp;
+          }
 
-                timeout = setTimeout(function() {
-                    $.get(url, function(data) {
-                        var $modalBody = $divBootstrapLogArea;
-                        if (clearData) {
-                            $modalBody.empty();
-                        }
-                        var $table = $('<div></div>');
+          timeout = setTimeout(function() {
+            $.get(url, function(data) {
+              var $modalBody = $divBootstrapLogArea;
+              if (clearData) {
+                $modalBody.empty();
+              }
+              var $table = $('<div></div>');
 
-                        for (var i = 0; i < data.length; i++) {
-                            var $rowDiv = $('<div class="row"></div>');
-                            var timeString = new Date().setTime(data[i].timestamp);
+              for (var i = 0; i < data.length; i++) {
+                var $rowDiv = $('<div class="row"></div>');
+                var timeString = new Date().setTime(data[i].timestamp);
                             var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                             //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                             if (data[i].err) {
-                                $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                              $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
                             } else {
-                                $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
+                              $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
                             }
 
                             $table.append($rowDiv);
-                        }
+                          }
 
 
-                        if (data.length) {
+                          if (data.length) {
                             lastTimestamp = data[data.length - 1].timestamp;
                             console.log(lastTimestamp);
                             $modalBody.append($table);
                             $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
-                        }
+                          }
 
 
-                        console.log('polling again');
-                        if ($launchResultContainer.data()['bs.modal'].isShown) {
+                          console.log('polling again');
+                          if ($launchResultContainer.data()['bs.modal'].isShown) {
                             pollLogs(lastTimestamp, 1000, false);
-                        } else {
+                          } else {
                             console.log('not polling again');
-                        }
-                    });
-                }, delay);
-            }
-            pollLogs(lastTimestamp, 0, true);
-            $.get('/instances/' + data.id, function(data) {
-                addInstanceToDOM(data);
-            });
+                          }
+                        });
+}, delay);
+}
+pollLogs(lastTimestamp, 0, true);
+$.get('/instances/' + data.id, function(data) {
+  addInstanceToDOM(data);
+});
 
-        }).error(function() {
-            $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
-        });;
+}).error(function() {
+  $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+});;
 
 
 
-    });
+});
 
 /*
     function showHideControl(objID)
@@ -3078,66 +3130,39 @@ function registerEventsForSearchInstances(){
             }
             //localStorage.clear();
         }
-    }*/
+      }*/
     //window.onload= getViewTile();
 
     function getViewTile(){
-        var locationData = localStorage.getItem("ControlID");
-        if(locationData)
-        {
-            showHideControl(locationData);
+      var locationData = localStorage.getItem("ControlID");
+      if(locationData)
+      {
+        showHideControl(locationData);
             //alert("clearing");
             //localStorage.clear();
+          }
         }
-    }
 
-    function loadcarousel() {
-        $('.carousel.slide').carousel({
+        function loadcarousel() {
+          $('.carousel.slide').carousel({
             interval : false,
             cycle : false
-        });
+          });
 
-    }
-   
+        }
+        
 
   //  $(function(){
-
+    initializeInstance();
+    initializeBluePrints();
+    initializeContainer();
     registerEventsForPemFile();
     registerEventsForSearchInstances();
-
     initializeControlPanel();
+    initializingOrchestration();        
 
-    initializeContainer();
-
-        initializingOrchestration();
-        initializeInstance();
-        initializeBluePrints();
-
- loadcarousel();
- getViewTile();
+    loadcarousel();
+    getViewTile();
    // });
 
 });
-
-    function showHideControl(objID)
-    {
-        if(objID)
-        {
-            if(objID == "divinstancescardview" || objID == "defaultViewButton")
-            {
-                $("#divinstancestableview").removeClass("visibleClass");
-                $("#divinstancescardview").addClass("visibleClass");
-                $("#divinstancestableview").hide();
-                $("#divinstancescardview").show();
-            }
-            else
-            {
-
-                $("#divinstancestableview").addClass("visibleClass");
-                $("#divinstancescardview").removeClass("visibleClass");
-                $("#divinstancestableview").show();
-                $("#divinstancescardview").hide();
-            }
-            //localStorage.clear();
-        }
-    }

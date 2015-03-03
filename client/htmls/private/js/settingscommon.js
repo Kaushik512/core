@@ -121,7 +121,7 @@ if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonnew/" + id,
+        url: serviceURL + "readmasterjsonneworglist/" + id,
         success: function(data) {
                 // alert(data.toString());  
             // debugger;
@@ -398,7 +398,17 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 }
                 inputC = $('.rowtemplate').find("[datafield='" + k + "']");
                 if(inputC){
-                    inputC.html(v);
+                    console.log('Inputc===>' + inputC.attr('datafield'));
+                    if(inputC.attr('datafield') == 'active')
+                    {
+                        if(v.toString() == 'false'){
+                            inputC.html('Inactive');
+                        }
+                        else
+                            inputC.html('Active');
+                    }
+                    else
+                        inputC.html(v);
                 }
             });
 

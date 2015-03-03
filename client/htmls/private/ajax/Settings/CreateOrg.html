@@ -45,14 +45,14 @@
                                   <label for="name">Organization Status:</label>
                                     <div class="clearfix" style="border:1px solid silver" >
                                       
-                                      <div class="btn-group pull-left" style="padding:5px;width:100%">
+                                      <div class="btn-group pull-left" style="padding:5px;margin-top:-22px;width:100%">
                                             <div style="padding-top:5px;">
-                                            <label for="active" style="width:20%"><input name="ctl00$MainContent$domainname" value="" id="active" class="hidden" type="text"  cdata="catalyst" style="margin-top:-25px"></label>
+                                            <label for="active" style="width:20%"><input name="ctl00$MainContent$domainname" value="" id="active" class="hidden" type="text"  cdata="catalyst" style="margin-top:-25px" value="true"></label>
                                             <div class="input-group from-control col-md-12 smart-form">
                                             <label class="toggle font-sm" ><input onclick='if($(this).is(":checked")) {$(this).closest("label").css("background-color","#ffffff");$(this).css("border-color","#ffffff");}else{$(this).closest("label").css("background-color","#ffffff");$(this).css("border-color","red");}' type="checkbox" name="checkbox-toggle" value="true" style="width:100%" id="currentorgstatus"><i data-swchoff-text="Active" data-swchon-text="Inactive" style="width:61px;"></i>Current Status</label>
                                               </div>
                                             </div>
-                                            <label for="name"><span style="margin-top:5px" class="control-label"><br/>Note:<br/>Deactivating is cascading and would deactivate all entities depending on this organization.</span></label>
+                                            <label for="name"><div style="margin-top:5px" class="control-label"><br/>Note:<br/><span style="color:#CC0000">Deactivating is cascading and would deactivate all entities depending on this organization.</span></div></label>
                                             <div>
                                             <a class="btn btn-primary btn-mini pull-right hidden" onclick="" id="btnenablement">
                                             <i class="ace-icon fa fa-check bigger-110"></i>
@@ -388,8 +388,9 @@
 <script>
    $(document).ready(function () {
     var rowid = $('#myForm').find('button').first().attr('rowid');
-    if(typeof rowid != "undefined"){
+    if(typeof rowid == "undefined"){
       //$('.orgactive').removeClass('hidden'); //commented to hide isactive check
+      $('#active').val('true');
     }
     $("#orgname").focus();
        $('#myForm').submit(function() {
