@@ -1016,43 +1016,39 @@ function Configmgmt() {
         var count = 0;
         var exitloop  = false;
         //Building dynamic schema
+        var checkmasters = function(rowid,formids,fieldname){
+            var delcheckquery = {};
+            delcheckquery.id = {$in:formids};
 
-        if(formids.indexOf('blueprints') < 0 && formids.indexOf('instances') < 0)
-            {
-                var delcheckquery = {};
-                delcheckquery.id = {$in:formids};
-
-                delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
-                //delcheckschema.rowid = {type:String};
-                //var dynaschema = new d4dModelNew.d4dModelMastersGeneric(delcheckschema);
-                d4dModelNew.d4dModelMastersGeneric.find(delcheckquery,function(err,d4dMasterJson){
-                    if(!err)
-                    {
-                        console.log(JSON.stringify(d4dMasterJson));
-                        if(d4dMasterJson.length > 0){
-                            console.log('Found in ' + d4dMasterJson[0]['id'] + ' returning : ');
-                            callback(null,'found');
-                            return;
-                        }
-
-                        else{
-                            callback(null,'none');
-                            return;
-                        }
-
-                    }
-                    else{
-                        console.log("Hit an error in deleteCheck:" + err);
-                        callback(err,null);
+            delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
+            //delcheckschema.rowid = {type:String};
+            //var dynaschema = new d4dModelNew.d4dModelMastersGeneric(delcheckschema);
+            d4dModelNew.d4dModelMastersGeneric.find(delcheckquery,function(err,d4dMasterJson){
+                if(!err)
+                {
+                    console.log(JSON.stringify(d4dMasterJson));
+                    if(d4dMasterJson.length > 0){
+                        console.log('Found in ' + d4dMasterJson[0]['id'] + ' returning : ');
+                        callback(null,'found');
                         return;
                     }
-                        
-                });
-            }
-        else{
-            if(formids.indexOf('blueprints') >= 0)
-            {
-                blueprintdao.getBlueprintsByProjectId(rowid,function(err,data){
+
+                    else{
+                        callback(null,'none');
+                        return;
+                    }
+
+                }
+                else{
+                    console.log("Hit an error in deleteCheck:" + err);
+                    callback(err,null);
+                    return;
+                }
+                    
+            });
+        };
+        var checkBPInstances = function(rowid,tempplatescheck){
+            blueprintdao.getBlueprintsByProjectId(rowid,function(err,data){
                 if(!err){
                     console.log(JSON.stringify(data));
                         if(data.length > 0){
@@ -1061,7 +1057,7 @@ function Configmgmt() {
                             return;
                         }
                         else{
-                            if(formids.indexOf('instances') < 0){
+                            if(formids.indexOf('instances') < 0 && formids.indexOf('all') < 0){
                                 callback(null,'none');
                                 return;
                             }
@@ -1075,8 +1071,17 @@ function Configmgmt() {
                                                 return;
                                             }
                                             else{
-                                                callback(null,'none');
-                                                return;
+                                                if(tempplatescheck != null){
+                                                    var ids =[];
+                                                    ids.push('17');
+
+                                                      checkmasters(rowid,ids,'configname_rowid');
+                                                }
+                                                else
+                                                {
+                                                        callback(null,'none');
+                                                         return;
+                                                }
                                             }
                                     }
                                     else
@@ -1095,7 +1100,23 @@ function Configmgmt() {
                     callback(err,null);
                     return;
                 }
-                });
+            });
+        };
+
+        if(formids.indexOf('blueprints') < 0 && formids.indexOf('instances') < 0  && formids.indexOf('all') < 0)
+            {
+                
+                checkmasters(rowid,formids,fieldname);
+            }
+        else{
+            if(formids.indexOf('blueprints') >= 0)
+            {
+                
+                checkBPInstances(rowid,null);
+            }
+            else if(formids.indexOf('all') >= 0){
+                console.log('Entering all');
+                checkBPInstances(rowid,"checktemplates");
             }
             
 
