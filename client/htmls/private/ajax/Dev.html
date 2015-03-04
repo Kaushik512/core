@@ -2617,6 +2617,7 @@ function removeSelectedBlueprint() {
 
 function pollInstanceState(instanceId, state, delay) {
     var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+
     var timeout = setTimeout(function() {
         $.get('../instances/' + instanceId, function(data) {
             if (data) {
@@ -2624,13 +2625,13 @@ function pollInstanceState(instanceId, state, delay) {
                 enableInstanceActionStopBtn(instanceId);
               }
               if (data.instanceState == 'running'){
-                enableInstanceActionStartBtn(instanceId);
+                enableInstanceActionStartBtn(instanceId,data.hardware.os);
               }
               if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
                disableInstanceActionBtns(instanceId);
               }
               if (data.instanceState == 'unknown'){
-                disableInstanceStartStopActionBtns(data._id);
+                disableInstanceStartStopActionBtns(data._id,data.hardware.os);
               }
               if (data.instanceState === state) {
                 pollInstanceState(instanceId, state, 5000);
@@ -2807,15 +2808,26 @@ function showSSHModal() {
     });
 }
 
+function disableSSHBtn(instanceId) {
 
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+  var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+  
+}
 
-function enableInstanceActionStartBtn(instanceId){
+function enableInstanceActionStartBtn(instanceId,osType){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
   var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
   $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
   $tableViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
-  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  
+  if (osType === 'linux') {
+      $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+      $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  }
+
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
@@ -2838,25 +2850,33 @@ function disableInstanceActionBtns(instanceId){
   var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
   $cardViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
   $tableViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
+  
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+  
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
-function disableInstanceStartStopActionBtns(instanceId){
+function disableInstanceStartStopActionBtns(instanceId,osType){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
   var $tableViewInstanceId =  $("tr[data-instanceId='"+instanceId+"']");
   $cardViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
   $tableViewInstanceId.find('.chefClientRunlistImage').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('actionbuttonChefClientRun');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
-  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  
+  if (osType === 'linux') {
+    $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+    $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+  }
+
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
   $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
+
+
 function addInstanceToDOM(data) {
      //var dataTable = $('#tableinstanceview').DataTable()
      // TEMP Hack for the multiple cards issue. 
@@ -2906,7 +2926,8 @@ function addInstanceToDOM(data) {
     var $div = $('<div></div>').addClass('domain-roles ');
     var $divDomainRolesCaption = $('<div></div>').addClass('domain-roles-caption').attr({
         'data-instanceId': data._id,
-        'data-blueprintName': data.blueprintData.blueprintName
+        'data-blueprintName': data.blueprintData.blueprintName,
+        'data-osType': data.hardware.os
     });
     var $divHeading = $('<div></div>').addClass('domain-roles-heading');
 
@@ -3223,18 +3244,22 @@ function addInstanceToDOM(data) {
         console.log($(".container").index($(this)));
     });
     pageSetUp();
+
+    if(data.hardware.os !== 'linux') {
+      disableSSHBtn(data._id);
+    }
     
     if (data.instanceState == 'stopped'){
       enableInstanceActionStopBtn(data._id);
     }
     if (data.instanceState == 'running'){
-      enableInstanceActionStartBtn(data._id);
+      enableInstanceActionStartBtn(data._id,data.hardware.os);
     }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
       disableInstanceActionBtns(data._id);
     }
     if (data.instanceState == 'unknown'){
-      disableInstanceStartStopActionBtns(data._id);
+      disableInstanceStartStopActionBtns(data._id,data.hardware.os);
     }
     
 
