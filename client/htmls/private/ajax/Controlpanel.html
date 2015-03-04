@@ -523,11 +523,24 @@ var urlParams ={};
      
 })();
 
+
+function disableSSHBtn(instanceId) {
+  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+}
+
+
+
 function enableInstanceActionStartBtn(instanceId){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-
+  var osType = $cardViewInstanceId.attr('data-osType');
+ 
   $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  
+  if (osType === 'linux') {
+      $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  }
+  
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
@@ -549,9 +562,14 @@ function disableInstanceActionBtns(instanceId){
 }
 function disableInstanceStartStopActionBtns(instanceId){
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-
+  var osType = $cardViewInstanceId.attr('data-osType');
+  
   $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  
+  if(osType === 'linux') {
+    $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+  }
+  
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
@@ -652,7 +670,7 @@ $.get('../instances/'+urlParams.id,function(data){
     
 
   
-   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
+   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).attr('data-osType',data.hardware.os).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
@@ -684,6 +702,12 @@ $.get('../instances/'+urlParams.id,function(data){
             $domainRolesCaption.find('.componentlistContainer').addClass('pending');
             $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
   }
+
+  if(data.hardware.os !== 'linux') {
+    disableSSHBtn(data._id);
+  }
+
+
   if (data.instanceState == 'stopped'){
     enableInstanceActionStopBtn(data._id);
   }
