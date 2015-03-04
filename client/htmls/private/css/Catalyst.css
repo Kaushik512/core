@@ -6927,3 +6927,8 @@ body .ui-tooltip {
     font-weight:normal;
     color:#A6A2A6
 }
+
+.rowSpacing td 
+{
+    padding-top: 7px;
+}
