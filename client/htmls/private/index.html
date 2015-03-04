@@ -26,6 +26,7 @@ function showLoader(){
 function hideLoader(){
 $('#clickdisabler').hide(); 
 }
+var a,b,x;
         </script>
     </head>
     <body class="custom-theme">
@@ -577,6 +578,7 @@ $('#clickdisabler').hide();
             //trigger click on tab
             //alert('about to click on ' + ltab);
             $('#' + ltab).trigger('click');
+            selectFirstEnv();
             drawBreadCrumb();
         }
         else{ //will be a first time load
