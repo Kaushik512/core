@@ -1061,8 +1061,10 @@ function Configmgmt() {
                             return;
                         }
                         else{
-                            callback(null,'none');
-                            return;
+                            if(formids.indexOf('instances') < 0){
+                                callback(null,'none');
+                                return;
+                            }
                         }
                 }
                 else

@@ -1543,7 +1543,7 @@ function bindClick_LaunchBtn(){
 
 
             $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-            var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
+            var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
             var $newinstancetbody = $('<tbody></tbody>');
             $newinstancetable.append($newinstancetbody);
             var $instancetable = $('#tableinstanceview').clone();
@@ -1562,6 +1562,7 @@ function bindClick_LaunchBtn(){
               if(k > 3 )
                 $(this).detach();
             });
+            $('#dockerintsancestab thead').append('<td>Log Info</td>');
             $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
             $('#dockerintsancestab tbody tr').each(function(k,v){
 
@@ -1578,8 +1579,9 @@ function bindClick_LaunchBtn(){
                       $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                     }
                   });
+            $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo" stlye=></a></td>');
               $(this).append('<td  class="hidden"><input type="checkbox"></td>');
-
+            $(this).find('.moreInfo').click(instanceLogsHandler);
             });
             $('.launchdockerinstance').click(function(){
               $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
@@ -1588,7 +1590,7 @@ function bindClick_LaunchBtn(){
             });
             $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
             $launchDockerInstanceSelector.modal('show');
-            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td  class="hidden">Add Docker Engine</td></tr>');
+             $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
             $('#dockerintsancestab').dataTable({
               "bPaginate": false
             });
@@ -1682,18 +1684,6 @@ $.get('../instances/' + data.id, function(data) {
   addInstanceToDOM(data);
 
 });
-
-                // //Check if docker has been added.
-                // $.get('/instances/dockercontainerdetails/' + data.id,function(data){
-                //     if(JSON.stringify(data) != ""){
-                //         $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
-                //         //find the instance card - to do instance table view update
-                //         var $instancecard = $('div[data-instanceid="' + data.id + '"]');
-                //         if($instancecard.find('.dockerenabledinstacne').length <= 0){
-                //             $instancecard.find('.componentlistContainer').first().append($dockericon);
-                //         }
-                //      }
-                // });
 
 
 }).error(function() {
@@ -2025,18 +2015,18 @@ if (data[i].lastRunTimestamp) {
             if (clearData) {
               $modalBody.empty();
             }
-            var $table = $('<div></div>');
+          var $table = $('<table></table>');
 
             for (var i = 0; i < data.length; i++) {
-              var $rowDiv = $('<div class="row"></div>');
+             var $rowDiv = $('<tr class="row"></tr>');
               var timeString = new Date().setTime(data[i].timestamp);
                     var date = new Date(timeString).toUTCString(); //converts to human readable strings
-                    $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+                    /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
 
                     if (data[i].err) {
-                      $rowDiv.append($('<div class="col-lg-7 col-sm-7" style="color:red;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
+                       $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">'+ date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' +data[i].log + '</span>'));
                     } else {
-                      $rowDiv.append($('<div class="col-lg-7 col-sm-7 " style="color:DarkBlue;"></div>').append('<span style="width:100%">' + data[i].log + '</span>'));
+                       $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">'+ date + '</span>' + '&nbsp;&nbsp;&nbsp;'+ '<span>' + data[i].log + '</span>'));
                     }
 
                     $table.append($rowDiv);

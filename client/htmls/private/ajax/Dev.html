@@ -153,14 +153,10 @@ var callback=function(){
  $(document).trigger('devPagesLoaded');
 };
 
+
 loadHTMLFile(basePath+htmlTabs.instance,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.blueprint,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.orchestration,$('#myTabContent3'));
-
-/*$('#l1-a').load(basePath+htmlTabs.instance,callback);//instances
-$('#l2-a').load(basePath+htmlTabs.blueprint,callback);//blueprint
-$('#l3-a').load(basePath+htmlTabs.orchestration,callback);//orchestration
-*/
 
 function loadHTMLFile(url,parentToAppend){
     $.ajax({
@@ -181,9 +177,4 @@ function loadHTMLFile(url,parentToAppend){
 }
 });
 </script>
-<!-- 
-<script src="js/dev/blueprint.js"></script>
-<script src="js/dev/container.js"></script>
-<script src="js/dev/controlpanel.js"></script>
-<script src="js/dev/orchestration.js"></script> -->
-<!--<script src="js/dev/dev.js"></script>-->
+
