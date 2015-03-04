@@ -163,7 +163,7 @@ function loadHTMLFile(url,parentToAppend){
         type : "GET",
         url : url,
         dataType : 'html',
-        cache : true, // (warning: this will cause a timestamp and will call the request twice)
+        cache : true, 
         success : function(data) {        
         $(parentToAppend).append(data);
             $(document).trigger('devPagesLoaded');
@@ -172,9 +172,8 @@ function loadHTMLFile(url,parentToAppend){
             container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! Page not found.</h4>');
             //hideLoader();
         },
-        async : false // by anshul
+        async : false
     });
 }
 });
 </script>
-

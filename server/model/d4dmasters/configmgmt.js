@@ -1057,13 +1057,35 @@ function Configmgmt() {
                     console.log(JSON.stringify(data));
                         if(data.length > 0){
                             console.log('Found in ' + data['name'] + ' returning : ');
-                            callback(null,'found');
+                            callback(null,'found blueprints');
                             return;
                         }
                         else{
                             if(formids.indexOf('instances') < 0){
                                 callback(null,'none');
                                 return;
+                            }
+                            else{
+                                instancedao.getInstanceByProjectId(rowid,function(err,data){
+                                    if(!err){
+                                        //console.log(JSON.stringify(data));
+                                            if(data.length > 0){
+                                                console.log('Found in ' + data['chefNodeName'] + ' returning : ');
+                                                callback(null,'found instances');
+                                                return;
+                                            }
+                                            else{
+                                                callback(null,'none');
+                                                return;
+                                            }
+                                    }
+                                    else
+                                    {
+                                        console.log("Hit an error in deleteCheck getInstanceByProjectId:" + err);
+                                        callback(err,null);
+                                        return;
+                                    }
+                                });
                             }
                         }
                 }
@@ -1075,80 +1097,11 @@ function Configmgmt() {
                 }
                 });
             }
-            if(formids.indexOf('instances') >= 0){
-                instancedao.getInstanceByProjectId(rowid,function(err,data){
-                    if(!err){
-                        //console.log(JSON.stringify(data));
-                            if(data.length > 0){
-                                console.log('Found in ' + data['chefNodeName'] + ' returning : ');
-                                callback(null,'found');
-                                return;
-                            }
-                            else{
-                                callback(null,'none');
-                                return;
-                            }
-                    }
-                    else
-                    {
-                        console.log("Hit an error in deleteCheck getInstanceByProjectId:" + err);
-                        callback(err,null);
-                        return;
-                    }
-                });
-            }
+            
 
         }
 
-        // {id: {type:String},
-        //             name: {type:String},
-        //             orgname: {type:String},
-
-         // for(var u =0;u< formids.length;u++){
-         //    if(exitloop){
-         //        return;
-         //    }
-         //    this.getDBModelFromID(formids[u], function(err, dbtype) {
-         //         console.log('formid:' + formids[u]);
-         //        if (err) {
-         //            callback(err, null);
-         //            exitloop = true;
-         //            return;
-         //            //console.log("Hit and error:" + err);
-         //        }
-         //        if (dbtype) {
-         //            var query = {};
-         //            query[fieldname] = {$regex : ".*" + rowid + "*"};
-         //            query['id'] = formids[u];
-         //            eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
-         //                if (err) {
-         //                    callback(err, null);
-         //                    exitloop = true;
-         //                    return;
-         //                }
-         //                //check if d4dMasterJson has some rows. if found we can return intimating found
-         //                if(d4dMasterJson.length > 0){
-         //                    console.log('Found in ' + u + ' returning');
-         //                    callback(null, 'found');
-         //                    exitloop = true;
-         //                    return;
-         //                }
-         //                console.log('d4dMasterJson length:' + d4dMasterJson.length);
-         //                console.log('count : ' + count + ' formid length ' + formids.toString() + ' formid ' + formids[u]);
-         //                if(u >= formids.length - 1){
-         //                    console.log('None Found returning' + u);
-         //                    callback(null,'none');
-         //                    exitloop = true;
-         //                    return;
-         //                }
-         //                count++;
-
-         //            });
-
-         //        }
-                
-         //     });
-         // }
+        
     };
 
     this.getServiceFromId = function(serviceId, callback) {
