@@ -577,6 +577,7 @@ $('#clickdisabler').hide();
 			//trigger click on tab
 			//alert('about to click on ' + ltab);
 			$('#' + ltab).trigger('click');
+			selectFirstEnv();
 			drawBreadCrumb();
 		}
 		else{ //will be a first time load

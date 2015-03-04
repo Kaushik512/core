@@ -733,7 +733,7 @@ $.get('../instances/'+urlParams.id,function(data){
             var $table = $('<table></table>');
 
                 for (var i = 0; i < data.length; i++) {
-                    var $rowDiv = $('<tr class="row"></tr>');
+                    var $rowDiv = $('<tr class="row rowSpacing"></tr>');
                     var timeString = new Date().setTime(data[i].timestamp);
                     var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                     /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
@@ -745,7 +745,7 @@ $.get('../instances/'+urlParams.id,function(data){
                     }
 
                     $table.append($rowDiv);
-                    $table.append('<hr/>');
+                    //$table.append('<hr/>');
 
                 }
            
