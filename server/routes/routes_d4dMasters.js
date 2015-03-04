@@ -238,19 +238,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     var item = '\"' + req.params.fieldname + '\"';
                     console.log("About to delete Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
                     //res.send(500);
-                    // eval('d4dModelNew.' + dbtype).remove({
-                    //     rowid: req.params.fieldvalue
-                    // }, function(err) {
-                    //     if (err) {
-                    //         console.log('Hit an errror on delete : ' + err);
-                    //         res.send(500);
-                    //         return;
-                    //     } else {
-                    //         console.log('Document deleted : ' + req.params.fieldvalue);
-                    //         res.send(200);
-                    //         return;
-                    //     }
-                    // }); //end findOne
+                    eval('d4dModelNew.' + dbtype).remove({
+                        rowid: req.params.fieldvalue
+                    }, function(err) {
+                        if (err) {
+                            console.log('Hit an errror on delete : ' + err);
+                            res.send(500);
+                            return;
+                        } else {
+                            console.log('Document deleted : ' + req.params.fieldvalue);
+                            res.send(200);
+                            return;
+                        }
+                    }); //end findOne
                 }
             }); //end configmgmtDao
         }
@@ -1676,7 +1676,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (d4dMasterJson != null) {
                                 uuid1 = bodyJson["rowid"];
                                 //    console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
-                                console.log('rowtoedit :' + rowtoedit);
+                               // console.log('rowtoedit :' + JSON.stringify(rowtoedit) + ' : ' + JSON.stringify(bodyJson) );
+
                                 if (bodyJson["folderpath"] == undefined) //folderpath issue fix
                                     folderpath = ''
                                 else
@@ -1688,11 +1689,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             rowtoedit[myval] = bodyJson[myval];
                                             fldadded = true;
                                         }
-                                    console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
+                                 //   console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
                                 }
                                 if(!fldadded){
-                                    //
-                                    //console.log("");
+                                    console.log('Not Added --------->' + itm);
+                                    if(bodyJson[itm] != '') //found to have a value
+                                        {
+                                            rowtoedit[itm] = bodyJson[itm];
+                                          //  console.log('New Entity :' + rowtoedit[myval]);
+                                        }
                                 }
                                 // for(var myval in d4dMasterJson){
                                 //      console.log("key:"+myval+", value:");
