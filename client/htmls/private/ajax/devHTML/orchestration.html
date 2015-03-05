@@ -1,0 +1,193 @@
+
+<!--orchestration tab starts here-->
+
+                <div class="tab-pane" id="l3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h5 class="widget-title" style="color:#4e5964;">
+                                            <strong>List of Tasks</strong>
+                                        </h5>
+                                        <div class="widget-toolbar no-border">
+                                            <div>
+                                                <button class="btn btn-minier btn-primary createTaskLink" href="javascript:void(0)">
+                                                    <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                                                    New
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main" style="min-height:300px">
+                                            <div class="col-md-12 table-responsive" style=" padding-top: 40px;">
+                                                <table id="tableOrchestration" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                    <thead>
+                                                    <tr class="rowCustomStyle">
+                                                        <td>Name</td>
+                                                        <td>Assigned Nodes</td>
+                                                        <td>Assigned Runlists</td>
+                                                        <td>Execute</td>
+                                                        <td>Last Run</td>
+                                                        <td>Action</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="taskListArea">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <!--orchestration tab ends here-->
+
+<!--/.modal-assignedNode-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-sitemap txt-color-blue"></i>&nbsp;&nbsp;Assigned Nodes
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section>
+                            <div class="">
+                                <table align="left" style="margin-left:20px;">
+                                    <thead>
+                                    <tr style="line-height:2.3">
+                                        <th style="width:100px" scope="col"><u style="font-size:12px;">Name</u>
+                                        </th>
+                                        <th style="width:100px" scope="col"> <u style="font-size:12px;">IP Address</u></th>
+                                        <th scope="col"> <u style="font-size:12px;">Status</u></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody class="taskNodeListContainer">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </fieldset>
+                    <div>
+
+                    </div>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedNode-->
+
+<!--/.modal-assignedRunlist-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedRunlist" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Assigned Runlists
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section class="col col-6">
+                            <label class="label">
+                                <img src="img/templateicons/Order-run-list---deployment.png">
+                                <strong>RunLists</strong>
+                            </label>
+                            <div class="row">
+                                <div class="col col-10">
+                                    <ul class="taskRunListContainer" style="border:1px solid #dddddd;list-style:none outside none;min-height:100px;overflow-y:auto;">
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                    </fieldset>
+                    <div>
+
+                    </div>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedRunlist-->
+
+
+<!--execute modal-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedExecute" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+
+                <form class="smart-form" id="login-form" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section>
+
+                            <div role="content">
+                                <div class="widget-body">
+
+                                    <ul id="taskExecuteTabsHeader" class="nav nav-tabs bordered">
+
+
+                                    </ul>
+
+                                    <div id="taskExecuteTabsContent" class="tab-content padding-10">
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+                    </fieldset>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
