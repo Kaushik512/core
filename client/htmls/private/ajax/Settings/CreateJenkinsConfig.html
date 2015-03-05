@@ -5,7 +5,7 @@
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
-         <form action="" id="frmconfigmanagement">
+         <form action="" id="myForm50">
             <div class="widget-box">
                <div class="widget-header">
                   <h4 class="widget-margin" style="color:black;">New Jenkins Config  <span id="spnjenkins"></span></h4>
@@ -27,7 +27,8 @@
                                           <div class="col-lg-6">
                                              <label for="">
                                              Reference Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                             <input name="ctl00$MainContent$orgname" value="" id="jenkinsname" class="form-control" type="text"  cdata="catalyst" unique="true" uniqueconditionedby="jenkinsname"  cat-validation="required,max15">
+
+                                             <input name="ctl00$MainContent$orgname" value="" id="jenkinsname" class="form-control" type="text"  cdata="catalyst" unique="true"  uniqueconditionedby="jenkinsname"  cat-validation="required,max15">
                                           </div>
                                           <div class="col-lg-6">
                                              <label for="">
@@ -50,7 +51,7 @@
                                                 <label for="file" class="field file">
                                                    <div class="imgdiv" value="1"></div>
                                                    <span class="button btn-primary">Browse</span>
-                                                   <input id="jenkinstoken" keyfield="jenkinsname" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
+                                                   <input id="jenkinstokenfile" keyfield="jenkinsname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                 </label>
                                              </div>
                                           </div>
@@ -117,7 +118,7 @@
        });
        $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
        var ten = 20;
-       readformnew(20); //6 is for role
+       readformnew('20'); //6 is for role
        //
       
        $('#content').css("opacity", "1 !important");
@@ -149,7 +150,7 @@
 <script>
    $(document).ready(function () {
       $("#jenkinsname").focus();
-       $('#frmconfigmanagement').submit(function() {
+       $('#myForm50').submit(function() {
            $(this).validate();
    
            if($(this).valid){

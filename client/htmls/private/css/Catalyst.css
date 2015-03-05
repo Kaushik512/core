@@ -6925,9 +6925,15 @@ body .ui-tooltip {
 /*CUSTOM FOR LOGS*/
 .textLogs{
     font-weight:normal;
-    color:#A6A2A6
+    color:#000;
 }
 
-.rowSpacing td {
+.rowSpacing td 
+{
     padding-top: 7px;
+    margin-bottom: 0.5em;
+    border-style: inset;
+    border-width: 1px;
+
 }
+
