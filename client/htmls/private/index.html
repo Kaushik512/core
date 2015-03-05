@@ -569,23 +569,24 @@ var a,b,x;
 
     };
 
-    //Renavigate to the tab that was previously selected.
-    checkandnavigatetotab = function(){
-        //has tab in LS
-        var ltab = localStorage.getItem("lasttabselected");
-        //alert(ltab);
-        if(ltab){
-            //trigger click on tab
-            //alert('about to click on ' + ltab);
-            $('#' + ltab).trigger('click');
-            selectFirstEnv();
-            drawBreadCrumb();
-        }
-        else{ //will be a first time load
-            selectFirstEnv();
-        }
-    };
-    checkandnavigatetotab();
+	//Renavigate to the tab that was previously selected.
+	checkandnavigatetotab = function(){
+		//has tab in LS
+		var ltab = localStorage.getItem("lasttabselected");
+		//alert(ltab);
+		if(ltab){
+			//trigger click on tab
+			//alert('about to click on ' + ltab);
+			$('#' + ltab).trigger('click');
+			selectFirstEnv();
+			drawBreadCrumb();
+		}
+		else{ //will be a first time load
+			selectFirstEnv();
+		}
+	};
+	checkandnavigatetotab();
+
  //function ends
 </script>
 <script src="js/chefmodalcommon.js"></script>

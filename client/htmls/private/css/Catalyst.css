@@ -42,7 +42,7 @@
     opacity: 1.0;
 }*/
 .margin-top40{
-	margin-top: 40px !important;
+    margin-top: 40px !important;
 }
 .chefClientRunlistImageCP{
     background-image:url('../img/galleryIcons/Chefimport.png');
@@ -53,15 +53,15 @@
     margin-top:1px;
 }
 .txt-color-white{
-	color:#fff!important;
+    color:#fff!important;
 }
 .border-color{
     /*border-color: #e5e5e5 #eee #eee;*/
     border: 1px solid #e5e5e5;
 }
 .margintopbottom{
-	margin-top: 4px !important;
-	margin-bottom: 4px !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
 }
 .hidden-menu .minifyme, .minified #tree {
     display: none;
@@ -1242,8 +1242,8 @@ nav ul ul>li:hover b {
     margin-left: 4px;
 }
 .left-projects-links{
-	font-size:12px!important;
-	margin-top: 30px!important;
+    font-size:12px!important;
+    margin-top: 30px!important;
 }
 .btn-header.transparent a {
     border: 0!important;
@@ -1401,10 +1401,10 @@ nav ul ul>li:hover b {
 }
 /*Added for aside minimization*/
 .minified #left-panel{
-	width:38px !important;
+    width:38px !important;
 }
 .minified .hiddencollapse{
-	display: none !important;
+    display: none !important;
 }
 .minified #left-panel, .minified nav>ul>li {
     overflow: visible;
@@ -2279,15 +2279,15 @@ nav ul ul>li:hover b {
 
 @media (min-width:768px) and (max-width:980px)
 {
-	.left-projects-links
-	{
-		font-size:12px!important;
-	}
-	
-	#logout
-	{
-		margin-top: -10px;
-	}
+    .left-projects-links
+    {
+        font-size:12px!important;
+    }
+    
+    #logout
+    {
+        margin-top: -10px;
+    }
 }
 
 /*Dev.html CSS-Main*/
@@ -3657,7 +3657,7 @@ body
     margin-top:0px;
 }
 .moreinfoactionHistory{
-	background-repeat:no-repeat;
+    background-repeat:no-repeat;
     float: left;
     height: 27px;
     width: 30px;
@@ -4202,12 +4202,12 @@ header
  min-height:8%!important;
 }
 @media(min-width:1400px){
-	header{
-		min-height: 4.5%!important;
-	}
-	#left-panel{
-		height:94.3%!important;
-	}
+    header{
+        min-height: 4.5%!important;
+    }
+    #left-panel{
+        height:94.3%!important;
+    }
 }
 
 .menu-item-parentdemo li b{
@@ -5391,14 +5391,14 @@ table.dataTable td {
 
 /*For new sshIcon 
 .sshIcon{
-	background-position: -212px -12px ;
-	width: 27px;
-	height: 27px;
+    background-position: -212px -12px ;
+    width: 27px;
+    height: 27px;
 }*/
 .sshIcon{
-	background-position: -206px -9px ;
-	width: 34px;
-	height: 28px;
+    background-position: -206px -9px ;
+    width: 34px;
+    height: 28px;
 }
 
 .aws{
@@ -5445,25 +5445,25 @@ table.dataTable td {
 
 .right-button
 {
-	margin-right: 10px;
-	border-radius: 50%;
+    margin-right: 10px;
+    border-radius: 50%;
 }
 
 .widget-margin{
-	margin-top: 13px;
+    margin-top: 13px;
 }
 label{
-	color:#666;
+    color:#666;
 }
 .zero-margin
 {
-	margin-left: 0px!important;
-	margin-right: 0px!important;
+    margin-left: 0px!important;
+    margin-right: 0px!important;
 }
 
 .custom-scroll
 {
-	display: block;
+    display: block;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -5606,33 +5606,33 @@ label{
 
 .logouttop
 {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 
 /*Bootstrap Tree-View CSS*/
 
 .list-group-item {
-	cursor: pointer;
-	border:0px solid #000000 !important;
-	/*background-color: #2c3742;*/
-	background-color:#2c3638;
-	color:#fff !important;
-	padding: 5px 10px !important;
+    cursor: pointer;
+    border:0px solid #000000 !important;
+    /*background-color: #2c3742;*/
+    background-color:#2c3638;
+    color:#fff !important;
+    padding: 5px 10px !important;
 }
 
 span.indent {
-	margin-left: 6px;
-	margin-right: 13px;
+    margin-left: 6px;
+    margin-right: 13px;
 }
 
 span.expand-collapse {
-	width: 1rem;
-	height: 1rem;
+    width: 1rem;
+    height: 1rem;
 }
 
 span.icon {
-	margin-left: 10px;
-	margin-right: 5px;
+    margin-left: 10px;
+    margin-right: 5px;
 }
 
 .margin-right12{
@@ -5647,12 +5647,12 @@ span.icon {
 }
 
 .modal-height{
-	height:314px;
+    height:314px;
 }
 
 .modalbody-height
 {
-	height:410px;
+    height:410px;
 }
 
 .padding0{
@@ -5660,35 +5660,35 @@ span.icon {
 }
 
 .marginForURL{
-	margin-left:40px;
+    margin-left:40px;
 }
 
 .marginForButtons{
-	margin-right:15px;
+    margin-right:15px;
 
 }
 /*Change for the blueprint coming up when the user launches an instance and the user moves to Instances from Blueprints*/
 /*.carousel-inner>.item{
-	display:block!important;
+    display:block!important;
 }*/
 
 @media screen and (max-width:1200px) {
 
-	.modal-height{
-	height:520px;
+    .modal-height{
+    height:520px;
 }
 .topNew
 {
-	margin-top: 15px;
+    margin-top: 15px;
 }
 
 .modalbody-height{
-	height:640px!important;
+    height:640px!important;
 }
 
 }
 .btn-importbyIP{
-	top:11px !important;
+    top:11px !important;
 }
 <<<<<<< HEAD
 
@@ -6928,7 +6928,6 @@ body .ui-tooltip {
     color:#A6A2A6
 }
 
-.rowSpacing td
-{
-padding-top: 7px;
+.rowSpacing td {
+    padding-top: 7px;
 }
