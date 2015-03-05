@@ -16,7 +16,7 @@
                     <li class="pull-left Orchestration">
                         <a href="#l3" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                     </li>
-                     <li class="pull-left Containers hidden">
+                     <li class="pull-left Containers">
                         <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                     </li>
                 </ul>
@@ -3286,6 +3286,7 @@ function loadContainersTable(){
       var $docker = $(this).find('.dockerenabledinstacne');
       if($docker.html() != undefined){
         //Get the instance ID
+        //alert('in container');
         $('li.Containers').removeClass('hidden');
         var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
             $.get('/instances/dockercontainerdetails/' + instanceid,function(data){
@@ -3426,7 +3427,8 @@ function loadContainersTable(){
         }
       else{ //no docker found
         $('.loadingimagefordockertable').addClass('hidden');
-        $('li.Containers').addClass('hidden');
+        //alert('no docker');
+       // $('li.Containers').addClass('hidden');
       }
     });
     //dockercontaineraction
