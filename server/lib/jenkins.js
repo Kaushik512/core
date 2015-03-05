@@ -1,24 +1,22 @@
 var jenkinsApi = require('jenkins-api');
 var logger = require('./logger')(module);
+var url = require('url');
 
 
 
 var Jenkins = function(options) {
-
-    var jenkinsUrl = 'http://';
-    if (options.secureOnly) {
-        jenkinsUrl = 'https://';
-    }
+    var parsedUrl = url.parse(options.url);
+    console.log(parsedUrl);
+   
+    var jenkinsUrl = parsedUrl.protocol + '//';
     if (options.username) {
         jenkinsUrl += options.username;
         var pass = options.password ? options.password : options.token;
         jenkinsUrl += ':' + pass + '@';
     }
 
-    jenkinsUrl += options.host;
-    if (options.port) {
-        jenkinsUrl += ':' + options.port;
-    }
+    jenkinsUrl += parsedUrl.host+parsedUrl.path;
+    
 
     logger.debug(jenkinsUrl);
     var jenkins = jenkinsApi.init(jenkinsUrl);
@@ -34,6 +32,29 @@ var Jenkins = function(options) {
             callback(null, data);
         });
     };
+
+    this.getJobInfo = function(jobName, callback) {
+        jenkins.job_info(jobName, function(err, data) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        })
+    }
+
+    this.buildJob = function(jobName, callback) {
+        jenkins.build(jobName, function(err, data) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    };
+
 
     this.buildJobWithParams = function(jobName, params, callback) {
         jenkins.build(jobName, params, function(err, data) {
@@ -57,7 +78,20 @@ var Jenkins = function(options) {
         });
     };
 
-    this.getJobReport = function(jobName) {
+    this.getLastBuildInfo = function(jobName, callback) {
+        console.log(jobName);
+        jenkins.last_build_info(jobName, function(err, data) {
+            if (err) {
+                logger.error(err, data);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    };
+
+
+    this.getJobLastBuildReport = function(jobName, callback) {
         jenkins.last_build_report(jobName, function(err, data) {
             if (err) {
                 logger.error(err);
