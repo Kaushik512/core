@@ -1,0 +1,147 @@
+
+<!--blueprint tab-->
+<div class="tab-pane" id="l2">
+                    <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                        <div>
+
+                            <div class="widget-body no-padding">
+
+                                <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
+                                    <div class="devopsRolePanel panel panel-default blueprintContainer">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="d#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
+                                        </div>
+                                        <div id="collapseOne-2" class="panel-collapse collapse">
+                                            <div class="panel-body">
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!--App Factory Starts here-->
+                                    <div class="appFactoryPanel panel panel-default blueprintContainer">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
+                                        </div>
+                                        <div id="collapse2" class="panel-collapse collapse">
+                                            <div class="panel-body">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--App Factory ends here-->
+
+                                    <div class="panel panel-default blueprintContainer">
+                                        <div class="panel-heading ">
+                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse3" class="collapsed"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cloud Formation</a></h4>
+                                        </div>
+                                        <div id="collapse3" class="panel-collapse collapse in">
+                                            <div class="panel-body">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="desktopProvisioningPanel panel panel-default blueprintContainer">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse4"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Desktop Provisioning</a></h4>
+                                        </div>
+                                        <div id="collapse4" class="panel-collapse collapse">
+                                            <div class="panel-body">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <footer class="footer">
+                        <div class="clearfix form-actions" style="text-align:center">
+                            <div class="btn-group">
+
+                                <button class="btn pull-left btn-primary launchBtn" style="margin-left:200px;">
+                                    <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
+                                    Launch
+                                </button>
+                            </div>
+                            <button class="btn pull-right btn-danger right-button" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
+                        </div>
+
+                    </footer><!--Launch div ends here-->
+                </div> <!--tab-pane l2 gets over -->
+
+                <!--modal for launching the blueprint-->
+				<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+
+				<div class="modal-dialog">
+				<div class="modal-content">
+				<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel">Launching Blueprint</h4>
+				</div>
+				<div class="modal-body">
+				...
+				</div>
+				<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+				</div>
+				</div>
+				</div>
+				</div>
+
+<!--modal for blueprint edit-->
+<div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
+            </div>
+            <div class="modal-body" style="padding:0px !important">
+
+            </div>
+            <div class="modal-footer" style="margin-top:0px !important;">
+
+                <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--updating the runlist while blueprint edit-->
+<div class="modal fade bs-example-modal-lg" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
+            </div>
+            <div class="modal-body" style="padding:0px !important">
+
+
+                <div class="chefRunlistContainer">
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer" style="margin-top:0px !important;">
+                <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

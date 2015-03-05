@@ -338,7 +338,7 @@
 
             </div> <!--Configure tab contents ends here -->
 
-            <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;">
+            <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;border:1px solid #ddd;border-radius:11px;">
               <div class="logsArea"></div>
             </div>
             <!-- History tab contents starts here -->
@@ -479,10 +479,10 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="">
-          <i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Logs
+          <i class="fa fa-bar-chart-o txt-color-blue"></i>Instance Logs
         </h4>
       </div>
-      <div class="modal-body" style="height:430px">
+      <div class="modal-body" style="height:430px;overflow-y:auto;">
 
            
       </div>
@@ -769,7 +769,7 @@ $.get('../instances/'+urlParams.id,function(data){
                     }
 
                     $table.append($rowDiv);
-                    //$table.append('<hr/>');
+
 
                 }
            
@@ -1379,23 +1379,19 @@ function addActionLogRow(actionLog) {
         var actionId = $(this).data('actionLogId');
         var $actionLogMoreInfo = $('#actionLogMoreInfo');
         $.get('/instances/' + urlParams['id'] + '/actionLogs/' + actionId+'/logs', function(data) {
-            var $table = $('<div></div>').css({
-                'height': '400px',
-                'overflow-x': 'hidden',
-                'overflow-y': 'auto',
-            });
+            var $table = $('<table></table>');
 
             for (var i = 0; i < data.length; i++) {
-                var $rowDiv = $('<div class="row"></div>');
+                var $rowDiv = $('<tr class="row rowSpacing"></tr>');
                 var timeString = new Date().setTime(data[i].timestamp);
                 var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                $rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+                //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                 if (data[i].err) {
-                    $rowDiv.append($('<div class="col-lg-8 col-sm-8"></div>').append('<span>' + data[i].log + '</span>'));
-                } else {
-                    $rowDiv.append($('<div class="col-lg-8 col-sm-8 " style="color:DarkBlue;"></div>').append('<span>' + data[i].log + '</span>'));
-                }
+                              $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                          } else {
+                              $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                          }
 
                 $table.append($rowDiv);
                 $table.append('<hr/>');
