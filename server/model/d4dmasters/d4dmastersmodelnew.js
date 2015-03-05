@@ -238,7 +238,7 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 	jenkinsurl: {type:String,required:true, trim:true},
 	jenkinsusername: {type:String,required:true, trim:true, validate:nameValidator},
 	jenkinspassword: {type:String,required:true, trim:true},
-	jenkinstoken: {type:String, trim:true},
+	jenkinstokenfile_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
