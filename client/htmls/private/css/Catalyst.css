@@ -784,7 +784,7 @@ h6 {
     background: -webkit-linear-gradient(left,#2c3638 99%,#2c3638 100%);
     background: -webkit-gradient(linear,top left,top right,from(#2c3638),to(#2c3638));
     background: linear-gradient(to right,#2c3638 99%,#2c3638 100%);
-    height: 91.6%!important;
+    height: 91.4%!important;
     float:left;
 }
 #main {
