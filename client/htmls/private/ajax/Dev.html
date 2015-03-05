@@ -146,6 +146,10 @@ if(window.count===3){
 var el=document.createElement('script');
 el.setAttribute('src','js/dev/dev.js');
 $('head').append(el);
+var list=$('[id="l1"]');
+if(list.length>1){
+    list.not(":first").remove();
+}
 }
 });
 
