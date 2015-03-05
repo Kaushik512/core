@@ -222,6 +222,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 tocheck.push('all');
                 fieldname = "configname_rowid";
                 break;
+            case "19":
+                tocheck.push('blueprints');
+                tocheck.push('instances');
+                fieldname = "projectId";
+                break;
         }
         configmgmtDao.deleteCheck(req.params.fieldvalue,tocheck,fieldname,function(err,data){
         console.log('Delete check returned:' + data);
