@@ -3802,6 +3802,7 @@ float: left;
     height:400px;
     overflow-y:auto;
     overflow-x:hidden;
+    word-break:break-all;
 }
 .logsAreaBootstrap {
     height:400px;
@@ -6931,9 +6932,7 @@ body .ui-tooltip {
 .rowSpacing td 
 {
     padding-top: 7px;
-    margin-bottom: 0.5em;
-    border-style: inset;
-    border-width: 1px;
+    
 
 }
 
