@@ -283,14 +283,17 @@ $(document).ready(function() {
              $jenkinsServerListDropdown.append($option); 
             }
             //$jenkinsServerListDropdown.trigger();
+           
             $jenkinsServerListDropdown.change(function(e){
                 var jenkinsServerId = $(this).val();
                 var $jobsList = $('#jobListJenkins').empty();
+               $jobsList.prop("disabled", true);
                 $.get('/jenkins/'+jenkinsServerId+'/jobs',function(jobsList){
                   for (var i = 0; i < jobsList.length; i++) {
                     var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
                     $jobsList.append($option);
                   }
+                    $jobsList.prop("disabled", false);
                 });
 
             });
