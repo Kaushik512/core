@@ -1,17 +1,21 @@
   //function for showing the tableview and the cardview
   function showHideControl(objID) {
+    debugger;
     if (objID) {
       if (objID == "divinstancescardview" || objID == "defaultViewButton") {
-        $("#divinstancestableview").removeClass("visibleClass");
-        $("#divinstancescardview").addClass("visibleClass");
-        $("#divinstancestableview").hide();
-        $("#divinstancescardview").show();
+        $("#divinstancestableview").removeClass("visibleClass").hide();
+        $("#divinstancescardview").addClass("visibleClass").show();
+        //$("#divinstancestableview").hide();
+        //$("#divinstancescardview").show();
+        $('#defaultViewButton').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
+        $('#instanceview').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
       } else {
-
-        $("#divinstancestableview").addClass("visibleClass");
-        $("#divinstancescardview").removeClass("visibleClass");
-        $("#divinstancestableview").show();
-        $("#divinstancescardview").hide();
+        $("#divinstancestableview").addClass("visibleClass").show();
+        $("#divinstancescardview").removeClass("visibleClass").hide();
+        //$("#divinstancestableview").show();
+        //$("#divinstancescardview").hide();
+        $('#instanceview').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
+        $('#defaultViewButton').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
       }
     }
   }
@@ -2250,8 +2254,9 @@ function initializeTaskArea(data) {
       }
 
       //If instances are present user will be able to add new Nodes in orchestration
-      function registerEventsForSearchInstances() {
+     /* function registerEventsForSearchInstances() {
         $('.searchInstances').keyup(function(e) {
+       //   alert(1);
           var searchText = $(this).val();
               //alert(searchText);
               $allListElements = $('#divinstancescardview ul li .domain-roles-heading .cardHeadingTextoverflow');
@@ -2268,7 +2273,7 @@ function initializeTaskArea(data) {
               // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
             });
       }
-
+*/
 
 
       var wzlink = window.location.href.split('#')[1];
@@ -2915,13 +2920,24 @@ $.get('/instances/' + data.id, function(data) {
 
           }
 
+var SerachBoxInInstance={
+  init:function(){
 
+  },
+  initializeInstanceSearch:function(){
+
+  },
+  updateData:function(){
+
+  }
+
+}
 
           initializeInstance();
           initializeBluePrints();
           initializeContainer();
           registerEventsForPemFile();
-          registerEventsForSearchInstances();
+       //   registerEventsForSearchInstances();
           initializeControlPanel();
           initializingOrchestration();
 
