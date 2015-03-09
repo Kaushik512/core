@@ -6,8 +6,6 @@ var url = require('url');
 
 var Jenkins = function(options) {
     var parsedUrl = url.parse(options.url);
-    console.log(parsedUrl);
-   
     var jenkinsUrl = parsedUrl.protocol + '//';
     if (options.username) {
         jenkinsUrl += options.username;

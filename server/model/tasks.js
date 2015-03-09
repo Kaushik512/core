@@ -102,16 +102,9 @@ var TaskDao = function() {
                 jobName: taskData.jobName,
                 users: taskData.users
             }
-        } else {
-            callback({
-                error: 'Invalid Task Type'
-            }, null);
-            return;
         }
-
-        taskObj.name = taskData.name;
-
-        var task = new Tasks(taskObj);
+        console.log('taskObj ==>',taskObj);
+        /*var task = new Tasks(taskObj);
 
         task.save(function(err, data) {
             if (err) {
@@ -120,7 +113,7 @@ var TaskDao = function() {
             }
             console.log("task Created");
             callback(null, data);
-        });
+        });*/
     }
 
     this.getTaskById = function(taskId, callback) {
@@ -219,7 +212,6 @@ var TaskDao = function() {
             callback({
                 error: 'Invalid Task Type'
             }, null);
-            return;
         }
 
         Tasks.update({

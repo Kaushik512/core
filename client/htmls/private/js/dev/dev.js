@@ -1858,33 +1858,37 @@
               var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
               var $tdName = $('<td></td>').append(data[i].name);
               $tr.append($tdName);
-              var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
-              $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
-                  $.post('../instances/', {
-                      instanceIds: $(this).data('nodeList')
-                  }, function(instances) {
-                      var $taskNodeListContainer = $('.taskNodeListContainer').empty();
-                      for (var i = 0; i < instances.length; i++) {
-                          var $tr = $('<tr></tr>').css({
-                              'line-height': '2.1'
-                          });
-                          var $tdInstanceName = $('<td></td>').append(instances[i].chef.chefNodeName).css({
-                              'font-size': '12px'
-                          });
-                          var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
-                              'font-size': '12px'
-                          });
-                          var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
-                              'font-size': '12px'
-                          });
-                          $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
-                          $taskNodeListContainer.append($tr);
-                      }
-                      $('#assignedNode').modal('show');
-                  });
-              });
+              if (data[i].taskType === 'chef') {
+                var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
+                $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
+                    $.post('../instances/', {
+                        instanceIds: $(this).data('nodeList')
+                    }, function(instances) {
+                        var $taskNodeListContainer = $('.taskNodeListContainer').empty();
+                        for (var i = 0; i < instances.length; i++) {
+                            var $tr = $('<tr></tr>').css({
+                                'line-height': '2.1'
+                            });
+                            var $tdInstanceName = $('<td></td>').append(instances[i].chef.chefNodeName).css({
+                                'font-size': '12px'
+                            });
+                            var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
+                                'font-size': '12px'
+                            });
+                            var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
+                                'font-size': '12px'
+                            });
+                            $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
+                            $taskNodeListContainer.append($tr);
+                        }
+                        $('#assignedNode').modal('show');
+                    });
+                });
+              } else {
+                var $tdNodeList = $('<td> - </td>')
+              }
               $tr.append($tdNodeList);
-
+              if(data[i].taskType ==='chef') {
               var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
               $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
                   var $taskRunListContainer = $('.taskRunListContainer').empty();
@@ -1899,55 +1903,90 @@
                   }
                   $('#assignedRunlist').modal('show');
               });
+             } else {
+              var $tdRunlist = $('<td> - </td>');
+             }
               $tr.append($tdRunlist);
 
-              var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="#assignedExecute" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+              var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
               $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
                   var taskId = $(this).data('taskId');
                   var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                   var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
                   $.get('../tasks/' + taskId + '/run', function(data) {
-                      var instances = data.instances;
-                      var date = new Date().setTime(data.timestamp);
-                      var taskTimestamp = new Date(date).toUTCString(); //converts to human readable strings
-                      $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-                      for (var i = 0; i < instances.length; i++) {
-                          var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
-                          if (i === 4) {
-                              var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
+                    var date = new Date().setTime(data.timestamp);
+                    var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                    $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+                    if (data.taskType === 'chef') {
+                        var instances = data.instances;
+                        for (var i = 0; i < instances.length; i++) {
+                            var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                            if (i === 4) {
+                                var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
-                              $taskExecuteTabsHeaderContainer.append($liMoreHeader);
+                                $taskExecuteTabsHeaderContainer.append($liMoreHeader);
 
-                              $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
+                                $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
 
-                          }
+                            }
 
-                          $taskExecuteTabsHeaderContainer.append($liHeader);
+                            $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                          var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                            var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
 
-                          $taskExecuteTabsContent.append($tabContent);
-
-
-                      }
-                      //shown event
+                            $taskExecuteTabsContent.append($tabContent);
 
 
+                        }
+                        //shown event
 
-                      $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
-                          $(this).attr('data-taskPolling', 'true');
-                          $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
-                          var tabId = $(this).attr('href')
-                          pollTaskLogs($(this), $(tabId), null, 0, false);
-                          //e.relatedTarget // previous active tab
-                      });
 
-                      $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
-                          $(e.target).attr('data-taskPolling', 'true');
-                          //e.relatedTarget // previous active tab
-                      }).first().click();
 
-                      $('#assignedExecute').modal('show');
+                        $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
+                            $(this).attr('data-taskPolling', 'true');
+                            $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
+                            var tabId = $(this).attr('href')
+                            pollTaskLogs($(this), $(tabId), null, 0, false);
+                            //e.relatedTarget // previous active tab
+                        });
+
+                        $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
+                            $(e.target).attr('data-taskPolling', 'true');
+                            //e.relatedTarget // previous active tab
+                        }).first().click();
+
+                        $('#assignedExecute').modal('show');
+                    } else {
+                        var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
+                        $taskExecuteTabsHeaderContainer.append($liHeader);
+                        var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                        $taskExecuteTabsContent.append($tabContent);
+                        function pollJob() {
+                         $.get('../jenkins/'+data.jenkinsServerId+'/jobs/'+data.jobName,function(job){
+                            console.log(job.lastBuild.number);
+                            console.log(data.lastBuildNumber);
+                            if(job.lastBuild.number > data.lastBuildNumber) {
+                              function pollJobOutput() {
+                                $.get('../jenkins/'+data.jenkinsServerId+'/jobs/'+data.jobName+'/builds/'+job.lastBuild.number+'/output',function(jobOutput){
+                                  $tabContent.find('taskLogArea').html(jobOutput.output);
+                                  console.log(jobOutput);
+                                  setTimeout(function() {
+                                    if ($('#assignedExecute').data()['bs.modal'].isShown) {
+                                      pollJobOutput();
+                                    }
+                                  }, 3000);
+                                });
+                              }
+                            } else {
+                              pollJob();
+                            }
+                            console.log(job);
+                         });
+                        }
+                        pollJob();  
+                        $('#assignedExecute').modal('show'); 
+                        console.log(data);
+                    }
 
 
 
@@ -1960,7 +1999,7 @@
               var timestamp = "-";
               if (data[i].lastRunTimestamp) {
                   var date = new Date().setTime(data[i].lastRunTimestamp);
-                  timestamp = new Date(date).toUTCString(); //converts to human readable strings
+                  timestamp = new Date(date).toLocaleString(); //converts to human readable strings
               }
 
               var $tdTime = $('<td></td>').append(timestamp).addClass('taskrunTimestamp');
@@ -2031,7 +2070,7 @@
                       for (var i = 0; i < data.length; i++) {
                           var $rowDiv = $('<tr class="row"></tr>');
                           var timeString = new Date().setTime(data[i].timestamp);
-                          var date = new Date(timeString).toUTCString(); //converts to human readable strings
+                          var date = new Date(timeString).toLocaleString(); //converts to human readable strings
                           /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
 
                           if (data[i].err) {

@@ -764,9 +764,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         if (!taskData.runlist) {
             taskData.runlist = [];
         }
-
+        console.log(taskData);
         tasksDao.createTask(taskData, function(err, data) {
             if (err) {
+                console.log(err);
                 res.send(500);
                 return;
             }

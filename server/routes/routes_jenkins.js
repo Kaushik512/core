@@ -41,7 +41,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.get('/jenkins/:jenkinsId/jobs', function(req, res) {
         var jenkinsData = req.CATALYST.jenkins;
-        console.log(jenkinsData);
+
         var jenkins = new Jenkins({
             url: jenkinsData.jenkinsurl,
             username: jenkinsData.jenkinsusername,
@@ -54,6 +54,46 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 return;
             }
             res.send(jobsList);
+        });
+
+
+    });
+
+    app.get('/jenkins/:jenkinsId/jobs/:jobName', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
+        jenkins.getJobInfo(req.params.jobName, function(err, job) {
+            if (err) {
+                logger.error('jenkins jobs fetch error', err);
+                res.send(500, errorResponses.jenkins.serverError);
+                return;
+            }
+            res.send(job);
+        });
+
+
+    });
+
+    app.get('/jenkins/:jenkinsId/jobs/:jobName/builds/:buildNumber/output', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
+        jenkins.getJobOutput(req.params.jobName, req.params.buildNumber, function(err, jobOutput) {
+            if (err) {
+                logger.error('jenkins jobs fetch error', err);
+                res.send(500, errorResponses.jenkins.serverError);
+                return;
+            }
+            res.send(jobOutput);
         });
 
 
