@@ -2921,10 +2921,14 @@ $.get('/instances/' + data.id, function(data) {
           }
 
 var SerachBoxInInstance={
+  instanceData:null,
   init:function(){
-
+$('#instanceSearch').on('keyup',this.updateUI);
   },
-  initializeInstanceSearch:function(){
+initData:function(){
+
+},
+  updateUI:function(){
 
   },
   updateData:function(){
