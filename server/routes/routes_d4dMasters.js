@@ -195,30 +195,74 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
         console.log("REceived request for delete chk." + req.params.fieldvalue +  ' : ' + req.params.id + ' : ' + req.params.fieldname);
        // console.log('received request ' + req.params.id);
-       //Referntial integrity check 
-        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-            if (err) {
-                console.log("Hit and error:" + err);
-            }
-            if (dbtype) {
-                //Currently rowid is hardcoded since variable declaration was working
-                var item = '\"' + req.params.fieldname + '\"';
-                console.log("Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
-                eval('d4dModelNew.' + dbtype).remove({
-                    rowid: req.params.fieldvalue
-                }, function(err) {
-                    if (err) {
-                        console.log('Hit an errror on delete : ' + err);
-                        res.send(500);
-                        return;
-                    } else {
-                        console.log('Document deleted : ' + req.params.fieldvalue);
-                        res.send(200);
-                        return;
-                    }
-                }); //end findOne
-            }
-        }); //end configmgmtDao
+       //Referntial integrity check to be done.
+       var tocheck = [];
+       var fieldname = '';
+        switch (req.params.id){
+            case "1":
+                tocheck.push('2');
+                tocheck.push('3');
+                tocheck.push('10');
+                fieldname = "orgname_rowid";
+                break;
+            case "2":
+                tocheck.push('4');
+                fieldname = "productgroupname_rowid";
+                break;
+            case "3":
+                tocheck.push('4');
+                fieldname = "environmentname_rowid";
+                break;
+            case "4":
+                tocheck.push('blueprints');
+                tocheck.push('instances');
+                fieldname = "projectId";
+                break;
+            case "10":
+                tocheck.push('all');
+                fieldname = "configname_rowid";
+                break;
+            case "19":
+                tocheck.push('blueprints');
+                tocheck.push('instances');
+                fieldname = "projectId";
+                break;
+        }
+        configmgmtDao.deleteCheck(req.params.fieldvalue,tocheck,fieldname,function(err,data){
+        console.log('Delete check returned:' + data);
+        if(data == "none"){
+            console.log('entering delete');
+            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                if (err) {
+                    console.log("Hit and error:" + err);
+                }
+                if (dbtype) {
+                    //Currently rowid is hardcoded since variable declaration was working
+                    var item = '\"' + req.params.fieldname + '\"';
+                    console.log("About to delete Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
+                    //res.send(500);
+                    eval('d4dModelNew.' + dbtype).remove({
+                        rowid: req.params.fieldvalue
+                    }, function(err) {
+                        if (err) {
+                            console.log('Hit an errror on delete : ' + err);
+                            res.send(500);
+                            return;
+                        } else {
+                            console.log('Document deleted : ' + req.params.fieldvalue);
+                            res.send(200);
+                            return;
+                        }
+                    }); //end findOne
+                }
+            }); //end configmgmtDao
+        }
+        else{
+            console.log('There are dependent elements cannot delete');
+            res.send(412,"Cannot proceed with delete. \n Dependent elements found");
+            return;
+        }
+        });
 
     });
 
@@ -1635,7 +1679,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (d4dMasterJson != null) {
                                 uuid1 = bodyJson["rowid"];
                                 //    console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
-                                console.log('rowtoedit :' + rowtoedit);
+                               // console.log('rowtoedit :' + JSON.stringify(rowtoedit) + ' : ' + JSON.stringify(bodyJson) );
+
                                 if (bodyJson["folderpath"] == undefined) //folderpath issue fix
                                     folderpath = ''
                                 else
@@ -1647,11 +1692,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             rowtoedit[myval] = bodyJson[myval];
                                             fldadded = true;
                                         }
-                                    console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
+                                 //   console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
                                 }
                                 if(!fldadded){
-                                    //
-                                    //console.log("");
+                                    console.log('Not Added --------->' + itm);
+                                    if(bodyJson[itm] != '') //found to have a value
+                                        {
+                                            rowtoedit[itm] = bodyJson[itm];
+                                          //  console.log('New Entity :' + rowtoedit[myval]);
+                                        }
                                 }
                                 // for(var myval in d4dMasterJson){
                                 //      console.log("key:"+myval+", value:");

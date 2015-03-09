@@ -7,6 +7,8 @@ var codelist = require('../../codelist.json');
 var appConfig = require('../../config/app_config');
 var chefSettings = appConfig.chef;
 var logger = require('../../lib/logger')(module);
+var blueprintdao = require('../dao/blueprints.js');
+var instancedao = require('../dao/instancesdao.js');
 
 function Configmgmt() {
     this.getDBModelFromID = function(id, callback) {
@@ -1010,39 +1012,118 @@ function Configmgmt() {
     };
 
     this.deleteCheck = function(rowid,formids,fieldname,callback){
-        console.log("Delete Check request rcvd." + rowid +  ' : ' + formid + ' : ' + fieldname);
+        console.log("Delete Check request rcvd." + rowid +  ' : ' + formids.toString() + ' : ' + fieldname);
         var count = 0;
+        var exitloop  = false;
+        //Building dynamic schema
+        var checkmasters = function(rowid,formids,fieldname){
+            var delcheckquery = {};
+            delcheckquery.id = {$in:formids};
 
-         for(var formid in formids){
-            this.getDBModelFromID(formid, function(err, dbtype) {
-                if (err) {
-                    callback(err, null);
-                    return;
-                    //console.log("Hit and error:" + err);
+            delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
+            //delcheckschema.rowid = {type:String};
+            //var dynaschema = new d4dModelNew.d4dModelMastersGeneric(delcheckschema);
+            d4dModelNew.d4dModelMastersGeneric.find(delcheckquery,function(err,d4dMasterJson){
+                if(!err)
+                {
+                    console.log(JSON.stringify(d4dMasterJson));
+                    if(d4dMasterJson.length > 0){
+                        console.log('Found in ' + d4dMasterJson[0]['id'] + ' returning : ');
+                        callback(null,'found');
+                        return;
+                    }
+
+                    else{
+                        callback(null,'none');
+                        return;
+                    }
+
                 }
-                if (dbtype) {
-                    var query = {};
-                    query[fieldname] = fieldname;
-                    query['id'] = formid;
-                    eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
-                        if (err) {
-                            callback(err, null);
+                else{
+                    console.log("Hit an error in deleteCheck:" + err);
+                    callback(err,null);
+                    return;
+                }
+                    
+            });
+        };
+        var checkBPInstances = function(rowid,tempplatescheck){
+            blueprintdao.getBlueprintsByProjectId(rowid,function(err,data){
+                if(!err){
+                    console.log(JSON.stringify(data));
+                        if(data.length > 0){
+                            console.log('Found in ' + data['name'] + ' returning : ');
+                            callback(null,'found blueprints');
                             return;
                         }
-                        //check if d4dMasterJson has some rows. if found we can return intimating found
-                        if(d4dMasterJson.length > 0){
-                            callback(null, 'found');
-                            return;
-                        }
-                    });
+                        else{
+                            if(formids.indexOf('instances') < 0 && formids.indexOf('all') < 0){
+                                callback(null,'none');
+                                return;
+                            }
+                            else{
+                                instancedao.getInstanceByProjectId(rowid,function(err,data){
+                                    if(!err){
+                                        //console.log(JSON.stringify(data));
+                                            if(data.length > 0){
+                                                console.log('Found in ' + data['chefNodeName'] + ' returning : ');
+                                                callback(null,'found instances');
+                                                return;
+                                            }
+                                            else{
+                                                if(tempplatescheck != null){
+                                                    var ids =[];
+                                                    ids.push('17');
+                                                    ids.push('19');
 
+                                                      checkmasters(rowid,ids,'configname_rowid');
+                                                }
+                                                else
+                                                {
+                                                        callback(null,'none');
+                                                         return;
+                                                }
+                                            }
+                                    }
+                                    else
+                                    {
+                                        console.log("Hit an error in deleteCheck getInstanceByProjectId:" + err);
+                                        callback(err,null);
+                                        return;
+                                    }
+                                });
+                            }
+                        }
                 }
-                if(count >= formids.length - 1){
-                    callback(null,'none');
+                else
+                {
+                    console.log("Hit an error in deleteCheck getBlueprintsByProjectId:" + err);
+                    callback(err,null);
                     return;
                 }
-             });
-         }
+            });
+        };
+
+        if(formids.indexOf('blueprints') < 0 && formids.indexOf('instances') < 0  && formids.indexOf('all') < 0)
+            {
+                
+                checkmasters(rowid,formids,fieldname);
+            }
+        else{
+            if(formids.indexOf('blueprints') >= 0)
+            {
+                
+                checkBPInstances(rowid,null);
+            }
+            else if(formids.indexOf('all') >= 0){
+                console.log('Entering all');
+                checkBPInstances(rowid,"checktemplates");
+            }
+            
+
+        }
+
+        
     };
 
     this.getServiceFromId = function(serviceId, callback) {

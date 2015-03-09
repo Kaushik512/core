@@ -93,6 +93,16 @@ var d4dMastersGeneric = new mongoose.Schema(
 );
 var d4dModelMastersGeneric = mongoose.model('d4dModelMastersGeneric',d4dMastersGeneric,'d4dmastersnew');
 
+var d4dMastersDynamic = new mongoose.Schema(
+	{
+	active: {type:Boolean},
+	id: {type:String},
+	rowid: {type:String}
+	},{strict:false},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersDynamic = mongoose.model('d4dModelMastersDynamic',d4dMastersDynamic,'d4dmastersnew');
+
+
 
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
@@ -228,7 +238,7 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 	jenkinsurl: {type:String,required:true, trim:true},
 	jenkinsusername: {type:String,required:true, trim:true, validate:nameValidator},
 	jenkinspassword: {type:String,required:true, trim:true},
-	jenkinstoken: {type:String, trim:true},
+	jenkinstokenfile_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
@@ -251,3 +261,4 @@ module.exports.d4dModelMastersUserroles  = d4dModelMastersUserroles;
 module.exports.d4dModelMastersglobalaccess  = d4dModelMastersglobalaccess;
 module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//
 module.exports.d4dModelMastersGeneric  = d4dModelMastersGeneric;
+module.exports.d4dModelMastersDynamic  = d4dModelMastersDynamic;

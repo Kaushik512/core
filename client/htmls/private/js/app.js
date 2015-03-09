@@ -1276,11 +1276,19 @@ function checkURL() {
 
 }
 
+/*Setting GLobal Setting for jQuery AJAX for loading script dynamically that it should enable the caching of that file*/
+
+$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+  if ( options.dataType == 'script' || originalOptions.dataType == 'script' ) {
+      options.cache = true;
+  }
+});
+
+
 // LOAD AJAX PAGES
 
 function loadURL(url, container) {
-	//console.log(container)
-
+	
 	$.ajax({
 		type : "GET",
 		url : url,
@@ -1309,10 +1317,6 @@ function loadURL(url, container) {
 				}, "fast");
 			}
 		},
-		/*complete: function(){
-	    	// Handle the complete event
-	    	// alert("complete")
-		},*/
 		success : function(data) {
 			// cog replaced here...
 			// alert("success")

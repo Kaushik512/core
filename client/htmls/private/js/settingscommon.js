@@ -1,47 +1,53 @@
 function deleteItem(docid, key, value, button) {
 
-    if (confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"')) {
-
-        $.ajax({
-            type: "get",
-            dataType: "text",
-
-            async: false,
-            url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
-            success: function(data) {
-                // alert(data.toString());  
-                // debugger;
-                //d4ddata = JSON.parse(data);
-                // $('#refreshpage').click();
-                var $tr = $(button).closest('tr');
-               
-                //$tr.addClass('hidden').remove();
-                var $table = $tr.parents('table');
-               
-                if ( $.fn.DataTable.isDataTable( $table ) ) {
-                   var $dataTable = $table.DataTable();
-                   $dataTable.row($tr).remove().draw( false );
-                } else {
-                    
-                    $tr.fadeOut("slow");
-                    $tr.addClass('hidden').remove();
-                }
-                 
-
-                var tab = 'envtable';
-                $('#' + tab).dataTable();
-                if(parseInt(docid) < 5){
-                    loadTreeFuncNew();
-                  //  alert('in saved');
-                 //   selectFirstEnv();
-                }
-            },
-            failure: function(data) {
-                // debugger;
-                //  alert(data.toString());
-            }
-        });
-    }
+    bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"',function(result){
+        if(result)
+        {
+            $.ajax({
+                    type: "get",
+                    dataType: "text",
+        
+                    async: false,
+                    url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
+                    success: function(data) {
+                        // alert(data.toString());  
+                        // debugger;
+                        //d4ddata = JSON.parse(data);
+                        // $('#refreshpage').click();
+                        //alert(data);
+                        var $tr = $(button).closest('tr');
+                       
+                        //$tr.addClass('hidden').remove();
+                        var $table = $tr.parents('table');
+                       
+                        if ( $.fn.DataTable.isDataTable( $table ) ) {
+                           var $dataTable = $table.DataTable();
+                           $dataTable.row($tr).remove().draw( false );
+                        } else {
+                            
+                            $tr.fadeOut("slow");
+                            $tr.addClass('hidden').remove();
+                        }
+                         
+        
+                        var tab = 'envtable';
+                        $('#' + tab).dataTable();
+                        if(parseInt(docid) < 5){
+                            loadTreeFuncNew();
+                          //  alert('in saved');
+                         //   selectFirstEnv();
+                        }
+                    },
+                    failure: function(data) {
+                        // debugger;
+                         bootbox.alert(data.toString());
+                    },
+                    error: function(data){
+                        bootbox.alert(data.responseText);
+                    }
+                });
+        }
+    });
 
 }
 
