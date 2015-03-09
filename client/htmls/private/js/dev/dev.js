@@ -2549,7 +2549,7 @@ function initializeTaskArea(data) {
           console.log('called');
           //Shwoing the loader spinner and clearing the rows.
           $('tr[id*="trfordockercontainer_"]').remove();
-          $('.loadingimagefordockertable').removeClass('hidden');
+          //$('.loadingimagefordockertable').removeClass('hidden');
           $dockercontainertable = $('#dockercontainertable tbody');
 
           $('.container').each(function() {
@@ -2649,48 +2649,48 @@ function initializeTaskArea(data) {
 
 
 
-  $thistr.closest('tr').fadeTo('slow', 1);
-  $progressicon.addClass('hidden');
-});
-}
+                                        $thistr.closest('tr').fadeTo('slow', 1);
+                                        $progressicon.addClass('hidden');
+                                      });
+                                  }
 
-} else
-$progressicon.addClass('hidden');
+                                } else
+                                  $progressicon.addClass('hidden');
 
-});
-}
-return (false);
-}
-
-
-
-if (action == '6') {
-  bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-    if (!result) {
-      return;
-    }
-    performAction();
-  });
-} else if (action == '2') {
-  bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-    if (!result) {
-      return;
-    }
-    performAction();
-  });
-} else {
-  performAction();
-}
+                              });
+                          }
+                          return (false);
+                        }
 
 
-});
-  return;
-}
-});
-});
+
+                        if (action == '6') {
+                          bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+                            if (!result) {
+                              return;
+                            }
+                            performAction();
+                          });
+                        } else if (action == '2') {
+                          bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+                            if (!result) {
+                              return;
+                            }
+                            performAction();
+                          });
+                        } else {
+                          performAction();
+                        }
+
+
+                      });
+                    return;
+                  }
+                });
+            });
               } else { //no docker found
                 $('.loadingimagefordockertable').addClass('hidden');
-                $('li.Containers').addClass('hidden');
+                //$('li.Containers').addClass('hidden');
               }
             });
           //dockercontaineraction
