@@ -1,7 +1,6 @@
   //function for showing the tableview and the cardview
   function showHideControl(objID) {
-    debugger;
-    if (objID) {
+      if (objID) {
       if (objID == "divinstancescardview" || objID == "defaultViewButton") {
         $("#divinstancestableview").removeClass("visibleClass").hide();
         $("#divinstancescardview").addClass("visibleClass").show();
@@ -2921,7 +2920,7 @@ $.get('/instances/' + data.id, function(data) {
           }
 
 var SerachBoxInInstance={
-  instanceData:null,
+  //instanceData:null,
   init:function(){
 $('#instanceSearch').on('keyup',this.updateUI);
   },
