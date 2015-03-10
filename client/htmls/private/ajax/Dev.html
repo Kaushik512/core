@@ -17,7 +17,7 @@
                 <li class="pull-left Orchestration">
                     <a href="#l3" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                 </li>
-                <li class="pull-left Containers">
+                <li class="pull-left Containers hidden">
                     <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                 </li>
             </ul>
@@ -161,7 +161,6 @@ var callback=function(){
 loadHTMLFile(basePath+htmlTabs.instance,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.blueprint,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.orchestration,$('#myTabContent3'));
-loadHTMLFile(basePath+htmlTabs.docker,$('#myTabContent3'));
 
 function loadHTMLFile(url,parentToAppend){
     $.ajax({
