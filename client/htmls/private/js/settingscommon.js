@@ -414,7 +414,23 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                             inputC.html('Active');
                     }
                     else
-                        inputC.html(v);
+                        {
+                            if(inputC.attr('datatype'))
+                                {
+                                   // inputC.attr('data-content',v);
+                                   // inputC.attr('data-toggle',"popover");
+                                   if(inputC.attr('datatype') == 'list')
+                                    {
+                                        v = v.replace(/,/g, "<br/>");
+                                        inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
+                                    }
+                                   else
+                                    inputC.html(v);
+                                }
+                            else
+                                inputC.html(v);
+                                
+                        }
                 }
             });
 
@@ -492,6 +508,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             // $('#envtable').append(sRow);
             
      //   });
+        setPopOverForTableFields();
 
         $(".savespinner").hide();
 
@@ -499,7 +516,45 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 // function CreateTableFromJson(formID, idFieldName, createFileName) {
 //     CreateTableFromJsonNew(formID, idFieldName, createFileName);
 // }
+function setPopOverForTableFields() {
 
+    var overPopup = false;
+
+    $('[data-toggle="popover"]').popover({
+        trigger: 'manual',
+        placement: 'left',
+        html: true
+
+    // replacing hover with mouseover and mouseout
+    }).mouseover(function (e) {
+        // when hovering over an element which has a popover, hide
+        // them all except the current one being hovered upon
+        $('[data-toggle="popover"]').not('#' + $(this).attr('id')).popover('hide');
+        var $popover = $(this);
+        $popover.popover('show');
+
+        // set a flag when you move from button to popover
+        // dirty but only way I could think of to prevent
+        // closing the popover when you are navigate across
+        // the white space between the two
+        $popover.mouseenter(function () {
+            overPopup = true;
+        }).mouseleave(function () {
+            overPopup = false;
+            $popover.popover('hide');
+        });
+
+    }).mouseout(function (e) {
+        // on mouse out of button, close the related popover
+        // in 200 milliseconds if you're not hovering over the popover
+        var $popover = $(this);
+        setTimeout(function () {
+            if (!overPopup) {
+                $popover.popover('hide');
+            }
+        }, 200);
+    });
+}
 
 
 var forceEdit = false; //variable used to force save one record ex. Authentication
