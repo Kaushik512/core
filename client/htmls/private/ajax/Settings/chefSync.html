@@ -717,7 +717,7 @@ $(function() {
 
                 function pollTaskStatus(taskId, timestamp) {
                     timeout = setTimeout(function() {
-                        $.get('../task/' + taskId + '/status?timestamp=' + timestamp, function(data) {
+                        $.get('../taskstatus/' + taskId + '/status?timestamp=' + timestamp, function(data) {
                             console.log(data);
                             if (!data.completed) {
                                 if (data.statusList && data.statusList.length) {

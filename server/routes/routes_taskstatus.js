@@ -4,7 +4,7 @@ var taskStatusModule = require('../model/taskstatus');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
-    app.get('/task/:taskId/status', sessionVerificationFunc, function(req, res) {
+    app.get('/taskstatus/:taskId/status', sessionVerificationFunc, function(req, res) {
         taskStatusModule.getTaskStatus(req.params.taskId, function(err, taskStatus) {
             if (err) {
                 res.send(500);
