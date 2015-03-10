@@ -8,7 +8,7 @@
           $('#defaultViewButton').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
           $('#instanceview').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
         } else {
-          $('#tableinstanceview_filter').css('display','none');
+         // $('#tableinstanceview_filter').css('display','none');
           $("#divinstancestableview").addClass("visibleClass").show();
           $("#divinstancescardview").removeClass("visibleClass").hide();
           $('#instanceview').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
@@ -133,11 +133,11 @@
                         url: url,
                         type: 'DELETE',
                         success: function() {
-                                      // $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
-                                      serachBoxInInstance.updateData(undefined,"remove",instanceId);
+                                      $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                     // serachBoxInInstance.updateData(undefined,"remove",instanceId);
 
-                                      //     var table = $('#tableinstanceview').DataTable();
-                                      //   table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                                          var table = $('#tableinstanceview').DataTable();
+                                        table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
                                       dialog.modal('hide');
                                     }
                                   }).fail(function() {
@@ -160,7 +160,7 @@
   } else {
     bootbox.alert('Please select an instance to remove.');
   }
-  }
+}
 
         /*
         Attaching Click Event on IP Address Import, which will reset instance form.
@@ -301,8 +301,8 @@
                     // $('#addInstanceBtn').attr('disabled','disabled');
                     $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/addInstance', reqBody, function(data) {
                       $('#tabInstanceStatus').hide();
-                      //addInstanceToDOM(data);
-                      serachBoxInInstance.updateData(data,"add",undefined);
+                      addInstanceToDOM(data);
+                    //  serachBoxInInstance.updateData(data,"add",undefined);
                       $spinner.addClass('hidden');
                       $result.addClass('hidden');
                       $('#addInstanceBtn').removeAttr('disabled');
@@ -467,14 +467,14 @@
         var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
         switch (key) {
               case 38: // UP arrow
-            var $newSelectedRowPre=$selectedRow.prev();
+              var $newSelectedRowPre=$selectedRow.prev();
               if ($newSelectedRowPre.length == 1) {           
                 $newSelectedRowPre.addClass('rowcustomselected');
                 $selectedRow.removeClass('rowcustomselected');              
               }
               break;
               case 40: // DOWN arrow
-           var $newSelectedRowNext = selectedRowPre.next();
+              var $newSelectedRowNext = selectedRowPre.next();
               if ($newSelectedRowNext.length == 1) {
                 $newSelectedRowNext.addClass('rowcustomselected');
                 $selectedRow.removeClass('rowcustomselected');                
@@ -525,7 +525,7 @@
           if (data.length) {
             $('#tabInstanceStatus').hide();
           }
-          serachBoxInInstance.initData(data);
+         // serachBoxInInstance.initData(data);
           a=createInstanceUI;
           createInstanceUI(data);
         }
@@ -744,7 +744,7 @@
   }, delay);
   }
   pollLogs(lastTimestamp, 0, true);
-  };
+};
 
 
         //emptying ssh container
@@ -1433,10 +1433,10 @@
     }
   }
   $selecteditBtnContainer.append($li);
-  }
-  $itemBody.append($ul);
-  $itemBody.append($selecteditBtnContainer);
-  $itemContainer.append($itemBody);
+}
+$itemBody.append($ul);
+$itemBody.append($selecteditBtnContainer);
+$itemContainer.append($itemBody);
 
                         //Find the template type container and add to it.
                         //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
@@ -1671,17 +1671,17 @@
 
   $.get('../instances/' + data.id, function(data) {
     $('#tabInstanceStatus').hide();
-  //  addInstanceToDOM(data);
-  serachBoxInInstance.updateData(data,"add",undefined);
+    addInstanceToDOM(data);
+ // serachBoxInInstance.updateData(data,"add",undefined);
 
-  });
+});
 
 
-  }).error(function() {
-    $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
-  });
-  }
-  });
+}).error(function() {
+  $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+});
+}
+});
 
   }
 
@@ -2352,7 +2352,7 @@
                           }
                         });
   }
-  });
+});
   });
 
 
@@ -2365,7 +2365,7 @@
             initializeBlueprintArea(data.blueprints);
             initializeTaskArea(data.tasks);
             x = data.instances;
-            initializeInstanceArea(data.instances);
+           initializeInstanceArea(data.instances);
 
           });
 
@@ -2563,39 +2563,39 @@
   });
   }
 
-  } else
-  $progressicon.addClass('hidden');
+} else
+$progressicon.addClass('hidden');
 
-  });
+});
   }
   return (false);
-  }
+}
 
 
 
-  if (action == '6') {
-    bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-      if (!result) {
-        return;
-      }
-      performAction();
-    });
-  } else if (action == '2') {
-    bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-      if (!result) {
-        return;
-      }
-      performAction();
-    });
-  } else {
+if (action == '6') {
+  bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+    if (!result) {
+      return;
+    }
     performAction();
-  }
-
-
   });
+} else if (action == '2') {
+  bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+    if (!result) {
+      return;
+    }
+    performAction();
+  });
+} else {
+  performAction();
+}
+
+
+});
     return;
   }
-  });
+});
   });
                 } else { //no docker found
                   $('.loadingimagefordockertable').addClass('hidden');
@@ -2798,17 +2798,17 @@
   }
   pollLogs(lastTimestamp, 0, true);
   $.get('/instances/' + data.id, function(data) {
-   // addInstanceToDOM(data);
-   serachBoxInInstance.updateData(data,"add",undefined);
-  });
+   addInstanceToDOM(data);
+  // serachBoxInInstance.updateData(data,"add",undefined);
+ });
 
-  }).error(function() {
-    $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
-  });;
+}).error(function() {
+  $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+});;
 
 
 
-  });
+});
 
 
 
@@ -2828,32 +2828,52 @@
               });
             }
 
-        var serachBoxInInstance= {
+            var serachBoxInInstance= {
               instanceData:null,
               isActive:false,
               init:function(){
                this.updateUI=this.updateUI.bind(this);
+
                $('#search').on('click',this.updateUI);
-               $('.custom-left').click(function() {
-                 $('#divinstancescardview').carousel('prev');
+               $('.custom-left').click(function() {//previous list
+                var originalList=$('#divinstancescardview').find('.carousel-inner');
+                var activeList=originalList.find('.active'),
+                prevList=activeList.prev();
+               if(prevList.length==1){
+                 activeList.removeClass('active');
+                prevList.addClass('active');                             
+               }else{
+                activeList.removeClass('active');
+               originalList.find('.item:last').addClass('active');               
+               }
                });
 
                $('.custom-right').click(function() {
-                 $('#divinstancescardview').carousel('next');
-               });
+                var originalList=$('#divinstancescardview').find('.carousel-inner');
+                var activeList=originalList.find('.active'),
+                nextList=activeList.next();
+               if(nextList.length==1){
+                nextList.addClass('active');
+                activeList.removeClass('active');
+               }else{
+                 activeList.removeClass('active');
+               originalList.find('.item:first').addClass('active');              
+               }
               
-  },
-  initData:function(data){
-    x=data;
-    this.instanceData=data;
-    console.log(this.instanceData);
-  },
-  emptyInstanceCarosuelAndDataTable:function(){
-    var table = $('#tableinstanceview').DataTable();
-    var el=  $('#divinstancescardview').find('.carousel-inner');
-    table.clear().draw(false);
-    el.find('.item').addClass('active').not(":first").remove();
-    el.find('.domain-role-thumbnail').remove();
+               });
+
+             },
+             initData:function(data){
+              x=data;
+              this.instanceData=data;
+              console.log(this.instanceData);
+            },
+            emptyInstanceCarosuelAndDataTable:function(){
+              var table = $('#tableinstanceview').DataTable();
+              var el=  $('#divinstancescardview').find('.carousel-inner');
+              table.clear().draw(false);
+              el.find('.item').addClass('active').remove();
+             // el.find('.domain-role-thumbnail').remove();
                    // dialog.modal('hide');
                  },
                  updateUI:function(){
@@ -2870,6 +2890,7 @@
             this.emptyInstanceCarosuelAndDataTable();
             createInstanceUI(resultJSON);
             this.isActive=false;
+            loadcarousel();
           },
           updateData:function(object,operationType,instanceId){
             var temp,data=this.instanceData,len=this.instanceData.length;
@@ -2911,7 +2932,6 @@
         }
         return searchResult;
       }
-
     };
 
     initializeInstance();
@@ -2924,6 +2944,6 @@
          loadcarousel();
          getViewTile();
 
-         serachBoxInInstance.init();
+        // serachBoxInInstance.init();
 
        });
