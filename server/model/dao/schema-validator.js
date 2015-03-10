@@ -26,6 +26,7 @@ var validators = {
     recipeValidator: [getRegExValidator(/^recipe[|role[.*]$/i, "Invalid Runlist format")], // need to investigate further
     catalystUsernameValidator: [getLengthValidator(1, 100, 'Invalid Catalyst Username'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Catalyst Username')],
     blueprintNameValidator : [getLengthValidator(1, 100, 'Invalid Blueprint Name')],
+    taskNameValidator : [getLengthValidator(1, 100, 'Invalid Task Name')],
 
 };
 
