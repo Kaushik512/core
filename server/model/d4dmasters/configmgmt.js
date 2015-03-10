@@ -74,6 +74,10 @@ function Configmgmt() {
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelJenkinsConfig');
                 break;
+            case "21":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersTeams');
+                break;
         }
     };
     this.getChefServerDetails_old = function(rowid, callback) {
@@ -774,14 +778,34 @@ function Configmgmt() {
                                     console.log('rowidval' + JSON.stringify(rowidval));
                                     callback(null, rowidval);
                                 }
-                                var i = 0;
+                                
                                 envdata_.forEach(function(k, v) {
                                     // rowidval[k['rowid']] = k['environmentname'];
                                     //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
                                     var rid = {};
                                     rid[k['rowid']] = k['environmentname'];
                                     rowidval.push(rid);
-                                    if (i >= envdata_.length - 1) {
+                                    //  console.log(k['rowid'], k['environmentname'],envdata_.length);
+                                });
+                            } 
+
+                            d4dModelNew.d4dModelMastersUsers.find({
+                                id: "7"
+                            }, function(err, userdata) {
+                            if (userdata) {
+                                var userdata_ = JSON.parse(JSON.stringify(userdata));
+                                if (userdata_.length <= 0) {
+                                    console.log('rowidval' + JSON.stringify(rowidval));
+                                    callback(null, rowidval);
+                                }
+                                var i = 0;
+                                userdata_.forEach(function(k, v) {
+                                    // rowidval[k['rowid']] = k['environmentname'];
+                                    //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
+                                    var rid = {};
+                                    rid[k['rowid']] = k['loginname'];
+                                    rowidval.push(rid);
+                                    if (i >= userdata_.length - 1) {
                                         //   console.log('rowidval' + JSON.stringify(rowidval));
                                         callback(null, rowidval);
                                     }
@@ -794,6 +818,8 @@ function Configmgmt() {
                                 //    console.log('this called');
                                 callback(null, rowidval);
                             }
+
+                            }); //userdata 
                         }); //env
                     }); //config management
                 }); // proj

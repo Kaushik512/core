@@ -6,3 +6,4 @@ server/config/catalyst-config.json
 server/.idea/
 tempfiles/
 seed/copychefidtoinstance.js
+server/catdata/

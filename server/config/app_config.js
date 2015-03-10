@@ -23,7 +23,7 @@ var config = {
         sessionSecret: 'sessionSekret'
     },
     app_run_port: 3001,
-    userHomeDir: pathExtra.homedir(),
+    userHomeDir: currentDirectory + '/../catdata', //pathExtra.homedir()
     catalysHomeDirName: 'catalyst',
     instancePemFilesDirName: 'instance-pemfiles',
     tempDirName: 'temp',

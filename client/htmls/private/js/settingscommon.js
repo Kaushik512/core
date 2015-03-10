@@ -414,7 +414,23 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                             inputC.html('Active');
                     }
                     else
-                        inputC.html(v);
+                        {
+                            if(inputC.attr('datatype'))
+                                {
+                                   // inputC.attr('data-content',v);
+                                   // inputC.attr('data-toggle',"popover");
+                                   if(inputC.attr('datatype') == 'list')
+                                    {
+                                        v = v.replace(/,/g, "<br/>");
+                                        inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
+                                    }
+                                   else
+                                    inputC.html(v);
+                                }
+                            else
+                                inputC.html(v);
+                                
+                        }
                 }
             });
 
@@ -492,6 +508,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             // $('#envtable').append(sRow);
             
      //   });
+        setPopOverForTableFields();
 
         $(".savespinner").hide();
 
@@ -499,7 +516,45 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 // function CreateTableFromJson(formID, idFieldName, createFileName) {
 //     CreateTableFromJsonNew(formID, idFieldName, createFileName);
 // }
+function setPopOverForTableFields() {
 
+    var overPopup = false;
+
+    $('[data-toggle="popover"]').popover({
+        trigger: 'manual',
+        placement: 'left',
+        html: true
+
+    // replacing hover with mouseover and mouseout
+    }).mouseover(function (e) {
+        // when hovering over an element which has a popover, hide
+        // them all except the current one being hovered upon
+        $('[data-toggle="popover"]').not('#' + $(this).attr('id')).popover('hide');
+        var $popover = $(this);
+        $popover.popover('show');
+
+        // set a flag when you move from button to popover
+        // dirty but only way I could think of to prevent
+        // closing the popover when you are navigate across
+        // the white space between the two
+        $popover.mouseenter(function () {
+            overPopup = true;
+        }).mouseleave(function () {
+            overPopup = false;
+            $popover.popover('hide');
+        });
+
+    }).mouseout(function (e) {
+        // on mouse out of button, close the related popover
+        // in 200 milliseconds if you're not hovering over the popover
+        var $popover = $(this);
+        setTimeout(function () {
+            if (!overPopup) {
+                $popover.popover('hide');
+            }
+        }, 200);
+    });
+}
 
 
 var forceEdit = false; //variable used to force save one record ex. Authentication
@@ -926,7 +981,8 @@ function readform(formID) {
                                 // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
                                 // alert("Added:" + item.field[i].values.value);
                               //  alert(item.rowid);
-                                addToSelectList(item[curInput.attr('datapath')],item.rowid, curInput);
+                            //  alert(JSON.stringify(item[curInput.attr('id')]));
+                                addToSelectList(item[curInput.attr('id')],item.rowid, curInput);
                          //   }
                        
                     });
@@ -1936,6 +1992,7 @@ function addToSelectList(txtVal,rowidval, inp) {
     var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px;visibility:hidden\' ></i>";
     var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ></button>";
     if (txtVal != '' && typeof inp != "undefined") {
+       // alert(txtVal);
         inp.append('<label class=\"toggle font-sm\" ><input onclick=\'if($(this).is(\":checked\")) {$(this).closest(\"label\").css(\"background-color\",\"#eeeeee\");$(this).css(\"border-color\",\"#3b9ff3\");}else{$(this).closest(\"label\").css(\"background-color\",\"#ffffff\");$(this).css(\"border-color\",\"red\");}\' type=\"checkbox\" name=\"checkbox-toggle\" rowid=\"' + rowidval + '\" value=\"' + txtVal + '\" style=\"width:100%\"><i data-swchoff-text=\"NO\" data-swchon-text=\"YES\"></i>' + txtVal + '</label>');
         //inp.append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;width:100%;cursor:pointer\'><p class=\'bg-success\'>' + imgCheck + txtVal + '</p></div>');
         $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
