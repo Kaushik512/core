@@ -19,7 +19,8 @@ module.exports = {
     },
     jenkins: {
         notFound: getErrMsgObj('Jenkins Server Id Does Not Exist'),
-        serverError:getErrMsgObj('Jenkins server error')
+        serverError: getErrMsgObj('Jenkins server error'),
+        buildInQueue: getErrMsgObj('A build is already in queue')
     }
 
 };

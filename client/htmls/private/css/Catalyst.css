@@ -3802,6 +3802,7 @@ float: left;
     height:400px;
     overflow-y:auto;
     overflow-x:hidden;
+    word-break:break-all;
 }
 .logsAreaBootstrap {
     height:400px;
@@ -4608,7 +4609,12 @@ body.custom-theme {
 .custom-theme .txt-color-blue {
     color: #40baf1 !important;
 }
-
+.custom-theme .txt-color-deactive {
+    color: #40baf1;
+}
+.custom-theme .txt-color-active {
+    color: green;
+}
 .custom-theme #logo-group>span .badge {
     background: #008DC4;
 }
@@ -5647,7 +5653,7 @@ span.icon {
 }
 
 .modal-height{
-    height:314px;
+    height:346px;
 }
 
 .modalbody-height
@@ -5675,7 +5681,7 @@ span.icon {
 @media screen and (max-width:1200px) {
 
     .modal-height{
-    height:520px;
+    height:590px;
 }
 .topNew
 {
@@ -6931,9 +6937,12 @@ body .ui-tooltip {
 .rowSpacing td 
 {
     padding-top: 7px;
-    margin-bottom: 0.5em;
-    border-style: inset;
-    border-width: 1px;
+    
 
 }
 
+.instanceBody{
+    height:430px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}

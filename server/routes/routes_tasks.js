@@ -11,6 +11,8 @@ var fileIo = require('../lib/utils/fileio');
 
 var Jenkins = require('../lib/jenkins');
 
+var errorResponses = require('./error_responses.js')
+
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/tasks/*', sessionVerification);
@@ -19,7 +21,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         tasksDao.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 console.log(err);
-                res.send(500);
+                res.send(500,errorResponses.db.error);
                 return;
             }
             if (!data.length) {
@@ -32,8 +34,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var instanceIds = task.chefTask.nodesIdList;
                 console.log(task.nodesIdList);
                 if (!(instanceIds && instanceIds.length)) {
-                    console.log(task.nodesIdList);
-                    res.send(500);
+                    res.send(500, errorResponses.db.error);
                     return;
                 }
 
@@ -42,7 +43,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 instancesDao.getInstances(instanceIds, function(err, instances) {
                     if (err) {
                         console.log(err);
-                        res.send(500);
+                        res.send(500, errorResponses.db.error);
                         return;
                     }
 
@@ -240,35 +241,40 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             username: jenkinsData.jenkinsusername,
                             password: jenkinsData.jenkinspassword
                         });
-                        jenkins.getJobLastBuildReport(jenkinsTask.jobName, function(err, lastBuildReport) {
+                        jenkins.getJobInfo(jenkinsTask.jobName, function(err, jobInfo) {
                             if (err) {
                                 logger.error(err);
                                 res.send(500, errorResponses.jenkins.serverError);
                                 return;
                             }
                             // running the job
-                            jenkins.buildJob(jenkinsTask.jobName, function(err,buildRes) {
-                                if (err) {
-                                    logger.error(err);
-                                    res.send(500, errorResponses.jenkins.serverError);
-                                    return;
-                                }
-                                console.log('buildRes ==> ',buildRes);
-                                var taskRunTimestamp = new Date().getTime();
-                                tasksDao.updateLastRunTimeStamp(req.params.taskId, new Date().getTime(), function(err, data) {
+                            if (!jobInfo.inQueue) {
+                                jenkins.buildJob(jenkinsTask.jobName, function(err, buildRes) {
                                     if (err) {
-                                        console.log(err);
+                                        logger.error(err);
+                                        res.send(500, errorResponses.jenkins.serverError);
+                                        return;
                                     }
-                                });
+                                    console.log('buildRes ==> ', buildRes);
+                                    var taskRunTimestamp = new Date().getTime();
+                                    tasksDao.updateLastRunTimeStamp(req.params.taskId, new Date().getTime(), function(err, data) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    });
 
-                                res.send({
-                                    timestamp: taskRunTimestamp,
-                                    lastBuildNumber: lastBuildReport.number,
-                                    taskType: 'jenkins',
-                                    jenkinsServerId: jenkinsTask.jenkinsServerId,
-                                    jobName: jenkinsTask.jobName
+                                    res.send({
+                                        timestamp: taskRunTimestamp,
+                                        lastBuildNumber: jobInfo.lastBuild.number,
+                                        nextBuildNumber: jobInfo.nextBuildNumber,
+                                        taskType: 'jenkins',
+                                        jenkinsServerId: jenkinsTask.jenkinsServerId,
+                                        jobName: jenkinsTask.jobName,
+                                    });
                                 });
-                            });
+                            } else {
+                                res.send(500, errorResponses.jenkins.buildInQueue);
+                            }
                         });
                     }
                 });
