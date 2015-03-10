@@ -894,6 +894,7 @@
 
 
             $divComponentList.append($divComponentItem);
+            $divComponentList.append($('<span class="card_os">'+data.hardware.os+'</span>'));
             $divComponentListContainer.append($divComponentList);
             $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId', data._id);
 
