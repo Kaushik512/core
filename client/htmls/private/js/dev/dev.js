@@ -996,15 +996,17 @@
             $divActionBtnContainer.append($divActionChefRunContainer);
 
             var $divActionStartContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
-            $divActionBtnContainer.append($divActionStartContainer);
+            //$divActionBtnContainer.append($divActionStartContainer);
             if (!data.chef) {
                 data.chef = {};
             }
             var $divActionShutdownContainer = $('<div class="actionbutton"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
-            $divActionBtnContainer.append($divActionShutdownContainer);
+        //    $divActionBtnContainer.append($divActionShutdownContainer);
 
             var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon" data-instanceid="' + data._id + '"></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
             $divActionBtnContainer.append($divActionSSHContainer);
+            $divActionBtnContainer.append($divActionStartContainer);
+            $divActionBtnContainer.append($divActionShutdownContainer);
 
             var $back = $('<div></div>').addClass('back card-backflip');
             var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
