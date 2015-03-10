@@ -3712,7 +3712,10 @@ background-image:url('../img/rsz_inactive.png');
 .rowcustomselected{
     /*font-weight: bold datatabledefaultcolor #b0bed9;
     font-size:14px;  c8b3c6*/
-    background-color: #e7e7e7 !important;
+  /*  background-color: #e7e7e7 !important;*/
+  background-color:lightblue !important;
+  color:black !important;
+  font-weight:bold;
 }
 
 
@@ -5196,9 +5199,10 @@ table.dataTable td {
   text-align: center;
   text-decoration: none !important;
   cursor: pointer;
-  *cursor: hand;
+  cursor: hand;
   color: #333333 !important;
   border: 1px solid transparent;
+font-size:14px !important;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
   color: #333333 !important;
@@ -6980,4 +6984,9 @@ body .ui-tooltip {
 }
 .dockerModalExit{
     margin-top: 45px;
+}
+.card_os{
+    font-size:11px;
+    font-weight:bold;
+
 }

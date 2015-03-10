@@ -4,6 +4,8 @@ var readline = require('readline');
 
 var userHomeDir = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 
+var currentDirectory = __dirname;
+
 function getDefaultsConfig() {
     var config = {
         express: {
@@ -12,7 +14,7 @@ function getDefaultsConfig() {
             sessionSecret: 'sessionSekret'
         },
         app_run_port: 3001,
-        userHomeDir: userHomeDir,
+        userHomeDir: currentDirectory+'/catdata',
         catalysHomeDirName: 'catalyst',
         instancePemFilesDirName: 'instance-pemfiles',
         tempDirName: 'temp',
