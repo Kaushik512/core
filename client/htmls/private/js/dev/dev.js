@@ -463,24 +463,21 @@
       //Setting the count for the table entry in TableView
       function tableupdownRow(evt) {
         evt = evt || window.event;
-        var key = evt.keyCode;
+        var key = evt.which? evt.which : evt.keyCode;
+        var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
         switch (key) {
               case 38: // UP arrow
-              var $selectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected");
-              if ($('#tableinstanceview tbody').find(".rowcustomselected").prev().length == 1) {
-                var $newSelectedRowPre = $('#tableinstanceview tbody').find(".rowcustomselected").prev();
+            var $newSelectedRowPre=$selectedRow.prev();
+              if ($newSelectedRowPre.length == 1) {           
                 $newSelectedRowPre.addClass('rowcustomselected');
-                $selectedRowPre.removeClass('rowcustomselected');
-              
+                $selectedRow.removeClass('rowcustomselected');              
               }
               break;
               case 40: // DOWN arrow
-              var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
-              if ($('#tableinstanceview tbody').find(".rowcustomselected").next().length == 1) {
-                var $newSelectedRow = $('#tableinstanceview tbody').find(".rowcustomselected").next();
-                $newSelectedRow.addClass('rowcustomselected');
-                $selectedRow.removeClass('rowcustomselected');
-                
+           var $newSelectedRowNext = selectedRowPre.next();
+              if ($newSelectedRowNext.length == 1) {
+                $newSelectedRowNext.addClass('rowcustomselected');
+                $selectedRow.removeClass('rowcustomselected');                
               }
               break;
             }
