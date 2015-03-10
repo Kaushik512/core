@@ -135,7 +135,7 @@
             </div>
             <div class="modal-body">
                 <section id="wizard">
-                    <form id="commentForm" action="" class="smart-form">
+                    <form id="commentForm" action="">
                         <div id="rootwizard">
                             <ul style="display:none">
                                 <li><a href="#tab1" data-toggle="tab">First</a></li>
@@ -143,87 +143,88 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane" id="tab1">
-                                    <div style="margin:0px;" class="row control-group">
-                                        <section class="col col-6">
-                                            <label class="control-label" for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
+                                    <div style="margin:0px;">
+                                        <div class="col-lg-6">
+                                            <label for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
                                             </label>
-                                            <label class="input controls">
+                                            
                                                 <input type="text" id="Containernamefield" name="namefield" class="form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
+                                            
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="category">Port Mappings
                                             </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="control-label" for="category">Port Mappings
-                                            </label>
-                                            <label class="input controls">
+                                            
                                                 <input type="text" id="Portmappingfield" name="Portmappingfield" class=" form-control" placeholder="Map host ports to container ports" dockerparamkey="-p">
+                                            
+                                        </div>
+                                        <div class="col-lg-6 dockerModal">
+                                            <label for="category">Volumes
                                             </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="control-label" for="category">Volumes
-                                            </label>
-                                            <label class="input controls">
+                                            
                                                 <input type="text" id="Volumesfield" name="Volumesfield" class=" form-control" placeholder="Map host folders to container folders"  dockerparamkey="-v">
+                                            
+                                        </div>
+                                        <div class="col-lg-6 dockerModal">
+                                            <label for="category">Volumes-from
                                             </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="control-label" for="category">Volumes-from
-                                            </label>
-                                            <label class="input controls">
+                                            
                                                 <input type="text" id="Volumes-fromfield" name="Volumes-fromfield" class=" form-control" placeholder="Comma separated container names" dockerparamkey="--volumes-from">
+                                            
+                                        </div>
+                                        <div class="col-lg-6 dockerModal">
+                                            <label for="category">Linked Container
                                             </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="control-label" for="category">Linked Container
-                                            </label>
-                                            <label class="input controls">
+                                            
                                                 <input type="text" id="Linkedcontainerfield" name="Linkedcontainerfield" class=" form-control" placeholder="The name of a container this one links to"  dockerparamkey="--link">
+                                            
+                                        </div>
+                                        <div class="col-lg-6 dockerModal">
+                                            <label for="category">Startup Command
                                             </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="control-label" for="category">Startup Command
-                                            </label>
-                                            <label class="input controls">
+                                            
                                                 <input type="text" id="Startupcommandfield" name="Startupcommandfield" class=" form-control" placeholder="Optional startup command for the container" dockerparamkey="-c">
+                                            
+                                        </div>
+                                        <div class="col-lg-6 dockerModal">
+                                            <label for="category">Additional Startup
                                             </label>
-                                        </section>
-                                        <section class="col col-6 hidden">
+                                            
+                                                <input type="text" id="additionalStartupcommandfield" name="additionalStartupcommandfield" class=" form-control" placeholder="Optional startup command for the container" dockerparamkey="-c">
+                                            
+                                        </div>
+                                        <div class="col-lg-6 hidden">
                                             <label class="control-label" for="category">Removed Linked Containers on Exit
                                             </label>
-                                            <label class="select controls">
+                                            
                                                 <select class="chooseSelect width-100" id="Removelinkedcontainersonexitfield" placeholder="Should this & linked containers be removed on exit">
                                                     <option>False</option>
                                                     <option>True</option>
 
                                                 </select>
+                                            
+                                        </div>
+                                        <div class="col-lg-6 dockerModal">
+                                            <label for="category">Remove on Exit
                                             </label>
-                                        </section>
-                                        <section class="col col-6 hidden">
-                                            <label class="control-label" for="category">Remove on Exit
-                                            </label>
-                                            <label class="select controls">
-                                                <select class="chooseSelect width-100 " id="Removeonexitfield" placeholder="Should this container be removed when it exits">
-                                                    <option>False</option>
-                                                    <option>True</option>
 
-                                                </select>
-                                            </label>
-                                        </section>
-                                        <section class="col col-6 hidden">
+                                            <select class="width-100" id="Removeonexitfield" placeholder="Should this container be removed when it exits">
+                                                    <option value="False" selected>False</option>
+                                                    <option value="True">True</option>
+
+                                            </select>
+                                            
+                                        </div>
+                                        <div class="col-lg-6 hidden">
                                             <label class="control-label" for="">Startup Script</label>
                                             <label class="input input-file" for="file">
                                                 <div class="button"><input type="file" id="Startupscriptfield" name="Startupscriptfield">Browse</div><input type="text" readonly="">
                                             </label>
-                                        </section>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tab2">
-                                    <div id="dockerinstancesselctorview" style="margin-left: 8px;margin-top: 26px;width: 98%;">
-                                        <!-- <div class="control-group">
-                  <label class="control-label" for="url">URL</label>
-                  <div class="controls">
-                    <input type="text" id="urlfield" name="urlfield" class="required url">
-                  </div>
-                </div> -->
+                                    <div id="dockerinstancesselctorview" style="margin-top: 26px;">
                                     </div>
                                     <div class="btn-group">
 
@@ -233,10 +234,10 @@
                                 <br><hr>
                                 <ul class="pager wizard">
                                     <!-- <li class="previous first" style="display:none;"><a href="#">First</a></li> -->
-                                    <li class="previous disabled"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px">Previous</a></li>
+                                    <li class="previous disabled"><a href="javascript:void(0);" class="btn btn-primary dockerModal previousModal" style="border-radius:0px">Previous</a></li>
                                     <!-- <li class="next last" style="display:none;"><a href="#">Last</a></li> -->
-                                    <li class="next"><a href="javascript:void(0);" class="btn btn-primary" style="border-radius:0px;margin-left:5px;">Next</a></li>
-                                    <button type="button" class="btn btn-primary nav nav-pills dockerinstancestart hidden" style="margin-right:5px;height:30px;width:80px">Start</button>
+                                    <li class="next"><a href="javascript:void(0);" class="btn btn-primary dockerModal nextModal" style="border-radius:0px;margin-left:5px;">Next</a></li>
+                                    <button type="button" class="btn btn-primary nav nav-pills dockerinstancestart hidden dockerModal startModal"><span class="startBTN">Start</span></button>
 
                                 </ul>
                             </div>
