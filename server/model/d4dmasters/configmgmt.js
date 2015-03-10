@@ -1180,7 +1180,37 @@ function Configmgmt() {
                 }, null);
             }
         });
-    }
+    };
+
+    this.getJenkinsDataFromId = function(serverId, callback) {
+        this.getDBModelFromID('20', function(err, dbtype) {
+            if (err) {
+                callback(err, null);
+                return;
+                //console.log("Hit and error:" + err);
+            }
+            if (dbtype) {
+                var query = {};
+                query['rowid'] = {
+                    '$in': [serverId]
+                }
+                query['id'] = '20';
+
+                console.log("Master Type: " + dbtype);
+                eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, d4dMasterJson);
+                });
+            } else {
+                callback({
+                    "msg": "Invalid DBTYPE"
+                }, null);
+            }
+        });
+    };
 
 
     this.getEnvNameFromEnvId = function(envId, callback) {
