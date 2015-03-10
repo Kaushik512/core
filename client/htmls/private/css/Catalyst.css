@@ -3712,7 +3712,10 @@ background-image:url('../img/rsz_inactive.png');
 .rowcustomselected{
     /*font-weight: bold datatabledefaultcolor #b0bed9;
     font-size:14px;  c8b3c6*/
-    background-color: #e7e7e7 !important;
+  /*  background-color: #e7e7e7 !important;*/
+  background-color:lightblue !important;
+  color:black !important;
+  font-weight:bold;
 }
 
 
