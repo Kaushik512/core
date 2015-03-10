@@ -6950,3 +6950,7 @@ body .ui-tooltip {
     overflow-y:auto;
     overflow-x:hidden;
 }
+.card_os{
+    font-size:11px;
+    font-weight:bold;
+}
