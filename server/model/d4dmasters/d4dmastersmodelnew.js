@@ -80,6 +80,12 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
+	//Included as a concept to be regularized after approval
+	configname: {type:String, trim:true},
+	configname_rowid: {type:String, trim:true},
+	teamname: {type:String, trim:true},
+	teamname_rowid: {type:String, trim:true},
+	//end of concept
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d4dMastersEnvironments,'d4dmastersnew');
