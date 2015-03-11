@@ -1507,6 +1507,8 @@
         function bindClick_LaunchBtn() {
 
             $('.launchBtn').click(function(e) {
+              $('#commentForm')[0].reset();
+              $('#Removeonexitfield').change();
                 var $selectedItems = $('.role-Selected1');
                 if (!$selectedItems.length) {
                     return;
@@ -1567,7 +1569,7 @@
                                 $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                             }
                         });
-                        $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo" stlye=></a></td>');
+                        $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
                         $(this).append('<td  class="hidden"><input type="checkbox"></td>');
                         $(this).find('.moreInfo').click(instanceLogsHandler);
                     });
@@ -2291,6 +2293,7 @@
             $('#myTab3').click();
         }
         $('#Removelinkedcontainersonexitfield').select2();
+        $('#Removeonexitfield').select2();
         $('#cAdvisorPageFrame').on('load', function() {
             $('#cadvisorloadingicon').hide();
         });
@@ -2457,7 +2460,7 @@
 
         function loadLaunchParams() {
             var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
-            if (lparam != '') {
+            if (lparam && lparam != '') {
                 $('[dockerparamkey]').val(''); //clearing the popup input boxes
                 //split by -c to get startup and other parameters
                 var preparams = lparam.split('-c');

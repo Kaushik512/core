@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
+var schemaValidator = require('./schema-validator');
+var uniqueValidator = require('mongoose-unique-validator');
 
 
 var TASK_TYPE = {
@@ -12,25 +14,39 @@ var Schema = mongoose.Schema;
 var taskSchema = new Schema({
     orgId: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        validate: schemaValidator.orgIdValidator
     },
     bgId: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        validate: schemaValidator.bgIdValidator
     },
     projectId: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        validate: schemaValidator.projIdValidator
     },
     envId: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        validate: schemaValidator.envIdValidator
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        validate: schemaValidator.taskNameValidator
     },
-    taskType: String,
+    taskType: {
+        type: String,
+        required: true,
+        trim: true
+    },
     chefTask: {
         nodesIdList: [String],
         runlist: [String]

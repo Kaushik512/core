@@ -6,6 +6,4 @@ server/config/catalyst-config.json
 server/.idea/
 tempfiles/
 seed/copychefidtoinstance.js
-server/catdata/catalyst/chef-repos
-server/catdata/catalyst/instance-pemfiles
-server/catdata/catalyst/temp
+server/catdata/

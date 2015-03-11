@@ -6950,7 +6950,43 @@ body .ui-tooltip {
     overflow-y:auto;
     overflow-x:hidden;
 }
+
+.dockerModal{
+    margin-top: 15px;
+}
+
+.previousModal{
+    margin-left: 12px
+}
+
+.nextModal{
+    margin-right: 13px;
+}
+
+.startModal{
+    margin-right:5px;
+    height:30px;
+    width:80px;
+}
+
+.startBTN{
+    margin-left: 10px;
+}
+.dockerLeft{
+    margin-left: 50px;
+}
+.dockerModalHeight
+{
+    height:320px;
+}
+.exitLabel{
+    margin-top: 46px;
+}
+.dockerModalExit{
+    margin-top: 45px;
+}
 .card_os{
     font-size:11px;
     font-weight:bold;
+
 }
