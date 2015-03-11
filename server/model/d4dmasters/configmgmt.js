@@ -798,14 +798,36 @@ function Configmgmt() {
                                     console.log('rowidval' + JSON.stringify(rowidval));
                                     callback(null, rowidval);
                                 }
-                                var i = 0;
+                                
                                 userdata_.forEach(function(k, v) {
                                     // rowidval[k['rowid']] = k['environmentname'];
                                     //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
                                     var rid = {};
                                     rid[k['rowid']] = k['loginname'];
                                     rowidval.push(rid);
-                                    if (i >= userdata_.length - 1) {
+                                    //  console.log(k['rowid'], k['environmentname'],envdata_.length);
+                                });
+
+
+                            } 
+
+                             d4dModelNew.d4dModelMastersTeams.find({
+                                id: "21"
+                            }, function(err, teamdata) {
+                            if (teamdata) {
+                                var teamdata_ = JSON.parse(JSON.stringify(teamdata));
+                                if (teamdata_.length <= 0) {
+                                    console.log('rowidval' + JSON.stringify(rowidval));
+                                    callback(null, rowidval);
+                                }
+                                var i = 0;
+                                teamdata_.forEach(function(k, v) {
+                                    // rowidval[k['rowid']] = k['environmentname'];
+                                    //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
+                                    var rid = {};
+                                    rid[k['rowid']] = k['teamname'];
+                                    rowidval.push(rid);
+                                    if (i >= teamdata_.length - 1) {
                                         //   console.log('rowidval' + JSON.stringify(rowidval));
                                         callback(null, rowidval);
                                     }
@@ -818,6 +840,8 @@ function Configmgmt() {
                                 //    console.log('this called');
                                 callback(null, rowidval);
                             }
+
+                            });
 
                             }); //userdata 
                         }); //env
