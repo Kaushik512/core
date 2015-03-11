@@ -1521,6 +1521,12 @@
                     return;
                 }
                 if ($selectedItems.attr('data-templateType') === 'Docker') {
+                    var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
+
+                if (cardCount === 0) {
+                    alert('No instances available.Kindly Launch one instance');
+                    return;
+                }
                     loadLaunchParams();
                     var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
                     var blueprintId = $selectedItems.attr('data-blueprintId');
