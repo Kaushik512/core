@@ -1531,6 +1531,12 @@
                     return;
                 }
                 if ($selectedItems.attr('data-templateType') === 'Docker') {
+                    var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
+
+                if (cardCount === 0) {
+                    alert('No instances available.Kindly Launch one instance');
+                    return;
+                }
                     loadLaunchParams();
                     var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
                     var blueprintId = $selectedItems.attr('data-blueprintId');
@@ -2392,20 +2398,51 @@
                         dockerlaunchparameters = 'null';
                     var lp = 'null'; //launch parameter
                     var sp = 'null'; //start parameter
+                    var ep = 'null';
                     if (dockerlaunchparameters) {
                         if (dockerlaunchparameters[0])
                             lp = dockerlaunchparameters[0];
                         if (dockerlaunchparameters[1])
                             sp = dockerlaunchparameters[1];
+                        if (dockerlaunchparameters[2])
+                            ep = dockerlaunchparameters[2];
                     }
                     // alert(lp + ' ' + sp);
                     // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
                     $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp), function(data) {
                         if (data == "OK") {
                             var $statmessage = $td.find('.dockerspinner').parent();
-                            $td.find('.dockerspinner').detach();
-                            $td.find('.dockermessage').detach();
-                            $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                           
+
+                            if(ep == 'null')
+                              $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                            else{
+                              if($('#Containernamefield').val() != '')
+                               { 
+                                $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep,function(data){
+                                     if(data == "OK")
+                                       {
+                                         $td.find('.dockerspinner').detach();
+                                         $td.find('.dockermessage').detach();
+                                         $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+   
+                                       }
+                                     else
+                                     {
+                                       $('.dockerspinner').detach();
+                                       $td.find('.dockermessage').detach();
+                                       $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                     }
+                                   }); ///instances/dockerexecute/:instanceid/:containerid/:action
+                              }
+                              else{
+                                $('.dockerspinner').detach();
+                                $td.find('.dockermessage').detach();
+                                  $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                  alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
+                              }
+                                
+                            }
                             //Updating instance card to show the docker icon.
                             $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
                             //find the instance card - to do instance table view update
@@ -2451,17 +2488,27 @@
             var launchparams = [];
             var preparams = '';
             var startparams = '';
+            var execparam = '';
             $('[dockerparamkey]').each(function() {
                 if ($(this).val() != '') {
                     var itms = $(this).val().split(',');
                     for (itm in itms) {
-                        if ($(this).attr('dockerparamkey') != '-c') //checking for start parameter
+                        if ($(this).attr('dockerparamkey') != '-c' && $(this).attr('dockerparamkey') != '-exec') //checking for start parameter
                             preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
                         else
-                            startparams += ' ' + itms[itm];
+                            {
+                              if ($(this).attr('dockerparamkey') == '-c')
+                                startparams += ' ' + itms[itm];
+                              if ($(this).attr('dockerparamkey') == '-exec')
+                                execparam += ' ' + itms[itm];
+
+
+                            }
                     }
                     launchparams[0] = preparams;
                     launchparams[1] = startparams;
+                   // alert(execparam);
+                    launchparams[2] = execparam;
                 }
             });
             return (launchparams);
@@ -2478,12 +2525,16 @@
                     lparam = preparams[0];
                     cparams = preparams[1];
                 }
+                lparam = lparam.replace(/  /g, " ");
                 console.log(lparam + ' ' + cparams);
                 var params = lparam.split(' -');
                 for (para in params) {
+
                     var subparam = params[para].split(' ');
+                   // alert(subparam.join());
                     if (subparam.length > 0) {
                         $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+
                         if ($inp.val() != '')
                             $inp.val($inp.val() + ',' + subparam[1]);
                         else
