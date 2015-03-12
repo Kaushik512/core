@@ -271,6 +271,14 @@
                 reqBody.credentials = {
                     username: $form.find('#instanceUsername').val()
                 };
+                var appName = $('#appName').val();
+                var appURL = $('#appURL').val();
+                if (appName && appURL) {
+                  reqBody.appUrl1 = {
+                     name: appName,
+                     url: appURL
+                  }
+                }
 
                 if (!reqBody.fqdn) {
                     alert('Please enter IP');
@@ -664,10 +672,13 @@
             var runlist = $this.data('runlist');
             console.log("runlist", runlist);
             var $chefRunModalContainer = $('#chefRunModalContainer');
-
+            var readMode = false;
+            if(localStorage.getItem('userRole') === '[Consumer]') {
+               readMode = true;
+            }
             var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-            }, runlist);
+            }, runlist,readMode);
             $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid', instanceId);
 
 
@@ -1747,6 +1758,10 @@
                     $inputs.each(function() {
                         runlist.push($(this).val());
                     });
+                    if(!runlist.length) {
+                      bootbox.alert('Runlist is empty');
+                      return;
+                    }
 
 
                     console.log(runlist);

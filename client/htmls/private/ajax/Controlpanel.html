@@ -961,7 +961,11 @@ $.get('../instances/'+urlParams.id,function(data){
          var orgId = $parent.data('orgId');
          var runlist = $parent.data('runlist');
          console.log(orgId);
-         var $ccrs = $chefCookbookRoleSelector(urlParams.org,null,runlist);
+         var readMode = false;
+         if(localStorage.getItem('userRole') === '[Consumer]') {
+          readMode = true;
+         }
+         var $ccrs = $chefCookbookRoleSelector(urlParams.org,null,runlist,readMode);
          var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
          $controlPanelChefRunModalContainer.find('.modal-body').empty().append($ccrs);
          $controlPanelChefRunModalContainer.modal('show');
@@ -986,6 +990,10 @@ $.get('../instances/'+urlParams.id,function(data){
         $inputs.each(function() {
             runlist.push($(this).val());
         });
+        if(!runlist.length) {
+          bootbox.alert("Runlist is empty");
+          return;
+        }
         console.log('runlist == ',runlist);
 
         // $.post('../instances/' + instanceId + '/updateRunlist', {

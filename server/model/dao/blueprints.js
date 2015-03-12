@@ -43,6 +43,14 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.blueprintNameValidator
     },
+    appUrl1: {
+        name: String,
+        url: String
+    },
+    appUrl2: {
+        name: String,
+        url: String
+    },
     templateId: {
         type: String,
         required: true,
@@ -231,10 +239,14 @@ var BlueprintsDao = function() {
             callback(null, data);
         });
     };
-    this.getBlueprintsByProjectId = function(projectId,callback) {
+    this.getBlueprintsByProjectId = function(projectId, callback) {
         logger.debug("Enter getBlueprintsByProjectId(%s)", projectId);
         var queryObj = {
-            $or:[{projectId: projectId},{chefServerId: projectId}]
+            $or: [{
+                projectId: projectId
+            }, {
+                chefServerId: projectId
+            }]
         }
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
@@ -278,6 +290,8 @@ var BlueprintsDao = function() {
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             name: blueprintData.name,
+            appUrl1 : blueprintData.appUrl1,
+            appUrl2 : blueprintData.appUrl2,
             iconpath: blueprintData.iconpath,
             templateId: blueprintData.templateId,
             templateType: blueprintData.templateType,

@@ -247,6 +247,28 @@
                                                 
                                                 
                                               </div>
+
+                                              <div class="col-lg-6 notFordocker" style="margin-top:15px">
+
+                                                <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                                                <input type="text" name="appNameInput" class="form-control" id="appName1">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
+
+                                               </div>
+
+                                               <div class="col-lg-6 notFordocker" style="margin-top:15px">
+
+                                                <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                                                <input type="text" name="appNameURL" class="form-control" id="appURL1">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
+
+                                              </div>
                                              
                                                  
                                             
@@ -428,7 +450,7 @@
                             </select>
                         
                     </div>
-                    <div class="col-lg-6 dockerModal">
+                    <div class="col-lg-6 dockerModal hidden">
                         <label for="category">Remove on Exit
                         </label>
                         
@@ -807,6 +829,7 @@ $(document).ready(function(){
                if ($('.productdiv2.role-Selected').length > 0) {
                    //Setting controls connected to docker to hidden
                    $('.fordocker').hide();
+                   $('.notFordocker').show();
 
                    $('.divconfigureparameterrunlist').show();
                    $('.divchefrunlist').show();
@@ -873,6 +896,7 @@ $(document).ready(function(){
                        //polulate the docker tags
                        var $dockerrepotagsul = $('#dockerrepotagsul');
                        $('.fordocker').show();
+                       $('.notFordocker').hide();
                        //return (true);
                      } else {
                      
@@ -1008,7 +1032,14 @@ $(document).ready(function(){
                    return false;
                }
                //alert(JSON.stringify(reqBody));
-
+            var appName = $('#appName1').val();
+            var appURL = $('#appURL1').val();
+            if (appName && appURL) {
+                reqBody.appUrl1 = {
+                    name: appName,
+                    url: appURL
+                }
+            }
                
                $('.blueprintMsgContainer').hide();
                
