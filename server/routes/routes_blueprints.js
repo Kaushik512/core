@@ -19,6 +19,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.post('/blueprints/:blueprintId/update', function(req, res) {
         logger.debug("Enter /blueprints/%s/update", req.params.blueprintId);
 
+        if (req.session.user.rolename === 'Consumer') {
+            res.send(401);
+            return;
+        }
+
         var blueprintUpdateData = req.body.blueprintUpdateData;
         if (!blueprintUpdateData.runlist) {
             blueprintUpdateData.runlist = [];
@@ -118,7 +123,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         res.send(500);
                         return;
                     }
-                    console.log('envName',envName);
+                    console.log('envName', envName);
                     configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
                         if (err) {
                             logger.error("Failed to getChefServerDetails", err);
