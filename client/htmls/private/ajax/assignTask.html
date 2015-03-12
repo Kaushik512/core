@@ -7,10 +7,10 @@
                 <div class="row">
                     <div class="col-lg-10">
                         
-                            <select class="chooseTasktype width-100">
-                                <option id="Chef" value="Chef">Chef</option>
-                                <option id="Jenkins" value="Jenkins">Jenkins</option>
-                                <option id="Custom" value="Custom">Custom</option>
+                            <select id="taskType" class="chooseTasktype width-100">
+                                <option id="Chef" value="chef">Chef</option>
+                                <option id="Jenkins" value="jenkins">Jenkins</option>
+                                <option id="Custom" value="custom">Custom</option>
                             </select>
                         
                     </div>  
@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col-lg-10">
                         
-                            <input type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" name="ctl00$MainContent$orgname" autofocus>
+                            <input id="chefTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" name="ctl00$MainContent$orgname" autofocus>
                         
                     </div>  
                 </div>
@@ -84,21 +84,19 @@
                 </label>
                 <div class="row">
                     <div class="col-lg-10">
-                <input id="tasknameJenkins" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>
+                <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>
                                            
                 </div>
                 </div>              
             </div>
             <div class="col-lg-4">
-                <label><b>Select Project</b><span style="color:red">*</span>
+                <label><b>Select Jenkins Server</b><span style="color:red">*</span>
                 </label>
                     <div class="row">
                     <div class="col-lg-10">
-                    <select class="projectListJenkins width-100">
+                    <select id="jenkinsServerList" class="width-100">
                         <option value="choose">Choose</option>
-                        <option value="Project1">Project1</option>
-                        <option value="Project2">Project2</option>
-                        <option value="Project3">Project3</option>
+                        
                     </select>
                   
                 </div>
@@ -108,11 +106,8 @@
                 <label><b>Select Job</b><span style="color:red">*</span></label>
                 <div class="row">
                     <div class="col-lg-10">
-                    <select class="jobListJenkins width-100">
-                        <option value="choose">Choose</option>
-                        <option value="Job1">Job1</option>
-                        <option value="Job2">Job2</option>
-                        <option value="Job3">Job3</option>
+                    <select id="jobListJenkins" class="width-100" disabled>
+                        
                     </select>
                </div>
            </div>
@@ -121,10 +116,8 @@
                 <label><strong>Assign Users</strong><span style="color:red">*</span></label>
                 <div class="row">
                     <div class="col-lg-7">
-                    <select multiple="" class="custom-scroll">
-                        <option value="administrator">administrator</option>
-                        <option value="consumer1">consumer</option>
-                        <option value="designer1">designer</option>
+                    <select id="jenkinsUserList" multiple="" class="custom-scroll userLists">
+                        
                     </select>
                 </div>
             </div>
@@ -176,10 +169,8 @@
                 <label><strong>Assign Users</strong><span style="color:red">*</span></label>
                 <div class="row">
                     <div class="col-lg-10">
-                    <select multiple="" class="custom-scroll">
-                        <option value="administrator">administrator</option>
-                        <option value="consumer1">consumer</option>
-                        <option value="designer1">designer</option>
+                    <select multiple="" class="custom-scroll userLists">
+                       
                     </select>
                 </div>
             </div>
@@ -226,24 +217,28 @@ var urlParams = {};
 
 $(document).ready(function() {
     $(".chooseTasktype").select2();
-    $(".projectListJenkins").select2();
-    $(".jobListJenkins").select2();
+    $("#jenkinsServerList").select2();
+    $("#jobListJenkins").select2();
     $(".assignuserListJenkins").select2();
     $(document).on('shown.bs.modal', function(e) {
         $('[autofocus]', e.target).focus();
     });
     function loadUIData(taskData) {
+        console.log(taskData);
         if(taskData) {
             $('.inputTaskName').val(taskData.name);
+            $('#taskType').val(taskData.taskType);
+            $('#taskType').change();
         }
+
         
         $.get('../organizations/' + urlParams.org + '/businessgroups/'+urlParams['bg']+'/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
                 if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' ||  data[i].instanceState == 'unknown') {
                     var checked = false;
-                    if (taskData && taskData.nodesIdList && taskData.nodesIdList.length) {
-                        if (taskData.nodesIdList.indexOf(data[i]._id) !== -1) {
+                    if (taskData && taskData.taskType==='chef' && taskData.chefTask.nodesIdList && taskData.chefTask.nodesIdList.length) {
+                        if (taskData.chefTask.nodesIdList.indexOf(data[i]._id) !== -1) {
                             checked = true;
                         }
                     }
@@ -260,8 +255,8 @@ $(document).ready(function() {
 
 
         var runlist = null;
-        if(taskData) {
-            runlist = taskData.runlist;
+        if(taskData && taskData.taskType==='chef') {
+            runlist = taskData.chefTask.runlist;
         }
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
@@ -273,10 +268,74 @@ $(document).ready(function() {
             $('.chefServerName').val(data.configname);
            }
         });
-
-
-
         $('.runlistContainer').append($ccrs);
+
+        // jenkins 
+
+        $.get('/jenkins/', function(jenkinsList) {
+            jenkinsList = JSON.parse(jenkinsList);
+            var $jenkinsServerListDropdown = $('#jenkinsServerList');
+            for (var i = 0; i < jenkinsList.length; i++) {
+             var keys = Object.keys(jenkinsList[i]);   
+             var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
+             $jenkinsServerListDropdown.append($option); 
+            }
+            //$jenkinsServerListDropdown.trigger();
+           
+            $jenkinsServerListDropdown.change(function(e){
+                var jenkinsServerId = $(this).val();
+                var $jobsList = $('#jobListJenkins').empty();
+               $jobsList.prop("disabled", true);
+                $.get('/jenkins/'+jenkinsServerId+'/jobs',function(jobsList){
+                  for (var i = 0; i < jobsList.length; i++) {
+                    var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+                    $jobsList.append($option);
+                  }
+                    $jobsList.prop("disabled", false);
+                    if (taskData && taskData.taskType === 'jenkins') {
+                        $jobsList.val(taskData.jenkinsTask.jobName);
+                        $jobsList.change();
+                    }
+                });
+
+            });
+
+            if(taskData && taskData.taskType==='jenkins') {
+                $jenkinsServerListDropdown.val(taskData.jenkinsTask.jenkinsServerId);
+                $jenkinsServerListDropdown.change();
+            }
+
+
+
+        });
+
+        $.get('../users', function(userList) {
+            userList = JSON.parse(userList);
+            var $userLists = $('.userLists').empty();
+            userList.sort(function(a, b) {
+                var keyA = Object.keys(a);
+                var keyB = Object.keys(b);
+
+                if (keyA[0] < keyB[0]) return -1;
+                if (keyA[0] > keyB[0]) return 1;
+                return 0;
+            });
+            var taskUsersList = [];
+            if(taskData && taskData.taskType === 'jenkins') {
+                   taskUsersList = taskData.jenkinsTask.users;                     
+            }
+            for (var i = 0; i < userList.length; i++) {
+                var keys = Object.keys(userList[i]);
+                var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+                if(taskUsersList.indexOf(keys[0]) !== -1) {
+                    $option.attr('selected','selected');
+                }
+
+                $userLists.append($option);
+            }
+
+        });
+
 
     }
 
@@ -290,47 +349,80 @@ $(document).ready(function() {
     
 
     $('.btnSaveTask').click(function(e) {
-        if (!$("#chef-dropdown").is(':visible')) {
-            return;
-        }
 
-        var $selectedNodes = $('#selectedNodesChefTask input[type=checkbox]');
-        console.log($selectedNodes.length);
-        var nodesList = [];
-        $selectedNodes.each(function() {
-            console.log('checked ==> '+this.checked);
-            if(this.checked) {
-             nodesList.push(this.value);
+        var taskType = $('#taskType').val();
+        var taskData = {};
+        
+        taskData.taskType = taskType;
+        if (taskType === 'chef') {
+            var taskName = $('#chefTaskName').val();
+            if (!taskName) {
+                alert('Please give a name');
+                return;
             }
-        });
-        if (!nodesList.length) {
-            alert('Please choose nodes');
+            taskData.name = taskName;
+            var $selectedNodes = $('#selectedNodesChefTask input[type=checkbox]');
+            console.log($selectedNodes.length);
+            var nodesList = [];
+            $selectedNodes.each(function() {
+                if (this.checked) {
+                    nodesList.push(this.value);
+                }
+            });
+            if (!nodesList.length) {
+                alert('Please choose nodes');
+                return;
+            }
+            var $selectedRunlist = $('.deploymentSelectedRunList input');
+            var runlist = [];
+            $selectedRunlist.each(function() {
+                runlist.push(this.value);
+            });
+
+            if (!runlist.length) {
+                alert('Please choose runlist');
+                return;
+            }
+            taskData.nodesIdList = nodesList;
+            taskData.runlist = runlist;
+        } else if (taskType === 'jenkins') {
+            var taskName = $('#jenkinsTaskName').val();
+            if (!taskName) {
+                alert('Please give a name');
+                return;
+            }
+            taskData.name = taskName;
+           var jenkinsServerId = $('#jenkinsServerList').val();
+           if(!jenkinsServerId) {
+              alert('Please Choose a Jenkins Server');
+              return;
+           }
+
+           var jenkinsJobName = $('#jobListJenkins').val();
+           if(!jenkinsJobName && jenkinsJobName === 'choose') {
+              alert('Please Choose a Jenkins Server');
+              return;
+           }
+           var usersList = [].concat($('#jenkinsUserList').val());
+           if(!usersList.length) {
+              alert('Please Choose a users');
+              return;
+           }
+          taskData.jenkinsServerId =  jenkinsServerId;
+          taskData.jobName =  jenkinsJobName;
+          taskData.users = usersList;
+         
+        } else {
             return;
         }
 
-        var $selectedRunlist = $('.deploymentSelectedRunList input');
-        var runlist = [];
-        $selectedRunlist.each(function() {
-            runlist.push(this.value);
-        });
-
-        if (!runlist.length) {
-            alert('Please choose runlist');
-            return;
-        }
-        var taskName = $('.inputTaskName').val();
-        if (!taskName) {
-            alert('Please give a name');
-            return;
-        }
+        
+        
 
         var reqBody = {
-            taskData: {
-                name: taskName,
-                nodesIdList: nodesList,
-                runlist: runlist,
-            }
+            taskData: taskData
         };
+        console.log(reqBody);
 
         if(urlParams.taskId) {
            $.post('../tasks/'+urlParams.taskId+'/update',reqBody,function(data){
@@ -349,12 +441,12 @@ $(document).ready(function() {
     $("#Jenkins-dropdown").hide();
     $("#Custom-dropdown").hide();
 
-    $('.chooseTasktype').change(function(e) {
-        if (this.value == "Chef") {
+    $('#taskType').change(function(e) {
+        if (this.value == "chef") {
             $("#Jenkins-dropdown").hide();
             $("#Custom-dropdown").hide();
             $("#chef-dropdown").show();
-        } else if (this.value == "Jenkins") {
+        } else if (this.value == "jenkins") {
             $("#Jenkins-dropdown").show();
             $("#Custom-dropdown").hide();
             $("#chef-dropdown").hide();
@@ -365,7 +457,7 @@ $(document).ready(function() {
         }
     });
 
-   
+    
 
 
 });

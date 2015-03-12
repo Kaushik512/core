@@ -1,3 +1,4 @@
+
 <script>
     $(".tree-view").hide();
 </script>
@@ -9,15 +10,14 @@
             <div class="widget-box">
                 <div class="widget-header">
                     <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Projects</strong>
+                    <strong>Environments</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
-                             
-                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
+                            <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentConceptList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                            </a>                      
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateProject.html?new">
+                            </a>                     
+                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateEnvironmentConcept.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -32,22 +32,18 @@
                                 <thead>
                                     <tr class="rowCustomStyle">
                                         <td>Name</td>
-                                        <td>Description</td>
                                         <td>Organization</td>
-                                        <td>Business Group</td>
-                                        <td>Environments</td>
-                                        <!-- <td>Cost Codes</td> -->
+                                        <td>Chef Server Name</td>
+                                        <td>Teams</td>
                                         <td class="">Action</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="hidden rowtemplate">
-                                        <td datafield="projectname"></td>
-                                        <td datafield="description"></td>
+                                        <td datafield="environmentname"></td>
                                         <td datafield="orgname"></td>
-                                        <td datafield="productgroupname"></td>
-                                        <td datafield="environmentname" datatype="list"></td>
-                                        <!-- <td datafield="costcode"></td> -->
+                                        <td datafield="configname"></td>
+                                        <td datafield="teamname" datatype="list"></td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -66,11 +62,9 @@
                                     <thead>
                                         <tr class="rowCustomStyle">
                                             <td>Name</td>
-                                            <td>Description</td>
                                             <td>Organization</td>
-                                            <td>Business Group</td>
-                                            <td>Environments</td>
-                                            <!-- <td>Cost Codes</td> -->
+                                            <td>Chef Server Name</td>
+                                            <td >Teams</td>
                                             <td class="">Action</td>
                                         </tr>
                                     </thead>
@@ -81,34 +75,31 @@
                                     
                                 </table>
                                 <script>
-                                    $(document).ready(function () {
-                                       
-                                        startup();
-                                    });
-
-                                    function startup() {
-
+                                    function inLineReady(){
                                         /* $('#envtable').dataTable({
-                                       "paging": false,
-                                       "ordering": false,
-                                       "info": false,
-                                       "search": false
-                                       });*/
-                                        //   alert('in');
-                                       // CreateTableFromJson(4);
-
-                                        CreateTableFromJson(4,'projectname' , 'CreateProject.html'); //1 is for Org
+                                        "paging": false,
+                                        "ordering": false,
+                                        "info": false,
+                                        "search": false
+                                        });*/
+                                       // debugger;
+                                      //  alert('in');
                                         var tab = 'envtable';
+                                        //CreateTableFromJson(3); //3 is for environment
+                                        CreateTableFromJson(3,'environmentname' , 'CreateEnvironmentConcept.html'); //3 is for 
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
                                             "pagingType": "full_numbers"
                                         });
                                         $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
                                         $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
+
                                         /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
                                         $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
                                         $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
                                         $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
+                                        
+                                        $('#content').css("opacity", "1 !important");
 
                                         //Force opening the left navigation menu
                                         if ($('#navSettings').is(":visible") == false) {
@@ -120,11 +111,10 @@
                                         //redrawing the breadcrumb and selecting the tree
                                         $('#ulsettingstree > li').removeClass('active');
                                         $('#ulsettingstree > li').each(function () {
-                                            if ($(this).text().trim() == "Projects")
+                                            if ($(this).text().trim() == "Environments")
                                                 $(this).addClass('active');
                                         });
-                                      //  drawBreadCrumb1();
-
+                                     //   drawBreadCrumb1();
                                     }
 
                                     function deleteItem_todelete(docid, key, value) {
@@ -133,7 +123,6 @@
                                             $.ajax({
                                                 type: "get",
                                                 dataType: "text",
-
                                                 async: false,
                                                 url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
                                                 success: function (data) {
@@ -150,6 +139,7 @@
                                         }
 
                                     }
+
 
                                     function readMasterJson_todelete(id) {
                                         // debugger;
@@ -173,46 +163,43 @@
                                     }
 
                                     $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
-                                    function CreateTableFromJson_old(formName) {
+                                    function CreateTableFromJson_todelete(formName) {
 
                                         //To Do SAve...
                                         // var d4djson = $.parseJSON(d4ddata);
                                         // alert(d4ddata.sections.section[0].name);
                                         var formData = null;
-                                        readMasterJson(4);
-
-                                        /*$.each(d4ddata.sections.section, function (i, item) {
+                                        readMasterJson(3);
+                                       /* $.each(d4ddata.sections.section, function (i, item) {
                                             if (item.name == formName) {
                                                 formData = item;
                                             }
                                         });*/
-
-                                       // alert(JSON.stringify(formData));
+                                       
                                         //Reading row to get schema
                                         formData = d4ddata.masterjson;
-
+                                        //alert(JSON.stringify(formData));
                                         var formSchema = null;
                                         $.each(formData.rows.row, function (i, item) {
-                                            
+                                          //  alert(JSON.stringify(item));
                                             var templateRow = $(".rowtemplate").clone();
                                             $.each(item.field, function (i, item) {
-                                                
+
 
                                                 var inputC = null;
                                                 var editButton = null;
                                                 var setOrgname = false;
                                                 $.each(item, function (k, v) {
                                                     if (k == "name") {
-                                                        // alert(v);
+                                                     //    alert(v);
                                                         inputC = $('.rowtemplate').find("[datafield='" + v + "']");
-                                                        if (v == "projectname") {
+                                                        if (v == "environmentname") {
                                                             setOrgname = true;
                                                         }
                                                     }
                                                 });
                                                 $.each(item, function (k, v) {
                                                     if (k == "values") {
-                                                       // alert(JSON.stringify(v));
                                                         if (inputC) {
                                                             //  alert(inputC.text());
                                                             //   inputC.html('test');
@@ -223,7 +210,6 @@
                                                                 else
                                                                     tv += ",&nbsp;" + v1;
                                                             });
-                                                           
                                                             inputC.html(tv);
                                                         }
                                                         if (setOrgname == true) {
@@ -237,16 +223,12 @@
                                                                         tv += ",&nbsp;" + v1;
                                                                 });
 
-                                                                editButton.attr("href", "index.html#ajax/Settings/CreateProject.html?" + tv);
-                                                                //setting the delete button
+                                                                editButton.attr("href", "index.html#ajax/CreateEnvironment.html?" + tv);
 
-                                                                var deletebutton =  $('.rowtemplate').find("[title='Remove']");
+                                                                var deletebutton = $('.rowtemplate').find("[title='Remove']");
                                                                 if (deletebutton) {
-                                                                    deletebutton.attr('onClick','deleteItem(\"4\", \"projectname\",\"' +  tv  +'\");');
+                                                                    deletebutton.attr('onClick', 'deleteItem(\"3\", \"environmentname\",\"' + tv + '\");');
                                                                 }
-                                                                
-                                                             /*  
-                                                                */
                                                             }
                                                             setOrgname = false;
                                                         }
@@ -264,7 +246,7 @@
 
                                         $(".savespinner").hide();
                                     }
-
+                                    inLineReady();
                                 </script>
                             <div class="col-md-5">
 

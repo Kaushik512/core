@@ -205,6 +205,34 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    app.get('/instances/dockerexecute/:instanceid/:containerid/:action', function(req, res) {
+
+            console.log('reached here dockerexecute' + req.params.action);
+            var instanceid = req.params.instanceid;
+            var _docker = new Docker();
+            var cmd = "sudo docker exec " + req.params.containerid + ' ' + req.params.action;
+            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
+                if (!err) {
+                logsDao.insertLog({
+                    referenceId: instanceid,
+                    err: false,
+                    log: "Container  " + req.params.containerid + " Executed :" + req.params.action,
+                    timestamp: new Date().getTime()
+                });
+                res.send(200);
+                } else {
+                    console.log("Excute Error : " + err);
+                    logsDao.insertLog({
+                        referenceId: instanceid,
+                        err: true,
+                        log: "Excute Error : " + err,
+                        timestamp: new Date().getTime()
+                    });
+                    res.send(500);
+                }
+            });
+
+    });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action', function(req, res) {
         //res.send(200);
         console.log('reached here action');
@@ -241,6 +269,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         if (action == 'delete') {
             cmd = 'sudo docker stop ' + req.params.containerid + ' &&  sudo docker rm ' + req.params.containerid;
         }
+
         console.log('cmd received: ' + cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
@@ -403,6 +432,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
+        if (req.session.user.rolename === 'Consumer') {
+            res.send(401);
+            return;
+        }
         if (!req.body.runlist) {
             res.send(400);
             return;

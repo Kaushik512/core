@@ -1,5 +1,5 @@
 //ChefItem added below
-var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) {
+var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, readMode) {
     if (!selectedRunlist) {
         selectedRunlist = [];
     }
@@ -46,9 +46,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $div1forCookbook.append($label2);
     $div1forCookbook.append($inputtypetextCookbooks);
     var $ul1 = $("<ul></ul>").addClass('deploymentsCookbookList deploymentsListCSS');
-    
+
     var $hr1 = $("<hr>");
-    
+
     $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
         console.log("Cookbooks Query:" + data);
 
@@ -92,7 +92,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
             callback('done');
         }
     }).fail(function(data) {
-        var $erroMsgArea = $('<span></span>').css({'color':'red'}).text(' ' + data.responseJSON.message);
+        var $erroMsgArea = $('<span></span>').css({
+            'color': 'red'
+        }).text(' ' + data.responseJSON.message);
         $('.cookbookspinner').detach();
         $strong1.append($erroMsgArea);
     });
@@ -108,13 +110,13 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     var $inputtypetextRoles = $('<input type="text" style="height:24px;margin-left:2px;" placeholder="Search Roles">').addClass('searchoptionforRoles form-control padding0');
     //var $hr2 = $("<hr>");
     var $ul2 = $("<ul></ul>").addClass('deploymentRoleList deploymentsListCSS');
-    
+
     $div1forRoles.append($label3);
     //$div1forRoles.append($hr2);
     $div1forRoles.append($inputtypetextRoles);
 
     $div1forRoles.append($ul2);
-    
+
     $div1.append($div1forRoles);
     $row1.append($div1);
 
@@ -123,6 +125,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $divbtngroupAdd = $("<div></div>").addClass('btn-group padding-bottom-10');
 
     $btntoAdd = $("<button></button>").addClass('btn btn-default btn-primary btnItemAdd btnItemCSS ');
+    if (readMode) {
+        $btntoAdd.attr('disabled', 'disabled');
+    }
     $btntoAdditag = $("<i></i>").addClass('fa fa-angle-double-right font-size-20');
     $btntoAdd.append($btntoAdditag);
     $divbtngroupAdd.append($btntoAdd);
@@ -133,7 +138,11 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
 
     $divbtngroupRemove = $("<div></div>").addClass('btn-group');
     $btntoRemove = $("<button></button>").addClass('btn btn-default btn-primary btnItemRemove btnItemCSS');
+    if (readMode) {
+        $btntoRemove.attr('disabled', 'disabled');
+    }
     $btntoRemoveitag = $("<i></i>").addClass('fa fa-angle-double-left font-size-20');
+
     $btntoRemove.append($btntoRemoveitag);
     $divbtngroupRemove.append($btntoRemove);
     $divinputgroupAddRemove.append($divbtngroupRemove);
@@ -201,6 +210,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
     $divbtngroupUp = $("<div></div>").addClass('btn-group padding-bottom-10');
 
     $btntoUp = $("<button></button>").addClass('btn btn-default btn-primary btnItemUp btnItemCSS ');
+    if (readMode) {
+        $btntoUp.attr('disabled', 'disabled');
+    }
     $btntoUpitag = $("<i></i>").addClass('fa fa-angle-double-up font-size-20');
     $btntoUp.append($btntoUpitag);
     $divbtngroupUp.append($btntoUp);
@@ -211,6 +223,9 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist) 
 
     $divbtngroupDown = $("<div></div>").addClass('btn-group');
     $btntoDown = $("<button></button>").addClass('btn btn-default btn-primary btnItemDown btnItemCSS');
+    if (readMode) {
+        $btntoDown.attr('disabled', 'disabled');
+    }
     $btntoDownitag = $("<i></i>").addClass('fa fa-angle-double-down font-size-20');
     $btntoDown.append($btntoDownitag);
     $divbtngroupDown.append($btntoDown);

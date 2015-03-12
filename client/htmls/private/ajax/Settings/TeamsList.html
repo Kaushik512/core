@@ -9,7 +9,7 @@
             <div class="widget-box">
                 <div class="widget-header">
                     <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Projects</strong>
+                    <strong>Teams</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
@@ -17,7 +17,7 @@
                               <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateProject.html?new">
+                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateTeam.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -32,21 +32,23 @@
                                 <thead>
                                     <tr class="rowCustomStyle">
                                         <td>Name</td>
-                                        <td>Description</td>
-                                        <td>Organization</td>
-                                        <td>Business Group</td>
-                                        <td>Environments</td>
+                                        <td>Users</td>
+                                        <td>Projects</td>
+                                        <!-- <td>Business Group</td>
+                                        <td>Project</td>
+                                        <td>Environments</td> -->
                                         <!-- <td>Cost Codes</td> -->
                                         <td class="">Action</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="hidden rowtemplate">
+                                        <td datafield="teamname"></td>
+                                        <td datafield="loginname" datatype="list"></td>
+                                        <td datafield="projectname" datatype="list"></td>
+                                       <!--  <td datafield="productgroupname"></td>
                                         <td datafield="projectname"></td>
-                                        <td datafield="description"></td>
-                                        <td datafield="orgname"></td>
-                                        <td datafield="productgroupname"></td>
-                                        <td datafield="environmentname" datatype="list"></td>
+                                        <td datafield="environmentname"></td> -->
                                         <!-- <td datafield="costcode"></td> -->
                                         <td>
                                             <div class="btn-group tableactionWidth">
@@ -66,10 +68,11 @@
                                     <thead>
                                         <tr class="rowCustomStyle">
                                             <td>Name</td>
-                                            <td>Description</td>
-                                            <td>Organization</td>
-                                            <td>Business Group</td>
-                                            <td>Environments</td>
+                                            <td>Users</td>
+                                            <td>Projects</td>
+                                            <!-- <td>Business Group</td>
+                                            <td>Project</td>
+                                            <td>Environments</td> -->
                                             <!-- <td>Cost Codes</td> -->
                                             <td class="">Action</td>
                                         </tr>
@@ -97,7 +100,7 @@
                                         //   alert('in');
                                        // CreateTableFromJson(4);
 
-                                        CreateTableFromJson(4,'projectname' , 'CreateProject.html'); //1 is for Org
+                                        CreateTableFromJson('21','teamname' , 'CreateTeam.html'); //1 is for Org
                                         var tab = 'envtable';
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',

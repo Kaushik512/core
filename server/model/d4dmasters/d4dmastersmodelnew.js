@@ -80,6 +80,12 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
+	//Included as a concept to be regularized after approval
+	configname: {type:String, trim:true},
+	configname_rowid: {type:String, trim:true},
+	teamname: {type:String, trim:true},
+	teamname_rowid: {type:String, trim:true},
+	//end of concept
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d4dMastersEnvironments,'d4dmastersnew');
@@ -162,6 +168,19 @@ var d4dMastersUsers = new mongoose.Schema(
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersUsers = mongoose.model('d4dModelMastersUsers',d4dMastersUsers,'d4dmastersnew');
+
+
+var d4dMastersTeams = new mongoose.Schema(
+	{id: {type:String, trim:true},
+	teamname: {type:String, trim:true, validate:nameValidator},
+	loginname: {type:String, trim:true},
+	loginname_rowid: {type:String,trim:true},
+	projectname: {type:String, trim:true},
+	projectname_rowid: {type:String,trim:true},
+	description: {type:String, trim:true, validate:descValidator},
+	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersTeams = mongoose.model('d4dModelMastersTeams',d4dMastersTeams,'d4dmastersnew');
 
 var d4dMastersUserroles = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
@@ -257,6 +276,7 @@ module.exports.d4dModelMastersDesignTemplateTypes  = d4dModelMastersDesignTempla
 module.exports.d4dModelMastersTemplatesList  = d4dModelMastersTemplatesList;
 module.exports.d4dModelMastersServicecommands  = d4dModelMastersServicecommands; 
 module.exports.d4dModelMastersUsers  = d4dModelMastersUsers;
+module.exports.d4dModelMastersTeams  = d4dModelMastersTeams;
 module.exports.d4dModelMastersUserroles  = d4dModelMastersUserroles;
 module.exports.d4dModelMastersglobalaccess  = d4dModelMastersglobalaccess;
 module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//

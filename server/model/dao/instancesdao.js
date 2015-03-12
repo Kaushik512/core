@@ -123,6 +123,14 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true
     },
+    appUrl1:{
+        name:String,
+        url:String
+    },
+    appUrl2:{
+        name:String,
+        url:String
+    },
     applicationUrl: {
         type: String,
         trim: true

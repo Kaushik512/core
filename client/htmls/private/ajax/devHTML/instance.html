@@ -12,7 +12,9 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
-                                                <a data-toggle="collapse">Instance</a>
+                                            <a data-toggle="collapse">Instances</a>
+                                          <!--  <input type="text" placeholder="Search Here.." id="instanceSearch" class="instancesearch" style="margin:6px;padding:4px;"/>
+                                            <button id="search">Go</button>-->
                                             </h4>
 
 
@@ -90,7 +92,7 @@
 
 
                             </div>
-                            <a class="btn pull-right btn-danger right-button" title="Remove Instance" onClick="removeSelectedInstance()" >
+                            <a class="btn pull-right btn-danger right-button" title="Remove Instance" id="removeInstance" >
                                 <i class="fa fa-trash-o"></i>
                             </a>&nbsp;
                             <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal">
@@ -213,6 +215,28 @@
                             <div class="userListLoadingContainer"></div>
                             <select class="custom-scroll" multiple="" id="importbyipuserListSelect" style="display:none" cat-validation="required">
                             </select>
+
+                        </div>
+
+                        <div class="col-lg-6" style="margin-top:15px">
+
+                            <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="appNameInput" class="form-control" id="appName">
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
+
+                        </div>
+
+                        <div class="col-lg-6" style="margin-top:15px">
+
+                            <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="appNameURL" class="form-control" id="appURL">
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
 
                         </div>
 
