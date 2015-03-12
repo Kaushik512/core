@@ -1,3 +1,6 @@
+.padding-left0{
+    padding-left: 0px !important;
+}
 .sshShellBtn{
     background-image:url('../img/galleryIcons/sshIcon.png');
     background-repeat:no-repeat;
@@ -275,7 +278,7 @@
     padding-right: 37px;
 }
 .smart-form .input .icon-prepend+.icon-append+input, .smart-form .textarea .icon-prepend+.icon-append+textarea {
-    padding-left: 37px;
+    : 37px;
 }
 .smart-form .row {
     margin: 6px -15px;
