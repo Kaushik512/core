@@ -2806,6 +2806,7 @@ hr{
     padding: 0 !important;
     position: relative;
     width: 64%;
+    cursor: pointer;
 }
 
 
