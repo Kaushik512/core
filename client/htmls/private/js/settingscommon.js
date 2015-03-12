@@ -1,51 +1,50 @@
 function deleteItem(docid, key, value, button) {
 
-    bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"',function(result){
-        if(result)
-        {
+    bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
+        if (result) {
             $.ajax({
-                    type: "get",
-                    dataType: "text",
-        
-                    async: false,
-                    url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
-                    success: function(data) {
-                        // alert(data.toString());  
-                        // debugger;
-                        //d4ddata = JSON.parse(data);
-                        // $('#refreshpage').click();
-                        //alert(data);
-                        var $tr = $(button).closest('tr');
-                       
-                        //$tr.addClass('hidden').remove();
-                        var $table = $tr.parents('table');
-                       
-                        if ( $.fn.DataTable.isDataTable( $table ) ) {
-                           var $dataTable = $table.DataTable();
-                           $dataTable.row($tr).remove().draw( false );
-                        } else {
-                            
-                            $tr.fadeOut("slow");
-                            $tr.addClass('hidden').remove();
-                        }
-                         
-        
-                        var tab = 'envtable';
-                        $('#' + tab).dataTable();
-                        if(parseInt(docid) < 5){
-                            loadTreeFuncNew();
-                          //  alert('in saved');
-                         //   selectFirstEnv();
-                        }
-                    },
-                    failure: function(data) {
-                        // debugger;
-                         bootbox.alert(data.toString());
-                    },
-                    error: function(data){
-                        bootbox.alert(data.responseText);
+                type: "get",
+                dataType: "text",
+
+                async: false,
+                url: serviceURL + "removeitem/" + docid + "/" + key + "/" + value,
+                success: function(data) {
+                    // alert(data.toString());  
+                    // debugger;
+                    //d4ddata = JSON.parse(data);
+                    // $('#refreshpage').click();
+                    //alert(data);
+                    var $tr = $(button).closest('tr');
+
+                    //$tr.addClass('hidden').remove();
+                    var $table = $tr.parents('table');
+
+                    if ($.fn.DataTable.isDataTable($table)) {
+                        var $dataTable = $table.DataTable();
+                        $dataTable.row($tr).remove().draw(false);
+                    } else {
+
+                        $tr.fadeOut("slow");
+                        $tr.addClass('hidden').remove();
                     }
-                });
+
+
+                    var tab = 'envtable';
+                    $('#' + tab).dataTable();
+                    if (parseInt(docid) < 5) {
+                        loadTreeFuncNew();
+                        //  alert('in saved');
+                        //   selectFirstEnv();
+                    }
+                },
+                failure: function(data) {
+                    // debugger;
+                    bootbox.alert(data.toString());
+                },
+                error: function(data) {
+                    bootbox.alert(data.responseText);
+                }
+            });
         }
     });
 
@@ -77,14 +76,14 @@ function validatedockeruser(usernameInput, passwordInput) {
 }
 
 //Reading a unique record from master data
-function readMasterRecord(id,rowid){
+function readMasterRecord(id, rowid) {
     $.ajax({
         type: "get",
         dataType: "text",
         async: false,
-        url: serviceURL + "readmasterjsonrecord/" + id +'/' + rowid,
+        url: serviceURL + "readmasterjsonrecord/" + id + '/' + rowid,
         success: function(data) {
-             //   alert(data.toString());  
+            //   alert(data.toString());  
             // debugger;
             d4ddata = JSON.parse(data);
         },
@@ -99,131 +98,127 @@ function readMasterRecord(id,rowid){
 
 function readMasterJson(id) {
     // debugger;
-   //alert(url);
-if(url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ){
-    //alert('in 1');
-    $.ajax({
-        type: "get",
-        dataType: "text",
-        async: false,
-        url: serviceURL + "readmasterjsonnew/" + id,
-        success: function(data) {
+    //alert(url);
+    if (url.indexOf('List') >= 0 || url.indexOf('Create') >= 0) {
+        //alert('in 1');
+        $.ajax({
+            type: "get",
+            dataType: "text",
+            async: false,
+            url: serviceURL + "readmasterjsonnew/" + id,
+            success: function(data) {
                 // alert(data.toString());  
-            // debugger;
-            d4ddata = JSON.parse(data);
-            //alert(JSON.stringify(d4ddata));
-        },
-        failure: function(data) {
-            // debugger;
-            //  alert(data.toString());
-        }
-    });
-    return (d4ddata);
-}
-if(id.toString() == "1" && url.indexOf('OrgList.html') > 0)
-{
-    //alert('in 1');
-    $.ajax({
-        type: "get",
-        dataType: "text",
-        async: false,
-        url: serviceURL + "readmasterjsonneworglist/" + id,
-        success: function(data) {
+                // debugger;
+                d4ddata = JSON.parse(data);
+                //alert(JSON.stringify(d4ddata));
+            },
+            failure: function(data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (d4ddata);
+    }
+    if (id.toString() == "1" && url.indexOf('OrgList.html') > 0) {
+        //alert('in 1');
+        $.ajax({
+            type: "get",
+            dataType: "text",
+            async: false,
+            url: serviceURL + "readmasterjsonneworglist/" + id,
+            success: function(data) {
                 // alert(data.toString());  
-            // debugger;
-            d4ddata = JSON.parse(data);
-        },
-        failure: function(data) {
-            // debugger;
-            //  alert(data.toString());
-        }
-    });
-    return (d4ddata);
-}
-else{
-    
-    $.ajax({
-        type: "get",
-        dataType: "text",
+                // debugger;
+                d4ddata = JSON.parse(data);
+            },
+            failure: function(data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (d4ddata);
+    } else {
 
-        async: false,
-        url: serviceURL + "readmasterjson/" + id,
-        success: function(data) {
-            //      alert(data.toString());  
-            // debugger;
-            d4ddata = JSON.parse(data);
-        },
-        failure: function(data) {
-            // debugger;
-            //  alert(data.toString());
-        }
-    });
-    return (d4ddata);
+        $.ajax({
+            type: "get",
+            dataType: "text",
+
+            async: false,
+            url: serviceURL + "readmasterjson/" + id,
+            success: function(data) {
+                //      alert(data.toString());  
+                // debugger;
+                d4ddata = JSON.parse(data);
+            },
+            failure: function(data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (d4ddata);
     }
 }
 
 //function duplicated for kana to be referenced back to readMasterJson
 function readMasterJsontv(id) {
     // debugger;
-   //alert(url);
-if((url.indexOf('List') >= 0 || url.indexOf('Create') >= 0 ) && url.indexOf('OrgList.html') < 0){
-    // alert('in 1');
-    $.ajax({
-        type: "get",
-        dataType: "text",
-        async: false,
-        url: serviceURL + "readmasterjsonnew/" + id,
-        success: function(data) {
-           // alert(data.toString());  
-            // debugger;
-            d4ddata = JSON.parse(data);
-        },
-        failure: function(data) {
-            // debugger;
-            //  alert(data.toString());
-        }
-    });
-    return (d4ddata);
-}
-if(url.indexOf('OrgList.html') > 0)
-{
-    //alert('in 1');
-    $.ajax({
-        type: "get",
-        dataType: "text",
-        async: false,
-        url: serviceURL + "readmasterjsonneworglist/" + id,
-        success: function(data) {
+    //alert(url);
+    if ((url.indexOf('List') >= 0 || url.indexOf('Create') >= 0) && url.indexOf('OrgList.html') < 0) {
+        // alert('in 1');
+        $.ajax({
+            type: "get",
+            dataType: "text",
+            async: false,
+            url: serviceURL + "readmasterjsonnew/" + id,
+            success: function(data) {
                 // alert(data.toString());  
-            // debugger;
-            d4ddata = JSON.parse(data);
-        },
-        failure: function(data) {
-            // debugger;
-            //  alert(data.toString());
-        }
-    });
-    return (d4ddata);
-}
-else{
-    
-    $.ajax({
-        type: "get",
-        dataType: "text",
+                // debugger;
+                d4ddata = JSON.parse(data);
+            },
+            failure: function(data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (d4ddata);
+    }
+    if (url.indexOf('OrgList.html') > 0) {
+        //alert('in 1');
+        $.ajax({
+            type: "get",
+            dataType: "text",
+            async: false,
+            url: serviceURL + "readmasterjsonneworglist/" + id,
+            success: function(data) {
+                // alert(data.toString());  
+                // debugger;
+                d4ddata = JSON.parse(data);
+            },
+            failure: function(data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (d4ddata);
+    } else {
 
-        async: false,
-        url: serviceURL + "readmasterjsonnew/" + id,
-        success: function(data) {
-            //      alert(data.toString());  
-            // debugger;
-            d4ddata = JSON.parse(data);
-        },
-        failure: function(data) {
-            // debugger;
-            //  alert(data.toString());
-        }
-    });
-    return (d4ddata);
+        $.ajax({
+            type: "get",
+            dataType: "text",
+
+            async: false,
+            url: serviceURL + "readmasterjsonnew/" + id,
+            success: function(data) {
+                //      alert(data.toString());  
+                // debugger;
+                d4ddata = JSON.parse(data);
+            },
+            failure: function(data) {
+                // debugger;
+                //  alert(data.toString());
+            }
+        });
+        return (d4ddata);
     }
 }
 
@@ -317,11 +312,11 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
                                 }
 
                             }
-                            if(editButton){
-                            editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
-                            editButton.addClass("tableactionbutton tableactionbuttonpadding");
-                            editButton.removeClass('btn-xs');
-                            editButton.addClass('btn-sg');
+                            if (editButton) {
+                                editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + tv);
+                                editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                                editButton.removeClass('btn-xs');
+                                editButton.addClass('btn-sg');
                             }
                             //importbutton will be present for config management screen.
                             var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
@@ -358,7 +353,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
         sRow.removeClass("hidden");
         sRow.removeClass("rowtemplate");
         $('#envtable').append(sRow);
-        
+
     });
 
     $(".savespinner").hide();
@@ -391,46 +386,38 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         //alert(JSON.stringify(formData));
 
         var formSchema = null;
-        $.each(d4ddata, function(i, item) { 
+        $.each(d4ddata, function(i, item) {
             console.log("Top:" + JSON.stringify(item)); //rows
             var editButton = null;
             var idFieldValue = null;
             var imageTD = null;
-            $.each(item,function(k,v){ //columns
+            $.each(item, function(k, v) { //columns
                 // var inputC = null;
                 console.log('k:' + k + ' v :' + JSON.stringify(v));
-                if(k == idFieldName){
-                        idFieldValue = v;
+                if (k == idFieldName) {
+                    idFieldValue = v;
                 }
                 inputC = $('.rowtemplate').find("[datafield='" + k + "']");
-                if(inputC){
+                if (inputC) {
                     console.log('Inputc===>' + inputC.attr('datafield'));
-                    if(inputC.attr('datafield') == 'active')
-                    {
-                        if(v.toString() == 'false'){
+                    if (inputC.attr('datafield') == 'active') {
+                        if (v.toString() == 'false') {
                             inputC.html('Inactive');
-                        }
-                        else
+                        } else
                             inputC.html('Active');
-                    }
-                    else
-                        {
-                            if(inputC.attr('datatype'))
-                                {
-                                   // inputC.attr('data-content',v);
-                                   // inputC.attr('data-toggle',"popover");
-                                   if(inputC.attr('datatype') == 'list')
-                                    {
-                                        v = v.replace(/,/g, "<br/>");
-                                        inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
-                                    }
-                                   else
-                                    inputC.html(v);
-                                }
-                            else
+                    } else {
+                        if (inputC.attr('datatype')) {
+                            // inputC.attr('data-content',v);
+                            // inputC.attr('data-toggle',"popover");
+                            if (inputC.attr('datatype') == 'list') {
+                                v = v.replace(/,/g, "<br/>");
+                                inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
+                            } else
                                 inputC.html(v);
-                                
-                        }
+                        } else
+                            inputC.html(v);
+
+                    }
                 }
             });
 
@@ -442,7 +429,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
             editButton = $('.rowtemplate').find("[title='Update']");
 
-            if(idFieldValue){
+            if (idFieldValue) {
                 if (imageTD) {
                     if (imageTD.length > 0) {
                         console.log("Template Icon:" + idFieldValue);
@@ -458,7 +445,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     }
 
                 }
-                if(editButton){
+                if (editButton) {
                     editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
                     editButton.addClass("tableactionbutton tableactionbuttonpadding");
                     editButton.removeClass('btn-xs');
@@ -496,26 +483,26 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             $('#envtable').append(sRow);
 
         });
-      //  $.each(formData.data.fields, function(i, item) { //row iteration
+        //  $.each(formData.data.fields, function(i, item) { //row iteration
 
-            // var templateRow = $(".rowtemplate").clone();
-            // $.each(item,function(k, v) {
-            //     console.log('k:' + k + ',v:' + v);
-            // });
-            // var sRow = $(".rowtemplate").clone();
-            // sRow.removeClass("hidden");
-            // sRow.removeClass("rowtemplate");
-            // $('#envtable').append(sRow);
-            
-     //   });
+        // var templateRow = $(".rowtemplate").clone();
+        // $.each(item,function(k, v) {
+        //     console.log('k:' + k + ',v:' + v);
+        // });
+        // var sRow = $(".rowtemplate").clone();
+        // sRow.removeClass("hidden");
+        // sRow.removeClass("rowtemplate");
+        // $('#envtable').append(sRow);
+
+        //   });
         setPopOverForTableFields();
 
         $(".savespinner").hide();
 
     }
-// function CreateTableFromJson(formID, idFieldName, createFileName) {
-//     CreateTableFromJsonNew(formID, idFieldName, createFileName);
-// }
+    // function CreateTableFromJson(formID, idFieldName, createFileName) {
+    //     CreateTableFromJsonNew(formID, idFieldName, createFileName);
+    // }
 function setPopOverForTableFields() {
 
     var overPopup = false;
@@ -525,8 +512,8 @@ function setPopOverForTableFields() {
         placement: 'left',
         html: true
 
-    // replacing hover with mouseover and mouseout
-    }).mouseover(function (e) {
+        // replacing hover with mouseover and mouseout
+    }).mouseover(function(e) {
         // when hovering over an element which has a popover, hide
         // them all except the current one being hovered upon
         $('[data-toggle="popover"]').not('#' + $(this).attr('id')).popover('hide');
@@ -537,18 +524,18 @@ function setPopOverForTableFields() {
         // dirty but only way I could think of to prevent
         // closing the popover when you are navigate across
         // the white space between the two
-        $popover.mouseenter(function () {
+        $popover.mouseenter(function() {
             overPopup = true;
-        }).mouseleave(function () {
+        }).mouseleave(function() {
             overPopup = false;
             $popover.popover('hide');
         });
 
-    }).mouseout(function (e) {
+    }).mouseout(function(e) {
         // on mouse out of button, close the related popover
         // in 200 milliseconds if you're not hovering over the popover
         var $popover = $(this);
-        setTimeout(function () {
+        setTimeout(function() {
             if (!overPopup) {
                 $popover.popover('hide');
             }
@@ -768,7 +755,7 @@ function readform__(formID) {
                             $(inputC).closest('input').next().val(v[k1]);
                         }
                         if (inputC.getType().toLowerCase() == "select") {
-                          //alert(v[k1]);
+                            //alert(v[k1]);
                             $(inputC).val(v[k1]);
                             $(inputC).attr('savedvalue', v[k1]);
                             //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
@@ -776,7 +763,7 @@ function readform__(formID) {
                             $(inputC).select2();
                         }
                         if (inputC.getType().toLowerCase() == "ul") {
-                          //  alert('in ul');
+                            //  alert('in ul');
                             if (v[k1].indexOf(',') >= 0) {
                                 var itms = v[k1].split(',');
                                 $(inputC).attr('defaultvalues', v[k1]);
@@ -787,9 +774,9 @@ function readform__(formID) {
                             }
                         }
                         if (inputC.getType().toLowerCase() == "div") {
-                            
+
                             $(inputC).attr('savedvalue', v[k1])
-                            //Set saved values to div.
+                                //Set saved values to div.
                             var ctype = '';
                             var csource = '';
                             if ($(inputC).attr('ctype'))
@@ -797,7 +784,7 @@ function readform__(formID) {
                             if ($(inputC).attr('csource'))
                                 csource = $(inputC).attr('csource');
                             var divselect1 = v[k1].toString().split(',');
-                          //  alert(v[k1]);
+                            //  alert(v[k1]);
                             for (var j = 0; j < divselect1.length; j++) {
                                 if (ctype == 'list' && csource != '') {
 
@@ -805,8 +792,8 @@ function readform__(formID) {
                                 }
                                 if (ctype == '')
                                     inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
-                                if(ctype == 'checkbox'){
-                                    inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                                if (ctype == 'checkbox') {
+                                    inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked', 'checked');
                                 }
                             }
                         }
@@ -859,15 +846,15 @@ function readform(formID) {
 
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                     var curSelect = $(this);
-                  //  alert(JSON.stringify(tempJSON));
+                    //  alert(JSON.stringify(tempJSON));
                     var _rowid = 0;
                     $.each(tempJSON, function(i, item) {
                         _rowid = item['rowid'];
 
-                        $.each(item,function(k,v){ //columns
+                        $.each(item, function(k, v) { //columns
                             console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
                             if (k == curSelect.attr("id")) {
-                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                                curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                             }
                         });
                     });
@@ -906,14 +893,13 @@ function readform(formID) {
                             //alert(JSON.stringify(opts));
                             $.each(eval(opts), function(j, itm) {
                                 var itmrowid = '';
-                                if(itm.indexOf('##') > 0)
-                                {
+                                if (itm.indexOf('##') > 0) {
                                     var breakid = itm.split('##');
                                     itm = breakid[0];
                                     itmrowid = breakid[1];
                                 }
                                 if (targetCtrl.attr('multiselect'))
-                                    addToSelectList(itm,itmrowid, targetCtrl);
+                                    addToSelectList(itm, itmrowid, targetCtrl);
                                 else
                                     targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
@@ -950,41 +936,41 @@ function readform(formID) {
                 //     }
                 // });
                 $.each(tempJSON, function(i, item) {
-                       // _rowid = item['rowid'];
+                    // _rowid = item['rowid'];
 
-                        $.each(item,function(k,v){ //columns
-                            console.log('2 k:' + k + ' 2 v :' + JSON.stringify(v));
-                           if (k == curInput.attr("id")) {
-                                 addToCodeList(v, curInput);
-                            }
-                        });
+                    $.each(item, function(k, v) { //columns
+                        console.log('2 k:' + k + ' 2 v :' + JSON.stringify(v));
+                        if (k == curInput.attr("id")) {
+                            addToCodeList(v, curInput);
+                        }
+                    });
                 });
-                
+
             }
         });
 
         $('div[datatype="select"]').each(function() {
             //debugger;
-        
+
             if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
                 if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
-                 //   debugger;
+                    //   debugger;
                     //alert(JSON.stringify(tempJSON));
                     var curInput = $(this);
                     //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
                     $.each(tempJSON, function(i, item) {
                         //     alert(item.field[0].values.value);
                         // debugger;
-                        
-                          //  if (item.field[k].name == curInput.attr("id")) {
-                                // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
-                                // alert("Added:" + item.field[i].values.value);
-                              //  alert(item.rowid);
-                            //  alert(JSON.stringify(item[curInput.attr('id')]));
-                                addToSelectList(item[curInput.attr('id')],item.rowid, curInput);
-                         //   }
-                       
+
+                        //  if (item.field[k].name == curInput.attr("id")) {
+                        // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
+                        // alert("Added:" + item.field[i].values.value);
+                        //  alert(item.rowid);
+                        //  alert(JSON.stringify(item[curInput.attr('id')]));
+                        addToSelectList(item[curInput.attr('id')], item.rowid, curInput);
+                        //   }
+
                     });
                 }
             }
@@ -998,7 +984,7 @@ function readform(formID) {
 
 
         // alert("before d4d" + JSON.stringify(d4ddata));
-        readMasterRecord(formID,rowid);
+        readMasterRecord(formID, rowid);
         //alert("after d4d" + JSON.stringify(d4ddata));
 
         /* $.each(d4ddata.sections.section, function (i, item) {
@@ -1006,7 +992,7 @@ function readform(formID) {
                  formData = item;
              }
          });*/
-        
+
         //get Unique record into d4ddata.
 
 
@@ -1016,7 +1002,7 @@ function readform(formID) {
         // var orgName = url.substr(url.indexOf("?") + 1);
         // //  alert(orgName);
         // var editMode = false;
-      //  alert(d4ddata);
+        //  alert(d4ddata);
         formData = d4ddata;
 
         //alert("here " + JSON.stringify(formData) + ":" + orgName);
@@ -1037,8 +1023,8 @@ function readform(formID) {
         //     formSchema = item.field;
         // });
         //  alert('Edit Mode:' + editMode);
-        
-        if(typeof(formData.rowid) != 'undefined'){
+
+        if (typeof(formData.rowid) != 'undefined') {
             editMode = true;
         }
         if (forceEdit == true) {
@@ -1068,14 +1054,14 @@ function readform(formID) {
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
 
-        $.each(formData, function(k,v) {
+        $.each(formData, function(k, v) {
             var inputC = null;
             console.log('k:' + k + ' v:' + v);
             //Finding the input control to bind.
             if (k.indexOf("_filename") > 0) {
-                    k = k.replace('_filename', '');
+                k = k.replace('_filename', '');
             }
-            if(k.indexOf('_id') < 0){ //ensuring that you do not find an id field
+            if (k.indexOf('_id') < 0) { //ensuring that you do not find an id field
                 inputC = $('#' + k);
             }
             if (inputC && $(inputC).attr("id") != undefined) {
@@ -1090,12 +1076,12 @@ function readform(formID) {
                         inputC.val(v);
                 }
                 if (inputC.getType().toLowerCase() == "file") {
-                                //  v[k1]
-                   $(inputC).closest('input').next().val(v);
+                    //  v[k1]
+                    $(inputC).closest('input').next().val(v);
                 }
                 if (inputC.getType().toLowerCase() == "select") {
-                  //alert(v[k1]);
-                     $(inputC).val(v);
+                    //alert(v[k1]);
+                    $(inputC).val(v);
                     //Get the rowid for the control
                     // $('#' + k);
                     // var selectedrowid = formData['k' + '_rowid'];
@@ -1106,7 +1092,7 @@ function readform(formID) {
                     $(inputC).select2();
                 }
                 if (inputC.getType().toLowerCase() == "ul") {
-                  //  alert('in ul');
+                    //  alert('in ul');
                     if (v.indexOf(',') >= 0) {
                         var itms = v.split(',');
                         $(inputC).attr('defaultvalues', v);
@@ -1116,9 +1102,9 @@ function readform(formID) {
                     }
                 }
                 if (inputC.getType().toLowerCase() == "div") {
-                                
+
                     $(inputC).attr('savedvalue', v)
-                    //Set saved values to div.
+                        //Set saved values to div.
                     var ctype = '';
                     var csource = '';
                     if ($(inputC).attr('ctype'))
@@ -1126,7 +1112,7 @@ function readform(formID) {
                     if ($(inputC).attr('csource'))
                         csource = $(inputC).attr('csource');
                     var divselect1 = v.toString().split(',');
-                  //  alert(v[k1]);
+                    //  alert(v[k1]);
                     for (var j = 0; j < divselect1.length; j++) {
                         if (ctype == 'list' && csource != '') {
 
@@ -1134,51 +1120,51 @@ function readform(formID) {
                         }
                         if (ctype == '')
                             inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
-                        if(ctype == 'checkbox'){
-                            inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                        if (ctype == 'checkbox') {
+                            inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked', 'checked');
                         }
                     }
                 }
                 inputC = null;
 
             }
-            
+
         });
         //Force clicking on selects that has dependent controls
-         $('[linkedfields]').each(function() {
-             $(this).trigger('change');
-             var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
+        $('[linkedfields]').each(function() {
+            $(this).trigger('change');
+            var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
             // alert(ctrls.length);
-                for (var i = 0; i < ctrls.length; i++) {
-                    var ctrl = $("#" + ctrls[i]);
-                    if (ctrl.getType() == "select") {
-                        ctrl.val(ctrl.attr('savedvalue'));
-                        ctrl.trigger('change');
-                    }
-                    if (ctrl.getType() == "div") {
-                        var divselect = ctrl.attr('savedvalue').split(',');
-                        // alert(divselect.length);
-                        for (var j = 0; j < divselect.length; j++) {
-                            ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
-                        }
+            for (var i = 0; i < ctrls.length; i++) {
+                var ctrl = $("#" + ctrls[i]);
+                if (ctrl.getType() == "select") {
+                    ctrl.val(ctrl.attr('savedvalue'));
+                    ctrl.trigger('change');
+                }
+                if (ctrl.getType() == "div") {
+                    var divselect = ctrl.attr('savedvalue').split(',');
+                    // alert(divselect.length);
+                    for (var j = 0; j < divselect.length; j++) {
+                        ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
                     }
                 }
+            }
         });
 
 
         //  alert('almost exiting');
         //Setting the unique field with current value
         $('input[unique="true"],select[unique="true"]').each(function() {
-           
+
             $(this).attr('initialvalue', $(this).val());
-           
+
         });
         return (true);
-    }//end readform
+    } //end readform
 
 
 
-    function readformnew(formID) {
+function readformnew(formID) {
         var formData = null;
         //    alert("force edit:" + forceEdit);
         //Prefilling dropdowns
@@ -1190,15 +1176,15 @@ function readform(formID) {
 
                     var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                     var curSelect = $(this);
-                  //  alert(JSON.stringify(tempJSON));
+                    //  alert(JSON.stringify(tempJSON));
                     var _rowid = 0;
                     $.each(tempJSON, function(i, item) {
                         _rowid = item['rowid'];
 
-                        $.each(item,function(k,v){ //columns
+                        $.each(item, function(k, v) { //columns
                             console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
                             if (k == curSelect.attr("id")) {
-                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                                curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                             }
                         });
                     });
@@ -1273,16 +1259,16 @@ function readform(formID) {
                 //     }
                 // });
                 $.each(tempJSON, function(i, item) {
-                       // _rowid = item['rowid'];
+                    // _rowid = item['rowid'];
 
-                        $.each(item,function(k,v){ //columns
-                            console.log('2 k:' + k + ' 2 v :' + JSON.stringify(v));
-                           if (k == curInput.attr("id")) {
-                                 addToCodeList(v, curInput);
-                            }
-                        });
+                    $.each(item, function(k, v) { //columns
+                        console.log('2 k:' + k + ' 2 v :' + JSON.stringify(v));
+                        if (k == curInput.attr("id")) {
+                            addToCodeList(v, curInput);
+                        }
+                    });
                 });
-                
+
             }
         });
 
@@ -1317,7 +1303,7 @@ function readform(formID) {
 
 
         // alert("before d4d" + JSON.stringify(d4ddata));
-        readMasterRecord(formID,rowid);
+        readMasterRecord(formID, rowid);
         //alert("after d4d" + JSON.stringify(d4ddata));
 
         /* $.each(d4ddata.sections.section, function (i, item) {
@@ -1325,7 +1311,7 @@ function readform(formID) {
                  formData = item;
              }
          });*/
-        
+
         //get Unique record into d4ddata.
 
 
@@ -1356,8 +1342,8 @@ function readform(formID) {
         //     formSchema = item.field;
         // });
         //  alert('Edit Mode:' + editMode);
-        
-        if(typeof(formData.rowid) != 'undefined'){
+
+        if (typeof(formData.rowid) != 'undefined') {
             editMode = true;
         }
         if (forceEdit == true) {
@@ -1382,19 +1368,19 @@ function readform(formID) {
 
         //Since this section is executed only in edit mode. The rowid field is injected with the rowid
         $('button').attr("rowid", rowid);
-        $("button[rowid*='"+"']");
+        $("button[rowid*='" + "']");
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
 
-        $.each(formData, function(k,v) {
+        $.each(formData, function(k, v) {
             var inputC = null;
             console.log('k:' + k + ' v:' + v);
             //Finding the input control to bind.
             if (k.indexOf("_filename") > 0) {
-                    k = k.replace('_filename', '');
+                k = k.replace('_filename', '');
             }
-            if(k.indexOf('_id') < 0){ //ensuring that you do not find an id field
+            if (k.indexOf('_id') < 0) { //ensuring that you do not find an id field
                 inputC = $('#' + k);
             }
             if (inputC && $(inputC).attr("id") != undefined) {
@@ -1409,18 +1395,18 @@ function readform(formID) {
                         inputC.val(v);
                 }
                 if (inputC.getType().toLowerCase() == "file") {
-                                //  v[k1]
-                   $(inputC).closest('input').next().val(v);
+                    //  v[k1]
+                    $(inputC).closest('input').next().val(v);
                 }
                 if (inputC.getType().toLowerCase() == "select") {
-                  //alert(v[k1]);
+                    //alert(v[k1]);
                     $(inputC).val(v);
                     $(inputC).attr('savedvalue', v);
                     //fix for select2 type control. Expecting all select boxes to be type select2. - Vinod
                     $(inputC).select2();
                 }
                 if (inputC.getType().toLowerCase() == "ul") {
-                  //  alert('in ul');
+                    //  alert('in ul');
                     if (v.indexOf(',') >= 0) {
                         var itms = v.split(',');
                         $(inputC).attr('defaultvalues', v);
@@ -1430,9 +1416,9 @@ function readform(formID) {
                     }
                 }
                 if (inputC.getType().toLowerCase() == "div") {
-                                
+
                     $(inputC).attr('savedvalue', v)
-                    //Set saved values to div.
+                        //Set saved values to div.
                     var ctype = '';
                     var csource = '';
                     if ($(inputC).attr('ctype'))
@@ -1440,7 +1426,7 @@ function readform(formID) {
                     if ($(inputC).attr('csource'))
                         csource = $(inputC).attr('csource');
                     var divselect1 = v.toString().split(',');
-                  //  alert(v[k1]);
+                    //  alert(v[k1]);
                     for (var j = 0; j < divselect1.length; j++) {
                         if (ctype == 'list' && csource != '') {
 
@@ -1448,34 +1434,34 @@ function readform(formID) {
                         }
                         if (ctype == '')
                             inputC.find('input[value="' + divselect1[j] + '"]').trigger('click');
-                        if(ctype == 'checkbox'){
-                            inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked','checked');
+                        if (ctype == 'checkbox') {
+                            inputC.find('input[id="checkbox_' + divselect1[j] + '"]').attr('checked', 'checked');
                         }
                     }
                 }
                 inputC = null;
 
             }
-            
+
         });
         //Force clicking on selects that has dependent controls
-         $('[linkedfields]').each(function() {
-             $(this).trigger('change');
-             var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
+        $('[linkedfields]').each(function() {
+            $(this).trigger('change');
+            var ctrls = $(this).attr('linkedfields').replace(/'/g, "").replace(/]/g, "").replace(/\[/g, "").split(',');
             // alert(ctrls.length);
-                for (var i = 0; i < ctrls.length; i++) {
-                    var ctrl = $("#" + ctrls[i]);
-                    if (ctrl.getType() == "select") {
-                        ctrl.val(ctrl.attr('savedvalue'));
-                    }
-                    if (ctrl.getType() == "div") {
-                        var divselect = ctrl.attr('savedvalue').split(',');
-                        // alert(divselect.length);
-                        for (var j = 0; j < divselect.length; j++) {
-                            ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
-                        }
+            for (var i = 0; i < ctrls.length; i++) {
+                var ctrl = $("#" + ctrls[i]);
+                if (ctrl.getType() == "select") {
+                    ctrl.val(ctrl.attr('savedvalue'));
+                }
+                if (ctrl.getType() == "div") {
+                    var divselect = ctrl.attr('savedvalue').split(',');
+                    // alert(divselect.length);
+                    for (var j = 0; j < divselect.length; j++) {
+                        ctrl.find('input[value="' + divselect[j] + '"]').trigger('click');
                     }
                 }
+            }
         });
 
 
@@ -1487,131 +1473,131 @@ function readform(formID) {
             // alert($(this).attr('initialvalue'));
         });
         return (true);
-    }// end readformnew
+    } // end readformnew
 
-    function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
+function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
-        //To Do SAve...
-        // var d4djson = $.parseJSON(d4ddata);
-        // alert(d4ddata.sections.section[0].name);
-        //alert('run');
-        var formData = null;
-        readMasterJson(formID);
+    //To Do SAve...
+    // var d4djson = $.parseJSON(d4ddata);
+    // alert(d4ddata.sections.section[0].name);
+    //alert('run');
+    var formData = null;
+    readMasterJson(formID);
 
-        /*$.each(d4ddata.sections.section, function (i, item) {
-            if (item.name == formName) {
-                formData = item;
+    /*$.each(d4ddata.sections.section, function (i, item) {
+        if (item.name == formName) {
+            formData = item;
+        }
+    });*/
+
+    //force setting the idFieldName to "rowid"
+    idFieldName = "rowid";
+
+    // alert(JSON.stringify(formData));
+    //Reading row to get schema
+    formData = d4ddata;
+    // alert(JSON.stringify(formData));
+
+    var formSchema = null;
+    $.each(d4ddata, function(i, item) {
+        console.log("Top:" + JSON.stringify(item)); //rows
+        var editButton = null;
+        var idFieldValue = null;
+        var imageTD = null;
+        $.each(item, function(k, v) { //columns
+            // var inputC = null;
+            console.log('k:' + k + ' v :' + JSON.stringify(v));
+            if (k == idFieldName) {
+                idFieldValue = v;
             }
-        });*/
-
-        //force setting the idFieldName to "rowid"
-        idFieldName = "rowid";
-
-        // alert(JSON.stringify(formData));
-        //Reading row to get schema
-        formData = d4ddata;
-       // alert(JSON.stringify(formData));
-
-        var formSchema = null;
-        $.each(d4ddata, function(i, item) { 
-            console.log("Top:" + JSON.stringify(item)); //rows
-            var editButton = null;
-            var idFieldValue = null;
-            var imageTD = null;
-            $.each(item,function(k,v){ //columns
-                // var inputC = null;
-                console.log('k:' + k + ' v :' + JSON.stringify(v));
-                if(k == idFieldName){
-                        idFieldValue = v;
-                }
-                inputC = $('.rowtemplate').find("[datafield='" + k + "']");
-                if(inputC){
-                    inputC.html(v);
-                }
-            });
-
-            var sRow = $(".rowtemplate").clone();
-            sRow.removeClass("hidden");
-            sRow.removeClass("rowtemplate");
-            // $('#envtable').append(sRow);
-            imageTD = $('.rowtemplate').find("[datatype='image']");
-
-            editButton = $('.rowtemplate').find("[title='Update']");
-
-            if(idFieldValue){
-                if (imageTD) {
-                    if (imageTD.length > 0) {
-                        console.log("Template Icon:" + idFieldValue);
-                        var imgpath = 'img/blank.png';
-                        if (imageTD.html().indexOf('<img') >= 0) {
-                            imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
-                        } else
-                            imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
-
-                        imageTD.html('');
-                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
-
-                    }
-
-                }
-                if(editButton){
-                    editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
-                    editButton.addClass("tableactionbutton tableactionbuttonpadding");
-                    editButton.removeClass('btn-xs');
-                    editButton.addClass('btn-sg');
-                }
-                //importbutton will be present for config management screen.
-                var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
-                // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
-                //&& tdorgname.length > 0
-                if (importbutton && importbutton.length > 0) {
-                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
-                    importbutton.removeClass('btn-xs');
-                    importbutton.addClass('btn-sg');
-                    importbutton.addClass('tableactionbutton');
-                }
-
-
-
-                //setting the delete button
-
-                var deletebutton = $('.rowtemplate').find("[title='Remove']");
-                if (deletebutton) {
-                    deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
-                    deletebutton.removeClass('btn-xs');
-                    deletebutton.addClass('btn-sg');
-                    deletebutton.addClass('tableactionbutton');
-                }
+            inputC = $('.rowtemplate').find("[datafield='" + k + "']");
+            if (inputC) {
+                inputC.html(v);
             }
-
-
-            console.log('-----------');
-            var sRow = $(".rowtemplate").clone();
-            sRow.removeClass("hidden");
-            sRow.removeClass("rowtemplate");
-            $('#envtable').append(sRow);
-
         });
-      //  $.each(formData.data.fields, function(i, item) { //row iteration
 
-            // var templateRow = $(".rowtemplate").clone();
-            // $.each(item,function(k, v) {
-            //     console.log('k:' + k + ',v:' + v);
-            // });
-            // var sRow = $(".rowtemplate").clone();
-            // sRow.removeClass("hidden");
-            // sRow.removeClass("rowtemplate");
-            // $('#envtable').append(sRow);
-            
-     //   });
+        var sRow = $(".rowtemplate").clone();
+        sRow.removeClass("hidden");
+        sRow.removeClass("rowtemplate");
+        // $('#envtable').append(sRow);
+        imageTD = $('.rowtemplate').find("[datatype='image']");
 
-        $(".savespinner").hide();
+        editButton = $('.rowtemplate').find("[title='Update']");
 
-    }
+        if (idFieldValue) {
+            if (imageTD) {
+                if (imageTD.length > 0) {
+                    console.log("Template Icon:" + idFieldValue);
+                    var imgpath = 'img/blank.png';
+                    if (imageTD.html().indexOf('<img') >= 0) {
+                        imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                    } else
+                        imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+
+                    imageTD.html('');
+                    imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+
+                }
+
+            }
+            if (editButton) {
+                editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
+                editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                editButton.removeClass('btn-xs');
+                editButton.addClass('btn-sg');
+            }
+            //importbutton will be present for config management screen.
+            var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
+            // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+            //&& tdorgname.length > 0
+            if (importbutton && importbutton.length > 0) {
+                importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                importbutton.removeClass('btn-xs');
+                importbutton.addClass('btn-sg');
+                importbutton.addClass('tableactionbutton');
+            }
 
 
 
-function saveform(formID,operationTypes) {
+            //setting the delete button
+
+            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+            if (deletebutton) {
+                deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                deletebutton.removeClass('btn-xs');
+                deletebutton.addClass('btn-sg');
+                deletebutton.addClass('tableactionbutton');
+            }
+        }
+
+
+        console.log('-----------');
+        var sRow = $(".rowtemplate").clone();
+        sRow.removeClass("hidden");
+        sRow.removeClass("rowtemplate");
+        $('#envtable').append(sRow);
+
+    });
+    //  $.each(formData.data.fields, function(i, item) { //row iteration
+
+    // var templateRow = $(".rowtemplate").clone();
+    // $.each(item,function(k, v) {
+    //     console.log('k:' + k + ',v:' + v);
+    // });
+    // var sRow = $(".rowtemplate").clone();
+    // sRow.removeClass("hidden");
+    // sRow.removeClass("rowtemplate");
+    // $('#envtable').append(sRow);
+
+    //   });
+
+    $(".savespinner").hide();
+
+}
+
+
+
+function saveform(formID, operationTypes) {
     //Validating the form
 
     if (isFormValid(formID) == false)
@@ -1622,9 +1608,9 @@ function saveform(formID,operationTypes) {
     var fileNames = '';
     var orgName = $('#orgname').val();
     var button = $("form[id*='myForm']").find("div.pull-right > button");
-    
-    if(button){
-        button.attr('disabled','disabled');
+
+    if (button) {
+        button.attr('disabled', 'disabled');
         button.parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif"></img> </label>');
         //button.parent.prepend('<label id="masterssavespinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></img> </label>')
     }
@@ -1634,7 +1620,7 @@ function saveform(formID,operationTypes) {
 
         if (($(this).prop("type") == "password" || $(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '') {
             data1.append($(this).prop("id"), $(this).val());
-            if($(this).prop("type").indexOf("select") >= 0){
+            if ($(this).prop("type").indexOf("select") >= 0) {
                 //alert('found one ' + $(this).prop("id") + '_rowid' + ' ' + $(this).find('option:selected').attr('rowid'));
                 //debugger;
                 data1.append($(this).prop("id") + '_rowid', $(this).find('option:selected').attr('rowid'));
@@ -1645,7 +1631,7 @@ function saveform(formID,operationTypes) {
                 // alert('in' + $(this).attr('fixedname'));
                 data1.append($(this).prop("id"), $(this).get(0).files[0]);
                 if ($(this).attr("fixedname")) {
-                   // alert('in' + $(this).attr('fixedname'));
+                    // alert('in' + $(this).attr('fixedname'));
                     data1.append($(this).prop("id") + "_filename", $(this).attr("fixedname"));
                 } else
                     data1.append($(this).prop("id") + "_filename", $(this).get(0).files[0].name);
@@ -1667,9 +1653,9 @@ function saveform(formID,operationTypes) {
 
         k = $(this).attr("id");
         k_rowid = $(this).attr("id") + "_rowid";
-       // alert('id:' + k);
+        // alert('id:' + k);
         $(this).find("input").each(function() {
-           // alert($(this).val());
+            // alert($(this).val());
             if ($(this).is(":checked")) {
                 //    v.push("\"" + $(this).val() + "\"");
                 v.push($(this).val());
@@ -1688,10 +1674,9 @@ function saveform(formID,operationTypes) {
         });
 
         //for chef cookbook selections
-        if($(this).find('.deploymentSelectedRunList').length > 0)
-        {
+        if ($(this).find('.deploymentSelectedRunList').length > 0) {
             var v2 = [];
-            $(this).find('input[type="hidden"]').each(function(){
+            $(this).find('input[type="hidden"]').each(function() {
                 v2.push("\"" + $(this).val() + "\"");
             });
             //alert('hit on run list' + v2.join(','));
@@ -1699,7 +1684,7 @@ function saveform(formID,operationTypes) {
         }
         if (k != '') {
             //data1.append(k,"[" + v.toString() + "]");
-           // alert(v);
+            // alert(v);
             data1.append(k, v);
             data1.append(k_rowid, v_rowid);
         }
@@ -1739,26 +1724,26 @@ function saveform(formID,operationTypes) {
 
 
     //alert(button.attr("rowid"));
-    
+
     //Verifying if the form is in edit mode by checking the rowid provided in the save button.
 
     if (button.attr("rowid")) {
         data1.append("rowid", button.attr("rowid"));
     }
 
-   
+
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
     if (fileNames == '')
         fileNames = 'null';
-    if(typeof(orgname) == 'undefined'){
+    if (typeof(orgname) == 'undefined') {
         orgName = '%2f'; //When this is updated the upload of image has an issue
     }
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
-   
+
     console.log('This is the data that gets saved:' + data1['rowid']);
-   // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
+    // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,
         data: data1,
@@ -1770,8 +1755,7 @@ function saveform(formID,operationTypes) {
             $(".savespinner").hide();
             if ($('#btncancel'))
                 $('#btncancel').click();
-            if(parseInt(formID) < 5)
-            {
+            if (parseInt(formID) < 5) {
                 loadTreeFuncNew(); //this should refresh the tree
             }
             button.removeAttr("rowid", "");
@@ -1781,7 +1765,7 @@ function saveform(formID,operationTypes) {
         error: function(jqxhr) {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
-            
+
             alert(jqxhr.status);
         }
     });
@@ -1988,11 +1972,11 @@ function addToCodeList() {
     }
 }
 
-function addToSelectList(txtVal,rowidval, inp) {
+function addToSelectList(txtVal, rowidval, inp) {
     var imgCheck = "<i class=\'ace-icon fa fa-check bigger-110 green\' style=\'padding-left:10px;padding-right:10px;visibility:hidden\' ></i>";
     var imgDed = "<button class=\'pull-right bordered btn-danger\' style=\'margin-right:10px\' onClick=\'removeFromCodeList(this);\' ></button>";
     if (txtVal != '' && typeof inp != "undefined") {
-       // alert(txtVal);
+        // alert(txtVal);
         inp.append('<label class=\"toggle font-sm\" ><input onclick=\'if($(this).is(\":checked\")) {$(this).closest(\"label\").css(\"background-color\",\"#eeeeee\");$(this).css(\"border-color\",\"#3b9ff3\");}else{$(this).closest(\"label\").css(\"background-color\",\"#ffffff\");$(this).css(\"border-color\",\"red\");}\' type=\"checkbox\" name=\"checkbox-toggle\" rowid=\"' + rowidval + '\" value=\"' + txtVal + '\" style=\"width:100%\"><i data-swchoff-text=\"NO\" data-swchon-text=\"YES\"></i>' + txtVal + '</label>');
         //inp.append('<div class=\'codelistitem\' style=\'margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;width:100%;cursor:pointer\'><p class=\'bg-success\'>' + imgCheck + txtVal + '</p></div>');
         $('.widget-main').css('height', ($('.widget-main').height() + 40) + "px");
@@ -2062,94 +2046,95 @@ function addToTargetList(inputctrl, inputctrl1) {
         }
     }
 }
-function loadcookbooksinto(cookbookctrl,chefserverid){
-  //  alert( ' yep1 ' + cookbookctrl);
 
-  var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
-  $('#chefserverid').val(csid);
+function loadcookbooksinto(cookbookctrl, chefserverid) {
+    //  alert( ' yep1 ' + cookbookctrl);
+
+    var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
+    $('#chefserverid').val(csid);
     //alert(csid);
     var $servicecookbookspinner = $('.' + cookbookctrl + 'spinner');
     $servicecookbookspinner.removeClass('hidden');
-    $.get('/chef/servers/' + csid + '/cookbooks',function(data){
-      
-      if(data){
-        var $servicecookbook = $('#' + cookbookctrl);
-        
-        $servicecookbook.empty();
-        $.each(data,function(k,v){
-          $servicecookbook.append('<option value="' + k + '">' + k + '</option>');
-     
-        });
-        //Autoselecting the first item.
-        $servicecookbook.val($servicecookbook.find('option:first').val());
+    $.get('/chef/servers/' + csid + '/cookbooks', function(data) {
 
-        // Loading the saved value back
-        if($servicecookbook.attr('savedvalue')){
-            $servicecookbook.val($servicecookbook.attr('savedvalue'));
-        }
-        $servicecookbook.trigger('change');
-      }
-      $servicecookbookspinner.addClass('hidden');
+        if (data) {
+            var $servicecookbook = $('#' + cookbookctrl);
 
+            $servicecookbook.empty();
+            $.each(data, function(k, v) {
+                $servicecookbook.append('<option value="' + k + '">' + k + '</option>');
 
-    });
+            });
+            //Autoselecting the first item.
+            $servicecookbook.val($servicecookbook.find('option:first').val());
 
-
-}
-function loadreceipesinto(receipectrls,cookbook,chefserverid,finalfunction){
-    if(cookbook){
-   
-    var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
-    $('.receipelistspinner').removeClass('hidden'); 
-                   
-    $.get('/chef/servers/' + csid + '/receipeforcookbooks/' + cookbook,function(data){
-      //  alert('/chef/servers/' + csid + '/receipeforcookbooks/' + cookbook);
-      if(data){
-         $.each(receipectrls,function(k1,v1){
-                var $servicecookbook = $('#' + v1);
-                $servicecookbook.html('');
-               // $servicecookbook.append('<option value="none">None</option>');
-                $.each(data,function(k,v){
-                    var recp = data[k].name.substring(0,data[k].name.length-3);
-                 //   console.log(k + ":" + recp);
-                  $servicecookbook.append('<option value="' +cookbook + '::' + recp + '">' + recp + '</option>');
-             
-                });
-                //Autoselecting the first item.
-                $servicecookbook.val($servicecookbook.find('option:first').val());
-
-                // Loading the saved value back
-                if($servicecookbook.attr('savedvalue') && $servicecookbook.attr('savedvalue').trim() != '' && $servicecookbook.attr('savedvalue').trim() != 'none'){
-                    $servicecookbook.val($servicecookbook.attr('savedvalue'));
-                }
-                
-                $servicecookbook.trigger('change');
-                
-        });
-      }
-      $('.receipelistspinner').addClass('hidden');
-      loadactioncheckboxes(receipectrls);
-      //eval(finalfunction + '([' + receipectrls.toString() +'])');
-    });
-  }
-
-}
-
-function loadactioncheckboxes(receipectrls){
-     $.each(receipectrls,function(k1,v1){
-            var $servicecookbook = $('#' + v1);
-            var $servicecookbookcheckbox = $('#' + v1 +'checkbox'),attr=$servicecookbook.attr('savedvalue');
-            if($servicecookbook.length && $servicecookbookcheckbox.length){
-                if(attr && (attr.trim() === 'none' || attr.trim() === ''))
-                {
-                    $servicecookbookcheckbox.removeAttr('checked');
-                }
-                else{
-                    //$servicecookbookcheckbox.attr('checked','checked');
-                }
-                    
+            // Loading the saved value back
+            if ($servicecookbook.attr('savedvalue')) {
+                $servicecookbook.val($servicecookbook.attr('savedvalue'));
             }
-     });
+            $servicecookbook.trigger('change');
+        }
+        $servicecookbookspinner.addClass('hidden');
+
+
+    });
+
+
+}
+
+function loadreceipesinto(receipectrls, cookbook, chefserverid, finalfunction) {
+    if (cookbook) {
+
+        var csid = $('#' + chefserverid).find('option:selected').attr('rowid');
+        $('.receipelistspinner').removeClass('hidden');
+
+        $.get('/chef/servers/' + csid + '/receipeforcookbooks/' + cookbook, function(data) {
+            //  alert('/chef/servers/' + csid + '/receipeforcookbooks/' + cookbook);
+            if (data) {
+                $.each(receipectrls, function(k1, v1) {
+                    var $servicecookbook = $('#' + v1);
+                    $servicecookbook.html('');
+                    // $servicecookbook.append('<option value="none">None</option>');
+                    $.each(data, function(k, v) {
+                        var recp = data[k].name.substring(0, data[k].name.length - 3);
+                        //   console.log(k + ":" + recp);
+                        $servicecookbook.append('<option value="' + cookbook + '::' + recp + '">' + recp + '</option>');
+
+                    });
+                    //Autoselecting the first item.
+                    $servicecookbook.val($servicecookbook.find('option:first').val());
+
+                    // Loading the saved value back
+                    if ($servicecookbook.attr('savedvalue') && $servicecookbook.attr('savedvalue').trim() != '' && $servicecookbook.attr('savedvalue').trim() != 'none') {
+                        $servicecookbook.val($servicecookbook.attr('savedvalue'));
+                    }
+
+                    $servicecookbook.trigger('change');
+
+                });
+            }
+            $('.receipelistspinner').addClass('hidden');
+            loadactioncheckboxes(receipectrls);
+            //eval(finalfunction + '([' + receipectrls.toString() +'])');
+        });
+    }
+
+}
+
+function loadactioncheckboxes(receipectrls) {
+    $.each(receipectrls, function(k1, v1) {
+        var $servicecookbook = $('#' + v1);
+        var $servicecookbookcheckbox = $('#' + v1 + 'checkbox'),
+            attr = $servicecookbook.attr('savedvalue');
+        if ($servicecookbook.length && $servicecookbookcheckbox.length) {
+            if (attr && (attr.trim() === 'none' || attr.trim() === '')) {
+                $servicecookbookcheckbox.removeAttr('checked');
+            } else {
+                //$servicecookbookcheckbox.attr('checked','checked');
+            }
+
+        }
+    });
 }
 
 function removeFromCodeList(btn, div2) {
@@ -2206,35 +2191,35 @@ function getCount(jsonID) {
     return (count);
 }
 
-function getRelatedValuesForUniqueCheck(jsonID,queryconditionedby){
+function getRelatedValuesForUniqueCheck(jsonID, queryconditionedby) {
     var data1 = new FormData();
-   // var queryconditionedby  = 'orgname,productgroupname';
+    // var queryconditionedby  = 'orgname,productgroupname';
     var retData = '';
-    if(queryconditionedby != ''){
-            var elems = queryconditionedby.split(',');
-            var query = '';
-            for(var y = 0; y < elems.length; y++){
-                data1.append(elems[y],$('#' + elems[y]).val());
-            }
+    if (queryconditionedby != '') {
+        var elems = queryconditionedby.split(',');
+        var query = '';
+        for (var y = 0; y < elems.length; y++) {
+            data1.append(elems[y], $('#' + elems[y]).val());
         }
-     $.ajax({
-            url: '/d4dMasters/getListFiltered/' + jsonID,
-            data: data1,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            async: false,
-            success: function(data,success){
-             // alert(data == "Not Found");
-              retData = data;
-              // if(data == "Not Found")
-              //       retData('');
-              //   else
-              //       return('found');
-              //$('#loginname').trigger('blur');
-            }
+    }
+    $.ajax({
+        url: '/d4dMasters/getListFiltered/' + jsonID,
+        data: data1,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        async: false,
+        success: function(data, success) {
+            // alert(data == "Not Found");
+            retData = data;
+            // if(data == "Not Found")
+            //       retData('');
+            //   else
+            //       return('found');
+            //$('#loginname').trigger('blur');
+        }
     });
-     return(retData);
+    return (retData);
     // if(queryconditionedby.indexOf('""') < 0){
     //    var data1 = {queryparams:[]};
     //    data1.queryparams.push(queryconditionedby);
@@ -2275,8 +2260,8 @@ function getRelatedValues(jsonID, comparedField, filterByValue, outputField) {
     //         }
     //     });
     // });
-    $.each(d4ddata, function(i, item) { 
-        if(item[comparedField] == filterByValue){
+    $.each(d4ddata, function(i, item) {
+        if (item[comparedField] == filterByValue) {
             result.push(item[outputField] + '##' + item["rowid"]);
         }
     });
@@ -2332,7 +2317,7 @@ function errormessageforInput(id, msg) {
     if (errlabel.length > 0) { //no error label found
         errlabel.html(msg);
     } else {
-        if(currCtrl.get(0).tagName != 'DIV')
+        if (currCtrl.get(0).tagName != 'DIV')
             currCtrl.closest('div').find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
         else
             currCtrl.closest('div').parent().find('label').first().append('<span id="errmsg_' + id + '" style="color:red"></span>');
@@ -2355,17 +2340,17 @@ function errormessageforInput(id, msg) {
 //run validation tests on inputs 
 function isFormValid(formid) {
     var isValid = true;
-     if ($('input[unique="true"], select[unique="true"]').length > 0) {
-       // alert('in isFormValid');
-        $('input[unique="true"], select[unique="true"]').each(function(){
-             $(this).trigger('blur');
-              
-              if($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0){
-               // alert('pusing isvalid false');
-              isValid = false;
-              }
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
         });
-     }
+    }
 
 
     $('[cat-validation]').each(function(itm) {
@@ -2408,7 +2393,7 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
-                 case "nospace":
+                case "nospace":
                     var str = currCtrl.val();
                     if (str.indexOf(' ') > 0) {
                         isValid = false;
@@ -2438,36 +2423,36 @@ function isFormValid(formid) {
         });
 
     });
-if(formid && formid===19){
-    var selectionMode=$('#commandtype').val();
-    if(selectionMode==="Chef Cookbook/Recepie"){
-if($('#servicename').val().trim()){
-    isValid=true;
-}else{
-    isValid=false;
-}
-}else if(selectionMode==="Service Command"){
-if($('#servicename').val().trim() && $('#command').val().trim()){
-    isValid=true;
-}else{
-    isValid=false;
-}
+    if (formid && formid === 19) {
+        var selectionMode = $('#commandtype').val();
+        if (selectionMode === "Chef Cookbook/Recepie") {
+            if ($('#servicename').val().trim()) {
+                isValid = true;
+            } else {
+                isValid = false;
+            }
+        } else if (selectionMode === "Service Command") {
+            if ($('#servicename').val().trim() && $('#command').val().trim()) {
+                isValid = true;
+            } else {
+                isValid = false;
+            }
 
+        }
     }
-}
 
     return (isValid);
 }
 
 function enableUniqueCheckingForInputs(id) {
-    
+
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
 
         $('input[unique="true"], select[unique="true"]').blur(function() {
             //Disabling the save button while testing for uniqueness
             //alert('in blue');
             $('button[onclick*="saveform"]').attr('disabled', 'disabled');
-            
+
             var uni = $('#unique_' + $(this).attr("id"));
             if ($(this).attr("initialvalue") != null) {
                 if ($(this).attr("initialvalue") == $(this).val()) {
@@ -2486,24 +2471,23 @@ function enableUniqueCheckingForInputs(id) {
                 uni = $('#unique_' + $(this).attr("id"));
             }
             var queryconditionedby = $(this).attr("uniqueconditionedby");
-            if(queryconditionedby)
-               { 
-                    
-                  // alert(queryconditionedby);
-                    var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedby);
-                    //alert(getBG);
-                  //  alert('getBG !=' + getBG);
-                   //alert(getBG != "" && uni.attr("id"));
-                   if (getBG != 'Not Found') { //this ensures that its present
-                       uni.css("color", "red");
-                       uni.html('Selected is already registered');
-                       $(this).focus();
-                   } else {
-                       uni.css("color", "green");
-                       uni.html('available');
-                   }
+            if (queryconditionedby) {
+
+                // alert(queryconditionedby);
+                var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedby);
+                //alert(getBG);
+                //  alert('getBG !=' + getBG);
+                //alert(getBG != "" && uni.attr("id"));
+                if (getBG != 'Not Found') { //this ensures that its present
+                    uni.css("color", "red");
+                    uni.html('Selected is already registered');
+                    $(this).focus();
+                } else {
+                    uni.css("color", "green");
+                    uni.html('available');
                 }
-                $('button[onclick*="saveform"]').removeAttr('disabled');
+            }
+            $('button[onclick*="saveform"]').removeAttr('disabled');
         });
     }
 }
@@ -2562,13 +2546,13 @@ function checkusernameexistsinldap(inputID) {
     }
 }
 
-function updateInstanceCardWithDocker(instanceID){
-   // alert('in updatecard' + instanceID);
-    var $_cont =$('div[data-instanceid="54e45ed3918d01850c22b474"].domain-roles-caption').find('div.componentlistContainer').first();
+function updateInstanceCardWithDocker(instanceID) {
+    // alert('in updatecard' + instanceID);
+    var $_cont = $('div[data-instanceid="54e45ed3918d01850c22b474"].domain-roles-caption').find('div.componentlistContainer').first();
     //alert($_cont.find('img.dockerenabledinstacne').length);
-    if($_cont.find('img.dockerenabledinstacne').length <= 0){
-      $_cont.find('a[class*="app.url"]').detach();
-      $_cont.append('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne">');
+    if ($_cont.find('img.dockerenabledinstacne').length <= 0) {
+        $_cont.find('a[class*="app.url"]').detach();
+        $_cont.append('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne">');
     }
 
 }
@@ -2576,7 +2560,7 @@ function updateInstanceCardWithDocker(instanceID){
 //STandby code to receive docker images. To be updated to receive the url from settings
 function getDockerTags() {
     var returnValue = '';
-   // debugger;
+    // debugger;
     $.ajax({
         type: "get",
         dataType: "text/json",
@@ -2596,7 +2580,7 @@ function getDockerTags() {
 
 function getDockerImages() {
     var returnValue = '';
-   // debugger;
+    // debugger;
     $.ajax({
         type: "get",
         dataType: "text/json",
@@ -2634,7 +2618,7 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
                 if (txt != '') {
                     if (obj[v]) {
                         if (obj[v]['data'][txt]) {
-                            obj[v]['data'][txt]++;
+                            obj[v]['data'][txt] ++;
                         } else {
                             obj[v].count++;
                             obj[v]['data'][txt] = 1;
@@ -2659,4 +2643,3 @@ function aggregateTable(tableid, filterColumnNo, filterColumnValue, colsArr) {
 
     return obj;
 }
-
