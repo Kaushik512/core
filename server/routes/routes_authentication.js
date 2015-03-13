@@ -85,6 +85,13 @@ module.exports.setRoutes = function(app) {
                                             //res.end(req.session.user.authorizedfiles);
                                             user.roleName = "Admin";
                                             user.authorizedfiles = getAccessFiles;
+                                            // checking permission 
+                                            //to test (username,category,permissionto,req,permissionset,callback)
+                                            usersDao.haspermission(user.cn,'services','read',null,null,function(err,data){
+                                                if(!err){
+                                                    logger.debug('Returned from haspermission' + data);
+                                                }
+                                            });
                                             res.redirect('/private/index.html');
                                         } else {
                                             logger.error("getAccessFiles not available")

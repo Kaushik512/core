@@ -106,7 +106,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     envs += ',' + tempenvname;
                                                                 }
                                                             }
-                                                            logger.debug("Env in:%s", docprojs);
+                                                           // logger.debug("Env in:%s", docprojs);
                                                             prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push({ //
                                                                 name: prjname,
@@ -307,7 +307,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     });
                                                                 }
                                                             }
-                                                            logger.debug("Env in:%s", docprojs);
+                                                           // logger.debug("Env in:%s", docprojs);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push({ //
                                                                 name: docprojs[_prj]['projectname'],
                                                                 environments: envs

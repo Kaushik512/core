@@ -32,7 +32,7 @@ var Permissionsets = mongoose.model('permissionsets', permissionsetsschema);
 
 var PermissionsetsDao = function() {
     this.getPermissionSet = function(roles,callback){
-        logger.debug('Entering getPermissionSet. roles rcvd:' + roles);
+      //  logger.debug('Entering getPermissionSet. roles rcvd:' + roles);
         roles = roles.split(',');
         Permissionsets.find({rolename:{$in:roles}},function(err,data){
             if(!err){
@@ -48,6 +48,7 @@ var PermissionsetsDao = function() {
             }
         });
     };
+
 };
 
 module.exports = new PermissionsetsDao();
