@@ -26,7 +26,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         //blueprintUpdateData.runlist.splice(0, 0, 'recipe[ohai]');
 
-        logger.debug("Blueprint Data = ", blueprintUpdateData);
+        logger.debug("Blueprint Data = %s", blueprintUpdateData);
         blueprintsDao.updateBlueprint(req.params.blueprintId, blueprintUpdateData, function(err, data) {
             if (err) {
                 logger.error("Blueprint Updated Failed >> ", err);
@@ -111,7 +111,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(404);
                     return;
                 }
-                logger.debug('Using Chef serverid : ', blueprint.chefServerId);
+                logger.debug('Using Chef serverid : %s', blueprint.chefServerId);
                 //logger.debug("Using blueprint version ==>", version);
                 configmgmtDao.getEnvNameFromEnvId(blueprint.envId, function(err, envName) {
                     if (err) {
