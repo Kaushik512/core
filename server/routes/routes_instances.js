@@ -432,6 +432,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
+        if (req.session.user.rolename === 'Consumer') {
+            res.send(401);
+            return;
+        }
         if (!req.body.runlist) {
             res.send(400);
             return;

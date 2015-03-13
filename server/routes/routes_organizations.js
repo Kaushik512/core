@@ -31,7 +31,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug("Rowid List /organizations/getTreeNew -->%s", rowidlist);
             d4dModelNew.d4dModelMastersOrg.find({
                 id: 1,
-                active:true
+                active: true
             }, function(err, docorgs) {
                 var orgids = docorgs.map(function(docorgs1) {
                     return docorgs1.rowid;
@@ -88,7 +88,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     for (var _i = 0; _i < orgTree.length; _i++) {
                                         logger.debug("Orgid:%s", orgTree[_i]['rowid']);
                                         for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                            logger.debug("businessGroups rowid:%s%s", orgTree[_i]['businessGroups'],[__i]['rowid']);
+                                            logger.debug("businessGroups rowid:%s%s", orgTree[_i]['businessGroups'], [__i]['rowid']);
                                             logger.debug("docprojs.length:%s", docprojs.length);
                                             for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
@@ -164,7 +164,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
 
                     }
-                    
+
                     //finding the current bg
                     // orgTree.forEach(function(k1,v1){
 
@@ -276,7 +276,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     for (var _i = 0; _i < orgTree.length; _i++) {
                                         logger.debug("Orgnames:%s", orgTree[_i]['name']);
                                         for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                            logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'],[__i]['name'],docprojs.length);
+                                            logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'], [__i]['name'], docprojs.length);
                                             for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                                 if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
@@ -451,7 +451,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 for (var _i = 0; _i < orgTree.length; _i++) {
                                     logger.debug("Orgnames:%s", orgTree[_i]['name']);
                                     for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                        logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'],[__i]['name'],docprojs.length);
+                                        logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'], [__i]['name'], docprojs.length);
                                         for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                             if (docprojs[_bg]['orgname'] == orgTree[_i]['name'] && docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']) {
@@ -675,7 +675,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
@@ -683,11 +683,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
-        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         var blueprintData = req.body.blueprintData;
         blueprintData.orgId = req.params.orgId;
         blueprintData.bgId = req.params.bgId;
@@ -708,12 +708,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
-        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/instances', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/instances",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/instances", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
@@ -721,11 +721,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
-        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/instances",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/instances", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
             if (err) {
                 res.send(500);
@@ -733,11 +733,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
-        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
             if (err) {
                 res.send(500);
@@ -762,13 +762,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
 
             });
-            logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+            logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
 
         });
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId,req.params.bgId,req.params.projectId,req.params.environments);
+        logger.debug("Enter post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.environments);
         var taskData = req.body.taskData;
         taskData.orgId = req.params.orgId;
         taskData.bgId = req.params.bgId;
@@ -777,7 +777,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         if (!taskData.runlist) {
             taskData.runlist = [];
         }
-        logger.debug("taskData: %s",taskData);
+        logger.debug("taskData: %s", taskData);
         tasksDao.createTask(taskData, function(err, data) {
             if (err) {
                 logger.err(err);
@@ -785,12 +785,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             res.send(data);
-            logger.debug("Exit post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId,req.params.bgId,req.params.projectId,req.params.environments);
+            logger.debug("Exit post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.environments);
         });
     });
 
     app.get('/organizations/:orgId/chefserver', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/chefserver",req.params.orgId);
+        logger.debug("Enter get() for /organizations/%s/chefserver", req.params.orgId);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
@@ -802,13 +802,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             } else {
                 res.send(chefDetails);
-                logger.debug("Exit get() for /organizations/%s/chefserver",req.params.orgId);
+                logger.debug("Exit get() for /organizations/%s/chefserver", req.params.orgId);
             }
         });
     });
 
     app.get('/organizations/:orgname/cookbooks', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/cookbooks",req.params.orgname);
+        logger.debug("Enter get() for /organizations/%s/cookbooks", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
                 res.send(500);
@@ -842,7 +842,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         serverId: chefDetails.rowid,
                         cookbooks: cookbooks
                     });
-                    logger.debug("Exit get() for /organizations/%s/cookbooks",req.params.orgname);
+                    logger.debug("Exit get() for /organizations/%s/cookbooks", req.params.orgname);
                 }
             });
 
@@ -851,10 +851,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgname/roles', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/roles",req.params.orgname);
+        logger.debug("Enter get() for /organizations/%s/roles", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
-                res.send("There is some Internal Server Error. ",500);
+                res.send("There is some Internal Server Error. ", 500);
                 return;
             }
             logger.debug("chefdata", chefDetails);
@@ -882,7 +882,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         serverId: chefDetails.rowid,
                         roles: roles
                     });
-                    logger.debug("Exit get() for /organizations/%s/roles",req.params.orgname);
+                    logger.debug("Exit get() for /organizations/%s/roles", req.params.orgname);
                 }
             });
 
@@ -891,7 +891,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgname/chefRunlist', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/chefRunlist",req.params.orgname);
+        logger.debug("Enter get() for /organizations/%s/chefRunlist", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -929,7 +929,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 roles: roles,
                                 cookbooks: cookbooks
                             });
-                            logger.debug("Exit get() for /organizations/%s/chefRunlist",req.params.orgname);
+                            logger.debug("Exit get() for /organizations/%s/chefRunlist", req.params.orgname);
                         }
                     });
                 }
@@ -939,7 +939,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
     app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
-        logger.debug("Enter get() for /organizations/usechefserver/%s/chefRunlist",req.params.orgname);
+        logger.debug("Enter get() for /organizations/usechefserver/%s/chefRunlist", req.params.orgname);
         configmgmtDao.getChefServerDetails(req.params.chefserverid, function(err, chefDetails) {
             if (err) {
                 res.send(500);
@@ -977,7 +977,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 roles: roles,
                                 cookbooks: cookbooks
                             });
-                            logger.debug("Exit get() for /organizations/usechefserver/%s/chefRunlist",req.params.orgname);
+                            logger.debug("Exit get() for /organizations/usechefserver/%s/chefRunlist", req.params.orgname);
                         }
                     });
                 }
@@ -989,7 +989,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
 
         if (!(req.body.fqdn && req.body.os)) {
             res.send(400);
@@ -1020,6 +1020,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     res.send(500);
                     return;
                 }
+
                 function getCredentialsFromReq(callback) {
                     var credentials = req.body.credentials;
                     if (req.body.credentials.pemFileData) {
@@ -1082,6 +1083,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     instanceState: nodeAlive,
                                     bootStrapStatus: 'waiting',
                                     runlist: [],
+                                    appUrl1: req.body.appUrl1,
+                                    appUrl2: req.body.appUrl2,
                                     users: req.body.users, //[req.session.user.cn], //need to change this
                                     hardware: {
                                         platform: 'unknown',
@@ -1289,7 +1292,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                     });
                                     res.send(instance);
-                                    logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance",req.params.orgId,req.params.bgId,req.params.projectId,req.params.envId);
+                                    logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
                                 });
                             });
 

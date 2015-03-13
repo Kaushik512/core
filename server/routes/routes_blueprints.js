@@ -181,6 +181,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         chefNodeName: instanceData.InstanceId,
                                         runlist: version.runlist,
                                         platformId: instanceData.InstanceId,
+                                        appUrl1: blueprint.appUrl1,
+                                        appUrl2: blueprint.appUrl2,
                                         instanceIP: instanceData.PublicIpAddress,
                                         instanceState: instanceData.State.Name,
                                         bootStrapStatus: 'waiting',
@@ -538,6 +540,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             instanceIP: req.body.instanceIP,
                             instanceState: 'running',
                             bootStrapStatus: 'waiting',
+                            appUrl1: blueprint.appUrl1,
+                            appUrl2: blueprint.appUrl2,
                             users: blueprint.users,
                             hardware: {
                                 platform: 'unknown',
