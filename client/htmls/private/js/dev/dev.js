@@ -915,18 +915,18 @@
 
                 $divComponentListContainer.append($dockerStatus);
             }
-            if (typeof data.applicationUrl != 'undefined') {
-                if (data.applicationUrl != 'http://') {
-                    var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.applicationUrl + "' href='" + data.applicationUrl + "'' target='_blank' >WSS</a>";
-                    $divComponentListContainer.append($anchor);
-                }
+            if(data.appUrl1 && data.appUrl1.name && data.appUrl1.url) {
+                 var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrl1.url + "' href='" + data.appUrl1.url + "'' target='_blank' >"+data.appUrl1.name+"</a>";
+                 $divComponentListContainer.append($anchor);
             }
-            if (typeof data.applicationUrl1 != 'undefined') {
-                if (data.applicationUrl1 != 'http://') {
-                    var $anchor1 = "<br><a style='margin-left:44px;font-size:10px;margin-top:-10px;' title='" + data.applicationUrl1 + "' class='app.url1 forURL' href='" + data.applicationUrl1 + "'' target='_blank'>AD</a>";
-                    $divComponentListContainer.append($anchor1);
-                }
+
+            if(data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
+                 var $anchor1 = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrl2.url + "' href='" + data.appUrl2.url + "'' target='_blank' >"+data.appUrl2.name+"</a>";
+                 $divComponentListContainer.append($anchor1);
             }
+
+            
+        
 
             $rowContainter.append('<td></td>');
             $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');

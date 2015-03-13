@@ -43,7 +43,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(data);
         });
     });
-    //updateInstanceAppUrl
+
     app.get('/instances/:instanceId', function(req, res) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
@@ -103,23 +103,36 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
     });
     //updateInstanceIp
-    app.get('/instances/updateappurl/:instanceId/:appurlid/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
-        if (req.params.appurlid == '0')
-            instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                res.end('OK');
-            });
-        else {
-            instancesDao.updateInstanceAppUrl1(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                res.end('OK');
-            });
+    app.post('/instances/:instanceId/appUrl/update', function(req, res) { //function(instanceId, ipaddress, callback)
+        var callback = function(err, updateCount) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (updateCount) {
+                res.send(200, {
+                    updateCount: updateCount
+                })
+            } else {
+                res.send(404, {
+                    updateCount: 0
+                })
+            }
+        }
+        if (req.body.appUrl1) {
+            if (req.body.appUrl1 && req.body.appUrl1.name && req.body.appUrl1.url) {
+                instancesDao.updateAppUrl1(req.params.instanceId, req.body.appUrl1, callback);
+            } else {
+                res.send(400);
+            }
+        } else if (req.body.appUrl2) {
+            if (req.body.appUrl2 && req.body.appUrl2.name && req.body.appUrl2.url) {
+                instancesDao.updateAppUrl2(req.params.instanceId, req.body.appUrl2, callback);
+            } else {
+                res.send(400);
+            }
+        } else {
+            res.send(400);
         }
     });
 
@@ -207,12 +220,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     app.get('/instances/dockerexecute/:instanceid/:containerid/:action', function(req, res) {
 
-            console.log('reached here dockerexecute' + req.params.action);
-            var instanceid = req.params.instanceid;
-            var _docker = new Docker();
-            var cmd = "sudo docker exec " + req.params.containerid + ' ' + req.params.action;
-            _docker.runDockerCommands(cmd,instanceid,function(err,retCode){
-                if (!err) {
+        console.log('reached here dockerexecute' + req.params.action);
+        var instanceid = req.params.instanceid;
+        var _docker = new Docker();
+        var cmd = "sudo docker exec " + req.params.containerid + ' ' + req.params.action;
+        _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
+            if (!err) {
                 logsDao.insertLog({
                     referenceId: instanceid,
                     err: false,
@@ -220,17 +233,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
                 res.send(200);
-                } else {
-                    console.log("Excute Error : " + err);
-                    logsDao.insertLog({
-                        referenceId: instanceid,
-                        err: true,
-                        log: "Excute Error : " + err,
-                        timestamp: new Date().getTime()
-                    });
-                    res.send(500);
-                }
-            });
+            } else {
+                console.log("Excute Error : " + err);
+                logsDao.insertLog({
+                    referenceId: instanceid,
+                    err: true,
+                    log: "Excute Error : " + err,
+                    timestamp: new Date().getTime()
+                });
+                res.send(500);
+            }
+        });
 
     });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action', function(req, res) {
