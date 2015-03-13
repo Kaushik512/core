@@ -2363,17 +2363,6 @@
         //event for orchatration tab show
         //   $(function() {
 
-        var $createTaskBtn = $('.createTaskLink');
-        // var $instanceList = $('.instancesList');
-        $('a[data-toggle="tab"][href="#l3"]').on('show.bs.tab', function() {
-            var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
-
-            if (cardCount === 0) {
-                $createTaskBtn[0].disabled = true;
-            } else {
-                $createTaskBtn[0].disabled = false;
-            }
-        });
 
         // });
 
