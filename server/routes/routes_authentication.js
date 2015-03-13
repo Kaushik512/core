@@ -164,6 +164,10 @@ module.exports.setRoutes = function(app) {
         res.send(req.session.cuserrole);
     });
 
+    app.get('/auth/getpermissionset', function(req, res) {
+        res.send(req.session.user.permissionset);
+    });
+
     var verifySession = function(req, res, next) {
         //logger.debug("Enter verifySession");
         if (req.session && req.session.user) {

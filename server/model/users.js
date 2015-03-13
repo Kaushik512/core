@@ -75,7 +75,7 @@ module.exports.getUser = function(username, req, callback) {
     });
 }
 
-module.exports.
+
 
 module.exports.getUser__ = function(username, callback) {
   Users.find({
