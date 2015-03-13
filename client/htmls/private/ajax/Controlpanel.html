@@ -1570,16 +1570,25 @@ $('.formSubmit').click(function(e){
               name:$('#appURL1NameInput').val(),
               url:$('#txtapplicationurl').val()
              }; 
+             if(!(reqBody.appUrl1.url.indexOf('http://') === 0 || reqBody.appUrl1.url.indexOf('https://')===0) ) {
+                reqBody.appUrl1.url = 'http://'+reqBody.appUrl1.url;
+              
+             }
              href = reqBody.appUrl1.url; 
              name = reqBody.appUrl1.name;
              className = 'app-url';
              textBoxId = 'txtapplicationurl';
+
 
            } else if(appUrlType =='2') {
              reqBody.appUrl2 = {
                name:$('#appURL2NameInput').val(),
                url:$('#txtapplicationurl1').val()
              };
+             if(!(reqBody.appUrl2.url.indexOf('http://') === 0 || reqBody.appUrl2.url.indexOf('https://')===0) ) {
+                reqBody.appUrl2.url = 'http://'+reqBody.appUrl2.url;
+              
+             }
              href = reqBody.appUrl2.url; 
              name = reqBody.appUrl2.name;
              className = 'app-url1';

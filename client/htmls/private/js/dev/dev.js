@@ -273,7 +273,11 @@
                 };
                 var appName = $('#appName').val();
                 var appURL = $('#appURL').val();
+                
                 if (appName && appURL) {
+                  if(!(appURL.indexOf('http://') === 0 || appURL.indexOf('https://')===0) ) {
+                    appURL = 'http://'+appURL;
+                  }
                   reqBody.appUrl1 = {
                      name: appName,
                      url: appURL
