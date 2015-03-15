@@ -26,11 +26,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
 
     app.get('/organizations/getTreeNew', function(req, res) {
+        logger.debug("Enter get() for /organizations/getTreeNew");
         configmgmtDao.getRowids(function(err, rowidlist) {
-            console.log("Rowid List /organizations/getTreeNew -->" + rowidlist);
+            logger.debug("Rowid List /organizations/getTreeNew -->%s", rowidlist);
             d4dModelNew.d4dModelMastersOrg.find({
                 id: 1,
-                active:true
+                active: true
             }, function(err, docorgs) {
                 var orgids = docorgs.map(function(docorgs1) {
                     return docorgs1.rowid;
@@ -41,7 +42,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 orgids.forEach(function(k, v) {
                     //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
                     //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                    console.log('Org v:' + JSON.stringify(v));
+                    logger.debug("Org v:%s", JSON.stringify(v));
                     orgname = configmgmtDao.convertRowIDToValue(k, rowidlist);
                     orgTree.push({
                         name: orgname,
@@ -78,21 +79,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     orgname_rowid: orgTree[i]['rowid'],
                                     productgroupname_rowid: docbgs[k]['rowid']
                                 }, function(err, docprojs) {
-                                    console.log('Projects:' + docprojs);
+                                    logger.debug("Projects:%s", docprojs);
 
                                     var prjids = docprojs.map(function(docprojs1) {
                                         return docprojs1.rowid;
                                     });
 
                                     for (var _i = 0; _i < orgTree.length; _i++) {
-                                        console.log('Orgid:' + orgTree[_i]['rowid']);
+                                        logger.debug("Orgid:%s", orgTree[_i]['rowid']);
                                         for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                            console.log('businessGroups rowid:' + orgTree[_i]['businessGroups'][__i]['rowid']);
-                                            console.log('docprojs.length:' + docprojs.length);
+                                            logger.debug("businessGroups rowid:%s%s", orgTree[_i]['businessGroups'], [__i]['rowid']);
+                                            logger.debug("docprojs.length:%s", docprojs.length);
                                             for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                                 if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
-                                                    console.log('hit');
+                                                    logger.debug("hit");
                                                     if (orgTree[_i]['businessGroups'][__i]['projects'].length <= 0) {
                                                         for (var _prj = 0; _prj < docprojs.length; _prj++) {
                                                             var envsids = docprojs[_prj]['environmentname_rowid'].split(',');
@@ -105,7 +106,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     envs += ',' + tempenvname;
                                                                 }
                                                             }
-                                                            console.log("Env in:" + docprojs);
+                                                            logger.debug("Env in:%s", docprojs);
                                                             prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push({ //
                                                                 name: prjname,
@@ -125,7 +126,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             }
                                         }
                                     }
-                                    console.log("OrgTree:" + JSON.stringify(orgTree));
+                                    logger.debug("OrgTree:%s", JSON.stringify(orgTree));
                                     if (counter >= docbgs.length - 1) {
                                         d4dModelNew.d4dModelMastersEnvironments.find({
                                             id: 3,
@@ -145,6 +146,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                                 if (_i >= orgTree.length - 1) {
                                                     res.send(orgTree);
+                                                    logger.debug("Exit get() for /organizations/getTreeNew");
                                                     return;
                                                 }
                                             }
@@ -162,6 +164,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
 
                     }
+
                     //finding the current bg
                     // orgTree.forEach(function(k1,v1){
 
@@ -181,14 +184,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     // orgTree.businessGroups.push(docbgs.)
                 });
 
-
             });
         });
 
     });
 
     app.get('/organizations/getTreeForbtv', function(req, res) {
-        console.log("Enter /organizations/getTreeForbtv");
+        logger.debug("Enter get() for /organizations/getTreeForbtv");
+        //console.log("Enter /organizations/getTreeForbtv");
         configmgmtDao.getRowids(function(err, rowidlist) {
             d4dModelNew.d4dModelMastersOrg.find({
                 id: 1,
@@ -218,7 +221,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                 });
                 orgCount++;
-                console.log("Found Orgs");
+                logger.debug("Found Orgs");
                 d4dModelNew.d4dModelMastersProductGroup.find({
                     id: 2,
                     orgname_rowid: {
@@ -226,7 +229,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                 }, function(err, docbgs) {
                     if (docbgs.length <= 0) { //no bgs for any org return tree
-                        console.log('Not found any BUs returing empty orgs');
+                        logger.debug("Not found any BUs returing empty orgs");
                         res.send(orgTree);
                         return;
                     }
@@ -269,16 +272,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     var prjids = docprojs.map(function(docprojs1) {
                                         return docprojs1.rowid;
                                     });
-                                    console.log('Projects found:' + prjids.length);
+                                    logger.debug("Projects found:%s", prjids.length);
                                     for (var _i = 0; _i < orgTree.length; _i++) {
-                                        console.log('Orgnames:' + orgTree[_i]['name']);
+                                        logger.debug("Orgnames:%s", orgTree[_i]['name']);
                                         for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                            console.log('businessGroups:' + orgTree[_i]['businessGroups'][__i]['name']);
-                                            console.log('docprojs.length:' + docprojs.length);
+                                            logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'], [__i]['name'], docprojs.length);
                                             for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                                 if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
-                                                    console.log('hit');
                                                     if (orgTree[_i]['businessGroups'][__i]['projects'].length <= 0) {
                                                         for (var _prj = 0; _prj < docprojs.length; _prj++) {
                                                             var envs = docprojs[_prj]['environmentname_rowid'].split(',');
@@ -306,7 +307,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     });
                                                                 }
                                                             }
-                                                            console.log("Env in:" + docprojs);
+                                                            logger.debug("Env in:%s", docprojs);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push({ //
                                                                 name: docprojs[_prj]['projectname'],
                                                                 environments: envs
@@ -341,7 +342,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             }
                                         }
                                     }
-                                    console.log("OrgTree:" + JSON.stringify(orgTree));
+                                    logger.debug("OrgTree:%s", JSON.stringify(orgTree));
                                     if (counter >= docbgs.length - 1) {
                                         d4dModelNew.d4dModelMastersEnvironments.find({
                                             id: 3,
@@ -358,6 +359,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                                 if (_i >= orgTree.length - 1) {
                                                     res.send(orgTree);
+                                                    logger.debug("Exit get() for /organizations/getTreeForbtv");
                                                     return;
                                                 }
                                             }
@@ -401,6 +403,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/getTree', function(req, res) {
+        logger.debug("Enter get() for /organizations/getTree");
         d4dModelNew.d4dModelMastersOrg.find({
             id: 1
         }, function(err, docorgs) {
@@ -446,20 +449,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 });
 
                                 for (var _i = 0; _i < orgTree.length; _i++) {
-                                    console.log('Orgnames:' + orgTree[_i]['name']);
+                                    logger.debug("Orgnames:%s", orgTree[_i]['name']);
                                     for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                        console.log('businessGroups:' + orgTree[_i]['businessGroups'][__i]['name']);
-                                        console.log('docprojs.length:' + docprojs.length);
+                                        logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'], [__i]['name'], docprojs.length);
                                         for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                             if (docprojs[_bg]['orgname'] == orgTree[_i]['name'] && docprojs[_bg]['productgroupname'] == orgTree[_i]['businessGroups'][__i]['name']) {
-                                                console.log('hit');
                                                 if (orgTree[_i]['businessGroups'][__i]['projects'].length <= 0) {
                                                     for (var prjname in prjnames)
                                                         orgTree[_i]['businessGroups'][__i]['projects'].push(prjnames[prjname]);
                                                 }
 
-                                                console.log("Env:" + docprojs[_bg]['environmentname']);
+                                                logger.debug("Env:%s", docprojs[_bg]['environmentname']);
                                                 // if(orgTree[_i]['environments'].length <=0){
                                                 //     for(var envname in docprojs[_bg]['environmentname'])
                                                 //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
@@ -468,7 +469,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                     }
                                 }
-                                console.log("OrgTree:" + JSON.stringify(orgTree));
+                                logger.debug("OrgTree:%s", JSON.stringify(orgTree));
                                 if (counter >= docbgs.length - 1) {
                                     d4dModelNew.d4dModelMastersEnvironments.find({
                                         id: 3,
@@ -484,6 +485,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             }
                                             if (_i >= orgTree.length - 1) {
                                                 res.send(orgTree);
+                                                logger.debug("Exit get() for /organizations/getTree");
                                                 return;
                                             }
                                         }
@@ -527,6 +529,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/getTreeOld', function(req, res) {
+        logger.debug("Enter get() for /organizations/getTreeOld");
         masterjsonDao.getMasterJson("1", function(err, orgsJson) {
             if (err) {
                 res.send(500);
@@ -665,14 +668,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
             } else {
                 res.send(orgTree);
             }
-
-
+            logger.debug("Exit get() for /organizations/getTreeOld");
         });
 
     });
 
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
@@ -680,9 +683,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         var blueprintData = req.body.blueprintData;
         blueprintData.orgId = req.params.orgId;
         blueprintData.bgId = req.params.bgId;
@@ -703,10 +708,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
+        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/instances', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/instances", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, data) {
             if (err) {
                 res.send(500);
@@ -714,9 +721,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/instances", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
             if (err) {
                 res.send(500);
@@ -724,9 +733,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
             if (err) {
                 res.send(500);
@@ -751,11 +762,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
 
             });
+            logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
 
         });
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.environments);
         var taskData = req.body.taskData;
         taskData.orgId = req.params.orgId;
         taskData.bgId = req.params.bgId;
@@ -764,40 +777,45 @@ module.exports.setRoutes = function(app, sessionVerification) {
         if (!taskData.runlist) {
             taskData.runlist = [];
         }
-        console.log(taskData);
+        logger.debug("taskData: %s", taskData);
         tasksDao.createTask(taskData, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.err(err);
                 res.send(500);
                 return;
             }
             res.send(data);
+            logger.debug("Exit post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.environments);
         });
     });
 
     app.get('/organizations/:orgId/chefserver', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/chefserver", req.params.orgId);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            logger.debug("chefdata", chefDetails);
+            logger.debug("chefdata%s", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
             } else {
                 res.send(chefDetails);
+                logger.debug("Exit get() for /organizations/%s/chefserver", req.params.orgId);
             }
         });
     });
 
     app.get('/organizations/:orgname/cookbooks', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/cookbooks", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
                 res.send(500);
+                logger.error(err);
                 return;
             }
-            logger.debug("chefdata", chefDetails);
+            logger.debug("chefdata%s", chefDetails);
 
 
             if (!chefDetails) {
@@ -824,6 +842,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         serverId: chefDetails.rowid,
                         cookbooks: cookbooks
                     });
+                    logger.debug("Exit get() for /organizations/%s/cookbooks", req.params.orgname);
                 }
             });
 
@@ -832,9 +851,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgname/roles', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/roles", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
-                res.send(500);
+                res.send("There is some Internal Server Error. ", 500);
                 return;
             }
             logger.debug("chefdata", chefDetails);
@@ -862,6 +882,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         serverId: chefDetails.rowid,
                         roles: roles
                     });
+                    logger.debug("Exit get() for /organizations/%s/roles", req.params.orgname);
                 }
             });
 
@@ -870,6 +891,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/organizations/:orgname/chefRunlist', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/chefRunlist", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -907,6 +929,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 roles: roles,
                                 cookbooks: cookbooks
                             });
+                            logger.debug("Exit get() for /organizations/%s/chefRunlist", req.params.orgname);
                         }
                     });
                 }
@@ -916,6 +939,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
     app.get('/organizations/usechefserver/:chefserverid/chefRunlist', function(req, res) {
+        logger.debug("Enter get() for /organizations/usechefserver/%s/chefRunlist", req.params.orgname);
         configmgmtDao.getChefServerDetails(req.params.chefserverid, function(err, chefDetails) {
             if (err) {
                 res.send(500);
@@ -953,6 +977,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 roles: roles,
                                 cookbooks: cookbooks
                             });
+                            logger.debug("Exit get() for /organizations/usechefserver/%s/chefRunlist", req.params.orgname);
                         }
                     });
                 }
@@ -964,6 +989,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
 
         if (!(req.body.fqdn && req.body.os)) {
             res.send(400);
@@ -980,7 +1006,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 return;
             }
-            console.log('Received Users:' + req.body.users);
+            logger.debug("Received Users: %s", req.body.users);
             if (req.body.credentials && req.body.credentials.username) {
                 if (!(req.body.credentials.password || req.body.credentials.pemFileData)) {
                     res.send(400);
@@ -994,6 +1020,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     res.send(500);
                     return;
                 }
+
                 function getCredentialsFromReq(callback) {
                     var credentials = req.body.credentials;
                     if (req.body.credentials.pemFileData) {
@@ -1056,6 +1083,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     instanceState: nodeAlive,
                                     bootStrapStatus: 'waiting',
                                     runlist: [],
+                                    appUrl1: req.body.appUrl1,
+                                    appUrl2: req.body.appUrl2,
                                     users: req.body.users, //[req.session.user.cn], //need to change this
                                     hardware: {
                                         platform: 'unknown',
@@ -1131,15 +1160,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 cmdswin: ["del "]
                                             }
                                             //cmds: ["rm -rf /etc/chef/","rm -rf /var/chef/"] ["ls -l","ls -al"]
-                                        console.log('decryptCredentials ==>', decryptedCredentials);
+                                        logger.debug("decryptCredentials ==> %s", decryptedCredentials);
                                         if (decryptedCredentials.pemFileLocation) {
                                             opts.privateKey = decryptedCredentials.pemFileLocation;
                                         } else {
                                             opts.password = decryptedCredentials.password;
                                         }
-                                        console.log("Node OS : " + instance.hardware.os);
+                                        logger.debug("Node OS : %s", instance.hardware.os);
                                         chef.cleanChefonClient(opts, function(err, retCode) {
-                                            console.log('Entering chef.bootstarp');
+                                            logger.debug("Entering chef.bootstarp");
                                             chef.bootstrapInstance({
                                                 instanceIp: instance.instanceIP,
                                                 pemFilePath: decryptedCredentials.pemFileLocation,
@@ -1263,6 +1292,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                     });
                                     res.send(instance);
+                                    logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
                                 });
                             });
 

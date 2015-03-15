@@ -19,6 +19,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.post('/blueprints/:blueprintId/update', function(req, res) {
         logger.debug("Enter /blueprints/%s/update", req.params.blueprintId);
 
+        if (req.session.user.rolename === 'Consumer') {
+            res.send(401);
+            return;
+        }
+
         var blueprintUpdateData = req.body.blueprintUpdateData;
         if (!blueprintUpdateData.runlist) {
             blueprintUpdateData.runlist = [];
@@ -26,7 +31,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         //blueprintUpdateData.runlist.splice(0, 0, 'recipe[ohai]');
 
-        logger.debug("Blueprint Data = ", blueprintUpdateData);
+        logger.debug("Blueprint Data = %s", blueprintUpdateData);
         blueprintsDao.updateBlueprint(req.params.blueprintId, blueprintUpdateData, function(err, data) {
             if (err) {
                 logger.error("Blueprint Updated Failed >> ", err);
@@ -111,14 +116,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(404);
                     return;
                 }
-                logger.debug('Using Chef serverid : ', blueprint.chefServerId);
+                logger.debug('Using Chef serverid : %s', blueprint.chefServerId);
                 //logger.debug("Using blueprint version ==>", version);
                 configmgmtDao.getEnvNameFromEnvId(blueprint.envId, function(err, envName) {
                     if (err) {
                         res.send(500);
                         return;
                     }
-                    console.log('envName',envName);
+                    console.log('envName', envName);
                     configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
                         if (err) {
                             logger.error("Failed to getChefServerDetails", err);
@@ -176,6 +181,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         chefNodeName: instanceData.InstanceId,
                                         runlist: version.runlist,
                                         platformId: instanceData.InstanceId,
+                                        appUrl1: blueprint.appUrl1,
+                                        appUrl2: blueprint.appUrl2,
                                         instanceIP: instanceData.PublicIpAddress,
                                         instanceState: instanceData.State.Name,
                                         bootStrapStatus: 'waiting',
@@ -533,6 +540,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             instanceIP: req.body.instanceIP,
                             instanceState: 'running',
                             bootStrapStatus: 'waiting',
+                            appUrl1: blueprint.appUrl1,
+                            appUrl2: blueprint.appUrl2,
                             users: blueprint.users,
                             hardware: {
                                 platform: 'unknown',

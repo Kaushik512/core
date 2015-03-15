@@ -123,6 +123,14 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true
     },
+    appUrl1:{
+        name:String,
+        url:String
+    },
+    appUrl2:{
+        name:String,
+        url:String
+    },
     applicationUrl: {
         type: String,
         trim: true
@@ -438,45 +446,46 @@ var InstancesDao = function() {
 
     };
 
-    this.updateInstanceAppUrl = function(instanceId, instnaceurl, callback) {
-        logger.debug("Enter updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+    
+    this.updateAppUrl1 = function(instanceId, appUrlData, callback) {
+        logger.debug("Enter updateAppUrl1 (%s, %s)", instanceId, appUrlData);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $set: {
-                "applicationUrl": instnaceurl
+                "appUrl1": appUrlData
             }
         }, {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateinstnaceurl (%s, %s)", instanceId, instnaceurl, err);
+                logger.error("Failed to updateAppUrl1 (%s, %s)", instanceId, appUrlData, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+            logger.debug("Exit updateAppUrl1 (%s, %s)", instanceId, appUrlData);
             callback(null, data);
         });
 
     };
 
-    this.updateInstanceAppUrl1 = function(instanceId, instnaceurl, callback) {
-        logger.debug("Enter updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+    this.updateAppUrl2 = function(instanceId, appUrlData, callback) {
+        logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, appUrlData);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $set: {
-                "applicationUrl1": instnaceurl
+                "appUrl2": appUrlData
             }
         }, {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateinstnaceurl (%s, %s)", instanceId, instnaceurl, err);
+                logger.error("Failed to updateAppUrl2 (%s, %s)", instanceId, appUrlData, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit updateinstnaceurl (%s, %s)", instanceId, instnaceurl);
+            logger.debug("Exit updateAppUrl2 (%s, %s)", instanceId, appUrlData);
             callback(null, data);
         });
 
