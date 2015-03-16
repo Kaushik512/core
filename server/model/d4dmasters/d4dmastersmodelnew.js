@@ -264,6 +264,21 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 );
 var d4dModelJenkinsConfig = mongoose.model('d4dModelJenkinsConfig',d4dMastersJenkinsConfig,'d4dmastersnew');
 
+var d4dMastersProviders = new mongoose.Schema(
+		{id: {type:String,required:true, trim:true},
+		providername:{type:String,required:true,trim:true},
+        description:{type:String,required:true,trim:true},
+		accountid:{type:String,required:true,trim:true},
+        region:{type:String,required:true,trim:true},
+        accesskey:{type:String,required:true,trim:true},
+        secretkey:{type:String,required:true,trim:true},
+        keypairname:{type:String,required:true,trim:true},
+        securitygroupid:{type:String,required:true,trim:true},
+        accountpemfile:{type:String,required:false,trim:true},
+        rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');
+
 
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
@@ -282,3 +297,4 @@ module.exports.d4dModelMastersglobalaccess  = d4dModelMastersglobalaccess;
 module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//
 module.exports.d4dModelMastersGeneric  = d4dModelMastersGeneric;
 module.exports.d4dModelMastersDynamic  = d4dModelMastersDynamic;
+module.exports.d4dModelMastersProviders = d4dModelMastersProviders;
