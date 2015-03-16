@@ -778,7 +778,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         appCardData.bgId = req.params.bgId;
         appCardData.projectId = req.params.projectId;
         appCardData.users = [req.session.user.cn];
-        appCardsDao.createAppCard(blueprintData, function(err, data) {
+        appCardsDao.createAppCard(appCardData, function(err, data) {
             if (err) {
                 res.send(500);
                 return;

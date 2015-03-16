@@ -74,6 +74,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
         });
         //alert("ServerID:" + data.serverId);
         $('.deploymentSelectedRunList').first().data('chefServerId', data.serverId);
+        $('.deploymentSelectedRunList').first().attr('data-chefServerId', data.serverId);
 
         var $deploymentRolesList = $('.deploymentRoleList');
         for (i = 0; i < keys.length; i++) {

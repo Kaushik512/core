@@ -41,7 +41,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.get('/jenkins/:jenkinsId/jobs', function(req, res) {
         var jenkinsData = req.CATALYST.jenkins;
-
         var jenkins = new Jenkins({
             url: jenkinsData.jenkinsurl,
             username: jenkinsData.jenkinsusername,

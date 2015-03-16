@@ -892,7 +892,7 @@
             </div>
              <div class="modal-footer">
                 <div class="btn-group" style="margin-left:200px;">                                
-                 <a class="btn btn-primary importSaveBtn" data-dismiss="modal">
+                 <a class="btn btn-primary appCardSaveBtn" data-dismiss="modal">
                     <i class="ace-icon fa fa-save bigger-110"></i>
                     Save
                 </a>
@@ -1717,9 +1717,52 @@ $(document).ready(function() {
     });
 
 });
-$('.importSaveBtn').click(function(e) {
-    var $tt = $('#applicationNameInput').val();
-    localStorage.setItem('newAppName', $tt);
+$('.appCardSaveBtn').click(function(e) {
+    var appCardData = {};
+    appCardData.name = $('#applicationNameInput').val();
+    if (!appCardData.name) {
+        alert("App card name is empty");
+        return;
+    }
+    appCardData.buildConfig = {
+        jenkinsServerId: $('#jenkinsServerList').val(),
+        jobName: $('#jobListJenkins').val()
+    };
+
+    if (!(appCardData.buildConfig.jenkinsServerId && appCardData.buildConfig.jobName)) {
+        alert("Build configuration is incorrect");
+        return;
+    }
+    appCardData.instanceIds = [];
+    appCardData.instanceIds.push($('#instanceList').val());
+    if (!appCardData.instanceIds.length) {
+        alert("Please Select an Instance");
+        return;
+    }
+    var $selectedRunlist = $('#runlistContainer').find('.deploymentSelectedRunList');
+
+    var runlist = [];
+    var $inputs = $selectedRunlist.find('input');
+    $inputs.each(function() {
+        runlist.push($(this).val());
+    });
+    if (!runlist.length) {
+        alert("Please Choose a Runlist");
+        return;
+    }
+
+    appCardData.deployConfig = {
+        chefServerId: $selectedRunlist.attr('data-chefServerId'),
+        runlist: runlist
+    }
+
+    $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/appcards', {
+        appCardData: appCardData
+    }, function(appCard) {
+        console.log(appCard);
+
+    });
+
 });
 $('.actionnewControlPanel').click(function(e) {
     var $selectedCard = $('.role-Selectedcard-app');
