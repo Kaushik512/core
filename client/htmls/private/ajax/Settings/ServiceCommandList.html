@@ -18,7 +18,7 @@
                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                        
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateServiceCommand.html?test">
+                            <a id="newService" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateServiceCommand.html?test">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -84,6 +84,17 @@
                                     </tbody>
                                     
                                 </table>
+                                <script>
+                                $(document).ready(function(){
+                                    var hasCreateServicePermission = false;
+                                    if(haspermission('services','create')){
+                                        hasCreateServicePermission=true;
+                                    }
+                                    if(!hasCreateServicePermission){
+                                        $('#newService').addClass('hidden');
+                                    }
+                                });
+                                </script>
                                 <script id="onpagescript">
                                     function inLineReady() {
                                         /* $('#envtable').dataTable({
