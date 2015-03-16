@@ -160,7 +160,7 @@
     } else {
         bootbox.alert('Please select an instance to remove.');
     }
-    }
+}
 
             /*
             Attaching Click Event on IP Address Import, which will reset instance form.
@@ -459,18 +459,18 @@
                         }
 
                     });
-                }
+    }
 
 
-                for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
 
-                    addInstanceToDOM(data[i]);
+        addInstanceToDOM(data[i]);
 
-                }
+    }
 
 
 
-                $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
+    $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
 
                 //Setting the count for the table entry in TableView
                 function tableupdownRow(evt) {
@@ -581,37 +581,41 @@
 
 
             function pollInstanceState(instanceId, state, delay) {
-                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-
+             
                 var timeout = setTimeout(function() {
                     $.get('../instances/' + instanceId, function(data) {
-                        if (data) {
-                            if (data.instanceState == 'stopped') {
-                                enableInstanceActionStopBtn(instanceId);
-                            }
-                            if (data.instanceState == 'running') {
-                                enableInstanceActionStartBtn(instanceId, data.hardware.os);
-                            }
-                            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
-                                disableInstanceActionBtns(instanceId);
-                            }
-                            if (data.instanceState == 'unknown') {
-                                disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-                            }
-                            $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);
-                            if (data.instanceState === state) {
-                                pollInstanceState(instanceId, state, 5000);
-                            } else {
-                                console.log('polling complete');
-                                var cssClassed = getCssClassFromStatus(data.instanceState);
-                                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                                $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-                                $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
-                                $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
-                            }
+                        if (data) {  
+                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);   
+                          if (data.instanceState == 'stopped') {
+                            enableInstanceActionStopBtn(instanceId);
+
                         }
-                    });
+                        if (data.instanceState == 'running') {
+                            enableInstanceActionStartBtn(instanceId, data.hardware.os);
+                        }
+                        if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                            disableInstanceActionBtns(instanceId);
+                        }
+                        if (data.instanceState == 'unknown') {
+                            disableInstanceStartStopActionBtns(data._id, data.hardware.os);
+                            
+                        }
+                        if (data.instanceState === state) {
+                            pollInstanceState(instanceId, state, 5000);
+                        } else {
+                            console.log('polling complete');
+                            var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                            $parent.find('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);
+                            var cssClassed = getCssClassFromStatus(data.instanceState);
+                            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                            $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
+                            $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
+
+                        }
+                    }
+                });
     }, delay);
     }
 
@@ -759,7 +763,7 @@
     }, delay);
     }
     pollLogs(lastTimestamp, 0, true);
-    };
+};
 
 
             //emptying ssh container
@@ -825,7 +829,7 @@
                         return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + data.blueprintData.blueprintName + '">' + data.blueprintData.blueprintName + '</span>';
                     },
                     getSpanHeadingRight: function(data) {
-                        return '<span style="float:right"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
+                        return '<span style="float:left;margin-top:4px;margin-left:8px;"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
                     },
                     getDomainRolesHeading: function(data) {
                         return '<div class="domain-roles-heading">' + this.getSpanHeadingLeft(data) + this.getSpanHeadingMiddle(data) + this.getOS(data) + '</div>';
@@ -855,7 +859,7 @@
                         return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="' + data.hardware.platform+ '" rel="tooltip"/></span>'
                     },
                     getStartStopToggler:function(data){
-                        return '<div class="startstoptoggler" instanceID="'+data._id+'" style="float:left;margin-left:7px;" rel="tooltip" >Status</div>'
+                        return '<div class="startstoptoggler" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;"></div>'
                     }
                 }
                 if (data && data._id) { // instanceId
@@ -910,22 +914,22 @@
 
                     $divComponentListContainer = $('<div></div>').addClass('componentlistContainer started');
                     $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator started');
-                
+
                 } else if (data.instanceState == 'terminated') {
-                
+
                     $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
                     $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
-                
+
                 } else if (data.instanceState == 'stopped') {
-                
+
                     $divComponentListContainer = $('<div></div>').addClass('componentlistContainer stopped');
                     $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator stopped');
-                
+
                 } else {
-                
+
                     $divComponentListContainer = $('<div></div>').addClass('componentlistContainer pending');
                     $tableInstanceStatusIndicator = $('<td></td>').addClass('instancestatusindicator pending');
-                
+
                 }
 
                 $tableInstanceStatusIndicator.attr('data-instanceId', data._id);
@@ -934,7 +938,7 @@
                 $divComponentItem = $(cardTemplate.getComponentItem());
 
                 $divComponentItem.click(function(e) {
-                
+
                     var $par = $(this).parents('.flip-toggle');
                     $par.find('.tooltip').remove();
                     if ($par.length && $par.hasClass('flip')) {
@@ -1060,46 +1064,46 @@
                 $divActionBtnContainer.append($divActionSSHContainer);
                 
                 var $startStopToggler=$(cardTemplate.getStartStopToggler(data));
-               $divActionBtnContainer.append($startStopToggler);
+                $divActionBtnContainer.append($startStopToggler);
 
-              $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
-              var $back = $('<div></div>').addClass('back card-backflip');
-              var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
+                $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
+                var $back = $('<div></div>').addClass('back card-backflip');
+                var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
-              var $backdiv = $('<span></span>').addClass('card-backflip-margin');
-              var $backdiva = $('<a style="color:#333;"></a>');
-              var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+                var $backdiv = $('<span></span>').addClass('card-backflip-margin');
+                var $backdiva = $('<a style="color:#333;"></a>');
+                var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
 
-              var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Runlists');
-              var $backhr = $('<hr>');
-              $backdiva.append($backdivai);
-              $backdiva.append($backdivaspan);
-              $backdiv.append($backdiva);
+                var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Runlists');
+                var $backhr = $('<hr>');
+                $backdiva.append($backdivai);
+                $backdiva.append($backdivaspan);
+                $backdiv.append($backdiva);
 
-              $back.append($backdiv);
+                $back.append($backdiv);
 
-              for (var j = 0; j < data.runlist.length; j++) {
-                var $divComponentItem;
+                for (var j = 0; j < data.runlist.length; j++) {
+                    var $divComponentItem;
 
-                $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
-                $backRunlistContainer.append($divComponentItem);
-            }
+                    $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+                    $backRunlistContainer.append($divComponentItem);
+                }
 
-            $back.append($backRunlistContainer);
-            $backdiv.append($backhr);
+                $back.append($backRunlistContainer);
+                $backdiv.append($backhr);
 
 
-            var $flipbackdivaspanhr = $('<hr>');
-            $back.append($flipbackdivaspanhr);
-            var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href', 'javascript:void(0)').append("Go Back"));
-            $flipbackdivaspan.click(function(e) {
-                $(this).parents('.flip-toggle').toggleClass('flip');
-            });
-            $back.append($flipbackdivaspan);
+                var $flipbackdivaspanhr = $('<hr>');
+                $back.append($flipbackdivaspanhr);
+                var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href', 'javascript:void(0)').append("Go Back"));
+                $flipbackdivaspan.click(function(e) {
+                    $(this).parents('.flip-toggle').toggleClass('flip');
+                });
+                $back.append($flipbackdivaspan);
 
-            $divDomainRolesCaption.append($divActionBtnContainer);
-            $front.append($div);
-            $card.append([$front,$back]);
+                $divDomainRolesCaption.append($divActionBtnContainer);
+                $front.append($div);
+                $card.append([$front,$back]);
                // $card.append($front);
                 //$card.append($back);
                 $container.append($card);
@@ -1154,19 +1158,19 @@
     //var allClass='stopped running pending unknown', addClass='';
     if (data.instanceState == 'stopped') {
         enableInstanceActionStopBtn(data._id);
-        $startStopToggler.addClass('stopped').html(data.instanceState);
+        $startStopToggler.addClass('stopped');
     }
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id, data.hardware.os);
-        $startStopToggler.addClass('running').html(data.instanceState);
+        $startStopToggler.addClass('running');
     }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
         disableInstanceActionBtns(data._id);
-        $startStopToggler.addClass('pending').html(data.instanceState);
+        $startStopToggler.addClass('pending');
     }
     if (data.instanceState == 'unknown') {
         disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-        $startStopToggler.addClass('unknown').html(data.instanceState);
+        $startStopToggler.addClass('unknown');
     }
     $startStopToggler.click(function(e){
 
@@ -1176,13 +1180,11 @@
         }
         else if($(this).hasClass('running')){
             console.log('running State');
-            $(this).parents('.instanceActionBtn').find('[data-actionType="Stop"]').trigger('click');
+            $(this).parent().find('[data-actionType="Stop"]').trigger('click');
 
         }else if($(this).hasClass('stopped')){
-
-        console.log('Stopped State');
-        $(this).parents('.instanceActionBtn').find('[data-actionType="Start]').trigger('click');
-
+            console.log('Stopped State');
+            $(this).parents().find('[data-actionType="Start"]').trigger('click');
         }
     });
 
@@ -1193,7 +1195,7 @@
         }
     }, 3);
     $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
-    }
+}
 
 
             //enaling the start Button and checking the instanceID & OS-Type
@@ -1512,10 +1514,10 @@
     }
     $selecteditBtnContainer.append($li);
 
-    }
-    $itemBody.append($ul);
-    $itemBody.append($selecteditBtnContainer);
-    $itemContainer.append($itemBody);
+}
+$itemBody.append($ul);
+$itemBody.append($selecteditBtnContainer);
+$itemContainer.append($itemBody);
 
                             //Find the template type container and add to it.
                             //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
@@ -1764,11 +1766,11 @@
                             });
 
 
-    }).error(function() {
-        $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
-    });
-    }
-    });
+}).error(function() {
+    $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+});
+}
+});
 
     }
 
@@ -2067,19 +2069,19 @@
     pollJob();
 
     console.log(data);
-    }
+}
 
-    }).fail(function(jxhr) {
-        $modal.find('.loadingContainer').hide();
-        $modal.find('.outputArea').hide();
-        var $errorContainer = $modal.find('.errorMsgContainer').show();
-        if (jxhr.responseJSON && jxhr.responseJSON.message) {
-            $errorContainer.html(jxhr.responseJSON.message);
-        } else {
-            $errorContainer.html("Server Behaved Unexpectedly");
-        }
-    });
-    });
+}).fail(function(jxhr) {
+    $modal.find('.loadingContainer').hide();
+    $modal.find('.outputArea').hide();
+    var $errorContainer = $modal.find('.errorMsgContainer').show();
+    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+        $errorContainer.html(jxhr.responseJSON.message);
+    } else {
+        $errorContainer.html("Server Behaved Unexpectedly");
+    }
+});
+});
         $tr.append($tdExecute);
         var timestamp = "-";
         if (data[i].lastRunTimestamp) {
@@ -2500,15 +2502,15 @@
                                        $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
                                    }
                                        }); ///instances/dockerexecute/:instanceid/:containerid/:action
-                                }
-                                else{
-                                    $('.dockerspinner').detach();
-                                    $td.find('.dockermessage').detach();
-                                    $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                    alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
-                                }
+    }
+    else{
+        $('.dockerspinner').detach();
+        $td.find('.dockermessage').detach();
+        $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+        alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
+    }
 
-                            }
+}
                                 //Updating instance card to show the docker icon.
                                 $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
                                 //find the instance card - to do instance table view update
@@ -2526,7 +2528,7 @@
                             }
                         });
     }
-    });
+});
     });
 
 
@@ -2577,12 +2579,12 @@
                        launchparams[2] = execparam;
                    }
                });
-                return (launchparams);
-            }
+        return (launchparams);
+    }
 
-            function loadLaunchParams() {
-                var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
-                if (lparam && lparam != '') {
+    function loadLaunchParams() {
+        var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+        if (lparam && lparam != '') {
                     $('[dockerparamkey]').val(''); //clearing the popup input boxes
                     //split by -c to get startup and other parameters
                     var preparams = lparam.split('-c');
@@ -2751,39 +2753,39 @@
     });
     }
 
-    } else
-    $progressicon.addClass('hidden');
+} else
+$progressicon.addClass('hidden');
 
-    });
+});
     }
     return (false);
-    }
+}
 
 
 
-    if (action == '6') {
-        bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-            if (!result) {
-                return;
-            }
-            performAction();
-        });
-    } else if (action == '2') {
-        bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-            if (!result) {
-                return;
-            }
-            performAction();
-        });
-    } else {
+if (action == '6') {
+    bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+        if (!result) {
+            return;
+        }
         performAction();
-    }
-
-
     });
+} else if (action == '2') {
+    bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+        if (!result) {
+            return;
+        }
+        performAction();
+    });
+} else {
+    performAction();
+}
+
+
+});
         return;
     }
-    });
+});
     });
                     } else { //no docker found
                         $('.loadingimagefordockertable').addClass('hidden');
@@ -2990,13 +2992,13 @@
                         // serachBoxInInstance.updateData(data,"add",undefined);
                     });
 
-    }).error(function() {
-        $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
-    });;
+}).error(function() {
+    $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+});;
 
 
 
-    });
+});
 
 
 
