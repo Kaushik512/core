@@ -27,7 +27,7 @@ var AppCardSchema = new Schema({
         trim: true,
         validate: schemaValidator.projIdValidator
     },
-    instanceIds : [String],
+    instanceIds: [String],
     iconpath: {
         type: String,
         trim: true
@@ -69,18 +69,30 @@ var AppCardSchema = new Schema({
         user: String
     }],
 
-    
+    functionalTestUrl: String,
+    performanceTestUrl: String,
+    securityTestUrl: String,
+    nonFunctionalTestUrl: String,
+    unitTestUrl: String,
+    codeCoverageTestUrl: String,
+    codeAnalysisUrl: String
+
+
+
+
+
+
 
 });
 
 var AppCards = mongoose.model('appcard', AppCardSchema);
 
 var AppCardsDao = function() {
-    
+
 
     this.createAppCard = function(appCardData, callback) {
         logger.debug("Enter createAppCard");
-        
+
         var appcard = new AppCards(appCardData);
 
         appcard.save(function(err, data) {
