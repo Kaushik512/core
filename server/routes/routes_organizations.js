@@ -736,6 +736,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/appcards', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+        instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+        });
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+    });
+
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {

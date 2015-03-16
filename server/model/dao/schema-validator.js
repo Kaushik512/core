@@ -27,6 +27,7 @@ var validators = {
     catalystUsernameValidator: [getLengthValidator(1, 100, 'Invalid Catalyst Username'),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Catalyst Username')],
     blueprintNameValidator : [getLengthValidator(1, 100, 'Invalid Blueprint Name')],
     taskNameValidator : [getLengthValidator(1, 100, 'Invalid Task Name')],
+    appCardNameValidator : [getLengthValidator(1, 100, 'Invalid App Card Name')],
 
 };
 
