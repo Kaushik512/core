@@ -80,6 +80,61 @@ function Configmgmt() {
                 break;
         }
     };
+
+    this.getCategoryFromID = function(id){
+        logger.log('Entering getDBModelFromID');
+        switch (id.toString()) {
+            case "1":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+               return('organization');
+                break;
+            case "2":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('businessgroups');
+                break;
+            case "3":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('environment');
+                break;
+            case "4":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('projects');
+                break;
+            case "5":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('organization');
+                break;
+            case "7":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('users');
+                break;
+            case "10":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('configuration');
+                break;
+            case "17":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('templates');
+                break;
+            case "18":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('dockerrepository');
+                break;
+            case "19":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('services');
+                break;
+            case "20":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('buildservers');
+                break;
+            case "21":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('teams');
+                break;
+
+        };
+    };
     this.getChefServerDetails_old = function(rowid, callback) {
         d4dModel.findOne({
             id: '10'
