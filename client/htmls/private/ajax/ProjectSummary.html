@@ -808,7 +808,7 @@
                                 <div class="col-lg-6">
                                    <label for="">
                                     <i class="fa fa-fw fa-crosshairs txt-color-blue" style="font-size:20px"></i>
-                                   Funtional Test
+                                   Funtional Test Result
                                         <!-- <span style="color:Red;" class="control-label">&nbsp;*</span> -->
                                     </label>
                                    <input id="appFunctionalTest" class="form-control" type="text">
@@ -816,25 +816,25 @@
                                 <div class="col-lg-6">
                                    <label for="">
                                     <i class="fa fa-fw fa-dot-circle-o txt-color-blue" style="font-size:20px"></i>
-                                   Performance Test</label>
+                                   Performance Test Result</label>
                                    <input id="appPerformanceTest" class="form-control" type="text">
                                 </div>
                                 <div class="col-lg-6" style="margin-top:15px">
                                    <label for="">
                                     <i class="fa fa-fw fa-compass txt-color-blue" style="font-size:20px"></i>
-                                   Non Functional Test</label>
+                                   Non Functional Test Result</label>
                                    <input id="appNonFunctionalTest" class="form-control" type="text">
                                 </div>
                                 <div class="col-lg-6" style="margin-top:15px">
                                    <label for="">
                                     <i class="fa fa-fw fa-lock txt-color-blue" style="font-size:20px"></i>
-                                    Security Test</label>
+                                    Security Test Result</label>
                                    <input id="appSecurityTest" class="form-control" type="text">
                                 </div>
                                 <div class="col-lg-6" style="margin-top:15px">
                                    <label for="">
                                     <i class="fa fa-fw fa-lemon-o txt-color-blue" style="font-size:20px"></i>
-                                    Unit Test</label>
+                                    Unit Test Result</label>
                                    <input id="appUnitTest" class="form-control" type="text">
                                 </div>
                                 <div class="col-lg-6" style="margin-top:15px">
@@ -877,11 +877,15 @@
                                         </label>
                                     </section>                                         
                                     <section class="col col-6">
-                                        <label for="">Blueprint Name  
+                                        <label for="category">Choose Instance<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                        <label class="input">
+                                            <select class="chooseInstances width-100">
+                                                <option value="">i-4324hkaf</option>
+                                                <option value="">i-4267asds</option>
+                                                <option value="">i-2134adad</option>
+                                                <option value="">i-7463sfjlk</option>
+                                            </select>   
                                         </label>
-                                        <label class="input"> 
-                                           <input type="text" class="form-control">
-                                        </label>                                          
                                     </section>
                                 </fieldset>
                               </div>
@@ -2233,6 +2237,7 @@ $(document).ready(function() {
     $(".chooseBuildJobs").select2();
     $(".chooseJobs").select2();
     $(".chooseEnvironment").select2();
+    $(".chooseInstances").select2();
     // newCard();
 });
 $('.importSaveBtn').click(function(e) {
