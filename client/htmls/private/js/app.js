@@ -117,6 +117,7 @@ $(document).ready(function() {
            url: "/d4dMasters/getuser",
            success: function (data) {
                var usrdata = JSON.parse(JSON.stringify(data));
+              // alert(JSON.stringify(data));
                //$("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata[0]['loginname'] + "</b>&nbsp;[" + usrdata[0]['userrolename'] + "]");
                if(usrdata.user[1].role.indexOf('undefined') >= 0)
                	usrdata.user[1].role = '[Not Defined]';
