@@ -1,3 +1,242 @@
+.paddingtopbottom10{
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.width50borderradius50{
+    width:50%;
+    padding: 4px 0 !important;
+    border-radius: 50% !important;
+}
+.width40borderradius50Deploy{
+    width:40%;
+    padding: 4px 0 !important;
+    border-radius: 50% !important;
+}
+.btn-black {
+    background-color: #2c3638;
+    color:white;
+}
+.btn-black:hover, .btn-black:focus {
+    background-color: #2c3638;
+    color:white;
+}
+.btn-black:active {
+    background-color: #2c3638;
+    color:white;
+    /*7a7a7a*/
+}
+.width100{
+    width:100%;
+    padding: 4px 0 !important;
+    box-shadow: 0 0px 0 rgba(0, 0, 0, 0.05) inset !important;
+}
+.borderlastBuildGreen{
+    border-bottom: 2px solid green;
+    margin-bottom:2px;
+}
+.borderlastBuildRed{
+    border-bottom: 2px solid red;
+    margin-bottom:2px;
+}
+.borderlastDeployGreen{
+    border-bottom: 2px solid red;
+    margin-bottom:2px;
+}
+.borderlastDeployRed{
+    border-bottom: 2px solid red;
+    margin-bottom:2px;
+}
+.borderlastTestGreen{
+    border-bottom: 2px solid green;
+    margin-bottom:2px;
+}
+.borderlastTestRed{
+    border-bottom: 2px solid red;
+    margin-bottom:2px;
+}
+.applogslinksBackground{
+    background-color: #e7e7e7;
+    height: 97%;
+    margin-left: 2px;
+    width: 98%;
+    padding-top: 20px;
+    text-align: center;
+}
+.applogslinksBorder{
+    border-width: 0 0 2px 0;
+    height:60px;
+}
+.appperflinksBackground{
+    background-color: #e7e7e7;
+    height: 94%;
+    width: 98%;
+    padding-top: 20px;
+    text-align: center;
+}
+.appperflinksBorder{
+    border-width: 0 2px 0 0;
+    height:60px;
+}
+.codehealthlinksBackground{
+    background-color: #e7e7e7;
+    height: 96%;
+    margin-top: 2px;
+    width: 98%;
+    padding-top: 20px;
+    text-align: center;
+}
+.codehealthlinksBorder{
+    border-width: 2px 2px 0 0;
+    height:60px;
+    margin-top: -2px;
+}
+.uiperflinksBackground{
+    background-color: #e7e7e7;
+    height: 94%;
+    width: 98%;
+    padding-top: 20px;
+    text-align: center;
+}
+.uiperflinksBorder{
+  border-width: 0;
+  height: 60px;
+  margin-top: 2px;  
+}
+.ApplinksColor{
+    color: #3276b1;
+    font-size: 11px;
+}
+.paddingleftright0{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.paddingleftright4{
+    padding-left:4px;
+    padding-right:4px;
+}
+.padding7{
+    padding: 7px;
+}
+.font-size12{
+    font-size: 12px !important;
+}
+.btnBuild{
+    /*width:64px;*/
+    width:100%;
+    font-size:10px;
+    padding: 1px !important;
+}
+.btnDeploy{
+    /*width:74px;*/
+    width:100%;
+    font-size:10px;
+    padding: 1px !important;
+}
+.btnTest{
+    /*width:58px;*/
+    width:100%;
+    font-size:10px;
+    padding: 1px !important; 
+}
+.greenBuild{
+    width:64px;
+    font-size:10px;
+    /*color:green;*/
+}
+.redBuild{
+    width:64px;
+    font-size:10px;
+    /*color:red;*/
+}
+.greenDeploy{
+    width:74px;
+    font-size:10px;
+    /*color:green;*/
+}
+.redDeploy{
+    width:74px;
+    font-size:10px;
+    /*color:red;*/
+}
+.greenTest{
+    width:56px;
+    font-size:10px;
+    /*color:green;*/
+    padding-left: 4px !important;
+}
+.redTest{
+    width:56px;
+    font-size:10px;
+    /*color:red;*/
+    padding-left: 4px;
+}
+.appCardBorder{
+    /*border-color: black;*/
+    /*border-color:lavender;*/
+    /*border-color:#d0d0d0;*/
+    border-color:white;
+    border-style: solid;
+}
+.btn-green {
+    background-color: #04B404;
+}
+.btn-green:hover, .btn-green:focus {
+    background-color: #04B404;
+}
+.btn-green:active {
+    background-color: #04B404;
+}
+.btn-red {
+    background-color: red;
+}
+.btn-red:hover, .btn-red:focus {
+    background-color: red;
+}
+.btn-red:active {
+    background-color: red;
+}
+.btn-white {
+    background-color: #ffffff;
+}
+.btn-white:hover, .btn-white:focus {
+    background-color: #ffffff;
+}
+.btn-white:active {
+    background-color: #ffffff;
+}
+.builLogsContainer{
+    height:400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.appCardLoadingContainer {
+    display: none;
+}
+.light-grey{
+    /*background-color: #afafaf !important;*/
+    /*background-color: #e7e7e7 !important;*/
+    background-color: #d0d0d0 !important;
+}
+.role-Selectedcard-app {
+    /*border: 4px solid #e7e7e7;*/
+    border: 3px solid #40baf1;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.minheight130{
+    min-height: 130px;
+    padding-left: 10px;
+}
+.minheight120{
+    min-height: 120px;
+    /*padding-left: 10px;*/
+}
+@media (min-width: 992px) {
+
+.modal-lg {
+    width: 900px;
+  }
+}
 .padding-left0{
     padding-left: 0px !important;
 }
