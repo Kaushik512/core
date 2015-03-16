@@ -189,10 +189,11 @@
                           </div>
                           <div id="collapseAppURL" class="panel-collapse collapse in">
                             <div class="panel-body">
-                                <form action="" id="myForm30">
+                                <form action="" id="myForm30" style="display:none" data-appURLType="1" class="appUrlForm">
                                   <!--1st text box-->
                                   <div class="col-lg-6">
-                                    <label for="">WSS:</label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
+                                    <input type="hidden" id="appURL1NameInput" />
+                                    <label id="appURL1name" for="">WSS:</label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
                                     <br>
                                       <input type="text" id="txtapplicationurl" type="url">
 
@@ -201,9 +202,10 @@
                                    </form>
                                   <!--1st text box ends-->
                                   <!--2nd text box-->
-                                  <form action="" id="myForm31">
+                                  <form action="" id="myForm31" style="display:none" data-appURLType="2" class="appUrlForm">
                                   <div class="col-lg-6">
-                                    <label for="">AD:</label><span id="urlsaved1" class="hidden">&nbsp;&nbsp;Saved</span>
+                                    <input type="hidden" id="appURL2NameInput" />
+                                    <label id="appURL2name" for="">AD:</label><span id="urlsaved1" class="hidden">&nbsp;&nbsp;Saved</span>
                                     <br>
                                       <input type="text" id="txtapplicationurl1" type="url">
 
@@ -1083,62 +1085,27 @@ $.get('../instances/'+urlParams.id,function(data){
   $tr = $('<tr style="line-height:2.3"></tr>');
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
-  if(typeof data.applicationUrl != 'undefined')
-  {
-  if(data.applicationUrl != 'http://')
-  {
-    var href = data.applicationUrl;
-     var anchor = ""+
-     "<a class='app.url' href='"+href+"'' target='_blank' title='"+href+"'>"+
-     "WSS</a>";
-    $('.instance-bootstrap-list').last().append(anchor);
-    
-     // data.applicationUrl.substring()
-    $('#txtapplicationurl').val(data.applicationUrl);
-     if(typeof data.applicationUrl == 'undefined')
-        {
-           $("#txtapplicationurl").val('http://' + data.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
-                  
-        }
-    }
-    else{
-      
-       if(data.applicationUrl=="http://"){
-                  $("#txtapplicationurl").val('http://' + data.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
-                  
-                }
-        /*alert(typeof data.applicationUrl == 'undefined');*/
-       
-    }
-  }
-if(typeof data.applicationUrl1 != 'undefined')
-  {
-    if(data.applicationUrl1 != 'http://')
-  {
-    var href1 = data.applicationUrl1;
-     var anchor1 = ""+
-     "<a style='margin-left:44px;font-size:10px' class='app.url1' href='"+href1+"'' target='_blank' title='"+href1+"'>"+
-     "AD</a>";
 
-    $('.forURL').last().append(anchor1);
-    
-     // data.applicationUrl.substring()
-    $('#txtapplicationurl1').val(data.applicationUrl1);
-    if(typeof data.applicationUrl1 == 'undefined')
-        {
-           $("#txtapplicationurl1").val('http://' + data.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
-                  
-        }
-    }
-    else{
-      
-       if(data.applicationUrl1=="http://"){
-        $("#txtapplicationurl1").val('http://' + data.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
-                  
-                }
-        
-    }
-  }
+
+ if(data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
+     var anchor = "<a class='app-url1' href='"+data.appUrl2.url+"'' target='_blank' title='"+data.appUrl2.url+"'>"+data.appUrl2.name+"</a>";
+     $('.instance-bootstrap-list').last().append(anchor);
+     $('#appURL2NameInput').val(data.appUrl2.name);
+     $('#appURL2name').html(data.appUrl2.name);
+     $('#txtapplicationurl1').val(data.appUrl2.url);
+     $('#myForm31').show();
+ }
+
+ if(data.appUrl1 && data.appUrl1.name && data.appUrl1.url) {
+     var anchor = "<a class='app-url' href='"+data.appUrl1.url+"'' target='_blank' title='"+data.appUrl1.url+"'>"+data.appUrl1.name+"</a>";
+     $('.instance-bootstrap-list').last().append(anchor);
+     $('#appURL1NameInput').val(data.appUrl1.name);
+     $('#appURL1name').html(data.appUrl1.name);
+      $('#txtapplicationurl').val(data.appUrl1.url);
+      $('#myForm30').show();
+ }
+ 
+
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
   
@@ -1590,112 +1557,78 @@ $('.formSubmit').click(function(e){
        
 
    
-       $('#myForm30').submit(function() {
-           var icon = $('.instance-bootstrap-list').find(".app.url");
+       $('.appUrlForm').submit(function(e) {
+           var $this = $(this);
+           var appUrlType = $this.attr('data-appURLType');
+           var reqBody = {};
+            var href;
+            var name;
+            var className;
+            var textBoxId;
+           if(appUrlType == '1') {
+             reqBody.appUrl1 = {
+              name:$('#appURL1NameInput').val(),
+              url:$('#txtapplicationurl').val()
+             }; 
+             if(!(reqBody.appUrl1.url.indexOf('http://') === 0 || reqBody.appUrl1.url.indexOf('https://')===0) ) {
+                reqBody.appUrl1.url = 'http://'+reqBody.appUrl1.url;
+              
+             }
+             href = reqBody.appUrl1.url; 
+             name = reqBody.appUrl1.name;
+             className = 'app-url';
+             textBoxId = 'txtapplicationurl';
+
+
+           } else if(appUrlType =='2') {
+             reqBody.appUrl2 = {
+               name:$('#appURL2NameInput').val(),
+               url:$('#txtapplicationurl1').val()
+             };
+             if(!(reqBody.appUrl2.url.indexOf('http://') === 0 || reqBody.appUrl2.url.indexOf('https://')===0) ) {
+                reqBody.appUrl2.url = 'http://'+reqBody.appUrl2.url;
+              
+             }
+             href = reqBody.appUrl2.url; 
+             name = reqBody.appUrl2.name;
+             className = 'app-url1';
+             textBoxId = 'txtapplicationurl1';
+           } else {
+             return;
+           }
+           var icon = $('.instance-bootstrap-list').find(className);
            
-           if(!icon.length){
-            var href= $("#txtapplicationurl").val();
-
-
-            href = $.trim(href);
-            if(href!=="http://"){
-               if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
-                href = "http://"+href;
-                }  
-            }
-            else{
-                $('a[class="app.url"]').detach();
+            if(!icon.length){
+            
+            } else{
+                $('a[class="'+className+'"]').detach();
             }
             
           
-           var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
-           if(instanceidforappurl){
-            $.get('/instances/updateappurl/' + instanceidforappurl + '/0/' + encodeURIComponent(href),function(data){
-                $('a[class="app.url"]').detach();
-                var anchor = "<a class='app.url' title='"+href+"' href='"+href+"'' target='_blank'>WSS</a>";
+           var instanceId = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
+           if(instanceId){
+            $.post('../instances/'+instanceId+'/appUrl/update',reqBody,function(data){
+                $('.'+className).detach();
+                var anchor = "<a class='"+className+"' title='"+href+"' href='"+href+"'' target='_blank'>"+name+"</a>";
                 $('.instance-bootstrap-list').last().append(anchor);
                 $('#urlsaved').removeClass('hidden');
-                $("#txtapplicationurl").attr('readOnly','readonly');
+                $("#"+textBoxId).attr('readOnly','readonly');
                 if(href=="http://" || href==''){
                   /*$("#txtapplicationurl").val('http://localhost:8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
-                  $('a[class="app.url"]').detach();
+                  $('a[class="'+className+'"]').detach();
                 }
                 setTimeout(function() {
                   $('#urlsaved').addClass('hidden');
                 }, (2000));
-            } );
+            });
            }
            
-            // 
-
-           }
-           return false; // for demo
        });
-   
-   
-   
    
    });
 </script>
 <script>
-   $(document).ready(function () {
-
-       /*var app_url_submit = function(url1, url2, callback1, callback2){
-          var form1 = $('#myForm30');
-          var form2 = $('#myForm31');
-
-       }; */   
-       /*var href1= $("#txtapplicationurl").val();
-       if(href1=="http://" || href1==''){
-                  $("#txtapplicationurl").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');
-                  
-                }*/
-   
-       $('#myForm31').submit(function() {
-           var icon = $('.forURL').find(".app.url1");
-           
-           if(!icon.length){
-            var href1= $("#txtapplicationurl1").val();
-            href = $.trim(href1);
-            if(href!=="http://"){
-               if( href.indexOf("http://") <0 && href.indexOf("https://") <0  ){
-                  href = "http://"+href;
-                }  
-            }
-            else{
-                $('a[class="app.url1"]').detach();
-            }
-            
-           // get instance ID
-           var instanceidforappurl = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
-
-           if(instanceidforappurl){
-            $.get('/instances/updateappurl/' + instanceidforappurl + '/1/' + encodeURIComponent(href),function(data){
-                $('a[class="app.url1"]').detach();
-                var anchor1 = "<a style='margin-left:44px;font-size:10px' class='app.url1' title='"+href1+"' href='"+href+"'' target='_blank'>AD</a>";
-                $('.forURL').last().append(anchor1);
-                $('#urlsaved1').removeClass('hidden');
-                $("#txtapplicationurl1").attr('readOnly','readonly');
-                if(href=="http://"){
-                  /*$("#txtapplicationurl1").val('http://localhost:8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
-                  $('a[class="app.url1"]').detach();
-                }
-                setTimeout(function() {
-                  $('#urlsaved1').addClass('hidden');
-                }, (2000));
-            });// end $.get
-           }
-           
-            // 
-
-           }
-           return false; // for demo
-       });
-   
-   
-   
-   
-   });
+ 
 </script>
 <script type="text/javascript">
   if (!$.fn.dataTable.isDataTable('#tableactionHistory')) {
