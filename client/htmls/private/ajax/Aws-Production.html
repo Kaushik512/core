@@ -1051,6 +1051,7 @@ $(document).ready(function(){
                    var wizard = $wizard.data('bootstrapWizard');
                     wizard.disablePreviouBtn();
                }).error(function(){
+                  $('.blueprintSaveFail').find('h3').first().html('Insufficient permission to perform operation.')
                   $('.blueprintSaveFail').show();
                });
                console.log('final', reqBody);
