@@ -20,6 +20,8 @@ var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var Curl = require('../lib/utils/curl.js');
 var waitForPort = require('wait-for-port');
 
+var appCardsDao = require('../model/dao/appcarddao');
+
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -736,16 +738,35 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
-    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/appcards', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/appcards', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
+        appCardsDao.getAppCardsByOrgBgAndProjectId(req.params.orgId, req.params.bgId, req.params.projectId, req.session.user.cn, function(err, appCardsList) {
             if (err) {
                 res.send(500);
                 return;
             }
+            req.send(appCardsList);
         });
-        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
     });
+
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/appcards', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
+        var appCardData = req.body.appCardData;
+        appCardData.orgId = req.params.orgId;
+        appCardData.bgId = req.params.bgId;
+        appCardData.projectId = req.params.projectId;
+        appCardData.users = [req.session.user.cn];
+        appCardsDao.createAppCard(blueprintData, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+        });
+        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
+    });
+
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
