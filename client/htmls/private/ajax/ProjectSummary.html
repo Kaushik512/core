@@ -865,22 +865,16 @@
                                     <section class="col col-6">
                                         <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                         <label class="input">
-                                            <select class="chooseEnvironment width-100">
-                                                <option value="">DEV</option>
-                                                <option value="">QA</option>
-                                                <option value="">Stage</option>
-                                                <option value="">Production</option>
+                                            <select id="environmentList" class="chooseEnvironment width-100" disabled>
+                                                
                                             </select>   
                                         </label>
                                     </section>                                         
                                     <section class="col col-6">
                                         <label for="category">Choose Instance<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                         <label class="input">
-                                            <select class="chooseInstances width-100">
-                                                <option value="">i-4324hkaf</option>
-                                                <option value="">i-4267asds</option>
-                                                <option value="">i-2134adad</option>
-                                                <option value="">i-7463sfjlk</option>
+                                            <select id="instanceList" class="chooseInstances width-100" disabled>
+                                                
                                             </select>   
                                         </label>
                                     </section>
@@ -1694,8 +1688,33 @@ $(document).ready(function() {
     var $ccrs = $chefCookbookRoleSelector(urlParams.org,null,null);
     $('#runlistContainer').append($ccrs);
 
+    // loading envronments 
+    $.get('/d4dMasters/3/orgname_rowid/' + urlParams.org, function(envs) {
+        envs = JSON.parse(envs);
+        var $envList = $('#environmentList');
+        if (envs.length) {
+            $envList.prop("disabled", false);
+        }
+        for (var i = 0; i < envs.length; i++) {
+            var $option = $('<option></option>').html(envs[i].environmentname).val(envs[i].rowid);
+            $envList.append($option);
+        }
 
+        $envList.change(function(e) {
+            var envId = $(this).val();
+            var $instanceList = $('#instanceList').empty();
+            $instanceList.change();
+            $instanceList.prop("disabled", true);
+            $.get('/organizations/'+urlParams.org+'/businessgroups/'+urlParams.bg+'/projects/'+urlParams.projid+'/environments/'+envId+'/instances', function(instances) {
+                for (var i = 0; i < instances.length; i++) {
+                    var $option = $('<option></option>').val(instances[i]._id).html(instances[i].chef.chefNodeName);
+                    $instanceList.append($option);
+                }
+                $instanceList.prop("disabled", false);
+            });
+        });
 
+    });
 
 });
 $('.importSaveBtn').click(function(e) {
