@@ -2,7 +2,7 @@ var masterjsonDao = require('../model/d4dmasters/masterjson.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 var blueprintsDao = require('../model/dao/blueprints');
-
+var usersDao = require('../model/users.js');
 var instancesDao = require('../model/dao/instancesdao');
 var tasksDao = require('../model/dao/orchestrationdao');
 var appConfig = require('../config/app_config');
@@ -690,27 +690,48 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        var blueprintData = req.body.blueprintData;
-        blueprintData.orgId = req.params.orgId;
-        blueprintData.bgId = req.params.bgId;
-        blueprintData.projectId = req.params.projectId;
-        blueprintData.envId = req.params.envId;
-        if (!blueprintData.runlist) {
-            blueprintData.runlist = [];
-        }
-        if (!blueprintData.users || !blueprintData.users.length) {
-            res.send(400);
-            return;
-        }
+        //validating if user has permission to save a blueprint
+        logger.debug('Verifying User permission set');
+        var user = req.session.user;
+        var category = 'blueprints';
+        var permissionto = 'create';
+       
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
 
-        blueprintsDao.createBlueprint(blueprintData, function(err, data) {
-            if (err) {
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
                 res.send(500);
                 return;
             }
-            res.send(data);
+            var blueprintData = req.body.blueprintData;
+            blueprintData.orgId = req.params.orgId;
+            blueprintData.bgId = req.params.bgId;
+            blueprintData.projectId = req.params.projectId;
+            blueprintData.envId = req.params.envId;
+            if (!blueprintData.runlist) {
+                blueprintData.runlist = [];
+            }
+            if (!blueprintData.users || !blueprintData.users.length) {
+                res.send(400);
+                return;
+            }
+
+            blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(data);
+            });
+            logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         });
-        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
 
