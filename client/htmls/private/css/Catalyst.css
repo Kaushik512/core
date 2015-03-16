@@ -7245,3 +7245,20 @@ body .ui-tooltip {
     margin-left: -13px;
     width:51.5%;
 }
+.instanceActionBtnCtr >.pending,.stopping,.unknown{
+    background:url('../img/galleryIcons/rsz_start_icon.png');
+    width:26px;
+    height:25px;
+}
+.instanceActionBtnCtr >.running{
+background:url('../img/galleryIcons/shut_down.png');
+    width:26px;
+    height:25px;
+    cursor:pointer;
+}
+.instanceActionBtnCtr >.stopped{
+background:url('../img/galleryIcons/start_icon.png');
+    width:26px;
+    height:25px;
+    cursor:pointer;
+}
