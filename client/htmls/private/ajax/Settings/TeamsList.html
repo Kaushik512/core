@@ -17,7 +17,7 @@
                               <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateTeam.html?new">
+                            <a id="newTeam" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateTeam.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -85,6 +85,13 @@
                                 </table>
                                 <script>
                                     $(document).ready(function () {
+                                        var hasCreateTeamPermission = false;
+                                        if(haspermission('teams','create')){
+                                            hasCreateTeamPermission=true;
+                                        }
+                                        if(!hasCreateTeamPermission){
+                                            $('#newTeam').addClass('hidden');
+                                        }
                                        
                                         startup();
                                     });
