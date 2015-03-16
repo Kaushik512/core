@@ -1,0 +1,230 @@
+<html class="yui3-js-enabled">
+  <head>
+	<script src="http://yslow.org/yslow-bookmarklet.js">
+  </script>
+  <link id="yui_3_3_0_3_14254768952349" type="text/css" rel="stylesheet" href="http://yslow.org/yslow-style.css" charset="utf-8">
+  <link id="yui_3_3_0_3_14254768976579" type="text/css" rel="stylesheet" href="http://yslow.org/yslow-style.css" charset="utf-8">
+  </head>
+  <body onload="YUI_config={win:window.parent,doc:window.parent.document};var d=document;d.getElementsByTagName('head')[0].appendChild(d.createElement('script')).src='http://yslow.org/yslow-bookmarklet.js'">
+    <div id="yslowDiv" style="display:none;">
+      <div id="tooltipDiv" style="display: none;">
+      </div>
+      <div id="dialogDiv" style="display: none; left: 0px; top: 0px;">
+        <div class="dialog-box" style="left: 287px; top: 93px;">
+          <h1>
+            <div class="dialog-text">
+              Ooops! An error occured fetching page components. Plese try again.
+            </div>
+          </h1>
+          <div class="dialog-more-text">
+          </div>
+          <div class="buttons">
+            <input type="button" onclick="javascript:document.ysview.closeDialog(document)" value="OK" class="dialog-left-button">
+            <input type="button" onclick="javascript:document.ysview.closeDialog(document)" value="Cancel" class="dialog-right-button">
+          </div>
+        </div>
+        <div class="dialog-mask">
+        </div>
+      </div>
+      <div id="toolbarDiv" style="display: block;">
+        <div class="floatRight" id="toolbar-ruleset">
+          Rulesets 
+          <select onchange="javascript:document.ysview.onChangeRuleset(event)" name="rulesets" id="toolbar-rulesetList">
+            <option selected="" value="ydefault">
+              YSlow(V2)
+            </option>
+            <option value="yslow1">
+              Classic(V1)
+            </option>
+            <option value="yblog">
+              Small Site or Blog
+            </option>
+          </select>
+          <button onclick="javascript:document.ysview.showRuleSettings()">
+            Edit
+          </button>
+          <ul id="tbActions">
+            <li id="fsLink">
+              <a href="#">
+                <b class="icon exp">
+                  ∧
+                </b>
+                <em class="exp">
+                  Expand
+                </em>
+                <b class="icon res">
+                  ∨
+                </b>
+                <em class="res">
+                  Restore
+                </em>
+              </a>
+            </li>
+            <li id="helpLink">
+              <a href="javascript:document.ysview.showHideHelp()">
+                <b class="icon">
+                  ?
+                </b>
+                <em>
+                  Help ↓
+                </em>
+              </a>
+            </li>
+            <li id="fsClose">
+              <a href="#">
+                <b class="icon">
+                  X
+                </b>
+                <em>
+                  Close
+                </em>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div style="visibility: hidden" class="help" id="helpDiv">
+          <div>
+            <a href="javascript:document.ysview.openLink('https://github.com/marcelduran/yslow/wiki/User-Guide')">
+              YSlow Help
+            </a>
+          </div>
+          <div>
+            <a href="javascript:document.ysview.openLink('https://github.com/marcelduran/yslow/wiki/FAQ')">
+              YSlow FAQ
+            </a>
+          </div>
+          <div class="new-section">
+            <a href="javascript:document.ysview.openLink('http://yslow.org/blog/')">
+              YSlow Blog
+            </a>
+          </div>
+          <div>
+            <a href="javascript:document.ysview.openLink('http://tech.groups.yahoo.com/group/exceptional-performance/')">
+              YSlow Community
+            </a>
+          </div>
+          <div class="new-section">
+            <a href="javascript:document.ysview.openLink('https://github.com/marcelduran/yslow/issues')">
+              YSlow Issues
+            </a>
+          </div>
+          <div class="new-section">
+            <div>
+              <a href="javascript:document.ysview.openLink('http://yslow.org/')" class="social yslow">
+                YSlow Home
+              </a>
+            </div>
+            <div>
+              <a href="javascript:document.ysview.openLink('http://www.facebook.com/getyslow')" class="social facebook">
+                Like YSlow
+              </a>
+            </div>
+            <div>
+              <a href="javascript:document.ysview.openLink('http://twitter.com/yslow')" class="social twitter">
+                Follow YSlow
+              </a>
+            </div>
+          </div>
+          <div id="help-version" class="new-section">
+            Version 3.1.6
+          </div>
+        </div>
+        <div id="nav-menu">
+          <ul id="toolbarLinks" class="yui-nav">
+            <li id="ysHomeButton" class="first off selected">
+              <a onclick="javascript:document.ysview.onclickToolbarMenu(event)" href="javascript:document.ysview.setSplashView()">
+                <em>
+                  Home
+                </em>
+                <span class="pipe">
+                </span>
+              </a>
+            </li>
+            <li id="ysPerfButton" class="">
+              <a onclick="javascript:document.ysview.onclickToolbarMenu(event)" href="javascript:document.ysview.showPerformance()">
+                <em>
+                  Grade
+                </em>
+                <span class="pipe">
+                </span>
+              </a>
+            </li>
+            <li id="ysCompsButton">
+              <a onclick="javascript:document.ysview.onclickToolbarMenu(event)" href="javascript:document.ysview.showComponents()">
+                <em>
+                  Components
+                </em>
+                <span class="pipe">
+                </span>
+              </a>
+            </li>
+            <li id="ysStatsButton">
+              <a onclick="javascript:document.ysview.onclickToolbarMenu(event)" href="javascript:document.ysview.showStats()">
+                <em>
+                  Statistics
+                </em>
+                <span class="pipe">
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div style="display: block;" id="viewDiv" class="yui-skin-sam">
+        <div style="display: block;">
+          <div id="splashDiv">
+            <div id="splashDivCenter">
+              <b src="chrome://yslow/content/yslow/img/speedometer.png" alt="splash image" height="150" width="250" id="splashImg">
+              </b>
+              <div id="left">
+                <h2>
+                  Grade your web pages with YSlow
+                </h2>
+                <div class="padding50" id="content">
+                  <h3>
+                    YSlow gives you:
+                  </h3>
+                  <ul id="splashBullets">
+                    <ul>
+                      <li>
+                        Grade based on the performance of the page (you can define your own ruleset)
+                      </li>
+                      <li>
+                        Summary of the page components
+                      </li>
+                      <li>
+                        Chart with statistics
+                      </li>
+                    </ul>
+                  </ul>
+                  <label>
+                    <input type="checkbox" onclick="javascript:document.ysview.setAntiIframe(this.checked)">
+                    Check here if the current page prevents itself from being embedded/iframed. A simpler post onload detection will be used instead.
+                  </label>
+                  <div id="runtestDiv">
+                    <button onclick="javascript:document.ysview.runTest()" id="runtest-btn">
+                      Run Test
+                    </button>
+                  </div>
+                </div>
+                <div class="footer">
+                  <div class="moreinfo">
+                    <a href="javascript:document.ysview.openLink('https://yslow.org/');">
+                      <b>
+                        »
+                      </b>
+                      Learn more about YSlow and the Yahoo! Developer Network
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="copyrightDiv">
+        Copyright &copy; 2015 Yahoo! Inc. All rights reserved.
+      </div>
+    </div>
+  </body>
+</html>
