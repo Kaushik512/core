@@ -30,7 +30,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     $chefItemdiv.append($panelbody);
 
     var $fieldset = $("<fieldset></fieldset>").addClass('padding0 fieldsetContainschefItem');
-    var $section1 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    var $section1 = $("<section></section>").addClass('col col-sm-6 col-xs-12 padding-right0');
 
     var $label1 = $("<label></label>").addClass('label');
     var $img1 = $("<img />").attr('src', 'img/templateicons/Create-run-list---deployment.png');
@@ -154,7 +154,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
 
     //Section 2 started
 
-    var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12');
+    var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12 padding-left0');
     var $label2 = $("<label></label>").addClass('label');
     var $img2 = $("<img />").attr('src', 'img/templateicons/Order-run-list---deployment.png');
     var $strong2 = $("<span></span>").text("Order Runlist");
