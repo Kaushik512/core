@@ -125,7 +125,7 @@ module.exports.getUser = function(username, req, callback) {
             //Fetching the permission set for the role defined for the user
             d4dMasterJson = JSON.parse(JSON.stringify(d4dMasterJson));
             logger.debug('Entering  permissionsetDao.getPermissionSet. d4dMasterJson : ' + JSON.stringify(d4dMasterJson));
-
+            
             permissionsetDao.getPermissionSet(d4dMasterJson[0].userrolename, function(err, data) {
                 if (!err) {
                     if (req != null) {
@@ -144,8 +144,6 @@ module.exports.getUser = function(username, req, callback) {
                     callback(err, null);
                 }
             });
-
-
             //res.end();
         } else {
             console.log("none found");

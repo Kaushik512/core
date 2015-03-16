@@ -75,14 +75,14 @@ module.exports.setRoutes = function(app) {
                                     user.roleId = data[0].userrolename;
 
                                     //user.groupId = data[0].groupId;
-                                    console.log('Just before role:', data[0].roleId);
+                                    console.log('Just before role:', data[0].userrolename);
                                     user.roleName = "Admin";
                                     user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
-                                    usersDao.haspermission(user.cn,'services','read',null,req.session.user.permissionset,function(err,data){
-                                        if(!err){
-                                            logger.debug('Returned from haspermission' + data);
-                                        }
-                                    });
+                                    // usersDao.haspermission(user.cn,'services','read',null,req.session.user.permissionset,function(err,data){
+                                    //     if(!err){
+                                    //         logger.debug('Returned from haspermission' + data);
+                                    //     }
+                                    // });
                                     res.redirect('/private/index.html');
                                     
                                     // configmgmtDao.getAccessFilesForRole(user.cn, user, req, res, function(err, getAccessFiles) {
@@ -166,7 +166,7 @@ module.exports.setRoutes = function(app) {
         logger.debug('Enter /auth/userexists/:username. for Username ::' + req.params.username);
         var ldapClient = new LdapClient();
         ldapClient.compare(req.params.username, function(err, status) {
-            logger.debug("/auth/userexists/:username. LDAP Response = " + status);
+           // logger.debug("/auth/userexists/:username. LDAP Response = " + status);
             res.send(status)
         });
     });
@@ -176,7 +176,10 @@ module.exports.setRoutes = function(app) {
     });
 
     app.get('/auth/getpermissionset', function(req, res) {
-        res.send(req.session.user.permissionset);
+        logger.debug('hit permissionset ' + req.session.user.cn);
+        if(req.session.user.password)
+            delete req.session.user.password;
+        res.send(JSON.stringify(req.session.user));
     });
 
     var verifySession = function(req, res, next) {

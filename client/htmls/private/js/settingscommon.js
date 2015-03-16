@@ -13,28 +13,33 @@ function deleteItem(docid, key, value, button) {
                     // debugger;
                     //d4ddata = JSON.parse(data);
                     // $('#refreshpage').click();
-                    //alert(data);
-                    var $tr = $(button).closest('tr');
-
-                    //$tr.addClass('hidden').remove();
-                    var $table = $tr.parents('table');
-
-                    if ($.fn.DataTable.isDataTable($table)) {
-                        var $dataTable = $table.DataTable();
-                        $dataTable.row($tr).remove().draw(false);
-                    } else {
-
-                        $tr.fadeOut("slow");
-                        $tr.addClass('hidden').remove();
+                    if(data != '401')
+                    {
+                        var $tr = $(button).closest('tr');
+                        //$tr.addClass('hidden').remove();
+                        var $table = $tr.parents('table');
+    
+                        if ($.fn.DataTable.isDataTable($table)) {
+                            var $dataTable = $table.DataTable();
+                            $dataTable.row($tr).remove().draw(false);
+                        } else {
+    
+                            $tr.fadeOut("slow");
+                            $tr.addClass('hidden').remove();
+                        }
+    
+    
+                        var tab = 'envtable';
+                        $('#' + tab).dataTable();
+                        if (parseInt(docid) < 5) {
+                            loadTreeFuncNew();
+                            //  alert('in saved');
+                            //   selectFirstEnv();
+                        }
                     }
-
-
-                    var tab = 'envtable';
-                    $('#' + tab).dataTable();
-                    if (parseInt(docid) < 5) {
-                        loadTreeFuncNew();
-                        //  alert('in saved');
-                        //   selectFirstEnv();
+                    else
+                    {
+                        bootbox.alert('Insufficient permission to perform this operation.');
                     }
                 },
                 failure: function(data) {
@@ -49,6 +54,73 @@ function deleteItem(docid, key, value, button) {
     });
 
 }
+
+
+var sessionUser = null;
+
+var getpermissionforcategory = function(category,permissionto, permissionset) {
+    var perms = [];
+    if (permissionset) {
+      // logger.debug('About to call getObjects u:' + username + ' c:' + category);
+       //permissionset = JSON.parse(permissionset);
+        for(var i = 0; i< permissionset.length; i++){
+          var obj = permissionset[i].permissions;
+          for(var j = 0; j < obj.length;j++){
+            if(obj[j].category == category){
+              //perms.push(obj[j].access);
+              var acc = obj[j].access.toString().split(',');
+              for(var ac in acc){
+               // logger.debug('Array : ' +acc[ac]);
+                if(perms.indexOf(acc[ac]) < 0)
+                  perms.push(acc[ac]);
+              }
+             
+            }
+          }
+        }
+       // logger.debug('getobjects query returns:' + perms.join());
+        if(perms.indexOf(permissionto) >=0){
+          return(true);
+        }
+        else
+          return(false);
+    } else {
+        return (false);
+    }
+};
+
+var haspermission = function(category, permissionto) {
+    var retVal = '';
+    if (!sessionUser) {
+        console.log('sessionUser not found hitting server');
+        $.ajax({
+            type: "get",
+            dataType: "text",
+            async: false,
+            url: '/auth/getpermissionset',
+            success: function(data) {
+                if (data) {
+                    sessionUser = JSON.parse(data);
+                   // debugger;
+                   // alert(sessionUser.permissionset);
+                    retVal = getpermissionforcategory(category, permissionto, sessionUser.permissionset);
+                } else {
+                    //errormessageforInput(usernameInput.attr('id'), "Not a valid Docker UserID / Password");
+                    retval = false;
+                }
+            },
+            failure: function(data) {
+                //errormessageforInput(usernameInput.attr('id'), "Not a valid Docker UserID / Password");
+                retval = false;
+            }
+        });
+    } else {
+        console.log('hitting local');
+        retVal = getpermissionforcategory(category, permissionto, sessionUser.permissionset);
+    }
+    return (retVal);
+};
+
 
 function validatedockeruser(usernameInput, passwordInput) {
     var retval = false;
@@ -1751,22 +1823,34 @@ function saveform(formID, operationTypes) {
         contentType: false,
         type: 'POST',
         success: function(data, success) {
-            //alert('Successfully Saved'); 
-            $(".savespinner").hide();
-            if ($('#btncancel'))
-                $('#btncancel').click();
-            if (parseInt(formID) < 5) {
-                loadTreeFuncNew(); //this should refresh the tree
+            //alert('Successfully Saved ' + data);
+            if (data != '401') {
+                $(".savespinner").hide();
+                if ($('#btncancel'))
+                    $('#btncancel').click();
+                if (parseInt(formID) < 5) {
+                    loadTreeFuncNew(); //this should refresh the tree
+                }
+                button.removeAttr("rowid", "");
+                $("#masterssavespinner").detach();
+                button.removeAttr('disabled');
             }
-            button.removeAttr("rowid", "");
-            $("#masterssavespinner").detach();
-            button.removeAttr('disabled');
+            else{
+                $(".savespinner").hide();
+                button.removeAttr("rowid", "");
+                $("#masterssavespinner").detach();
+                alert('Insufficient permission to perform this operation.');
+                button.removeAttr('disabled');
+            }
         },
         error: function(jqxhr) {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
 
             alert(jqxhr.status);
+        },
+        failure: function(data) {
+            alert(data);
         }
     });
 

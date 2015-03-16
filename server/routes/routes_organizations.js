@@ -328,7 +328,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 href: 'javascript:void(0)',
                                                                 environments: envs
                                                             });
-                                                            //#ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
+                                                            //'#ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
                                                         }
 
                                                     }
