@@ -76,29 +76,33 @@ module.exports.setRoutes = function(app) {
 
                                     //user.groupId = data[0].groupId;
                                     console.log('Just before role:', data[0].roleId);
-
-                                    configmgmtDao.getAccessFilesForRole(user.cn, user, req, res, function(err, getAccessFiles) {
-                                        if (getAccessFiles) {
-                                            getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
-                                            console.log('Rcvd in call: ' + getAccessFiles);
-                                            //req.session.user.authorizedfiles = getAccessFiles;
-                                            //res.end(req.session.user.authorizedfiles);
-                                            user.roleName = "Admin";
-                                            user.authorizedfiles = getAccessFiles;
-                                            // checking permission 
-                                            //to test (username,category,permissionto,req,permissionset,callback)
-                                            usersDao.haspermission(user.cn,'services','read',null,null,function(err,data){
-                                                if(!err){
-                                                    logger.debug('Returned from haspermission' + data);
-                                                }
-                                            });
-                                            res.redirect('/private/index.html');
-                                        } else {
-                                            logger.error("getAccessFiles not available")
-                                            res.send(500);
-                                            return;
+                                    user.roleName = "Admin";
+                                    user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+                                    usersDao.haspermission(user.cn,'services','read',null,req.session.user.permissionset,function(err,data){
+                                        if(!err){
+                                            logger.debug('Returned from haspermission' + data);
                                         }
                                     });
+                                    res.redirect('/private/index.html');
+                                    
+                                    // configmgmtDao.getAccessFilesForRole(user.cn, user, req, res, function(err, getAccessFiles) {
+                                    //     if (getAccessFiles) {
+                                    //         getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
+                                    //         console.log('Rcvd in call: ' + getAccessFiles);
+                                    //         //req.session.user.authorizedfiles = getAccessFiles;
+                                    //         //res.end(req.session.user.authorizedfiles);
+                                    //         user.roleName = "Admin";
+                                    //         logger.debug('getAccessFiles' + getAccessFiles);
+                                    //         user.authorizedfiles = getAccessFiles;
+                                    //         // checking permission 
+                                    //         //to test (username,category,permissionto,req,permissionset,callback)
+                                            
+                                    //     } else {
+                                    //         logger.error("getAccessFiles not available")
+                                    //         res.send(500);
+                                    //         return;
+                                    //     }
+                                    // });
                                 } else {
                                     //making an entry of that user in data base
                                     usersDao.createUser(user.cn, 'firstname', 'lastname', 0, 3, function(err, data) {
