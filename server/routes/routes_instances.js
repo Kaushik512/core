@@ -14,6 +14,7 @@ var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
+var logger = require('../lib/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -21,32 +22,38 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances', function(req, res) {
+        logger.debug("Enter get() for /instances");
         instancesDao.getInstances(null, function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500);
                 return;
             }
-
+            logger.debug("Successfully sent data ",data);
             res.send(data);
-
+            logger.debug("Exit get() for /instances");
         });
     });
 
     app.post('/instances', function(req, res) {
+        logger.debug("Enter post() for /instances");
         instancesDao.getInstances(req.body.instanceIds, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.error("Instance creation Failed >> ", err);
                 res.send(500);
                 return;
             }
+            logger.debug("Successfully sent data ",data);
             res.send(data);
+            logger.debug("Exit post() for /instances");
         });
     });
-    //updateInstanceAppUrl
+
     app.get('/instances/:instanceId', function(req, res) {
+        logger.debug("Enter get() for /instances/%s",req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
+                logger.error("Instance fetch Failed >> ", err);
                 res.send(500);
                 return;
             }
@@ -54,30 +61,37 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (data.length) {
                 res.send(data[0]);
             } else {
+                logger.error("No such Instance for >> %s", req.params.instanceId);
                 res.send(404);
             }
+            logger.debug("Exit get() for /instances/%s",req.params.instanceId);
         });
     });
 
     app.delete('/instances/:instanceId', function(req, res) {
+        logger.debug("Enter delete() for /instances/%s",req.params.instanceId);
         function removeInstanceFromDb() {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
                 if (err) {
+                    logger.error("Instance deletion Failed >> ", err);
                     res.send(500, errorResponses.db.error);
                     return;
                 }
+                logger.debug("Exit delete() for /instances/%s",req.params.instanceid);
                 res.send(200);
             });
         }
         if (req.query.chefRemove && req.query.chefRemove === 'true') {
             instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
                 if (err) {
+                    logger.debug("Failed to fetch Instance ",err);
                     res.send(500, errorResponses.db.error);
                     return;
                 }
                 var instance = data[0];
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
+                        logger.debug("Failed to fetch ChefServerDetails ",err);
                         res.send(500, errorResponses.chef.corruptChefData);
                         return;
                     }
@@ -90,9 +104,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     });
                     chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
                         if (err) {
+                            logger.debug("Failed to delete node ",err);
                             res.send(500);
                         } else {
                             removeInstanceFromDb();
+                            logger.debug("Successfully removed instance from db.");
                         }
                     });
 
@@ -100,60 +116,80 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         } else {
             removeInstanceFromDb();
+            logger.debug("Successfully removed instance from db.");
         }
+        logger.debug("Exit delete() for /instances/%s",req.params.instanceId);
     });
     //updateInstanceIp
-    app.get('/instances/updateappurl/:instanceId/:appurlid/:instanceappurl', function(req, res) { //function(instanceId, ipaddress, callback)
-        if (req.params.appurlid == '0')
-            instancesDao.updateInstanceAppUrl(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                res.end('OK');
-            });
-        else {
-            instancesDao.updateInstanceAppUrl1(req.params.instanceId, decodeURIComponent(req.params.instanceappurl), function(err, data) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                res.end('OK');
-            });
+    app.post('/instances/:instanceId/appUrl/update', function(req, res) { //function(instanceId, ipaddress, callback)
+        logger.debug("Enter post() for /instances/%s/appUrl/update",req.params.instanceId);
+        var callback = function(err, updateCount) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (updateCount) {
+                logger.debug("Exit post() for /instances/%s/appUrl/update",req.params.instanceId);
+                res.send(200, {
+                    updateCount: updateCount
+                })
+            } else {
+                res.send(404, {
+                    updateCount: 0
+                })
+            }
+        }
+        if (req.body.appUrl1) {
+            if (req.body.appUrl1 && req.body.appUrl1.name && req.body.appUrl1.url) {
+                instancesDao.updateAppUrl1(req.params.instanceId, req.body.appUrl1, callback);
+            } else {
+                res.send(400);
+            }
+        } else if (req.body.appUrl2) {
+            if (req.body.appUrl2 && req.body.appUrl2.name && req.body.appUrl2.url) {
+                instancesDao.updateAppUrl2(req.params.instanceId, req.body.appUrl2, callback);
+            } else {
+                res.send(400);
+            }
+        } else {
+            res.send(400);
         }
     });
 
     app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
+        logger.debug("Enter get() for /instances/updateip/%s/%s",req.params.instanceId,req.params.ipaddress);
         instancesDao.updateInstanceIp(req.params.instanceId, req.params.ipaddress, function(err, data) {
             if (err) {
+                logger.error("Failed to update instanceip",err);
                 res.send(500);
                 return;
             }
+            logger.debug("Successfully updated instanceip");
             res.end('OK');
         });
+        logger.debug("Exit get() for /instances/updateip/%s/%s",req.params.instanceId,req.params.ipaddress);
     });
 
     app.get('/instances/dockercontainerdetails/:instanceid', function(req, res) {
-        //res.send(200);
-        console.log('reached here a');
+        logger.debug("Enter get() for /instances/dockercontainerdetails/%s",req.params.instanceid);
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var stdmessages = '';
         var cmd = 'echo -e \"GET /containers/json?all=1 HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
 
-        console.log('cmd received: ' + cmd);
+        logger.debug('cmd received: ', cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             //alert('Done');
             var _stdout = stdOut.split('\r\n');
-            console.log('Docker containers : ' + _stdout.length);
+            logger.debug('Docker containers : %s', _stdout.length);
             var start = false;
             var so = '';
             _stdout.forEach(function(k, v) {
-                console.log(_stdout[v] + ':' + _stdout[v].length);
+                logger.debug(_stdout[v] + ':' + _stdout[v].length);
                 if (start == true) {
                     so += _stdout[v];
-                    console.log(v + ':' + _stdout[v].length);
+                    logger.debug(v + ':' + _stdout[v].length);
                 }
                 if (_stdout[v].length == 1)
                     start = true;
@@ -165,31 +201,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             stdOut += stdOutData;
             // alert(stdOutData);
         }, function(stdOutErr) {
+            logger.error("Error hits to fetch docker details",stdOutErr);
             res.send(500);
         });
+        logger.debug("Exit get() for /instances/dockercontainerdetails/%s",req.params.instanceid);
 
     });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid', function(req, res) {
         //res.send(200);
-        console.log('reached container details');
+        logger.debug("Enter get() for /instances/dockercontainerdetails/%s/%s",req.params.instanceid,req.params.containerid);
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var stdmessages = '';
         var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
 
-        console.log('cmd received: ' + cmd);
+        logger.debug('cmd received: ', cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             //alert('Done');
             var _stdout = stdOut.split('\r\n');
-            console.log('Docker containers : ' + _stdout.length);
+            logger.debug('Docker containers : ', _stdout.length);
             var start = false;
             var so = '';
             _stdout.forEach(function(k, v) {
-                console.log(_stdout[v] + ':' + _stdout[v].length);
+                logger.debug(_stdout[v] + ':' + _stdout[v].length);
                 if (start == true) {
                     so += _stdout[v];
-                    console.log(v + ':' + _stdout[v].length);
+                    logger.debug(v + ':' + _stdout[v].length);
                 }
                 if (_stdout[v].length == 1)
                     start = true;
@@ -201,13 +239,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             stdOut += stdOutData;
             // alert(stdOutData);
         }, function(stdOutErr) {
+            logger.error("Hit some error: ",stdOutErr);
             res.send(500);
         });
+        logger.debug("Exit get() for /instances/dockercontainerdetails/%s/%s",req.params.instanceid,req.params.containerid);
 
     });
     app.get('/instances/dockerexecute/:instanceid/:containerid/:action', function(req, res) {
-
-            console.log('reached here dockerexecute' + req.params.action);
+            logger.debug("Enter get() for /instances/dockerexecute/%s/%s/%s",req.params.instanceid,req.params.containerid,req.params.action);
             var instanceid = req.params.instanceid;
             var _docker = new Docker();
             var cmd = "sudo docker exec " + req.params.containerid + ' ' + req.params.action;
@@ -219,23 +258,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     log: "Container  " + req.params.containerid + " Executed :" + req.params.action,
                     timestamp: new Date().getTime()
                 });
+                logger.debug("Docker Command run Successfully");
                 res.send(200);
+                logger.debug("Exit get() for /instances/dockerexecute/%s/%s/%s",req.params.instanceid,req.params.containerid,req.params.action);
                 } else {
-                    console.log("Excute Error : " + err);
+                    logger.error("Excute Error : ", err);
                     logsDao.insertLog({
                         referenceId: instanceid,
                         err: true,
                         log: "Excute Error : " + err,
                         timestamp: new Date().getTime()
                     });
+                    logger.error("Error hits while running Docker Command: ",err);
                     res.send(500);
                 }
             });
 
     });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action', function(req, res) {
-        //res.send(200);
-        console.log('reached here action');
+        logger.debug("Enter get() for /instances/dockercontainerdetails/%s/%s/%s",req.params.instanceid,req.params.containerid,req.params.action);
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var stdmessages = '';
@@ -270,7 +311,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             cmd = 'sudo docker stop ' + req.params.containerid + ' &&  sudo docker rm ' + req.params.containerid;
         }
 
-        console.log('cmd received: ' + cmd);
+        logger.debug('cmd received: ', cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             //alert('Done');
@@ -281,15 +322,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     log: "Container  " + req.params.containerid + " Action :" + action,
                     timestamp: new Date().getTime()
                 });
+                logger.debug("Exit get() for /instances/dockercontainerdetails/%s/%s/%s",req.params.instanceid,req.params.containerid,req.params.action);
                 res.send(200);
             } else {
-                console.log("Action Error : " + err);
+                logger.error("Action Error : ", err);
                 logsDao.insertLog({
                     referenceId: instanceid,
                     err: true,
                     log: "Action Error : " + err,
                     timestamp: new Date().getTime()
                 });
+                logger.error("Error hits while running Docker Command: ",err);
                 res.send(500);
             }
 
@@ -303,20 +346,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
             // alert(stdOutData);
         }, function(stdOutErr) {
+            logger.error("Error hits while running Docker Command: ",err);
             res.send(500);
         });
 
     });
     app.get('/instances/checkfordocker/:instanceid', function(req, res) {
+        logger.debug("Enter get() for /instances/checkfordocker/%s",req.params.instanceid);
 
         //Confirming if Docker has been installed on the box
         var _docker = new Docker();
         var cmd = "sudo docker ps";
-        console.log('Docker command executed : ' + cmd);
+        logger.debug('Docker command executed : ', cmd);
         _docker.runDockerCommands(cmd, req.params.instanceid,
             function(err, retCode) {
                 if (err) {
-                    console.log(err);
+                    logger.error("Failed to Excute Docker command: ",err);
                     res.send(500);
                     return;
                     //res.end('200');
@@ -326,11 +371,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 if (retCode == '0') {
                     instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
                         console.log('Instance Docker Status set to Success');
+                        logger.debug("Exit get() for /instances/checkfordocker/%s",req.params.instanceid);
                         res.send('OK');
                         return;
                     });
 
                 } else
+                logger.debug("Sending empty response.");
                     res.send('');
             });
 
@@ -338,17 +385,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
 
-        console.log('reached here b');
+        logger.debug("Enter get() for /instances/dockerimagepull");
         var instanceid = req.params.instanceid;
 
         configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
             if (!err) {
 
                 //  var dockerRepo = JSON.parse(data);
-                console.log('Docker Repo ->', JSON.stringify(data));
+                logger.debug('Docker Repo ->', JSON.stringify(data));
                 var dock = JSON.parse(data);
                 // var dockkeys = Object.keys(data);
-                console.log('username:' + dock.dockeruserid);
+                logger.debug('username:', dock.dockeruserid);
 
                 var _docker = new Docker();
                 var stdmessages = '';
@@ -358,7 +405,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
                 //removing docker userID
                 cmd += ' && sudo docker pull ' + decodeURIComponent(req.params.imagename);
-                console.log('Intermediate cmd: ' + cmd);
+                logger.debug('Intermediate cmd: ', cmd);
                 if (req.params.tagname != null) {
                     cmd += ':' + req.params.tagname;
                 }
@@ -372,7 +419,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 } else
                     startparams = '/bin/bash';
                 cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' ' + startparams;
-                console.log('Docker command executed : ' + cmd);
+                logger.debug('Docker command executed : ', cmd);
                 _docker.runDockerCommands(cmd, req.params.instanceid,
                     function(err, retCode) {
                         if (err) {
@@ -382,26 +429,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 log: 'Unable to run chef-client',
                                 timestamp: new Date().getTime()
                             });
+                            logger.error("Failed to Excute Docker command: ",err);
                             res.send(err);
                             return;
                         }
 
-                        console.log("docker return ", retCode);
+                        logger.debug("docker return ", retCode);
                         //if retCode == 0 //update docker status into instacne
                         instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
-                            console.log('Instance Docker Status set to Success');
+                            logger.debug('Instance Docker Status set to Success');
 
                         });
-
-
-
+                        logger.debug("Exit get() for /instances/dockerimagepull");
                         res.send(200);
 
                     },
                     function(stdOutData) {
                         if (!stdOutData) {
 
-                            console.log("SSH Stdout :" + stdOutData.toString('ascii'));
+                            logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
                             stdmessages += stdOutData.toString('ascii');
                         } else {
                             logsDao.insertLog({
@@ -410,7 +456,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 log: stdOutData.toString('ascii'),
                                 timestamp: new Date().getTime()
                             });
-                            console.log("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
+                            logger.debug("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
                             stdmessages += stdOutData.toString('ascii');
                         }
                     }, function(stdOutErr) {
@@ -436,13 +482,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(401);
             return;
         }
+        logger.debug("Enter post() for /instances/dockerimagepull");
         if (!req.body.runlist) {
             res.send(400);
             return;
         }
-        console.log(req.body.runlist);
+        logger.debug(req.body.runlist);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
+                logger.error("Failed to get Instance: ",err);
                 res.send(500);
                 return;
             }
@@ -512,7 +560,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             runlist: req.body.runlist,
                             overrideRunlist: false
                         }
-                        console.log('decryptCredentials ==>', decryptedCredentials);
+                        logger.debug('decryptCredentials ==>', decryptedCredentials);
                         if (decryptedCredentials.pemFileLocation) {
                             chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
                         } else {
@@ -530,9 +578,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             if (decryptedCredentials.pemFileLocation) {
                                 fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
                                     if (err) {
-                                        console.log("Unable to delete temp pem file =>", err);
+                                        logger.debug("Unable to delete temp pem file =>", err);
                                     } else {
-                                        console.log("temp pem file deleted =>", err);
+                                        logger.debug("temp pem file deleted =>", err);
                                     }
                                 });
                             }
@@ -549,9 +597,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
                                 return;
                             }
-                            console.log("knife ret code", retCode);
+                            logger.debug("knife ret code", retCode);
                             if (retCode == 0) {
-                                console.log('updating node runlist in db');
+                                logger.debug('updating node runlist in db');
                                 instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
                                     if (err) {
                                         return;
@@ -571,16 +619,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     _docker.checkDockerStatus(instance.id,
                                         function(err, retCode) {
                                             if (err) {
-                                                console.log(err);
+                                                logger.error("Failed to check docker status: ",err);
                                                 res.send(500);
                                                 return;
                                                 //res.end('200');
 
                                             }
-                                            console.log('Docker Check Returned:' + retCode);
+                                            logger.debug('Docker Check Returned:', retCode);
                                             if (retCode == '0') {
                                                 instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
-                                                    console.log('Instance Docker Status set to Success');
+                                                    logger.debug('Instance Docker Status set to Success');
+                                                    logger.debug("Exit post() for /instances/dockerimagepull");
                                                 });
                                             }
                                         });
@@ -650,8 +699,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/:instanceId/stopInstance', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/stopInstance",req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
+                logger.error("Error hits getting instance: ",err);
                 res.send(500);
                 return;
             }
@@ -688,6 +739,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         return;
                     }
+                    logger.debug("Exit get() for /instances/%s/stopInstance",req.params.instanceId);
                     res.send(200, {
                         instanceCurrentState: stoppingInstances[0].CurrentState.Name,
                         actionLogId: actionLog._id
@@ -695,10 +747,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
                         if (err) {
-                            console.log("update instance state err ==>", err);
+                            logger.error("update instance state err ==>", err);
                             return;
                         }
-                        console.log('instance state upadated');
+                        logger.debug('instance state upadated');
                     });
 
                 }, function(err, state) {
@@ -707,10 +759,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                     instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
                         if (err) {
-                            console.log("update instance state err ==>", err);
+                            logger.error("update instance state err ==>", err);
                             return;
                         }
-                        console.log('instance state upadated');
+                        logger.debug('instance state upadated');
                     });
                     var timestampEnded = new Date().getTime();
 
@@ -736,6 +788,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/:instanceId/startInstance', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/startInstance",req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
                 res.send(500);
@@ -776,6 +829,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         return;
                     }
+                    logger.debug("Exit get() for /instances/%s/startInstance",req.params.instanceId);
                     res.send(200, {
                         instanceCurrentState: startingInstances[0].CurrentState.Name,
                         actionLogId: actionLog._id
@@ -783,10 +837,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
                         if (err) {
-                            console.log("update instance state err ==>", err);
+                            logger.error("update instance state err ==>", err);
                             return;
                         }
-                        console.log('instance state upadated');
+                        logger.debug('instance state upadated');
                     });
 
                 }, function(err, state) {
@@ -795,10 +849,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                     instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
                         if (err) {
-                            console.log("update instance state err ==>", err);
+                            logger.error("update instance state err ==>", err);
                             return;
                         }
-                        console.log('instance state upadated');
+                        logger.debug('instance state upadated');
                     });
                     var timestampEnded = new Date().getTime()
                     logsDao.insertLog({
@@ -812,17 +866,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     ec2.describeInstances([data[0].platformId], function(err, data) {
                         if (err) {
-                            console.error(err);
+                            logger.error("Hit some error: ",err);
                             return;
                         }
                         if (data.Reservations.length && data.Reservations[0].Instances.length) {
-                            console.info("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
+                            logger.debug("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
                             instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
                                 if (err) {
-                                    console.log("update instance ip err ==>", err);
+                                    logger.error("update instance ip err ==>", err);
                                     return;
                                 }
-                                console.log('instance ip upadated');
+                                logger.debug('instance ip upadated');
                             });
                         }
                     });
@@ -838,15 +892,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances/:instanceId/logs', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/logs",req.params.instanceId);
         var timestamp = req.query.timestamp;
         if (timestamp) {
             timestamp = parseInt(timestamp);
         }
         logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
             if (err) {
+                logger.error("Found error to fetch Logs: ",err);
                 res.send(500);
                 return;
             }
+            logger.debug("Exit get() for /instances/%s/logs",req.params.instanceId);
             res.send(data);
 
         });
@@ -857,17 +914,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.post('/instances/:instanceId/services/add', function(req, res) {
-        console.log('serviceIds ==>', req.body.serviceIds, req.body.serviceIds.length);
+        logger.debug("Enter post() for /instances/%s/services/add",req.params.instanceId);
+        logger.debug('serviceIds ==>', req.body.serviceIds);
         instancesDao.addService(req.params.instanceId, req.body.serviceIds, function(err, updateCount) {
             if (err) {
-                console.log(err)
+                logger.error("Found error while adding service: ",err);
                 res.send(500);
                 return;
             }
             console.log(updateCount);
             if (updateCount > 0) {
+                logger.debug("Exit post() for /instances/%s/services/add",req.params.instanceId);
                 res.send(200, req.body.serviceIds);
             } else {
+                logger.debug("Exit post() for /instances/%s/services/add",req.params.instanceId);
                 res.send(200, []);
             }
 
@@ -875,14 +935,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.delete('/instances/:instanceId/services/:serviceId', function(req, res) {
+        logger.debug("Enter delete() for /instances/%s/services/%s",req.params.instanceId,req.params.serviceId);
         instancesDao.deleteService(req.params.instanceId, req.params.serviceId, function(err, deleteCount) {
             if (err) {
-                console.log(err)
+                logger.error("Found error while deleting service: ",err);
                 res.send(500);
                 return;
             }
             console.log(deleteCount);
             if (deleteCount) {
+                logger.debug("Exit delete() for /instances/%s/services/%s",req.params.instanceId,req.params.serviceId);
                 res.send({
                     deleteCount: deleteCount
                 }, 200);
@@ -896,8 +958,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/:instanceId/services/:serviceId/:actionType', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/services/%s/%s",req.params.instanceId,req.params.serviceId,req.params.actionType);
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
+                logger.error("Getting error while fetching instance: ",err);
                 res.send(500);
                 return;
             }
@@ -908,18 +972,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var instance = instances[0];
             configmgmtDao.getServiceFromId(req.params.serviceId, function(err, services) {
                 if (err) {
-                    console.log(err);
+                    logger.error("Getting error while fetching service: ",err);
                     res.send(500);
                     return;
                 }
                 if (!services.length) {
-                    console.log(services.length);
+                    logger.error("Service not found: ",services.length);
                     res.send(404);
                     return;
                 }
 
                 var serviceData = services[0];
-                console.log(serviceData);
+                logger.debug("serviceData",serviceData);
                 var timestampStarted = new Date().getTime();
                 var actionLog = instancesDao.insertServiceActionLog(req.params.instanceId, {
                     serviceName: serviceData.servicename,
@@ -939,7 +1003,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
                         return;
                     }
-                    console.log("ret code", retCode);
+                    logger.debug("ret code", retCode);
 
                     if (retCode == 0) {
                         var timestampEnded = new Date().getTime();
@@ -1060,7 +1124,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
                             });
-                            console.log('instance IP ==>', instance.instanceIP);
+                            logger.debug('instance IP ==>', instance.instanceIP);
                             var actionType = req.params.actionType;
                             var runlist = [];
                             if (actionType == 'start' && (serviceData.servicestart && serviceData.servicestart != 'none')) {
@@ -1088,14 +1152,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             } else {
                                 chefClientOptions.password = decryptedCredentials.password;
                             }
-                            console.log('running chef client');
+                            logger.debug('running chef client');
                             chef.runChefClient(chefClientOptions, function(err, ret) {
                                 if (decryptedCredentials.pemFileLocation) {
                                     fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
                                         if (err) {
-                                            console.log("Unable to delete temp pem file =>", err);
+                                            logger.error("Unable to delete temp pem file =>", err);
                                         } else {
-                                            console.log("temp pem file deleted =>", err);
+                                            logger.error("temp pem file deleted =>", err);
                                         }
                                     });
                                 }
@@ -1131,14 +1195,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 if (decryptedCredentials.pemFileLocation) {
                                     fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
                                         if (err) {
-                                            console.log("Unable to delete temp pem file =>", err);
+                                            logger.error("Unable to delete temp pem file =>", err);
                                         } else {
-                                            console.log("temp pem file deleted =>", err);
+                                            logger.error("temp pem file deleted =>", err);
                                         }
                                     });
                                 }
                                 onComplete(err, ret);
                             }, onStdOut, onStdErr);
+                            logger.debug("Exit get() for /instances/%s/services/%s/%s",req.params.instanceId,req.params.serviceId,req.params.actionType);
                             res.send(200, {
                                 actionLogId: actionLog._id
                             });
@@ -1151,15 +1216,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances/:instanceId/actionLogs', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/actionLogs",req.params.instanceId);
         instancesDao.getAllActionLogs(req.params.instanceId, function(err, actionLogs) {
             if (err) {
+                logger.error("Failed to fetch ActionLogs: ",err);
                 res.send(500);
                 return;
             }
 
             if (actionLogs && actionLogs.length) {
+                logger.debug("Enter get() for /instances/%s/actionLogs",req.params.instanceId);
                 res.send(actionLogs);
             } else {
+                logger.debug("Exit get() for /instances/%s/actionLogs",req.params.instanceId);
                 res.send([]);
             }
 
@@ -1168,8 +1237,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/:instanceId/actionLogs/:logId', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/actionLogs/%s",req.params.instanceId,req.params.logId);
         instancesDao.getActionLogById(req.params.instanceId, req.params.logId, function(err, instances) {
             if (err) {
+                logger.error("Failed to fetch ActionLog: ",err);
                 res.send(500);
                 return;
             }
@@ -1178,6 +1249,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(400);
                 return;
             } else {
+                logger.debug("Exit get() for /instances/%s/actionLogs/%s",req.params.instanceId,req.params.logId);
                 res.send(instances[0].actionLogs[0]);
             }
 
@@ -1186,8 +1258,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/:instanceId/actionLogs/:logId/logs', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/actionLogs/%s/logs",req.params.instanceId,req.params.logId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
+                logger.error("Failed to fetch Instance: ",err);
                 res.send(500);
                 return;
             }
@@ -1198,10 +1272,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             logsDao.getLogsByReferenceId(req.params.logId, null, function(err, data) {
                 if (err) {
+                    logger.error("Failed to fetch Logs: ",err);
                     res.send(500);
                     return;
                 }
-
+                logger.debug("Exit get() for /instances/%s/actionLogs/%s/logs",req.params.instanceId,req.params.logId);
                 res.send(data);
             });
 

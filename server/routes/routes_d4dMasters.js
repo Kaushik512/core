@@ -25,6 +25,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     })*/
     app.get('/d4dmasters/dockervalidate/:username/:password', function(req, res) {
+        logger.debug("Enter get() for /d4dmasters/dockervalidate/%s/%s",req.params.username,req.params.password);
         var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
         var curl = new Curl();
         curl.executecurl(cmd, function(err, stdout) {
@@ -33,18 +34,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             if (stdout) {
                 if (stdout.indexOf('OK') > 0) {
-                    console.log('Good');
                     res.end('200');
                 } else {
-                    console.log('No User');
+                    logger.debug("No User");
                     res.end('402');
                 }
             }
         });
+        logger.debug("Exit get() for /d4dmasters/dockervalidate/%s/%s",req.params.username,req.params.password);
 
     });
 
     app.get('/d4dmasters/instanceping/:ip',function(req,res){
+        logger.debug("Enter get() for /d4dmasters/instanceping/%s",req.params.ip);
         var cmd = 'ping -c 1 -w 1 ' + req.params.ip ;
         var curl = new Curl();
         console.log("Pinging Node to check if alive :" + cmd );
@@ -54,14 +56,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             if (stdout) {
                 if (stdout.indexOf('1 received') > 0) {
-                    console.log('Good');
                     //res.send();
                     res.end('Alive');
                     //res.send('200');
+                    logger.debug("Exit get() for /d4dmasters/instanceping/%s",req.params.ip);
                     return;
 
                 } else {
-                    console.log('Not Found');
+                    logger.debug('Not Found');
                     //res.send('400 Not Found');\
                    res.end('Not Alive');
                    // res.send('200');
@@ -72,40 +74,42 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {
+        logger.debug("Enter get() for /d4dmasters/getdockertags/%s/%s",req.params.repopath,req.params.dockerreponame);
         //fetch the username and password from 
         //Need to populate dockerrowid in template card. - done
-        console.log('hit getdockertags');
+        logger.debug('hit getdockertags');
         configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
             if (!err) {
 
                 var dockerRepo = JSON.parse(data);
-                console.log('Docker Repo ->', JSON.stringify(dockerRepo));
+                logger.debug("Docker Repo ->%s", JSON.stringify(dockerRepo));
                 var cmd = '';
                 //Below is for public repository
                 cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath + '/tags';
                 //Below is for private repository
                 //cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
-                console.log('executing - ', cmd);
+                logger.debug("executing - %s", cmd);
                 var curl = new Curl();
                 curl.executecurl(cmd, function(err, stdout) {
                     if (err) {
+                        logger.error("Error occured: ",err);
                         res.end(err);
                     }
                     if (stdout) {
                         if (stdout.indexOf('404:') > 0) {
-                            console.log('No Data');
+                            logger.debug("No Data");
                             res.end('402');
 
                         } else {
-                            console.log('Received JSON');
-
+                            logger.debug("Received JSON");
+                            logger.debug("Exit get() for /d4dmasters/getdockertags/%s/%s",req.params.repopath,req.params.dockerreponame);
                             res.end(stdout);
                         }
                     }
                 });
 
             } else {
-                console.log('Error:' + err);
+                logger.error("Error:", err);
                 res.end(err);
             }
         });
@@ -116,22 +120,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/d4dMasters/mastersjson', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/mastersjson");
         res.send([{
             name: 'master'
         }, {
             name: 'master2'
         }]);
+        logger.debug("Exit get() for /d4dMasters/mastersjson");
     });
     //getAccessFilesForRole
     app.get('/d4dMasters/getaccessroles/:loginname', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/getaccessroles/%s",req.params.loginname);
         configmgmtDao.getAccessFilesForRole(req.params.loginname, req, res, function(err, getAccessFiles) {
             if (getAccessFiles) {
                 getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
-                console.log('Rcvd in call: ' + getAccessFiles);
+                logger.debug("Rcvd in call: %s", getAccessFiles);
                 req.session.user.authorizedfiles = getAccessFiles;
                 res.end(req.session.user.authorizedfiles);
             }
         });
+        logger.debug("Exit get() for /d4dMasters/getaccessroles/%s",req.params.loginname);
     });
 
     app.get('/d4dMasters/getaccessroles/:masterid/:fieldname/:filedvalue', function(req, res) {
@@ -140,16 +148,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/getcodelist/:name', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/getcodelist/%s",req.params.name);
         configmgmtDao.getCodeList(req.params.name, function(err, cl) {
-            console.log(cl);
             if (cl) {
-                console.log('Closing');
+                logger.debug("Closing");
                 res.end(cl);
             }
         });
+        logger.debug("Exit get() for /d4dMasters/getcodelist/%s",req.params.name);
     });
 
     app.get('/d4dMasters/getuser', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/getuser");
         res.send({
             "user": [{
                 username: req.session.user
@@ -157,6 +167,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 role: '[' + req.session.user.rolename + ']'
             }]
         });
+        logger.debug("Exit get() for /d4dMasters/getuser");
 
 
         // var query = {};
@@ -177,7 +188,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/authorizedfiles', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/authorizedfiles");
         res.send('[' + req.session.user.authorizedfiles + ']');
+        logger.debug("Exit get() for /d4dMasters/authorizedfiles");
     });
 
     app.get('/d4dMasters/candelete/:rowid/:formid',function(req,res){
@@ -193,7 +206,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
-        console.log("REceived request for delete chk." + req.params.fieldvalue +  ' : ' + req.params.id + ' : ' + req.params.fieldname);
+        logger.debug("REceived request for delete chk. %s : %s : %s", req.params.fieldvalue ,req.params.id ,req.params.fieldname);
        // console.log('received request ' + req.params.id);
        //Referntial integrity check to be done.
        var tocheck = [];
@@ -229,28 +242,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 break;
         }
         configmgmtDao.deleteCheck(req.params.fieldvalue,tocheck,fieldname,function(err,data){
-        console.log('Delete check returned:' + data);
+        logger.debug("Delete check returned: %s", data);
         if(data == "none"){
-            console.log('entering delete');
+            logger.debug("entering delete");
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
-                    console.log("Hit and error:" + err);
+                    logger.debug("Hit and error:", err);
                 }
                 if (dbtype) {
                     //Currently rowid is hardcoded since variable declaration was working
                     var item = '\"' + req.params.fieldname + '\"';
-                    console.log("About to delete Master Type: " + dbtype + ":" + item + ":" + req.params.fieldvalue);
+                    logger.debug("About to delete Master Type: %s : % : %", dbtype,item,req.params.fieldvalue);
                     //res.send(500);
                     eval('d4dModelNew.' + dbtype).remove({
                         rowid: req.params.fieldvalue
                     }, function(err) {
                         if (err) {
-                            console.log('Hit an errror on delete : ' + err);
+                            logger.debug("Hit an errror on delete : %s", err);
                             res.send(500);
                             return;
                         } else {
-                            console.log('Document deleted : ' + req.params.fieldvalue);
+                            logger.debug("Document deleted : %s", req.params.fieldvalue);
                             res.send(200);
+                            logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id ,req.params.fieldname,req.params.fieldvalue);
                             return;
                         }
                     }); //end findOne
@@ -258,7 +272,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }); //end configmgmtDao
         }
         else{
-            console.log('There are dependent elements cannot delete');
+            logger.debug("There are dependent elements cannot delete");
             res.send(412,"Cannot proceed with delete. \n Dependent elements found");
             return;
         }
@@ -268,6 +282,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     //Reading a icon file saved
     app.get('/d4dMasters/image/:imagename', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/image/%s", req.params.imagename);
         var settings = appConfig.chef;
         var chefRepoPath = settings.chefReposLocation;
         console.log(chefRepoPath);
@@ -280,15 +295,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
             res.end(data, 'binary');
         });
+        logger.debug("Exit get() for /d4dMasters/image/%s", req.params.imagename);
     });
 
     app.get('/d4dMasters/readmasterjson/:id', function(req, res) {
-        console.log('received request ' + req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjson/%s",req.params.id);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 // res.send(200, d4dMasterJson);
@@ -299,33 +315,33 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // res.json(d4dMasterJson);
                 //res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify(d4dMasterJson));
-                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                 //res.end();
             } else {
                 res.send(400, {
                     "error": err
                 });
-                console.log("none found");
+                logger.debug("none found");
             }
-
+            logger.debug("Exit get() for /d4dMasters/readmasterjson/%s",req.params.id);
 
         });
     });
 
     app.get('/d4dMasters/readmasterjsonrecord/:id/:rowid', function(req, res) {
-        console.log('received request ' + req.params.id + ' rowid: ' + req.params.rowid);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonrecord/%s/%s",req.params.id,req.params.rowid);
         configmgmtDao.getRowids(function(err,rowidlist){
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
-                    console.log("Hit and error:" + err);
+                    logger.error("Hit and error:", err);
                 }
                 if (dbtype) {
-                    console.log("Master Type: " + dbtype)
+                    logger.debug("Master Type: %s", dbtype)
                     eval('d4dModelNew.' + dbtype).findOne({
                         rowid: req.params.rowid
                     }, function(err, d4dMasterJson) {
                         if (err) {
-                            console.log("Hit and error:" + err);
+                            logger.error("Hit and error:", err);
                         }
                         if (d4dMasterJson) {
                             // res.send(200, d4dMasterJson);
@@ -354,7 +370,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             //Will handle this seperately : Vinod to Do
                                             var itms = jobj[k1].split(',');
                                             for(_itms in itms){
-                                                console.log("in items");
+                                                logger.debug("in items");
                                                 if(names == '')
                                                 {
                                                     names = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
@@ -362,7 +378,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 else{
                                                     names += ',' + configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
                                                 }
-                                                console.log('names:',names);
+                                                logger.debug("names: %s",names);
                                             }
                                             
                                         }
@@ -388,11 +404,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                            
 
                             res.end(JSON.stringify(d4dMasterJson));
-                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                            logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                            logger.debug("Exit get() for /d4dMasters/readmasterjsonrecord/%s/%s",req.params.id,req.params.rowid);
                             //res.end();
                         } else {
                             res.end(JSON.stringify([]));
-                            console.log("none found");
+                            logger.debug("none found");
                         }
 
 
@@ -404,12 +421,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/readmasterjsonnew__/:id', function(req, res) {
-        console.log('received new request ' + req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonnew__/%s",req.params.id);
         d4dModelNew.d4dModelMastersOrg.find({
             id: req.params.id
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.debug("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 //
@@ -421,13 +438,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // res.json(d4dMasterJson);
                 //res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify(d4dMasterJson));
-                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                logger.debug("Exit get() for /d4dMasters/readmasterjsonnew__/%s",req.params.id);
                 //res.end();
             } else {
                 res.send(400, {
                     "error": err
                 });
-                console.log("none found");
+                logger.debug("none found");
             }
 
 
@@ -435,23 +453,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
-        console.log('received new request ' + req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
          configmgmtDao.getRowids(function(err,rowidlist){
 
-            console.log("Rowid List----&&&&---->" + rowidlist);
+            logger.debug("Rowid List----&&&&----> %s", rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
-                    console.log("Hit and error:" + err);
+                    logger.error("Hit and error:", err);
                 }
                 if (dbtype) {
-                    console.log("Master Type: " + dbtype);
+                    logger.debug("Master Type: %s", dbtype);
                     
                     var query = {};
                 query['id'] = req.params.id;
                 
                     
                     
-                    console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
                     if(req.params.id == '1' || req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
                         query['active'] = 'true';
                     }
@@ -462,13 +479,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         
                     , function(err, d4dMasterJson) {
                         if (err) {
-                            console.log("Hit and error:" + err);
+                            logger.error("Hit and error:", err);
                         }
                         //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
                             var _keys = Object.keys(d4dMasterJson);
-                            console.log("Master Length:" + _keys.length);
+                            logger.debug("Master Length: %s", _keys.length);
                             if(_keys.length <= 0){
-                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                                 res.end(JSON.stringify(d4dMasterJson));
                             }
                             var counter = 0;
@@ -491,7 +508,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             //Will handle this seperately : Vinod to Do
                                             var itms = jobj[k1].split(',');
                                             for(_itms in itms){
-                                                console.log("in items");
+                                                logger.debug("in items");
                                                 var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
                                                 if(_itmsName != '')
                                                 {
@@ -502,7 +519,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         else{
                                                             names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
                                                         }
-                                                        console.log('names:',names);
+                                                        logger.debug("names: %s",names);
                                                 }
                                             }
                                             
@@ -510,24 +527,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         else{
                                             names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
                                         }
-                                        console.log('names:',names,(names == ''));
 
                                         d4dMasterJson[k][flds[0]] = names;
 
                                         if(names == '' && k1.indexOf('orgname_rowid') >= 0)
                                             todelete.push(k);
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                        console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
+                                        logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
                                   //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
-                                console.log("Orgname check:" + d4dMasterJson[k]['orgname']);
+                                logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
                                 
                                 
                                 counter++;
                             };//);
-                                    console.log("To Delete Array:", todelete.toString());
+                                    logger.debug("To Delete Array: %s", todelete.toString());
                                     var collection = [];
                                     
                                     for(var i = 0; i < d4dMasterJson.length;i++){
@@ -536,15 +552,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                         
                                     }
-                                    console.log("sent response 484" + JSON.stringify(collection));
+                                    logger.debug("sent response 484 %s", JSON.stringify(collection));
                                     res.end(JSON.stringify(collection));
-                                    //console.log(k,d4dMasterJson[k],v);
-
-                        
-
-
-                            
-                        
+                                    logger.debug("Exit get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
                     });
                 }
             });
@@ -552,21 +562,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
      app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
-        console.log('received new request ' + req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
          configmgmtDao.getRowids(function(err,rowidlist){
 
-            console.log("Rowid List----&&&&---->" + rowidlist);
+            logger.debug("Rowid List----&&&&----> ", rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
-                    console.log("Hit and error:" + err);
+                    logger.error("Hit and error:", err);
                 }
                 if (dbtype) {
-                    console.log("Master Type: " + dbtype);
+                    logger.debug("Master Type: %s", dbtype);
                     
                     var query = {};
                     
                     query['id'] = req.params.id;
-                    console.log('hit a filtered request' + (req.params.id == 2 || req.params.id == 3 || req.params.id == 4 || req.params.id == 10));
                     if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
                         query['active'] = true;
                     }
@@ -577,13 +586,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                     , function(err, d4dMasterJson) {
                         if (err) {
-                            console.log("Hit and error:" + err);
+                            logger.debug("Hit and error:", err);
                         }
                         //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
                             var _keys = Object.keys(d4dMasterJson);
-                            console.log("Master Length:" + _keys.length);
+                            logger.debug("Master Length:" + _keys.length);
                             if(_keys.length <= 0){
-                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                                 res.end(JSON.stringify(d4dMasterJson));
                             }
                             var counter = 0;
@@ -606,7 +615,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             //Will handle this seperately : Vinod to Do
                                             var itms = jobj[k1].split(',');
                                             for(_itms in itms){
-                                                console.log("in items");
                                                 var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
                                                 if(_itmsName != '')
                                                 {
@@ -617,7 +625,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         else{
                                                             names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
                                                         }
-                                                        console.log('names:',names);
+                                                        logger.debug("names: %s",names);
                                                 }
                                             }
                                             
@@ -625,25 +633,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         else{
                                             names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
                                         }
-                                        console.log('names:',names,(names == ''));
 
                                         d4dMasterJson[k][flds[0]] = names;
 
                                         if(names == '' && k1.indexOf('orgname_rowid') >= 0)
                                             todelete.push(k);
                                         //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                        console.log('jobj[flds[0]]',d4dMasterJson[k][flds[0]],flds[0],k1,k);
+                                        logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                     }
                                     
                                   //  console.log("key**:",k1," val**:",jobj[k1]);
                                    
                                 }
-                                console.log("Orgname check:" + d4dMasterJson[k]['orgname']);
+                                logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
                                 
                                 
                                 counter++;
                             };//);
-                                    console.log("To Delete Array:", todelete.toString());
+                                    logger.debug("To Delete Array: %s", todelete.toString());
                                     var collection = [];
                                     
                                     for(var i = 0; i < d4dMasterJson.length;i++){
@@ -652,15 +659,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                         
                                     }
-                                    console.log("sent response 484" + JSON.stringify(collection));
+                                    logger.debug("sent response 484 %s", JSON.stringify(collection));
                                     res.end(JSON.stringify(collection));
-                                    //console.log(k,d4dMasterJson[k],v);
-
-                        
-
-
-                            
-                        
+                                    logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
                     });
                 }
             });
@@ -668,10 +669,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
     //for kana to be reverted to the original function 
     app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
-        console.log('received new request ' + req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
         configmgmtDao.getRowids(function(err,rowidlist){
 
-            console.log("Rowid List-->" + rowidlist);
+            logger.debug("Rowid List-->", rowidlist);
             d4dModelNew.d4dModelMastersOrg.find({
                 id: 1
             }, function(err, docorgs) {
@@ -681,10 +682,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if(req.params.id == '2'  || req.params.id == '3'  || req.params.id == '10' ){
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
-                            console.log("Hit and error:" + err);
+                            logger.error("Hit and error:", err);
                         }
                         if (dbtype) {
-                            console.log("Master Type: " + dbtype);
+                            logger.debug("Master Type: %s", dbtype);
                             eval('d4dModelNew.' + dbtype).find({
                                 id: req.params.id,
                                 orgname_rowid: {
@@ -692,7 +693,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                             }, function(err, d4dMasterJson) {
                                 if (err) {
-                                    console.log("Hit and error:" + err);
+                                    logger.error("Hit and error:", err);
                                 }
                                 //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
                                 var _keys = Object.keys(d4dMasterJson);
@@ -708,15 +709,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             var flds = k1.split('_');
                                             jobj[flds[0]] = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
                                         }
-                                        console.log("key:",k1," val:",jobj[k1]);
+                                        logger.debug("key: %s val: %s",k1,jobj[k1]);
 
                                     }
-                                    console.log(k,d4dMasterJson[k],v);
                                 });
-                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                                 res.end(JSON.stringify(d4dMasterJson));
                                 
-                                console.log();
+                                logger.debug("Exit get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
                             });
                         }
                     });
@@ -733,10 +733,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                                 if (err) {
-                                    console.log("Hit and error:" + err);
+                                    logger.error("Hit and error:", err);
                                 }
                                 if (dbtype) {
-                                    console.log("Master Type: " + dbtype);
+                                    logger.debug("Master Type: %s", dbtype);
                                     eval('d4dModelNew.' + dbtype).find({
                                         id: req.params.id,
                                         productgroupname: {
@@ -744,10 +744,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                     }, function(err, d4dMasterJson) {
                                         if (err) {
-                                            console.log("Hit and error:" + err);
+                                            logger.error("Hit and error:", err);
                                         }
                                         res.end(JSON.stringify(d4dMasterJson));
-                                        console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                                        logger.debug("Exit get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
                                     });
                                 }
                             });
@@ -758,18 +759,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 else{
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
-                            console.log("Hit and error:" + err);
+                            logger.error("Hit and error:", err);
                         }
                         if (dbtype) {
-                            console.log("Master Type: " + dbtype);
+                            logger.debug("Master Type: %s", dbtype);
                             eval('d4dModelNew.' + dbtype).find({
                                 id: req.params.id
                             }, function(err, d4dMasterJson) {
                                 if (err) {
-                                    console.log("Hit and error:" + err);
+                                    logger.error("Hit and error:", err);
                                 }
                                 res.end(JSON.stringify(d4dMasterJson));
-                                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                                logger.debug("Exit get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
                             });
                         }
                     });
@@ -780,7 +782,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
-        logger.debug('Entered readmasterjsoncounts');
+        logger.debug("Enter get() for  /d4dMasters/readmasterjsoncounts");
         var ret = [];
         var masts = ['2', '3', '4'];
         var counts = [];
@@ -800,7 +802,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             orgname_rowid:{$in:orgnames}
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 // res.send(200, d4dMasterJson);
@@ -809,7 +811,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     'Content-Type': 'application/json'
                 });
                 
-                console.log("sent response" + JSON.stringify(d4dMasterJson));
+                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                 logger.debug(d4dMasterJson.length);
                 var i = 0;
                 for(var i=0;i < d4dMasterJson.length;i++){
@@ -824,45 +826,47 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 ret.push('{"1":"' + orgnames.length + '"}');
                 res.end('[' + ret.join(',') + ']');
                 //res.end();
+                logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
                 return;
             } else {
                 //res.send(400, {
                 ret.push(i + ':' + '');
                 // "error": err
                 // });
-                console.log("none found");
+                logger.debug("none found");
             }
         });
     });
     });
 
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
-        console.log('received request ' + req.params.items);
+        logger.debug("Enter get() for  /d4dMasters/getdashboardvalues/%s", req.params.items);
         var masts = [];
         masts = req.params.items.split(',');
-        console.log('---Length--' + masts.length);
-
+        logger.debug("---Length-- %s", masts.length);
+        logger.debug("Exit get() for  /d4dMasters/getdashboardvalues/%s", req.params.items);
     });
 
     app.get('/d4dMasters/qmasterjson/:id/:name', function(req, res) {
 
     });
     app.get('/d4dMasters/getprovider/:rowid', function(req, res) {
+        logger.debug("Enter get() for  /d4dMasters/getprovider/%s", req.params.rowid);
         d4dModel.findOne({
             id: '9'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var chefRepoPath = '';
                 var hasOrg = false;
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'rowid') {
                             if (itm.field[j]["values"].value == req.params.rowid) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                logger.debug("found: %s  -- %s", i,itm.field[j]["values"].value);
                                 hasOrg = true;
                                 //Re-construct the json with the item found
                                 var configmgmt = '';
@@ -875,28 +879,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                 }
                                 configmgmt = "{" + configmgmt + "}";
-                                console.log(JSON.stringify(configmgmt));
+                                logger.debug(JSON.stringify(configmgmt));
                             }
                         }
                     }
                 }); // rows loop
             }
+            logger.debug("Exit get() for  /d4dMasters/getprovider/%s", req.params.rowid);
         });
 
     });
 
 
     app.get('/d4dMasters/getlist/:masterid/:fieldname', function(req, res) {
+        logger.debug("Enter get() for  /d4dMasters/getlist/%s/%s",req.params.masterid,req.params.fieldname);
         d4dModel.findOne({
             id: req.params.masterid
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var jsonlist = '';
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
                     var rowid = '';
                     var fieldvalue = '';
                     for (var j = 0; j < itm.field.length; j++) {
@@ -914,24 +920,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 });
                 configmgmt = "{" + jsonlist + "}";
-                console.log(JSON.stringify(jsonlist));
+                logger.debug(JSON.stringify(jsonlist));
+                logger.debug("Exit get() for  /d4dMasters/getlist/%s/%s",req.params.masterid,req.params.fieldname);
                 //res.end(jsonlist);
             }
         });
     });
 
     app.get('/d4dMasters/getlist/:masterid/:fieldname/:fieldname1', function(req, res) {
+        logger.debug("Enter get() for  /d4dMasters/getlist/%s/%s/%s",req.params.masterid,req.params.fieldname,req.params.fieldname);
         d4dModel.findOne({
             id: req.params.masterid
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
                 res.end(null);
             }
             if (d4dMasterJson) {
                 var jsonlist = '';
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
                     var rowid = '';
                     var fieldvalue = '';
                     for (var j = 0; j < itm.field.length; j++) {
@@ -954,8 +962,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 });
                 configmgmt = "[" + jsonlist + "]";
-                console.log(JSON.stringify(jsonlist));
+                logger.debug(JSON.stringify(jsonlist));
                 res.end(configmgmt);
+                logger.debug("Exit get() for  /d4dMasters/getlist/%s/%s/%s",req.params.masterid,req.params.fieldname,req.params.fieldname);
             } else {
                 res.send(404);
             }
@@ -963,19 +972,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/getorgnamebychefserver/:chefserver', function(req, res) {
+        logger.debug("Enter get() for  /d4dMasters/getorgnamebychefserver/%s",req.params.chefserver);
         configmgmtDao.getListFiltered(10, 'orgname', 'configname', req.params.chefserver, function(err, catorgname) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log("catorgname:", catorgname);
+            logger.debug("catorgname: %s", catorgname);
 
             if (!catorgname) {
                 res.send('');
-
+                logger.debug("Exit get() for  /d4dMasters/getorgnamebychefserver/%s",req.params.chefserver);
                 return;
             } else {
                 res.end(catorgname);
+                logger.debug("Exit get() for  /d4dMasters/getorgnamebychefserver/%s",req.params.chefserver);
                 return;
             }
 
@@ -983,9 +994,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
     app.post('/d4dMasters/getListFiltered/:masterid',function(req,res){
+        logger.debug("Enter post() for  /d4dMasters/getListFiltered/%s",req.params.masterid);
         configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (dbtype) {
                 var query = {};
@@ -993,10 +1005,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 //     '$in':req.body.serviceids
                 // }
                 query['id'] = req.params.masterid;
-                console.log('Req.body for glf' + JSON.stringify(req.body));
+                logger.debug("Req.body for glf %s", JSON.stringify(req.body));
                 var bodyJson = JSON.parse(JSON.stringify(req.body));
 
-                console.log('Query Build in getListFiltered:' + JSON.stringify(bodyJson));
+                logger.debug("Query Build in getListFiltered: %s", JSON.stringify(bodyJson));
                 var _keys = Object.keys(bodyJson);
                 _keys.forEach(function(k,v){
                     console.log(k,bodyJson[k]);
@@ -1011,18 +1023,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // });
                 eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
                     if (err) {
-                        console.log("Hit and error:" + err);
+                        logger.error("Hit and error:", err);
                     }
-                    console.log(' getListFiltered ' + d4dMasterJson.length)
+                    logger.debug("getListFiltered %s", d4dMasterJson.length);
                     if(d4dMasterJson.length > 0)
                     {   
-                        console.log("sent response" + JSON.stringify(d4dMasterJson));
+                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                         res.send("Found");
-
+                        logger.debug("Exit post() for  /d4dMasters/getListFiltered/%s",req.params.masterid);
                     }
                     else
                         {
-                            console.log("sent response" + JSON.stringify(d4dMasterJson));
+                            logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                             res.send("Not Found");
                         }
                     
@@ -1034,23 +1046,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
-
+        logger.debug("Enter get() for  /d4dMasters/%s/%s/%s",req.params.masterid,req.params.filtercolumnname,req.params.filtercolumnvalue);
         configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (dbtype) {
                 var query = {};
                 query[req.params.filtercolumnname] = req.params.filtercolumnvalue; //building the query 
                 query['id'] = req.params.masterid;
 
-                console.log("Master Type: " + dbtype);
+                logger.debug("Master Type: %s", dbtype);
                 eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
                     if (err) {
-                        console.log("Hit and error:" + err);
+                        logger.error("Hit and error:", err);
                     }
                     res.end(JSON.stringify(d4dMasterJson));
-                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                    logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                    logger.debug("Exit get() for  /d4dMasters/%s/%s/%s",req.params.masterid,req.params.filtercolumnname,req.params.filtercolumnvalue);
                 });
             }
         });
@@ -1060,26 +1073,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/d4dMasters/configmgmt/:rowid', function(req, res) {
-
+        logger.debug("Enter get() for  /d4dMasters/configmgmt/%s",req.params.rowid);
         d4dModel.findOne({
             id: '10'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:" + err);
             }
             if (d4dMasterJson) {
                 var chefRepoPath = '';
                 settingsController.getChefSettings(function(settings) {
                     chefRepoPath = settings.chefReposLocation;
-                    console.log("Repopath:" + chefRepoPath);
+                    logger.debug("Repopath: %s", chefRepoPath);
 
                     var hasOrg = false;
                     d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                        console.log("found" + itm.field.length);
+                        logger.debug("found %s", itm.field.length);
                         for (var j = 0; j < itm.field.length; j++) {
                             if (itm.field[j]["name"] == 'rowid') {
                                 if (itm.field[j]["values"].value == req.params.rowid) {
-                                    console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                    logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
                                     hasOrg = true;
                                     //Re-construct the json with the item found
                                     var configmgmt = '';
@@ -1103,7 +1116,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                     }
                                     configmgmt = "{" + configmgmt + "}";
-                                    console.log(JSON.stringify(configmgmt));
+                                    logger.debug(JSON.stringify(configmgmt));
+                                    logger.debug("Exit get() for  /d4dMasters/configmgmt/%s",req.params.rowid);
                                 }
                             }
 
@@ -1116,6 +1130,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/getuuid', function(req, res) {
+        logger.debug("Enter get() for  /d4dMasters/getuuid");
         var uuid1 = uuid.v4();
         res.writeHead(200, {
             'Content-Type': 'application/json'
@@ -1123,7 +1138,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         // res.json(d4dMasterJson);
         //res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(uuid1));
-        console.log("sent response" + JSON.stringify('{"uuid":"' + uuid1 + '"}'));
+        logger.debug("sent response %s", JSON.stringify('{"uuid":"' + uuid1 + '"}'));
+        logger.debug("Exit get() for  /d4dMasters/getuuid");
     });
 
 
@@ -1148,10 +1164,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
     function mkdir_p(path, mode, callback, position) {
         mode = mode || 0777;
         position = position || 0;
-        console.log('entered');
         parts = require('path').normalize(path).split('/');
         var directory = parts.slice(0, position + 1).join('/');
-        console.log('stage 2 ' + directory);
+        logger.debug("stage 2 %s", directory);
         fs.mkdirSync(directory, mode);
         if (position >= parts.length) {
             return (true);
@@ -1167,7 +1182,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     }
 
     function saveuploadedfile(suffix, folderpath, req) {
-        console.log(req.body);
+        logger.debug(req.body);
         var fi;
         if (req.params.fileinputs.indexOf(',') > 0)
             fi = req.params.fileinputs.split(',');
@@ -1185,19 +1200,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         var filesNames = Object.keys(req.files);
         var count = filesNames.length;
-        console.log('in' + count);
+        logger.debug("in %s", count);
         filesNames.forEach(function(item) {
-            console.log(item);
+            logger.debug(item);
         });
 
         var settings = appConfig.chef;
 
         var chefRepoPath = settings.chefReposLocation;
 
-        console.log('Type of org : ' + typeof req.params.orgname);
-       console.log('Org ID: ' + req.params.orgid);
-        console.log(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
-        console.log('Orgname : #' + req.params.orgname.toString() + '#' + (req.params.orgname == ''));
+        logger.debug("Type of org : %s", typeof req.params.orgname);
+        logger.debug("Org ID: %s", req.params.orgid);
+        logger.debug(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
+        logger.debug("Orgname : # %s # %s", req.params.orgname.toString(),(req.params.orgname == ''));
 
         //Handling the exception to handle uploads without orgname
         if (req.params.orgname) {
@@ -1214,10 +1229,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         //fs.mkdirParent(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1),0777); //if path is not present create it.
         parts = require('path').normalize(path).split('/');
-        console.log('Length of parts:' + parts.length);
+        logger.debug("Length of parts: %s", parts.length);
         for (var i = 1; i <= parts.length; i++) {
             var directory = parts.slice(0, i).join('/');
-            console.log(directory);
+            logger.debug(directory);
             mkdirSync1(directory);
             // fs.mkdirSync(directory,0777);
             //mkdir_p1(directory,'0777');
@@ -1227,7 +1242,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
         //mkdir_p(chefRepoPath + req.params.orgname + folderpath.substring(0,folderpath.length - 1)); ///if path is not present create it.
-        console.log("files:" + fi.length);
+        logger.debug("files: %s", fi.length);
         for (var i = 0; i < fi.length; i++) {
             var controlName = fi[i];
             var fil = eval('req.files.' + fi[i]);
@@ -1243,22 +1258,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     }
                                 });*/
                 if (folderpath == '') {
-                    console.log('this is where file gets saved as (no folderpath): ' + chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name);
+                    logger.debug("this is where file gets saved as (no folderpath): %s %s / %s %s __ %s",chefRepoPath,req.params.orgname,suffix,controlName,fil.name);
                     fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
                 } else {
                     if (folderpath.indexOf('.chef') > 0) { //identifying if its a chef config file
-                        console.log('this is where file gets saved as .chef (with folderpath): ' + chefRepoPath + req.params.orgid + folderpath + fil.name);
+                        logger.debug("this is where file gets saved as .chef (with folderpath):    %s %s %s %s",chefRepoPath,req.params.orgid,folderpath,fil.name);
                         fs.writeFileSync(chefRepoPath + req.params.orgid + folderpath + fil.name, data);
                     } else //not a a chef config file
                     {
-                        console.log("Folderpath rcvd:" + folderpath);
+                        logger.debug("Folderpath rcvd: %s", folderpath);
 
                         if (fil.name == saveAsfileName) {
-                            console.log('this is where file gets saved as (with folderpath): ' + chefRepoPath + req.params.orgid + '/' + suffix + controlName + '__' + fil.name);
+                            logger.debug("this is where file gets saved as (with folderpath): %s %s / %s %s __ %s",chefRepoPath,req.params.orgid,suffix,controlName,fil.name);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
 
                         } else {
-                            console.log('this is where file gets saved as (with folderpath) fixed name: ' + chefRepoPath + req.params.orgid + folderpath + '/' + saveAsfileName);
+                            logger.debug("this is where file gets saved as (with folderpath) fixed name: %s %s %s / %s",chefRepoPath,req.params.orgid,folderpath,saveAsfileName);
                             //fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
                         }
@@ -1271,10 +1286,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             }
         }
-        console.log('Before ssl fetch');
+        logger.debug("Before ssl fetch");
         if(req.params.id == '10') //Fix introduced for Kana 
         { 
-            console.log('In ssl fetch');
+            logger.debug("In ssl fetch");
             var options = {
                     cwd: chefRepoPath + req.params.orgname + folderpath,
                     onError: function(err) {
@@ -1288,17 +1303,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             var procSSLFetch = exec(cmdSSLFetch, options, function(err, stdOut, stdErr) {
                 if (err) {
-                    console.log('Failed on procSSLFetch routes d4dMasters:', err);
+                    logger.debug("Failed on procSSLFetch routes d4dMasters:", err);
                     return;
                 }
             });
             procSSLFetch.on('close', function(code) {
-                console.log('procSSLFetch done: ');
+                logger.debug("procSSLFetch done: ");
             });
 
             procSSLFetch.stdout.on('data', function(data) {
                 //console.log('stdout: ==> ' + data);
-                console.log('procSSLFetch : ' , data);
+                logger.debug("procSSLFetch : %s", data);
             });
         }
         return ("200");
@@ -1306,9 +1321,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/d4dmasters/getrows/:masterid', function(req, res) {
+        logger.debug("Enter post() for  /d4dmasters/getrows/%s", req.params.masterid);
         configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (dbtype) {
                 var query = {};
@@ -1317,13 +1333,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
                 query['id'] = req.params.masterid;
 
-                console.log("Master Type: " + dbtype);
+                logger.debug("Master Type: %s", dbtype);
                 eval('d4dModelNew.' + dbtype).find(query, function(err, d4dMasterJson) {
                     if (err) {
-                        console.log("Hit and error:" + err);
+                        logger.error("Hit and error:", err);
                     }
                     res.end(JSON.stringify(d4dMasterJson));
-                    console.log("sent response" + JSON.stringify(d4dMasterJson));
+                    logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                    logger.debug("Exit post() for  /d4dmasters/getrows/%s", req.params.masterid);
                 });
             } else {
                 res.send(500);
@@ -1332,12 +1349,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.post('/d4dMastersold/getrows/:masterid', function(req, res) {
-        console.log('received request ' + req.params.id);
+        logger.debug("Enter post() for  /d4dMastersold/getrows/%s", req.params.masterid);
         d4dModel.findOne({
             id: req.params.masterid
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var bodyJson = JSON.parse(JSON.stringify(req.body));
@@ -1345,17 +1362,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (bodyJson["serviceids"] != null) {
                     var root = '';
                     bodyJson["serviceids"].forEach(function(serviceid, servicecount) {
-                        console.log(serviceid + '::' + servicecount);
+                        logger.debug("%s :: %s",serviceid,servicecount);
 
                         d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                            console.log("found" + itm.field.length);
+                            logger.debug("found %s", itm.field.length);
 
 
                             var configmgmt = '';
                             for (var j = 0; j < itm.field.length; j++) {
                                 if (itm.field[j]["name"] == 'rowid') {
                                     if (itm.field[j]["values"].value == serviceid) {
-                                        console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                        logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
                                         hasOrg = true;
                                         //Re-construct the json with the item found
 
@@ -1388,6 +1405,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     //console.log(JSON.stringify(root));
                     res.send(JSON.parse(root));
+                    logger.debug("Exit post() for  /d4dMastersold/getrows/%s", req.params.masterid);
 
                 }
 
@@ -1397,12 +1415,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.post('/d4dMasters/savemasterjsonfull/:id', function(req, res) {
-        console.log('received request ' + req.params.id);
+        logger.debug("Enter post() for  /d4dMasters/savemasterjsonfull/%s", req.params.id);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var bodyJson = JSON.parse(JSON.stringify(req.body));
@@ -1414,7 +1432,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (bodyJson["rowid"] != null) { //for edit
                     editMode = true;
                     for (var u = 0; u < d4dMasterJson.masterjson.rows.row.length; u++) {
-                        console.log("Value:" + bodyJson["rowid"]);
+                        logger.debug("Value: %s", bodyJson["rowid"]);
                         if (d4dMasterJson.masterjson.rows.row[u].rowid == bodyJson["rowid"]) {
                             rowtoedit = d4dMasterJson.masterjson.rows.row[u];
                         }
@@ -1426,7 +1444,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 var frmkeys = Object.keys(bodyJson);
                 var rowFLD = [];
-                console.log(JSON.stringify(bodyJson));
+                logger.debug(JSON.stringify(bodyJson));
 
                 frmkeys.forEach(function(itm) {
                     if (!editMode) {
@@ -1445,7 +1463,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
 
                 var FLD = "{" + JSON.stringify(rowFLD) + "}";
-                console.log(FLD);
+                logger.debug(FLD);
+                logger.debug("Exit post() for  /d4dMasters/savemasterjsonfull/%s", req.params.id);
             }
 
         });
@@ -1453,12 +1472,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/d4dMasters/savemasterjsonrow/:id/:fileinputs/:orgname', function(req, res) {
-        console.log('received request ' + req.params.id);
+        logger.debug('Enter post() for  /d4dMasters/savemasterjsonrow/%s/%s/%s', req.params.id,req.params.fileinputs,req.params.orgname);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
 
@@ -1475,7 +1494,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     editMode = true;
                     for (var u = 0; u < d4dMasterJson.masterjson.rows.row.length; u++) {
                         for (var i = 0; i < d4dMasterJson.masterjson.rows.row[u].field.length; i++) {
-                            console.log("Value:" + bodyJson[d4dMasterJson.masterjson.rows.row[u].field[i].name]);
+                            logger.debug("Value: %s", bodyJson[d4dMasterJson.masterjson.rows.row[u].field[i].name]);
                             if (d4dMasterJson.masterjson.rows.row[u].field[i].values.value == bodyJson["rowid"]) {
 
                                 rowtoedit = d4dMasterJson.masterjson.rows.row[u];
@@ -1501,7 +1520,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 //console.log(bodyJson['orgname']);
 
                 if (rowtoedit) //testing if the rowtoedit has a value
-                    console.log("Edited Row:" + JSON.stringify(rowtoedit));
+                    logger.debug("Edited Row: %s", JSON.stringify(rowtoedit));
 
 
                 var frmkeys = Object.keys(bodyJson);
@@ -1511,13 +1530,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 //  var filesNames = Object.keys(req.files);
                 var folderpath = ''; //will hold the folderpath field to create the path in the system
 
-                console.log(JSON.stringify(bodyJson));
+                logger.debug(JSON.stringify(bodyJson));
 
                 frmkeys.forEach(function(itm) {
                     if (!editMode) {
                         var thisVal = bodyJson[itm];
                         //console.log(thisVal.replace(/\"/g,'\\"'));
-                        console.log('thisVal' + thisVal);
+                        logger.debug("thisVal %s", thisVal);
                         var item;
 
                         if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
@@ -1533,7 +1552,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else { //in edit mode
                         if (rowtoedit) {
                             uuid1 = bodyJson["rowid"];
-                            console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+                            logger.debug("Bodyjson[folderpath]: %s", bodyJson["folderpath"]);
                             if (bodyJson["folderpath"] == undefined) //folderpath issue fix
                                 folderpath = ''
                             else
@@ -1541,22 +1560,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             for (var j = 0; j < rowtoedit.field.length; j++) {
                                 if (bodyJson[rowtoedit.field[j].name] != null) {
                                     rowtoedit.field[j].values.value = bodyJson[rowtoedit.field[j].name];
-                                    console.log('Entered Edit' + rowtoedit.field[j].values.value);
+                                    logger.debug("Entered Edit %s", rowtoedit.field[j].values.value);
                                 }
                             }
                         }
                     }
 
                 });
-                console.log('Changed');
+                logger.debug("Changed");
                 var FLD = "{\"field\":" + JSON.stringify(rowFLD) + "}";
                 //frmvals.push(rowFLD);
-                console.log(FLD);
+                logger.debug(FLD);
                 if (!rowtoedit) { //push new values only when not in edit mode
                     d4dMasterJson.masterjson.rows.row.push(JSON.parse(FLD));
                 }
 
-                console.log(JSON.stringify(d4dMasterJson.masterjson));
+                logger.debug(JSON.stringify(d4dMasterJson.masterjson));
                 d4dModel.update({
                     "id": req.params.id
                 }, {
@@ -1573,8 +1592,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                     // To do save uploaded files.
                     //saveuploadedfile(suffix,fileinputs,orgname,req,res,callback)
-                    console.log(req.params.fileinputs == 'null');
-                    console.log('folderpath:' + folderpath);
+                    logger.debug("folderpath: %s", folderpath);
 
                     if (req.params.fileinputs != 'null')
                         res.send(saveuploadedfile(uuid1 + '__', folderpath, req));
@@ -1586,28 +1604,31 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                     //res.send(200);
                     //callback(null, data);
+                    logger.debug("Exit post() for  /d4dMasters/savemasterjsonrow/%s/%s/%s", req.params.id,req.params.fileinputs,req.params.orgname);
                 });
             }
         });
     });
     app.post('/d4dMasters/deactivateorg/:action',function(req,res){
+        logger.debug("Enter post() for /d4dMasters/deactivateorg/%s",req.params.action);
         var bodyJson = JSON.parse(JSON.stringify(req.body));
 
         if(!req.orgid){
-            console.log('Org ID found ' + bodyJson.orgid);
+            logger.debug('Org ID found %s', bodyJson.orgid);
             configmgmtDao.deactivateOrg(bodyJson.orgid,req.params.action,function(err,data){
                  if(err){
-                    console.log('Error:' + err);
+                    logger.error('Error: ', err);
                     res.send(500);
                  }
-                 console.log(data);
+                 logger.debug('=== %s',data);
                  res.send(200);
+                 logger.debug("Exit post() for /d4dMasters/deactivateorg/%s",req.params.action);
             });
         }
        
     });
     app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
-        console.log('received new save request ' + req.params.id);
+        logger.debug("Enter post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s",req.params.id,req.params.fileinputs,req.params.orgname);
         var bodyJson = JSON.parse(JSON.stringify(req.body));
         //pushing the rowid field
 
@@ -1619,24 +1640,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
             editMode = false;
             bodyJson["rowid"] = uuid.v4();
         }
-        console.log('EditMode:' + editMode);
+        logger.debug('EditMode: %s', editMode);
         bodyJson["id"] = req.params.id; //storing the form id.
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (dbtype) {
-                console.log("Master Type: " + dbtype);
+                logger.debug("Master Type: %s", dbtype);
 
                 eval('d4dModelNew.' + dbtype).findOne({
                     rowid: bodyJson["rowid"]
                 }, function(err, d4dMasterJson) {
                     if (err) {
-                        console.log("Hit and error:" + err);
+                        logger.error("Hit and error:", err);
                     }
                     if (d4dMasterJson) {
                         rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
-                        console.log('<<<<< Reached here >>>>' + (rowtoedit == null));
+                        logger.debug('<<<<< Reached here >>>> %s',(rowtoedit == null));
                     }
                     // if(!rowtoedit)
                     //  console.log("Edited Row:" + rowtoedit);
@@ -1655,14 +1676,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //       console.log('BodyJSON rowid:' + JSON.stringify(bodyJson));
                     var newrowid = '';
                     frmkeys.forEach(function(itm) {
-                        console.log("Each item: itm " + itm + ' bodyJson[itm] ' + bodyJson[itm]);
+                        logger.debug("Each item: itm %s bodyJson[itm] %s",itm,bodyJson[itm]);
                         if (itm.trim() == 'rowid') {
-                            console.log('!!!! in rowid ' + bodyJson[itm]);
+                            logger.debug('!!!! in rowid %s', bodyJson[itm]);
                             newrowid = bodyJson[itm];
                         }
                         if (!editMode) {
                             var thisVal = bodyJson[itm];
-                            console.log(thisVal);
+                            logger.debug(thisVal);
                             var item = null;
                             if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
                                 item = "\"" + itm + "\" : \"" + thisVal + "\"";
@@ -1672,7 +1693,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             rowFLD.push(item);
                             if (itm == 'folderpath') { //special variable to hold the folder to which the files will be copied.
                                 rowFLD.push("\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"");
-                                console.log('Got a folderpath:' + thisVal);
+                                logger.debug('Got a folderpath: %s', thisVal);
                                 folderpath = thisVal;
                             }
                         } else {
@@ -1695,7 +1716,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                  //   console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
                                 }
                                 if(!fldadded){
-                                    console.log('Not Added --------->' + itm);
+                                    logger.debug('Not Added ---------> %s', itm);
                                     if(bodyJson[itm] != '') //found to have a value
                                         {
                                             rowtoedit[itm] = bodyJson[itm];
@@ -1719,15 +1740,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                         mastersrdb.save(function(err, data) {
                             if (err) {
-                                console.log('Hit Save error' + err);
+                                logger.error('Hit Save error', err);
                                 res.send(500);
                                 return;
 
                             }
-                            console.log('New Master Saved');
+                            logger.debug('New Master Saved');
 
-                            console.log(req.params.fileinputs == 'null');
-                            console.log('New record folderpath:' + folderpath + ' rowid:' + newrowid + ' FLD["folderpath"]:' + folderpath);
+                            logger.debug(req.params.fileinputs == 'null');
+                            logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:',folderpath ,newrowid ,folderpath);
                             if(!folderpath)
                             {
                                 if (FLD["folderpath"] == undefined) //folderpath issue fix
@@ -1744,10 +1765,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             return;
                         });
                     } else {
-                        console.log("Rowid: " + bodyJson["rowid"]);
+                        logger.debug("Rowid: %s", bodyJson["rowid"]);
                         var currowid = bodyJson["rowid"];
                         delete rowtoedit._id; //fixing the issue of 
-                        console.log('Rowtoedit:' + JSON.stringify(rowtoedit));
+                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
                         eval('d4dModelNew.' + dbtype).update({
                             rowid: bodyJson["rowid"]
                         }, {
@@ -1756,7 +1777,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             upsert: false
                         }, function(err, saveddata) {
                             if (err) {
-                                console.log('Hit Save error' + err);
+                                logger.error('Hit Save error', err);
                                 res.send(500);
                                 return;
                             }
@@ -1766,14 +1787,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             else
                                 folderpath = bodyJson["folderpath"];
 
-                            console.log('Master Data Updated: ' + saveddata);
-                            console.log(req.params.fileinputs == 'null');
-                            console.log('folderpath:' + folderpath + ' rowid:' + currowid);
+                            logger.debug('Master Data Updated: %s', saveddata);
+                            logger.debug('folderpath: %s rowid %s',folderpath,currowid);
 
                             if (req.params.fileinputs != 'null')
                                 res.send(saveuploadedfile(currowid + '__', folderpath, req));
                             else
                                 res.send(200);
+                            logger.debug("Exit post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s",req.params.id,req.params.fileinputs,req.params.orgname);
                             return;
                         });
                     }
@@ -1792,7 +1813,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.post('/d4dMasters/testingupload/:suffix/:fileinputs', function(req, res) {
-        console.log(req.body);
+        logger.debug("Enter post() for /d4dMasters/testingupload/%s/%s",req.params.suffix,req.params.fileinputs);
+        logger.debug("req body: %s",req.body);
         var fi;
         if (req.params.fileinputs.indexOf(',') > 0)
             fi = req.params.fileinputs.split(',');
@@ -1804,9 +1826,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         var filesNames = Object.keys(req.files);
         var count = filesNames.length;
-        console.log('in' + count);
+        logger.debug('in %s', count);
         filesNames.forEach(function(item) {
-            console.log(item);
+            logger.debug(item);
         });
 
 
@@ -1817,11 +1839,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var controlName = fi[i];
                 var fil = eval('req.files.' + fi[i]);
                 if (typeof fil != 'undefined') {
-                    console.log('this is where file gets saved  : ' + chefRepoPath + fil.name);
+                    logger.debug('this is where file gets saved  : %s %s',chefRepoPath,fil.name);
                     fileIo.readFile(fil.path, function(err, data) {
                         //var getDirName = require("path").dirname;
                         fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + controlName + '__' + fil.name, data, null, function(err) {
-                            console.log(err);
+                            logger.error("Hit error: ",err);
                             count--;
                             if (count === 0) { // all files uploaded
                                 res.send("ok");
@@ -1846,6 +1868,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
         res.send(200);
+        logger.debug("Exit post() for /d4dMasters/testingupload/%s/%s",req.params.suffix,req.params.fileinputs);
     });
 
 
@@ -1854,15 +1877,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/d4dMasters/savemasterjson/:id', function(req, res) {
         //Finding the Master Json if present
-
-        console.log(req.body);
-
-        console.log('received request ' + req.params.id);
+        logger.debug("Enter post() for /d4dMasters/savemasterjson/%s",req.params.id);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (!d4dMasterJson) {
 
@@ -1873,10 +1893,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 d4dmj.save(function(err, d4dmj) {
                     if (err) {
-                        console.log("Hit and error:" + err)
+                        logger.error("Hit and error:", err)
                         res.send(500);
                     };
-                    console.log('saved');
+                    logger.debug('saved');
                 });
                 res.send(200);
             } else {
@@ -1885,42 +1905,44 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 d4dMasterJson.save(function(err, d4dMasterJson) {
                     if (err) {
-                        console.log("Hit and error:" + err)
+                        logger.error("Hit and error:", err)
                     }
-                    console.log('updated');
+                    logger.debug('updated');
                 });
                 res.send(200);
             }
+            logger.debug("Exit post() for /d4dMasters/savemasterjson/%s",req.params.id);
         });
         //mongoose.disconnect();
     });
 
     app.get('/createbg/:orgname/:bgname', function(req, res) {
+        logger.debug("Enter get() for /createbg/%s/%s",req.params.orgname,req.params.bgname);
         // var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + req.params.envname + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + req.params.orgname + "\"}}]}";
         var bgfield = "{\"field\":[{\"values\":{\"value\":\"" + req.params.bgname + "\"},\"name\":\"productgroupname\"},{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"name\":\"costcode\"}] }";
         //var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
         db.on('error', console.error.bind(console, 'connection error:'));
-        console.log(JSON.stringify(bgfield));
+        logger.debug(JSON.stringify(bgfield));
         db.once('open', function callback() {
 
-            console.log('in once');
+            logger.debug('in once');
         });
-        console.log('received request ' + req.params.bgname);
+        logger.debug('received request %s', req.params.bgname);
         d4dModel.findOne({
             id: '2'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var hasOrg = false;
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
 
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'productgroupname') {
                             if (itm.field[j]["values"].value == req.params.bgname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s",i,itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -1930,7 +1952,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 if (hasOrg == false) {
                     //Creating org
-                    console.log('Creating');
+                    logger.debug('Creating');
                     d4dMasterJson.masterjson.rows.row.push(JSON.parse(bgfield));
                     d4dModel.update({
                         "id": "2"
@@ -1957,40 +1979,42 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, {
                     "error": err
                 });
-                console.log("none found");
+                logger.debug("none found");
             }
+            logger.debug("Exit get() for /createbg/%s/%s",req.params.orgname,req.params.bgname);
 
         });
     });
 
 
     app.get('/createproj/:orgname/:envname/:prodgroup/:projname', function(req, res) {
+         logger.debug("Enter get() for /createproj/%s/%s/%s/%s",req.params.orgname,req.params.envname,req.params.prodgroup,req.params.projname);
         var projField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.projname + "\"},\"name\":\"projectname\"},{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"" + req.params.prodgroup + "\"},\"name\":\"productgroupname\"},{\"values\":{\"value\":\"" + req.params.envname + "\"},\"name\":\"environmentname\"},{\"values\":{\"value\":[\"Code 1\",\"Code 2\"]},\"name\":\"costcode\"}] }";
 
         //var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
         db.on('error', console.error.bind(console, 'connection error:'));
-        console.log(JSON.stringify(projField));
+        logger.debug(JSON.stringify(projField));
         db.once('open', function callback() {
 
-            console.log('in once');
+            logger.debug('in once');
         });
-        console.log('received request ' + req.params.orgname);
+        logger.debug('received request %s', req.params.orgname);
         d4dModel.findOne({
             id: '4'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var hasOrg = false;
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
 
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'projectname') {
                             //console.log("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == req.params.projname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s",i,itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2000,7 +2024,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 if (hasOrg == false) {
                     //Creating org
-                    console.log('Creating');
+                    logger.debug('Creating');
                     d4dMasterJson.masterjson.rows.row.push(JSON.parse(projField));
                     d4dModel.update({
                         "id": "4"
@@ -2027,39 +2051,41 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, {
                     "error": err
                 });
-                console.log("none found");
+                logger.debug("none found");
             }
+            logger.debug("Exit get() for /createproj/%s/%s/%s/%s",req.params.orgname,req.params.envname,req.params.prodgroup,req.params.projname);
 
         });
     });
 
 
     app.get('/createenv/:orgname/:envname', function(req, res) {
+        logger.debug("Enter get() for /createenv/%s/%s", req.params.orgname,req.params.envname);
         var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + req.params.envname + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + req.params.orgname + "\"}}]}";
         //var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
         db.on('error', console.error.bind(console, 'connection error:'));
-        console.log(JSON.stringify(envField));
+        logger.debug(JSON.stringify(envField));
         db.once('open', function callback() {
 
-            console.log('in once');
+            logger.debug('in once');
         });
-        console.log('received request ' + req.params.orgname);
+        logger.debug('received request %s', req.params.orgname);
         d4dModel.findOne({
             id: '3'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error:", err);
             }
             if (d4dMasterJson) {
                 var hasOrg = false;
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
 
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'environmentname') {
                             //console.log("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == req.params.envname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2069,7 +2095,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 if (hasOrg == false) {
                     //Creating org
-                    console.log('Creating');
+                    logger.debug('Creating');
                     d4dMasterJson.masterjson.rows.row.push(JSON.parse(envField));
 
 
@@ -2098,38 +2124,40 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, {
                     "error": err
                 });
-                console.log("none found");
+                logger.debug("none found");
             }
+            logger.debug("Exit get() for /createenv/%s/%s", req.params.orgname,req.params.envname);
 
         });
     });
 
 
     app.get('/createorg/:orgname', function(req, res) {
+        logger.debug("Enter get() for /createorg/%s", req.params.orgname);
         var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
         db.on('error', console.error.bind(console, 'connection error:'));
-        console.log(JSON.stringify(orgField));
+        logger.debug(JSON.stringify(orgField));
         db.once('open', function callback() {
 
-            console.log('in once');
+            logger.debug('in once');
         });
-        console.log('received request ' + req.params.orgname);
+        logger.debug('received request %s', req.params.orgname);
         d4dModel.findOne({
             id: '1'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.error("Hit and error: ", err);
             }
             if (d4dMasterJson) {
                 var hasOrg = false;
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found %s", itm.field.length);
 
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'orgname') {
                             //console.log("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == req.params.orgname) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2144,7 +2172,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 if (hasOrg == false) {
                     //Creating org
-                    console.log('Creating');
+                    logger.debug('Creating');
                     d4dMasterJson.masterjson.rows.row.push(JSON.parse(orgField));
                     d4dModel.update({
                         "id": "1"
@@ -2179,19 +2207,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, {
                     "error": err
                 });
-                console.log("none found");
+                logger.debug("none found");
             }
+            logger.debug("Exit get() for /createorg/%s", req.params.orgname);
 
         });
     });
 
     app.get('/d4dMasters/:chefserver/cookbooks', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/%s/cookbooks", req.params.chefserver);
         configmgmtDao.getChefServerDetailsByChefServer(req.params.chefserver, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata %s", chefDetails);
 
             if (!chefDetails) {
                 res.send(404);
@@ -2207,7 +2237,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -2216,6 +2246,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         serverId: chefDetails.rowid,
                         cookbooks: cookbooks
                     });
+                    logger.debug("Exit get() for /d4dMasters/%s/cookbooks", req.params.chefserver);
                 }
             });
 
@@ -2224,12 +2255,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/:chefserver/roles', function(req, res) {
+        logger.debug("Enter get() for /d4dMasters/%s/roles", req.params.chefserver);
         configmgmtDao.getChefServerDetailsByChefServer(req.params.chefserver, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefdata", chefDetails);
+            logger.debug("chefdata %s", chefDetails);
             if (!chefDetails) {
                 res.send(404);
                 return;
@@ -2243,7 +2275,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getRolesList(function(err, roles) {
-                console.log(err);
+                logger.error(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -2252,6 +2284,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         serverId: chefDetails.rowid,
                         roles: roles
                     });
+                    logger.debug("Exit get() for /d4dMasters/%s/roles", req.params.chefserver);
                 }
             });
 
