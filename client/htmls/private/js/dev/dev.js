@@ -166,11 +166,14 @@
             Attaching Click Event on IP Address Import, which will reset instance form.
             */
             function bindClick_ipaddressImport() {
+
                 $('#ipaddressimport').click(function(e) {
+              
                     $('#nodeimportipresultmsg').addClass("hidden");
                     $('#addInstanceForm').trigger("reset");
                     $('#pemFileDropdown').change();
                     $('#importinstanceOS').change();
+                    
                 });
             }
 
@@ -417,6 +420,10 @@
             for (var i = 0; i < userList.length; i++) {
                 var keys = Object.keys(userList[i]);
                 var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+                if(sessionUser.cn){
+                  if(keys[0] == sessionUser.cn)
+                    $option.attr('selected','selected');
+                }
                 $importbyipuserListSelect.append($option);
             }
             $loadingContainer.hide();

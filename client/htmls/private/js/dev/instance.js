@@ -267,12 +267,22 @@
  Attaching Click Event on IP Address Import, which will reset instance form.
  */
         function bindClick_ipaddressImport() {
-            $('#ipaddressimport').click(function(e) {
-                $('#nodeimportipresultmsg').addClass("hidden");
-                $('#addInstanceForm').trigger("reset");
-                $('#pemFileDropdown').change();
-                $('#importinstanceOS').change();
-            });
+            // $('#ipaddressimport').click(function(e) {
+            //     var perm = haspermission('instancelaunch','execute');
+            //         //alert(perm);
+            //       if(!perm)
+            //       {
+            //         $('#modalContainerimportInstance').modal('hide');
+            //         bootbox.alert('Insufficient permission to perform operation.');
+            //         return;
+            //       }
+            //       else{
+            //         $('#nodeimportipresultmsg').addClass("hidden");
+            //         $('#addInstanceForm').trigger("reset");
+            //         $('#pemFileDropdown').change();
+            //         $('#importinstanceOS').change();
+            //     }
+            // });
         }
 
         /*
