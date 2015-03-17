@@ -17,7 +17,7 @@
                               <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/RolesList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
-                            <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateConfigManagement.html?new">
+                            <a id="newConfig" class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateConfigManagement.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -82,6 +82,13 @@
 
                                 <script>
                                     $(document).ready(function () {
+                                        var hasCreateConfigPermission = false;
+                                        if(haspermission('chefserver','create')){
+                                            hasCreateConfigPermission=true;
+                                        }
+                                        if(!hasCreateConfigPermission){
+                                            $('#newConfig').addClass('hidden');
+                                        }
                                        
                                         startup();
                                     });

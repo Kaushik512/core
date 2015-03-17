@@ -17,7 +17,7 @@
                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                        
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateProductGroup.html?test">
+                            <a id="newProd" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateProductGroup.html?test">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -72,6 +72,18 @@
                                     </tbody>
                                     
                                 </table>
+                                <script>
+                                $(document).ready(function() {
+                                    var hasCreateProductPermission = false;
+                                        if(haspermission('businessgroups','create')){
+                                            hasCreateProductPermission=true;
+                                        }
+                                        
+                                        if(!hasCreateProductPermission){
+                                            $('#newProd').addClass('hidden');
+                                        }
+                                    });
+                                </script>
                                 <script id="onpagescript">
                                     function inLineReady() {
                                         /* $('#envtable').dataTable({

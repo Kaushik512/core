@@ -519,6 +519,54 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 }
                 if (editButton) {
                     editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
+                    //checking for createfilename and checking for the resources as per the JSON
+                    var hasEditPermission = false;
+                    if(createFileName==='CreateOrg.html'){
+                        if(haspermission('organization','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateProductGroup.html'){
+                        if(haspermission('businessgroups','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateProject.html'){
+                        if(haspermission('projects','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironment.html'){
+                        if(haspermission('environment','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironmentConcept.html'){
+                        if(haspermission('chefenvironment','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateConfigManagement.html'){
+                        if(haspermission('chefserver','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateUser.html'){
+                        if(haspermission('users','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateTeam.html'){
+                        if(haspermission('teams','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateTemplates.html'){
+                        if(haspermission('templates','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    //user has no permission to edit
+                    if(!hasEditPermission){
+                        
+                        editButton.addClass('disabled');
+                    }
                     editButton.addClass("tableactionbutton tableactionbuttonpadding");
                     editButton.removeClass('btn-xs');
                     editButton.addClass('btn-sg');
@@ -541,6 +589,55 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 var deletebutton = $('.rowtemplate').find("[title='Remove']");
                 if (deletebutton) {
                     deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                    var hasDeletePermission = false;
+                    //checking whether the user has the authentication to delete any entry
+                    if(createFileName==='CreateOrg.html'){
+                        if(haspermission('organization','delete')){
+                        hasDeletePermission =true;
+                        }
+
+                    }else if(createFileName==='CreateProductGroup.html'){
+                        if(haspermission('businessgroups','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateProject.html'){
+                        if(haspermission('projects','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironment.html'){
+                        if(haspermission('environment','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironmentConcept.html'){
+                        if(haspermission('chefenvironment','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateConfigManagement.html'){
+                        if(haspermission('chefserver','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateUser.html'){
+                        if(haspermission('users','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateTeam.html'){
+                        if(haspermission('teams','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateTemplates.html'){
+                        if(haspermission('templates','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }
+
+                    if(!hasDeletePermission){
+                        
+                        deletebutton.addClass('disabled');
+                    }
                     deletebutton.removeClass('btn-xs');
                     deletebutton.addClass('btn-sg');
                     deletebutton.addClass('tableactionbutton');
@@ -1051,6 +1148,7 @@ function readform(formID) {
         // End Prefilling dropdowns
         var formSchema = null;
         var rowid = url.substr(url.indexOf("?") + 1);
+
         //  alert(orgName);
         var editMode = false;
 

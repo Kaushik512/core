@@ -74,7 +74,7 @@ module.exports.haspermission = function(username,category,permissionto,req,permi
   if(req == null && permissionset == null){ //there is no request object check if the json has been provided
       this.getUser(username,req,function(err,data){
           if(!err){
-            logger.debug('Entering getpermissionforcategory');
+            logger.debug('Entering getpermissionforcategory category:' + category + ' permissionto: ' + permissionto );
             var permissionfound = getpermissionforcategory(category,permissionto,data);
             callback(null,permissionfound);
           }
@@ -85,20 +85,20 @@ module.exports.haspermission = function(username,category,permissionto,req,permi
       });
   }
   else if(permissionset != null){
-      logger.debug('Has permissionset');
+      logger.debug('Has permissionset category:' + category + ' permissionto: ' + permissionto );
             var permissionfound = getpermissionforcategory(category,permissionto,permissionset);
             callback(null,permissionfound);
   }
   else{ //req != null
     if(req.session.user.permissionset){
-        logger.debug('Found permissionset in req');
+        logger.debug('Found permissionset in req category:' + category + ' permissionto: ' + permissionto );
             var permissionfound = getpermissionforcategory(category,permissionto,req.session.user.permissionset);
             callback(null,permissionfound);
     }
     else{
        this.getUser(username,null,function(err,data){
           if(!err){
-            logger.debug('Entering getpermissionforcategory with no req');
+            logger.debug('Entering getpermissionforcategory with no req category:' + category + ' permissionto: ' + permissionto );
             var permissionfound = getpermissionforcategory(category,permissionto,data);
             callback(null,permissionfound);
           }

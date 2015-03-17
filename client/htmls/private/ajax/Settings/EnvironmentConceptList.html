@@ -17,7 +17,7 @@
                             <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/EnvironmentConceptList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                     
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateEnvironmentConcept.html?new">
+                            <a id="newENV" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateEnvironmentConcept.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -75,6 +75,15 @@
                                     
                                 </table>
                                 <script>
+                                $(document).ready(function(){
+                                    var hasCreateEnvConceptPermission = false;
+                                        if(haspermission('chefenvironment','create')){
+                                            hasCreateEnvConceptPermission=true;
+                                        }
+                                        if(!hasCreateEnvConceptPermission){
+                                            $('#newENV').addClass('hidden');
+                                        }
+                                });
                                     function inLineReady(){
                                         /* $('#envtable').dataTable({
                                         "paging": false,

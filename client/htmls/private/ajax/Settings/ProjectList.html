@@ -17,7 +17,7 @@
                               <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateProject.html?new">
+                            <a id="newProj" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateProject.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -82,7 +82,13 @@
                                 </table>
                                 <script>
                                     $(document).ready(function () {
-                                       
+                                       var hasCreateProjPermission = false;
+                                       if(haspermission('projects','create')){
+                                            hasCreateProjPermission=true;
+                                       }
+                                       if(!hasCreateProjPermission){
+                                            $('#newProj').addClass('hidden');
+                                       }
                                         startup();
                                     });
 

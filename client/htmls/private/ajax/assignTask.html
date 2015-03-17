@@ -357,7 +357,7 @@ $(document).ready(function() {
         if (taskType === 'chef') {
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
-                alert('Please give a name');
+                alert('Please enter a Task-Name');
                 return;
             }
             taskData.name = taskName;
@@ -388,7 +388,7 @@ $(document).ready(function() {
         } else if (taskType === 'jenkins') {
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
-                alert('Please give a name');
+                alert('Please enter a Task-Name');
                 return;
             }
             taskData.name = taskName;
