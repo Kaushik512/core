@@ -179,7 +179,7 @@
       </div>
 
      
-      <div class="col-lg-6" style="margin-top:15px;">
+      <div class="col-lg-6 hidden" style="margin-top:15px;">
           <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
           
               <div class="userListLoadingContainer"></div>
@@ -226,10 +226,23 @@
 <script type="text/javascript">
 
 $('#buttonForIP').click(function(e){
-  $('#chefImportBgSelect').select2('val', 'All');
-  $('#chefImportProjectSelect').select2('val', 'All');
-  $('#myForm12').trigger("reset");
-  $('#pemFileDropdown2').change();
+  var perm = haspermission('instancelaunch','execute');
+  
+  //alert(perm);
+  if(!perm)
+  {
+    
+    bootbox.alert('Insufficient permission to perform operation.');
+    $('#chefImportNodesModal').modal('hide');
+    return;
+  }
+  else{
+    $('#chefImportNodesModal').modal('show');
+    $('#chefImportBgSelect').select2('val', 'All');
+    $('#chefImportProjectSelect').select2('val', 'All');
+    $('#myForm12').trigger("reset");
+    $('#pemFileDropdown2').change();
+    }
 });
 
 $(document).ready(function() {
@@ -372,7 +385,7 @@ $(function() {
                     var $tableBody = $('.table-hover tbody');
 
                     //restricting to first 5 to change the below to nodeList.length
-                    for (var i = 0; i < nodeList.length; i++) {
+                    for (var i = 0; i < 5; i++) {
                         var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName', nodeList[i]);
                         $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
                         $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
@@ -614,7 +627,7 @@ $(function() {
             alert('Please Choose nodes first');
             return;
         }
-        $('#chefImportNodesModal').modal('show');
+        //$('#chefImportNodesModal').modal('show');
     });
     $('#importPemfileInput').change(function() {
         //console.log(this.files);
@@ -770,7 +783,7 @@ $(function() {
 
 
 (function() {
-
+  
     var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
     $.get('../users', function(userList) {
         var $userListSelect = $('#userListSelect').empty();
@@ -786,10 +799,17 @@ $(function() {
         for (var i = 0; i < userList.length; i++) {
             var keys = Object.keys(userList[i]);
             var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+            if(sessionUser.cn){
+              if(keys[0] == sessionUser.cn)
+                $option.attr('selected','selected');
+            }
             $userListSelect.append($option);
         }
+
         $loadingContainer.hide();
         $userListSelect.show();
+        
+         
     }).error(function() {
         $loadingContainer.empty().append('Unable to load users. Please try again later.');
     });

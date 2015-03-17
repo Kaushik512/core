@@ -154,7 +154,7 @@ var d4dMastersDockerConfig = new mongoose.Schema(
 	dockerpassword: {type:String,required:true, trim:true},
 	folderpath: {type:String,trim:true},
 	active: {type:Boolean, trim:true,default:true},
-	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}	
 );
 var d4dModelMastersDockerConfig = mongoose.model('d4dModelMastersDockerConfig',d4dMastersDockerConfig,'d4dmastersnew');
 

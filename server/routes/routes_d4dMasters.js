@@ -205,6 +205,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
          
     });
 
+    app.get('/d4dMasters/setting',function(req,res){
+        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn,function(err,data){
+            logger.debug('Retuened setting : ' + data);
+            res.send(200);
+        });
+    });
+
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
         logger.debug("Received request for delete chk. %s : %s : %s", req.params.fieldvalue ,req.params.id ,req.params.fieldname);
        // console.log('received request ' + req.params.id);
