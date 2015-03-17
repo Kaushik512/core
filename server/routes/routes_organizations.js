@@ -4,7 +4,6 @@ var Chef = require('../lib/chef');
 var blueprintsDao = require('../model/dao/blueprints');
 var usersDao = require('../model/users.js');
 var instancesDao = require('../model/dao/instancesdao');
-var tasksDao = require('../model/dao/orchestrationdao');
 var appConfig = require('../config/app_config');
 var logger = require('../lib/logger')(module);
 var uuid = require('node-uuid');
@@ -22,7 +21,7 @@ var waitForPort = require('wait-for-port');
 
 var appCardsDao = require('../model/dao/appcarddao');
 
-
+var Tasks = require('../model/classes/tasks/tasks.js');
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
@@ -108,7 +107,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     envs += ',' + tempenvname;
                                                                 }
                                                             }
-                                                           // logger.debug("Env in:%s", docprojs);
+                                                            // logger.debug("Env in:%s", docprojs);
                                                             prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push({ //
                                                                 name: prjname,
@@ -309,7 +308,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     });
                                                                 }
                                                             }
-                                                           // logger.debug("Env in:%s", docprojs);
+                                                            // logger.debug("Env in:%s", docprojs);
                                                             orgTree[_i]['businessGroups'][__i]['projects'].push({ //
                                                                 name: docprojs[_prj]['projectname'],
                                                                 environments: envs
@@ -327,7 +326,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 borderColor: '#000',
                                                                 selectable: false,
                                                                 itemtype: 'proj',
-                                                                href: '#ajax/ProjectSummary.html?org=' +  orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'],
+                                                                href: '#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'],
                                                                 environments: envs
                                                             });
                                                             //javascript:void(0) #ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
@@ -695,7 +694,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'create';
-       
+
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
@@ -749,7 +748,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
+        Tasks.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -791,7 +790,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        tasksDao.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
+        Tasks.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
             if (err) {
                 res.send(500);
                 return;
@@ -827,19 +826,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
         taskData.bgId = req.params.bgId;
         taskData.projectId = req.params.projectId;
         taskData.envId = req.params.envId;
-        if (!taskData.runlist) {
-            taskData.runlist = [];
-        }
-        logger.debug("taskData: %s", taskData);
-        tasksDao.createTask(taskData, function(err, data) {
+        Tasks.createNew(taskData, function(err, task) {
             if (err) {
                 logger.err(err);
                 res.send(500);
                 return;
             }
-            res.send(data);
+            res.send(task);
             logger.debug("Exit post() for /organizations/%s/businessGroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.environments);
-        });
+       });
     });
 
     app.get('/organizations/:orgId/chefserver', function(req, res) {

@@ -11,7 +11,9 @@ var fileIo = require('../lib/utils/fileio');
 
 var Jenkins = require('../lib/jenkins');
 
-var errorResponses = require('./error_responses.js')
+var errorResponses = require('./error_responses.js');
+
+var Tasks = require('../model/classes/tasks/tasks.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -284,7 +286,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.delete('/tasks/:taskId', function(req, res) {
-        tasksDao.removeTaskById(req.params.taskId, function(err, deleteCount) {
+        Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
             if (err) {
                 res.send(500);
                 return;
@@ -300,7 +302,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/:taskId', function(req, res) {
-        tasksDao.getTaskById(req.params.taskId, function(err, data) {
+        Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -317,7 +319,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.post('/tasks/:taskId/update', function(req, res) {
         var taskData = req.body.taskData;
 
-        tasksDao.updateTaskData(req.params.taskId, taskData, function(err, updateCount) {
+        Tasks.updateTaskById(req.params.taskId, taskData, function(err, updateCount) {
             if (err) {
                 res.send(500);
                 return;
