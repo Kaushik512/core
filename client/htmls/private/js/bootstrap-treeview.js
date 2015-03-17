@@ -340,6 +340,7 @@
 							.attr('itemtype',node.itemtype)
 							.attr('title',node.tooltip)
 							.attr('rowid',node.rowid)
+							.attr('target',node.target)
 							.append(node.text)
 						);
 				}

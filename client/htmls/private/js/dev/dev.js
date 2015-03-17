@@ -480,14 +480,14 @@
                     switch (key) {
                         case 38: // UP arrow
                         var $newSelectedRowPre = $selectedRow.prev();
-                        if ($newSelectedRowPre.length == 1) {
+                        if ($newSelectedRowPre && $newSelectedRowPre.length == 1) {
                             $newSelectedRowPre.addClass('rowcustomselected');
                             $selectedRow.removeClass('rowcustomselected');
                         }
                         break;
                         case 40: // DOWN arrow
-                        var $newSelectedRowNext = selectedRowPre.next();
-                        if ($newSelectedRowNext.length == 1) {
+                        var $newSelectedRowNext = $selectedRow.next();
+                        if ($newSelectedRowNext && $newSelectedRowNext.length == 1) {
                             $newSelectedRowNext.addClass('rowcustomselected');
                             $selectedRow.removeClass('rowcustomselected');
                         }
