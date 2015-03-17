@@ -110,7 +110,7 @@ function Configmgmt() {
                 break;
             case "10":
                  logger.log('Exting getDBModelFromID ' + id.toString());
-               return('configuration');
+               return('chefserver');
                 break;
             case "17":
                  logger.log('Exting getDBModelFromID ' + id.toString());
