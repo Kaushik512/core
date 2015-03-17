@@ -349,7 +349,10 @@
                                     $result.html("Invalid request");
                                 }
                             } else {
-                                $result.html("Server Behaved Unexpectedly");
+                                if(jxhr.status === 401)
+                                    $result.html("Inssuficient permission to perform operation.");
+                                else
+                                    $result.html("Server Behaved Unexpectedly");
                             }
                             $result.removeClass('hidden');
                             $('#addInstanceBtn').removeAttr('disabled');
@@ -407,6 +410,7 @@
 
         var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
         $.get('../users', function(userList) {
+            var perm = haspermission('instancelaunch','execute');
             userList = JSON.parse(userList);
             var $importbyipuserListSelect = $('#importbyipuserListSelect').empty();
             userList.sort(function(a, b) {
