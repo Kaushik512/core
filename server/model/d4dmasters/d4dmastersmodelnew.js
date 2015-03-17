@@ -274,10 +274,30 @@ var d4dMastersProviders = new mongoose.Schema(
         secretkey:{type:String,required:true,trim:true},
         keypairname:{type:String,required:true,trim:true},
         securitygroupid:{type:String,required:true,trim:true},
+        providertype: {type:String,required:true,trim:true},
         accountpemfile:{type:String,required:false,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');
+
+var d4dMastersImages = new mongoose.Schema(
+		{id: {type:String,required:true, trim:true},
+		imagename:{type:String,required:true,trim:true},
+		providertype: {type:String,required:true,trim:true},
+		imageid: {type:String,required:true,trim:true},
+        rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersImages = mongoose.model('d4dModelMastersImages',d4dMastersImages,'d4dmastersnew');
+
+var d4dMastersJira = new mongoose.Schema(
+		{id: {type:String,required:true, trim:true},
+		jiraname:{type:String,required:true,trim:true},
+        jirausername:{type:String,required:true,trim:true},
+		jirapassword:{type:String,required:true,trim:true},
+		jiraurl:{type:String,required:true,trim:true},
+        rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersJira = mongoose.model('d4dModelMastersJira',d4dMastersJira,'d4dmastersnew');
 
 
 module.exports = d4dModelNew;
@@ -298,3 +318,5 @@ module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//
 module.exports.d4dModelMastersGeneric  = d4dModelMastersGeneric;
 module.exports.d4dModelMastersDynamic  = d4dModelMastersDynamic;
 module.exports.d4dModelMastersProviders = d4dModelMastersProviders;
+module.exports.d4dModelMastersImages = d4dModelMastersImages;
+module.exports.d4dModelMastersJira = d4dModelMastersJira;

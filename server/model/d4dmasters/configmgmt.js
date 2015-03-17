@@ -78,6 +78,14 @@ function Configmgmt() {
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersTeams');
                 break;
+            case "22":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersImages');
+                break;
+            case "23":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersJira');
+                break;
         }
     };
     this.getChefServerDetails_old = function(rowid, callback) {
