@@ -1034,10 +1034,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/addInstance', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+    logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/addInstance", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
 
-        if (!(req.body.fqdn && req.body.os)) {
-            res.send(400);
+    if (!(req.body.fqdn && req.body.os)) {
+        res.send(400);
+    }
+    logger.debug('Verifying User permission set');
+    var user = req.session.user;
+    var category = 'instancelaunch';
+    var permissionto = 'execute';
+
+    usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401);
+
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
+            return;
         }
         instancesDao.getInstanceByOrgAndNodeNameOrIP(req.params.orgId, req.body.fqdn, req.body.fqdn, function(err, instances) {
             if (err) {
@@ -1347,5 +1366,5 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
         });
     });
-
+});
 }
