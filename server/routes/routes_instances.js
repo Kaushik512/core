@@ -274,6 +274,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(500);
                 }
             });
+      
 
     });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action', function(req, res) {
@@ -283,24 +284,30 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var stdmessages = '';
         //Command mapping for security
         var action = 'start';
+         var action1 = action;
         switch (req.params.action) {
             case "1":
                 action = 'start';
+                action1 = 'start';
                 break;
             case "2":
                 action = 'stop';
                 break;
             case "3":
                 action = 'restart';
+                action1 = 'start';
                 break;
             case "4":
                 action = 'pause';
+                action1 = 'start';
                 break;
             case "5":
                 action = 'unpause';
+                action1 = 'start';
                 break;
             case "6":
                 action = 'delete';
+                action1 = 'terminate';
                 break;
         }
 
@@ -314,6 +321,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         logger.debug('cmd received: ', cmd);
         var stdOut = '';
+          logger.debug('Verifying User permission set for execute.');
+        var user = req.session.user;
+        var category = 'dockercontainer' + action1;
+        var permissionto = 'execute';
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+                    return;
+                }
+                else{
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             //alert('Done');
             if (!err) {
@@ -350,6 +370,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             logger.error("Error hits while running Docker Command: ",err);
             res.send(500);
         });
+        }//else haspermission
+        } //if !err
+        }); //haspermission
 
     });
     app.get('/instances/checkfordocker/:instanceid', function(req, res) {
