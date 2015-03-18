@@ -30,6 +30,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             } else {
                 if (!(jenkinsData && jenkinsData.length)) {
                     res.send(404, errorResponses.jenkins.notFound);
+                    return;
                 }
                 req.CATALYST = {
                     jenkins: jenkinsData[0]
@@ -60,7 +61,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.get('/jenkins/:jenkinsId/jobs/:jobName', function(req, res) {
         var jenkinsData = req.CATALYST.jenkins;
-
+       
         var jenkins = new Jenkins({
             url: jenkinsData.jenkinsurl,
             username: jenkinsData.jenkinsusername,

@@ -15,12 +15,13 @@ var errorResponses = require('./error_responses.js');
 
 var Tasks = require('../model/classes/tasks/tasks.js');
 
+var logger = require('../lib/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/tasks/*', sessionVerification);
 
     app.get('/tasks/:taskId/run', function(req, res) {
-        tasksDao.getTaskById(req.params.taskId, function(err, data) {
+        /*tasksDao.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 console.log(err);
                 res.send(500,errorResponses.db.error);
@@ -282,13 +283,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             }
 
+        });*/
+        Tasks.getTaskById(req.params.taskId, function(err, task) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            task.execute(req.session.user.cn,function(err, taskRes) {
+                if (err) {
+                    logger.error(err);
+                    res.send(500, err);
+                    return;
+                } 
+                res.send(taskRes);
+            });
         });
+
     });
 
     app.delete('/tasks/:taskId', function(req, res) {
         Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
             if (err) {
-                res.send(500);
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
             if (deleteCount) {
@@ -304,12 +322,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/tasks/:taskId', function(req, res) {
         Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
-                res.send(500);
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
-            console.log('task data');
-            if (data && data.length) {
-                res.send(data[0]);
+            if (data) {
+                res.send(data);
             } else {
                 res.send(404);
             }
@@ -321,7 +339,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         Tasks.updateTaskById(req.params.taskId, taskData, function(err, updateCount) {
             if (err) {
-                res.send(500);
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
             if (updateCount) {

@@ -54,25 +54,58 @@ var taskSchema = new Schema({
         trim: true
     },
     taskConfig: Schema.Types.Mixed,
-    running: Boolean,
+
     lastRunTimestamp: Number,
 });
 
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(taskData, callback) {
-
+taskSchema.methods.execute = function(userName,callback) {
+    logger.debug('Executing');
+    var task;
+    var self = this;
+    if (this.taskType === TASK_TYPE.CHEF_TASK) {
+        task = new ChefTask(this.taskConfig);
+    } else if (this.taskType === TASK_TYPE.JENKINS_TASK) {
+        task = new JenkinsTask(this.taskConfig);
+    } else {
+        callback({
+            message: "Invalid Task Type"
+        }, null);
+        return;
+    }
+    task.execute(userName,function(err, taskExecuteData) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        var timestamp = new Date().getTime();
+        self.lastRunTimestamp = timestamp;
+        self.save(function(err, data) {
+            if (err) {
+                logger.error("Unable to update task timestamp");
+                return;
+            }
+            logger.debug("Task last run timestamp updated");
+        });
+        if (!taskExecuteData) {
+            taskExecuteData = {};
+        }
+        taskExecuteData.timestamp = timestamp;
+        taskExecuteData.taskType = task.taskType;
+        callback(null, taskExecuteData);
+    });
 };
 
 // Get Nodes list
 taskSchema.methods.getChefTaskNodes = function() {
-    if(this.taskType === TASK_TYPE.CHEF_TASK) {
-        var chefTask = new ChefTask(this.taskConfig); 
+    if (this.taskType === TASK_TYPE.CHEF_TASK) {
+        var chefTask = new ChefTask(this.taskConfig);
         return chefTask.getNodes();
     } else {
         return null;
-    }    
+    }
 };
 
 
@@ -146,7 +179,12 @@ taskSchema.statics.getTaskById = function(taskId, callback) {
             return;
         }
         //console.log('data ==>', data);
-        callback(null, data);
+        if (data.length) {
+            callback(null, data[0]);
+        } else {
+            callback(null, null);
+        }
+
     });
 };
 
