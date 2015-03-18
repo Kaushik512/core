@@ -66,8 +66,13 @@ taskSchema.methods.execute = function(taskData, callback) {
 };
 
 // Get Nodes list
-taskSchema.methods.getNodes = function(callback) {
-
+taskSchema.methods.getChefTaskNodes = function() {
+    if(this.taskType === TASK_TYPE.CHEF_TASK) {
+        var chefTask = new ChefTask(this.taskConfig); 
+        return chefTask.getNodes();
+    } else {
+        return null;
+    }    
 };
 
 
