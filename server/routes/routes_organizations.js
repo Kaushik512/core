@@ -34,6 +34,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             res.send(orgTree);
             return;
         } else {
+            logger.debug('Objperms:' + JSON.stringify(objperms));
             configmgmtDao.getRowids(function(err, rowidlist) {
                 logger.debug("Rowid List /organizations/getTreeNew -->%s", rowidlist);
                 d4dModelNew.d4dModelMastersOrg.find({
@@ -85,10 +86,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     d4dModelNew.d4dModelMastersProjects.find({
                                         id: 4,
                                         orgname_rowid: orgTree[i]['rowid'],
-                                        productgroupname_rowid: docbgs[k]['rowid'],
-                                        rowid: {$in: objperms.projects}
+                                        productgroupname_rowid: docbgs[k]['rowid']
+                                        //,rowid: {$in: objperms.projects}
                                     }, function(err, docprojs) {
-                                        logger.debug("Projects:%s", docprojs);
+                                        logger.debug("Projects:%s", JSON.stringify(docprojs));
 
                                         var prjids = docprojs.map(function(docprojs1) {
                                             return docprojs1.rowid;
@@ -142,8 +143,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 orgname_rowid: {
                                                     $in: orgids
                                                 },
-                                                rowid: {$in: objperms.orgs}
+                                                orgname_rowid: {$in: objperms.orgs}
                                             }, function(err, docenvs) {
+                                                logger.debug('Env Count : ' + JSON.stringify(docenvs) + ' permission : ' + objperms.orgs);
                                                 for (var _i = 0; _i < orgTree.length; _i++) {
                                                     for (var _env = 0; _env < docenvs.length; _env++) {
                                                         if (orgTree[_i]['rowid'] == docenvs[_env]['orgname_rowid']) {
