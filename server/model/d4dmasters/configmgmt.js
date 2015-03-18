@@ -116,6 +116,10 @@ function Configmgmt() {
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('users');
                 break;
+             case "9":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('provider');
+                break;
             case "10":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('chefserver');
@@ -139,6 +143,14 @@ function Configmgmt() {
             case "21":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('teams');
+                break;
+            case "22":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('imagegallery');
+                break;
+            case "23":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('jiraserver');
                 break;
 
         };
