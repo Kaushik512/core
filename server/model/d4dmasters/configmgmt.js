@@ -48,7 +48,7 @@ function Configmgmt() {
                 break;
             case "9":
                 logger.log('Exting getDBModelFromID ' + id.toString());
-                callback(null, 'd4dModelMastersProjects');
+                callback(null, 'd4dModelMastersProviders');
                 break;
             case "10":
                 logger.log('Exting getDBModelFromID ' + id.toString());
@@ -77,6 +77,14 @@ function Configmgmt() {
             case "21":
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersTeams');
+                break;
+            case "22":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersImages');
+                break;
+            case "23":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersJira');
                 break;
         }
     };
@@ -108,6 +116,10 @@ function Configmgmt() {
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('users');
                 break;
+             case "9":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('provider');
+                break;
             case "10":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('chefserver');
@@ -131,6 +143,14 @@ function Configmgmt() {
             case "21":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('teams');
+                break;
+            case "22":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('imagegallery');
+                break;
+            case "23":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('jiraserver');
                 break;
 
         };
@@ -905,6 +925,8 @@ function Configmgmt() {
             }); //bg
         }); //org
     };
+
+    
     this.getListNew = function(mastername, fieldname, callback) {
         console.log(mastername);
         this.getDBModelFromID(mastername, function(err, dbtype) {
@@ -1325,6 +1347,110 @@ function Configmgmt() {
             }
         });
     };
+
+    this.getTeamsOrgBuProjForUser = function(username, callback) {
+     logger.debug('Entering getTeamsOrgBuProjForUser');
+     var outJ = [];
+     var query = {};
+     query['loginname'] = username;
+     query['id'] = '7';
+     d4dModelNew.d4dModelMastersUsers.find(query, function(err, userd) {
+         if (err) {
+            logger.debug('Exiting with err 1336 getTeamsOrgBuProjForUser');
+             callback(err, null);
+             return;
+         }
+         if (userd) {
+             //Get teams for user
+             logger.debug('In getTeamsOrgBuProjForUser userd :' + JSON.stringify(userd[0]));
+             outJ.push({
+                 userid: userd[0]['rowid'],
+                 teams: [],
+                 orgs: [],
+                 projects: [],
+                 bunits: [],
+             });
+             //callback(null,userd);
+             var qry = {};
+             qry['id'] = '21';
+             if(userd[0]['userrolename'] != 'Admin')
+                qry['loginname_rowid'] = {$regex:userd[0]['rowid']};
+             // {
+             //     loginname_rowid: {
+             //         $regex: userd[0]['rowid']
+             //     }
+             // }
+             d4dModelNew.d4dModelMastersTeams.find(qry, function(err, teamd) {
+                 if (err) {
+                    logger.debug('Exiting with err 1359 getTeamsOrgBuProjForUser');
+                     callback(err, null);
+                     return;
+                 }
+                 if (teamd) {
+                     // logger.debug('In d4dModelMastersTeams teadd :' + JSON.stringify(teamd));
+                     teamd.forEach(function(k, v) {
+                         logger.debug('k:' + k + 'v:' + v);
+                         outJ[0].teams.push(k['rowid']);
+                         var projs = k['projectname_rowid'].split(',');
+                         for (var i = 0; i < projs.length; i++) {
+
+                             if (outJ[0].projects.indexOf(projs[i]) < 0) {
+                                 outJ[0].projects.push(projs[i]);
+
+                             }
+                             if (v >= teamd.length - 1 && i >= (projs.length - 1)) {
+                                 //logger.debug('Printing outJ : ' + JSON.stringify(outJ));
+                                 //All projects added.
+                                 var qry1 = {};
+                                 qry1['id'] = '4';
+                                 if(userd[0]['userrolename'] != 'Admin')
+                                    qry1['rowid'] = {$in: outJ[0].projects};
+
+                                 d4dModelNew.d4dModelMastersProjects.find(qry1, function(err, projd) {
+                                     if (err) {
+                                        logger.debug('Exiting with err 1386 getTeamsOrgBuProjForUser');
+                                         callback(err, null);
+                                         return;
+                                     }
+                                     if (projd) {
+                                         for (var j = 0; j < projd.length; j++) {
+                                             var orglist = projd[j]['orgname_rowid'].split(',');
+                                             var bulist = projd[j]['productgroupname_rowid'].split(',');
+                                             for (var k = 0; k < orglist.length; k++) {
+                                                 if (outJ[0]['orgs'].indexOf(orglist[k]) < 0)
+                                                     outJ[0]['orgs'].push(orglist[k]);
+                                             }
+                                             for (var k = 0; k < bulist.length; k++) {
+                                                 if (outJ[0]['bunits'].indexOf(bulist[k]) < 0)
+                                                     outJ[0]['bunits'].push(bulist[k]);
+                                             }
+                                             if (j >= projd.length - 1) {
+                                                 logger.debug('Came to the last project');
+                                                 logger.debug('Exiting getTeamsOrgBuProjForUser');
+                                                // logger.debug('Printing outJ : ' + JSON.stringify(outJ));
+                                                 callback(null, outJ[0]);
+                                             }
+                                         }
+
+                                     } else {
+                                        logger.debug('Exiting with err 1411 getTeamsOrgBuProjForUser');
+                                         callback(null, outJ);
+                                         return;
+                                     }
+                                 });
+                             }
+                         }
+                     });
+                 } else {
+                     callback(null, outJ);
+                     return;
+                 }
+             });
+         } else {
+             callback(null, outJ);
+         }
+     }); //d4dModelMastersUsers
+ };
 
 }
 

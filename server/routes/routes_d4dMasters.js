@@ -205,6 +205,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
          
     });
 
+    app.get('/d4dMasters/setting',function(req,res){
+        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn,function(err,data){
+            logger.debug('Retuened setting : ' + data);
+            res.send(200);
+        });
+    });
+
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
         logger.debug("Received request for delete chk. %s : %s : %s", req.params.fieldvalue ,req.params.id ,req.params.fieldname);
        // console.log('received request ' + req.params.id);
@@ -569,7 +576,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                         
                                     }
-                                    logger.debug("sent response 484 %s", JSON.stringify(collection));
+                                    logger.debug("sent response 579 %s", JSON.stringify(collection));
                                     res.end(JSON.stringify(collection));
                                     logger.debug("Exit get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
                     });
@@ -648,7 +655,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             
                                         }
                                         else{
-                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
+                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
                                         }
 
                                         d4dMasterJson[k][flds[0]] = names;
@@ -676,7 +683,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                         
                                     }
-                                    logger.debug("sent response 484 %s", JSON.stringify(collection));
+                                    logger.debug("sent response 686 %s", JSON.stringify(collection));
                                     res.end(JSON.stringify(collection));
                                     logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
                     });
@@ -1802,6 +1809,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 else
                                     folderpath = rowFLD["folderpath"];
                             }
+                            //if env is saved then it should be associated with project.
+                            
 
                             if (req.params.fileinputs != 'null')
                                 res.send(saveuploadedfile(newrowid + '__', folderpath, req));

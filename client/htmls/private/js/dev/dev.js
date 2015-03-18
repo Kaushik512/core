@@ -166,11 +166,14 @@
             Attaching Click Event on IP Address Import, which will reset instance form.
             */
             function bindClick_ipaddressImport() {
+
                 $('#ipaddressimport').click(function(e) {
+              
                     $('#nodeimportipresultmsg').addClass("hidden");
                     $('#addInstanceForm').trigger("reset");
                     $('#pemFileDropdown').change();
                     $('#importinstanceOS').change();
+                    
                 });
             }
 
@@ -346,7 +349,10 @@
                                     $result.html("Invalid request");
                                 }
                             } else {
-                                $result.html("Server Behaved Unexpectedly");
+                                if(jxhr.status === 401)
+                                    $result.html("Inssuficient permission to perform operation.");
+                                else
+                                    $result.html("Server Behaved Unexpectedly");
                             }
                             $result.removeClass('hidden');
                             $('#addInstanceBtn').removeAttr('disabled');
@@ -404,6 +410,7 @@
 
         var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
         $.get('../users', function(userList) {
+            var perm = haspermission('instancelaunch','execute');
             userList = JSON.parse(userList);
             var $importbyipuserListSelect = $('#importbyipuserListSelect').empty();
             userList.sort(function(a, b) {
@@ -417,6 +424,10 @@
             for (var i = 0; i < userList.length; i++) {
                 var keys = Object.keys(userList[i]);
                 var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+                if(sessionUser.cn){
+                  if(keys[0] == sessionUser.cn)
+                    $option.attr('selected','selected');
+                }
                 $importbyipuserListSelect.append($option);
             }
             $loadingContainer.hide();
@@ -480,14 +491,14 @@
                     switch (key) {
                         case 38: // UP arrow
                         var $newSelectedRowPre = $selectedRow.prev();
-                        if ($newSelectedRowPre.length == 1) {
+                        if ($newSelectedRowPre && $newSelectedRowPre.length == 1) {
                             $newSelectedRowPre.addClass('rowcustomselected');
                             $selectedRow.removeClass('rowcustomselected');
                         }
                         break;
                         case 40: // DOWN arrow
-                        var $newSelectedRowNext = selectedRowPre.next();
-                        if ($newSelectedRowNext.length == 1) {
+                        var $newSelectedRowNext = $selectedRow.next();
+                        if ($newSelectedRowNext && $newSelectedRowNext.length == 1) {
                             $newSelectedRowNext.addClass('rowcustomselected');
                             $selectedRow.removeClass('rowcustomselected');
                         }
