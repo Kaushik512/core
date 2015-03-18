@@ -151,6 +151,13 @@
                                                   </select>
                                                 
                                             </div>
+                                            <div class="col-lg-6">
+                                                    <label for="">Choose Image:<span style="color:red">*</span></label>
+                                                    <select id="imagename" class="chooseImage width-100">
+                                                    </select>
+
+                                                                                              
+                                                </div>
                                             <!--To add the Swipe Functionality-->                            
                                             
                                             </form><!--end-->
@@ -568,11 +575,35 @@ $(document).ready(function(){
     $(".chooseOS").select2();
     $(".chooseSecurity").select2();
     $(".chooseInstance").select2();
+    $(".chooseImage").select2();
     $(".chooseBG").select2();
     $(".chooseProject").select2();
     $(".chooseEnv").select2();
     $(".chooseDockerContainer").select2();
     $(".chooseSelectExit").select2();
+
+    $.ajax({
+      url: "/d4dMasters/readmasterjsonnew/22",
+      dataType: "json",
+      type: "GET",
+      cache: "true",
+       
+       //async: false,
+       
+       success: function(data) {
+        //alert(data);
+          //console.log("Image Data>>>>>>>>>>>> "+data);
+           var data = JSON.parse(JSON.stringify(data));
+           alert(data);
+           var $imgListInput = $('#imagename');
+          // console.log("Image Json>>>>>>>>>>  "+data);
+           for (var i = 0; i < data.length; i++) {
+              //alert(data[i].imagename);
+            $imgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].imagename));
+           }
+
+           }
+         });
    $.ajax({
     url: "/d4dMasters/readmasterjsonnew/16",
     dataType: "json",
