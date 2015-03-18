@@ -36,7 +36,7 @@ $(".tree-view").hide();
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
 
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
                                                             <option value="">Select an Organization</option>
                                                         </select>
 
@@ -47,7 +47,7 @@ $(".tree-view").hide();
                                                             <label for="category">Chef Server:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                             </label>
 
-                                                            <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required">
+                                                            <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" >
                                                                 <option value="">Select a Chef Server</option>
                                                             </select>
                                                         </div>
