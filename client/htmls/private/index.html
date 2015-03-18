@@ -23,9 +23,7 @@
     height:100px;
     display: none;
 }
-.node-setting_tree{
-   /* background-color:transparent !important;*/
-}
+
         </style>
         <script>
 
@@ -103,7 +101,7 @@ var a,b,x;
             <div id="tree" style="font-size:12px;"></div>
             <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
         </div>
-        <div id="Settings_nav">
+        <div id="Settings_nav" style="display:none;">
             
             <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
                 
@@ -179,18 +177,6 @@ var a,b,x;
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="ajax/Settings/ProvidersList.html"><i class="fa fa-lg fa-fw fa-link"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Providers
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ajax/Settings/JiraConfigList.html"><i class="fa fa-lg fa-fw fa-link"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Jira
-                                </span>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <!--User Setup starts here -->
@@ -231,11 +217,6 @@ var a,b,x;
                         <li>
                             <a href="ajax/Settings/ServiceCommandList.html"><i class="fa fa-lg fa-fw fa-terminal"></i>
                                 <span class="menu-item-parent" style="font-weight:bold">Service Command</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ajax/Settings/ImagesList.html"><i class="fa fa-lg fa-fw fa-terminal"></i>
-                                <span class="menu-item-parent" style="font-weight:bold">Image</span>
                             </a>
                         </li>
                         
@@ -443,7 +424,7 @@ var SettingTreeJson=[
     {
         "name": "organizationsetup",
         "text": "Organization Setup",
-        "icon": "fa fa-building ",
+        "icon": "fa fa-lg fa-fw fa-building",
         "nodes": [
             {
                 "name": "organizations",
@@ -451,6 +432,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/OrgList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-building"
                 
             },
             {
@@ -459,6 +441,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ProductGroupList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-th"
                 
             },{
                 "name": "organizations",
@@ -466,16 +449,19 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ProjectList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-tags"
                 
             }
         ],
         "borderColor": "#000",
         "selectable": false,
+        "href":"javascript:void(0);"
+
               
     },{
         "name": "devopssetup",
         "text": "DevOps Setup",
-        "icon": "fa fa-building ",
+        "icon": "fa fa-lg fa-fw fa-qrcode",
         "nodes": [
             {
                 "name": "organizations",
@@ -483,6 +469,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ConfigManagementList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-random"
                 
             },
             {
@@ -491,6 +478,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/EnvironmentConceptList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-tint"
                 
             },{
                 "name": "organizations",
@@ -498,6 +486,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/DockerTemplatesList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-hdd-o"
                 
             },
             {
@@ -506,16 +495,35 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/JenkinsConfigList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-link"
                 
-            }
+            },
+              {
+                "name": "organizations",
+                "text": "Providers",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ProvidersList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-link"
+                
+            },  {
+                "name": "organizations",
+                "text": "Jira",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/JiraConfigList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-link"
+                
+            },
         ],
         "borderColor": "#000",
         "selectable": false,
+        "href":"javascript:void(0);"
               
     },{
         "name": "usersetup",
         "text": "Users Setup",
-        "icon": "fa fa-building ",
+        "icon": "fa fa-lg fa-fw  fa-tasks",
         "nodes": [
             {
                 "name": "organizations",
@@ -523,6 +531,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/RolesList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-th-list"
                 
             },
             {
@@ -531,6 +540,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/UsersList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-user"
                 
             },{
                 "name": "organizations",
@@ -538,16 +548,18 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/TeamsList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-users"
                 
             }
         ],
         "borderColor": "#000",
         "selectable": false,
+        "href":"javascript:void(0);"
               
     },{
         "name": "gallerysetup",
         "text": "Gallery Setup",
-        "icon": "fa fa-building ",
+        "icon": "fa fa-lg fa-fw fa-building",
         "nodes": [
             {
                 "name": "organizations",
@@ -555,6 +567,7 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/TemplatesList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-files-o"
                 
             },
             {
@@ -563,11 +576,22 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ServiceCommandList.html",
                 "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-terminal"
+                
+            },
+              {
+                "name": "organizations",
+                "text": "Image",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ImagesList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-terminal"
                 
             }
         ],
         "borderColor": "#000",
         "selectable": false,
+        "href":"javascript:void(0);"
               
     },{
         "name": "userguide",
@@ -577,6 +601,7 @@ var SettingTreeJson=[
         "selectable": false,
         "href":"ajax/Settings/Catalyst-Guide.html",
         "target":"_blank",
+        "icon":"fa fa-book"
        
               
     }
@@ -593,7 +618,9 @@ function loadSettingsTree(){
                             /*Draw the braedcrumb from ol*/
                             //var ol = $("#ribbon ol.breadcrumb");
                             //if(ol.children().length == 0){
+
                                 drawBreadCrumb1();
+                                event.stopPropagation();
                           //  }
                         }
                     });
