@@ -48,7 +48,7 @@ function Configmgmt() {
                 break;
             case "9":
                 logger.log('Exting getDBModelFromID ' + id.toString());
-                callback(null, 'd4dModelMastersProjects');
+                callback(null, 'd4dModelMastersProviders');
                 break;
             case "10":
                 logger.log('Exting getDBModelFromID ' + id.toString());
@@ -77,6 +77,14 @@ function Configmgmt() {
             case "21":
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersTeams');
+                break;
+            case "22":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersImages');
+                break;
+            case "23":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersJira');
                 break;
         }
     };
@@ -792,7 +800,7 @@ function Configmgmt() {
 
                 }
                 d4dModelNew.d4dModelMastersProjects.find({
-                    id: "4"
+                    id: "9"
                 }, function(err, prjdata) {
                     if (prjdata) {
                         var prjdata_ = JSON.parse(JSON.stringify(prjdata));
