@@ -36,7 +36,7 @@ $(".tree-view").hide();
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
 
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']">
                                                             <option value="">Select an Organization</option>
                                                         </select>
 
@@ -47,7 +47,7 @@ $(".tree-view").hide();
                                                             <label for="category">Chef Server:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                             </label>
 
-                                                            <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['environmentname']">
+                                                            <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required">
                                                                 <option value="">Select a Chef Server</option>
                                                             </select>
                                                         </div>
@@ -55,8 +55,8 @@ $(".tree-view").hide();
                                                         <div class="col-lg-6" style="margin-top:25px;margin-left10px">
                                                             <label for="category">Environment:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                             </label>
-
-                                                            <select id="environmentname" class="chooseOrganization width-100" sourcepath="3" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" unique="true" uniqueconditionedby="environmentname,orgname">
+                                                            <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a>
+                                                            <select id="environmentname" class="chooseOrganization width-100"  datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" unique="true" uniqueconditionedby="environmentname,orgname">
                                                                 <option value="">Select an Environment</option>
                                                             </select>
                                                         </div>
@@ -83,7 +83,7 @@ $(".tree-view").hide();
                     <div class="widget-toolbox clearfix">
                         <div class="btn-group pull-right">
                             <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                            <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+                            <button class="btn btn-primary btn-mini" style="margin-right:11px;" oncli>
                                 <i class="ace-icon fa fa-check bigger-110"></i> Save
                             </button>
                             <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
@@ -98,13 +98,79 @@ $(".tree-view").hide();
         <!--col-md-12 ends here-->
     </div>
 </div>
+<div class="modal fade bs-example-modal-sg" id="myModalCreateChefEnv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Add a Chef Environment</h4>
+      </div>
+      <div class="modal-body" style="height:100px">
+      <section>
+        <form id="createenvinchefform" action="">
+             <div style="margin:0px;">
+                    <div class="col-lg-6">
+                        <label for="category">Environment Name:<span style="color:red">*</span><span class="chefenvnamerequired hidden" style="color:red">&nbsp;Required</span>
+                        </label>
+                        
+                           <input type="text" id="chefenvname" name="chefenvname" class=" form-control" tabindex='1'>
+                        
+                    </div>
+                </div>
+        </form>
+      </section>
+      </div>
+      <div class="modal-footer">
+        <div class="btn-group pull-right">
+        <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
+        <span id="chefenvcreatemsg" style="color:red"></span>
+         <button type="button" class="btn btn-default btn-primary createchefenvbtn" onclick="createchefenv();" style="margin-right:11px;">
+          <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
+        <button type="button" class="btn btn-default btn-primary">
+          <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!--row ends here-->
 <script>
 //Form Name
 $(document).ready(function() {
     $(".chooseOrganization").select2();
 });
-
+function preprocess(){
+    $('#createenvinchefform')[0].reset();
+    if(typeof $('#configname').find('option:selected').attr('rowid') == 'undefined'){
+        bootbox.alert('Select a Chef Server before adding an environments.');
+        return(false);
+    }
+    else
+        return(true);
+}
+function createchefenv(){
+   $('#envcreatespinner').removeClass('hidden');
+   var chefid =  $('#configname').find('option:selected').attr('rowid');
+   var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
+   $crbtn.attr('disabled','disabled');
+   //alert('in createchefenvbtn');
+   if(typeof chefid != 'undefined'){
+   $.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
+            if(envname){
+            $crbtn.removeAttr('disabled');
+            $('#envcreatespinner').addClass('hidden');
+            $('#configname').change();
+            $('#myModalCreateChefEnv').modal('hide');
+            }
+            else{
+                $('#chefenvcreatemsg').html('Could not complete.' + envname);
+                $crbtn.removeAttr('disabled');
+                $('#envcreatespinner').addClass('hidden');
+                $('#myModalCreateChefEnv').modal('hide');
+            }
+   });
+   }
+}
 function loadChefEnvs(chefID) {
     $('#myForm1').find('button').attr('disabled', 'disabled');
     $.get('../chef/servers/' + chefID + '/environments', function(envList) { //getting the list of env
