@@ -385,7 +385,7 @@ $(function() {
                     var $tableBody = $('.table-hover tbody');
 
                     //restricting to first 5 to change the below to nodeList.length
-                    for (var i = 0; i < 5; i++) {
+                    for (var i = 0; i < nodeList.length; i++) {
                         var $tr = $('<tr></tr>').addClass('show-settings').attr('data-nodeName', nodeList[i]);
                         $tr.append($('<td></td>').addClass('chef-nodeName').append(nodeList[i]));
                         $tr.append($('<td></td>').addClass('chef-ip').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
