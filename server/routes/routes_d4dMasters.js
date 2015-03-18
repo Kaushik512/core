@@ -1204,6 +1204,60 @@ module.exports.setRoutes = function(app, sessionVerification) {
             //if ( e.code != 'EEXIST' ) throw e;
         }
     }
+    function updateProjectWithEnv(projects,envid){
+        for(var p = 0; p < projects.length;p++){
+        
+        var currproj = projects[p];
+        logger.debug('Project : ' + currproj);
+        d4dModelNew.d4dModelMastersProjects.findOne({
+                            rowid: currproj,
+                            id:'4'
+                        },function(err,data2){
+                            if(!err)
+                            {
+                                logger.debug('Project JSON:' + JSON.stringify(data2));
+                                var newenv = envid;
+                                if(data2.environmentname_rowid != '')
+                                    {
+                                        // logger.debug("Env Names found :========> " +data2.environmentname_rowid );
+                                        // var _data2env = data2.environmentname_rowid.split(',');
+                                        // if(_data2env.indexOf(envid) >= 0){
+                                        //     //found an env in the list exit
+                                        //        return;
+                                        // }
+                                        // data2.environmentname_rowid +=  ',' ;
+                                        if(data2.environmentname_rowid.indexOf(envid) < 0){
+                                            newenv = data2.environmentname_rowid + ',' + envid;
+                                        }
+                                    }
+                                //var newenv = data2.environmentname_rowid + envid;
+
+                                logger.debug('Newenv ====>',newenv);
+                                d4dModelNew.d4dModelMastersProjects.update({
+                                    rowid: currproj,
+                                    id:'4'
+                                },{environmentname_rowid:newenv},function(err,data1){
+                                    if(!err)
+                                        { 
+                                            //data2.environmentname_rowid
+                                         logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
+                                               return;
+                                        }
+                                    else{
+                                        logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                        return;
+                                    }
+    
+                                });
+                            }
+                            else
+                            {
+                                logger.debug('Err in findone updateProjectWithEnv - d4dModelMastersProjects' + err);
+                                return;
+                            }
+                        });
+        }
+    };
 
     function saveuploadedfile(suffix, folderpath, req) {
         logger.debug(req.body);
@@ -1809,6 +1863,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 else
                                     folderpath = rowFLD["folderpath"];
                             }
+                            //if env is saved then it should be associated with project.
+                            if(req.params.id == '3')
+                            {
+                                logger.debug('in env update');
+                                var teamids = bodyJson['teamname_rowid'].split(',');
+                                logger.debug('teamids:', teamids);
+                                configmgmtDao.getProjectsForTeams(teamids.join(),function(err,projs_){
+                                    if(!err)
+                                    {
+                                        logger.debug('Project found for team :' + projs_);
+                                        updateProjectWithEnv(projs_,newrowid);
+                                    }
+                                });
+                            }
 
                             if (req.params.fileinputs != 'null')
                                 res.send(saveuploadedfile(newrowid + '__', folderpath, req));
@@ -1839,6 +1907,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 folderpath = ''
                             else
                                 folderpath = bodyJson["folderpath"];
+
+                            //if env is saved then it should be associated with project.
+                            if(req.params.id == '3')
+                            {
+                                logger.debug('in env update');
+                                var teamids = bodyJson['teamname_rowid'].split(',');
+                                logger.debug('teamids:', teamids);
+                                configmgmtDao.getProjectsForTeams(teamids.join(),function(err,projs_){
+                                    if(!err)
+                                    {
+                                        logger.debug('Project found for team :' + projs_);
+                                        updateProjectWithEnv(projs_,currowid);
+                                    }
+                                });
+                            }
 
                             logger.debug('Master Data Updated: %s', saveddata);
                             logger.debug('folderpath: %s rowid %s', folderpath, currowid);
@@ -2306,6 +2389,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         });
 
+    });
+
+    app.post('/d4dMasters/test',function(req,res){
+        var bodyJson = JSON.parse(JSON.stringify(req.body));
+        logger.debug('rcvd : ' + bodyJson['teamids']);
+        configmgmtDao.getProjectsForTeams(bodyJson['teamids'],function(err,data){
+            if(!err){
+                res.send(data);
+            }
+        });
     });
 
     app.get('/d4dMasters/:chefserver/roles', function(req, res) {

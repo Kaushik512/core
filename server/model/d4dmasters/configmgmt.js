@@ -747,7 +747,43 @@ function Configmgmt() {
             }
         });
     };
+    this.getProjectsForTeams  = function(teamids,callback){
+        logger.debug('rcvd teamids: ' + teamids);
+        var query = {};
+        teamids = teamids.split(',');
+        query['rowid'] = {
+            '$in': teamids
+        }
+        query['id'] = '21';
 
+       // console.log("Master Type: " + dbtype);
+       var projects = [];
+        d4dModelNew.d4dModelMastersTeams.find(query, function(err, teamjson) {
+            if (err) {
+                logger.error('d4dModelMastersTeams' + err);
+                callback(err, null);
+                return;
+            }
+            teamjson.forEach(function(k,v){
+                if(k['projectname_rowid'].indexOf(',') > 0){
+                    var projs = k['projectname_rowid'].split(',');
+                    for(var prj in projs){
+                        if(projects.indexOf(projs) < 0)
+                            projects.push(projs);
+                    }
+                }
+                else{
+                    if(projects.indexOf(k['projectname_rowid']) < 0)
+                        projects.push(k['projectname_rowid']);
+                }
+                if(v >= teamjson.length - 1){
+                    logger.debug('teamjson',JSON.stringify(projects));
+                   callback(null, projects); 
+                }
+            });
+            
+        });
+    };
     this.convertRowIDToValue = function(rowid, rowidcont) {
         // if(rowidcont.length > 0)
         // { 
@@ -925,6 +961,8 @@ function Configmgmt() {
             }); //bg
         }); //org
     };
+
+    
     this.getListNew = function(mastername, fieldname, callback) {
         console.log(mastername);
         this.getDBModelFromID(mastername, function(err, dbtype) {
