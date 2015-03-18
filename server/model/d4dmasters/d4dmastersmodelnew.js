@@ -299,16 +299,6 @@ var d4dMastersJira = new mongoose.Schema(
 );
 var d4dModelMastersJira = mongoose.model('d4dModelMastersJira',d4dMastersJira,'d4dmastersnew');
 
-var d4dMastersOperatingSystems = new mongoose.Schema(
-		{id: {type:String,required:true, trim:true},
-		jiraname:{type:String,required:true,trim:true},
-        jirausername:{type:String,required:true,trim:true},
-		jirapassword:{type:String,required:true,trim:true},
-		jiraurl:{type:String,required:true,trim:true},
-        rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
-);
-var d4dModelMastersJira = mongoose.model('d4dModelMastersJira',d4dMastersJira,'d4dmastersnew');
-
 
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
