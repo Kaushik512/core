@@ -1809,6 +1809,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 else
                                     folderpath = rowFLD["folderpath"];
                             }
+                            //if env is saved then it should be associated with project.
+                            
 
                             if (req.params.fileinputs != 'null')
                                 res.send(saveuploadedfile(newrowid + '__', folderpath, req));

@@ -925,6 +925,8 @@ function Configmgmt() {
             }); //bg
         }); //org
     };
+
+    
     this.getListNew = function(mastername, fieldname, callback) {
         console.log(mastername);
         this.getDBModelFromID(mastername, function(err, dbtype) {
