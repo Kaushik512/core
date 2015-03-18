@@ -362,7 +362,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         borderColor: '#000',
                                                                         selectable: false,
                                                                         itemtype: 'proj',
-                                                                        href: '#ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid'],
+                                                                        href: '#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'],
                                                                         environments: envs
                                                                     });
                                                                     //javascript:void(0) #ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
