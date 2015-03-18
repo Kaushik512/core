@@ -8,7 +8,7 @@
   <article class="col-sm-12 col-md-12 col-lg-12" id="controlPanelContainer">
     <div class="widget-body" style="font-size:14px;">
       <div class="appcardList" style="padding-left:0 !important;padding-right:0 !important">
-        <!-- <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer">
+        <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer">
           <div class="panel panel-primary appcard-role-inner role-Selectedcard-app" style="border-radius: 12px;border-color: #40baf1 !important;">
             <div class="panel-heading" style="height:40px;text-align:center;background:#40baf1 !important;border-radius: 10px 10px 0 0;border-color: #40baf1 !important;">
               <span contenteditable="false" class="domain-roles-icon" style="float:left;">
@@ -32,6 +32,7 @@
                   <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10">
                     <i class="fa fa-cog" style="padding-right:5px;cursor:pointer;color:black;font-size:22px;">
                     </i>
+                    <!-- <span><a target="_blank" href="newrelic.html" style="color: #40baf1;font-size: 14px;">App Performance</a></span> -->
                     <div style=" margin-left: 30px;margin-top: -22px;">
                       <a target="_blank" href="newrelic.html" style="color: #40baf1;font-size: 14px;">App Performance</a>
                     </div>
@@ -125,19 +126,18 @@
             </div>
           </div>
           </div>
-        </div> -->
-        <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer">
-          <div class="panel panel-primary appcard-role-inner role-Selectedcard-app" style="border-radius: 12px;border-color: #dddddd;box-shadow:2px 2px 2px 2px #cccccc !important">
-            <div class="panel-heading" style="height:40px;text-align:center;background:#40baf1 !important;border-radius: 10px 10px 0 0;border-color: #dddddd;">
-              <span contenteditable="false" class="domain-roles-icon" style="float:left;">
-                
-                <img style="height:24px" src="img/liferay.jpg">
+        </div>
+        <!-- <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer">
+          <div class="panel panel-primary role-Selectedcard-app appcard-role-inner">
+            <div class="panel-heading" style="height:45px;text-align:center;background:#0072bf">
+              <span contenteditable="false" class="domain-roles-icon" style="float:left;margin-top:-4px;width:30px;">
+                <img style="height:27px" src="img/rsz_logo.png">
               </span>
               <span style="text-align:center;width:30px;font-weight: bold;">
-                <a href="javascript:void(0)" style="color:#ffffff">Life Ray</a>
+                <a href="javascript:void(0)" style="color:white">Life Ray</a>
               </span>
               <span class="pull-right">
-                <a class="fa fa-cog" style="padding-right:5px;cursor:pointer;color:#ffffff;font-size:20px;" href="#modalAppCardSettings" data-toggle="modal">
+                <a class="fa fa-cog" style="padding-right:5px;cursor:pointer;color:white;font-size:20px;" href="#modalAppCardSettings" data-toggle="modal">
                 </a>
               </span>
               <br/>
@@ -146,104 +146,90 @@
               <div class="appCardLoadingContainer" style="min-height: 115px;">
                   <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
               </div>
-              <div class="panel-body panel-primary appCardInfo" style="padding: 7px;">
+            <div class="panel-body panel-primary appCardInfo" style="padding: 7px;">
               <div class="minheight120">
-                  <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10">
-                    <img src="img/projectdemo/app-performanceblack.png" style="height: 27px;margin-left: -10px;">
-                    <div style=" margin-left: 30px;margin-top: -20px;">
-                      <a target="_blank" href="newrelic.html" style="color: #40baf1;font-size: 13px;">App Performance</a>
+                <div class="col-lg-6 col-sm-6 col-xs-6" style="padding:0px">
+                  <div style="border-width: 0 2px 0 0;height:60px;" class="appCardBorder">
+                    <div style="background-color: #e7e7e7;height: 94%;width: 98%;padding-top: 20px;text-align: center;">
+                      <div style="color: #3276b1;font-size: 11px;">
+                        <a href="newrelic.html" target="_blank">App Perf</a>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10">
-                    <img src="img/projectdemo/logsblack.png" style="height: 27px;margin-left: -5px;">
-                    <div style=" margin-left: 30px;margin-top: -22px;">
-                      <a target="_blank" href="kibana.html" style="color: #40baf1;font-size: 13px;">App Logs</a>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6" style="padding:0px">
+                  <div style="border-width: 0 0 2px 0;height:60px;" class="appCardBorder">
+                    <div style=" background-color: #e7e7e7;height: 97%;margin-left: 2px;width: 98%;padding-top: 20px;text-align: center;">
+                      <div style="color: #3276b1;font-size: 11px;">
+                        <a href="kibana.html" target="_blank">App Logs</a>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10">
-                    <img src="img/projectdemo/code_healthblack.png" style="height: 27px;margin-left: -5px;">
-                    <div style=" margin-left: 30px;margin-top: -22px;">
-                      <a target="_blank" href="sonar.html" style="color: #40baf1;font-size: 13px;">Code Health</a>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6" style="padding:0px">
+                  <div style="border-width: 2px 2px 0 0;height:60px; margin-top: -2px;" class="appCardBorder">
+                    <div style="background-color: #e7e7e7;height: 96%;margin-top: 2px;width: 98%;padding-top: 20px;text-align: center;">
+                      <div style="color: #3276b1;font-size: 11px;">
+                        <a href="sonar.html" target="_blank">Code Health</a>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10">
-                    <img src="img/projectdemo/UI_performanceblack.png" style="height: 27px;margin-left: -5px;">
-                    <div style=" margin-left: 30px;margin-top: -22px;">
-                      <a target="_blank" href="yslow.html" style="color: #40baf1;font-size: 13px;">UI Performance</a>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6" style="padding:0px">
+                  <div style="border-width: 0;height: 60px;margin-top: 2px;" class="appCardBorder">
+                    <div style="background-color: #e7e7e7;height: 94%;width: 98%;margin-left: 2px;padding-top: 20px;text-align: center;">
+                      <div style="color: #3276b1;font-size: 11px;">
+                        <a href="yslow.html" target="_blank">UI Perf</a>
+                      </div>
                     </div>
                   </div>
+                </div>
               </div> 
             </div>
-            
-            <div class="panel-footer clearfix" style="padding:3px;border-radius:0 0 12px 12px;background:white!important;">
-              
+            <div class="panel-footer clearfix" style="padding: 3px;">
               <div class="col-lg-12 col-sm-12 col-xs-12" style="padding-left:4px;padding-right:4px;">
-                  <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;">
-                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnBuild width100" rel="tooltip" data-placement="top" data-original-title="3/3/2015 11:08:28am" style="margin-bottom:2px;font-size:13px;color:black">Last Build 
+                 <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;">
+                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnBuild" rel="tooltip" data-placement="top" data-original-title="3/3/2015 11:08:28am" style="border-bottom: 2px solid green;margin-bottom:2px;">Last Build 
                   </a>
-                 
+                   
                 </div>
                <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;padding-right:0px;">
-                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnDeploy width100" rel="tooltip" data-placement="top" data-original-title="3/3/2015 17:08:52pm" style="margin-bottom:2px;font-size:13px;color:black">Last Deploy 
+                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnDeploy" rel="tooltip" data-placement="top" data-original-title="3/3/2015 17:08:52pm" style="border-bottom: 2px solid red;margin-bottom:2px;">Last Deploy 
                   </a>
-                  
                 </div>
                <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-right:0px;">
-                <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnTest width100" rel="tooltip" data-placement="top" data-original-title="2/3/2015 09:23:25am" style="margin-bottom:2px;font-size:13px;color:black">Last Test
+                <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnTest" rel="tooltip" data-placement="top" data-original-title="2/3/2015 09:23:25am" style="border-bottom: 2px solid green;margin-bottom:2px;">Last Test
                 </a>
-                
                 </div>
-
-              </div>
-              <div class="col-lg-12 col-sm-12 col-xs-12" style="padding-left:4px;padding-right:4px;margin-top:-8px">
-                  <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;">
-                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnBuild" style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 7px;">
-                  </a>
-                 
-                </div>
-               <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;padding-right:0px;">
-                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnBuild" style="background: none repeat scroll 0 0 red;margin-bottom:2px; height: 7px;">
-                  </a>
-                  
-                </div>
-               <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-right:0px;">
-                  <a href="javascript:void(0)" data-toggle="modal" class="btn btn-white btn-sm btnBuild" style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 7px;">
-                  </a>
-                
-                </div>
-
               </div>
               <div class="col-lg-12 col-sm-12 col-xs-12" style="padding-left:4px;padding-right:4px;">
                  <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;">
 
-                   <a href="#modalappCardBuild" data-toggle="modal" class="btn btn-primary btn-sm width50borderradius50">
-                      <i class="fa fa-inbox" style="font-size: 14px;"> </i> 
+                   <a href="#modalappCardBuild" data-toggle="modal" class="btn btn-primary btn-sm width100">
+                      <i class="fa fa-inbox"> </i> Build 
                    </a> 
-                   <span style="font-size: 10px;">Build</span>
                 </div>
                <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-left:0px;padding-right:0px;">
 
-                  <a href="#modalappCardDeploy" data-toggle="modal" class="btn btn-primary btn-sm width40borderradius50Deploy">
-                    <i class="fa fa-bullseye" style="font-size: 14px;"> </i>
-                    
+                  <a href="#modalappCardDeploy" data-toggle="modal" class="btn btn-primary btn-sm width100">
+                    <i class="fa fa-bullseye"> </i>
+                    Deploy
                   </a>
-                  <span style="font-size: 10px;">Deploy</span>
+                  
                 </div>
                <div class="col-lg-4 col-sm-4 col-xs-4" style="padding-right:0px;">
                 
-                <a href="#modalappCardTest" data-toggle="modal" class="btn btn-primary btn-sm width50borderradius50" style="padding-left:10px;">
-                  <i class="fa fa-location-arrow" style="font-size: 14px;"> </i>
-                  
+                <a href="#modalappCardTest" data-toggle="modal" class="btn btn-primary btn-sm width100" style="padding-left:10px;">
+                  <i class="fa fa-location-arrow"> </i>
+                  Test
                 </a>
-                <span style="font-size: 10px;">Test</span>
                 </div>
               </div>
             </div>
 
+            </div>
           </div>
-            
-          </div>
-        </div>
+        </div> -->
         
       </div>
       <div class="col-sm-12 col-md-6 col-lg-9 appcard-role-outer">       
@@ -255,17 +241,17 @@
           <li class="pull-left" style="margin-right: 20px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-inbox"></i>Build</a>
           </li>
-          <!-- <li class="pull-left" style="margin-right: 20px;">
+          <li class="pull-left" style="margin-right: 20px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-bullseye"></i>Deploy</a>
-          </li> -->
+          </li>
           <li class="pull-left" style="margin-right: 20px;">
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-eraser"></i>Test</a>
           </li>
-          <!-- <li class="pull-left" style="margin-right: 20px;">
-              <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l5" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-stethoscope"></i>Health</a>
-          </li> -->
           <li class="pull-left" style="margin-right: 20px;">
-              <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l6" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-sun-o"></i>Running App</a>
+              <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l5" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-stethoscope"></i>Health</a>
+          </li>
+          <li class="pull-left" style="margin-right: 20px;">
+              <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l6" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-sun-o"></i>Instances</a>
           </li>
           <li class="pull-left" style="margin-right: 20px;">
               <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l7" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Monitoring</a>
@@ -393,6 +379,9 @@
                     <strong style="color:#3a87ad">User</strong>
                   </td>
                   <td style="font-size: 13px;">
+                    <strong style="color:#3a87ad">Build Health</strong>
+                  </td>
+                  <td style="font-size: 13px;">
                     <strong style="color:#3a87ad">Logs</strong>
                   </td>
                 </tr>
@@ -404,6 +393,29 @@
                   <td>Wed, 25 Feb 2015 11:52:37 GMT</td>
                   <td>superadmin</td>
                   <td>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Functional Test">
+                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Performance Test">
+                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Non Functional Test">
+                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Security Test">
+                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Unit Test">
+                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Coverage">
+                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Analysis">
+                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
+                    </a>
+                  </td>
+                  <td>
                     <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
                   </td>
                 </tr>
@@ -412,6 +424,29 @@
                   <td>build2</td>
                   <td>Tue, 24 Feb 2015 23:52:31 GMT</td>
                   <td>consumer</td>
+                  <td>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Functional Test">
+                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Performance Test">
+                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Non Functional Test">
+                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Security Test">
+                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Unit Test">
+                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Coverage">
+                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Analysis">
+                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
+                    </a>
+                  </td>
                   <td>
                     <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
                   </td>
@@ -422,6 +457,29 @@
                   <td>Wed, 25 Feb 2015 19:34:31 GMT</td>
                   <td>designer</td>
                   <td>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Functional Test">
+                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Performance Test">
+                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Non Functional Test">
+                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Security Test">
+                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Unit Test">
+                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Coverage">
+                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Analysis">
+                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
+                    </a>
+                  </td>
+                  <td>
                     <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
                   </td>
                 </tr>
@@ -430,6 +488,29 @@
                   <td>build4</td>
                   <td>Wed, 25 Feb 2015 12:14:31 GMT</td>
                   <td>superadmin</td>
+                  <td>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Functional Test">
+                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Performance Test">
+                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Non Functional Test">
+                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Security Test">
+                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Unit Test">
+                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Coverage">
+                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
+                    </a>
+                    <a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="Code Analysis">
+                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
+                    </a>
+                  </td>
                   <td>
                     <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
                   </td>
@@ -443,7 +524,8 @@
 
       <!-- Configure tab contents starts here -->
       <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
-        <!-- <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
+        <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
+          <!-- class="table table-hover" -->
           <table  id="tableDeploy" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
               <thead>
                 <tr>
@@ -504,7 +586,7 @@
               </tbody> 
               <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#deployModalContainer">Add New Deploy</a>
           </table>
-        </div> -->
+        </div>
         <!-- <table class="table table-bordered" style="border:1px solid #eeeeee !important;">
           <thead>
       
@@ -550,7 +632,7 @@
                           </td>
                         </tr>
                       </thead>
-                      <tbody class="UITestTbody" style="font-size:12px;">
+                      <tbody class="UITestTbody">
                         <tr>
                           <td>1</td>
                           <td>build1</td>
@@ -612,7 +694,7 @@
                           </td>
                         </tr>
                       </thead>
-                      <tbody class="PerformanceTestTbody" style="font-size:12px;">
+                      <tbody class="PerformanceTestTbody">
                         <tr>
                           <td>1</td>
                           <td>build1</td>
@@ -674,7 +756,7 @@
                           </td>
                         </tr>
                       </thead>
-                      <tbody class="FunctionalTestTbody" style="font-size:12px;">
+                      <tbody class="FunctionalTestTbody">
                         <tr>
                           <td>1</td>
                           <td>build1</td>
@@ -751,89 +833,8 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="l6" style="height:415px;">
-        <!-- overflow-y: auto; -->
-        <div class="row">
-          <div class="col-md-12">
-              <div class="col-md-12">
-
-                  <div class="widget-box">
-                      <div class="widget-header">
-                          <h5 style="color:#4e5964;" class="widget-title">
-                          <strong>App Instances</strong>
-                          </h5>
-                          <div class="widget-toolbar no-border">
-                              <div>
-                                  <!-- <a class="btn btn-minier btn-primary" id="assigntask" href="#ajax/Settings/AssignTask.html" style="display:none">
-                                      <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                                  </a>                -->        
-                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary" data-toggle="modal">
-                                      <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
-                                      Add New
-                                  </a>                                                
-                              </div>
-                          </div>
-                                                  
-                      </div>
-                      <div class="widget-body">
-                          <div style="min-height:300px" class="widget-main">
-                              <div class="col-md-12 table-responsive">
-                                  <table cellpadding="5px" width="100%" class="table table-striped table-bordered table-hover dataTable no-footer">
-                                      <thead>
-                                          <tr class="rowCustomStyle">    
-                                              <td>S.No</td>
-                                              <td>Name</td>
-                                              <td>Nodes</td>
-                                              <td>Deploy History</td>
-                                              <td>Actions</td>
-                                          </tr>
-                                      </thead>
-                                      <tbody style="font-size:12px;">
-                                        <tr>
-                                          <td>1</td>
-                                          <td>SLZ_AWS_AUS</td>
-                                          <td>7<a href="javascript:void(0)" data-original-title="MySql_Server, Web_Server, chef-user-starter, i-086b2904, i-129def6hs, i-31123hgsa, i-5238gdweu" data-placement="right" rel="tooltip" Style="color:black">(View)</a></td>
-                                          <td>
-                                            <a class="btn btn-primary btn-sm" data-toggle="modal" href="#modalappCardDeployHistory" style="border-radius:50%">
-                                              <i style="font-size: 14px;" class="fa fa-reorder"> </i> 
-                                            </a>
-                                          </td>
-                                          <td>
-                                            <a class="btn btn-primary btn-sm" data-toggle="modal" href="#modalappCardActions" style="border-radius:50%">
-                                              <i style="font-size: 14px;" class="fa fa-bullseye"> </i> 
-                                            </a>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>2</td>
-                                          <td>SLZ_AWS_China</td>
-                                          <td>5<a href="javascript:void(0)" data-original-title="MySql_Server, Web_Server, chef-user-starter, i-086b2904, i-129def6hs" data-placement="right" rel="tooltip" Style="color:black">(View)</a></td>
-                                          <td>
-                                            <a class="btn btn-primary btn-sm" data-toggle="modal" href="#modalappCardDeployHistory2" style="border-radius:50%">
-                                              <i style="font-size: 14px;" class="fa fa-reorder"> </i> 
-                                            </a>
-                                          </td>
-                                          <td>
-                                            <a class="btn btn-primary btn-sm" data-toggle="modal" href="#modalappCardActions" style="border-radius:50%">
-                                              <i style="font-size: 14px;" class="fa fa-bullseye"> </i> 
-                                            </a>
-                                          </td>
-                                        </tr>
-                                          
-                                      </tbody>
-                                  </table>
-                              </div>
-                          </div>
-                          <div class="widget-toolbox padding-8 clearfix">
-                             <div class="pull-left" id="tableFooterLeft">Showing 1 to 2 of 2 entries</div>
-                             <div class="pull-right" id="tableFooterRight">1</div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-        <!-- <span style="font-size: 13px;padding: 6%;">Support for this features will be available in the future...</span> -->
+      <div class="tab-pane" id="l6" style="height:415px;overflow-y: auto;">
+        <span style="font-size: 13px;padding: 6%;">Support for this features will be available in the future...</span>
       </div>
       <div class="tab-pane" id="l7" style="height:415px;overflow-y: auto;">
         <div class="panel-group smart-accordion-default" id="accordion-Monitoring" style="height:444px;overflow-y: auto;">
@@ -939,7 +940,7 @@
       </div>
       <div class="modal-body">
         <div class="panel-body">
-            <form action="" autocomplete="off">
+            <form action="" id="checkout-form" autocomplete="off">
               <div class="widget-body no-padding">
                 <div class="col-lg-6">
                    <label for="">
@@ -1033,405 +1034,6 @@
   </div>
 </div>
 
-<!--Modal for Project appCard-->
-<div class="modal fade" id="modaladdAppInstances" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-          <form role="form" id="" autocomplete="off">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    X
-                </button>
-                <h4 class="modal-title">
-                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add a App-Instances
-                </h4>
-            </div>
-           
-            <div class="modal-body">
-              <form action="">
-                <div class="row" style="margin:0px">
-                  <div class="col-lg-6" style="padding-left:0px;">
-                    <label for="name">Deployment Label:
-                    </label>
-                    <input id="applicationInstanceNameInput" class="form-control" type="text" style="height:36px;" placeholder="Example : Prod_AUS">
-                  </div>
-                  <!-- <div class="col-lg-6" style="padding-right:0px;">
-                    <div class="smart-forms">
-                      <label for="">Application Icon<span class="control-label" style="color:Red;">&nbsp;*</span></label>
-                      <label class="file" name="field" for="">
-                          <span class="button btn-primary btn-applicationIcon" style="margin-top:24px;margin-right:0px;">Browse</span>
-                          <input type="file" class="gui-file" id="applicationiconInput">
-                          <input type="text" class="gui-input" readonly="">
-                      </label>
-                    </div>
-                  </div> -->
-                </div>
-                <br>
-                  <div class="panel-group smart-accordion-default" id="accordion-DesignaddApp">
-                    
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                          <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion-DesignaddApp" href="#CollapseChefCookbookrunlistParameteraddApp"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Deploy</a>
-                          </h4>
-                      </div>
-                        <div id="CollapseChefCookbookrunlistParameteraddApp" class="panel-collapse collapse in">
-                          <div class="panel-body">
-                            <form action="" class="smart-form">
-                              <div class="widget-body no-padding smart-form">
-                                <fieldset>
-                                    <section class="col col-6" style="padding-left:0px;">
-                                        <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                        <label class="input">
-                                            <select class="chooseEnvironment width-100">
-                                                <option value="">DEV</option>
-                                                <option value="">QA</option>
-                                                <option value="">Stage</option>
-                                                <option value="">Production</option>
-                                            </select>   
-                                        </label>
-                                    </section>                       
-                                </fieldset>
-                              </div>
-                            </form>  
-                            <form action="" class="smart-form"> 
-                                <fieldset style="padding:0px;">
-
-                                    <section class="col col-6">
-                                        <label class="label">
-                                          <img src="img/templateicons/Order-run-list---deployment.png">
-                                            <strong>Create TaskList</strong>
-                                        </label>
-                                        <div class="row">
-                                            <div class="col col-10" style="padding-left:0px;padding-right:0px">
-                                                <ul class="deploymentCookbookList" style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
-                                                    <label style="text-align:center;" class="label">Select Tasks</label>
-                                                    <hr>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task1" name="checkboxTasklist" value="Task1"><i></i>Task1
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task2" name="checkboxTasklist" value="Task2"><i></i>Task2
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task3" name="checkboxTasklist" value="Task3"><i></i>Task3
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task4" name="checkboxTasklist" value="Task4"><i></i>Task4
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                            </div>
-                                            <div class="col col-2" style="margin-top:50px;">
-                                                <div class="input-group">
-                                                    <div class="btn-group" style="padding-bottom: 10px;">
-                                                        <button type="button" style="width:30px;height:27px;" class="btn btn-default btnItemAdd btn-primary" id="btnDeploymentAddSelectedCookbook"><i class="fa fa-angle-double-right" style="font-size:20px;"></i></button>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                    <div class="btn-group">
-                                                        <button type="button" style="width:30px;height:27px;" class="btn btn-default btnItemRemove btn-primary" id="btnDeploymentRemoveSelectedCookbook"><i class="fa fa-angle-double-left" style="font-size:20px;"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </section>
-                                    <section class="col col-6">
-                                        <label class="label">
-                                            <img src="img/templateicons/Order-run-list---deployment.png">
-                                            <strong>Order TaskList</strong>
-                                        </label>
-                                        <div class="row">
-                                            <div class="col col-10" style="padding-right:0px">
-                                                <ul class="deploymentSelectedRunList" style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
-                                                    
-                                                </ul>
-                                            </div>
-                                            <div class="col col-2" style="margin-top:50px;">
-                                                <div class="input-group">
-                                                    <div class="btn-group" style="padding-bottom: 10px;">
-                                                        <button type="button" style="width:30px;height:27px;" class="btn btn-default btn-primary btnItemUp" id=""><i class="fa fa-angle-double-up" style="font-size:20px;"></i></button>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                    <div class="btn-group">
-                                                        <button type="button" style="width:30px;height:27px;" class="btn btn-default btn-primary btnItemDown" id=""><i class="fa fa-angle-double-down" style="font-size:20px;"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </fieldset>
-                            </form>             
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-              </form>
-            </div>
-             <div class="modal-footer">
-                <div class="btn-group" style="margin-left:200px;">                                 
-                 <a class="btn btn-primary importSaveBtn" data-dismiss="modal">
-                    <i class="ace-icon fa fa-save bigger-110"></i>
-                    Save
-                </a>
-                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                    Cancel
-                </a>
-                </div>
-              </div>
-             </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-<div class="modal fade" id="modalappCardDeployHistory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <form role="form" id="" autocomplete="off">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    X
-                </button>
-                <h4 class="modal-title">
-                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Deploy History
-                </h4>
-            </div>
-           
-            <div class="modal-body" style="padding: 4px;">
-              <div class="table-responsive">
-          <!-- class="table table-hover" -->
-          <table  id="tableDeploy" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
-              <thead>
-                <tr>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">S.No</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Deploy Name</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Time</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">User</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Logs</strong>
-                  </td>
-                </tr>
-              </thead>
-              <tbody class="deployTbody" style="font-size:12px;">
-                <tr>
-                  <td>1</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Wed, 25 Feb 2015 11:52:37 GMT</td>
-                  <td>superadmin</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Tue, 24 Feb 2015 23:52:31 GMT</td>
-                  <td>consumer</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Wed, 25 Feb 2015 19:34:31 GMT</td>
-                  <td>designer</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Wed, 25 Feb 2015 12:14:31 GMT</td>
-                  <td>superadmin</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-              </tbody> 
-              <!-- <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#deployModalContainer">Add New Deploy</a> -->
-          </table>
-        </div>
-            </div>
-             <div class="modal-footer">
-                <div class="btn-group" style="margin-left:200px;">                                
-                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                    Cancel
-                </a>
-                </div>
-              </div>
-             </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-<div class="modal fade" id="modalappCardDeployHistory2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <form role="form" id="" autocomplete="off">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    X
-                </button>
-                <h4 class="modal-title">
-                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Deploy History
-                </h4>
-            </div>
-           
-            <div class="modal-body" style="padding: 4px;">
-              <div class="table-responsive">
-          <!-- class="table table-hover" -->
-          <table  id="tableDeploy2" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
-              <thead>
-                <tr>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">S.No</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Deploy Name</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Time</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">User</strong>
-                  </td>
-                  <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Logs</strong>
-                  </td>
-                </tr>
-              </thead>
-              <tbody class="deployTbody" style="font-size:12px;">
-                <tr>
-                  <td>1</td>
-                  <td>SLZ_AWS_China</td>
-                  <td>Wed, 25 Feb 2015 11:52:37 GMT</td>
-                  <td>superadmin</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>SLZ_AWS_China</td>
-                  <td>Tue, 24 Feb 2015 23:52:31 GMT</td>
-                  <td>consumer</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>SLZ_AWS_China</td>
-                  <td>Wed, 25 Feb 2015 19:34:31 GMT</td>
-                  <td>designer</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>SLZ_AWS_China</td>
-                  <td>Wed, 25 Feb 2015 12:14:31 GMT</td>
-                  <td>superadmin</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-              </tbody> 
-              <!-- <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#deployModalContainer">Add New Deploy</a> -->
-          </table>
-        </div>
-            </div>
-             <div class="modal-footer">
-                <div class="btn-group" style="margin-left:200px;">                                
-                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                    Cancel
-                </a>
-                </div>
-              </div>
-             </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-<div class="modal fade" id="modalappCardActions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-          <form role="form" id="" autocomplete="off">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    X
-                </button>
-                <h4 class="modal-title">
-                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Current Deploy
-                </h4>
-            </div>
-           
-            <div class="modal-body">
-              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Logs</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="width:20%">23/2/2015 11:08:28 am</td>
-                    <td style="color:DarkBlue;">LifeRay App-Card Deploying Java started</td>
-                  </tr>
-                  <tr>
-                    <td style="width:20%">23/2/2015 11:11:59 am</td>
-                    <td style="color:DarkBlue;">LifeRay App-Card Deploying Java ends</td>
-                  </tr>
-                  <tr>
-                    <td style="width:20%">23/2/2015 11:12:28 am</td>
-                    <td style="color:DarkBlue;">LifeRay App-Card Deploying NodeJS started</td>
-                  </tr>
-                  <tr>
-                    <td style="width:20%">23/2/2015 11:12:59 am</td>
-                    <td style="color:DarkBlue;">LifeRay App-Card Deploying NodeJS ends</td>
-                  </tr>
-                  <tr>
-                    <td style="width:20%">23/2/2015 11:14:12 am</td>
-                    <td style="color:DarkBlue;">LifeRay App-Card Deploying MongoDB started</td>
-                  </tr>
-                  <tr>
-                    <td style="width:20%">23/2/2015 11:14:52 am</td>
-                    <td style="color:DarkBlue;">LifeRay App-Card Deploying MongoDB ends</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-             <div class="modal-footer">
-                <div class="btn-group" style="margin-left:200px;">                                
-                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                    Cancel
-                </a>
-                </div>
-              </div>
-             </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
 <!-- Card Modal starts here -->
 <div class="modal fade" id="modalappCardBuild" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
@@ -1645,7 +1247,7 @@
                     <div id="CollapseGithubRepoParameter" class="panel-collapse collapse in">
                       <div class="panel-body">
                          <div class="widget-body no-padding">
-                              <form action="">
+                              <form action="" id="checkout-form">
                                 <div class="row" style="margin:0px">
                                   <div class="col-lg-6">
                                     <label for="name">Repo Name:
@@ -1685,7 +1287,7 @@
                   </div>
                     <div id="CollapseJenkinJobsParameter" class="panel-collapse collapse">
                       <div class="panel-body">
-                        <form action="" autocomplete="off">
+                        <form action="" id="checkout-form" autocomplete="off">
                           <div class="widget-body no-padding">
                             <div class="col-lg-6">
                                <label for="">
@@ -1730,7 +1332,7 @@
                   </div>
                     <div id="CollapseChefCookbookrunlistParameter" class="panel-collapse collapse">
                       <div class="panel-body">
-                        <form action="">
+                        <form action="" id="checkout-form">
                           <div class="widget-body no-padding">                    
                             <div class="col-lg-6 topNew">
                               <label for="name">User Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -1787,7 +1389,7 @@
                   </div>
                     <div id="CollapseblueprintParameter" class="panel-collapse collapse">
                       <div class="panel-body">
-                        <form action="">
+                        <form action="" id="checkout-form">
                           <div class="row " style="margin:0px;">
                             <div class="col-lg-6">
                               <label for="name">Application Name:
@@ -1874,7 +1476,6 @@ $(document).ready(function() {
     $(".chooseOS").select2();
     $(".chooseSecurity").select2();
     $(".chooseInstance").select2();
-    $(".chooseEnvironment").select2();
 
 
     $('.importSaveBtn').click(function(e) {
@@ -1917,6 +1518,9 @@ $(document).ready(function() {
                   "bSortable": true
               },
               {
+                  "bSortable": true
+              },
+              {
                   "bSortable": false
               }
           ]
@@ -1926,29 +1530,6 @@ $(document).ready(function() {
    if (!$.fn.dataTable.isDataTable('#tableDeploy') ){
      // $buildDatatable =  $('#tableBuild').DataTable({
         $('#tableDeploy').DataTable({
-          "pagingType": "full_numbers",
-          "aoColumns": [
-              {
-                  "bSortable": true
-              },
-              {
-                  "bSortable": true
-              },
-              {
-                  "bSortable": true
-              },
-              {
-                  "bSortable": true
-              },
-              {
-                  "bSortable": false
-              }
-          ]
-      });
-   }
-   if (!$.fn.dataTable.isDataTable('#tableDeploy2') ){
-     // $buildDatatable =  $('#tableBuild').DataTable({
-        $('#tableDeploy2').DataTable({
           "pagingType": "full_numbers",
           "aoColumns": [
               {
@@ -2051,58 +1632,5 @@ $(document).ready(function() {
         break;
     }
     $('.appcardName').append(finalcardname);
-    });
-
-$('.btnItemAdd').click(function(e) {
-  //alert('hello');
-        var $deploymentSelectedList = $('.deploymentSelectedRunList');
-        var $selectedCookbooks = $("input[name=checkboxTasklist]:checked");
-        $selectedCookbooks.each(function(idx) {
-            var $this = $(this);
-            $deploymentSelectedList.append($('<li title="' + $this.attr('data-tasknamename') + '"><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-tasknamename').substr(0, 15) + '</label></li>').on('click', function(e) {
-                if ($(this).hasClass('deploymentCookbookSelected')) {
-                    $(this).removeClass('deploymentCookbookSelected');
-                } else {
-                    $(this).addClass('deploymentCookbookSelected');
-                }
-            }));
-            $this.attr('checked', false);
-            $this.parents('li').hide().data('itemSelected', true);
-        });
-        e.preventDefault();
-        return (false);
-    });
-    
-    $('.btnItemRemove').click(function(e) {
-        var $deploymentSelectedList = $('.deploymentSelectedRunList');
-        $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
-            var value = $(this).find('input').val();
-            var selector = 'input[name=checkboxRole][value="' + value + '"]';
-            console.log(selector);
-            $('input[name=checkboxRole][value="' + value + '"]').parents('li').show().data('itemSelected', false);
-            $('input[name=checkboxTasklist][value="' + value + '"]').parents('li').show().data('itemSelected', false);
-            $(this).remove();
-        });
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
-    });
-
-    $(".btnItemUp").on('click', function(e) {
-        var $selectedRunlist = $('.deploymentCookbookSelected');
-
-        $selectedRunlist.insertBefore($selectedRunlist.first().prev());
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
-    });
-
-    $(".btnItemDown").on('click', function(e) {
-        var $selectedRunlistDown = $('.deploymentCookbookSelected');
-
-        $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
-        //chrome fix - Page refresh - Vinod 
-        e.preventDefault();
-        return (false);
     });
 </script>

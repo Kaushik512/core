@@ -561,6 +561,20 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if(haspermission('services','modify')){
                         hasEditPermission =true;
                         }
+                    }else if(createFileName==='CreateJiraConfig.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    else if(createFileName==='CreateProviders.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    else if(createFileName==='CreateImages.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
                     }
                     //user has no permission to edit
                     if(!hasEditPermission){
@@ -629,6 +643,18 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateJiraConfig.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateProviders.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateImages.html'){
                         if(haspermission('services','delete')){
                         hasDeletePermission =true;
                         }
