@@ -284,6 +284,7 @@
                     reqBody.credentials = {
                         username: $form.find('#instanceUsername').val()
                     };
+                    //condition for 1st app-name
                     var appName = $('#appName').val();
                     var appURL = $('#appURL').val();
                     
@@ -296,6 +297,20 @@
                      url: appURL
                  }
              }
+             //condition for 2nd app-name
+                    var appName2 = $('#appName2').val();
+                    var appURL2 = $('#appURL2').val();
+                    
+                    if (appName2 && appURL2) {
+                      if(!(appURL2.indexOf('http://') === 0 || appURL2.indexOf('https://')===0) ) {
+                        appURL2 = 'http://'+appURL2;
+                    }
+                    reqBody.appUrl2 = {
+                     name: appName2,
+                     url: appURL2
+                 }
+             }
+
 
              if (!reqBody.fqdn) {
                 alert('Please enter IP');

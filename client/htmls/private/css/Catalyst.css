@@ -7262,3 +7262,10 @@ background:url('../img/galleryIcons/start_icon.png');
     height:25px;
     cursor:pointer;
 }
+.ipLEFT{
+    margin-left: -13px;
+}
+.ipWidth{
+    margin-top:15px;
+    width:52.5%;
+}
