@@ -24,7 +24,7 @@
                                 <option value="Inactive">Inactive</option>
                                 <option value="">All</option>
                             </select>
-                            <a class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
+                            <a id="newOrg" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -97,6 +97,18 @@
                                 <div id="envtable_tools1"></div>
                                 <script>
 
+                                $(document).ready(function() {
+                                    var hasCreatePermissionOrg = false;
+                                    if(haspermission('organization','create')){
+                                            hasCreatePermissionOrg=true;
+                                    }
+                                    
+                                    if(!hasCreatePermissionOrg){
+                                            $('#newOrg').addClass('hidden');
+                                    }
+                                });
+
+
                                     function filterColumn () {
                                        // alert('hi ' + $("#filteractive").val());
                                         var filter = $("#filteractive").val();
@@ -122,6 +134,7 @@
                                         //alert('in org');
                                       //  CreateTableFromJson("Organization");
                                         CreateTableFromJson(1,'orgname' , 'CreateOrg.html'); //1 is for Org
+                                        
                                         var tab = 'envtable';
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',

@@ -428,19 +428,34 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    app.post('/chef/environments/create', function(req, res) {
+    app.post('/chef/environments/create/:serverId', function(req, res) {
 
-        var settings = appConfig.chef;
-        var chef = new Chef(settings);
-        chef.createEnvironment(req.body.envName, function(err, envName) {
+       
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
-            } else {
-                res.send(envName);
             }
-        });
-
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+                chef.createEnvironment(req.body.envName, function(err, envName) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    } else {
+                        res.send(envName);
+                    }
+                });
+         });
     });
 
     app.get('/chef/servers/:serverId/cookbooks', function(req, res) {

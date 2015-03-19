@@ -9,6 +9,7 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Docker = require('../model/docker.js');
 var SSH = require('../lib/utils/sshexec');
 var appConfig = require('../config/app_config.js');
+var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
@@ -273,6 +274,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(500);
                 }
             });
+      
 
     });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid/:action', function(req, res) {
@@ -282,24 +284,30 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var stdmessages = '';
         //Command mapping for security
         var action = 'start';
+         var action1 = action;
         switch (req.params.action) {
             case "1":
                 action = 'start';
+                action1 = 'start';
                 break;
             case "2":
                 action = 'stop';
                 break;
             case "3":
                 action = 'restart';
+                action1 = 'start';
                 break;
             case "4":
                 action = 'pause';
+                action1 = 'start';
                 break;
             case "5":
                 action = 'unpause';
+                action1 = 'start';
                 break;
             case "6":
                 action = 'delete';
+                action1 = 'terminate';
                 break;
         }
 
@@ -313,6 +321,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         logger.debug('cmd received: ', cmd);
         var stdOut = '';
+          logger.debug('Verifying User permission set for execute.');
+        var user = req.session.user;
+        var category = 'dockercontainer' + action1;
+        var permissionto = 'execute';
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+                    return;
+                }
+                else{
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             //alert('Done');
             if (!err) {
@@ -349,6 +370,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             logger.error("Error hits while running Docker Command: ",err);
             res.send(500);
         });
+        }//else haspermission
+        } //if !err
+        }); //haspermission
 
     });
     app.get('/instances/checkfordocker/:instanceid', function(req, res) {
@@ -477,229 +501,259 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.post('/instances/:instanceId/updateRunlist', function(req, res) {
-        if (req.session.user.rolename === 'Consumer') {
-            res.send(401);
-            return;
-        }
-        logger.debug("Enter post() for /instances/dockerimagepull");
-        if (!req.body.runlist) {
-            res.send(400);
-            return;
-        }
-        logger.debug(req.body.runlist);
-        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-            if (err) {
-                logger.error("Failed to get Instance: ",err);
-                res.send(500);
+app.post('/instances/:instanceId/updateRunlist', function(req, res) {
+    if (req.session.user.rolename === 'Consumer') {
+        res.send(401);
+        return;
+    }
+    logger.debug("Enter post() for /instances/updateRunlist");
+    if (!req.body.runlist) {
+        res.send(400);
+        return;
+    }
+    logger.debug(req.body.runlist);
+    //verifying permission to update runlist
+    logger.debug('Verifying User permission set for execute.');
+    var user = req.session.user;
+    var category = 'instancerunlist';
+    var permissionto = 'execute';
+    usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401);
                 return;
-            }
-            if (data.length) {
-                var instance = data[0];
-                var actionLog = instancesDao.insertChefClientRunActionLog(instance.id, req.body.runlist, req.session.user.cn, new Date().getTime());
-                var logReferenceIds = [instance.id, actionLog._id];
-                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+            } else {
+                instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
                     if (err) {
-                        var timestampEnded = new Date().getTime();
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "Unable to get chef data. Chef run failed",
-                            timestamp: timestampEnded
-                        });
-                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-                        res.send(200, {
-                            actionLogId: actionLog._id
-                        });
+                        logger.error("Failed to get Instance: ", err);
+                        res.send(500);
                         return;
                     }
-                    if (!chefDetails) {
-                        var timestampEnded = new Date().getTime();
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "Chef data in null. Chef run failed",
-                            timestamp: timestampEnded
-                        });
-                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-
-                        res.send(200, {
-                            actionLogId: actionLog._id
-                        });
-                        return;
-                    }
-
-                    //decrypting pem file
-                    credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
-                        if (err) {
-                            var timestampEnded = new Date().getTime();
-                            logsDao.insertLog({
-                                referenceId: logReferenceIds,
-                                err: true,
-                                log: "Unable to decrypt pem file. Chef run failed",
-                                timestamp: timestampEnded
-                            });
-                            instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-                            return;
-                        }
-
-                        var chef = new Chef({
-                            userChefRepoLocation: chefDetails.chefRepoLocation,
-                            chefUserName: chefDetails.loginname,
-                            chefUserPemFile: chefDetails.userpemfile,
-                            chefValidationPemFile: chefDetails.validatorpemfile,
-                            hostedChefUrl: chefDetails.url,
-                        });
-
-                        var chefClientOptions = {
-                            privateKey: decryptedCredentials.pemFileLocation,
-                            username: decryptedCredentials.username,
-                            host: instance.instanceIP,
-                            instanceOS: instance.hardware.os,
-                            port: 22,
-                            runlist: req.body.runlist,
-                            overrideRunlist: false
-                        }
-                        logger.debug('decryptCredentials ==>', decryptedCredentials);
-                        if (decryptedCredentials.pemFileLocation) {
-                            chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
-                        } else {
-                            chefClientOptions.password = decryptedCredentials.password;
-                        }
-
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: false,
-                            log: 'Running chef-client',
-                            timestamp: new Date().getTime()
-                        });
-
-                        chef.runChefClient(chefClientOptions, function(err, retCode) {
-                            if (decryptedCredentials.pemFileLocation) {
-                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                    if (err) {
-                                        logger.debug("Unable to delete temp pem file =>", err);
-                                    } else {
-                                        logger.debug("temp pem file deleted =>", err);
-                                    }
-                                });
-                            }
-
+                    if (data.length) {
+                        var instance = data[0];
+                        var actionLog = instancesDao.insertChefClientRunActionLog(instance.id, req.body.runlist, req.session.user.cn, new Date().getTime());
+                        var logReferenceIds = [instance.id, actionLog._id];
+                        configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                             if (err) {
-                                //console.log(err);
                                 var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
                                     referenceId: logReferenceIds,
                                     err: true,
-                                    log: "Unable to run chef-client",
+                                    log: "Unable to get chef data. Chef run failed",
                                     timestamp: timestampEnded
                                 });
                                 instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                res.send(200, {
+                                    actionLogId: actionLog._id
+                                });
                                 return;
                             }
-                            logger.debug("knife ret code", retCode);
-                            if (retCode == 0) {
-                                logger.debug('updating node runlist in db');
-                                instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
-                                    if (err) {
-                                        return;
-                                    }
+                            if (!chefDetails) {
+                                var timestampEnded = new Date().getTime();
+                                logsDao.insertLog({
+                                    referenceId: logReferenceIds,
+                                    err: true,
+                                    log: "Chef data in null. Chef run failed",
+                                    timestamp: timestampEnded
+                                });
+                                instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
+                                res.send(200, {
+                                    actionLogId: actionLog._id
+                                });
+                                return;
+                            }
+
+                            //decrypting pem file
+                            credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                                if (err) {
                                     var timestampEnded = new Date().getTime();
                                     logsDao.insertLog({
                                         referenceId: logReferenceIds,
-                                        err: false,
-                                        log: 'instance runlist updated',
+                                        err: true,
+                                        log: "Unable to decrypt pem file. Chef run failed",
                                         timestamp: timestampEnded
                                     });
-                                    instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
-
-                                    //Checking docker status and updating
-                                    var _docker = new Docker();
-                                    _docker.checkDockerStatus(instance.id,
-                                        function(err, retCode) {
-                                            if (err) {
-                                                logger.error("Failed to check docker status: ",err);
-                                                res.send(500);
-                                                return;
-                                                //res.end('200');
-
-                                            }
-                                            logger.debug('Docker Check Returned:', retCode);
-                                            if (retCode == '0') {
-                                                instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
-                                                    logger.debug('Instance Docker Status set to Success');
-                                                    logger.debug("Exit post() for /instances/dockerimagepull");
-                                                });
-                                            }
-                                        });
-
-                                });
-                            } else {
-                                if (retCode === -5000) {
-                                    logsDao.insertLog({
-                                        referenceId: logReferenceIds,
-                                        err: true,
-                                        log: 'Host Unreachable',
-                                        timestamp: new Date().getTime()
-                                    });
-                                } else if (retCode === -5001) {
-                                    logsDao.insertLog({
-                                        referenceId: logReferenceIds,
-                                        err: true,
-                                        log: 'Invalid credentials',
-                                        timestamp: new Date().getTime()
-                                    });
-
-                                } else {
-                                    logsDao.insertLog({
-                                        referenceId: logReferenceIds,
-                                        err: true,
-                                        log: 'Unknown error occured. ret code = ' + retCode,
-                                        timestamp: new Date().getTime()
-                                    });
-
+                                    instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                    return;
                                 }
-                                var timestampEnded = new Date().getTime();
+
+                                var chef = new Chef({
+                                    userChefRepoLocation: chefDetails.chefRepoLocation,
+                                    chefUserName: chefDetails.loginname,
+                                    chefUserPemFile: chefDetails.userpemfile,
+                                    chefValidationPemFile: chefDetails.validatorpemfile,
+                                    hostedChefUrl: chefDetails.url,
+                                });
+
+                                var chefClientOptions = {
+                                    privateKey: decryptedCredentials.pemFileLocation,
+                                    username: decryptedCredentials.username,
+                                    host: instance.instanceIP,
+                                    instanceOS: instance.hardware.os,
+                                    port: 22,
+                                    runlist: req.body.runlist,
+                                    overrideRunlist: false
+                                }
+                                logger.debug('decryptCredentials ==>', decryptedCredentials);
+                                if (decryptedCredentials.pemFileLocation) {
+                                    chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                                } else {
+                                    chefClientOptions.password = decryptedCredentials.password;
+                                }
+
                                 logsDao.insertLog({
                                     referenceId: logReferenceIds,
-                                    err: true,
-                                    log: 'Unable to run chef-client',
-                                    timestamp: timestampEnded
+                                    err: false,
+                                    log: 'Running chef-client',
+                                    timestamp: new Date().getTime()
                                 });
-                                instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-                                return;
-                            }
-                        }, function(stdOutData) {
-                            logsDao.insertLog({
-                                referenceId: logReferenceIds,
-                                err: false,
-                                log: stdOutData.toString('ascii'),
-                                timestamp: new Date().getTime()
-                            });
 
-                        }, function(stdOutErr) {
-                            logsDao.insertLog({
-                                referenceId: logReferenceIds,
-                                err: true,
-                                log: stdOutErr.toString('ascii'),
-                                timestamp: new Date().getTime()
+                                chef.runChefClient(chefClientOptions, function(err, retCode) {
+                                    if (decryptedCredentials.pemFileLocation) {
+                                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                            if (err) {
+                                                logger.debug("Unable to delete temp pem file =>", err);
+                                            } else {
+                                                logger.debug("temp pem file deleted =>", err);
+                                            }
+                                        });
+                                    }
+
+                                    if (err) {
+                                        //console.log(err);
+                                        var timestampEnded = new Date().getTime();
+                                        logsDao.insertLog({
+                                            referenceId: logReferenceIds,
+                                            err: true,
+                                            log: "Unable to run chef-client",
+                                            timestamp: timestampEnded
+                                        });
+                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                        return;
+                                    }
+                                    logger.debug("knife ret code", retCode);
+                                    if (retCode == 0) {
+                                        logger.debug('updating node runlist in db');
+                                        instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+                                            if (err) {
+                                                return;
+                                            }
+
+                                            var timestampEnded = new Date().getTime();
+                                            logsDao.insertLog({
+                                                referenceId: logReferenceIds,
+                                                err: false,
+                                                log: 'instance runlist updated',
+                                                timestamp: timestampEnded
+                                            });
+                                            instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
+                                            //Checking docker status and updating
+                                            var _docker = new Docker();
+                                            _docker.checkDockerStatus(instance.id,
+                                                function(err, retCode) {
+                                                    if (err) {
+                                                        logger.error("Failed to check docker status: ", err);
+                                                        res.send(500);
+                                                        return;
+                                                        //res.end('200');
+
+                                                    }
+                                                    logger.debug('Docker Check Returned:', retCode);
+                                                    if (retCode == '0') {
+                                                        instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
+                                                            logger.debug('Instance Docker Status set to Success');
+                                                            logger.debug("Exit post() for /instances/dockerimagepull");
+                                                        });
+                                                    }
+                                                });
+
+                                        });
+                                    } else {
+                                        if (retCode === -5000) {
+                                            logsDao.insertLog({
+                                                referenceId: logReferenceIds,
+                                                err: true,
+                                                log: 'Host Unreachable',
+                                                timestamp: new Date().getTime()
+                                            });
+                                        } else if (retCode === -5001) {
+                                            logsDao.insertLog({
+                                                referenceId: logReferenceIds,
+                                                err: true,
+                                                log: 'Invalid credentials',
+                                                timestamp: new Date().getTime()
+                                            });
+
+                                        } else {
+                                            logsDao.insertLog({
+                                                referenceId: logReferenceIds,
+                                                err: true,
+                                                log: 'Unknown error occured. ret code = ' + retCode,
+                                                timestamp: new Date().getTime()
+                                            });
+
+                                        }
+                                        var timestampEnded = new Date().getTime();
+                                        logsDao.insertLog({
+                                            referenceId: logReferenceIds,
+                                            err: true,
+                                            log: 'Unable to run chef-client',
+                                            timestamp: timestampEnded
+                                        });
+                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                        return;
+                                    }
+                                }, function(stdOutData) {
+                                    logsDao.insertLog({
+                                        referenceId: logReferenceIds,
+                                        err: false,
+                                        log: stdOutData.toString('ascii'),
+                                        timestamp: new Date().getTime()
+                                    });
+
+                                }, function(stdOutErr) {
+                                    logsDao.insertLog({
+                                        referenceId: logReferenceIds,
+                                        err: true,
+                                        log: stdOutErr.toString('ascii'),
+                                        timestamp: new Date().getTime()
+                                    });
+                                });
+                                res.send(200, {
+                                    actionLogId: actionLog._id
+                                });
+
                             });
                         });
-                        res.send(200, {
-                            actionLogId: actionLog._id
-                        });
-
-                    });
+                    } else {
+                        res.send(404);
+                    }
                 });
-            } else {
-                res.send(404);
-            }
-        });
-    });
+
+            } //else haspermission
+        } //if !err
+    }); //haspermission
+});
 
     app.get('/instances/:instanceId/stopInstance', function(req, res) {
         logger.debug("Enter get() for /instances/%s/stopInstance",req.params.instanceId);
+        logger.debug('Verifying User permission set for stopInstance.');
+        var user = req.session.user;
+        var category = 'instancestop';
+        var permissionto = 'execute';
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+                    return;
+                }
+                else{
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
                 logger.error("Error hits getting instance: ",err);
@@ -785,10 +839,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
+        }//else haspermission
+        } //if !err
+        }); //haspermission
     });
 
     app.get('/instances/:instanceId/startInstance', function(req, res) {
         logger.debug("Enter get() for /instances/%s/startInstance",req.params.instanceId);
+         logger.debug('Verifying User permission set for startInstance.');
+        var user = req.session.user;
+        var category = 'instancestart';
+        var permissionto = 'execute';
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+                    return;
+                }
+                else{
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
                 res.send(500);
@@ -887,6 +957,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
+        
+    
+        }//else haspermission
+        } //if !err
+        }); //haspermission
 
     });
 
@@ -916,6 +991,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.post('/instances/:instanceId/services/add', function(req, res) {
         logger.debug("Enter post() for /instances/%s/services/add",req.params.instanceId);
         logger.debug('serviceIds ==>', req.body.serviceIds);
+        
+        logger.debug('Verifying User permission set for execute.');
+        var user = req.session.user;
+        var category = 'instanceservices';
+        var permissionto = 'execute';
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+                    return;
+                }
+                else{
         instancesDao.addService(req.params.instanceId, req.body.serviceIds, function(err, updateCount) {
             if (err) {
                 logger.error("Found error while adding service: ",err);
@@ -932,6 +1021,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
 
         });
+        }//else haspermission
+        } //if !err
+        }); //haspermission
     });
 
     app.delete('/instances/:instanceId/services/:serviceId', function(req, res) {

@@ -4134,6 +4134,9 @@ backface-visibility: hidden;
 }
 
 .front1 {
+    background: green;
+}
+.frontTerminate{
     background: #B80000;
 }
 .back1 {
@@ -7232,4 +7235,30 @@ body .ui-tooltip {
     font-size:11px;
     font-weight:bold;
 
+}
+
+.widthContainer {
+    width:16%;
+}
+
+.dockerLEFT{
+    margin-left: -13px;
+    width:51.5%;
+}
+.instanceActionBtnCtr >.pending,.stopping,.unknown{
+    background:url('../img/galleryIcons/rsz_start_icon.png');
+    width:26px;
+    height:25px;
+}
+.instanceActionBtnCtr >.running{
+background:url('../img/galleryIcons/shut_down.png');
+    width:26px;
+    height:25px;
+    cursor:pointer;
+}
+.instanceActionBtnCtr >.stopped{
+background:url('../img/galleryIcons/start_icon.png');
+    width:26px;
+    height:25px;
+    cursor:pointer;
 }

@@ -34,7 +34,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
 
     var $label1 = $("<label></label>").addClass('label');
     var $img1 = $("<img />").attr('src', 'img/templateicons/Create-run-list---deployment.png');
-    var $strong1 = $("<span></span>").text("Select Runlist").append('<img class="cookbookspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
+    var $strong1 = $("<span></span>").css("margin-left","7px").text("Select Runlist").append('<img class="cookbookspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
     $label1.append($img1);
     $label1.append($strong1);
     $section1.append($label1);
@@ -156,13 +156,13 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
 
     var $section2 = $("<section></section>").addClass('col col-sm-6 col-xs-12 padding-left0');
     var $label2 = $("<label></label>").addClass('label');
-    var $img2 = $("<img />").attr('src', 'img/templateicons/Order-run-list---deployment.png');
-    var $strong2 = $("<span></span>").text("Order Runlist");
+    var $img2 = $("<img />").css("margin-left","30px").attr('src', 'img/templateicons/Order-run-list---deployment.png');
+    var $strong2 = $("<span></span>").css("margin-left","7px").text("Order Runlist");
     $label2.append($img2);
     $label2.append($strong2);
     $section2.append($label2);
 
-    var $rowOrder1 = $("<div></div>").addClass('row');
+    var $rowOrder1 = $("<div></div>").css("margin-left","14px").addClass('row');
     var $divOrder1 = $("<div></div>").addClass('col col-10 padding-right0');
     var $ulOrder1 = $("<ul></ul>").addClass('deploymentSelectedRunList deploymentSelectedRunListCSS');
     //alert('here ==>');

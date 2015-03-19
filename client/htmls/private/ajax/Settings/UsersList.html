@@ -18,7 +18,7 @@
                               <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/UsersList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                      
-                            <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateUser.html?new">
+                            <a id="newUser" class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateUser.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -82,6 +82,13 @@
 
                                 <script>
                                     $(document).ready(function () {
+                                        var hasCreateUserPermission = false;
+                                        if(haspermission('users','create')){
+                                            hasCreateUserPermission=true;
+                                        }
+                                        if(!hasCreateUserPermission){
+                                            $('#newUser').addClass('hidden');
+                                        }
                                        
                                         startup();
                                     });
