@@ -36,6 +36,9 @@ function hideLoader(){
 $('#clickdisabler').hide(); 
 }
 var a,b,x;
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
         </script>
     </head>
     <body class="custom-theme">
@@ -356,6 +359,7 @@ var a,b,x;
     <!-- MAIN APP JS FILE -->
     <script type="text/javascript">
 
+
     $(document).ready(function(){
     var hasSettingsPermission =false;
         if(haspermission("settings","read")){
@@ -375,6 +379,14 @@ var a,b,x;
     });
 
 
+function foldTreeForSetting(){
+    var list=$('#setting_tree').find('.fa-angle-down'),len=list.length;
+    for(var i=0;i<len;i++){
+    list.eq(i).trigger('click');
+    }
+}
+
+
     function setleftnavigation(toplink,breadcrumbHeader){
    var TabID=$(toplink).attr('id');
         if(TabID==="workZoneNew"){
@@ -387,8 +399,10 @@ var a,b,x;
             $('#Settings_nav').hide();
 
         }else if(TabID==="settingsNew"){
+             foldTreeForSetting();
             $('#Workspace1').hide();
             $('#Settings_nav').show();
+           
         }
 
         if($(toplink).hasClass('active')){

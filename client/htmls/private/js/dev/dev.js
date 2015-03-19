@@ -833,9 +833,6 @@
                 // TEMP Hack for the multiple cards issue.
                 // Import also needs to be fixed as it inserts 2 records in the db..
                 var cardTemplate = {
-                    capitalizeFirstLetter:function(string){
-                        return string.charAt(0).toUpperCase() + string.slice(1);
-                    },
                     getItem: function() {
                         return '<div class="item"></div>';
                     },
@@ -910,7 +907,7 @@
                             }
 
                         }
-                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ this.capitalizeFirstLetter(title) +'" rel="tooltip"/></span>'
+                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ title.capitalizeFirstLetter() +'" rel="tooltip"/></span>'
                     },
                     getStart:function (data){
                       return'<div class="actionbutton instance-bootstrap-ActionStart" style="display:none !important;" ><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actionType="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>';
