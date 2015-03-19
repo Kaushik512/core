@@ -31,60 +31,92 @@ var ApplicationSchema = new Schema({
         type: String,
         trim: true
     },
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.appCardNameValidator
-    },
     users: [{
         type: String,
         required: true,
         trim: true,
         validate: schemaValidator.catalystUsernameValidator
     }],
-    build: {
-        type: Schema.ObjectId,
-        ref: Build.schema
-    }
+    buildId: {}
 
 });
 
+// instance method 
+ApplicationSchema.methods.build = function(user,callback) {
+    Build.getBuildById(this.buildId, function(err, build) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        build.execute(user,callback);
+    });
+};
+
 // static methods
+ApplicationSchema.statics.getApplicationById = function(applicationId, callback) {
+    this.find({
+        "_id": new ObjectId(applicationId)
+    }, function(err, data) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        //console.log('data ==>', data);
+        if (data.length) {
+            callback(null, data[0]);
+        } else {
+            callback(null, null);
+        }
+
+    });
+};
+
 ApplicationSchema.statics.createNew = function(appData, callback) {
     logger.debug("Enter create new application");
     var self = this;
-    var application = new self(appData);
-
-    application.save(function(err, data) {
+    var build = new Build(appData.build);
+    logger.debug('saving build==>');
+    build.save(function(err, data) {
         if (err) {
             logger.error("create Application Failed", err, appData);
             callback(err, null);
             return;
         }
-        logger.debug("Exit createNew application");
-        callback(null, data);
+        logger.debug('build saved ==>');
+        console.log(data);
+        appData.buildId = data._id;
+        var application = new self(appData);
+
+        application.save(function(err, data) {
+            if (err) {
+                logger.error("create Application Failed", err, appData);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit createNew application");
+            callback(null, data);
+        });
     });
 };
 
-ApplicationSchema.statics.getAppCardsByOrgBgAndProjectId = function(orgId, bgId, projectId, userName, callback) {
-    logger.debug("Enter getAppCardsByOrgBgAndProjectId (%s,%s, %s, %s)", orgId, bgId, projectId, userName);
+ApplicationSchema.statics.getAppCardsByOrgBgAndProjectId = function(orgId, bgId, projectId, callback) {
+    logger.debug("Enter getAppCardsByOrgBgAndProjectId (%s,%s, %s, %s)", orgId, bgId, projectId);
     var queryObj = {
         orgId: orgId,
         bgId: bgId,
         projectId: projectId,
     }
-    if (userName) {
-        queryObj.users = userName;
-    }
+
     this.find(queryObj, function(err, applications) {
         if (err) {
-            logger.error("Failed to getAppCardsByOrgBgAndProjectId (%s,%s, %s, %s)", orgId, bgId, projectId, userName, err);
+            logger.error("Failed to getAppCardsByOrgBgAndProjectId (%s,%s, %s)", orgId, bgId, projectId, err);
             callback(err, null);
             return;
         }
 
-        logger.debug("Exit getAppCardsByOrgBgAndProjectId (%s,%s, %s, %s)", orgId, bgId, projectId, userName);
+        logger.debug("Exit getAppCardsByOrgBgAndProjectId (%s,%s, %s)", orgId, bgId, projectId);
         callback(null, applications);
     });
 };

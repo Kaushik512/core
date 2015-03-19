@@ -797,25 +797,45 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
-    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/appcards', function(req, res) {
-        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
-        Application.getAppCardsByOrgBgAndProjectId(req.params.orgId, req.params.bgId, req.params.projectId, req.session.user.cn, function(err, applications) {
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
+        Application.getAppCardsByOrgBgAndProjectId(req.params.orgId, req.params.bgId, req.params.projectId, function(err, applications) {
             if (err) {
                 res.send(500);
                 return;
             }
-            req.send(appCardsList);
+            res.send(applications);
         });
-        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
+
     });
 
-    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/appcards', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications/:applicationId/build', function(req, res) {
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            application.build(req.session.user.cn, function(err, buildRes) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(buildRes);
+            });
+        });
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
+
+    });
+
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications', function(req, res) {
+        console.log(req.files);
+        console.log(req.body.appData);
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
         var appData = req.body.appData;
         appData.orgId = req.params.orgId;
         appData.bgId = req.params.bgId;
         appData.projectId = req.params.projectId;
-        appData.users = [req.session.user.cn];
         Application.createNew(appData, function(err, data) {
             if (err) {
                 res.send(500);
@@ -823,7 +843,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send(data);
         });
-        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
+        logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
     });
 
 
