@@ -359,6 +359,24 @@ var a,b,x;
     <!-- MAIN APP JS FILE -->
     <script type="text/javascript">
 
+    $(document).ready(function(){
+    var hasSettingsPermission =false;
+        if(haspermission("settings","read")){
+            hasSettingsPermission =true;
+        }
+        if(!hasSettingsPermission){
+            $('#settingsNew').addClass('hidden');
+        }
+
+    var hasDesignPermission =false;
+        if(haspermission("design","read")){
+            hasDesignPermission =true;
+        }
+        if(!hasDesignPermission){
+            $('#designNew').addClass('hidden');
+        }
+    });
+
 
     function setleftnavigation(toplink,breadcrumbHeader){
         if($(toplink).hasClass('active')){
@@ -627,6 +645,7 @@ var a,b,x;
 	checkandnavigatetotab();
 
  //function ends
+ 
 </script>
 <script src="js/chefmodalcommon.js"></script>
     <script src="/private/js/settingscommon.js"></script>
