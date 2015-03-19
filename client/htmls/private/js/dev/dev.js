@@ -1680,6 +1680,7 @@ $itemContainer.append($itemBody);
         });
         $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
         $launchDockerInstanceSelector.modal('show');
+        $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
         $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
         $('#dockerintsancestab').dataTable({
             "bPaginate": false
@@ -1860,7 +1861,8 @@ $itemContainer.append($itemBody);
                             $parent.find('.moreInfo').trigger('click');
                             console.log(data);
                         }).fail(function(jxObj) {
-
+                                if(jxObj.status == '401')
+                                    bootbox.alert('Inssuficient permission to perform operation.');
                         });
                     });
 
@@ -2494,7 +2496,10 @@ $itemContainer.append($itemBody);
 
 
                                 if(ep == 'null')
-                                  $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                  {
+                                    $td.find('.dockerspinner').detach();
+                                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                    }
                               else{
                                   if($('#Containernamefield').val() != '')
                                   { 
