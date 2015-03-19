@@ -23,7 +23,9 @@
     height:100px;
     display: none;
 }
-
+#setting_tree > .icon{
+    font-size:18px;
+}
         </style>
         <script>
 
@@ -601,9 +603,7 @@ var SettingTreeJson=[
         "selectable": false,
         "href":"ajax/Settings/Catalyst-Guide.html",
         "target":"_blank",
-        "icon":"fa fa-book"
-       
-              
+        "icon":"fa fa-book"             
     }
 ];
 
@@ -624,7 +624,7 @@ function loadSettingsTree(){
                           //  }
                         }
                     });
-                
+                                   
 }
     var loadTreeFuncNew = function(){
         console.log('Loaded a tree');

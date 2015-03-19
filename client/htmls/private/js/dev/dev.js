@@ -595,8 +595,10 @@
              
                 var timeout = setTimeout(function() {
                     $.get('../instances/' + instanceId, function(data) {
+                        var title='';
                         if (data) {  
-                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);   
+                            title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
+                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title',title);   
                           if (data.instanceState == 'stopped') {
                             enableInstanceActionStopBtn(instanceId);
 
@@ -806,6 +808,9 @@
                 // TEMP Hack for the multiple cards issue.
                 // Import also needs to be fixed as it inserts 2 records in the db..
                 var cardTemplate = {
+                    capitalizeFirstLetter:function(string){
+                        return string.charAt(0).toUpperCase() + string.slice(1);
+                    },
                     getItem: function() {
                         return '<div class="item"></div>';
                     },
@@ -852,7 +857,7 @@
                     getComponentItem: function(data) {
                         return '<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;" class="instance-details-item">' + '<a class="btn instance-bootstrap-list-faimage" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="ViewAllRunlist">' + '<i class="fa fa-2x fa-exchange txt-color-blue"></i></a></span>';
                     },getOS:function(data){
-                        var basePath='img/osIcons/',imgPath;
+                        var basePath='img/osIcons/',imgPath,title='';
                         console.log(data.hardware.os+' :: OS ::'+data.hardware.platform.toLowerCase())
                         switch(data.hardware.platform.toLowerCase()){
                             case "window 2008":
@@ -867,10 +872,23 @@
                             default:
                             imgPath='unknown.png';
                         }
-                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="' + data.hardware.platform+ '" rel="tooltip"/></span>'
+                        title=data.hardware.platform;
+                        if(imgPath==="unknown.png"){
+                            if(data.hardware.os.toLowerCase()==="linux"){
+                                imgPath="linux.png";
+                                title=data.hardware.os;
+
+                            }else if(data.hardware.os.toLowerCase().indexOf('window')>-1){
+                                imgPath="windows.png";
+                                title=data.hardware.os;
+
+                            }
+
+                        }
+                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ this.capitalizeFirstLetter(title) +'" rel="tooltip"/></span>'
                     },
                     getStartStopToggler:function(data){
-                        return '<div class="startstoptoggler" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;"></div>'
+                        return '<div class="startstoptoggler" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="" rel="tooltip"></div>'
                     }
                 }
                 if (data && data._id) { // instanceId
@@ -1169,11 +1187,11 @@
     //var allClass='stopped running pending unknown', addClass='';
     if (data.instanceState == 'stopped') {
         enableInstanceActionStopBtn(data._id);
-        $startStopToggler.addClass('stopped');
+        $startStopToggler.addClass('stopped').attr('data-original-title','Start');
     }
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id, data.hardware.os);
-        $startStopToggler.addClass('running');
+        $startStopToggler.addClass('running').attr('data-original-title','Stop');
     }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
         disableInstanceActionBtns(data._id);
