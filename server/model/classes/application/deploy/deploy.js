@@ -7,7 +7,7 @@ var schemaValidator = require('../../../schema-validator');
 var Schema = mongoose.Schema;
 
 var deploySchema = new Schema({
-    taskId: String
+    taskId: String,
 });
 
 // Get Nodes list

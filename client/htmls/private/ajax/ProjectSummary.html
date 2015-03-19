@@ -1757,7 +1757,7 @@ $('.appCardSaveBtn').click(function(e) {
     }
 
     $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/appcards', {
-        appCardData: appCardData
+        appData: appCardData
     }, function(appCard) {
         console.log(appCard);
 

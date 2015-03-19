@@ -21,7 +21,9 @@ var waitForPort = require('wait-for-port');
 
 var appCardsDao = require('../model/dao/appcarddao');
 
-var Tasks = require('../model/classes/tasks/tasks.js');
+var Application = require('../model/classes/application/application');
+
+var Task = require('../model/classes/tasks/tasks.js');
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
@@ -785,7 +787,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        Tasks.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
+        Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -797,7 +799,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/appcards', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
-        appCardsDao.getAppCardsByOrgBgAndProjectId(req.params.orgId, req.params.bgId, req.params.projectId, req.session.user.cn, function(err, appCardsList) {
+        Application.getAppCardsByOrgBgAndProjectId(req.params.orgId, req.params.bgId, req.params.projectId, req.session.user.cn, function(err, applications) {
             if (err) {
                 res.send(500);
                 return;
@@ -809,12 +811,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/appcards', function(req, res) {
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/appcards", req.params.orgId, req.params.bgId, req.params.projectId);
-        var appCardData = req.body.appCardData;
-        appCardData.orgId = req.params.orgId;
-        appCardData.bgId = req.params.bgId;
-        appCardData.projectId = req.params.projectId;
-        appCardData.users = [req.session.user.cn];
-        appCardsDao.createAppCard(appCardData, function(err, data) {
+        var appData = req.body.appData;
+        appData.orgId = req.params.orgId;
+        appData.bgId = req.params.bgId;
+        appData.projectId = req.params.projectId;
+        appData.users = [req.session.user.cn];
+        Application.createNew(appData, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
@@ -827,7 +829,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        Tasks.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
+        Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
             if (err) {
                 res.send(500);
                 return;
@@ -863,7 +865,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         taskData.bgId = req.params.bgId;
         taskData.projectId = req.params.projectId;
         taskData.envId = req.params.envId;
-        Tasks.createNew(taskData, function(err, task) {
+        Task.createNew(taskData, function(err, task) {
             if (err) {
                 logger.err(err);
                 res.send(500);
