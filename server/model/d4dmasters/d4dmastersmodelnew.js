@@ -267,15 +267,15 @@ var d4dModelJenkinsConfig = mongoose.model('d4dModelJenkinsConfig',d4dMastersJen
 var d4dMastersProviders = new mongoose.Schema(
 		{id: {type:String,required:true, trim:true},
 		providername:{type:String,required:true,trim:true},
-        description:{type:String,required:true,trim:true},
-		accountid:{type:String,required:true,trim:true},
+        /*description:{type:String,required:true,trim:true},
+		accountid:{type:String,required:false,trim:true},*/
         region:{type:String,required:true,trim:true},
         accesskey:{type:String,required:true,trim:true},
         secretkey:{type:String,required:true,trim:true},
-        keypairname:{type:String,required:true,trim:true},
-        securitygroupid:{type:String,required:true,trim:true},
+        //keypairname:{type:String,required:true,trim:true},
+        //securitygroupid:{type:String,required:true,trim:true},
         providertype: {type:String,required:true,trim:true},
-        accountpemfile:{type:String,trim:true},
+        //accountpemfile:{type:String,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');
@@ -284,7 +284,9 @@ var d4dMastersImages = new mongoose.Schema(
 		{id: {type:String,required:true, trim:true},
 		imagename:{type:String,required:true,trim:true},
 		providertype: {type:String,required:true,trim:true},
+		providername: {type:String,required:true,trim:true},
 		imageid: {type:String,required:true,trim:true},
+		region: {type:String,required:true,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersImages = mongoose.model('d4dModelMastersImages',d4dMastersImages,'d4dmastersnew');

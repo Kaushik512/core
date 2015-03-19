@@ -34,4 +34,24 @@ module.exports.setRoutes = function(app, verifySession) {
         res.send(appConfig.aws.os);
     });
 
+    app.post('/aws/ec2/test',function(req,res){
+        logger.debug("Enter post() for /aws/ec2/test");
+        logger.debug("Recieved : %s %s ",req.body.accesskey,req.body.secretkey);
+        var settings = appConfig.aws;
+        var ec2 = new EC2({
+            "access_key": req.body.accesskey,
+            "secret_key": req.body.secretkey,
+            "region": settings.region
+        });
+        ec2.getSecurityGroups(function(err,data){
+            logger.debug("Called AW Security Groups");
+            if(err){
+                logger.debug("Unable to get AWS Security Groups", err);
+            }
+            logger.debug("Returning AW Security Groups");
+            res.send(data);
+        });
+
+    });
+
 }
