@@ -27,5 +27,5 @@ db.d4dmastersnew.update(
 	{$set: {'active':true}},
 	{multi:true}
 );
-
+//db.permissionsets.find({rolename:'Admin',permissions.category:'instancerunlist'})
 

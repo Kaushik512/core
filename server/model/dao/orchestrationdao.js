@@ -60,7 +60,7 @@ var taskSchema = new Schema({
     lastRunTimestamp: Number,
 });
 
-var Tasks = mongoose.model('Tasks', taskSchema);
+var Tasks = mongoose.model('Tasksasas', taskSchema);
 
 var TaskDao = function() {
 

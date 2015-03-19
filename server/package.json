@@ -31,7 +31,8 @@
         "mongoose-validator": "1.0.3",
         "winston-logstash": "0.1.11",
         "jenkins-api":"0.2.6",
-        "wait-for-port":"0.0.1"
+        "wait-for-port":"0.0.1",
+        "mongoose-schema-extend":"0.1.7"
     },
     "devDependencies": {
         "grunt": "0.4.5",

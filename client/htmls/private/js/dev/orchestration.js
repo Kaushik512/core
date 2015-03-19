@@ -121,7 +121,7 @@ function initializeTaskArea(data) {
 
         if (data[i].taskType === 'chef') {
             var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
-            $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
+            $tdNodeList.find('a').data('nodeList', data[i].taskConfig.nodesIds).click(function(e) {
                 $.post('../instances/', {
                     instanceIds: $(this).data('nodeList')
                 }, function(instances) {
@@ -151,7 +151,7 @@ function initializeTaskArea(data) {
         $tr.append($tdNodeList);
         if (data[i].taskType === 'chef') {
             var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-            $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
+            $tdRunlist.find('a').data('taskRunlist', data[i].taskConfigrunlist).click(function(e) {
                 var $taskRunListContainer = $('.taskRunListContainer').empty();
                 var runlist = $(this).data('taskRunlist');
                 if (runlist && runlist.length) {
