@@ -62,6 +62,17 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
+            function disableImportLaunch(){
+                var hasIPPermission = false;
+                    if(haspermission("instancelaunch","execute")){
+                        hasIPPermission=true;
+                    }
+                    if(!hasIPPermission){
+                        $('#ipaddressimport').addClass('hidden');
+                        $('.launchBtn').addClass('hidden');
+                    }
+            }
+
             function initializeInstance() {
                 bindClick_ipaddressImport();
                 bindClick_instnaceTab();
@@ -161,7 +172,6 @@
         bootbox.alert('Please select an instance to remove.');
     }
 }
-
             /*
             Attaching Click Event on IP Address Import, which will reset instance form.
             */
@@ -3139,6 +3149,7 @@ if (action == '6') {
             }
         };
 
+        disableImportLaunch();
         initializeInstance();
         initializeBluePrints();
         initializeContainer();
