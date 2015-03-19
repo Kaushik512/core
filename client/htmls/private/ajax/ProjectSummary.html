@@ -778,12 +778,13 @@
                                     </section>
                                     <section class="col col-6">
                                         <label for="category">Choose Tasks<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                        <label class="input">
+                                        <label class="input">                                                
                                             <select class="chooseTasks width-100">
                                                 <option value="">Taskname1</option>
                                                 <option value="">Taskname2</option>
                                                 <option value="">Taskname3</option>
                                                 <option value="">Taskname4</option>
+
                                             </select>   
                                         </label>
                                     </section>
@@ -855,13 +856,13 @@
                           </div>
                         </div>
                     </div>
-                    
+
                   </div>
               </form>
             </div>
              <div class="modal-footer">
                 <div class="btn-group" style="margin-left:200px;">                                
-                 <a class="btn btn-primary importSaveBtn" data-dismiss="modal">
+                 <a class="btn btn-primary appCardSaveBtn" data-dismiss="modal">
                     <i class="ace-icon fa fa-save bigger-110"></i>
                     Save
                 </a>
@@ -1584,6 +1585,22 @@
 </div>
 <script type="text/javascript">
 
+var urlParams = {};
+(window.onpopstate = function() {
+    var url = window.location.href;
+    var indexOfQues = url.lastIndexOf("?");
+    if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+            var paramParts = params[i].split('=');
+            urlParams[paramParts[0]] = paramParts[1];
+        }
+    }
+
+})();
+
 $(document).ready(function() {
     $(".chooseROE").select2();
     $(".chooseRLCE").select2();
@@ -1605,22 +1622,129 @@ $(document).ready(function() {
     $(".chooseEnvironment").select2();
     $(".chooseInstances").select2();
     // newCard();
-});
-$('.importSaveBtn').click(function(e) {
-        var $tt = $('#applicationNameInput').val();
-        localStorage.setItem('newAppName', $tt);
-    });
-    $('.actionnewControlPanel').click(function(e) {
-        var $selectedCard = $('.role-Selectedcard-app');
-        if ($selectedCard.length) {
-            window.location.href = 'index.html#ajax/newControlpanel.html';
+
+    //loading list of jenkins server 
+
+    $.get('/jenkins/', function(jenkinsList) {
+        jenkinsList = JSON.parse(jenkinsList);
+        var $jenkinsServerListDropdown = $('#jenkinsServerList');
+        if(jenkinsList.length) {
+           $jenkinsServerListDropdown.prop("disabled", false);
         }
+        for (var i = 0; i < jenkinsList.length; i++) {
+            var keys = Object.keys(jenkinsList[i]);
+            var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
+            $jenkinsServerListDropdown.append($option);
+        }
+        //$jenkinsServerListDropdown.trigger();
+
+        $jenkinsServerListDropdown.change(function(e) {
+            var jenkinsServerId = $(this).val();
+            var $jobsList = $('#jobListJenkins').empty();
+            $jobsList.prop("disabled", true);
+            $.get('/jenkins/' + jenkinsServerId + '/jobs', function(jobsList) {
+                for (var i = 0; i < jobsList.length; i++) {
+                    var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+                    $jobsList.append($option);
+                }
+                $jobsList.prop("disabled", false);
+            });
+
+        });
+
     });
-    $('.appcard-role-outer').find('.appcard-role-inner').click(function(e) {
-      var selectedappcardDesign = $(".appcard-role-inner").index($(this));
-      localStorage.setItem("selectedappcardDesign", selectedappcardDesign);
-        $('.appcard-role-inner').removeClass('role-Selectedcard-app');
-        $(this).addClass('role-Selectedcard-app');
+
+    // loading runlist 
+    var $ccrs = $chefCookbookRoleSelector(urlParams.org,null,null);
+    $('#runlistContainer').append($ccrs);
+
+    // loading envronments 
+    $.get('/d4dMasters/3/orgname_rowid/' + urlParams.org, function(envs) {
+        envs = JSON.parse(envs);
+        var $envList = $('#environmentList');
+        if (envs.length) {
+            $envList.prop("disabled", false);
+        }
+        for (var i = 0; i < envs.length; i++) {
+            var $option = $('<option></option>').html(envs[i].environmentname).val(envs[i].rowid);
+            $envList.append($option);
+        }
+
+        $envList.change(function(e) {
+            var envId = $(this).val();
+            var $instanceList = $('#instanceList').empty();
+            $instanceList.change();
+            $instanceList.prop("disabled", true);
+            $.get('/organizations/'+urlParams.org+'/businessgroups/'+urlParams.bg+'/projects/'+urlParams.projid+'/environments/'+envId+'/instances', function(instances) {
+                for (var i = 0; i < instances.length; i++) {
+                    var $option = $('<option></option>').val(instances[i]._id).html(instances[i].chef.chefNodeName);
+                    $instanceList.append($option);
+                }
+                $instanceList.prop("disabled", false);
+            });
+        });
+
     });
-    pageSetUp();
+
+});
+$('.appCardSaveBtn').click(function(e) {
+    var appCardData = {};
+    appCardData.name = $('#applicationNameInput').val();
+    if (!appCardData.name) {
+        alert("App card name is empty");
+        return;
+    }
+    appCardData.buildConfig = {
+        jenkinsServerId: $('#jenkinsServerList').val(),
+        jobName: $('#jobListJenkins').val()
+    };
+
+    if (!(appCardData.buildConfig.jenkinsServerId && appCardData.buildConfig.jobName)) {
+        alert("Build configuration is incorrect");
+        return;
+    }
+    appCardData.instanceIds = [];
+    appCardData.instanceIds.push($('#instanceList').val());
+    if (!appCardData.instanceIds.length) {
+        alert("Please Select an Instance");
+        return;
+    }
+    var $selectedRunlist = $('#runlistContainer').find('.deploymentSelectedRunList');
+
+    var runlist = [];
+    var $inputs = $selectedRunlist.find('input');
+    $inputs.each(function() {
+        runlist.push($(this).val());
+    });
+    if (!runlist.length) {
+        alert("Please Choose a Runlist");
+        return;
+    }
+
+    appCardData.deployConfig = {
+        chefServerId: $selectedRunlist.attr('data-chefServerId'),
+        runlist: runlist
+    }
+
+    $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/appcards', {
+        appData: appCardData
+    }, function(appCard) {
+        console.log(appCard);
+
+    });
+
+});
+$('.actionnewControlPanel').click(function(e) {
+    var $selectedCard = $('.role-Selectedcard-app');
+    if ($selectedCard.length) {
+        window.location.href = 'index.html#ajax/newControlpanel.html';
+    }
+});
+$('.appcard-role-outer').find('.appcard-role-inner').click(function(e) {
+    var selectedappcardDesign = $(".appcard-role-inner").index($(this));
+    localStorage.setItem("selectedappcardDesign", selectedappcardDesign);
+    $('.appcard-role-inner').removeClass('role-Selectedcard-app');
+    $(this).addClass('role-Selectedcard-app');
+});
+pageSetUp();
 </script>

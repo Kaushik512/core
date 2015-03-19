@@ -237,8 +237,8 @@ $(document).ready(function() {
             for (var i = 0; i < data.length; i++) {
                 if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' ||  data[i].instanceState == 'unknown') {
                     var checked = false;
-                    if (taskData && taskData.taskType==='chef' && taskData.chefTask.nodesIdList && taskData.chefTask.nodesIdList.length) {
-                        if (taskData.chefTask.nodesIdList.indexOf(data[i]._id) !== -1) {
+                    if (taskData && taskData.taskType==='chef' && taskData.taskConfig.nodeIds && taskData.taskConfig.nodeIds.length) {
+                        if (taskData.taskConfig.nodeIds.indexOf(data[i]._id) !== -1) {
                             checked = true;
                         }
                     }
@@ -256,7 +256,7 @@ $(document).ready(function() {
 
         var runlist = null;
         if(taskData && taskData.taskType==='chef') {
-            runlist = taskData.chefTask.runlist;
+            runlist = taskData.taskConfig.runlist;
         }
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
@@ -293,7 +293,7 @@ $(document).ready(function() {
                   }
                     $jobsList.prop("disabled", false);
                     if (taskData && taskData.taskType === 'jenkins') {
-                        $jobsList.val(taskData.jenkinsTask.jobName);
+                        $jobsList.val(taskData.taskConfig.jobName);
                         $jobsList.change();
                     }
                 });
@@ -301,7 +301,7 @@ $(document).ready(function() {
             });
 
             if(taskData && taskData.taskType==='jenkins') {
-                $jenkinsServerListDropdown.val(taskData.jenkinsTask.jenkinsServerId);
+                $jenkinsServerListDropdown.val(taskData.taskConfig.jenkinsServerId);
                 $jenkinsServerListDropdown.change();
             }
 
@@ -320,17 +320,10 @@ $(document).ready(function() {
                 if (keyA[0] > keyB[0]) return 1;
                 return 0;
             });
-            var taskUsersList = [];
-            if(taskData && taskData.taskType === 'jenkins') {
-                   taskUsersList = taskData.jenkinsTask.users;                     
-            }
+            
             for (var i = 0; i < userList.length; i++) {
                 var keys = Object.keys(userList[i]);
                 var $option = $('<option></option>').append(keys[0]).val(keys[0]);
-                if(taskUsersList.indexOf(keys[0]) !== -1) {
-                    $option.attr('selected','selected');
-                }
-
                 $userLists.append($option);
             }
 
@@ -383,7 +376,7 @@ $(document).ready(function() {
                 alert('Please choose runlist');
                 return;
             }
-            taskData.nodesIdList = nodesList;
+            taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
         } else if (taskType === 'jenkins') {
             var taskName = $('#jenkinsTaskName').val();
