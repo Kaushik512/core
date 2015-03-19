@@ -53,7 +53,7 @@
 		color: undefined, // '#000000',
 		backColor: undefined, // '#FFFFFF',
 		borderColor: undefined, // '#dddddd',
-		onhoverColor: '#F5F5F5',
+		onhoverColor: 'rebeccapurple',
 		selectedColor: '#FFFFFF',
 		selectedBackColor: '#428bca',
 
@@ -340,6 +340,7 @@
 							.attr('itemtype',node.itemtype)
 							.attr('title',node.tooltip)
 							.attr('rowid',node.rowid)
+							.attr('target',node.target)
 							.append(node.text)
 						);
 				}
