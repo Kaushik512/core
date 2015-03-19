@@ -151,13 +151,13 @@
                                                   </select>
                                                 
                                             </div>
-                                            <div class="col-lg-6">
+                                            <!-- <div class="col-lg-6" style="margin-top:15px;">
                                                     <label for="">Choose Image:<span style="color:red">*</span></label>
                                                     <select id="imagename" class="chooseImage width-100">
                                                     </select>
 
                                                                                               
-                                                </div>
+                                                </div> -->
                                             <!--To add the Swipe Functionality-->                            
                                             
                                             </form><!--end-->
@@ -575,14 +575,14 @@ $(document).ready(function(){
     $(".chooseOS").select2();
     $(".chooseSecurity").select2();
     $(".chooseInstance").select2();
-    $(".chooseImage").select2();
+    //$(".chooseImage").select2();
     $(".chooseBG").select2();
     $(".chooseProject").select2();
     $(".chooseEnv").select2();
     $(".chooseDockerContainer").select2();
     $(".chooseSelectExit").select2();
 
-    $.ajax({
+    /*$.ajax({
       url: "/d4dMasters/readmasterjsonnew/22",
       dataType: "json",
       type: "GET",
@@ -603,7 +603,7 @@ $(document).ready(function(){
            }
 
            }
-         });
+         });*/
    $.ajax({
     url: "/d4dMasters/readmasterjsonnew/16",
     dataType: "json",
