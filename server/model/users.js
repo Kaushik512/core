@@ -39,6 +39,8 @@ module.exports.createUser = function(username, fname, lname, groupId, roleId, ca
 
 var getpermissionforcategory = function(category,permissionto, permissionset) {
     var perms = [];
+   // logger.debug(JSON.stringify(permissionset));
+ //   logger.debug('Category : ' + category);
     if (permissionset) {
       // logger.debug('About to call getObjects u:' + username + ' c:' + category);
        //permissionset = JSON.parse(permissionset);

@@ -249,7 +249,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     break;
                 case "3":
                     tocheck.push('4');
-                    fieldname = "environmentname_rowid";
+                    fieldname = "environmentname_rowid,orgname_rowid";
                     break;
                 case "4":
                     tocheck.push('blueprints');
