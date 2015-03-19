@@ -1182,8 +1182,15 @@ function Configmgmt() {
         var checkmasters = function(rowid,formids,fieldname){
             var delcheckquery = {};
             delcheckquery.id = {$in:formids};
-
-            delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
+            if(fieldname.indexOf(',') > 0)
+            {
+                var fldn = fieldname.split(',');
+                for(flds in fldn){
+                    delcheckquery[flds] = {$regex : ".*" + rowid + "*"};
+                }
+            }
+            else
+                delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
             //delcheckschema.rowid = {type:String};
             //var dynaschema = new d4dModelNew.d4dModelMastersGeneric(delcheckschema);
             d4dModelNew.d4dModelMastersGeneric.find(delcheckquery,function(err,d4dMasterJson){

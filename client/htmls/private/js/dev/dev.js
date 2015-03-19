@@ -1690,6 +1690,7 @@ $itemContainer.append($itemBody);
         });
         $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
         $launchDockerInstanceSelector.modal('show');
+        $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
         $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
         $('#dockerintsancestab').dataTable({
             "bPaginate": false
@@ -1870,7 +1871,8 @@ $itemContainer.append($itemBody);
                             $parent.find('.moreInfo').trigger('click');
                             console.log(data);
                         }).fail(function(jxObj) {
-
+                                if(jxObj.status == '401')
+                                    bootbox.alert('Inssuficient permission to perform operation.');
                         });
                     });
 
@@ -1948,7 +1950,7 @@ $itemContainer.append($itemBody);
 
                     if (data[i].taskType === 'chef') {
                         var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
-                        $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
+                        $tdNodeList.find('a').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                             $.post('../instances/', {
                                 instanceIds: $(this).data('nodeList')
                             }, function(instances) {
@@ -1978,7 +1980,7 @@ $itemContainer.append($itemBody);
     $tr.append($tdNodeList);
     if (data[i].taskType === 'chef') {
         var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-        $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
+        $tdRunlist.find('a').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
             var $taskRunListContainer = $('.taskRunListContainer').empty();
             var runlist = $(this).data('taskRunlist');
             if (runlist && runlist.length) {
@@ -2504,7 +2506,10 @@ $itemContainer.append($itemBody);
 
 
                                 if(ep == 'null')
-                                  $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                  {
+                                    $td.find('.dockerspinner').detach();
+                                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                    }
                               else{
                                   if($('#Containernamefield').val() != '')
                                   { 

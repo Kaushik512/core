@@ -44,7 +44,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            logger.debug("Successfully sent data ",data);
             res.send(data);
             logger.debug("Exit post() for /instances");
         });
