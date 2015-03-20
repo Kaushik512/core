@@ -32,6 +32,11 @@ var ApplicationSchema = new Schema({
         type: String,
         trim: true
     },
+    git: {
+        repoUrl: String,
+        repoUsername: String,
+        repoPassword: String,
+    },
     users: [{
         type: String,
         required: true,
