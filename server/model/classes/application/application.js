@@ -27,6 +27,7 @@ var ApplicationSchema = new Schema({
         trim: true,
         validate: schemaValidator.projIdValidator
     },
+    name: String,
     iconpath: {
         type: String,
         trim: true
@@ -42,16 +43,41 @@ var ApplicationSchema = new Schema({
 });
 
 // instance method 
-ApplicationSchema.methods.build = function(user,callback) {
+ApplicationSchema.methods.build = function(user, callback) {
+    logger.debug("Executing build");
     Build.getBuildById(this.buildId, function(err, build) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        build.execute(user,callback);
+        build.execute(user, callback);
     });
 };
+
+// static methods
+ApplicationSchema.methods.getBuild = function(callback) {
+    Build.getBuildById(this.buildId, function(err, build) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, build);
+    });
+};
+
+ApplicationSchema.methods.getBuildHistory = function(callback) {
+    Build.getBuildById(this.buildId, function(err, build) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        build.getHistory(callback);
+    });
+};
+
 
 // static methods
 ApplicationSchema.statics.getApplicationById = function(applicationId, callback) {
@@ -72,6 +98,7 @@ ApplicationSchema.statics.getApplicationById = function(applicationId, callback)
 
     });
 };
+
 
 ApplicationSchema.statics.createNew = function(appData, callback) {
     logger.debug("Enter create new application");

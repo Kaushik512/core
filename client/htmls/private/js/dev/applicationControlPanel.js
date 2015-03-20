@@ -23,7 +23,10 @@ $(function() {
         var $appCard = $appCardTemplate.clone();
         var applicationId = data._id;
         $appCard.data('applicationId', data._id);
+
+        //setting up name 
         $appCard.find('.applicationName').html(data.name);
+        $('.applicationNameLabel').html(data.name);
 
         $appCard.find('.appcard-role-inner').click(function(e) {
             var selectedappcardDesign = $(".appcard-role-inner").index($(this));
@@ -31,13 +34,16 @@ $(function() {
             $('.appcard-role-inner').removeClass('role-Selectedcard-app');
             $(this).addClass('role-Selectedcard-app');
         });
-
+         
         $.get('../applications/' + applicationId + '/buildConf', function(buildData) {
             $appCard.find('.codeHealthUrl').attr('href', buildData.codeAnalysisUrl);
             $appCard.find('.uiHealthUrl').attr('href', buildData.uiPerformaceUrl);
         });
+        // setting build history
 
-
+        $.get('../applications/' + applicationId + '/buildHistory', function(buildHistories) {
+           console.log(buildHistories);            
+        });
 
         $appCard.find('.appCardBuildBtn').data('applicationId', data._id).click(function(e) {
             var applicationId = $(this).data('applicationId');
@@ -139,157 +145,229 @@ $(function() {
                 }
             });
         });
-
-
-
         return $appCard;
     }
 
 
 
-    $(".chooseROE").select2();
-    $(".chooseRLCE").select2();
-    $('#divinstancestableview').hide();
-    $(".selectSecurityEdit").select2();
-    $(".selectInstanceEdit").select2();
-    $(".selectOSEdit").select2();
-    $(".selectNumberInstancesEdit").select2();
-    $(".selectInstanceValidityEdit").select2();
-    $(".selectBGEdit").select2();
-    $(".selectProjectEdit").select2();
-    $(".selectEnvironmentEdit").select2();
-    $(".chooseOS").select2();
-    $(".chooseSecurity").select2();
-    $(".chooseInstance").select2();
-
-    $(".chooseAppEnvironment").select2();
-    $(".chooseTasks").select2();
-    $(".chooseEnvironment").select2();
-    $(".chooseInstances").select2();
-
-
     // loading cards
 
-    $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications', function(apps) {
+    $.get('../applications/'+urlParams.appId, function(app) {
         var $cardList = $('.appcardList');
-        for (var i = 0; i < apps.length; i++) {
-            $cardList.append(createAppCard(apps[i]));
+        console.log(app);
+        if(app) {
+          $cardList.append(createAppCard(app));
         }
     });
 
 
+     if (!$.fn.dataTable.isDataTable('#tableBuild') ){
+     // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#tableBuild').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": false
+              }
+          ]
+      });
+   }
 
-    // loading envronments 
-    $.get('/d4dMasters/3/orgname_rowid/' + urlParams.org, function(envs) {
-        envs = JSON.parse(envs);
-        var $envList = $('#environmentList');
-        if (envs.length) {
-            $envList.prop("disabled", false);
-        }
-        for (var i = 0; i < envs.length; i++) {
-            var $option = $('<option></option>').html(envs[i].environmentname).val(envs[i].rowid);
-            $envList.append($option);
-        }
+   if (!$.fn.dataTable.isDataTable('#tableDeploy') ){
+     // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#tableDeploy').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": false
+              }
+          ]
+      });
+   }
+   if (!$.fn.dataTable.isDataTable('#tableDeploy2') ){
+     // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#tableDeploy2').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": false
+              }
+          ]
+      });
+   }
 
-        $envList.change(function(e) {
+   if (!$.fn.dataTable.isDataTable('#tableUITest') ){
+     // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#tableUITest').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              }
+          ]
+      });
+   }
 
-            var envId = $(this).val();
-            var $taskList = $('#taskList').empty();
-            $taskList.change();
-            $taskList.prop("disabled", true);
-            $.get('/organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/environments/' + envId + '/tasks', function(tasks) {
-                for (var i = 0; i < tasks.length; i++) {
-                    var $option = $('<option></option>').val(tasks[i]._id).html(tasks[i].name);
-                    $taskList.append($option);
+   if (!$.fn.dataTable.isDataTable('#tablePerformanceTest') ){
+     // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#tablePerformanceTest').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              }
+          ]
+      });
+   }
+
+   if (!$.fn.dataTable.isDataTable('#tableFunctionalTest') ){
+     // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#tableFunctionalTest').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              },
+              {
+                  "bSortable": true
+              }
+          ]
+      });
+   }
+
+   var remotecardDesign = localStorage.getItem("selectedappcardDesign");
+    
+    var finalcardname;
+  //console.log(typeof remotecardDesign);
+  switch (remotecardDesign) {
+    case "0":
+        finalcardname = "Life Ray";
+        break;
+    case "1":
+        finalcardname = "Drupal";
+        break;
+    case "2":
+        finalcardname =  "Redaxscript";
+        break;
+    }
+    $('.appcardName').append(finalcardname);
+  
+
+$('.btnItemAdd').click(function(e) {
+  //alert('hello');
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        var $selectedCookbooks = $("input[name=checkboxTasklist]:checked");
+        $selectedCookbooks.each(function(idx) {
+            var $this = $(this);
+            $deploymentSelectedList.append($('<li title="' + $this.attr('data-tasknamename') + '"><label style="margin: 5px;"><input type="hidden" value="' + $this.val() + '"/>' + $this.attr('data-tasknamename').substr(0, 15) + '</label></li>').on('click', function(e) {
+                if ($(this).hasClass('deploymentCookbookSelected')) {
+                    $(this).removeClass('deploymentCookbookSelected');
+                } else {
+                    $(this).addClass('deploymentCookbookSelected');
                 }
-                $taskList.prop("disabled", false);
-            });
+            }));
+            $this.attr('checked', false);
+            $this.parents('li').hide().data('itemSelected', true);
         });
-
+        e.preventDefault();
+        return (false);
     });
-
-    $('.appCardSaveBtn').click(function(e) {
-        var appCardData = {};
-        appCardData.name = $('#applicationNameInput').val();
-        if (!appCardData.name) {
-            alert("App card name is empty");
-            return;
-        }
-
-        var iconFileInput = $('#applicationiconInput')[0].files;
-        if (!iconFileInput.length) {
-            alert("Please add an icon file");
-            return;
-        }
-
-
-        appCardData.git = {
-            repoUrl: $('#gitURLInputaddApp').val(),
-            repoUsername: $('#gitusernameaddApp').val(),
-            repoPassword: $('#gitpasswordaddApp').val(),
-        };
-
-        if (!(appCardData.git.repoUrl && appCardData.git.repoUsername && appCardData.git.repoPassword)) {
-            alert("Git configuration is incorrect");
-            return;
-        }
-
-        appCardData.build = {
-            envId: $('#environmentList').val(),
-            taskId: $('#taskList').val(),
-            functionalTestUrl: $('#appFunctionalTest').val(),
-            performanceTestUrl: $('#appPerformanceTest').val(),
-            securityTestUrl: $('#appSecurityTest').val(),
-            nonFunctionalTestUrl: $('#appNonFunctionalTest').val(),
-            unitTestUrl: $('#appUnitTest').val(),
-            codeCoverageTestUrl: $('#appCodeCoverage').val(),
-            codeAnalysisUrl: $('#appCodeAnalysis').val(),
-            uiPerformaceUrl: $('#UIPerfAnalysis').val(),
-        };
-
-        if (!(appCardData.build.envId && appCardData.build.taskId)) {
-            alert("Build configuration is incorrect");
-            return;
-        }
-
-        /*var fd = new FormData();
-        fd.append("applicationIcon", iconFileInput[0].data);
-        fd.append('appData', JSON.stringify(appCardData));
-        $.ajax({
-            url: '../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications',
-            type: "POST",
-            data: fd,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                // .. do something
-            },
-            error: function(jqXHR, textStatus, errorMessage) {
-                console.log(errorMessage); // Optional
-            }
-        });*/
-
-        $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications', {
-            appData: appCardData
-        }, function(appCard) {
-            console.log(appCard);
-            $('.appcardList').append(createAppCard(appCard));
-            $('#modaladdAppCard').modal('hide'); 
+    
+    $('.btnItemRemove').click(function(e) {
+        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
+            var value = $(this).find('input').val();
+            var selector = 'input[name=checkboxRole][value="' + value + '"]';
+            console.log(selector);
+            $('input[name=checkboxRole][value="' + value + '"]').parents('li').show().data('itemSelected', false);
+            $('input[name=checkboxTasklist][value="' + value + '"]').parents('li').show().data('itemSelected', false);
+            $(this).remove();
         });
+        //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return (false);
+    });
 
+    $(".btnItemUp").on('click', function(e) {
+        var $selectedRunlist = $('.deploymentCookbookSelected');
+
+        $selectedRunlist.insertBefore($selectedRunlist.first().prev());
+        //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return (false);
     });
-    $('.actionnewControlPanel').click(function(e) {
-        var $selectedCard = $('.role-Selectedcard-app');
-        if ($selectedCard.length) {
-            var applicationId  = $selectedCard.parent().data('applicationId');
-            window.location.href = 'index.html#ajax/newControlpanel.html?appId='+applicationId;
-        }
+
+    $(".btnItemDown").on('click', function(e) {
+        var $selectedRunlistDown = $('.deploymentCookbookSelected');
+
+        $selectedRunlistDown.insertAfter($selectedRunlistDown.last().next());
+        //chrome fix - Page refresh - Vinod 
+        e.preventDefault();
+        return (false);
     });
-    $('.appcard-role-outer').find('.appcard-role-inner').click(function(e) {
-        var selectedappcardDesign = $(".appcard-role-inner").index($(this));
-        localStorage.setItem("selectedappcardDesign", selectedappcardDesign);
-        $('.appcard-role-inner').removeClass('role-Selectedcard-app');
-        $(this).addClass('role-Selectedcard-app');
-    });
+
     pageSetUp();
 });

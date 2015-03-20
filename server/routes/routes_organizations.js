@@ -810,22 +810,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
-    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications/:applicationId/build', function(req, res) {
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications/:applicationId/build/:buildId', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.send(500);
+                res.send(500, errorResponses.db.error);
                 return;
             }
-            application.build(req.session.user.cn, function(err, buildRes) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                res.send(buildRes);
-            });
+            if (application) {
+                application.getBuild(function(err, build) {
+                    if (err) {
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    res.send(build)
+                });
+            } else {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
         });
-        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
-
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications', function(req, res) {
@@ -979,7 +983,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
 
             chef.getRolesList(function(err, roles) {
-
                 if (err) {
                     logger.error('Unable to fetch roles : ', err);
                     res.send(500);
@@ -992,9 +995,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     logger.debug("Exit get() for /organizations/%s/roles", req.params.orgname);
                 }
             });
-
         });
-
     });
 
     app.get('/organizations/:orgname/chefRunlist', function(req, res) {
