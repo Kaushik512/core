@@ -3,6 +3,9 @@
     float:right !important;
     margin-top: -5px !important;
 }
+.panel-default > .panel-heading + .panel-collapse .panel-body{
+  border-top: none !important;
+}
 </style>
 <div class="row">
   <article class="col-sm-12 col-md-12 col-lg-12" id="controlPanelContainer">
@@ -1163,14 +1166,17 @@
             <div class="modal-body">
                 <div class="row" style="margin:0px">
                   <div class="col-lg-6" style="padding-left:0px;">
-                    <label for="name">Deployment Label:
+                    <label for="name">Name:
                     </label>
                     <input id="applicationInstanceNameInput" class="form-control" type="text" style="height:36px;" placeholder="Example : Prod_AUS">
                   </div>
-                  <div class="col-lg-6" style="padding-left:0px;">
-                    <label for="name">Name:
-                    </label>
-                    <input id="" class="form-control" type="text" style="height:36px;" placeholder="Example : Prod_AUS">
+                  <div class="col-lg-6">
+                    <label for="">Deployment Label:<span style="color:red">*</span></label>
+                    <select class="chooseDeployment width-100">
+                      <option value="">Prod_AUS</option>
+                      <option value="">Prod_CHINA</option>
+                      <option value="">Prod_INDIA</option>
+                    </select>
                   </div>
                   <!-- <div class="col-lg-6" style="padding-right:0px;">
                     <div class="smart-forms">
@@ -1193,9 +1199,24 @@
                           </h4>
                       </div>
                         <div id="CollapseChefCookbookrunlistParameteraddApp" class="panel-collapse collapse in">
-                          <form action="" class="smart-form">
-                              <div class="widget-body no-padding smart-form">
-                                <fieldset>
+                          <form action="">
+                            <div class="row " style="margin:0px;">
+                            
+                            
+                            <div class="col-lg-6" style="margin-top:15px;">
+                              <label for="">Choose Environment:<span style="color:red">*</span></label>
+                              <select class="chooseEnvironment width-100">
+                                <option value="">DEV</option>
+                                <option value="">QA</option>
+                                <option value="">Stage</option>
+                                <option value="">Production</option>
+                              </select>
+                            </div>
+                            </div>
+                          </form>  
+                          <!-- <form action="" class="smart-form">
+                              <div class="widget-body no-padding">
+                                <fieldset style="padding:0px;">
                                     <section class="col col-6">
                                         <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                         <label class="input">
@@ -1209,7 +1230,7 @@
                                     </section>                       
                                 </fieldset>
                               </div>
-                            </form>  
+                            </form>  --> 
                           <div class="panel-body">
                             
                                 
@@ -1988,11 +2009,12 @@ var urlParams = {};
 })();
 
 $(document).ready(function() {
-    newCard();
+    //newCard();
     $(".chooseOS").select2();
     $(".chooseSecurity").select2();
     $(".chooseInstance").select2();
     $(".chooseEnvironment").select2();
+    $(".chooseDeployment").select2();
     
 
 
