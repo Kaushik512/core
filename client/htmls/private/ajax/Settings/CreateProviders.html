@@ -165,11 +165,7 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                       <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="awsTest()">
-                            <i class="ace-icon fa fa-check bigger-110"></i>
-                             Test
-                        </button>
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm())saveform(9);">
+                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="providerTest()">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
@@ -228,10 +224,11 @@
 
     inLineReady();
 
-    function awsTest(){
+    function providerTest(){
                  var inputData = new Object();
                  inputData.accesskey = $('#accesskey').val();
                  inputData.secretkey = $('#secretkey').val();
+                 inputData.region = $('#region').val();
                  //alert(inputData.accesskey);
  
                  $.ajax({
@@ -241,9 +238,10 @@
                      data: inputData,
                      success: function (data) {
                          //alert("Success...");
+                         if(validateForm())saveform(9);
                      },
-                     error: function (xhr) {
-                         //alert("error...")
+                     error: function (err) {
+                         alert("Invalid AccessKey or SecretKey.")
                      }
                  });
   

@@ -22,6 +22,7 @@ var taskStatus = require('./routes_taskstatus');
 var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');
+var jira = require('./routes_jira');
 
 
 module.exports.setRoutes = function(app) {
@@ -60,6 +61,8 @@ module.exports.setRoutes = function(app) {
   ec2.setRoutes(app,sessionVerificationFunc);
   
   jenkins.setRoutes(app,sessionVerificationFunc);
+
+  jira.setRoutes(app,sessionVerificationFunc);
 
   app.get('/', function(req, res) {
     res.redirect('/private/index.html');
