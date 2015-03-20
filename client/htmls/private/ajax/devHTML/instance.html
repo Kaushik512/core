@@ -188,8 +188,8 @@
 
                         </div>
                     
-                       
-                        <div class="col-lg-6 authPassword" style="margin-top:15px">
+                    <div class="col-lg-12 ipLEFT">
+                        <div class="col-lg-6 authPassword ipWidth">
 
                             <label for="">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
@@ -199,7 +199,9 @@
 
 
                         </div>
-                        <div class="col-lg-6 authPemFile" style="margin-top:15px">
+                    </div>
+                    <div class="col-lg-12 ipLEFT">
+                        <div class="col-lg-6 authPemFile ipWidth">
                             <div class="smart-forms">
                                 <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                 <label for="templatesicon" name="field" class="file">
@@ -209,6 +211,7 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
                         <div class="col-lg-6 hidden" style="margin-top:15px;">
                             <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
@@ -217,7 +220,7 @@
                             </select>
 
                         </div>
-
+                        <!--app series-->
                         <div class="col-lg-6" style="margin-top:15px">
 
                             <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -231,9 +234,32 @@
 
                         <div class="col-lg-6" style="margin-top:15px">
 
-                            <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                            <label for="">Application URL(ex:- $host[:port]/application)<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
                             <input type="text" name="appNameURL" class="form-control" id="appURL">
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
+
+                        </div>
+
+                        <!--condition for 2nd app-->
+                        <div class="col-lg-6" style="margin-top:15px">
+
+                            <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="appNameInput2" class="form-control" id="appName2">
+                            <b class="tooltip tooltip-top-right">
+                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+
+
+                        </div>
+
+                        <div class="col-lg-6" style="margin-top:15px">
+
+                            <label for="">Application URL(ex:- $host[:port]/application)<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="appNameURL2" class="form-control" id="appURL2">
                             <b class="tooltip tooltip-top-right">
                                 <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
 
@@ -260,7 +286,7 @@
 </div><!-- /.modal for Import by IP ended-->
 
 <!--instance launching pad-->
-<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" id="instanceLogModalContainer" tabindex="-1" style='z-index:1800' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

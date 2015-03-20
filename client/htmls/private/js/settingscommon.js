@@ -2670,6 +2670,14 @@ function enableUniqueCheckingForInputs(id) {
                     return (true);
                 }
             }
+            if ($(this).attr("savedvalue") != null) {
+                if ($(this).attr("savedvalue") == $(this).val()) {
+                    if (uni.length > 0)
+                        uni.html('');
+                    $('button[onclick*="saveform"]').removeAttr('disabled');
+                    return (true);
+                }
+            }
             //alert(typeof uni);
             if (uni.length > 0)
                 uni.html('');

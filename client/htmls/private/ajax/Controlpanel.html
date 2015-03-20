@@ -46,10 +46,10 @@
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
                                       
                                       </div>
-                                      <div class="actionbutton instance-bootstrap-ActionStart"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
+                                      <div class="actionbutton instance-bootstrap-ActionStart" style="display:none;"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
                                         
                                       
-                                      <div class="actionbutton instance-bootstrap-ActionShutdown"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Stop"></a></div>
+                                      <div class="actionbutton instance-bootstrap-ActionShutdown"style="display:none;"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Stop"></a></div>
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
                                         <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
@@ -669,7 +669,57 @@ $.get('../instances/'+urlParams.id,function(data){
       addActionLogsToTable(actionLogs);
     });
     
-    
+    var getOS=function(data){
+                        var basePath='img/osIcons/',imgPath,title='';
+                        console.log(data.hardware.os+' :: OS ::'+data.hardware.platform.toLowerCase())
+                        switch(data.hardware.platform.toLowerCase()){
+                            case "window 2008":
+                            imgPath='windows.png';
+                            break;
+                            case "centos":
+                            imgPath='centos.png';
+                            break;
+                            case "ubuntu":
+                            imgPath='ubuntu.png';
+                            break;
+                            default:
+                            imgPath='unknown.png';
+                        }
+                        title=data.hardware.platform;
+                        if(imgPath==="unknown.png"){
+                            if(data.hardware.os.toLowerCase()==="linux"){
+                                imgPath="linux.png";
+                                title=data.hardware.os;
+
+                            }else if(data.hardware.os.toLowerCase().indexOf('window')>-1){
+                                imgPath="windows.png";
+                                title=data.hardware.os;
+
+                            }
+
+                        }
+                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ title.capitalizeFirstLetter() +'" rel="tooltip"/></span>'
+                    },
+                    getStartStopToggler=function(data){
+                      var title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
+                        return '<div class="startstoptoggler '+data.instanceState+'" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="'+title+'" rel="tooltip"></div>'
+                    },
+                    startAndStopToggler=function (e){
+        if($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')){
+            console.log('pending or Unknow State');
+            return false;
+        }
+        else if($(this).hasClass('running')){
+            console.log('running State');
+            debugger;
+            $(this).parent().find('.actionbuttonShutdown').trigger('click');
+
+        }else if($(this).hasClass('stopped')){
+            console.log('Stopped State');
+            debugger;
+            $(this).parent().find('.actionbuttonStart').trigger('click');
+        }
+}
 
   
    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).attr('data-osType',data.hardware.os).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
@@ -679,15 +729,18 @@ $.get('../instances/'+urlParams.id,function(data){
 
     var $spanheadingMiddleCP = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
     var $spanheadingRightCP = $('<span></span>').css({
-        'float': 'right'
+      'float':'left','margin-top':'4px','margin-left':'8px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
 
     $divHeadingCP.append($spanheadingLeftCP);
     $divHeadingCP.append($spanheadingMiddleCP);
-    $divHeadingCP.append($spanheadingRightCP);
+    $divHeadingCP.append($(getOS(data)));
+
+$('.instanceActionBtnCtr').append([$(getStartStopToggler(data)),$spanheadingRightCP]);
+    //$divHeadingCP.append($spanheadingRightCP);
     //$domainRolesCaption.append($divHeadingCP);
 
-
+$('.startstoptoggler').click(startAndStopToggler);
    // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
   $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
   $domainRolesCaption.find('.instance-state').html(data.instanceState);
@@ -898,6 +951,9 @@ $.get('../instances/'+urlParams.id,function(data){
                     stateTimeout = setTimeout(function() {
                         $.get('../instances/' + instanceId, function(data) {
                             if (data) {
+                                title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
+                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title',title);   
+
                                 if (data.instanceState == 'stopped') {
 
                                     enableInstanceActionStopBtn(data._id);
