@@ -225,6 +225,16 @@
 
 <script type="text/javascript">
 
+$(document).ready(function(){
+  var hasChefImportPermission = false;
+   if(haspermission("instancelaunch","execute")){
+    hasChefImportPermission=true;
+   }
+   if(!hasChefImportPermission){
+      $('#buttonForIP').addClass('hidden');
+   }
+});
+
 $('#buttonForIP').click(function(e){
   var perm = haspermission('instancelaunch','execute');
   

@@ -358,12 +358,34 @@ String.prototype.capitalizeFirstLetter = function() {
     
     <!-- MAIN APP JS FILE -->
     <script type="text/javascript">
+
+
+    $(document).ready(function(){
+    var hasSettingsPermission =false;
+        if(haspermission("settings","read")){
+            hasSettingsPermission =true;
+        }
+        if(!hasSettingsPermission){
+            $('#settingsNew').addClass('hidden');
+        }
+
+    var hasDesignPermission =false;
+        if(haspermission("design","read")){
+            hasDesignPermission =true;
+        }
+        if(!hasDesignPermission){
+            $('#designNew').addClass('hidden');
+        }
+    });
+
+
 function foldTreeForSetting(){
     var list=$('#setting_tree').find('.fa-angle-down'),len=list.length;
     for(var i=0;i<len;i++){
     list.eq(i).trigger('click');
     }
 }
+
 
     function setleftnavigation(toplink,breadcrumbHeader){
    var TabID=$(toplink).attr('id');
@@ -593,7 +615,7 @@ var SettingTreeJson=[
             },
               {
                 "name": "organizations",
-                "text": "Image",
+                "text": "VMImage",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ImagesList.html",
                 "selectable": true,
@@ -855,6 +877,7 @@ console.log(event.target);
 	checkandnavigatetotab();
 loadSettingsTree();
  //function ends
+ 
 </script>
 <script src="js/chefmodalcommon.js"></script>
     <script src="/private/js/settingscommon.js"></script>
