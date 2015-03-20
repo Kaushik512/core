@@ -1,5 +1,4 @@
 var logger = require('../lib/logger')(module);
-var MyJiraApi = require('../lib/jira.js');
 var JiraApi = require('jira').JiraApi;
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all('/jira/*',sessionVerificationFunc);
