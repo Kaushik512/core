@@ -178,7 +178,13 @@
             function bindClick_ipaddressImport() {
 
                 $('#ipaddressimport').click(function(e) {
-              
+                    var hasChefServerPermission = false;
+                    if(haspermission("chefserver","read")){
+                        hasChefServerPermission=true;
+                    }if(!hasChefServerPermission){
+                        alert('Please add a Chef Server');
+                        return false;
+                    }
                     $('#nodeimportipresultmsg').addClass("hidden");
                     $('#addInstanceForm').trigger("reset");
                     $('#pemFileDropdown').change();
@@ -232,6 +238,7 @@
     function registerModelEventForImportInstance() {
         $('#modalContainerimportInstance').on('show.bs.modal', function(e) {
             $('#addInstanceBtn').removeAttr('disabled');
+            //var perm1 = haspermission("chefserver","read");
                     //$('#addInstanceForm').get(0).reset();
                     var _org = getUrlParameter('org');
                     $.get('/d4dMasters/readmasterjsonnew/10', function(data) {
@@ -692,6 +699,14 @@
                     url = '../instances/' + instanceId + '/stopInstance'
                 }
                 if (type === 'Stop') {
+                    var hasStopPermission=false;
+                    if(haspermission("instancestop","execute")){
+                        hasStopPermission=true;
+                    }
+                    if(!hasStopPermission){
+                        bootbox.alert('User has No Permission to Stop');
+                        return;
+                    }
                     bootbox.confirm(type + " instance?", function(result) {
                         if (!result) {
                             return;
@@ -709,6 +724,13 @@
             var instanceUpdateRunlistHandler = function(e) {
                 if ($(this).hasClass('isStopedInstance')) {
                     return false;
+                }
+                var hasChefRunPermission= false;
+                if(haspermission("instancechefclientrun","modify")){
+                    hasChefRunPermission=true;
+                }
+                if(!hasChefRunPermission){
+                    $('.btnUpdateInstanceRunlist').addClass('disabled');
                 }
                 var $this = $(this);
                 //alert($this);
@@ -815,6 +837,15 @@
                 if ($(this).hasClass('isStopedInstance')) {
                     return false;
                 }
+                var hasConnectPermission= false;
+                    if(haspermission("instanceconnect","execute")){
+                        hasConnectPermission=true;
+                    }
+                if(!hasConnectPermission){
+                    bootbox.alert('User has no permission to do SSH');
+                    return;
+                }
+
                 var $sshModal = $('#modalSSHShellContainer');
                 var instanceId = $(this).attr('data-instanceId');
                 $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -1111,7 +1142,7 @@
 
                 var $divActionBtnContainer = $(cardTemplate.getContainerForActionButtons(data));
 
-                var $divActionChefRunContainer = $('<div></div>').addClass('instance-bootstrap-ActionChefRun').append($divComponentListImage);
+                var $divActionChefRunContainer = $('<div></div>').addClass('instance-bootstrap-ActionChefRun devTOP').append($divComponentListImage);
                 $divActionBtnContainer.append($divActionChefRunContainer);
 
                 var $divActionStartContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
@@ -1123,7 +1154,7 @@
                
 
 
-                var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon" data-instanceid="' + data._id + '"></a>').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
+                var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon devTOP" data-instanceid="' + data._id + '"></a>').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
                 var $startStopToggler=$(cardTemplate.getStartStopToggler(data));
 
 
@@ -1677,7 +1708,7 @@ $itemContainer.append($itemBody);
                         var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
 
                         if (cardCount === 0) {
-                            alert('No instances available.Kindly Launch one instance');
+                            bootbox.alert('No instances available.Kindly Launch one instance');
                             return;
                         }
                         loadLaunchParams();
@@ -2501,6 +2532,14 @@ $itemContainer.append($itemBody);
             // });
 
         $('.createTaskLink').click(function(e) {
+                var hasTasksPermission= false;
+                if(haspermission("instancetasks","execute")){
+                  hasTasksPermission=true;
+                }
+                if(!hasTasksPermission){
+                  bootbox.alert('User has no permission to Add Tasks');
+                  return false;
+                }
             setBreadCrumbAndViewOrchestration();
 
             window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'];
