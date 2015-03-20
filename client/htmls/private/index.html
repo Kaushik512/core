@@ -23,6 +23,9 @@
     height:100px;
     display: none;
 }
+#setting_tree > .icon{
+    font-size:18px;
+}
         </style>
         <script>
 
@@ -33,6 +36,9 @@ function hideLoader(){
 $('#clickdisabler').hide(); 
 }
 var a,b,x;
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
         </script>
     </head>
     <body class="custom-theme">
@@ -100,11 +106,22 @@ var a,b,x;
             <div id="tree" style="font-size:12px;"></div>
             <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
         </div>
-        
+        <div id="Settings_nav" style="display:none;">
+            
+            <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
+                
+                <div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">SETTINGS</div>
+                
+            </div>
+            <div id="setting_tree" style="font-size:12px;"></div>
+            <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
+        </div>
+       
+
         <nav style="font-size:12px!important;">
             
-            <!--Workspace left panel -->
-            <ul class="menu-item-parentdemo hidden" id="Settings">
+            <!--Settings Left Panel -->
+          <!--  <ul class="menu-item-parentdemo hidden" id="Settings">
                 <li class="open active">
                     <a href="#" style="background-color:#40baf1;margin-right:1px;color: white !important;"><i class="fa fa-lg fa-fw fa-building"></i>
                         <span class="menu-item-parent" style="font-weight:bold">Organization Setup</span>
@@ -122,7 +139,7 @@ var a,b,x;
                                 <span class="menu-item-parent" style="font-weight:bold">Environments</span>
                             </a>
                         </li> -->
-                        <li>
+                        <!--<li>
                             <a href="ajax/Settings/ProductGroupList.html"><i class="fa fa-lg fa-fw fa-th"></i>
                                 <span class="menu-item-parent" style="font-weight:bold">Business Groups</span>
                             </a>
@@ -165,6 +182,7 @@ var a,b,x;
                                 </span>
                             </a>
                         </li>
+<<<<<<< HEAD
                         <li>
                             <a href="ajax/Settings/ProvidersList.html"><i class="fa fa-lg fa-fw fa-sitemap"></i>
                                 <span class="menu-item-parent" style="font-weight:bold">Providers
@@ -177,10 +195,12 @@ var a,b,x;
                                 </span>
                             </a>
                         </li>
+=======
+>>>>>>> feature_engineered
                     </ul>
                 </li>
                 <!--User Setup starts here -->
-                <li>
+            <!--    <li>
                     <a href="#"><i class="fa fa-lg fa-fw  fa-tasks"></i>
                         <span class="menu-item-parent" style="font-weight:bold">Users Setup</span>
                     </a>
@@ -204,7 +224,7 @@ var a,b,x;
                     </ul>
                 </li>
                 <!--Gallery Setup starts-->
-                <li>
+                <!--<li>
                     <a href="#"><i class="fa fa-lg fa-fw fa-building"></i>
                         <span class="menu-item-parent" style="font-weight:bold">Gallery Setup</span>
                     </a>
@@ -219,11 +239,14 @@ var a,b,x;
                                 <span class="menu-item-parent" style="font-weight:bold">Service Command</span>
                             </a>
                         </li>
+<<<<<<< HEAD
                         <li>
                             <a href="ajax/Settings/ImagesList.html"><i class="fa fa-lg fa-fw fa-image"></i>
                                 <span class="menu-item-parent" style="font-weight:bold">&nbsp;OS Image</span>
                             </a>
                         </li>
+=======
+>>>>>>> feature_engineered
                         
                     </ul>
                 </li>
@@ -231,7 +254,7 @@ var a,b,x;
                 <a href="ajax/Settings/Catalyst-Guide.html" target="_blank"><i class="fa fa-book"></i>
                         <span class="menu-item-parent" style="font-weight:bold;padding-left:5px;">&nbsp;User Guide</span>
                     </a>
-                </li>
+                </li>-->
                 
                 
                 
@@ -360,7 +383,51 @@ var a,b,x;
     <script type="text/javascript">
 
 
+    $(document).ready(function(){
+    var hasSettingsPermission =false;
+        if(haspermission("settings","read")){
+            hasSettingsPermission =true;
+        }
+        if(!hasSettingsPermission){
+            $('#settingsNew').addClass('hidden');
+        }
+
+    var hasDesignPermission =false;
+        if(haspermission("design","read")){
+            hasDesignPermission =true;
+        }
+        if(!hasDesignPermission){
+            $('#designNew').addClass('hidden');
+        }
+    });
+
+
+function foldTreeForSetting(){
+    var list=$('#setting_tree').find('.fa-angle-down'),len=list.length;
+    for(var i=0;i<len;i++){
+    list.eq(i).trigger('click');
+    }
+}
+
+
     function setleftnavigation(toplink,breadcrumbHeader){
+   var TabID=$(toplink).attr('id');
+        if(TabID==="workZoneNew"){
+            $('#Workspace1').show();
+            $('#Settings_nav').hide();
+
+
+        }else if(TabID==="designNew"){
+             $('#Workspace1').hide();
+            $('#Settings_nav').hide();
+
+        }else if(TabID==="settingsNew"){
+             foldTreeForSetting();
+            $('#Workspace1').hide();
+            $('#Settings_nav').show();
+           
+        }
+
         if($(toplink).hasClass('active')){
             //alert('about to return setleftnavigation:' + $(toplink).attr('href'));
             if($(toplink).attr('id') == 'workZoneNew'){
@@ -400,6 +467,7 @@ var a,b,x;
             selectFirstEnv();
         }
         //alert($(toplink).attr('id'));
+
     }
             
             //Expanding the providers tree
@@ -409,7 +477,210 @@ var a,b,x;
     var serviceURL = "../d4dMasters/";
     window.selectedOrgName = $('.orgSelected').text().trim();
     //alert('in');
+var SettingTreeJson=[
+    {
+        "name": "organizationsetup",
+        "text": "Organization Setup",
+        "icon": "fa fa-lg fa-fw fa-building",
+        "nodes": [
+            {
+                "name": "organizations",
+                "text": "Organizations",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/OrgList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-building"
+                
+            },
+            {
+                "name": "organizations",
+                "text": "Business Groups",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ProductGroupList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-th"
+                
+            },{
+                "name": "organizations",
+                "text": "Projects",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ProjectList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-tags"
+                
+            }
+        ],
+        "borderColor": "#000",
+        "selectable": false,
+        "href":"javascript:void(0);"
 
+              
+    },{
+        "name": "devopssetup",
+        "text": "DevOps Setup",
+        "icon": "fa fa-lg fa-fw fa-qrcode",
+        "nodes": [
+            {
+                "name": "organizations",
+                "text": "Config Management",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ConfigManagementList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-random"
+                
+            },
+            {
+                "name": "organizations",
+                "text": "Environments",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/EnvironmentConceptList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-tint"
+                
+            },{
+                "name": "organizations",
+                "text": "Docker",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/DockerTemplatesList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-hdd-o"
+                
+            },
+            {
+                "name": "organizations",
+                "text": "Jenkins",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/JenkinsConfigList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-link"
+                
+            },
+              {
+                "name": "organizations",
+                "text": "Providers",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ProvidersList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-link"
+                
+            },  {
+                "name": "organizations",
+                "text": "Jira",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/JiraConfigList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-link"
+                
+            },
+        ],
+        "borderColor": "#000",
+        "selectable": false,
+        "href":"javascript:void(0);"
+              
+    },{
+        "name": "usersetup",
+        "text": "Users Setup",
+        "icon": "fa fa-lg fa-fw  fa-tasks",
+        "nodes": [
+            {
+                "name": "organizations",
+                "text": "User Roles",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/RolesList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-th-list"
+                
+            },
+            {
+                "name": "organizations",
+                "text": "Users",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/UsersList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-user"
+                
+            },{
+                "name": "organizations",
+                "text": "Teams",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/TeamsList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-users"
+                
+            }
+        ],
+        "borderColor": "#000",
+        "selectable": false,
+        "href":"javascript:void(0);"
+              
+    },{
+        "name": "gallerysetup",
+        "text": "Gallery Setup",
+        "icon": "fa fa-lg fa-fw fa-building",
+        "nodes": [
+            {
+                "name": "organizations",
+                "text": "Templates",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/TemplatesList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-files-o"
+                
+            },
+            {
+                "name": "organizations",
+                "text": "Service Command",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ServiceCommandList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-terminal"
+                
+            },
+              {
+                "name": "organizations",
+                "text": "Image",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ImagesList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-terminal"
+                
+            }
+        ],
+        "borderColor": "#000",
+        "selectable": false,
+        "href":"javascript:void(0);"
+              
+    },{
+        "name": "userguide",
+        "text": "User Guide",
+        "icon": "fa fa-building ",
+        "borderColor": "#000",
+        "selectable": false,
+        "href":"ajax/Settings/Catalyst-Guide.html",
+        "target":"_blank",
+        "icon":"fa fa-book"             
+    }
+];
+
+function loadSettingsTree(){
+                    $('#setting_tree').html('').treeview({
+                        data:SettingTreeJson,
+                        enableLinks:true,
+                        collapseIcon:'fa fa-angle-down',
+                        expandIcon:'fa fa-angle-right',
+                        levels: 1,
+                        onNodeSelected: function(event, node) {     
+                            /*Draw the braedcrumb from ol*/
+                            //var ol = $("#ribbon ol.breadcrumb");
+                            //if(ol.children().length == 0){
+
+                                drawBreadCrumb1();
+                                event.stopPropagation();
+                          //  }
+                        }
+                    });
+                                   
+}
     var loadTreeFuncNew = function(){
         console.log('Loaded a tree');
         $.ajax({
@@ -420,7 +691,7 @@ var a,b,x;
                 success: function (data1) {
                     console.log('ajax success');
                     //alert('New Json' + JSON.stringify(data1));
-
+                    //lol=data1;
                     $('#tree').html('').treeview({
                         data:data1,enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
@@ -625,8 +896,9 @@ var a,b,x;
 		}
 	};
 	checkandnavigatetotab();
-
+loadSettingsTree();
  //function ends
+ 
 </script>
 <script src="js/chefmodalcommon.js"></script>
     <script src="/private/js/settingscommon.js"></script>

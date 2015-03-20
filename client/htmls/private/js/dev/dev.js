@@ -62,6 +62,17 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
+            function disableImportLaunch(){
+                var hasIPPermission = false;
+                    if(haspermission("instancelaunch","execute")){
+                        hasIPPermission=true;
+                    }
+                    if(!hasIPPermission){
+                        $('#ipaddressimport').addClass('hidden');
+                        $('.launchBtn').addClass('hidden');
+                    }
+            }
+
             function initializeInstance() {
                 bindClick_ipaddressImport();
                 bindClick_instnaceTab();
@@ -161,7 +172,6 @@
         bootbox.alert('Please select an instance to remove.');
     }
 }
-
             /*
             Attaching Click Event on IP Address Import, which will reset instance form.
             */
@@ -274,6 +284,7 @@
                     reqBody.credentials = {
                         username: $form.find('#instanceUsername').val()
                     };
+                    //condition for 1st app-name
                     var appName = $('#appName').val();
                     var appURL = $('#appURL').val();
                     
@@ -286,6 +297,20 @@
                      url: appURL
                  }
              }
+             //condition for 2nd app-name
+                    var appName2 = $('#appName2').val();
+                    var appURL2 = $('#appURL2').val();
+                    
+                    if (appName2 && appURL2) {
+                      if(!(appURL2.indexOf('http://') === 0 || appURL2.indexOf('https://')===0) ) {
+                        appURL2 = 'http://'+appURL2;
+                    }
+                    reqBody.appUrl2 = {
+                     name: appName2,
+                     url: appURL2
+                 }
+             }
+
 
              if (!reqBody.fqdn) {
                 alert('Please enter IP');
@@ -595,8 +620,10 @@
              
                 var timeout = setTimeout(function() {
                     $.get('../instances/' + instanceId, function(data) {
+                        var title='';
                         if (data) {  
-                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);   
+                            title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
+                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title',title);   
                           if (data.instanceState == 'stopped') {
                             enableInstanceActionStopBtn(instanceId);
 
@@ -852,7 +879,7 @@
                     getComponentItem: function(data) {
                         return '<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;" class="instance-details-item">' + '<a class="btn instance-bootstrap-list-faimage" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="ViewAllRunlist">' + '<i class="fa fa-2x fa-exchange txt-color-blue"></i></a></span>';
                     },getOS:function(data){
-                        var basePath='img/osIcons/',imgPath;
+                        var basePath='img/osIcons/',imgPath,title='';
                         console.log(data.hardware.os+' :: OS ::'+data.hardware.platform.toLowerCase())
                         switch(data.hardware.platform.toLowerCase()){
                             case "window 2008":
@@ -867,10 +894,35 @@
                             default:
                             imgPath='unknown.png';
                         }
-                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="' + data.hardware.platform+ '" rel="tooltip"/></span>'
+                        title=data.hardware.platform;
+                        if(imgPath==="unknown.png"){
+                            if(data.hardware.os.toLowerCase()==="linux"){
+                                imgPath="linux.png";
+                                title=data.hardware.os;
+
+                            }else if(data.hardware.os.toLowerCase().indexOf('window')>-1){
+                                imgPath="windows.png";
+                                title=data.hardware.os;
+
+                            }
+
+                        }
+                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ title.capitalizeFirstLetter() +'" rel="tooltip"/></span>'
+                    },
+                    getStart:function (data){
+                      return'<div class="actionbutton instance-bootstrap-ActionStart" style="display:none !important;" ><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actionType="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>';
+
+                    },
+                    getStop:function(data){
+                        $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
+
                     },
                     getStartStopToggler:function(data){
-                        return '<div class="startstoptoggler" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;"></div>'
+                      var title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
+                        return '<div class="startstoptoggler '+data.instanceState+'" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="'+title+'" rel="tooltip"></div>'
+                    },
+                    getContainerForActionButtons:function(data){
+                      return '<div style="height:30px;width:152px;" class="instanceActionBtnCtr" data-instanceId="'+data._id+'"></div>';
                     }
                 }
                 if (data && data._id) { // instanceId
@@ -1052,32 +1104,36 @@
 
                 $divInstanceDetails.append($instanceDetailsList);
 
-                $divDomainRolesCaption.append($divInstanceDetails);
+                $divDomainRolesCaption.append([$divInstanceDetails,$('<hr>')]);
 
-                $divDomainRolesCaption.append($('<hr>'));
+             //   $divDomainRolesCaption.append($('<hr>'));
 
 
-                var $divActionBtnContainer = $('<div style="height:30px;width:152px;"></div>').addClass('instanceActionBtnCtr').attr('data-instanceId', data._id);
+                var $divActionBtnContainer = $(cardTemplate.getContainerForActionButtons(data));
 
                 var $divActionChefRunContainer = $('<div></div>').addClass('instance-bootstrap-ActionChefRun').append($divComponentListImage);
                 $divActionBtnContainer.append($divActionChefRunContainer);
 
                 var $divActionStartContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
-                $divActionBtnContainer.append($divActionStartContainer);
+               
                 if (!data.chef) {
                     data.chef = {};
                 }
                 var $divActionShutdownContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
-                $divActionBtnContainer.append($divActionShutdownContainer);
+               
 
 
-                var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon" data-instanceid="' + data._id + '"></a>').addClass('').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
-                $divActionBtnContainer.append($divActionSSHContainer);
-                
+                var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon" data-instanceid="' + data._id + '"></a>').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
                 var $startStopToggler=$(cardTemplate.getStartStopToggler(data));
-                $divActionBtnContainer.append($startStopToggler);
 
-                $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
+
+               $divActionBtnContainer.append([$divActionSSHContainer,$divActionStartContainer,$divActionShutdownContainer,$startStopToggler,cardTemplate.getSpanHeadingRight(data)]);
+              //  $divActionBtnContainer.append($divActionSSHContainer);
+               //  $divActionBtnContainer.append($divActionStartContainer);
+             
+               // $divActionBtnContainer.append($startStopToggler);
+
+              //  $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
                 var $back = $('<div></div>').addClass('back card-backflip');
                 var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
@@ -1111,6 +1167,7 @@
                     $(this).parents('.flip-toggle').toggleClass('flip');
                 });
                 $back.append($flipbackdivaspan);
+                 var $tableActionBtnContainer=$divActionBtnContainer.clone();
 
                 $divDomainRolesCaption.append($divActionBtnContainer);
                 $front.append($div);
@@ -1122,9 +1179,11 @@
                 $div.append($divDomainRolesCaption);
 
                 $instancesList.append($li);
-                $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');
-                var $tableActionBtnContainer = $divActionBtnContainer.clone();
+                $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');//appending chef client feature
+                
+                $tableActionBtnContainer.find('.moreInfo').remove();
                 $tableActionBtnContainer.find('.instance-bootstrap-ActionChefRun').remove();
+                //$tableActionBtnContainer.append()
                 $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + '</td>');
 
                 var dataTable = $instanceDataTable.DataTable();
@@ -1166,24 +1225,33 @@
                 if (data.hardware.os !== 'linux') {
                     disableSSHBtn(data._id);
                 }
+               // alert($tableActionBtnContainer.find('.startstoptoggler').length);
     //var allClass='stopped running pending unknown', addClass='';
     if (data.instanceState == 'stopped') {
         enableInstanceActionStopBtn(data._id);
-        $startStopToggler.addClass('stopped');
-    }
+           }
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id, data.hardware.os);
-        $startStopToggler.addClass('running');
-    }
+         }
     if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
         disableInstanceActionBtns(data._id);
-        $startStopToggler.addClass('pending');
-    }
+     }
     if (data.instanceState == 'unknown') {
         disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-        $startStopToggler.addClass('unknown');
-    }
-    $startStopToggler.click(function(e){
+      }
+    $startStopToggler.click(startAndStopToggler);
+    $rowContainter.find('.startstoptoggler').off('click').on('click',startAndStopToggler);
+
+    setTimeout(function() {
+        var $l = $('#divinstancescardview').find('.active');
+        if ($l.length > 1) {
+            $l.not(':first').removeClass('active');
+        }
+    }, 3);
+    $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
+}
+
+function startAndStopToggler(e){
 
         if($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')){
             console.log('pending or Unknow State');
@@ -1195,20 +1263,9 @@
 
         }else if($(this).hasClass('stopped')){
             console.log('Stopped State');
-            $(this).parents().find('[data-actionType="Start"]').trigger('click');
+            $(this).parent().find('[data-actionType="Start"]').trigger('click');
         }
-    });
-
-    setTimeout(function() {
-        var $l = $('#divinstancescardview').find('.active');
-        if ($l.length > 1) {
-            $l.not(':first').removeClass('active');
-        }
-    }, 3);
-    $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
 }
-
-
             //enaling the start Button and checking the instanceID & OS-Type
             function enableInstanceActionStartBtn(instanceId, osType) {
                 var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -1680,6 +1737,7 @@ $itemContainer.append($itemBody);
         });
         $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
         $launchDockerInstanceSelector.modal('show');
+        $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
         $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
         $('#dockerintsancestab').dataTable({
             "bPaginate": false
@@ -1860,7 +1918,8 @@ $itemContainer.append($itemBody);
                             $parent.find('.moreInfo').trigger('click');
                             console.log(data);
                         }).fail(function(jxObj) {
-
+                                if(jxObj.status == '401')
+                                    bootbox.alert('Inssuficient permission to perform operation.');
                         });
                     });
 
@@ -1938,7 +1997,7 @@ $itemContainer.append($itemBody);
 
                     if (data[i].taskType === 'chef') {
                         var $tdNodeList = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" data-toggle="modal" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-sitemap fa-14x"></i></a>');
-                        $tdNodeList.find('a').data('nodeList', data[i].nodesIdList).click(function(e) {
+                        $tdNodeList.find('a').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                             $.post('../instances/', {
                                 instanceIds: $(this).data('nodeList')
                             }, function(instances) {
@@ -1968,7 +2027,7 @@ $itemContainer.append($itemBody);
     $tr.append($tdNodeList);
     if (data[i].taskType === 'chef') {
         var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-        $tdRunlist.find('a').data('taskRunlist', data[i].runlist).click(function(e) {
+        $tdRunlist.find('a').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
             var $taskRunListContainer = $('.taskRunListContainer').empty();
             var runlist = $(this).data('taskRunlist');
             if (runlist && runlist.length) {
@@ -2448,7 +2507,7 @@ $itemContainer.append($itemBody);
         });
 
             //for Table view
-            $('#defaultViewButton').click(); //setting the detault view
+            
 
 
 
@@ -2494,7 +2553,10 @@ $itemContainer.append($itemBody);
 
 
                                 if(ep == 'null')
-                                  $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                  {
+                                    $td.find('.dockerspinner').detach();
+                                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                    }
                               else{
                                   if($('#Containernamefield').val() != '')
                                   { 
@@ -3139,6 +3201,7 @@ if (action == '6') {
             }
         };
 
+        disableImportLaunch();
         initializeInstance();
         initializeBluePrints();
         initializeContainer();
@@ -3148,7 +3211,7 @@ if (action == '6') {
             initializingOrchestration();
             loadcarousel();
             getViewTile();
-
+            $('#defaultViewButton').click(); //setting the detault view
             // serachBoxInInstance.init();
 
         });

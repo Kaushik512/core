@@ -1952,7 +1952,7 @@ function saveform(formID, operationTypes) {
                 $(".savespinner").hide();
                 if ($('#btncancel'))
                     $('#btncancel').click();
-                if (parseInt(formID) < 5) {
+                if (parseInt(formID) < 5 || parseInt(formID) == "21") { //if it belongs to org or team
                     loadTreeFuncNew(); //this should refresh the tree
                 }
                 button.removeAttr("rowid", "");
@@ -2664,6 +2664,14 @@ function enableUniqueCheckingForInputs(id) {
             var uni = $('#unique_' + $(this).attr("id"));
             if ($(this).attr("initialvalue") != null) {
                 if ($(this).attr("initialvalue") == $(this).val()) {
+                    if (uni.length > 0)
+                        uni.html('');
+                    $('button[onclick*="saveform"]').removeAttr('disabled');
+                    return (true);
+                }
+            }
+            if ($(this).attr("savedvalue") != null) {
+                if ($(this).attr("savedvalue") == $(this).val()) {
                     if (uni.length > 0)
                         uni.html('');
                     $('button[onclick*="saveform"]').removeAttr('disabled');

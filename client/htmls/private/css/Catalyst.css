@@ -219,7 +219,7 @@
 }
 .role-Selectedcard-app {
     /*border: 4px solid #e7e7e7;*/
-    border: 3px solid #40baf1;
+    border: 2px solid #40baf1 !important;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -7261,4 +7261,11 @@ background:url('../img/galleryIcons/start_icon.png');
     width:26px;
     height:25px;
     cursor:pointer;
+}
+.ipLEFT{
+    margin-left: -13px;
+}
+.ipWidth{
+    margin-top:15px;
+    width:52.5%;
 }
