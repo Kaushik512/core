@@ -1,13 +1,7 @@
-var masterjsonDao = require('../model/d4dmasters/masterjson.js');
+
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
-var blueprintsDao = require('../model/dao/blueprints');
 
-var instancesDao = require('../model/dao/instancesdao');
-var tasksDao = require('../model/dao/orchestrationdao');
-var logsDao = require('../model/dao/logsdao.js');
-var credentialCryptography = require('../lib/credentialcryptography')
-var fileIo = require('../lib/utils/fileio');
 
 var Jenkins = require('../lib/jenkins');
 
