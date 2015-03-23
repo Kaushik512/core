@@ -189,31 +189,20 @@
                           </div>
                           <div id="collapseAppURL" class="panel-collapse collapse in">
                             <div class="panel-body">
-                                <form action="" id="myForm30" style="display:none" data-appURLType="1" class="appUrlForm">
+                                <form action="" id="appUrlTemplateForm" style="display:none" data-appURLType="1" class="appUrlForm">
                                   <!--1st text box-->
                                   <div class="col-lg-6">
-                                    <input type="hidden" id="appURL1NameInput" />
-                                    <label id="appURL1name" for="">WSS:</label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
+                                    <input type="hidden" class="appUrlId" />
+                                    <label class="appNameLabel" for=""></label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
                                     <br>
-                                      <input type="text" id="txtapplicationurl" type="url">
+                                      <input type="text" class="appUrlInput" type="url">
 
                                     <span class="glyphicon glyphicon-pencil" onclick=editName('1') style="cursor:pointer;"></span>
                                   </div>
-                                   </form>
-                                  <!--1st text box ends-->
-                                  <!--2nd text box-->
-                                  <form action="" id="myForm31" style="display:none" data-appURLType="2" class="appUrlForm">
-                                  <div class="col-lg-6">
-                                    <input type="hidden" id="appURL2NameInput" />
-                                    <label id="appURL2name" for="">AD:</label><span id="urlsaved1" class="hidden">&nbsp;&nbsp;Saved</span>
-                                    <br>
-                                      <input type="text" id="txtapplicationurl1" type="url">
+                                </form>
+                                
 
-                                    <span class="glyphicon glyphicon-pencil" onclick=editName1('1') style="cursor:pointer;"></span>
-                                  </div>
-                                  <!--2nd text box ends-->
-                                  <!-- <button type="submit" class="formSubmit">Submit</button> -->
-                               </form>
+                              
                             </div>
                           </div>
                         </div>
@@ -1165,7 +1154,7 @@ $('.startstoptoggler').click(startAndStopToggler);
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
 
-
+/*
  if(data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
      var anchor = "<a class='app-url1' href='"+data.appUrl2.url+"'' target='_blank' title='"+data.appUrl2.url+"'>"+data.appUrl2.name+"</a>";
      $('.instance-bootstrap-list').last().append(anchor);
@@ -1182,7 +1171,22 @@ $('.startstoptoggler').click(startAndStopToggler);
      $('#appURL1name').html(data.appUrl1.name);
       $('#txtapplicationurl').val(data.appUrl1.url);
       $('#myForm30').show();
- }
+ }*/
+
+    if (data.appUrls && data.appUrls.length) {
+      var $collapseAppURL = $('#collapseAppURL');
+      var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+        for (var k = 0; k < data.appUrls.length; k++) {
+          var anchor = "<a class='app-url1' href='"+data.appUrls[k].url+"'' target='_blank' title='"+data.appUrls[k].url+"'>"+data.appUrls[k].name+"</a>";
+            $cardAppUrlListContanier.last().append(anchor);
+            var $form = $('#appUrlTemplateForm').clone(true);
+            $form.find('.appNameLabel').html(data.appUrls[k].name);
+            $form.find('.appUrlId').val(data.appUrls[k]._id);
+            $form.find('.appUrlInput').val(data.appUrls[k].url);
+            $collapseAppURL.append($form);
+            $form.show();
+        }
+    }
  
 
     $('.loadingControlPanelIndicator').hide();
@@ -1646,8 +1650,7 @@ $('.formSubmit').click(function(e){
    
        $('.appUrlForm').submit(function(e) {
            var $this = $(this);
-           var appUrlType = $this.attr('data-appURLType');
-           var reqBody = {};
+            var reqBody = {};
             var href;
             var name;
             var className;
