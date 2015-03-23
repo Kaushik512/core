@@ -52,9 +52,24 @@ $(function() {
         $trHistoryRow.append($tdUrls);
         var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
         $aLogs.click(function(e) {
-
-            $('../jenkins/',function(logs){
-             
+            var $modal = $('#buildLogsModel');
+            $modal.find('.loadingContainer').show();
+            $modal.find('.errorMsgContainer').hide();
+            $modal.find('.outputArea').hide();
+            $modal.modal('show');
+            $('../jenkins/' + buildHistory.jenkinsServerId + '/jobs/' + buildHistory.jobName + '/builds/' + buildHistory.jobNumber + '/output', function(logs) {
+                $modal.find('.loadingContainer').hide();
+                $modal.find('.errorMsgContainer').hide();
+                $modal.find('.outputArea').append(logs.output).show();
+            }).fail(function(jxhr) {
+                $modal.find('.loadingContainer').hide();
+                $modal.find('.outputArea').hide();
+                var $errorContainer = $modal.find('.errorMsgContainer').show();
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    $errorContainer.html(jxhr.responseJSON.message);
+                } else {
+                    $errorContainer.html("Server Behaved Unexpectedly");
+                }
             });
 
         });
