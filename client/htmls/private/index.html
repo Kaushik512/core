@@ -684,14 +684,18 @@ function loadSettingsTree(){
                             localStorage.setItem('selectedOrgId',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
                             /*Description from the node*/
                             localStorage.setItem("orgname", node.orgname);
-                            localStorage.setItem("projname", node.projname);
+                            localStorage.setItem("projname", node.projname ?node.projname :node.text);
                             localStorage.setItem("bgname", node.bgname);
                             localStorage.setItem("envname", node.text);
+                            localStorage.setItem('itProjectActive','no');
 
                             /*Draw the braedcrumb from ol*/
                             var ol = $("#ribbon ol.breadcrumb");
                             if(ol.children().length == 0){
                                 drawBreadCrumb();
+                            }
+                            if(node.hasOwnProperty('itemtype') && node.itemtype ==="proj"){
+                                localStorage.setItem('itProjectActive','yes');
                             }
                           
                         }
