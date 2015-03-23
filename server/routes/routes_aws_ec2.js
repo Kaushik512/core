@@ -34,7 +34,7 @@ module.exports.setRoutes = function(app, verifySession) {
         res.send(appConfig.aws.os);
     });
 
-    app.get('/aws/ec2/test',function(req,res){
+    app.post('/aws/ec2/test',function(req,res){
         logger.debug("Enter post() for /aws/ec2/test");
         logger.debug("Recieved : %s %s ",req.body.accesskey,req.body.secretkey);
         var ec2 = new EC2({
