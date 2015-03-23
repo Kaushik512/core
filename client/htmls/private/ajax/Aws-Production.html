@@ -254,28 +254,27 @@
                                                 
                                                 
                                               </div>
-
-                                              <!--<div class="col-lg-6 notFordocker" style="margin-top:15px;display:none">
+                                              <div class="applicationURLContainer notFordocker"> 
+                                              <div class="col-lg-6" style="margin-top:15px;">
 
                                                 <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                                                <input type="text" name="appNameInput" class="form-control" id="appName1">
+                                                <input type="text" name="appNameInput appName" class="form-control" id="appName1">
                                                 <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
 
 
                                                </div>
 
-                                               <div class="col-lg-6 notFordocker" style="margin-top:15px">
+                                               <div class="col-lg-6" style="margin-top:15px">
 
                                                 <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                                                <input type="text" name="appNameURL" class="form-control" id="appURL1">
+                                                <input type="text" name="appNameURL appURL" class="form-control" id="appURL1">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
-
-
-                                              </div>-->
+                                              </div>
+                                            </div>
                                              
                                                  
                                             
@@ -1064,14 +1063,22 @@ $(document).ready(function(){
                    return false;
                }
                //alert(JSON.stringify(reqBody));
-            var appName = $('#appName1').val();
-            var appURL = $('#appURL1').val();
-            if (appName && appURL) {
-                reqBody.appUrl1 = {
-                    name: appName,
-                    url: appURL
+            var appUrls = [];
+            var $appURLContainers = $('.applicationURLContainer');
+            $applicationURLContainer.each(function() {
+                $this = $(this);
+                var appName = $this.find('.appName').val();
+                var appURL = $this.find('.appURL').val();
+                if (appName && appURL) {
+                    appUrls.push({
+                        name: appName,
+                        url: appURL
+                    });
                 }
-            }
+
+            });
+            reqBody.appUrls = appUrls;
+            
                
                $('.blueprintMsgContainer').hide();
                

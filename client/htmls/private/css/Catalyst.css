@@ -6013,7 +6013,6 @@ span.icon {
 .btn-importbyIP{
     top:11px !important;
 }
-<<<<<<< HEAD
 
 /*ui-css*/
 
@@ -7344,6 +7343,21 @@ background:url('../img/galleryIcons/start_icon.png');
     margin-top: 2px;
 }
 
+
+.widthBox{
+    height:150px;
+    overflow-y:auto;
+    padding:2px;
+    border:1px solid silver;
+    width:100%;
+    margin-top:5px;
+}
+.bootboxMODAL{
+    text-align:center;
+    margin-top:27px;
+}
+
 .hide_nav{
     display:none;
 }
+

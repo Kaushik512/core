@@ -1383,10 +1383,13 @@ function drawBreadCrumb() {
 						"Instances"
 					];
 
-		if(items[1] != null){
+		if(items[1] != null && localStorage.getItem('itProjectActive')==="no"){
 			items.forEach(function(item) {
 				ol.append("<li>"+ item+ "</li>");
 			});
+		}else if(localStorage.getItem('itProjectActive')==="yes"){
+				ol.append("<li>"+ items[0]+ "</li>"+"<li>"+ items[1]+ "</li>"+"<li>"+ items[2]+ "</li>"+"<li>"+ items[3]+ "</li>");
+
 		}
 		
 	}
