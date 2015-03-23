@@ -53,7 +53,7 @@
 		color: undefined, // '#000000',
 		backColor: undefined, // '#FFFFFF',
 		borderColor: undefined, // '#dddddd',
-		onhoverColor: 'rebeccapurple',
+		onhoverColor: undefined,
 		selectedColor: '#FFFFFF',
 		selectedBackColor: '#428bca',
 
@@ -390,7 +390,7 @@
 
 			if (this.options.highlightSelected && (node === this.selectedNode)) {
 
-				style += 'background-color:' + this.options.selectedBackColor + ';';
+				//style += 'background-color:' + this.options.selectedBackColor + ';';
 			}
 			else if (node.backColor) {
 				
