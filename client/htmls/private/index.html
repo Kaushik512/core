@@ -669,6 +669,8 @@ function loadSettingsTree(){
                     console.log('ajax success');
                     //alert('New Json' + JSON.stringify(data1));
                     //lol=data1;
+
+                    console.log(data1);
                     $('#tree').html('').treeview({
                         data:data1,enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
@@ -691,7 +693,6 @@ function loadSettingsTree(){
                             if(ol.children().length == 0){
                                 drawBreadCrumb();
                             }
-console.log(event.target);
                           
                         }
                     });
@@ -815,7 +816,9 @@ console.log(event.target);
     loadTreeFuncNew();
 
     var loaddefaultenv = function(){
+       // return false;
             //alert('loading default');
+            //alert(1);
             if($('#tree').find('.fa-angle-down').length > 0) //reload the tree only if it has been expanded to refresh.
                 loadTreeFuncNew();
             var hasOrg = false;
@@ -823,17 +826,18 @@ console.log(event.target);
             var hasProj = false;
             var hasEnv = false;
             var iteratetree = function(){
-              for(var o = 0;o < $('a[itemtype="org"]').length;o++){
-                $('a[itemtype="org"]').eq(o).trigger('click');
+                var $orgList=$('a[itemtype="org"]'),orgLen=$orgList.length;
+              for(var o = 0;o <orgLen;o++){
+                $orgList.eq(o).parent().find('.expand-collapse').trigger('click');
 
                // alert($('a[itemtype="bg"]').length);
                 for(var b = 0; b < $('a[itemtype="bg"]').length;b++){
                   hasOrg = true;
-                  $('a[itemtype="bg"]').eq(b).trigger('click');
+                  $('a[itemtype="bg"]').eq(b).parent().find('.expand-collapse').trigger('click');
                   for(var p = 0; p < $('a[itemtype="proj"]').length;p++){
                     //alert("in");
                     hasBg = true;
-                    $('a[itemtype="proj"]').eq(p).trigger('click');
+                    $('a[itemtype="proj"]').eq(p).parent().find('.expand-collapse').trigger('click');
                     if($('a[itemtype="env"]').length > 0)
                     {
                       hasProj = true;
