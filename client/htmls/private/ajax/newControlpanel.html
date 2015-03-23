@@ -78,7 +78,7 @@
                 <form action="" id="">
                   <div class="col-lg-6">
                     <label for="name" class="font-size12">GIT Repo URL:</label>&nbsp;&nbsp;
-                    <label for="" class="font-size12">https://github.com/RLIndia/D4D</label>
+                    <label for="" class="font-size12 gitUrlLabel">https://github.com/RLIndia/D4D</label>
                     <!--<input  id="gitURLInput" class="form-control" type="text" autofocus> -->
                   </div>
                 </form>
@@ -96,12 +96,12 @@
               <div class="panel-body">
                 <form action="" id="">
                   <div class="col-lg-6">
-                    <label for="name" class="font-size12">Jenkins Job:</label>&nbsp;&nbsp;
-                    <label for="name" class="font-size12">Build1</label>
+                    <label for="name" class="font-size12">Environment: </label>&nbsp;&nbsp;
+                    <label for="name" class="font-size12 buildEnvLabel">Build1</label>
                   </div>
                   <div class="col-lg-6">
-                     <label for="name" class="font-size12">Jenkins URL:</label>&nbsp;&nbsp;
-                      <label for="name" class="font-size12">http://name_of_my_machine.jenkins:8080</label>
+                     <label for="name" class="font-size12">Task:</label>&nbsp;&nbsp;
+                      <label for="name" class="font-size12 buildTaskName"></label>
                   </div>
                 </form>
               </div>
@@ -112,7 +112,7 @@
           <!--Deploy Starts Here-->
           <div class="panel panel-default" id="accordion-BuildHealthParameters">
             <div class="panel-heading">
-              <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-BuildHealthParameters" href="#collapseBuildHealthParameters"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bullseye" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Deploy</u></b></a></h4>
+              <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-BuildHealthParameters" href="#collapseBuildHealthParameters"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bullseye" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Health Parameters</u></b></a></h4>
             </div>
             <div id="collapseBuildHealthParameters" class="panel-collapse collapse in">
               <div class="panel-body">
@@ -134,14 +134,14 @@
                     <div class="col-lg-6">
                       <label for="" id="">Code Health</label>
                       <br>
-                        <input type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
+                        <input class="codeHealthUrl" type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
                       <span style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
 
                     <div class="col-lg-6">
                       <label for="" id="">UI Performance</label>
                       <br>
-                        <input type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
+                        <input class="uiHealthUrl" type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
                       <span style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
                   </form>
@@ -181,135 +181,7 @@
                 </tr>
               </thead>
               <tbody class="buildTbody">
-                <tr>
-                  <td>1</td>
-                  <td>build1</td>
-                  <td>Wed, 25 Feb 2015 11:52:37 GMT</td>
-                  <td>superadmin</td>
-                  <td>
-                    <a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>build2</td>
-                  <td>Tue, 24 Feb 2015 23:52:31 GMT</td>
-                  <td>consumer</td>
-                  <td>
-                    <a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>build3</td>
-                  <td>Wed, 25 Feb 2015 19:34:31 GMT</td>
-                  <td>designer</td>
-                  <td>
-                    <a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>build4</td>
-                  <td>Wed, 25 Feb 2015 12:14:31 GMT</td>
-                  <td>superadmin</td>
-                  <td>
-                    <a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-crosshairs txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-compass txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lock txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-lemon-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i>
-                    </a>
-                    <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)">
-                      <i class="fa fa-fw fa-barcode txt-color-blue"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a data-toggle="modal" href="#BuildmoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-              </tbody> 
+              </tbody>
               <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#buildModalContainer">Add New Build</a>
           </table>
         </div>

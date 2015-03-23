@@ -33,23 +33,40 @@ buildHistory.statics.createNew = function(historyData, callback) {
     });
 };
 
-buildHistory.statics.getHistoryByBuildIds = function(buildId, callback) {
+buildHistory.statics.getHistoryByBuildId = function(buildId, callback) {
     var queryObj = {
-    	buildId : buildId
+        buildId: buildId
     };
-    
-    BuildHistory.find(queryObj, function(err, histories) {
+
+    this.find(queryObj, function(err, histories) {
         if (err) {
-            logger.error("Failed to getHistoryByBuildIds :: ", buildId, err);
+            logger.error("Failed to getHistoryByBuildId :: ", buildId, err);
             callback(err, null);
             return;
         }
         //logger.debug(data);
-        logger.debug("Exit getHistoryByBuildIds :: ", buildId);
+        logger.debug("Exit getHistoryByBuildId :: ", buildId);
         callback(null, histories);
     });
 
 };
+
+buildHistory.statics.getHistoryById = function(id, callback) {
+
+    this.findById(id, function(err, history) {
+        if (err) {
+            logger.error("Failed to getHistoryById :: ", id, err);
+            callback(err, null);
+            return;
+        }
+        logger.debug("Exit getHistoryById :: ", id);
+        callback(null, history);
+    });
+
+};
+
+
+
 
 var BuildHistory = mongoose.model('appBuildHistory', buildHistory);
 
