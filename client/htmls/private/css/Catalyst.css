@@ -7332,3 +7332,6 @@ background:url('../img/galleryIcons/start_icon.png');
     margin-top: 2px;
 }
 
+.hide_nav{
+    display:none;
+}
