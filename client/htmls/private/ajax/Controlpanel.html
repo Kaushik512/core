@@ -39,8 +39,8 @@
                                       </div>
                                     </div>
                                     <hr>
-                                    <div style="width:152px !important;height:30px;" class="instanceActionBtnCtr">
-                                      <div class="instance-bootstrap-ActionChefRun">
+                                    <div style="width:152px !important;height:30px;margin-left:4px;" class="instanceActionBtnCtr">
+                                      <div class="instance-bootstrap-ActionChefRun cpTop">
 
                                         <!-- <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a> -->
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
@@ -52,7 +52,7 @@
                                       <div class="actionbutton instance-bootstrap-ActionShutdown"style="display:none;"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Stop"></a></div>
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
-                                        <a href="javascript:void(0)" class='sshShellBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
+                                        <a href="javascript:void(0)" class='sshShellBtn cpTop' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
                                           <!-- <img src="img/galleryIcons/sshIcon.png" style="height:28px;width:28px"> -->
                                         </a>
                                       </div>
@@ -711,12 +711,20 @@ $.get('../instances/'+urlParams.id,function(data){
         }
         else if($(this).hasClass('running')){
             console.log('running State');
-            debugger;
+            var hasStopPermissionCP=false;
+                if(haspermission("instancestop","execute")){
+                  hasStopPermissionCP=true;
+                }
+                if(!hasStopPermissionCP){
+                  bootbox.alert('User has No Permission to Stop');
+                  return;
+                }
+            //debugger;
             $(this).parent().find('.actionbuttonShutdown').trigger('click');
 
         }else if($(this).hasClass('stopped')){
             console.log('Stopped State');
-            debugger;
+            //debugger;
             $(this).parent().find('.actionbuttonStart').trigger('click');
         }
 }
@@ -867,6 +875,14 @@ $('.startstoptoggler').click(startAndStopToggler);
       if($(this).hasClass('isStopedInstance')){
         return false;
       }
+      var hasConnectPermission= false;
+          if(haspermission("instanceconnect","execute")){
+            hasConnectPermission=true;
+          }
+          if(!hasConnectPermission){
+            bootbox.alert('User has no permission to do SSH');
+            return;
+          }
         var $sshModal = $('#modalSSHShellContainer');
         var instanceId = $(this).parents('.domain-roles-caption').attr('data-instanceId');
         $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -1012,6 +1028,13 @@ $('.startstoptoggler').click(startAndStopToggler);
         if($(this).hasClass('isStopedInstance')){
           return false;
         }
+        var hasChefRunPermissionCP= false;
+          if(haspermission("instancechefclientrun","execute")){
+            hasChefRunPermissionCP=true;
+          }
+          if(!hasChefRunPermissionCP){
+            $('.btnUpdateInstanceRunlist').addClass('disabled');
+          }
         var $this = $(this);
          var $parent = $('.domain-roles-caption');
          var instanceId = $parent.attr('data-instanceId');
@@ -1486,6 +1509,14 @@ $('.btnSaveService').click(function(e) {
 
 $('.addServiceBtn').click(function(){
   $serviceList = $('#serviceList');
+  var hasServicesPermission= false;
+    if(haspermission("instanceservices","execute")){
+      hasServicesPermission=true;
+    }
+    if(!hasServicesPermission){
+      bootbox.alert('User has no permission to Add Services');
+      return false;
+    }
   //alert($serviceList.find('tr[data-listServiceId]:not(.hidden)').length);
   if($serviceList.find('tr[data-listServiceId]:not(.hidden)').length === 0) {
      

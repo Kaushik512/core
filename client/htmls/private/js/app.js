@@ -101,6 +101,11 @@ $(document).ready(function() {
 	$('.minifyme').click(function(e) {
 		$('body').toggleClass("minified");
 		$(this).effect("highlight", {}, 500);
+		if($('#setting_tree').hasClass('hide_nav')){
+			$('#setting_tree').removeClass('hide_nav');
+		}else{
+			$('#setting_tree').addClass('hide_nav');
+		}
 		e.preventDefault();
 	});
 

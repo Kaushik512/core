@@ -7324,3 +7324,14 @@ background:url('../img/galleryIcons/start_icon.png');
     margin-top:15px;
     width:52.5%;
 }
+
+.cpTop{
+    margin-top: 1px;
+}
+.devTOP{
+    margin-top: 2px;
+}
+
+.hide_nav{
+    display:none;
+}
