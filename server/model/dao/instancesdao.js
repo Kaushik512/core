@@ -396,7 +396,7 @@ var InstancesDao = function() {
 
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
-        
+
 
         var instance = new Instances(instanceData);
 
@@ -437,53 +437,28 @@ var InstancesDao = function() {
     };
 
     this.updateAppUrl = function(instanceId, appUrlId, url, callback) {
-
+        logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, url);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+            "appUrls._id": new ObjectId(appUrlId)
+        }, {
+            $set: {
+                "appUrls.$.url": url
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateAppUrl (%s, %s,%s,%s)", instanceId, appUrlId, url,err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateAppUrl2 (%s, %s,%s)", instanceId, appUrlId, url);
+            callback(null, data);
+        });
     }
 
 
-    this.updateAppUrl1 = function(instanceId, appUrlData, callback) {
-        logger.debug("Enter updateAppUrl1 (%s, %s)", instanceId, appUrlData);
-        Instances.update({
-            "_id": new ObjectId(instanceId),
-        }, {
-            $set: {
-                "appUrl1": appUrlData
-            }
-        }, {
-            upsert: false
-        }, function(err, data) {
-            if (err) {
-                logger.error("Failed to updateAppUrl1 (%s, %s)", instanceId, appUrlData, err);
-                callback(err, null);
-                return;
-            }
-            logger.debug("Exit updateAppUrl1 (%s, %s)", instanceId, appUrlData);
-            callback(null, data);
-        });
-
-    };
-
-    this.updateAppUrl2 = function(instanceId, appUrlData, callback) {
-        logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, appUrlData);
-        Instances.update({
-            "_id": new ObjectId(instanceId),
-        }, {
-            $set: {
-                "appUrl2": appUrlData
-            }
-        }, {
-            upsert: false
-        }, function(err, data) {
-            if (err) {
-                logger.error("Failed to updateAppUrl2 (%s, %s)", instanceId, appUrlData, err);
-                callback(err, null);
-                return;
-            }
-            logger.debug("Exit updateAppUrl2 (%s, %s)", instanceId, appUrlData);
-            callback(null, data);
-        });
-
-    };
 
     this.updateInstanceDockerStatus = function(instanceId, dockerstatus, dockerapiurl, callback) {
         logger.debug("Enter updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl);
