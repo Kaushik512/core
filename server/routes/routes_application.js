@@ -63,6 +63,34 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.get('/applications/:applicationId/lastBuildInfo', function(req, res) {
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!application) {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+            application.getLastBuildInfo(function(err, lastBuildInfo) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                if (lastBuildInfo) {
+                    res.send(lastBuildInfo);
+                } else {
+                    res.send(404, {
+                        message: "Last Build Info not found"
+                    });
+                }
+
+            });
+        });
+    });
+
     app.get('/applications/:applicationId/buildHistory', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
