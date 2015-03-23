@@ -43,23 +43,23 @@
                                                                 </label>        
                                                             </section>
                                                             <section class="col col-6">
+                                                              <label for="">Choose Provider:<span style="color:Red;" class="
+                                                                    control-label">&nbsp;*</span></label>
+                                                                <select id="providername" class="chooseProvider width-100" sourcepath="9" 
+                                                                    datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
+                                                                    <option value="">Select Provider</option>
+                                                                </select>
+                                                            </section>
+                                                            <!-- <section class="col col-6">
                                                               <label for="">Provider Type:<span style="color:Red;" class="
                                                                     control-label">&nbsp;*</span></label>
                                                                 <select id="providertype" class="chooseProvider width-100" sourcepath="1" 
                                                                     datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
                                                                     <option value="aws">AWS</option>
                                                                 </select>
-                                                            </section>
+                                                            </section> -->
                                                             </div>
                                                             <div class="row">
-                                                            <section class="col col-6">
-                                                              <label for="">Choose Provider:<span style="color:Red;" class="
-                                                                    control-label">&nbsp;*</span></label>
-                                                                <select id="providername" class="chooseProvider width-100" sourcepath="1" 
-                                                                    datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
-                                                                    <option value="">Select Provider</option>
-                                                                </select>
-                                                            </section>
                                                             <section class="col col-6">
                                                               <label for="">Region:<span style="color:Red;" class="
                                                                     control-label">&nbsp;*</span></label>
@@ -68,9 +68,6 @@
                                                                     <option value="us-west-2">us-west-2</option>
                                                                 </select>
                                                             </section>
-                                                            </div>
-                                                            
-                                                            <div class="row">
                                                                 <section class="col col-6">
                                                                     <label for="">
                                                                         Image ID:
@@ -133,25 +130,25 @@
 
 
 <script>
-$.ajax({
-      url: "/d4dMasters/readmasterjsonnew/9",
-      dataType: "json",
-      type: "GET",
-      cache: "true",
+// $.ajax({
+//       url: "/d4dMasters/readmasterjsonnew/9",
+//       dataType: "json",
+//       type: "GET",
+//       cache: "true",
        
-       //async: false,
+//        //async: false,
        
-       success: function(data) {
-           var data = JSON.parse(JSON.stringify(data));
-           var $nameListInput = $('#providername');
-          // console.log("Image Json>>>>>>>>>>  "+data);
-           for (var i = 0; i < data.length; i++) {
-              //alert(data[i].imagename);
-            $nameListInput.append($('<option></option>').val(data[i].rowid).html(data[i].providername));
-           }
+//        success: function(data) {
+//            var data = JSON.parse(JSON.stringify(data));
+//            var $nameListInput = $('#providername');
+//           // console.log("Image Json>>>>>>>>>>  "+data);
+//            for (var i = 0; i < data.length; i++) {
+//               //alert(data[i].imagename);
+//             $nameListInput.append($('<option id="providername"></option>').val(data[i].rowid).html(data[i].providername));
+//            }
 
-           }
-         });
+//            }
+//          });
     //Form Name
     function cancelClicked() {
         $("#popupSelectProvider").modal('hide');

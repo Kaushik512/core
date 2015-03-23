@@ -278,8 +278,8 @@ var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMast
 var d4dMastersImages = new mongoose.Schema(
 		{id: {type:String,required:true, trim:true},
 		imagename:{type:String,required:true,trim:true},
-		providertype: {type:String,required:true,trim:true},
 		providername: {type:String,required:true,trim:true},
+		providername_rowid: {type:String,trim:true},
 		imageid: {type:String,required:true,trim:true},
 		region: {type:String,required:true,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}

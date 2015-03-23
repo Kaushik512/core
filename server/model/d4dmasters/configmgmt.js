@@ -947,12 +947,40 @@ function Configmgmt() {
                                 });
 
 
-                            } else {
-                                //    console.log('this called');
-                                callback(null, rowidval);
-                            }
+                            } 
+                                d4dModelNew.d4dModelMastersProviders.find({
+                                    id: "9"
+                                }, function(err, providerdata) {
+                                if (providerdata) {
+                                    var providerdata_ = JSON.parse(JSON.stringify(providerdata));
+                                    if (providerdata_.length <= 0) {
+                                        console.log('rowidval' + JSON.stringify(rowidval));
+                                        callback(null, rowidval);
+                                    }
+                                    var i = 0;
+                                    providerdata_.forEach(function(k, v) {
+                                        // rowidval[k['rowid']] = k['environmentname'];
+                                        //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
+                                        var rid = {};
+                                        rid[k['rowid']] = k['providername'];
+                                        rowidval.push(rid);
+                                        if (i >= providerdata_.length - 1) {
+                                            //   console.log('rowidval' + JSON.stringify(rowidval));
+                                            callback(null, rowidval);
+                                        }
+                                        i++;
+                                        //  console.log(k['rowid'], k['environmentname'],envdata_.length);
+                                    });
 
-                            });
+
+                                } else {
+                                    //    console.log('this called');
+                                    callback(null, rowidval);
+                                }
+
+                                }); //provviders
+
+                            }); //teams
 
                             }); //userdata 
                         }); //env
