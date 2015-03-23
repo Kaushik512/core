@@ -127,14 +127,6 @@ var InstanceSchema = new Schema({
         name: String,
         url: String
     }],
-    applicationUrl: {
-        type: String,
-        trim: true
-    },
-    applicationUrl1: {
-        type: String,
-        trim: true
-    },
     instanceState: String,
     bootStrapStatus: String,
     users: [{
@@ -404,11 +396,7 @@ var InstancesDao = function() {
 
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
-        //Kana hack to add application url
-        if (typeof instanceData.instanceIP != 'undefined') {
-            instanceData.applicationUrl = 'http://' + instanceData.instanceIP + ':8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
-            instanceData.applicationUrl1 = 'http://' + instanceData.instanceIP + ':8280/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main';
-        }
+        
 
         var instance = new Instances(instanceData);
 
