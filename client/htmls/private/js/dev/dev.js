@@ -104,7 +104,7 @@
                 if (instanceId) {
                     //found now delete
                     var dialog = bootbox.dialog({
-                        title: "Remove Instance.",
+                        title: "Remove Instance",
                         message: '<div class="row">  ' +
                             '<div class="col-md-12"> ' +
                             '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
@@ -698,13 +698,22 @@
                 if (type === 'Stop') {
                     url = '../instances/' + instanceId + '/stopInstance'
                 }
+                if (type === 'Start') {
+                    var hasStartPermission=false;
+                    if(haspermission("instancestart","execute")){
+                        hasStartPermission=true;
+                    }
+                    if(!hasStartPermission){
+                        bootbox.alert('User Has No Permission to Start an Instance').find('.bootbox-body').addClass('bootboxMODAL');
+                        return;
+                    }}
                 if (type === 'Stop') {
                     var hasStopPermission=false;
                     if(haspermission("instancestop","execute")){
                         hasStopPermission=true;
                     }
                     if(!hasStopPermission){
-                        bootbox.alert('User has No Permission to Stop');
+                        bootbox.alert('User has No Permission to Stop an Instance').find('.bootbox-body').addClass('bootboxMODAL');
                         return;
                     }
                     bootbox.confirm(type + " instance?", function(result) {
