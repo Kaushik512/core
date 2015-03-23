@@ -38,7 +38,7 @@ buildSchema.methods.execute = function(user, callback) {
         task.execute(user, function(err, taskRes) {
             if (err) {
                 logger.error(err);
-                res.send(500, err);
+                callback(err, null)
                 return;
             }
             logger.debug('creating build history');
@@ -62,13 +62,27 @@ buildSchema.methods.execute = function(user, callback) {
     });
 };
 
+buildSchema.methods.getLastBuild = function(callback) {
+    if (this.buildHistoryIds && this.buildHistoryIds.length) {
+        BuildHistory.getHistoryById(this.buildHistoryIds[this.buildHistoryIds.length - 1], function(err, history) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, history);
+        });
+    } else {
+        callback(null, null);
+    }
+};
+
 buildSchema.methods.getHistory = function(callback) {
-    BuildHistory.getHistoryByBuildIds(this._id, function(err, histories) {
+    BuildHistory.getHistoryByBuildId(this._id, function(err, histories) {
         if (err) {
             callback(err, null);
             return;
         }
-        callback(null,histories);
+        callback(null, histories);
     });
 };
 

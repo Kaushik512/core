@@ -83,6 +83,17 @@ ApplicationSchema.methods.getBuildHistory = function(callback) {
     });
 };
 
+ApplicationSchema.methods.getLastBuildInfo = function(callback) {
+    Build.getBuildById(this.buildId, function(err, build) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        build.getLastBuild(callback);
+    });
+};
+
 
 // static methods
 ApplicationSchema.statics.getApplicationById = function(applicationId, callback) {
