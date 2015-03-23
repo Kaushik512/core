@@ -7331,6 +7331,7 @@ background:url('../img/galleryIcons/start_icon.png');
     margin-top: 2px;
 }
 
+
 .widthBox{
     height:150px;
     overflow-y:auto;
@@ -7342,5 +7343,9 @@ background:url('../img/galleryIcons/start_icon.png');
 .bootboxMODAL{
     text-align:center;
     margin-top:27px;
+}
+
+.hide_nav{
+    display:none;
 }
 

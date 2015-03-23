@@ -107,16 +107,27 @@
     });
   }
   setcountontile();
-	</script>
+	
 
  
     
-		<!-- MAIN APP JS FILE -->
+		
 
-         
-         
-         <script>
-    drawBreadCrumb1();
+
+
+  drawBreadCrumb1();
+  $('.circle-tile').find('a').click(function(){
+    var url=$(this).attr('href');
+debugger;
+    $('#setting_tree').find('a').each(function(){
+      if($(this).attr('href')==url){
+        debugger;
+        $(this).trigger('click');
+      }
+    });
+
+
+  });
 </script>
 
 
