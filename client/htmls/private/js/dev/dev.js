@@ -1,4 +1,4 @@
-        //function for showing the tableview and the cardview
+         //function for showing the tableview and the cardview
 
         function showHideControl(objID) {
             if (objID) {
@@ -17,7 +17,7 @@
             }
         }
 
-        //for disabling the ssh button
+         //for disabling the ssh button
         function disableSSHBtn(instanceId) {
 
             var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -27,7 +27,7 @@
 
         }
 
-        //for removing the selected blueprint in the blueprint tab
+         //for removing the selected blueprint in the blueprint tab
         function removeSelectedBlueprint() {
             var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
             if (blueprintId) {
@@ -47,7 +47,7 @@
                                 $bcc.addClass('hidden');
                             }
                         } else
-                        alert(data);
+                            alert(data);
                     });
                 });
             } else {
@@ -62,15 +62,15 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
-            function disableImportLaunch(){
+            function disableImportLaunch() {
                 var hasIPPermission = false;
-                    if(haspermission("instancelaunch","execute")){
-                        hasIPPermission=true;
-                    }
-                    if(!hasIPPermission){
-                        $('#ipaddressimport').addClass('hidden');
-                        $('.launchBtn').addClass('hidden');
-                    }
+                if (haspermission("instancelaunch", "execute")) {
+                    hasIPPermission = true;
+                }
+                if (!hasIPPermission) {
+                    $('#ipaddressimport').addClass('hidden');
+                    $('.launchBtn').addClass('hidden');
+                }
             }
 
             function initializeInstance() {
@@ -106,25 +106,25 @@
                     var dialog = bootbox.dialog({
                         title: "Remove Instance.",
                         message: '<div class="row">  ' +
-                        '<div class="col-md-12"> ' +
-                        '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
-                        '<form id="deleteInstanceForm" class="form-horizontal"> ' +
-                        '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
-                        '<div class="form-group"> ' +
-                        '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
-                        '</div>' +
-                        '<div class="form-group"> ' +
-                        '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
-                        '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
-                        '</div> ' +
-                        '<div class="form-group"> ' +
-                        '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
-                        '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
-                        '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
-                        'Delete this node from chef server </label> ' +
-                        '</div>' +
-                        '</div>' +
-                        '</form> </div>  </div>',
+                            '<div class="col-md-12"> ' +
+                            '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
+                            '<form id="deleteInstanceForm" class="form-horizontal"> ' +
+                            '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
+                            '<div class="form-group"> ' +
+                            '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+                            '</div>' +
+                            '<div class="form-group"> ' +
+                            '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
+                            '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
+                            '</div> ' +
+                            '<div class="form-group"> ' +
+                            '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+                            '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
+                            '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
+                            'Delete this node from chef server </label> ' +
+                            '</div>' +
+                            '</div>' +
+                            '</form> </div>  </div>',
                         buttons: {
                             success: {
                                 label: "Delete",
@@ -168,22 +168,28 @@
                             }
                         }
                     });
-    } else {
-        bootbox.alert('Please select an instance to remove.');
-    }
-}
+                } else {
+                    bootbox.alert('Please select an instance to remove.');
+                }
+            }
             /*
             Attaching Click Event on IP Address Import, which will reset instance form.
             */
             function bindClick_ipaddressImport() {
 
                 $('#ipaddressimport').click(function(e) {
-              
+                    var hasChefServerPermission = false;
+                    if(haspermission("chefserver","read")){
+                        hasChefServerPermission=true;
+                    }if(!hasChefServerPermission){
+                        bootbox.alert('Please add a Chef Server');
+                        return false;
+                    }
                     $('#nodeimportipresultmsg').addClass("hidden");
                     $('#addInstanceForm').trigger("reset");
                     $('#pemFileDropdown').change();
                     $('#importinstanceOS').change();
-                    
+
                 });
             }
 
@@ -224,14 +230,15 @@
 
                 });
 
-    }
-    /*Binding Click events to Instance*/
+            }
+            /*Binding Click events to Instance*/
 
 
-    /*Showing the dialog for import instance by IP when there is no chefServer*/
-    function registerModelEventForImportInstance() {
-        $('#modalContainerimportInstance').on('show.bs.modal', function(e) {
-            $('#addInstanceBtn').removeAttr('disabled');
+
+            /*Showing the dialog for import instance by IP when there is no chefServer*/
+            function registerModelEventForImportInstance() {
+                $('#modalContainerimportInstance').on('show.bs.modal', function(e) {
+                    $('#addInstanceBtn').removeAttr('disabled');
                     //$('#addInstanceForm').get(0).reset();
                     var _org = getUrlParameter('org');
                     $.get('/d4dMasters/readmasterjsonnew/10', function(data) {
@@ -256,8 +263,8 @@
                         }
                         importbyipusers();
                     });
-    });
-    }
+                });
+            }
 
             //Binding the user selection to pem file for import by IP
             function bindChange_importPemFile() {
@@ -287,52 +294,52 @@
                     //condition for 1st app-name
                     var appName = $('#appName').val();
                     var appURL = $('#appURL').val();
-                    
+
                     if (appName && appURL) {
-                      if(!(appURL.indexOf('http://') === 0 || appURL.indexOf('https://')===0) ) {
-                        appURL = 'http://'+appURL;
+                        if (!(appURL.indexOf('http://') === 0 || appURL.indexOf('https://') === 0)) {
+                            appURL = 'http://' + appURL;
+                        }
+                        reqBody.appUrl1 = {
+                            name: appName,
+                            url: appURL
+                        }
                     }
-                    reqBody.appUrl1 = {
-                     name: appName,
-                     url: appURL
-                 }
-             }
-             //condition for 2nd app-name
+                    //condition for 2nd app-name
                     var appName2 = $('#appName2').val();
                     var appURL2 = $('#appURL2').val();
-                    
+
                     if (appName2 && appURL2) {
-                      if(!(appURL2.indexOf('http://') === 0 || appURL2.indexOf('https://')===0) ) {
-                        appURL2 = 'http://'+appURL2;
+                        if (!(appURL2.indexOf('http://') === 0 || appURL2.indexOf('https://') === 0)) {
+                            appURL2 = 'http://' + appURL2;
+                        }
+                        reqBody.appUrl2 = {
+                            name: appName2,
+                            url: appURL2
+                        }
                     }
-                    reqBody.appUrl2 = {
-                     name: appName2,
-                     url: appURL2
-                 }
-             }
 
 
-             if (!reqBody.fqdn) {
-                alert('Please enter IP');
-                e.preventDefault();
-                return false;
-            }
-            if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
-                alert("Please provide a valid IP Address or Hostname");
-                e.preventDefault();
-                return false;
-            }
+                    if (!reqBody.fqdn) {
+                        alert('Please enter IP');
+                        e.preventDefault();
+                        return false;
+                    }
+                    if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
+                        alert("Please provide a valid IP Address or Hostname");
+                        e.preventDefault();
+                        return false;
+                    }
 
-            if (!reqBody.users) {
-                alert('Please assign atleast one user');
-                e.preventDefault();
-                return false;
-            }
-            if (!reqBody.os) {
-                alert('Please choose OS');
-                e.preventDefault();
-                return false;
-            }
+                    if (!reqBody.users) {
+                        alert('Please assign atleast one user');
+                        e.preventDefault();
+                        return false;
+                    }
+                    if (!reqBody.os) {
+                        alert('Please choose OS');
+                        e.preventDefault();
+                        return false;
+                    }
 
                     //Adding instance by Import By IP.
                     function makeRequest() {
@@ -374,7 +381,7 @@
                                     $result.html("Invalid request");
                                 }
                             } else {
-                                if(jxhr.status === 401)
+                                if (jxhr.status === 401)
                                     $result.html("Inssuficient permission to perform operation.");
                                 else
                                     $result.html("Server Behaved Unexpectedly");
@@ -427,42 +434,42 @@
 
                 });
 
-    }
-
-
-    /*Checking for The User Selection for Import By IP*/
-    function importbyipusers() {
-
-        var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
-        $.get('../users', function(userList) {
-            var perm = haspermission('instancelaunch','execute');
-            userList = JSON.parse(userList);
-            var $importbyipuserListSelect = $('#importbyipuserListSelect').empty();
-            userList.sort(function(a, b) {
-                var keyA = Object.keys(a);
-                var keyB = Object.keys(b);
-
-                if (keyA[0] < keyB[0]) return -1;
-                if (keyA[0] > keyB[0]) return 1;
-                return 0;
-            });
-            for (var i = 0; i < userList.length; i++) {
-                var keys = Object.keys(userList[i]);
-                var $option = $('<option></option>').append(keys[0]).val(keys[0]);
-                if(sessionUser.cn){
-                  if(keys[0] == sessionUser.cn)
-                    $option.attr('selected','selected');
-                }
-                $importbyipuserListSelect.append($option);
             }
-            $loadingContainer.hide();
-            $importbyipuserListSelect.show();
-        }).error(function() {
-            $loadingContainer.empty().append('Unable to load users. Please try again later.');
-        });
-    }
 
-    function createInstanceUI(data) {
+
+            /*Checking for The User Selection for Import By IP*/
+            function importbyipusers() {
+
+                var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
+                $.get('../users', function(userList) {
+                    var perm = haspermission('instancelaunch', 'execute');
+                    userList = JSON.parse(userList);
+                    var $importbyipuserListSelect = $('#importbyipuserListSelect').empty();
+                    userList.sort(function(a, b) {
+                        var keyA = Object.keys(a);
+                        var keyB = Object.keys(b);
+
+                        if (keyA[0] < keyB[0]) return -1;
+                        if (keyA[0] > keyB[0]) return 1;
+                        return 0;
+                    });
+                    for (var i = 0; i < userList.length; i++) {
+                        var keys = Object.keys(userList[i]);
+                        var $option = $('<option></option>').append(keys[0]).val(keys[0]);
+                        if (sessionUser.cn) {
+                            if (keys[0] == sessionUser.cn)
+                                $option.attr('selected', 'selected');
+                        }
+                        $importbyipuserListSelect.append($option);
+                    }
+                    $loadingContainer.hide();
+                    $importbyipuserListSelect.show();
+                }).error(function() {
+                    $loadingContainer.empty().append('Unable to load users. Please try again later.');
+                });
+            }
+
+            function createInstanceUI(data) {
                 //alert('starting');
 
                 if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
@@ -470,24 +477,24 @@
                     tableinstanceview = $('#tableinstanceview').DataTable({
                         "pagingType": "full_numbers",
                         "aoColumns": [
-                        null, {
-                            "bSortable": false
-                        },
-                        null,
-                        null, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false,
-                            "sWidth": "20%"
-                        }
+                            null, {
+                                "bSortable": false
+                            },
+                            null,
+                            null, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false,
+                                "sWidth": "20%"
+                            }
                         ],
                         "fnRowCallback": function(nRow, aData, iDisplayIndex) {
                             $("td:first", nRow).html(iDisplayIndex + 1);
@@ -495,18 +502,18 @@
                         }
 
                     });
-    }
+                }
 
 
-    for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
 
-        addInstanceToDOM(data[i]);
+                    addInstanceToDOM(data[i]);
 
-    }
+                }
 
 
 
-    $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
+                $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
 
                 //Setting the count for the table entry in TableView
                 function tableupdownRow(evt) {
@@ -515,19 +522,19 @@
                     var $selectedRow = $('#tableinstanceview tbody').find(".rowcustomselected");
                     switch (key) {
                         case 38: // UP arrow
-                        var $newSelectedRowPre = $selectedRow.prev();
-                        if ($newSelectedRowPre && $newSelectedRowPre.length == 1) {
-                            $newSelectedRowPre.addClass('rowcustomselected');
-                            $selectedRow.removeClass('rowcustomselected');
-                        }
-                        break;
+                            var $newSelectedRowPre = $selectedRow.prev();
+                            if ($newSelectedRowPre && $newSelectedRowPre.length == 1) {
+                                $newSelectedRowPre.addClass('rowcustomselected');
+                                $selectedRow.removeClass('rowcustomselected');
+                            }
+                            break;
                         case 40: // DOWN arrow
-                        var $newSelectedRowNext = $selectedRow.next();
-                        if ($newSelectedRowNext && $newSelectedRowNext.length == 1) {
-                            $newSelectedRowNext.addClass('rowcustomselected');
-                            $selectedRow.removeClass('rowcustomselected');
-                        }
-                        break;
+                            var $newSelectedRowNext = $selectedRow.next();
+                            if ($newSelectedRowNext && $newSelectedRowNext.length == 1) {
+                                $newSelectedRowNext.addClass('rowcustomselected');
+                                $selectedRow.removeClass('rowcustomselected');
+                            }
+                            break;
                     }
                 }
                 document.onkeydown = tableupdownRow;
@@ -586,27 +593,27 @@
                 switch (status) {
 
                     case 'running':
-                    cssClasses.ringClass = 'started';
-                    cssClasses.textClass = 'instance-state-text-started';
-                    cssClasses.tableViewStatusClass = "started";
-                    break;
+                        cssClasses.ringClass = 'started';
+                        cssClasses.textClass = 'instance-state-text-started';
+                        cssClasses.tableViewStatusClass = "started";
+                        break;
 
                     case 'stopped':
-                    cssClasses.ringClass = 'stopped';
-                    cssClasses.textClass = 'instance-state-text-stopped';
-                    cssClasses.tableViewStatusClass = "stopped";
-                    break;
+                        cssClasses.ringClass = 'stopped';
+                        cssClasses.textClass = 'instance-state-text-stopped';
+                        cssClasses.tableViewStatusClass = "stopped";
+                        break;
 
                     case 'terminated':
-                    cssClasses.ringClass = 'stopped';
-                    cssClasses.textClass = 'instance-state-text-stopped';
-                    cssClasses.tableViewStatusClass = "stopped";
-                    break;
+                        cssClasses.ringClass = 'stopped';
+                        cssClasses.textClass = 'instance-state-text-stopped';
+                        cssClasses.tableViewStatusClass = "stopped";
+                        break;
 
                     default:
-                    cssClasses.ringClass = 'pending';
-                    cssClasses.textClass = 'instance-state-text-pending';
-                    cssClasses.tableViewStatusClass = "pending";
+                        cssClasses.ringClass = 'pending';
+                        cssClasses.textClass = 'instance-state-text-pending';
+                        cssClasses.tableViewStatusClass = "pending";
 
                 }
 
@@ -617,45 +624,45 @@
 
 
             function pollInstanceState(instanceId, state, delay) {
-             
+
                 var timeout = setTimeout(function() {
                     $.get('../instances/' + instanceId, function(data) {
-                        var title='';
-                        if (data) {  
-                            title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
-                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title',title);   
-                          if (data.instanceState == 'stopped') {
-                            enableInstanceActionStopBtn(instanceId);
+                        var title = '';
+                        if (data) {
+                            title = data.instanceState == "running" ? "Stop" : data.instanceState == "stopped" ? "Start" : "";
+                            $('[instanceID="' + data._id + '"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title', title);
+                            if (data.instanceState == 'stopped') {
+                                enableInstanceActionStopBtn(instanceId);
 
-                        }
-                        if (data.instanceState == 'running') {
-                            enableInstanceActionStartBtn(instanceId, data.hardware.os);
-                        }
-                        if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
-                            disableInstanceActionBtns(instanceId);
-                        }
-                        if (data.instanceState == 'unknown') {
-                            disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-                            
-                        }
-                        if (data.instanceState === state) {
-                            pollInstanceState(instanceId, state, 5000);
-                        } else {
-                            console.log('polling complete');
-                            var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                            $parent.find('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);
-                            var cssClassed = getCssClassFromStatus(data.instanceState);
-                            $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                            $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
-                            $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
-                            $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
+                            }
+                            if (data.instanceState == 'running') {
+                                enableInstanceActionStartBtn(instanceId, data.hardware.os);
+                            }
+                            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                                disableInstanceActionBtns(instanceId);
+                            }
+                            if (data.instanceState == 'unknown') {
+                                disableInstanceStartStopActionBtns(data._id, data.hardware.os);
 
+                            }
+                            if (data.instanceState === state) {
+                                pollInstanceState(instanceId, state, 5000);
+                            } else {
+                                console.log('polling complete');
+                                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                                $parent.find('[instanceID="' + data._id + '"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState);
+                                var cssClassed = getCssClassFromStatus(data.instanceState);
+                                $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                                $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
+                                $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
+
+                            }
                         }
-                    }
-                });
-    }, delay);
-    }
+                    });
+                }, delay);
+            }
 
             //Checking the condition for Start and Stop of Instance.
             var startStopInstanceHandler = function(e) {
@@ -692,6 +699,14 @@
                     url = '../instances/' + instanceId + '/stopInstance'
                 }
                 if (type === 'Stop') {
+                    var hasStopPermission=false;
+                    if(haspermission("instancestop","execute")){
+                        hasStopPermission=true;
+                    }
+                    if(!hasStopPermission){
+                        bootbox.alert('User has No Permission to Stop');
+                        return;
+                    }
                     bootbox.confirm(type + " instance?", function(result) {
                         if (!result) {
                             return;
@@ -710,6 +725,13 @@
                 if ($(this).hasClass('isStopedInstance')) {
                     return false;
                 }
+                var hasChefRunPermission= false;
+                if(haspermission("instancechefclientrun","modify")){
+                    hasChefRunPermission=true;
+                }
+                if(!hasChefRunPermission){
+                    $('.btnUpdateInstanceRunlist').addClass('disabled');
+                }
                 var $this = $(this);
                 //alert($this);
                 var instanceId = $this.attr('data-instanceId');
@@ -720,35 +742,35 @@
                 console.log("runlist", runlist);
                 var $chefRunModalContainer = $('#chefRunModalContainer');
                 var readMode = false;
-                if(localStorage.getItem('userRole') === '[Consumer]') {
-                   readMode = true;
-               }
-               var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
-
-               }, runlist,readMode);
-               $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid', instanceId);
-
-
-
-               $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
-               $chefRunModalContainer.modal('show');
-
-           };
-
-
-           var instanceLogsHandler = function(e) {
-            var instanceId = $(this).attr('data-instanceId');
-            var timeout;
-            var $instanceLogModalContainer = $('#instanceLogModalContainer');
-            $instanceLogModalContainer.on('hidden.bs.modal', function(e) {
-                $instanceLogModalContainer.off('hidden.bs.modal');
-                if (timeout) {
-                    clearTimeout(timeout);
+                if (localStorage.getItem('userRole') === '[Consumer]') {
+                    readMode = true;
                 }
-            });
-            $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-            $instanceLogModalContainer.modal('show');
-            var lastTimestamp;
+                var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+
+                }, runlist, readMode);
+                $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid', instanceId);
+
+
+
+                $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+                $chefRunModalContainer.modal('show');
+
+            };
+
+
+            var instanceLogsHandler = function(e) {
+                var instanceId = $(this).attr('data-instanceId');
+                var timeout;
+                var $instanceLogModalContainer = $('#instanceLogModalContainer');
+                $instanceLogModalContainer.on('hidden.bs.modal', function(e) {
+                    $instanceLogModalContainer.off('hidden.bs.modal');
+                    if (timeout) {
+                        clearTimeout(timeout);
+                    }
+                });
+                $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                $instanceLogModalContainer.modal('show');
+                var lastTimestamp;
 
                 //Showing the log for Instances
                 function pollLogs(timestamp, delay, clearData) {
@@ -798,10 +820,10 @@
                                 console.log('not polling again');
                             }
                         });
-    }, delay);
-    }
-    pollLogs(lastTimestamp, 0, true);
-};
+                    }, delay);
+                }
+                pollLogs(lastTimestamp, 0, true);
+            };
 
 
             //emptying ssh container
@@ -815,6 +837,15 @@
                 if ($(this).hasClass('isStopedInstance')) {
                     return false;
                 }
+                var hasConnectPermission= false;
+                    if(haspermission("instanceconnect","execute")){
+                        hasConnectPermission=true;
+                    }
+                if(!hasConnectPermission){
+                    bootbox.alert('User has no permission to do SSH');
+                    return;
+                }
+
                 var $sshModal = $('#modalSSHShellContainer');
                 var instanceId = $(this).attr('data-instanceId');
                 $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -878,51 +909,53 @@
                     },
                     getComponentItem: function(data) {
                         return '<span style="overflow:hidden;text-overflow:ellipsis;width:62px;padding-right:0px;" class="instance-details-item">' + '<a class="btn instance-bootstrap-list-faimage" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="ViewAllRunlist">' + '<i class="fa fa-2x fa-exchange txt-color-blue"></i></a></span>';
-                    },getOS:function(data){
-                        var basePath='img/osIcons/',imgPath,title='';
-                        console.log(data.hardware.os+' :: OS ::'+data.hardware.platform.toLowerCase())
-                        switch(data.hardware.platform.toLowerCase()){
+                    },
+                    getOS: function(data) {
+                        var basePath = 'img/osIcons/',
+                            imgPath, title = '';
+                        console.log(data.hardware.os + ' :: OS ::' + data.hardware.platform.toLowerCase())
+                        switch (data.hardware.platform.toLowerCase()) {
                             case "window 2008":
-                            imgPath='windows.png';
-                            break;
+                                imgPath = 'windows.png';
+                                break;
                             case "centos":
-                            imgPath='centos.png';
-                            break;
+                                imgPath = 'centos.png';
+                                break;
                             case "ubuntu":
-                            imgPath='ubuntu.png';
-                            break;
+                                imgPath = 'ubuntu.png';
+                                break;
                             default:
-                            imgPath='unknown.png';
+                                imgPath = 'unknown.png';
                         }
-                        title=data.hardware.platform;
-                        if(imgPath==="unknown.png"){
-                            if(data.hardware.os.toLowerCase()==="linux"){
-                                imgPath="linux.png";
-                                title=data.hardware.os;
+                        title = data.hardware.platform;
+                        if (imgPath === "unknown.png") {
+                            if (data.hardware.os.toLowerCase() === "linux") {
+                                imgPath = "linux.png";
+                                title = data.hardware.os;
 
-                            }else if(data.hardware.os.toLowerCase().indexOf('window')>-1){
-                                imgPath="windows.png";
-                                title=data.hardware.os;
+                            } else if (data.hardware.os.toLowerCase().indexOf('window') > -1) {
+                                imgPath = "windows.png";
+                                title = data.hardware.os;
 
                             }
 
                         }
-                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ title.capitalizeFirstLetter() +'" rel="tooltip"/></span>'
+                        return '<span class="card_os" style="float:right;"><img src="' + basePath + imgPath + '" height="25" width="25" data-placement="top" data-original-title="' + title.capitalizeFirstLetter() + '" rel="tooltip"/></span>'
                     },
-                    getStart:function (data){
-                      return'<div class="actionbutton instance-bootstrap-ActionStart" style="display:none !important;" ><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actionType="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>';
+                    getStart: function(data) {
+                        return '<div class="actionbutton instance-bootstrap-ActionStart" style="display:none !important;" ><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actionType="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>';
 
                     },
-                    getStop:function(data){
+                    getStop: function(data) {
                         $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
 
                     },
-                    getStartStopToggler:function(data){
-                      var title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
-                        return '<div class="startstoptoggler '+data.instanceState+'" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="'+title+'" rel="tooltip"></div>'
+                    getStartStopToggler: function(data) {
+                        var title = data.instanceState == "running" ? "Stop" : data.instanceState == "stopped" ? "Start" : "";
+                        return '<div class="startstoptoggler ' + data.instanceState + '" instanceID="' + data._id + '" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="' + title + '" rel="tooltip"></div>'
                     },
-                    getContainerForActionButtons:function(data){
-                      return '<div style="height:30px;width:152px;" class="instanceActionBtnCtr" data-instanceId="'+data._id+'"></div>';
+                    getContainerForActionButtons: function(data) {
+                        return '<div style="height:30px;width:152px;" class="instanceActionBtnCtr" data-instanceId="' + data._id + '"></div>';
                     }
                 }
                 if (data && data._id) { // instanceId
@@ -954,17 +987,17 @@
                     }
                 }
                 var $rowContainter = $(cardTemplate.getRowContainer(data));
-                
+
                 var $li = $(cardTemplate.getDomainRoleThumbnail(data));
-                
+
                 var $container = $(cardTemplate.getContainer(data));
-                
+
                 var $card = $(cardTemplate.getCard(data));
-                
+
                 var $front = $(cardTemplate.getFront(data));
-                
+
                 var $div = $(cardTemplate.getDomainRoles(data));
-                
+
                 var $divDomainRolesCaption = $(cardTemplate.getDomainRolesCaption(data));
 
                 var $divComponentListContainer, $tdInstanceStatusIndicator, $divComponentListImage, $tableInstanceStatusIndicator;
@@ -998,7 +1031,7 @@
                 $tableInstanceStatusIndicator.attr('data-instanceId', data._id);
                 var $divComponentList = $(cardTemplate.getComponentList()),
 
-                $divComponentItem = $(cardTemplate.getComponentItem());
+                    $divComponentItem = $(cardTemplate.getComponentItem());
 
                 $divComponentItem.click(function(e) {
 
@@ -1023,28 +1056,28 @@
 
                     $divComponentListContainer.append($dockerStatus);
                 }
-                if(data.appUrl1 && data.appUrl1.name && data.appUrl1.url) {
-                 var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrl1.url + "' href='" + data.appUrl1.url + "'' target='_blank' >"+data.appUrl1.name+"</a>";
-                 $divComponentListContainer.append($anchor);
-             }
+                if (data.appUrl1 && data.appUrl1.name && data.appUrl1.url) {
+                    var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrl1.url + "' href='" + data.appUrl1.url + "'' target='_blank' >" + data.appUrl1.name + "</a>";
+                    $divComponentListContainer.append($anchor);
+                }
 
-             if(data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
-                 var $anchor1 = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrl2.url + "' href='" + data.appUrl2.url + "'' target='_blank' >"+data.appUrl2.name+"</a>";
-                 $divComponentListContainer.append($anchor1);
-             }
-
-
+                if (data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
+                    var $anchor1 = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrl2.url + "' href='" + data.appUrl2.url + "'' target='_blank' >" + data.appUrl2.name + "</a>";
+                    $divComponentListContainer.append($anchor1);
+                }
 
 
-             $rowContainter.append('<td></td>');
-             $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
 
-             $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 15) + '</td>');
-             $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
-             var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
+                $rowContainter.append('<td></td>');
+                $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
-             var $viewAllA;
+
+                $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 15) + '</td>');
+                $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
+                var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
+
+                var $viewAllA;
                 //alert(data.runlist);
                 if (data.runlist.length) {
                     $viewAllA = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist");
@@ -1070,22 +1103,22 @@
                         $modal.modal('show');
                         return false;
                     });
-    } else {
-        $viewAllA = $('<span></span>').append("View All Runlist");
-    }
-    var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
-    $tableRunlistDiv.append($divComponentItem);
-    $rowContainter.append($('<td></td>').append($tableRunlistDiv));
-    $rowContainter.append($tableInstanceStatusIndicator);
-    var temp = ($anchor ? $anchor : "") + "" + ($anchor1 ? $anchor1 : "");
-    $rowContainter.append('<td>' + temp + '</td>');
+                } else {
+                    $viewAllA = $('<span></span>').append("View All Runlist");
+                }
+                var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item').append($viewAllA);
+                $tableRunlistDiv.append($divComponentItem);
+                $rowContainter.append($('<td></td>').append($tableRunlistDiv));
+                $rowContainter.append($tableInstanceStatusIndicator);
+                var temp = ($anchor ? $anchor : "") + "" + ($anchor1 ? $anchor1 : "");
+                $rowContainter.append('<td>' + temp + '</td>');
 
-    $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
+                $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
 
-    $divDomainRolesCaption.append($divComponentListContainer);
-    var $divInstanceDetails = $('<div></div>')
-    var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
-    var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong class="instanceip">' + data.instanceIP + '</strong>');
+                $divDomainRolesCaption.append($divComponentListContainer);
+                var $divInstanceDetails = $('<div></div>')
+                var $instanceDetailsList = $('<div></div>').addClass('instance-details-list');
+                var $instanceDetailItemId = $('<span></span>').addClass('instance-details-id').html('IP : <strong class="instanceip">' + data.instanceIP + '</strong>');
                 //Arab
 
                 $instanceDetailsList.append($instanceDetailItemId);
@@ -1104,36 +1137,36 @@
 
                 $divInstanceDetails.append($instanceDetailsList);
 
-                $divDomainRolesCaption.append([$divInstanceDetails,$('<hr>')]);
+                $divDomainRolesCaption.append([$divInstanceDetails, $('<hr>')]);
 
-             //   $divDomainRolesCaption.append($('<hr>'));
+                //   $divDomainRolesCaption.append($('<hr>'));
 
 
                 var $divActionBtnContainer = $(cardTemplate.getContainerForActionButtons(data));
 
-                var $divActionChefRunContainer = $('<div></div>').addClass('instance-bootstrap-ActionChefRun').append($divComponentListImage);
+                var $divActionChefRunContainer = $('<div></div>').addClass('instance-bootstrap-ActionChefRun devTOP').append($divComponentListImage);
                 $divActionBtnContainer.append($divActionChefRunContainer);
 
                 var $divActionStartContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionStart').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonStart instanceActionBtn').attr('data-actionType', 'Start').attr('data-placement', 'top').attr('rel', 'tooltip').attr('data-original-title', 'Start'));
-               
+
                 if (!data.chef) {
                     data.chef = {};
                 }
                 var $divActionShutdownContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
-               
 
 
-                var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon" data-instanceid="' + data._id + '"></a>').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
+
+
+                var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon devTOP" data-instanceid="' + data._id + '"></a>').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
                 var $startStopToggler=$(cardTemplate.getStartStopToggler(data));
 
+                $divActionBtnContainer.append([$divActionSSHContainer, $divActionStartContainer, $divActionShutdownContainer, $startStopToggler, cardTemplate.getSpanHeadingRight(data)]);
+                //  $divActionBtnContainer.append($divActionSSHContainer);
+                //  $divActionBtnContainer.append($divActionStartContainer);
 
-               $divActionBtnContainer.append([$divActionSSHContainer,$divActionStartContainer,$divActionShutdownContainer,$startStopToggler,cardTemplate.getSpanHeadingRight(data)]);
-              //  $divActionBtnContainer.append($divActionSSHContainer);
-               //  $divActionBtnContainer.append($divActionStartContainer);
-             
-               // $divActionBtnContainer.append($startStopToggler);
+                // $divActionBtnContainer.append($startStopToggler);
 
-              //  $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
+                //  $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
                 var $back = $('<div></div>').addClass('back card-backflip');
                 var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
@@ -1167,20 +1200,20 @@
                     $(this).parents('.flip-toggle').toggleClass('flip');
                 });
                 $back.append($flipbackdivaspan);
-                 var $tableActionBtnContainer=$divActionBtnContainer.clone();
+                var $tableActionBtnContainer = $divActionBtnContainer.clone();
 
                 $divDomainRolesCaption.append($divActionBtnContainer);
                 $front.append($div);
-                $card.append([$front,$back]);
-               // $card.append($front);
+                $card.append([$front, $back]);
+                // $card.append($front);
                 //$card.append($back);
                 $container.append($card);
                 $li.append($container);
                 $div.append($divDomainRolesCaption);
 
                 $instancesList.append($li);
-                $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>');//appending chef client feature
-                
+                $rowContainter.append('<td>' + $('<div></div>').append($divComponentListImage.clone()).html() + '</td>'); //appending chef client feature
+
                 $tableActionBtnContainer.find('.moreInfo').remove();
                 $tableActionBtnContainer.find('.instance-bootstrap-ActionChefRun').remove();
                 //$tableActionBtnContainer.append()
@@ -1225,47 +1258,46 @@
                 if (data.hardware.os !== 'linux') {
                     disableSSHBtn(data._id);
                 }
-               // alert($tableActionBtnContainer.find('.startstoptoggler').length);
-    //var allClass='stopped running pending unknown', addClass='';
-    if (data.instanceState == 'stopped') {
-        enableInstanceActionStopBtn(data._id);
-           }
-    if (data.instanceState == 'running') {
-        enableInstanceActionStartBtn(data._id, data.hardware.os);
-         }
-    if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
-        disableInstanceActionBtns(data._id);
-     }
-    if (data.instanceState == 'unknown') {
-        disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-      }
-    $startStopToggler.click(startAndStopToggler);
-    $rowContainter.find('.startstoptoggler').off('click').on('click',startAndStopToggler);
+                // alert($tableActionBtnContainer.find('.startstoptoggler').length);
+                //var allClass='stopped running pending unknown', addClass='';
+                if (data.instanceState == 'stopped') {
+                    enableInstanceActionStopBtn(data._id);
+                }
+                if (data.instanceState == 'running') {
+                    enableInstanceActionStartBtn(data._id, data.hardware.os);
+                }
+                if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                    disableInstanceActionBtns(data._id);
+                }
+                if (data.instanceState == 'unknown') {
+                    disableInstanceStartStopActionBtns(data._id, data.hardware.os);
+                }
+                $startStopToggler.click(startAndStopToggler);
+                $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
 
-    setTimeout(function() {
-        var $l = $('#divinstancescardview').find('.active');
-        if ($l.length > 1) {
-            $l.not(':first').removeClass('active');
-        }
-    }, 3);
-    $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
-}
+                setTimeout(function() {
+                    var $l = $('#divinstancescardview').find('.active');
+                    if ($l.length > 1) {
+                        $l.not(':first').removeClass('active');
+                    }
+                }, 3);
+                $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
+            }
 
-function startAndStopToggler(e){
+            function startAndStopToggler(e) {
 
-        if($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')){
-            console.log('pending or Unknow State');
-            return false;
-        }
-        else if($(this).hasClass('running')){
-            console.log('running State');
-            $(this).parent().find('[data-actionType="Stop"]').trigger('click');
+                if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
+                    console.log('pending or Unknow State');
+                    return false;
+                } else if ($(this).hasClass('running')) {
+                    console.log('running State');
+                    $(this).parent().find('[data-actionType="Stop"]').trigger('click');
 
-        }else if($(this).hasClass('stopped')){
-            console.log('Stopped State');
-            $(this).parent().find('[data-actionType="Start"]').trigger('click');
-        }
-}
+                } else if ($(this).hasClass('stopped')) {
+                    console.log('Stopped State');
+                    $(this).parent().find('[data-actionType="Start"]').trigger('click');
+                }
+            }
             //enaling the start Button and checking the instanceID & OS-Type
             function enableInstanceActionStartBtn(instanceId, osType) {
                 var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -1381,7 +1413,7 @@ function startAndStopToggler(e){
                 });
 
 
-    }
+            }
 
             //Initializing the blueprint area according to the Template-Type and showing
             //the differnt template types whenever a blueprint is added
@@ -1432,51 +1464,51 @@ function startAndStopToggler(e){
                         //alert(getDesignTypeName);
                         switch (getDesignTypeName) {
                             case "AppFactory":
-                            $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
-                            $currRolePanel = $AppFactpanelBody;
-                            break;
+                                $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
+                                $currRolePanel = $AppFactpanelBody;
+                                break;
                             case "DevopsRoles":
-                            $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles"></div>');
-                            $currRolePanel = $DevopsRolespanelBody;
-                            break;
+                                $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles"></div>');
+                                $currRolePanel = $DevopsRolespanelBody;
+                                break;
                             case "CloudFormation":
-                            $CloudFormationBody = $('<div class="panel-body CloudFormation"></div>');
-                            $currRolePanel = $CloudFormationBody;
-                            break;
+                                $CloudFormationBody = $('<div class="panel-body CloudFormation"></div>');
+                                $currRolePanel = $CloudFormationBody;
+                                break;
                             case "Docker":
-                            $DockerpanelBody = $('<div class="panel-body Docker"></div>');
-                            $currRolePanel = $DockerpanelBody;
-                            break;
+                                $DockerpanelBody = $('<div class="panel-body Docker"></div>');
+                                $currRolePanel = $DockerpanelBody;
+                                break;
                             case "Desktop":
-                            $DesktopProvisioningPanelBody = $('<div class="panel-body Desktop"></div>');
-                            $currRolePanel = $DesktopProvisioningPanelBody;
-                            break;
+                                $DesktopProvisioningPanelBody = $('<div class="panel-body Desktop"></div>');
+                                $currRolePanel = $DesktopProvisioningPanelBody;
+                                break;
                             case "Environment":
-                            $EnvironmentpanelBody = $('<div class="panel-body Environment"></div>');
-                            $currRolePanel = $EnvironmentpanelBody;
-                            break;
+                                $EnvironmentpanelBody = $('<div class="panel-body Environment"></div>');
+                                $currRolePanel = $EnvironmentpanelBody;
+                                break;
 
                         }
 
 
                         $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
-                        '<div class="panel-heading">' +
+                            '<div class="panel-heading">' +
 
                         '<h4 class="panel-title">' +
-                        '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
-                        '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
-                        '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
-                        '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                        '<div class="panel-body ' + getDesignTypeName + '"></div>' +
-                        '</div>';
+                            '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
+                            '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
+                            '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
+                            '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
+                            '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                            '</div>';
                         // $($containerTemp).find('#collapse' + i).append($currRolePanel);
                         /*if($('#accordion-2').find('#collapse' + i).length > 0){
                      alert('in');
                      $('#accordion-2').find('#collapse' + i).first().append($containerTemp);
                  }*/
-                 $('#accordion-2').append($containerTemp);
+                        $('#accordion-2').append($containerTemp);
 
-             }
+                    }
                     //To fix template id and template type
                     // alert('in' + data.length);
                     for (var i = 0; i < data.length; i++) {
@@ -1562,30 +1594,30 @@ function startAndStopToggler(e){
                                         });
 
                                     });
-    }
-    if (localStorage.getItem('userRole') !== '[Consumer]') {
-        var $li = $('<li></li>').css({
-            "font-size": '10px'
-        }).append(tagLabel, $selectVer, $selectVerEdit);
+                                }
+                                if (localStorage.getItem('userRole') !== '[Consumer]') {
+                                    var $li = $('<li></li>').css({
+                                        "font-size": '10px'
+                                    }).append(tagLabel, $selectVer, $selectVerEdit);
 
-    } else {
-        var $li = $('<li></li>').css({
-            "font-size": '10px'
-        }).append(tagLabel, $selectVer);
+                                } else {
+                                    var $li = $('<li></li>').css({
+                                        "font-size": '10px'
+                                    }).append(tagLabel, $selectVer);
 
-    }
-    if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
-        for (var j = 0; j < data[i].versionsList.length; j++) {
-            var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
-            $selectVer.append($options);
-        }
-    }
-    $selecteditBtnContainer.append($li);
+                                }
+                                if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
+                                    for (var j = 0; j < data[i].versionsList.length; j++) {
+                                        var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                                        $selectVer.append($options);
+                                    }
+                                }
+                                $selecteditBtnContainer.append($li);
 
-}
-$itemBody.append($ul);
-$itemBody.append($selecteditBtnContainer);
-$itemContainer.append($itemBody);
+                            }
+                            $itemBody.append($ul);
+                            $itemBody.append($selecteditBtnContainer);
+                            $itemContainer.append($itemBody);
 
                             //Find the template type container and add to it.
                             //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
@@ -1618,10 +1650,10 @@ $itemContainer.append($itemBody);
                     pageSetUp();
                 }); //end of readmasterjson to be pushed to the end of the function.
 
-        $('#accordion-2').on('show.bs.collapse', function(e) {
-            console.log(e.target);
-            $(e.target).find('.productdiv1').first().click();
-        });
+                $('#accordion-2').on('show.bs.collapse', function(e) {
+                    console.log(e.target);
+                    $(e.target).find('.productdiv1').first().click();
+                });
                 //Expanding the fist Accordion.
             };
 
@@ -1677,7 +1709,7 @@ $itemContainer.append($itemBody);
                         var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
 
                         if (cardCount === 0) {
-                            alert('No instances available.Kindly Launch one instance');
+                            bootbox.alert('No instances available.Kindly Launch one instance');
                             return;
                         }
                         loadLaunchParams();
@@ -1730,31 +1762,31 @@ $itemContainer.append($itemBody);
                             $(this).append('<td  class="hidden"><input type="checkbox"></td>');
                             $(this).find('.moreInfo').click(instanceLogsHandler);
                         });
-        $('.launchdockerinstance').click(function() {
-            $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
-            $('#myModalLabel').first().html('Launching Blueprint');
+                        $('.launchdockerinstance').click(function() {
+                            $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
+                            $('#myModalLabel').first().html('Launching Blueprint');
 
-        });
-        $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
-        $launchDockerInstanceSelector.modal('show');
-        $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-        $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
-        $('#dockerintsancestab').dataTable({
-            "bPaginate": false
-        });
-        return;
-    }
+                        });
+                        $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
+                        $launchDockerInstanceSelector.modal('show');
+                        $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
+                        $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
+                        $('#dockerintsancestab').dataTable({
+                            "bPaginate": false
+                        });
+                        return;
+                    }
 
 
-    var $launchResultContainer = $('#launchResultContainer');
-    $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-    $launchResultContainer.find('.modal-title').html('Launching Blueprint');
-    $launchResultContainer.modal('show');
-    for (var i = 0; i < $selectedItems.length; i++) {
-        var projectId = $($selectedItems.get(i)).attr('data-projectId');
-        var envId = $($selectedItems.get(i)).attr('data-envId');
-        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
-        var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
+                    var $launchResultContainer = $('#launchResultContainer');
+                    $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                    $launchResultContainer.find('.modal-title').html('Launching Blueprint');
+                    $launchResultContainer.modal('show');
+                    for (var i = 0; i < $selectedItems.length; i++) {
+                        var projectId = $($selectedItems.get(i)).attr('data-projectId');
+                        var envId = $($selectedItems.get(i)).attr('data-envId');
+                        var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
+                        var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
                         // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
                         $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
@@ -1823,25 +1855,25 @@ $itemContainer.append($itemBody);
                                             console.log('not polling again');
                                         }
                                     });
-    }, delay);
-    }
-    pollLogs(lastTimestamp, 0, true);
+                                }, delay);
+                            }
+                            pollLogs(lastTimestamp, 0, true);
 
-    $.get('../instances/' + data.id, function(data) {
-        $('#tabInstanceStatus').hide();
-        addInstanceToDOM(data);
+                            $.get('../instances/' + data.id, function(data) {
+                                $('#tabInstanceStatus').hide();
+                                addInstanceToDOM(data);
                                 // serachBoxInInstance.updateData(data,"add",undefined);
 
                             });
 
 
-}).error(function() {
-    $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
-});
-}
-});
+                        }).error(function() {
+                            $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+                        });
+                    }
+                });
 
-    }
+            }
 
             //Updating blueprints
             function bindClick_bluePrintUpdate() {
@@ -1872,7 +1904,7 @@ $itemContainer.append($itemBody);
 
                     }
                 });
-    }
+            }
 
             //Updating the blueprint Runlist
             function bindClick_updateInstanceRunList() {
@@ -1891,19 +1923,19 @@ $itemContainer.append($itemBody);
                         $inputs.each(function() {
                             runlist.push($(this).val());
                         });
-                        if(!runlist.length) {
-                          bootbox.alert('Runlist is empty');
-                          return;
-                      }
+                        if (!runlist.length) {
+                            bootbox.alert('Runlist is empty');
+                            return;
+                        }
 
 
-                      console.log(runlist);
-                      $.post('../instances/' + instanceId + '/updateRunlist', {
-                        runlist: runlist
-                    }, function(data) {
-                        $chefRunModalContainer.modal('hide');
-                        var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                        var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
+                        console.log(runlist);
+                        $.post('../instances/' + instanceId + '/updateRunlist', {
+                            runlist: runlist
+                        }, function(data) {
+                            $chefRunModalContainer.modal('hide');
+                            var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                            var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
                             //console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
                             $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
                             var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
@@ -1918,24 +1950,24 @@ $itemContainer.append($itemBody);
                             $parent.find('.moreInfo').trigger('click');
                             console.log(data);
                         }).fail(function(jxObj) {
-                                if(jxObj.status == '401')
-                                    bootbox.alert('Inssuficient permission to perform operation.');
+                            if (jxObj.status == '401')
+                                bootbox.alert('Inssuficient permission to perform operation.');
                         });
                     });
 
 
-    });
-    }
+                });
+            }
 
-    /*********************************************Orchestration.js*************************************/
-    /*Binding Click events to Orchestration and showing the breadcrumb*/
-    function initializingOrchestration() {
+            /*********************************************Orchestration.js*************************************/
+            /*Binding Click events to Orchestration and showing the breadcrumb*/
+            function initializingOrchestration() {
 
-        $('.Orchestration').click(function(e) {
-            var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
-            var getbreadcrumbullength = getbreadcrumbul.length;
-            var DummyBreadCrumb;
-            if (getbreadcrumbullength > 0) {
+                $('.Orchestration').click(function(e) {
+                    var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
+                    var getbreadcrumbullength = getbreadcrumbul.length;
+                    var DummyBreadCrumb;
+                    if (getbreadcrumbullength > 0) {
                         //alert(getbreadcrumbullength);
                         for (var counter = 0; counter < getbreadcrumbullength; counter++) {
                             var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
@@ -1965,25 +1997,25 @@ $itemContainer.append($itemBody);
                     }
 
                 });
-    }
+            }
 
-    /*Initialising the data table in orchestration*/
-    function initializeTaskArea(data) {
-        if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
+            /*Initialising the data table in orchestration*/
+            function initializeTaskArea(data) {
+                if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
                     //var $taskListArea = $('.taskListArea').empty();
                     $taskDatatable = $('#tableOrchestration').DataTable({
                         "pagingType": "full_numbers",
                         "aoColumns": [
-                        null, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        },
-                        null, {
-                            "bSortable": false
-                        }
+                            null, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            },
+                            null, {
+                                "bSortable": false
+                            }
                         ]
 
                     });
@@ -2020,43 +2052,43 @@ $itemContainer.append($itemBody);
                                 }
                                 $('#assignedNode').modal('show');
                             });
-    });
-    } else {
-        var $tdNodeList = $('<td> - </td>')
-    }
-    $tr.append($tdNodeList);
-    if (data[i].taskType === 'chef') {
-        var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-        $tdRunlist.find('a').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
-            var $taskRunListContainer = $('.taskRunListContainer').empty();
-            var runlist = $(this).data('taskRunlist');
-            if (runlist && runlist.length) {
-                for (var i = 0; i < runlist.length; i++) {
-                    $li = $('<li></li>').append(runlist[i]).css({
-                        "font-size": "12px"
-                    });
-                    $taskRunListContainer.append($li);
-                }
-            }
-            $('#assignedRunlist').modal('show');
-        });
-    } else {
-        var $tdRunlist = $('<td> - </td>');
-    }
-    $tr.append($tdRunlist);
+                        });
+                    } else {
+                        var $tdNodeList = $('<td> - </td>')
+                    }
+                    $tr.append($tdNodeList);
+                    if (data[i].taskType === 'chef') {
+                        var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
+                        $tdRunlist.find('a').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
+                            var $taskRunListContainer = $('.taskRunListContainer').empty();
+                            var runlist = $(this).data('taskRunlist');
+                            if (runlist && runlist.length) {
+                                for (var i = 0; i < runlist.length; i++) {
+                                    $li = $('<li></li>').append(runlist[i]).css({
+                                        "font-size": "12px"
+                                    });
+                                    $taskRunListContainer.append($li);
+                                }
+                            }
+                            $('#assignedRunlist').modal('show');
+                        });
+                    } else {
+                        var $tdRunlist = $('<td> - </td>');
+                    }
+                    $tr.append($tdRunlist);
 
-    var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-    $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
-        var taskId = $(this).data('taskId');
-        var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-        var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-        var $modal = $('#assignedExecute');
-        $modal.find('.loadingContainer').show();
-        $modal.find('.errorMsgContainer').hide();
-        $modal.find('.outputArea').hide();
-        $modal.modal('show');
-        $.get('../tasks/' + taskId + '/run', function(data) {
-            var date = new Date().setTime(data.timestamp);
+                    var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+                    $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
+                        var taskId = $(this).data('taskId');
+                        var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                        var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                        var $modal = $('#assignedExecute');
+                        $modal.find('.loadingContainer').show();
+                        $modal.find('.errorMsgContainer').hide();
+                        $modal.find('.outputArea').hide();
+                        $modal.modal('show');
+                        $.get('../tasks/' + taskId + '/run', function(data) {
+                            var date = new Date().setTime(data.timestamp);
                             var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
                             $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
                             if (data.taskType === 'chef') {
@@ -2135,27 +2167,27 @@ $itemContainer.append($itemBody);
                                         }
                                         console.log(job);
                                     });
-    }
-    pollJob();
+                                }
+                                pollJob();
 
-    console.log(data);
-}
+                                console.log(data);
+                            }
 
-}).fail(function(jxhr) {
-    $modal.find('.loadingContainer').hide();
-    $modal.find('.outputArea').hide();
-    var $errorContainer = $modal.find('.errorMsgContainer').show();
-    if (jxhr.responseJSON && jxhr.responseJSON.message) {
-        $errorContainer.html(jxhr.responseJSON.message);
-    } else {
-        $errorContainer.html("Server Behaved Unexpectedly");
-    }
-});
-});
-        $tr.append($tdExecute);
-        var timestamp = "-";
-        if (data[i].lastRunTimestamp) {
-            var date = new Date().setTime(data[i].lastRunTimestamp);
+                        }).fail(function(jxhr) {
+                            $modal.find('.loadingContainer').hide();
+                            $modal.find('.outputArea').hide();
+                            var $errorContainer = $modal.find('.errorMsgContainer').show();
+                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                $errorContainer.html(jxhr.responseJSON.message);
+                            } else {
+                                $errorContainer.html("Server Behaved Unexpectedly");
+                            }
+                        });
+                    });
+                    $tr.append($tdExecute);
+                    var timestamp = "-";
+                    if (data[i].lastRunTimestamp) {
+                        var date = new Date().setTime(data[i].lastRunTimestamp);
                         timestamp = new Date(date).toLocaleString(); //converts to human readable strings
                     }
 
@@ -2263,8 +2295,8 @@ $itemContainer.append($itemBody);
                                 console.log('not polling again');
                             }
                         });
-    }, delay);
-    }
+                    }, delay);
+                }
 
                 //updating footer
                 $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
@@ -2312,8 +2344,8 @@ $itemContainer.append($itemBody);
                     }
 
                 });
-    }
-    /************************************ControlPanel.js*****************************************************/
+            }
+            /************************************ControlPanel.js*****************************************************/
             //drawing the breadcrumb when user clicks on control-panel
             function initializeControlPanel() {
                 $('.actionControlPanel').click(function(e) {
@@ -2366,11 +2398,11 @@ $itemContainer.append($itemBody);
                         }
                     }
                 });
-    }
+            }
 
 
 
-    /***************************************Dev.js***************************************/
+            /***************************************Dev.js***************************************/
             //Registring events for pemFile selection
             function registerEventsForPemFile() {
                 $(".authPassword").show();
@@ -2500,14 +2532,24 @@ $itemContainer.append($itemBody);
 
             // });
 
-        $('.createTaskLink').click(function(e) {
-            setBreadCrumbAndViewOrchestration();
 
-            window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'];
-        });
+            $('.createTaskLink').click(function(e) {
+                var hasTasksPermission= false;
+                    if(haspermission("instancetasks","execute")){
+                      hasTasksPermission=true;
+                    }
+                    if(!hasTasksPermission){
+                      bootbox.alert('User has no permission to Add Tasks');
+                      return false;
+                    }
+                setBreadCrumbAndViewOrchestration();
+
+
+                window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'];
+            });
 
             //for Table view
-            
+
 
 
 
@@ -2552,38 +2594,31 @@ $itemContainer.append($itemBody);
                                 var $statmessage = $td.find('.dockerspinner').parent();
 
 
-                                if(ep == 'null')
-                                  {
+                                if (ep == 'null') {
                                     $td.find('.dockerspinner').detach();
                                     $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                } else {
+                                    if ($('#Containernamefield').val() != '') {
+                                        $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep, function(data) {
+                                            if (data == "OK") {
+                                                $td.find('.dockerspinner').detach();
+                                                $td.find('.dockermessage').detach();
+                                                $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+
+                                            } else {
+                                                $('.dockerspinner').detach();
+                                                $td.find('.dockermessage').detach();
+                                                $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                            }
+                                        }); ///instances/dockerexecute/:instanceid/:containerid/:action
+                                    } else {
+                                        $('.dockerspinner').detach();
+                                        $td.find('.dockermessage').detach();
+                                        $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                        alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
                                     }
-                              else{
-                                  if($('#Containernamefield').val() != '')
-                                  { 
-                                    $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep,function(data){
-                                     if(data == "OK")
-                                     {
-                                         $td.find('.dockerspinner').detach();
-                                         $td.find('.dockermessage').detach();
-                                         $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
 
-                                     }
-                                     else
-                                     {
-                                       $('.dockerspinner').detach();
-                                       $td.find('.dockermessage').detach();
-                                       $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                   }
-                                       }); ///instances/dockerexecute/:instanceid/:containerid/:action
-    }
-    else{
-        $('.dockerspinner').detach();
-        $td.find('.dockermessage').detach();
-        $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-        alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
-    }
-
-}
+                                }
                                 //Updating instance card to show the docker icon.
                                 $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
                                 //find the instance card - to do instance table view update
@@ -2600,15 +2635,15 @@ $itemContainer.append($itemBody);
                                 $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
                             }
                         });
-    }
-});
-    });
+                    }
+                });
+            });
 
 
 
 
-        $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
-            console.log('success---3---4');
+            $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+                console.log('success---3---4');
 
                 //Syncing up the tree view based on url
                 initializeBlueprintArea(data.blueprints);
@@ -2636,28 +2671,27 @@ $itemContainer.append($itemBody);
                         for (itm in itms) {
                             if ($(this).attr('dockerparamkey') != '-c' && $(this).attr('dockerparamkey') != '-exec') //checking for start parameter
                                 preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
-                            else
-                            {
-                              if ($(this).attr('dockerparamkey') == '-c')
-                                startparams += ' ' + itms[itm];
-                            if ($(this).attr('dockerparamkey') == '-exec')
-                                execparam += ' ' + itms[itm];
+                            else {
+                                if ($(this).attr('dockerparamkey') == '-c')
+                                    startparams += ' ' + itms[itm];
+                                if ($(this).attr('dockerparamkey') == '-exec')
+                                    execparam += ' ' + itms[itm];
 
 
+                            }
                         }
+                        launchparams[0] = preparams;
+                        launchparams[1] = startparams;
+                        // alert(execparam);
+                        launchparams[2] = execparam;
                     }
-                    launchparams[0] = preparams;
-                    launchparams[1] = startparams;
-                       // alert(execparam);
-                       launchparams[2] = execparam;
-                   }
-               });
-        return (launchparams);
-    }
+                });
+                return (launchparams);
+            }
 
-    function loadLaunchParams() {
-        var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
-        if (lparam && lparam != '') {
+            function loadLaunchParams() {
+                var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+                if (lparam && lparam != '') {
                     $('[dockerparamkey]').val(''); //clearing the popup input boxes
                     //split by -c to get startup and other parameters
                     var preparams = lparam.split('-c');
@@ -2672,21 +2706,21 @@ $itemContainer.append($itemBody);
                     for (para in params) {
 
                         var subparam = params[para].split(' ');
-                       // alert(subparam.join());
-                       if (subparam.length > 0) {
-                        $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+                        // alert(subparam.join());
+                        if (subparam.length > 0) {
+                            $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
 
-                        if ($inp.val() != '')
-                            $inp.val($inp.val() + ',' + subparam[1]);
-                        else
-                            $inp.val(subparam[1]);
-                    }
+                            if ($inp.val() != '')
+                                $inp.val($inp.val() + ',' + subparam[1]);
+                            else
+                                $inp.val(subparam[1]);
+                        }
                         //alert(params[para]);
                     }
                     //Updating the startup parameter
                     $('[dockerparamkey="-c"]').first().val(cparams);
                 } else
-                $('[dockerparamkey]').val('');
+                    $('[dockerparamkey]').val('');
                 $('#myModalLabelDockerContainer').modal('show');
             }
 
@@ -2821,45 +2855,45 @@ $itemContainer.append($itemBody);
 
 
 
-        $thistr.closest('tr').fadeTo('slow', 1);
-        $progressicon.addClass('hidden');
-    });
-    }
+                                                                $thistr.closest('tr').fadeTo('slow', 1);
+                                                                $progressicon.addClass('hidden');
+                                                            });
+                                                        }
 
-} else
-$progressicon.addClass('hidden');
+                                                    } else
+                                                        $progressicon.addClass('hidden');
 
-});
-    }
-    return (false);
-}
-
-
-
-if (action == '6') {
-    bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-        if (!result) {
-            return;
-        }
-        performAction();
-    });
-} else if (action == '2') {
-    bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
-        if (!result) {
-            return;
-        }
-        performAction();
-    });
-} else {
-    performAction();
-}
+                                                });
+                                            }
+                                            return (false);
+                                        }
 
 
-});
-        return;
-    }
-});
-    });
+
+                                        if (action == '6') {
+                                            bootbox.confirm("Are you sure you would like to terminate container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+                                                if (!result) {
+                                                    return;
+                                                }
+                                                performAction();
+                                            });
+                                        } else if (action == '2') {
+                                            bootbox.confirm("Are you sure you would like to stop container : " + containerid + "?.<br/>This action could have an impact on other containers.", function(result) {
+                                                if (!result) {
+                                                    return;
+                                                }
+                                                performAction();
+                                            });
+                                        } else {
+                                            performAction();
+                                        }
+
+
+                                    });
+                                    return;
+                                }
+                            });
+                        });
                     } else { //no docker found
                         $('.loadingimagefordockertable').addClass('hidden');
                         //$('li.Containers').addClass('hidden');
@@ -3057,28 +3091,28 @@ if (action == '6') {
                                     console.log('not polling again');
                                 }
                             });
-    }, delay);
-    }
-    pollLogs(lastTimestamp, 0, true);
-    $.get('/instances/' + data.id, function(data) {
-        addInstanceToDOM(data);
+                        }, delay);
+                    }
+                    pollLogs(lastTimestamp, 0, true);
+                    $.get('/instances/' + data.id, function(data) {
+                        addInstanceToDOM(data);
                         // serachBoxInInstance.updateData(data,"add",undefined);
                     });
 
-}).error(function() {
-    $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
-});;
+                }).error(function() {
+                    $launchResultContainer.find('.modal-body').empty().append('<span>Oops! Something went wrong. Please try again later</span>');
+                });;
 
 
 
-});
+            });
 
 
 
-        function getViewTile() {
-            var locationData = localStorage.getItem("ControlID");
-            if (locationData) {
-                showHideControl(locationData);
+            function getViewTile() {
+                var locationData = localStorage.getItem("ControlID");
+                if (locationData) {
+                    showHideControl(locationData);
                     //alert("clearing");
                     //localStorage.clear();
                 }
@@ -3101,7 +3135,7 @@ if (action == '6') {
                     $('.custom-left').click(function() { //previous list
                         var originalList = $('#divinstancescardview').find('.carousel-inner');
                         var activeList = originalList.find('.active'),
-                        prevList = activeList.prev();
+                            prevList = activeList.prev();
                         if (prevList.length == 1) {
                             activeList.removeClass('active');
                             prevList.addClass('active');
@@ -3114,7 +3148,7 @@ if (action == '6') {
                     $('.custom-right').click(function() {
                         var originalList = $('#divinstancescardview').find('.carousel-inner');
                         var activeList = originalList.find('.active'),
-                        nextList = activeList.next();
+                            nextList = activeList.next();
                         if (nextList.length == 1) {
                             nextList.addClass('active');
                             activeList.removeClass('active');
@@ -3149,7 +3183,7 @@ if (action == '6') {
                     }
                     this.isActive = true;
                     var txt = $('#instanceSearch').val().trim(),
-                    resultJSON = txt ? this.bringSearchResult(txt, this.instanceData) : this.instanceData;
+                        resultJSON = txt ? this.bringSearchResult(txt, this.instanceData) : this.instanceData;
                     console.log('search Result:: ' + resultJSON);
                     this.emptyInstanceCarosuelAndDataTable();
                     createInstanceUI(resultJSON);
@@ -3158,25 +3192,25 @@ if (action == '6') {
                 },
                 updateData: function(object, operationType, instanceId) {
                     var temp, data = this.instanceData,
-                    len = this.instanceData.length;
+                        len = this.instanceData.length;
                     console.log("operation Type:::" + operationType);
                     switch (operationType) {
                         case "add":
-                        if (object) {
-                            this.instanceData.push(data);
-                        }
-                        break;
-                        case "remove":
-                        for (var i = 0; i < len; i++) {
-                            if (data[i]._id === instanceId) {
-                                temp = i;
-                                break;
+                            if (object) {
+                                this.instanceData.push(data);
                             }
-                        }
-                        if (typeof temp !== "undefined") {
-                            this.instanceData = this.instanceData.splice(temp, 1);
-                        }
-                        break;
+                            break;
+                        case "remove":
+                            for (var i = 0; i < len; i++) {
+                                if (data[i]._id === instanceId) {
+                                    temp = i;
+                                    break;
+                                }
+                            }
+                            if (typeof temp !== "undefined") {
+                                this.instanceData = this.instanceData.splice(temp, 1);
+                            }
+                            break;
                     }
                     this.updateUI();
                 },
@@ -3185,27 +3219,27 @@ if (action == '6') {
                 },
                 bringSearchResult: function(txt, data) {
                     var searchResult = [],
-                    o = this;
+                        o = this;
                     if (data && data.length > 0) {
                         for (var i = 0; i < data.length; i++) {
                             if (o.isTextAvailable(txt, data[i].instanceIP) ||
                                 o.isTextAvailable(txt, data[i].blueprintData.blueprintName) ||
                                 o.isTextAvailable(txt, data[i].bootStrapStatus) ||
                                 o.isTextAvailable(txt, data[i].hardware.os)
-                                ) {
+                            ) {
                                 searchResult.push(data[i]);
+                            }
                         }
                     }
+                    return searchResult;
                 }
-                return searchResult;
-            }
-        };
+            };
 
-        disableImportLaunch();
-        initializeInstance();
-        initializeBluePrints();
-        initializeContainer();
-        registerEventsForPemFile();
+            disableImportLaunch();
+            initializeInstance();
+            initializeBluePrints();
+            initializeContainer();
+            registerEventsForPemFile();
             //   registerEventsForSearchInstances();
             initializeControlPanel();
             initializingOrchestration();
