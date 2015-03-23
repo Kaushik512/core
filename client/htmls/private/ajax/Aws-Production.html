@@ -254,28 +254,8 @@
                                                 
                                                 
                                               </div>
-                                              <div class="applicationURLContainer notFordocker"> 
-                                              <div class="col-lg-6" style="margin-top:15px;">
-
-                                                <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                                                <input type="text" name="appNameInput appName" class="form-control" id="appName1">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
-
-
-                                               </div>
-
-                                               <div class="col-lg-6" style="margin-top:15px">
-
-                                                <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                                                <input type="text" name="appNameURL appURL" class="form-control" id="appURL1">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
-                                              </div>
-                                            </div>
-                                             
+                                              
+                                            
                                                  
                                             
                    
@@ -311,6 +291,44 @@
                                             </form>            
                                        </div>
                                   </div>
+                              </div>
+                              <!--adding new collapse-->
+                              <div class="panel panel-default appSeriesNameURL">
+                                      <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure App Name &amp; URL</a>
+                                          </h4>
+                                      </div>
+                                      <div id="CollapseApp" class="panel-collapse collapse">
+                                          <form action="" id="checkout-form">
+                                                
+                                              <div class="applicationURLContainer notFordocker" id="appSeries"> 
+                                                <div class="col-lg-6" style="margin-top:15px;">
+
+                                                <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                                                <input type="text" name="appNameInput appName" class="form-control" id="appName1">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+
+
+                                               </div>
+
+                                               <div class="col-lg-6" style="margin-top:15px">
+
+                                                <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                
+                                                <input type="text" name="appNameURL appURL" class="form-control" id="appURL1">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+                                              </div>
+                                            </div>
+
+                                              <a href="javascript:void(0);" class="clearfix pull-right addNewApp appDesignNew">Add New</a>
+                                                   
+                                                
+                                            </form>
+                                      </div>
                               </div>
                             </div>
                           </div>
@@ -498,6 +516,12 @@ $('#launchParamDocker').click(function(){
   $('#dockerparamsform')[0].reset();
   $('.chooseSelectExit').change();
 });
+
+//for adding the new App Series(Name and URL)
+$('.addNewApp').click(function() {
+  $('#appSeries').clone().insertAfter('.applicationURLContainer:last');
+});
+
 function generateDockerLaunchParams(){
   if($('#Containernamefield').val() == ''){
     $('.dockerparamrequired').removeClass('hidden');
