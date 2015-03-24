@@ -1,0 +1,93 @@
+
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+
+
+
+*** Keywords ***
+Catalyst Create New Environments Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
+    Clicks on New button Create New Environment
+    Select organization for Env
+    Select the Configuration name
+    Select the Environments1
+    Assign Teams1
+    Clicks on Save Button to save the Environments
+    Catalyst Environments2 setup
+
+Catalyst Environments2 setup
+    Clicks on New button Create New Environment
+    Select organization for Env
+    Select the Configuration name
+    Select the Environment2
+    Assign Team2
+    Clicks on Save Button to save the Environments
+
+
+#Catalyst Edit the Project Setup
+    #Clicks on Settings
+    #Clicks on Organization setup
+    #Clicks on projects menu
+    #Clicks on Edit Button of the Project Created
+    #Assign the Environments to your Project
+    #Clicks on Save Button
+
+
+
+
+
+#Edit Project Start
+Clicks on Organization setup
+    Click Element    xpath=.//*[@id='Settings']/li[1]/a/span
+
+Clicks on Edit Button of the Project Created
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a        #Catalyst
+
+
+  Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a       Primary_Edu
+
+Select organization for Env
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_orgname']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div 
+
+Select the EConfiguration name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+#Environment start
+Clicks on EEnvironments menu line
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[4]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
+
+
+Clicks on New button create new Environment
+    Wait Until Keyword Succeeds    1 minute     2 seconds       Wait Until Element Is Visible       xpath=.//*[@id='newENV']
+    Click Element    xpath=.//*[@id='newENV']
+
+Select the Environments1
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List    id=environmentname         Dev                        #Dev
+
+Select the Environment2
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List    id=environmentname         QA                       #QA
+
+Assign Teams1
+    Click Element    xpath=.//*[@id='teamname']/label[text()="Development"]/i              #Development Team
+
+Assign Team2
+    Click Element    xpath=.//*[@id='teamname']/label[text()="Scholastic"]/i                #Scholastic Team
+ #Environment End
