@@ -11,16 +11,16 @@ Catalyst new organization setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Create New Organization
-    Create New Business Group
-    Create New Projects
-    Create New Environments
-    Catalyst Logout
+    Create New Organization                           
+    Create New Business Group 
+    Create New Projects                         
+    Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst login with vaild user
+Catalyst login with vaild user     
     [Tags]       Sanity               Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Logout
     [Teardown]     Close Browser
+
