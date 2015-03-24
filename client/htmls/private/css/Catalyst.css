@@ -7365,3 +7365,8 @@ background:url('../img/galleryIcons/start_icon.png');
     margin-right: 12px;
 }
 
+.treeview .node-selected{
+      font-size: 13px !important;
+  font-weight: bold;
+  background-color: #3b4142 !important;
+}
