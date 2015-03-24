@@ -385,97 +385,131 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
-    app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
+app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
 
         logger.debug("Enter get() for /instances/dockerimagepull");
         var instanceid = req.params.instanceid;
-
-        configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
-            if (!err) {
-
-                //  var dockerRepo = JSON.parse(data);
-                logger.debug('Docker Repo ->', JSON.stringify(data));
-                var dock = JSON.parse(data);
-                // var dockkeys = Object.keys(data);
-                logger.debug('username:', dock.dockeruserid);
-
-                var _docker = new Docker();
-                var stdmessages = '';
-
-                var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
-
-                //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
-                //removing docker userID
-                cmd += ' && sudo docker pull ' + decodeURIComponent(req.params.imagename);
-                logger.debug('Intermediate cmd: ', cmd);
-                if (req.params.tagname != null) {
-                    cmd += ':' + req.params.tagname;
+        instancesDao.getInstanceById(req.params.instanceid, function(err, data) {
+            if (err) {
+                logger.error("Instance fetch Failed >> ", err);
+                res.send(500);
+                return;
+            }
+            logger.debug(data.length + ' ' + JSON.stringify(data));
+            if (data.length) {
+                logger.debug(' Docker dockerEngineStatus : ' + data[0].docker.dockerEngineStatus);
+                if(data[0].docker.dockerEngineStatus){
+                    if(data[0].docker.dockerEngineStatus != "success"){
+                        res.end('No Docker Found');
+                        return;
+                    }
                 }
-                var runparams = '';
-                if (req.params.runparams != 'null') {
-                    runparams = decodeURIComponent(req.params.runparams);
+                else{
+                     res.end('No Docker Found');
+                        return;
                 }
-                var startparams = '';
-                if (req.params.startparams != 'null') {
-                    startparams = decodeURIComponent(req.params.startparams);
-                } else
-                    startparams = '/bin/bash';
-                cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' ' + startparams;
-                logger.debug('Docker command executed : ', cmd);
-                _docker.runDockerCommands(cmd, req.params.instanceid,
-                    function(err, retCode) {
-                        if (err) {
-                            logsDao.insertLog({
-                                referenceId: instanceid,
-                                err: true,
-                                log: 'Unable to run chef-client',
-                                timestamp: new Date().getTime()
-                            });
-                            logger.error("Failed to Excute Docker command: ", err);
-                            res.send(err);
-                            return;
+                configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
+                    if (!err) {
+
+                        //  var dockerRepo = JSON.parse(data);
+                        logger.debug('Docker Repo ->', JSON.stringify(data));
+                        var dock = JSON.parse(data);
+                        // var dockkeys = Object.keys(data);
+                        logger.debug('username:', dock.dockeruserid);
+
+                        var _docker = new Docker();
+                        var stdmessages = '';
+
+                        var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+
+                        //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                        //removing docker userID
+                        cmd += ' && sudo docker pull ' + decodeURIComponent(req.params.imagename);
+                        logger.debug('Intermediate cmd: ', cmd);
+                        if (req.params.tagname != null) {
+                            cmd += ':' + req.params.tagname;
                         }
-
-                        logger.debug("docker return ", retCode);
-                        //if retCode == 0 //update docker status into instacne
-                        instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
-                            logger.debug('Instance Docker Status set to Success');
-
-                        });
-                        logger.debug("Exit get() for /instances/dockerimagepull");
-                        res.send(200);
-
-                    },
-                    function(stdOutData) {
-                        if (!stdOutData) {
-
-                            logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
-                            stdmessages += stdOutData.toString('ascii');
-                        } else {
-                            logsDao.insertLog({
-                                referenceId: instanceid,
-                                err: false,
-                                log: stdOutData.toString('ascii'),
-                                timestamp: new Date().getTime()
-                            });
-                            logger.debug("SSH Stdout :" + instanceid + stdOutData.toString('ascii'));
-                            stdmessages += stdOutData.toString('ascii');
+                        var runparams = '';
+                        if (req.params.runparams != 'null') {
+                            runparams = decodeURIComponent(req.params.runparams);
                         }
-                    }, function(stdOutErr) {
-                        logsDao.insertLog({
-                            referenceId: instanceid,
-                            err: true,
-                            log: stdOutErr.toString('ascii'),
-                            timestamp: new Date().getTime()
-                        });
-                        console.log("docker return ", stdOutErr);
-                        res.send(stdOutErr);
+                        var startparams = '';
+                        if (req.params.startparams != 'null') {
+                            startparams = decodeURIComponent(req.params.startparams);
+                        } else
+                            startparams = '/bin/bash';
+                        cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(req.params.imagename) + ':' + req.params.tagname + ' ' + startparams;
+                        logger.debug('Docker command executed : ', cmd);
+                        _docker.runDockerCommands(cmd, req.params.instanceid,
+                            function(err, retCode) {
+                                if (err) {
+                                    logsDao.insertLog({
+                                        referenceId: instanceid,
+                                        err: true,
+                                        log: 'Failed to Excute Docker command: . cmd : ' + cmd  + '. Error: ' + err,
+                                        timestamp: new Date().getTime()
+                                    });
+                                    logger.error("Failed to Excute Docker command: ",err);
+                                    res.send(err);
+                                    return;
+                                }
 
-                    });
+                                logger.debug("docker return ", retCode);
+                                if(retCode == 0)
+                                //if retCode == 0 //update docker status into instacne
+                                {
+                                    instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                                                            logger.debug('Instance Docker Status set to Success');
+                                                            res.send(200);
+                                    });
+                                    
 
+                                }
+                                else{
+                                    logger.debug('Failed running docker command ....');
+                                                            res.end('Image pull failed check instance log for details');
+
+
+                                }
+                                logger.debug("Exit get() for /instances/dockerimagepull");
+                                
+                            },
+                            function(stdOutData) {
+                                if (!stdOutData) {
+
+                                    logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
+                                    stdmessages += stdOutData.toString('ascii');
+                                } else {
+                                    logsDao.insertLog({
+                                        referenceId: instanceid,
+                                        err: false,
+                                        log: stdOutData.toString('ascii'),
+                                        timestamp: new Date().getTime()
+                                    });
+                                    logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
+                                    stdmessages += stdOutData.toString('ascii');
+                                }
+                            }, function(stdOutErr) {
+                                logsDao.insertLog({
+                                    referenceId: instanceid,
+                                    err: true,
+                                    log: stdOutErr.toString('ascii'),
+                                    timestamp: new Date().getTime()
+                                });
+                                console.log("docker return ", stdOutErr);
+                                res.send(stdOutErr);
+
+                            });
+
+                    }
+                });
+            }
+            else{
+                logger.debug('No Instance found with id : ' + instanceid);
+                res.send(500);
+                return;
             }
         });
-
 
     });
 
@@ -641,12 +675,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                         }
                                                         logger.debug('Docker Check Returned:', retCode);
-                                                        if (retCode == '0') {
+                                                        if (retCode == '0' || retCode == null) {
                                                             instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
                                                                 logger.debug('Instance Docker Status set to Success');
                                                                 logger.debug("Exit post() for /instances/dockerimagepull");
                                                             });
                                                         }
+                                                        if (retCode == '1') {
+                                                            instancesDao.updateInstanceDockerStatus(req.params.instanceId, "", '', function(data) {
+                                                                logger.debug('Instance Docker Status set to None');
+                                                                logger.debug("Exit post() for /instances/dockerimagepull");
+                                                            });
+                                                        }
+
                                                     });
 
                                             });
