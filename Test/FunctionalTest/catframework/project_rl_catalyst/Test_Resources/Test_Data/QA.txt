@@ -10,24 +10,23 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                   firefox                           #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             http://localhost:3001/public/login.html
+${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/public/login.html
 ${ENV}                 QA.txt
-${VALID USER}             sd1
-${VALID PASSWORD}         sd1-phoenix
-${ORGANIZATION NAME}         PhoenixInc
-${ORGANIZATION DOMAIN NAME}          www.TestAutomation.com
-${ORGANIZATION COST CODE}            test Cost Code
-${BUSINESS GROUP NAME}           Phoenix International
-${PROJECT NAME}                  Ecommerce
-${PROJECT DESCRIPTION}           New Test Automation Project Description
-${ENVIRONMENT NAME}              QA
-${CONFIG MANAGEMENT NAME}             PhoenixChef
+${VALID USER}             superadmin
+${VALID PASSWORD}         superadmin@123
+${ORGANIZATION NAME}         Relevance_Labs
+${ORGANIZATION DOMAIN NAME}          http://www.google.com
+${BUSINESS GROUP NAME}           Devops
+${PROJECT NAME}                  Catalyst
+${PROJECT DESCRIPTION}           Catalyst product automation Description
+${ENVIRONMENT NAME}              Dev
+${CONFIG MANAGEMENT NAME}             RLChefServer
 ${CONFIG MANAGEMENT USER NAME}         pcjoshi9
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1	
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
-${ASSIGN USERS1}         sd1
-${ASSIGN USERS2}         Consumer
+${ASSIGN USERS1}        superadmin          #Consumer
+${ASSIGN USERS2}         
 ${ASSIGN USERS PASSWORD}         Designer
 ${INSTANCE STARTED}        Instance Started
 ${INSTANCE STOPPED}        Instance Stopped
@@ -36,6 +35,7 @@ ${EXPECTED OS}       centos
 ${MACHINE}         x86_64
 ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
+${ENVIRONMENTSER NAME}          _default
 
 
 ${APACHE WEBSERVER STACK}         Java
@@ -61,3 +61,150 @@ ${TASK NAME}          Test Task
 ${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem 
 ${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/pjlab-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
+
+
+#Organization Name
+${Vaildate15ChrOrgName}            Relevancelabsinternationaltesting
+${VaildateBlankSpacesOrgName}       Relevance Labs
+${VaildateEmptyOrgName}            
+${VaildateSpecialChrOrgName}       RL&@Testing
+${VaildateAlreadyExistChrOrgName}  phoenixInc
+${VaildOrgName}                    Relevance
+${VaildEditOrg}                    Relevance_Labs
+${VaildEditOrgDomainName}       https://www.relevancelab.com
+
+
+${Vaildate15ChrErrMsg}            limited to 15 chars
+${VaildateBlankSpacesErrMsg}      space(s) not allowed
+${VaildateEmptyErrMsg}            Required
+${VaildateSpecialChrErrMsg}       special chars not allowed
+${VaildateAlreadyExistErrMsg}     Selected is already registered
+${OrganizationMsg}                Relevance_Labs
+${OrganizationDomainMsg}        https://www.relevancelab.com
+
+
+#Environment Name
+${Vaildate15ChrEnvName}               RelevanceLabsEnvironmentname                   
+${VaildateBlankSpacesEnvName}         RL Env name
+${VaildateEmptyEnvName}
+${VaildateSpecialChrEnvName}           RL#@@f$%3d
+${VaildateAlreadyExistChrEnvName}       Dev  
+${VaildateNoOrgEName}                  RLdev                  
+${VaildEnvName1}                       Dev
+${VaildEnvName2}                       QTest
+${VaildEditEnvironment}                QA
+
+${Vaildate15ChrErrMsg}              limited to 15 chars            
+${VaildateBlankSpacesErrMsg}        space(s) not allowed
+${VaildateEmptyErrMsg}              Required
+${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateAlreadyExistErrMsg}       Selected is already registered
+${VaildateNoOrgErrMsg}                 Required
+${EnvironmentMsg}                      QA
+
+
+#Business Group Name 
+${Vaildate15ChrBGrpName}               RLTestBusinessGroup                   
+${VaildateBlankSpacesBGrpName}         RL Test BusinessGroup
+${VaildateEmptyBGrpName}
+${VaildateSpecialChrBGrpName}           RL#@@f$%3d
+${VaildateAlreadyExistChrBGrpName}       PhoenixEnv  
+${VaildateNoOrgBName}                    RL
+${VaildBGrpName1}                         Devops
+${VaildBGrpName2}                         EduSymantics
+${VaildEditBusinessGroup}                 HealthSystems
+
+${Vaildate15ChrErrMsg}              limited to 15 chars            
+${VaildateBlankSpacesErrMsg}        space(s) not allowed
+${VaildateEmptyErrMsg}              Required
+${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateAlreadyExistErrMsg}       Selected is already registered
+${VaildateNoOrgBErrMsg}             Required
+${BusinessGroupMsg}                 HealthSystems
+
+
+#Project Name
+${Vaildate15ChrProjName}               CatalystProjectTestingisGood                   
+${VaildateBlankSpacesProjName}         Catalyst Project
+${VaildateEmptyProjName}
+${VaildateSpecialChrProjName}           Cat#@@f$%3d
+#${VaildateAlreadyExistChrProjName}       PhoenixEnv  
+${VaildProjName1}                         Catalyst 
+${VaildProjName2}                         Quality
+${VaildEditProject}                       Primary_Edu
+${VaildEditDescProject}             RelevanceLab DevOps Product
+
+${Vaildate15ChrErrMsg}              limited to 15 chars            
+${VaildateBlankSpacesErrMsg}        space(s) not allowed
+${VaildateEmptyErrMsg}              Required
+${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateAlreadyExistErrMsg}       Selected is already registered
+${ProjectMsg}                       Primary_Edu
+${ProjectEditDescMsg}               RelevanceLab DevOps Product
+
+
+#BreadCrumbs of Organization setup
+${ValidationOrgBreadCrumb}         SettingsOrganization SetupOrganizations
+${ValidationEnvBreadCrumb}         SettingsDevOps SetupEnvironments
+${ValidationBusGrpBreadCrumb}      SettingsOrganization SetupBusiness Groups
+${ValidationProjBreadCrumb}        SettingsOrganization SetupProjects
+
+#BreadCrumbs of Devops setup        
+${ValidationConfigMgmtBreadCrumb}     SettingsDevOps SetupConfig Management
+${ValidationDockerBreadCrumb}         SettingsDevOps SetupDocker
+${ValidationJenkinsBreadCrumb}        SettingsDevOps SetupJenkins
+
+#BreadCrumbs for Users Setup
+${ValidationUsersRolesBreadCrumb}    SettingsUsers SetupUser Roles    
+${ValidationUsersBreadCrumb}         SettingsUsers SetupUsers
+${ValidationTeamsBreadCrumb}         SettingsDevOps SetupUsers
+
+#BreadCrumbs for Templates Setup
+${ValidationTemplatesBreadCrumb}     SettingsGallery SetupTemplates
+${ValidationServiceBreadCrumb}       SettingsGallery SetupService Command
+
+#BreadCrumbs for Providers Setup
+${ValidationProvidersBreadCrumb}     SettingsDevOps SetupProviders
+${ValidationJiraBreadCrumb}          SettingsDevOps SetupJira
+${ValidationImageBreadCrumb}         SettingsDevOps SetupImage
+
+
+#Devops Config Mgmt
+
+${ValidateAlrdyExistConfigName}       RLChefServer
+${ValidateAlrdyExistOrgName}          Relevance_Labs
+${ValidateUserPemFilename}            catalyst.pem
+${ValidateValidatorPemFilename}       cat1-validator.pem
+${ValidateKnifeFilename}              Knife.rb
+${VaildEmptyURL}
+${VaildEmptyConfigname}
+${VaildEmptyUsername}
+
+
+${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
+${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
+${VaildEmptyURLErrMsg}                  Required
+${VaildEmptyConfignameErrMsg}           Required
+${VaildEmptyUsernameErrMsg}             Required
+
+
+#Team Names
+${TEAMNAME1}             Development
+${TEAMNAME2}             Scholastic
+${TEAMDESCRIPTION}      Developes the code
+${TEAMDESCRIPTION2}     Research on Project
+${VaildEmptyTeamName}
+${VaildEmptyUsers}
+${VaildEmptyProjects}
+
+${VaildEmptyTeamNameErrMsg}   Required 
+${VaildEmptyUsersErrMsg}      Atleast one required
+${VaildEmptyProjectsErrMsg}   Atleast one required
+
+    
+#Users Setup
+${VaildateEmptyUserName} 
+${VaildateEmptyEmailName}
+
+${VaildateEmptyUserNameErrMsg}       Required    
+${VaildateEmptyEmailNameErrMsg}      Required
