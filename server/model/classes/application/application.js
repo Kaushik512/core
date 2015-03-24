@@ -32,6 +32,11 @@ var ApplicationSchema = new Schema({
         type: String,
         trim: true
     },
+    git: {
+        repoUrl: String,
+        repoUsername: String,
+        repoPassword: String,
+    },
     users: [{
         type: String,
         required: true,
@@ -75,6 +80,17 @@ ApplicationSchema.methods.getBuildHistory = function(callback) {
             return;
         }
         build.getHistory(callback);
+    });
+};
+
+ApplicationSchema.methods.getLastBuildInfo = function(callback) {
+    Build.getBuildById(this.buildId, function(err, build) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        build.getLastBuild(callback);
     });
 };
 

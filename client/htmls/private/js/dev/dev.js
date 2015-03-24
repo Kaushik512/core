@@ -62,6 +62,10 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
+            $('.addNewApp1').click(function() {
+                $('#appSeries12').clone().insertAfter('.applicationURLContainer:last');
+            });
+
             function disableImportLaunch() {
                 var hasIPPermission = false;
                 if (haspermission("instancelaunch", "execute")) {
@@ -104,7 +108,7 @@
                 if (instanceId) {
                     //found now delete
                     var dialog = bootbox.dialog({
-                        title: "Remove Instance.",
+                        title: "Remove Instance",
                         message: '<div class="row">  ' +
                             '<div class="col-md-12"> ' +
                             '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
@@ -292,31 +296,21 @@
                         username: $form.find('#instanceUsername').val()
                     };
                     //condition for 1st app-name
-                    var appName = $('#appName').val();
-                    var appURL = $('#appURL').val();
+                    var appUrls = [];
+                    var $appURLContainers = $('.applicationURLContainer');
+                    $applicationURLContainer.each(function() {
+                        $this = $(this);
+                        var appName = $this.find('.appName').val();
+                        var appURL = $this.find('.appURL').val();
+                        if (appName && appURL) {
+                            appUrls.push({
+                                name: appName,
+                                url: appURL
+                            });
+                        }
 
-                    if (appName && appURL) {
-                        if (!(appURL.indexOf('http://') === 0 || appURL.indexOf('https://') === 0)) {
-                            appURL = 'http://' + appURL;
-                        }
-                        reqBody.appUrl1 = {
-                            name: appName,
-                            url: appURL
-                        }
-                    }
-                    //condition for 2nd app-name
-                    var appName2 = $('#appName2').val();
-                    var appURL2 = $('#appURL2').val();
-
-                    if (appName2 && appURL2) {
-                        if (!(appURL2.indexOf('http://') === 0 || appURL2.indexOf('https://') === 0)) {
-                            appURL2 = 'http://' + appURL2;
-                        }
-                        reqBody.appUrl2 = {
-                            name: appName2,
-                            url: appURL2
-                        }
-                    }
+                    });
+                    reqBody.appUrls = appUrls;
 
 
                     if (!reqBody.fqdn) {
@@ -698,13 +692,22 @@
                 if (type === 'Stop') {
                     url = '../instances/' + instanceId + '/stopInstance'
                 }
+                if (type === 'Start') {
+                    var hasStartPermission=false;
+                    if(haspermission("instancestart","execute")){
+                        hasStartPermission=true;
+                    }
+                    if(!hasStartPermission){
+                        bootbox.alert('User Has No Permission to Start an Instance').find('.bootbox-body').addClass('bootboxMODAL');
+                        return;
+                    }}
                 if (type === 'Stop') {
                     var hasStopPermission=false;
                     if(haspermission("instancestop","execute")){
                         hasStopPermission=true;
                     }
                     if(!hasStopPermission){
-                        bootbox.alert('User has No Permission to Stop');
+                        bootbox.alert('User has No Permission to Stop an Instance').find('.bootbox-body').addClass('bootboxMODAL');
                         return;
                     }
                     bootbox.confirm(type + " instance?", function(result) {

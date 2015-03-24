@@ -5,61 +5,62 @@
             <div class="widget-body" style="font-size:12px;">
 
                 <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
-                    <li class="active Dashboard">
+
+                    <!-- <li class="active Dashboard">
                         <a href="#l1" data-toggle="tab"><i class="fa fa-reorder"></i>&nbsp;Dashboard</a>
-                    </li>
-                    <li class="pull-left Applications">
+                    </li> -->
+                    <li class="pull-left active Applications">
                         <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Application</a>
                     </li>
                 </ul>
 
                 <div id="myTabContent3" class="nav tab-content">
-                    <div class="tab-pane" id="l1">
+                    <!-- <div class="tab-pane" id="l1">
                       <span style="font-size: 13px;">Support for this features will be available in the future...</span>
-                    </div>
+                    </div> -->
 
 
-                    <div class="tab-pane" id="l2">
-<div class="row">
-  <div class="col-md-12">
-    <div class="widget-box">
-      <div class="widget-header">
-        <h5 style="color:#777;font-size:14px;" class="widget-title">
-        <strong>List of Applications</strong>
-        </h5>
-        <div class="widget-toolbar no-border">
-            <div>     
-                <a href="#modaladdAppCard" data-toggle="modal" class="btn btn-minier btn-primary createAPP">
-                    <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
-                    ADD APP
-                </a>                                                
-            </div>
-        </div>                         
-      </div>
-      <div class="widget-body">
-         <div class="widget-main" style="min-height:200px">
-            <div class="row appcardList" style="padding-left:0 !important;padding-right:0 !important">
+                    <div class="tab-pane active" id="l2">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="widget-box">
+                            <div class="widget-header">
+                              <h5 style="color:#777;font-size:14px;" class="widget-title">
+                              <strong>List of Applications</strong>
+                              </h5>
+                              <div class="widget-toolbar no-border">
+                                  <div>     
+                                      <a href="#modaladdAppCard" data-toggle="modal" class="btn btn-minier btn-primary createAPP">
+                                          <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                                          ADD APP
+                                      </a>                                                
+                                  </div>
+                              </div>                         
+                            </div>
+                            <div class="widget-body">
+                               <div class="widget-main" style="min-height:200px">
+                                  <div class="row appcardList" style="padding-left:0 !important;padding-right:0 !important">
 
-              
+                                    
 
-             
+                                   
 
 
-    
-         </div>
-      </div>
-      <div class="widget-toolbox clearfix" style="text-align:center;">
-         <div class="btn-group">
-            <a class="btn btn-primary btn-mini actionnewControlPanel" style="text-align:center;">
-            <i class="ace-icon fa fa-gears bigger-110"></i>
-            Control Panel
-            </a>
-         </div>
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
+                          
+                               </div>
+                            </div>
+                            <div class="widget-toolbox clearfix" style="text-align:center;">
+                               <div class="btn-group">
+                                  <a class="btn btn-primary btn-mini actionnewControlPanel" style="text-align:center;">
+                                  <i class="ace-icon fa fa-gears bigger-110"></i>
+                                  Control Panel
+                                  </a>
+                               </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                       
 
@@ -157,6 +158,7 @@
                                         <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                         <label class="input">
                                             <select id="environmentList" class="chooseAppEnvironment width-100">
+                                              <option>Choose</option>
                                             </select>   
                                         </label>
                                     </section>
