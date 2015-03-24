@@ -189,31 +189,20 @@
                           </div>
                           <div id="collapseAppURL" class="panel-collapse collapse in">
                             <div class="panel-body">
-                                <form action="" id="myForm30" style="display:none" data-appURLType="1" class="appUrlForm">
+                                <form action="" id="appUrlTemplateForm" style="display:none" data-appURLType="1" class="appUrlForm">
                                   <!--1st text box-->
                                   <div class="col-lg-6">
-                                    <input type="hidden" id="appURL1NameInput" />
-                                    <label id="appURL1name" for="">WSS:</label><span id="urlsaved" class="hidden">&nbsp;&nbsp;Saved</span>
+                                    <input type="hidden" class="appUrlId" />
+                                    <label class="appNameLabel" for=""></label><span class="hidden urlsaved" >&nbsp;&nbsp;Saved</span>
                                     <br>
-                                      <input type="text" id="txtapplicationurl" type="url">
+                                      <input type="text" class="appUrlInput" type="url">
 
                                     <span class="glyphicon glyphicon-pencil" onclick=editName('1') style="cursor:pointer;"></span>
                                   </div>
-                                   </form>
-                                  <!--1st text box ends-->
-                                  <!--2nd text box-->
-                                  <form action="" id="myForm31" style="display:none" data-appURLType="2" class="appUrlForm">
-                                  <div class="col-lg-6">
-                                    <input type="hidden" id="appURL2NameInput" />
-                                    <label id="appURL2name" for="">AD:</label><span id="urlsaved1" class="hidden">&nbsp;&nbsp;Saved</span>
-                                    <br>
-                                      <input type="text" id="txtapplicationurl1" type="url">
+                                </form>
+                                
 
-                                    <span class="glyphicon glyphicon-pencil" onclick=editName1('1') style="cursor:pointer;"></span>
-                                  </div>
-                                  <!--2nd text box ends-->
-                                  <!-- <button type="submit" class="formSubmit">Submit</button> -->
-                               </form>
+                              
                             </div>
                           </div>
                         </div>
@@ -730,7 +719,7 @@ $.get('../instances/'+urlParams.id,function(data){
 }
 
   
-   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).attr('data-osType',data.hardware.os).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
+   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).attr('data-osType',data.hardware.os).attr('data-instanceIP',data.instanceIP).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
@@ -1165,7 +1154,7 @@ $('.startstoptoggler').click(startAndStopToggler);
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
 
-
+/*
  if(data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
      var anchor = "<a class='app-url1' href='"+data.appUrl2.url+"'' target='_blank' title='"+data.appUrl2.url+"'>"+data.appUrl2.name+"</a>";
      $('.instance-bootstrap-list').last().append(anchor);
@@ -1182,7 +1171,24 @@ $('.startstoptoggler').click(startAndStopToggler);
      $('#appURL1name').html(data.appUrl1.name);
       $('#txtapplicationurl').val(data.appUrl1.url);
       $('#myForm30').show();
- }
+ }*/
+
+    if (data.appUrls && data.appUrls.length) {
+      var $collapseAppURL = $('#collapseAppURL');
+      var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+        for (var k = 0; k < data.appUrls.length; k++) {
+          var url = data.appUrls[k].url;
+          url = url.replace('$host',data.instanceIP);
+          var anchor = "<a class='app-url' data-appUrlId='"+data.appUrls[k]._id+"' href='"+url+"'' target='_blank' title='"+data.appUrls[k].name+"'>"+data.appUrls[k].name+"</a>";
+            $cardAppUrlListContanier.last().append(anchor);
+            var $form = $('#appUrlTemplateForm').clone(true);
+            $form.find('.appNameLabel').html(data.appUrls[k].name);
+            $form.find('.appUrlId').val(data.appUrls[k]._id);
+            $form.find('.appUrlInput').val(data.appUrls[k].url);
+            $collapseAppURL.append($form);
+            $form.show();
+        }
+    }
  
 
     $('.loadingControlPanelIndicator').hide();
@@ -1639,79 +1645,31 @@ $('.formSubmit').click(function(e){
 </script>-->
 
 <script>
-   $(document).ready(function () {
+   $(document).ready(function() {
 
-       
-
-   
        $('.appUrlForm').submit(function(e) {
            var $this = $(this);
-           var appUrlType = $this.attr('data-appURLType');
-           var reqBody = {};
-            var href;
-            var name;
-            var className;
-            var textBoxId;
-           if(appUrlType == '1') {
-             reqBody.appUrl1 = {
-              name:$('#appURL1NameInput').val(),
-              url:$('#txtapplicationurl').val()
-             }; 
-             if(!(reqBody.appUrl1.url.indexOf('http://') === 0 || reqBody.appUrl1.url.indexOf('https://')===0) ) {
-                reqBody.appUrl1.url = 'http://'+reqBody.appUrl1.url;
-              
-             }
-             href = reqBody.appUrl1.url; 
-             name = reqBody.appUrl1.name;
-             className = 'app-url';
-             textBoxId = 'txtapplicationurl';
-
-
-           } else if(appUrlType =='2') {
-             reqBody.appUrl2 = {
-               name:$('#appURL2NameInput').val(),
-               url:$('#txtapplicationurl1').val()
-             };
-             if(!(reqBody.appUrl2.url.indexOf('http://') === 0 || reqBody.appUrl2.url.indexOf('https://')===0) ) {
-                reqBody.appUrl2.url = 'http://'+reqBody.appUrl2.url;
-              
-             }
-             href = reqBody.appUrl2.url; 
-             name = reqBody.appUrl2.name;
-             className = 'app-url1';
-             textBoxId = 'txtapplicationurl1';
-           } else {
-             return;
+           var appUrlId = $this.find('.appUrlId').val();
+           var appUrl = $this.find('.appUrlInput').val();
+           var $div = $('.domain-roles-caption');
+           var instanceId = $div.attr('data-instanceid');
+           var instanceIP = $div.attr('data-instanceIP');
+           if (instanceId) {
+               $.post('../instances/' + instanceId + '/appUrl/' + appUrlId + '/update', {
+                   url: appUrl
+               }, function(data) {
+                   var url = appUrl.replace('$host',instanceIP); 
+                   $('.app-url[data-appUrlId="'+appUrlId+'"]').attr('href',url);
+                   $this.find('.urlsaved').removeClass('hidden');
+                   setTimeout(function() {
+                       $this.find('.urlsaved').addClass('hidden');
+                   }, (2000));
+               });
            }
-           var icon = $('.instance-bootstrap-list').find(className);
-           
-            if(!icon.length){
-            
-            } else{
-                $('a[class="'+className+'"]').detach();
-            }
-            
-          
-           var instanceId = $('#controlPanelContainer').find('div[data-instanceid]').first().attr('data-instanceid');
-           if(instanceId){
-            $.post('../instances/'+instanceId+'/appUrl/update',reqBody,function(data){
-                $('.'+className).detach();
-                var anchor = "<a class='"+className+"' title='"+href+"' href='"+href+"'' target='_blank'>"+name+"</a>";
-                $('.instance-bootstrap-list').last().append(anchor);
-                $('#urlsaved').removeClass('hidden');
-                $("#"+textBoxId).attr('readOnly','readonly');
-                if(href=="http://" || href==''){
-                  /*$("#txtapplicationurl").val('http://localhost:8380/GTConnect/UnifiedAcceptor/FrameworkDesktop.Main');*/
-                  $('a[class="'+className+'"]').detach();
-                }
-                setTimeout(function() {
-                  $('#urlsaved').addClass('hidden');
-                }, (2000));
-            });
-           }
-           
+            e.preventDefault();
+            return false;
        });
-   
+
    });
 </script>
 <script>

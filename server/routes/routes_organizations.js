@@ -1234,8 +1234,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         instanceState: nodeAlive,
                                         bootStrapStatus: 'waiting',
                                         runlist: [],
-                                        appUrl1: req.body.appUrl1,
-                                        appUrl2: req.body.appUrl2,
+                                        appUrls: req.body.appUrls,
                                         users: req.body.users, //[req.session.user.cn], //need to change this
                                         hardware: {
                                             platform: 'unknown',
