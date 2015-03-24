@@ -5984,8 +5984,11 @@ span.icon {
 
 .marginForURL{
     margin-left:40px;
+    display:block;
 }
-
+.marginForURLCP{
+    display:block;   
+}
 .marginForButtons{
     margin-right:15px;
 
@@ -7372,4 +7375,8 @@ background:url('../img/galleryIcons/start_icon.png');
 }
 .appSeriesHeight{
     height:106px;
+}
+.modal
+{
+    overflow: hidden;
 }

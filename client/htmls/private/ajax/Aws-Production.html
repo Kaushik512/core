@@ -290,7 +290,7 @@
                                   </div>
                               </div>
                               <!--adding new collapse-->
-                              <div class="panel panel-default appSeriesNameURL notFordocker hidden">
+                              <div class="panel panel-default appSeriesNameURL notFordocker">
                                       <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure App Name &amp; URL</a>
@@ -357,7 +357,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr><td colspan=3 id="appEntry">No Data Available</td></tr>
                                        
                                     </tbody>
                                     
@@ -511,7 +511,7 @@
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal for Import by IP ended-->
+</div><!-- /.modal for appSeries ends-->
 <!--app series ends here-->
 <!--launch docker-->
 <div class="modal fade bs-example-modal-lg" id="myModalLabelDockerContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -1429,7 +1429,7 @@ $('#appURLForm').submit(function(e){
             var appUrl = $(this).find('.appURL').val();
             if(!(appName && appUrl)) {
               alert("Please enter name and url");
-              return;
+              return false;
             }
 
             $row.data('appUrlData',{
@@ -1446,14 +1446,15 @@ $('#appURLForm').submit(function(e){
             $tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
             //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
-
             $tdAction.find('.deleteURL').click(function(){
               $row.remove();
+              $('#appEntry').removeClass('hidden'); 
             });
 
             $row.append($tdName).append($tdURL).append($tdAction);
             $('#appUrlTable').find('tbody').append($row);
             $('#modalAppNameURL').modal('hide');
+            $('#appEntry').addClass('hidden');
             return false;
 
 })

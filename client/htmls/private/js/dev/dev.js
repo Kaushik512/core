@@ -62,8 +62,15 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
-              $('.addNewApp1').click(function() {
+              /*$('.addNewApp1').click(function() {
                   $('#appSeries12').clone().insertAfter('.applicationURLContainer:last');
+              });*/
+
+              $("#modalContainerimportInstance").draggable({
+                  handle: ".modal-header"
+              });
+              $("#modalAppUrlName").draggable({
+                  handle: ".modal-header"
               });
 
               function disableImportLaunch() {
