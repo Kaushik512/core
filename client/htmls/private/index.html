@@ -390,15 +390,17 @@ function foldTreeForSetting(){
     function setleftnavigation(toplink,breadcrumbHeader){
    var TabID=$(toplink).attr('id');
         if(TabID==="workZoneNew"){
-            $('#Workspace1').show();
+            loadTreeFuncNew();
+           
             $('#Settings_nav').hide();
-
+             $('#Workspace1').show();
 
         }else if(TabID==="designNew"){
              $('#Workspace1').hide();
             $('#Settings_nav').hide();
 
         }else if(TabID==="settingsNew"){
+            $('#tree').empty()
             loadSettingsTree();
             foldTreeForSetting();
             $('#Workspace1').hide();
@@ -682,7 +684,7 @@ function loadSettingsTree(){
                     //lol=data1;
 
                     console.log(data1);
-                    $('#tree').html('').treeview({
+                    $('#tree').empty().treeview({
                         data:data1,enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
                         expandIcon:'fa fa-angle-right',
