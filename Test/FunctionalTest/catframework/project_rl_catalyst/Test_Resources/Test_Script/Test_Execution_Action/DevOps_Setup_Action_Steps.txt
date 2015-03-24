@@ -16,10 +16,15 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 *** Variables ***
 
 *** Keywords ***
+Testing All New Config Management Conditions
+    Vaildate the Empty URL field  ${VaildEmptyURL}
+    URL field left Empty  ${VaildEmptyURLErrMsg} 
+    Vaildate Empty Config Name  ${VaildEmptyConfigname}
+    Config Name left empty  ${VaildEmptyConfignameErrMsg}
+    Vaildate Empty User Name  ${VaildEmptyUsername}
+    User Name left empty  ${VaildEmptyUsernameErrMsg}
+
 Create New Config Management
-    Clicks on Settings
-    Clicks on DevOps Setup menu
-    Clicks on Config Management menu
     Clicks on New button to Create New Config Management
     Enters config management name
     Enters config management user name
@@ -30,25 +35,168 @@ Create New Config Management
     Upload Validator Knife File
     Clicks on Save button to save the Environment detail
 
+
+Unique Devops Configuration Management
+    Clicks on New button to Create New Config Management
+    Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
+    Enters config management user name
+    Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
+    Enters config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Environment detail
+    Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
+    Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
+    Clicks on ButtonCancel Button
+
+
+Devops Click on Update of Your org and Org is disabled 
+    Devops click on Created Config Mgmt
+    Organization is Disabled
+    Verify the Organziation
+    Clicks on Save button to save the Environment detail
+    
+
+
+
+
+
+Vaildate Empty User Name
+    [Arguments]    ${loginname}
+    Clicks on New button to Create New Config Management
+    Enters config management name
+    Enters Empty User Name
+    Select organization for config management
+    Enters config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Environment detail
+
+
+Enters Empty User Name
+    Input Text    id=loginname    ${loginname}
+
+User Name left empty  
+    [Arguments]    ${VaildEmptyUsernameErrMsg}
+    Vaildate the Empty username field    ${VaildEmptyUsernameErrMsg}
+
+
+Vaildate the Empty username field 
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_loginname    ${ErrMsg} 
+    Clicks on Config Cancel Button
+
+
+
+
+Config Name left empty  
+    [Arguments]    ${VaildEmptyConfignameErrMsg}
+    Vaildate the Empty config field    ${VaildEmptyConfignameErrMsg}
+
+
+Vaildate the Empty config field 
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_configname    ${ErrMsg} 
+    Clicks on Config Cancel Button
+
+
+
+Vaildate Empty Config Name
+    [Arguments]    ${configname}
+    Clicks on New button to Create New Config Management
+    Enters Empty Configuration name
+    Enters config management user name
+    Select organization for config management
+    Enters config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Environment detail
+
+
+Enters Empty Configuration name
+    Input Text   id=configname    ${configname}
+
+Vaildate the Empty URL field
+    [Arguments]    ${url}
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Clicks on New button to Create New Config Management
+    Enters config management name
+    Enters config management user name
+    Select organization for config management
+    Enters empty config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Environment detail
+
+
+Enters empty config management URL
+    Input Text    id=url    ${url}
+
+
+
+
+URL field left Empty
+    [Arguments]    ${VaildEmptyURLErrMsg}
+    Vaildate the Empty field      ${VaildEmptyURLErrMsg}
+
+Vaildate the Empty field    
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_url    ${ErrMsg}
+    Clicks on Config Cancel Button
+
+Clicks on Config Cancel Button
+    Click Element    xpath=.//*[@id='btncancel']
+
+
+    
+
+
+
+
 #Catalyst Logout
 #    Clicks on LogOut link
 
 
+Clicks on New button to Create New Environments
+    Click Element    xpath=.//*[@id='newENV']
+
+Select organization
+    Select From List    id=orgname    ${ORGANIZATION NAME}
+
+Select the Configuration name
+    Select From List    id=configname    ${CONFIG MANAGEMENT NAME}
+
+Select the Environments
+    Select From List    id=environmentname    ${VaildEnvName1}        #Dev
+    #Select From List    id=environmentname    ${VaildEditEnvironment}        #QA
+
+Assign Teams
+    Click Element    xpath=.//*[@id='teamname']/label[1]/i        #Dev Team
+    #Click Element    xpath=.//*[@id='teamname']/label[2]/i        #Design Team
+
+Clicks on Save Button to save the Environments
+    Click Element    xpath=.//*[@id='myForm1']/div/div[3]/div/button      #Save 
 
 
-
-#Clicks on Settings
+#Clicks on Settings                                          #Devops Cofig Mgmt Start
 ##    Wait Until Element Is Visible      xpath=//a[contains(text(),'SETTINGS')]      1 seconds
 #    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'SETTINGS')]
 #    Click Element    xpath=//a[contains(text(),'SETTINGS')]
 
 Clicks on DevOps Setup menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[contains(text(),'DevOps Setup')]
-    Click Element    xpath=//span[contains(text(),'DevOps Setup')]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[2]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
 
 Clicks on Config Management menu
-    Click Element    xpath=//span[contains(text(),'Config Management')]
-
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    
 Clicks on New button to Create New Config Management
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
@@ -69,23 +217,77 @@ Enters config management URL
 
 
 Upload user Pem File
-    Choose File     xpath=.//*[@id='userpemfile']         ${USERPEMFILE}         #D:/Desktop26122014/Catalyst/pcjoshi9.pem
+    Choose File     xpath=.//*[@id='userpemfile']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
 
 Upload Validator Pem File
-    Choose File     xpath=.//*[@id='validatorpemfile']          ${VALIDATORPEMFILE}         #D:/Desktop26122014/Catalyst/pjlab-validator.pem
+    Choose File     xpath=.//*[@id='validatorpemfile']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat1-validator.pem
 
 Upload Validator Knife File
-    Choose File     xpath=.//*[@id='kniferbfile']          ${KNIFERBFILE}         #D:/Desktop26122014/Catalyst/knife.rb
-
+    Choose File     xpath=.//*[@id='kniferbfile']        C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
+   
 
 Clicks on Save button to save the Environment detail
-    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]
+    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]     #Devops Config Mgmt Ends
+
 
 #Clicks on LogOut link
 #    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
 #    Click Element    xpath=.//*[@id='logout']/span/a/i
 #    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='bot2-Msg1']
 #    Click Element     xpath=.//*[@id='bot2-Msg1']
+
+Validate the Unique Configuration Name                       #Unique Devops Config name start
+    [Arguments]    ${configname}
+    Enters config management name
+
+Configuration name already exists
+     [Arguments]    ${ValidateAlrdyExistConfigNameErrMsg}
+     Validate the Config Name    ${ValidateAlrdyExistConfigNameErrMsg}
+
+Validate the Config Name 
+    [Arguments]     ${ErrorMsg}  
+    Element Should Contain     id=unique_configname    ${ErrorMsg}
+
+
+Validate the Unique Organization
+    [Arguments]    ${orgname}
+    Select organization for config management
+
+Organization name already exists
+    [Arguments]    ${ValidateAlrdyExistOrgNameErrMsg}
+    Validate the ConOrganization name    ${ValidateAlrdyExistOrgNameErrMsg}
+
+Validate the ConOrganization name
+    [Arguments]    ${ErrorMsg}
+    Element Should Contain    id=unique_orgname    ${ErrorMsg}
+
+
+Clicks on ButtonCancel Button
+    Click Element    xpath=.//*[@id='btncancel']   
+
+
+Devops click on Created Config Mgmt
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a[2]/i 
+    Click Element    xpath =.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a[2]/i                                                              
+
+Organization is Disabled
+     Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=orgname
+     Element Should Be Disabled       id=orgname
+
+Verify the Organziation
+    Get Text    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Element Should Contain    xpath=.//*[@id='s2id_orgname']/a/span[1]    ${ORGANIZATION NAME}    
+#Unique Devops Config name Ends
+
+#Environments setup starts
+
+Clicks on Environments menu
+    Click Element    xpath=.//*[@id='Settings']/li[2]/ul/li[2]/a/span
+
+
+
+
+
 
 
 
@@ -99,7 +301,7 @@ test test
     \       ${no more book name exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
     \       Exit For Loop If     ${no more book name exists}
     \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
-#    \       ${book exist} =       Run Keyword and Return Status     Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+#    \       ${book exist} =       Run Keyword and Return Status     Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/there[${INDEX}]
     \       ${extracted book name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
 #    \       Run Keyword If    ${extracted book name}     ${ORGANIZATION NAME}     Log       Search keyword "${ORGANIZATION NAME}" exist in search result book name "${extracted book name}"
 #    \       Log       Search keyword "${ORGANIZATION NAME}" exist in search result book name "${extracted book name}"
@@ -141,16 +343,18 @@ Catalyst import chef server nodes by provider
     Click on Import button
 
 
-Chef server nodes import
+Chef server nodes import              
     Clicks on Settings
     Clicks on DevOps Setup menu
     Clicks on Config Management menu
-    Select chef server and click on the last icon namely import nodes under Action
-    Select the nodes namely MySql_Server and WebServer
+    Select chef server and click on the last icon namely import nodes Button
+    Select the nodes namely MySql_Server and WebServer 
     Click on Import nodes button on the bottom of the page
     Select the Business Group from dropdown list
     Select the Project from dropdown list
     Import User Name and Password
+    Choose Authentication Type
+    Upload user NodePem File
     Select Multiple Assign User
     Click on Import button
 
@@ -159,7 +363,7 @@ Verify the Workzone and Design
     Look for the list of links for the logged in user
     Click on Workzone
     Verify if there is an environment by name _default
-#    Verify the environment         ${ENVIRONMENT NAME}
+    Verify the environment         ${ENVIRONMENTSER NAME}
     Verify the list of instances
     Verify the availability of Start play icon on the instance card
     Verify the availabity of the Chef run icon on the instance card
@@ -177,7 +381,7 @@ Verify the Workzone Instances
 #    Wait For Condition  Page Should Contain Link      xpath=//header[@id='header']/div[2]/li/a      WORKZONE
     Look for the list of links for the logged in user
     Click on Workzone
-#   Verify the environment         ${ENVIRONMENT NAME}
+#   Verify the environment         ${ENVIRONMENT NAMESER}
     Verify if there is an environment by name _default
     Click on instances table view
     Select instance from the list and verify the instance status
@@ -211,6 +415,9 @@ Select the nodes namely MySql_Server and WebServer
     Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/label[1]/i     #//input[@data-nodename='MySql_Server']
     Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/label[1]/i    #//input[@data-nodename='Web_Server']
 
+Upload user NodePem File
+    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
+   
 
 Click on Import nodes button on the bottom of the page
     Wait Until Keyword Succeeds    1 minute     10 seconds       Element Should Be Visible       xpath=//input[@value='Import Nodes']
@@ -235,33 +442,45 @@ Select Assign User
     Select From List     id=userListSelect      ${ASSIGN USERS}
 
 Select Multiple Assign User
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=userListSelect      ${ASSIGN USERS}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List     id=userListSelect      ${ASSIGN USERS1}
 #    Select From List     id=userListSelect      ${ASSIGN USERS}
 #    Select From List     id=userListSelect      ${ASSIGN USERS1}
 #   Select From List     id=userListSelect      ${ASSIGN USERS2}
     Select From List By Value     id=userListSelect      ${ASSIGN USERS}
     Select From List By Value    id=userListSelect      ${ASSIGN USERS1}
-    Select From List By Value     id=userListSelect      ${ASSIGN USERS2}
+    #Select From List By Value     id=userListSelect      ${ASSIGN USERS2}
+
+
+
+Select chef server and click on the last icon namely import nodes Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="RLChefServer"]/../td[5]/div/a[3]
+
+
 
 
 Click on Import button
-    Click Element      xpath=//button[./text()='Import']
-#    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=//button[./text()='Import']
+    Focus    xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button  
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+    
 
 Look for the list of links for the logged in user
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=//header[@id='header']/div[1]
-    Page Should Contain Link      xpath=//header[@id='header']/div[2]/li/a      WORKZONE
-    Page Should Contain Link      xpath=//header[@id='header']/div[3]/li/a      DESIGN
+    #Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=//header[@id='header']/div[1]
+    Page Should Contain Link      xpath=.//*[@id='workZoneNew']      WORKZONE
+    Page Should Contain Link      xpath=.//*[@id='designNew']      DESIGN
 
 Click on Workzone
-    Click Element      xpath=//header[@id='header']/div[2]/li/a
+    Click Element      xpath=.//*[@id='workZoneNew']
 
 Verify the environment
     [Arguments]    ${env}
     Click Element      xpath=//a[@title='${env}']
 
 Verify if there is an environment by name _default
-    Click Element      xpath=//a[@title='_default']
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element      xpath=//*[normalize-space(text())="Relevance_Labs"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element      xpath=//*[normalize-space(text())="Devops"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element      xpath=//*[normalize-space(text())="Catalyst"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element      xpath=//*[normalize-space(text())="_default"]
 
 Verify the list of instances
     Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@class='card']
@@ -306,8 +525,14 @@ Click on update button
     
 
 Import User Name and Password
-    Input Text     id=importUsernameInput      ${VALID USER}
-    Input Text     id=importPasswordInput      ${VALID PASSWORD}
+    Input Text     id=importUsernameInput      ${VALID USER}    
+    #Input Text     id=importPasswordInput      ${VALID PASSWORD}
+
+Choose Authentication Type
+    Click Element    xpath=.//*[@id='s2id_pemFileDropdown2']/a
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+
 
 Click on control panel
     Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//button[@class='btn btn-primary actionControlPanel']
