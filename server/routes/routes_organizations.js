@@ -365,6 +365,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         selectable: true,
                                                                         itemtype: 'proj',
                                                                         href: '#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'],
+                                                                        //background: '#40baf1',
+                                                                        //color: '#40baf1 !important',
                                                                         environments: envs
                                                                     });
                                                                     //javascript:void(0) #ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
@@ -716,13 +718,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            res.send(data);
-        });
+        //getting the list of projects and confirming if user has permission on project
+
+            blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(data);
+            });
+    
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
@@ -853,33 +858,52 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
-            if (err) {
-                res.send(500);
-                return;
-            }
-            instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
-                    console.log(req.params.orgId, req.params.projectId, req.params.envId);
-                    if (err) {
-                        res.send(500);
+        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn,function(err,orgbuprojs){
+            logger.debug('-----------------------------------------------------getTeamsOrgBuProjForUser : ' + JSON.stringify(orgbuprojs));
+            if(!err)
+            {
+                if(orgbuprojs.projects.indexOf(req.params.projectId) >= 0)
+                    {
+                        Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
+                        if (err) {
+                            res.send(500);
+                            return;
+                        }
+                        instancesDao.getInstancesByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.instanceType, req.session.user.cn, function(err, instancesData) {
+                            if (err) {
+                                res.send(500);
+                                return;
+                            }
+                            blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
+                                console.log(req.params.orgId, req.params.projectId, req.params.envId);
+                                if (err) {
+                                    res.send(500);
+                                    return;
+                                }
+                                res.send({
+                                    tasks: tasksData,
+                                    instances: instancesData,
+                                    blueprints: blueprintsData
+                                });
+                                logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+                            });
+        
+                        });
+                        
+                        });
+                    } //if(orgbuprojs.orgbuprojs.indexOf(req.params.projectId) >= 0)
+                    else{
+                        logger.debug('User not part of team to see project.');
+                        res.send(401);
                         return;
                     }
-                    res.send({
-                        tasks: tasksData,
-                        instances: instancesData,
-                        blueprints: blueprintsData
-                    });
-                });
-
-            });
-            logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-
-        });
+            }
+            else{
+                res.send(500);
+                logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+                return;
+            }
+        }); //end getTeamsOrgBuProjForUser
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/tasks', function(req, res) {
@@ -1210,8 +1234,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         instanceState: nodeAlive,
                                         bootStrapStatus: 'waiting',
                                         runlist: [],
-                                        appUrl1: req.body.appUrl1,
-                                        appUrl2: req.body.appUrl2,
+                                        appUrls: req.body.appUrls,
                                         users: req.body.users, //[req.session.user.cn], //need to change this
                                         hardware: {
                                             platform: 'unknown',

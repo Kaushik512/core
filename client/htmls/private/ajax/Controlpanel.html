@@ -1666,7 +1666,8 @@ $('.formSubmit').click(function(e){
                    }, (2000));
                });
            }
-
+            e.preventDefault();
+            return false;
        });
 
    });

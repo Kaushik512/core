@@ -390,16 +390,19 @@ function foldTreeForSetting(){
     function setleftnavigation(toplink,breadcrumbHeader){
    var TabID=$(toplink).attr('id');
         if(TabID==="workZoneNew"){
-            $('#Workspace1').show();
+            loadTreeFuncNew();
+           
             $('#Settings_nav').hide();
-
+             $('#Workspace1').show();
 
         }else if(TabID==="designNew"){
              $('#Workspace1').hide();
             $('#Settings_nav').hide();
 
         }else if(TabID==="settingsNew"){
-             foldTreeForSetting();
+            $('#tree').empty()
+            loadSettingsTree();
+            foldTreeForSetting();
             $('#Workspace1').hide();
             $('#Settings_nav').show();
            
@@ -459,12 +462,15 @@ var SettingTreeJson=[
         "name": "organizationsetup",
         "text": "Organization Setup",
         "icon": "fa fa-lg fa-fw fa-building",
+        "nodetype":"org",
         "nodes": [
             {
                 "name": "organizations",
                 "text": "Organizations",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/OrgList.html",
+                "parent":"org",
+                "nodetype":"OrgList",
                 "selectable": true,
                 "icon":"fa fa-lg fa-fw fa-building"
                 
@@ -474,6 +480,8 @@ var SettingTreeJson=[
                 "text": "Business Groups",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ProductGroupList.html",
+                "parent":"org",
+                "nodetype":"ProductGroupList",
                 "selectable": true,
                 "icon":"fa fa-lg fa-fw fa-th"
                 
@@ -482,6 +490,8 @@ var SettingTreeJson=[
                 "text": "Projects",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ProjectList.html",
+                "parent":"org",
+                "nodetype":"ProjectList",                
                 "selectable": true,
                 "icon":"fa fa-lg fa-fw fa-tags"
                 
@@ -496,6 +506,7 @@ var SettingTreeJson=[
         "name": "devopssetup",
         "text": "DevOps Setup",
         "icon": "fa fa-lg fa-fw fa-qrcode",
+        "nodetype":"devops",
         "nodes": [
             {
                 "name": "organizations",
@@ -512,7 +523,9 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/EnvironmentConceptList.html",
                 "selectable": true,
-                "icon":"fa fa-lg fa-fw fa-tint"
+                "icon":"fa fa-lg fa-fw fa-tint",
+                "parent":"devops",
+                "nodetype":"EnvironmentConceptList"
                 
             },{
                 "name": "organizations",
@@ -640,12 +653,12 @@ var SettingTreeJson=[
 ];
 
 function loadSettingsTree(){
-                    $('#setting_tree').html('').treeview({
+                    $('#setting_tree').empty().treeview({
                         data:SettingTreeJson,
                         enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
                         expandIcon:'fa fa-angle-right',
-                        levels: 1,
+                        levels: -1,
                         onNodeSelected: function(event, node) {     
                             /*Draw the braedcrumb from ol*/
                             //var ol = $("#ribbon ol.breadcrumb");
@@ -671,7 +684,7 @@ function loadSettingsTree(){
                     //lol=data1;
 
                     console.log(data1);
-                    $('#tree').html('').treeview({
+                    $('#tree').empty().treeview({
                         data:data1,enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
                         expandIcon:'fa fa-angle-right',
@@ -882,8 +895,10 @@ function loadSettingsTree(){
 			selectFirstEnv();
 		}
 	};
-	checkandnavigatetotab();
+checkandnavigatetotab();
 loadSettingsTree();
+foldTreeForSetting();
+
  //function ends
  
 </script>
