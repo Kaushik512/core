@@ -729,7 +729,7 @@
                     return false;
                 }
                 var hasChefRunPermission= false;
-                if(haspermission("instancechefclientrun","modify")){
+                if(haspermission("instancechefclientrun","execute")){
                     hasChefRunPermission=true;
                 }
                 if(!hasChefRunPermission){
@@ -1055,7 +1055,9 @@
 
                 //Check if the docker status is succeeded
                 if (data.docker != null) {
-                    var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+                   // alert(JSON.stringify(data));
+                    if(data.docker.dockerEngineStatus == "success")
+                         var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
 
                     $divComponentListContainer.append($dockerStatus);
                 }
@@ -2562,8 +2564,10 @@
                     if ($(this).is(':checked')) {
 
                         var instid = $(this).closest('tr').attr('data-instanceid');
+                        var instbpname = $(this).closest('tr').attr('data-blueprintname');
                         if (instid)
                             var $that = $(this);
+                       // alert(instid);
                         var $td = $that.closest('td');
                         var tdtext = $td.text();
                         $td.find('.dockerspinner').detach();
@@ -2593,20 +2597,21 @@
                         // alert(lp + ' ' + sp);
                         // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
                         $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp), function(data) {
+                            //alert(JSON.stringify(data));
                             if (data == "OK") {
                                 var $statmessage = $td.find('.dockerspinner').parent();
 
 
                                 if (ep == 'null') {
                                     $td.find('.dockerspinner').detach();
-                                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done 1</span>');
                                 } else {
                                     if ($('#Containernamefield').val() != '') {
                                         $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep, function(data) {
                                             if (data == "OK") {
                                                 $td.find('.dockerspinner').detach();
                                                 $td.find('.dockermessage').detach();
-                                                $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                                $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done 2</span>');
 
                                             } else {
                                                 $('.dockerspinner').detach();
@@ -2632,10 +2637,24 @@
                                 //debugger;
                                 loadContainersTable(); //Clearing and loading the containers again.
                             } else {
+                                if(data.indexOf('No Docker Found') >= 0){
+                                    var $statmessage = $('.dockerspinner').parent();
+                                    $('.dockerspinner').detach();
+                                    $td.find('.dockermessage').detach();
+                                    $statmessage.append('<span style="margin-left:5px;color:red" title="Docker not found"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                    //Prompt user to execute the docker cookbook.
+                                    if(confirm('Docker was not found on the node : "' + instbpname + '". \nDo you wish to install it?')){
+                                        //Docker launcer popup had to be hidden due to overlap issue.
+                                        $('#launchDockerInstanceSelector').modal('hide');
+                                        $('a.actionbuttonChefClientRun[data-instanceid="' + instid + '"]').first().trigger('click');
+                                    }
+                                }
+                                else{
                                 var $statmessage = $('.dockerspinner').parent();
                                 $('.dockerspinner').detach();
                                 $td.find('.dockermessage').detach();
                                 $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                }
                             }
                         });
                     }

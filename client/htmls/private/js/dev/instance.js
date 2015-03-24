@@ -1032,6 +1032,7 @@ function initializeSSHModelContainer(){
 
             //Check if the docker status is succeeded
             if (data.docker != null) {
+                alert(JSON.stringify(data));
                 var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
 
                 $divComponentListContainer.append($dockerStatus);

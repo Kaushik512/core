@@ -80,7 +80,7 @@ var config = {
         port: '27017'
     },
     ldap: {
-        host: '54.187.120.22',
+        host: '54.149.26.254',
         port: 389,
         rootuser: 'Admin',
         rootpass: 'ReleV@ance'
