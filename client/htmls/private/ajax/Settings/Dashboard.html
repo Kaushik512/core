@@ -1,135 +1,209 @@
 <div id="page-wrapper">
-        <div class="row">
-        <div class="col-lg-3 col-md-6">
-    <div class="circle-tile" >
+  <div class="row">
+    <div class="col-lg-3 col-md-6">
+      <div class="circle-tile" >
         <a href="#ajax/Settings/OrgList.html">
-    <div class="circle-tile-heading light-blue">
-    <i class="fa fa-building fa-fw fa-3x"></i>
-    </div></a>
-    
-        <div class="circle-tile-content light-blue" onclick="$(this).closest('a').trigger('click')">
-        <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/OrgList.html" style="color:white;"> ORGANIZATIONS </a></div>
-        <div class="circle-tile-number text-faded organizationcount" itemid="1">
-           
-        </div>
-        
-    </div>
+          <div class="circle-tile-heading light-blue">
+            <i class="fa fa-building fa-fw fa-3x"></i>
+          </div></a>
+
+          <div class="circle-tile-content light-blue" onclick="$(this).closest('a').trigger('click')">
+            <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/OrgList.html" style="color:white;"> ORGANIZATIONS </a></div>
+            <div class="circle-tile-number text-faded organizationcount" itemid="1">
+
+            </div>
+
+          </div>
         </div> <!--heading dark-blue ends-->
-    
-    </div>
+
+      </div>
       <!--col-lg-3 ends-->
 
 
 
 
 
-    <div class="col-lg-3 col-md-6">
-    <div class="circle-tile">
-    <a href="#ajax/Settings/ProductGroupList.html">
-       <div class="circle-tile-heading light-black">
-       <i class="fa fa-group fa-fw fa-3x"></i>
-       </div></a>
-        <div class="circle-tile-content light-black">
+      <div class="col-lg-3 col-md-6">
+        <div class="circle-tile">
+          <a href="#ajax/Settings/ProductGroupList.html">
+           <div class="circle-tile-heading light-black">
+             <i class="fa fa-group fa-fw fa-3x"></i>
+           </div></a>
+           <div class="circle-tile-content light-black">
 
-        <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/ProductGroupList.html" style="color:white;">BUSINESS GROUPS</a></div>
-        <div class="circle-tile-number text-faded productgroupcount"  itemid="2">
-		    
-		</div>
-        
-   </div>
-        </div>
-    </div>     
+            <div class="circle-tile-description text-faded"><a href = "#ajax/Settings/ProductGroupList.html" style="color:white;">BUSINESS GROUPS</a></div>
+            <div class="circle-tile-number text-faded productgroupcount"  itemid="2">
 
-     
-       <!--heading orange ends-->
-        <!--Circle-tile ends--> 
-      <!-- col-lg-3 ends-->
-        
-    <div class="col-lg-3 col-md-6">
-    <div class="circle-tile">
-    <a href="#ajax/Settings/EnvironmentConceptList.html">
-       <div class="circle-tile-heading light-blue">
-       <i class="fa fa-desktop fa-fw fa-3x"></i>
-       </div></a>
-        <div class="circle-tile-content light-blue">
-        <div class="circle-tile-description text-faded"><a href="#ajax/Settings/EnvironmentConceptList.html" style="color:white;">ENVIRONMENTS</a></div>
-        <div class="circle-tile-number text-faded envCount"  itemid="3">
-            
-        </div>
-        
-   </div>
-    </div>    
-        </div>
-
-
-    <div class="col-lg-3 col-md-6">
-      <div class="circle-tile">
-    <a href="#ajax/Settings/ProjectList.html">
-       <div class="circle-tile-heading light-black">
-       <i class="fa fa-tasks fa-fw fa-3x"></i>
-       </div>
-    </a>
-        <div class="circle-tile-content light-black">
-            <div class="circle-tile-description text-faded"><a href="#ajax/Settings/ProjectList.html" style="color:white;">Projects</a>
             </div>
-        <div class="circle-tile-number text-faded projectCount"  itemid="4">
-            
+
+          </div>
         </div>
-        
-      
-        </div>
-        </div>
+      </div>     
+
+
+      <!--heading orange ends-->
+      <!--Circle-tile ends--> 
+      <!-- col-lg-3 ends-->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="circle-tile">
+          <a href="#ajax/Settings/EnvironmentConceptList.html">
+           <div class="circle-tile-heading light-blue">
+             <i class="fa fa-desktop fa-fw fa-3x"></i>
+           </div></a>
+           <div class="circle-tile-content light-blue">
+            <div class="circle-tile-description text-faded"><a href="#ajax/Settings/EnvironmentConceptList.html" style="color:white;">ENVIRONMENTS</a></div>
+            <div class="circle-tile-number text-faded envCount"  itemid="3">
+
+            </div>
+
+          </div>
         </div>    
+      </div>
+
+
+      <div class="col-lg-3 col-md-6">
+        <div class="circle-tile">
+          <a href="#ajax/Settings/ProjectList.html">
+           <div class="circle-tile-heading light-black">
+             <i class="fa fa-tasks fa-fw fa-3x"></i>
+           </div>
+         </a>
+         <div class="circle-tile-content light-black">
+          <div class="circle-tile-description text-faded"><a href="#ajax/Settings/ProjectList.html" style="color:white;">Projects</a>
+          </div>
+          <div class="circle-tile-number text-faded projectCount"  itemid="4">
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>    
 
 
 
-      </div> <!--row ends-->
-    
-   
+  </div> <!--row ends-->
+
+
 </div>
 
 <script type="text/javascript">
-         var serviceURL = "/d4dMasters/";
-         window.selectedOrgName = 'Settings'; 
-       	
+ var serviceURL = "/d4dMasters/";
+ window.selectedOrgName = 'Settings'; 
+
 				// $('[itemid]').each(function(){
 				//     var count = getCount($(this).attr('itemid'));    
 				//     $(this).html(count);
 				// });
-  function setcountontile(){
-    $.get('/d4dMasters/readmasterjsoncounts',function(data){
-      var mastcount = JSON.parse(JSON.stringify(data));
-      $.each(mastcount,function(k,v){
-        var ky = Object.keys(v);
+function setcountontile(){
+  $.get('/d4dMasters/readmasterjsoncounts',function(data){
+    var mastcount = JSON.parse(JSON.stringify(data));
+    $.each(mastcount,function(k,v){
+      var ky = Object.keys(v);
          //alert(k +' ' + ky +' ' + v[ky]);
-        $('[itemid="' + ky + '"]').html(v[ky]);
-      });
-    });
-  }
-  setcountontile();
-	
-
- 
-    
-		
-
-
-
-  drawBreadCrumb1();
-  $('.circle-tile').find('a').click(function(){
-    var url=$(this).attr('href');
-debugger;
-    $('#setting_tree').find('a').each(function(){
-      if($(this).attr('href')==url){
-        debugger;
-        $(this).trigger('click');
-      }
-    });
-
-
+         $('[itemid="' + ky + '"]').html(v[ky]);
+       });
   });
+}
+setcountontile();
+
+
+
+
+
+
+
+
+drawBreadCrumb1();
+
+$(function(){
+  $('.circle-tile').find('a').click(function(){
+    var href=$(this).attr('href'),setting_tree=$('#setting_tree'),
+    nodeList=setting_tree.find('li');
+
+    if(href && href.indexOf('OrgList.html')>-1){
+
+      if(setting_tree.find('li').eq(0).hasClass('active')){
+
+       setTimeout(function(){
+        setting_tree.find('li').find('[nodetype="OrgList"]').trigger('click');          
+      },100);
+
+
+     }else{
+
+      setting_tree.find('li').eq(0).find('.expand-collapse').trigger('click');
+      setTimeout(function(){
+        setting_tree.find('li').find('[nodetype="OrgList"]').trigger('click');          
+      },100);
+    }
+
+
+  }
+
+  else if(href && href.indexOf('ProductGroupList.html')>-1){
+
+
+    if(setting_tree.find('li').eq(0).hasClass('active')){
+     setTimeout(function(){
+      setting_tree.find('li').find('[nodetype="ProductGroupList"]').trigger('click');          
+    },100);
+     
+
+   }else{
+
+    setting_tree.find('li').eq(0).find('.expand-collapse').trigger('click');
+    setTimeout(function(){
+      setting_tree.find('li').find('[nodetype="ProductGroupList"]').trigger('click');          
+    },100);
+  }
+
+}
+
+
+else if(href && href.indexOf('EnvironmentConceptList.html')>-1){
+debugger;
+  if(setting_tree.find('li').find('[nodetype="devops"]').hasClass('active')){
+   setTimeout(function(){
+    setting_tree.find('li').find('[nodetype="EnvironmentConceptList"]').trigger('click');          
+  },100);
+
+ }else{
+
+  setting_tree.find('li').find('[nodetype="devops"]').parent().find('.expand-collapse').trigger('click');
+  setTimeout(function(){
+    setting_tree.find('li').find('[nodetype="EnvironmentConceptList"]').trigger('click');          
+  },100);
+}
+
+}
+
+else if(href && href.indexOf('ProjectList.html')>-1){
+
+  if(setting_tree.find('li').eq(0).hasClass('active')){
+
+   setTimeout(function(){
+    setting_tree.find('li').find('[nodetype="ProjectList"]').trigger('click');          
+  },100);
+
+
+ }else{
+
+  setting_tree.find('li').eq(0).find('.expand-collapse').trigger('click');
+  setTimeout(function(){
+    setting_tree.find('li').find('[nodetype="ProjectList"]').trigger('click');          
+  },100);
+}
+
+}
+
+});
+
+});
+
 </script>
 
 
-    
-  <!-- end scripts -->
+
+<!-- end scripts -->

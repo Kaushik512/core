@@ -341,6 +341,8 @@
 							.attr('title',node.tooltip)
 							.attr('rowid',node.rowid)
 							.attr('target',node.target)
+							.attr('nodetype',node.nodetype)
+							.attr('parent',node.parent)
 							.append(node.text)
 						);
 				}
