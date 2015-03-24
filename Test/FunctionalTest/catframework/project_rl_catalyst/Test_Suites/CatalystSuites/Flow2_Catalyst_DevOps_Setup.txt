@@ -5,6 +5,7 @@ Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
 Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 
 *** Test Cases ***
@@ -12,41 +13,45 @@ Catalyst new Config management setup
     [Tags]       Sanity
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
 #    Catalyst Login
+    Testing All New Config Management Conditions
     Create New Config Management
+    Unique Devops Configuration Management
+    Devops Click on Update of Your org and Org is disabled 
     Catalyst Logout
     [Teardown]     Close Browser
 
 
-Catalyst import chef server nodes by provider
-    [Tags]       Regression
+
+#-Catalyst import chef server nodes by provider
+    #-[Tags]       Regression
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst import chef server nodes by provider
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Catalyst import chef server nodes by provider
 #   Catalyst Logout
-    [Teardown]     Close Browser
+    #-[Teardown]     Close Browser
 
 Catalyst import chef server nodes
-    [Tags]       Sanity       ps
+    #-[Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Chef server nodes import
- #   Catalyst Logout
-    [Teardown]     Close Browser
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Chef server nodes import
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
-Access catalyst as Designer and password as Designer
-    [Tags]       Sanity      Smoke
-    Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
-    Verify the Workzone and Design
-    Catalyst Logout
-    [Teardown]     Close Browser
+#-Access catalyst as Designer and password as Designer
+    #-[Tags]       Sanity      Smoke
+    #-Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
+    #-Verify the Workzone and Design
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
 
-Access catalyst as Designer User and password
-    [Tags]       Sanity      Smoke
-    Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
-    Verify the Workzone Instances
-    Catalyst Logout
-    [Teardown]     Close Browser
+#-Access catalyst as Designer User and password
+    #-[Tags]       Sanity      Smoke
+    #-Catalyst User "${ASSIGN USERS}" logs in with password "${ASSIGN USERS PASSWORD}"
+    #-Verify the Workzone Instances
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
 
 
