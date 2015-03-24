@@ -222,7 +222,7 @@
                                              
 
                                           </div>
-                                          <div class="col-lg-6" style="margin-top:5px;">
+                                          <div class="col-lg-6 hidden" style="margin-top:5px;">
                                                 <label for="">Assign Users<span style="color:red">*</span></label>
                                                 
                                                     <div class="userListLoadingContainer">
@@ -232,7 +232,7 @@
 
                                                         </select> 
                                                   
-                                                </div>
+                                              </div>
                                               <div class="col-lg-6" style="margin-top:5px">
                                                 <label for="category">Project <span style="color:red">*</span>
                                                 </label>
@@ -253,10 +253,7 @@
                                                     </select>
                                                 
                                                 
-                                              </div>
-                                              
-                                            
-                                                 
+                                              </div>                                                 
                                             
                    
                                            <div class="col-lg-6 fordocker">
@@ -293,48 +290,104 @@
                                   </div>
                               </div>
                               <!--adding new collapse-->
-                              <div class="panel panel-default appSeriesNameURL">
+                              <div class="panel panel-default appSeriesNameURL notFordocker">
                                       <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure App Name &amp; URL</a>
                                           </h4>
                                       </div>
                                       <div id="CollapseApp" class="panel-collapse collapse">
-                                          <form action="" id="checkout-form">
-                                                
-                                              <div class="applicationURLContainer notFordocker" id="appSeries"> 
-                                                <div class="col-lg-6" style="margin-top:15px;">
+                                          
+                                            <div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
 
-                                                <label for="">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                                                <input type="text" name="appNameInput appName" class="form-control" id="appName1">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
-
-
-                                               </div>
-
-                                               <div class="col-lg-6" style="margin-top:15px">
-
-                                                <label for="">Application URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                
-                                                <input type="text" name="appNameURL appURL" class="form-control" id="appURL1">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
-                                              </div>
+            <div class="widget-box">
+                <div class="widget-header">
+                    <h5 class="widget-title" style="color:#4e5964;">
+                    <strong>Application Series</strong>
+                    </h5>
+                    <div class="widget-toolbar no-border">
+                        
+                            <a id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
+                                <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                                New
+                            </a>                                                
+                        
+                    </div>
+                                            
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main" style="min-height:300px">
+                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                            <table id="appTable" class="hidden" cellpadding="5px" width="100%">
+                                <thead>
+                                    <tr class="rowCustomStyle">
+                                        <td>Application Name</td>
+                                        <td>Application URL</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden rowtemplate">
+                                        
+                                        <td datafield="appName"></td>
+                                        <td datafield="appURL"></td>
+                                        <td>
+                                            <div class="btn-group tableactionWidth">
+                                                <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+                                                <a class="btn btn-xs btn-info pull-left" title="Update">
+                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                </a>
                                             </div>
+                                        </td>
 
-                                              <a href="javascript:void(0);" class="clearfix pull-right addNewApp appDesignNew">Add New</a>
-                                                   
-                                                
-                                            </form>
-                                      </div>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                                <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                    <thead>
+                                        <tr class="rowCustomStyle">
+                                            
+                                            <td>Application Name</td>
+                                            <td>Application URL</td>
+                                            <td class="">Action</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                       
+                                    </tbody>
+                                    
+                                </table>
+                                <div id="envtable_tools1"></div>
+                              
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                       <div id="tableFooterLeft" class="pull-left"></div>
+                       <div id="tableFooterRight" class="pull-right"></div>
+                    </div>
+                   
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                                      </div><!--collapseapp ends here-->
                               </div>
                             </div>
                           </div>
                          </div>
                         </div>
-                    </div>
+                    </div> <!--tab pane ends here-->
                      <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
                         
                         
@@ -400,7 +453,67 @@
     
 
 </div>
+<!--app series-->
+<div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="appURLForm" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Application Name &amp; URL
+                    </h4>
+                </div>
 
+                <div class="modal-body appSeriesHeight">
+                        
+
+                        
+                        <!--app series-->
+                        <div class="applicationURLContainer" id="appSeries"> 
+                                                <div class="col-lg-6" style="margin-top:15px;">
+
+                                                <label for="">Application Name<span style="color:red">*</label>
+
+                                                <input type="text" name="appNameInput" class="form-control appName">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+
+
+                                               </div>
+
+                                               <div class="col-lg-6" style="margin-top:15px">
+
+                                                <label for="">Application URL<span style="color:red">*</label>
+                                                
+                                                <input type="text" name="appNameURL" class="form-control appURL">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+                                              </div>
+                                            </div>
+                        
+
+
+                </div>
+                <div class="modal-footer">
+                    <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                    <div class="marginForButtons">
+                        <button id="addAppBtn" class="btn btn-primary" type="submit">
+                            <i class="fa fa-upload fa-1x"></i>&nbsp;Add
+                        </button>
+                        <a class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal for Import by IP ended-->
+<!--app series ends here-->
+<!--launch docker-->
 <div class="modal fade bs-example-modal-lg" id="myModalLabelDockerContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -1080,28 +1193,28 @@ $(document).ready(function(){
                    alert("Please choose an environment");
                    return false;
                }
+               $('#userListSelect').find('option').attr('selected','selected');
                reqBody.users = $('#userListSelect').val();
 
                if (!reqBody.users) {
+
                    alert("Please choose users");
                    return false;
                }
                //alert(JSON.stringify(reqBody));
-            var appUrls = [];
-            var $appURLContainers = $('.applicationURLContainer');
-            $applicationURLContainer.each(function() {
-                $this = $(this);
-                var appName = $this.find('.appName').val();
-                var appURL = $this.find('.appURL').val();
-                if (appName && appURL) {
-                    appUrls.push({
-                        name: appName,
-                        url: appURL
-                    });
-                }
+               var appUrls = []; 
+               var $appUrlTableBody = $('#appUrlTable tbody');
+               var $trs = $appUrlTableBody.find('tr');
+               alert($trs.length);
+               $trs.each(function(e){
+                 var $this = $(this);
+                 appUrls.push($this.data('appUrlData'));
+               });
 
-            });
-            reqBody.appUrls = appUrls;
+               reqBody.appUrls = appUrls;
+
+
+           
             
                
                $('.blueprintMsgContainer').hide();
@@ -1304,4 +1417,42 @@ $(document).ready(function(){
 $(document).ready(function () {
       $("#blueprintNameInput").focus();
    });
+</script>
+<script>
+$('#appURLForm').submit(function(e){
+            
+            var $row = $('<tr/>');
+            var appName = $(this).find('.appName').val();
+            var appUrl = $(this).find('.appURL').val();
+            if(!(appName && appUrl)) {
+              alert("Please enter name and url");
+              return;
+            }
+
+            $row.data('appUrlData',{
+              name:appName,
+              url:appUrl
+            })
+
+            var $tdName =$('<td/>');
+            $tdName.append(appName);
+            var $tdURL =$('<td/>');
+            $tdURL.append(appUrl);
+
+            var $tdAction =$('<td/>');
+            $tdAction.append('<div class="btn-group tableactionWidth"><button class="btn btn-xs btn-danger pull-left deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+            //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+
+            $tdAction.find('.deleteURL').click(function(){
+              $row.remove();
+            });
+
+            $row.append($tdName).append($tdURL).append($tdAction);
+            $('#appUrlTable').find('tbody').append($row);
+            $('#modalAppNameURL').modal('hide');
+            return false;
+
+})
+
 </script>

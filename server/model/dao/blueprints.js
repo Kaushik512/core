@@ -3,8 +3,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
 var logger = require('../../lib/logger')(module);
 var schemaValidator = require('./schema-validator');
-
-
+var configmgmtDao = require('../d4dmasters/configmgmt.js');
 
 var Schema = mongoose.Schema;
 
@@ -256,27 +255,29 @@ var BlueprintsDao = function() {
 
     this.getBlueprintsByOrgBgProjectAndEnvId = function(orgId, bgId, projectId, envId, blueprintType, userName, callback) {
         logger.debug("Enter getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
-        var queryObj = {
-            orgId: orgId,
-            bgId: bgId,
-            projectId: projectId,
-            envId: envId
-        }
-        if (blueprintType) {
-            queryObj.templateType = blueprintType;
-        }
-        if (userName) {
-            queryObj.users = userName;
-        }
+                var queryObj = {
+                    orgId: orgId,
+                    bgId: bgId,
+                    projectId: projectId,
+                    envId: envId
+                }
+                if (blueprintType) {
+                    queryObj.templateType = blueprintType;
+                }
+                //Removed as a team check for the project happens at the route. - Vinod
+                // if (userName) {
+                //     queryObj.users = userName;
+                // }
 
-        Blueprint.find(queryObj, function(err, data) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            logger.debug("Exit getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
-            callback(null, data);
-        });
+                Blueprint.find(queryObj, function(err, data) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    logger.debug("Exit getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
+                    callback(null, data);
+                });
+        
     };
     this.createBlueprint = function(blueprintData, callback) {
         logger.debug("Enter createBlueprint >> " + JSON.stringify(blueprintData));

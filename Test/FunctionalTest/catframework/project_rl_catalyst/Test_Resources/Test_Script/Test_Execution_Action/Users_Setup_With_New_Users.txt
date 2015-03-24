@@ -1,0 +1,353 @@
+*** Settings ***
+Documentation     Organization_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/New_Blueprint_Creation_Action_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Keywords ***
+
+Test Validation of Creation of New users
+    Vaildate the Empty User Name  ${VaildateEmptyUserName} 
+    Username field left empty  ${VaildateEmptyUserNameErrMsg}
+    Vaildate the Empty Email Address  ${VaildateEmptyEmailName} 
+    Email field left empty  ${VaildateEmptyEmailNameErrMsg}
+
+
+Devops Config Management New Users
+    Users Setup With New Users1
+    Users Setup With New Users2
+    Users Setup With New Users3 
+
+
+
+Users Setup With New Users1
+    Clicks on New Button
+    Enters Login Name 
+    Enters Email Address
+    Assign Roles
+    Add User to LDAP
+    Enters LDAP Password
+    Enters Confirm LDAP Password
+    Clicks on USave Button
+
+Test Validation of Creation of New Teams
+     Vaildate the Empty Team Name  ${VaildEmptyTeamName}
+     Team name field left empty  ${VaildEmptyTeamNameErrMsg}
+     Vaildate the No Users Selected  ${VaildEmptyUsers}
+     Users left empty  ${VaildEmptyUsersErrMsg}
+     Vaildate the No Projects Selected  ${VaildEmptyProjects}
+     Projects left empty  ${VaildEmptyProjectsErrMsg}
+
+    #Clicks on USettings
+    #Clicks on Users Setup
+    #Clicks on Users
+
+
+
+
+
+
+Devops Config Management New Teams
+    Clicks on USettings
+    Clicks on Users Setup
+    Clicks on Teams
+    Clicks on New Team Button
+    Enters the Team Name
+    Enters the Team Description
+    Assign Users
+    Assign Projects
+    Clicks on TSave Button
+    Clicks on New Team Button
+    Enters the Team Name2
+    Enters the Team2 Description
+    Assign Users2
+    Assign Projects2
+    Clicks on TSave Button
+
+
+    
+Clicks on Teams
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a       #Teams
+
+Assign Users
+    Click Element    xpath=.//*[@id='loginname']/label[text()="Designer"]/i         #Designer
+    Click Element    xpath=.//*[@id='loginname']/label[text()="Admin"]/i            #Admin
+    Click Element    xpath=.//*[@id='loginname']/label[text()="Consumer"]/i        #Consumer
+
+Assign Users2
+    Click Element    xpath=.//*[@id='loginname']/label[text()="Designer"]/i         #Designer
+    Click Element    xpath=.//*[@id='loginname']/label[text()="Admin"]/i            #Admin
+
+Assign Projects
+    Click Element    xpath=.//*[@id='projectname']/label[text()="Catalyst"]/i        #Catalyst
+
+Assign Projects2
+    Click Element    xpath=.//*[@id='projectname']/label[text()="Primary_Edu"]/i      #Primary_Edu
+
+Clicks on TSave Button
+    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button       #Save 
+
+
+Clicks on USettings                                                     #User setup new users start
+    Click Element    xpath=.//*[@id='settingsNew']
+
+Clicks on Users Setup
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+
+Clicks on Users
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='setting_tree']/ul/li[5]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[5]/a
+    
+Clicks on New Button
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='newUser']
+    Click Element    xpath=.//*[@id='newUser']
+
+Clicks on New Team Button
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='newTeam']
+    Click Element    xpath=.//*[@id='newTeam']
+
+Enters the Team Name
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=teamname    ${TEAMNAME1}
+
+Enters the Team Name2
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=teamname    ${TEAMNAME2}    
+
+Enters the Team Description
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=description
+    Input Text    id=description    ${TEAMDESCRIPTION}
+
+Enters the Team2 Description
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=description
+    Input Text    id=description    ${TEAMDESCRIPTION2}
+
+Enters Login Name
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text     id=loginname     Designer
+     
+
+Enters Email Address
+    Input Text    id=email    Designer@gmail.com
+
+Assign Roles
+    Click Element    xpath=.//*[@id='userrolename']/label[2]/i    #Designer
+
+Assign Roles2
+    Click Element    xpath=.//*[@id='userrolename']/label[1]/i    #Admin
+
+Assign Roles3
+    Click Element    xpath=.//*[@id='userrolename']/label[3]/i    #Consumer
+
+Add User to LDAP
+    Click Element    id=chkadduserldap
+
+Enters LDAP Password
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword
+    Input Text    id=userpassword    Designer
+
+Enters Confirm LDAP Password
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword1
+    Input Text    id=userpassword1    Designer
+
+Clicks on USave Button                                           #Users setup new users end
+    Click Element    xpath=.//*[@id='myForm5']/div/div[3]/div/button       
+
+
+Users setup Login processCont
+    Clicks on Users
+    Clicks on New Button
+     
+
+Users Setup Assign2 processCont
+    Enters Email Address2
+    Assign Roles2
+    Add User to LDAP
+    Enters LDAP Password2
+    Enters Confirm LDAP2 Password
+    Clicks on USave Button
+
+Users Setup Assign3 processCont
+    Enters Email Address3
+    Assign Roles3
+    Add User to LDAP
+    Enters LDAP Password3
+    Enters Confirm LDAP3 Password
+    Clicks on USave Button
+
+Users Setup With New Users2
+    Users setup Login processCont
+    Enters Login Name2
+    Users Setup Assign2 processCont
+
+
+Users Setup With New Users3
+    Users setup Login processCont
+    Enters Login Name3
+    Users Setup Assign3 processCont
+
+
+Enters Login Name2
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=loginname      Admin
+
+Enters Login Name3
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=loginname      Consumer
+
+
+Enters Email Address2
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=email
+    Input Text    id=email    Admin@gmail.com
+
+
+Enters Email Address3
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=email
+    Input Text    id=email    Consumer@gmail.com
+
+
+
+Enters LDAP Password2
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword
+    Input Text    id=userpassword    Admin
+
+Enters Confirm LDAP2 Password
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword1
+    Input Text    id=userpassword1    Admin
+
+
+
+Enters LDAP Password3
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword
+    Input Text    id=userpassword    Consumer
+
+Enters Confirm LDAP3 Password
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword1
+    Input Text    id=userpassword1    Consumer
+
+
+
+Vaildate the Empty Email Address
+    [Arguments]    ${email}
+    Clicks on New Button
+    Enters Login Name 
+    Enters the Empty Email Address
+    Assign Roles
+    Add User to LDAP
+    Enters LDAP Password
+    Enters Confirm LDAP Password
+    Clicks on USave Button
+    
+    
+
+Vaildate the Empty User Name
+    [Arguments]    ${loginname}
+    Clicks on USettings
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters Empty Login Name
+    Enters Email Address
+    Assign Roles
+    Add User to LDAP
+    Enters LDAP Password
+    Enters Confirm LDAP Password
+    Clicks on USave Button
+
+
+
+Username field left empty
+    [Arguments]    ${VaildateEmptyUserNameErrMsg}
+    Vaildate the Username field  ${VaildateEmptyUserNameErrMsg}
+
+
+Email field left empty
+    [Arguments]    ${VaildateEmptyEmailNameErrMsg}
+    Vaildate the Email field  ${VaildateEmptyEmailNameErrMsg}
+
+Vaildate the Email field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_email    ${ErrMsg}
+    Clicks on UserCancel Button
+
+Vaildate the Username field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_loginname    ${ErrMsg}
+    Clicks on UserCancel Button
+
+
+Enters Empty Login Name
+    Input Text    id=loginname     ${loginname}
+
+Enters the Empty Email Address
+    Input Text    id=email    ${email}
+
+
+Clicks on UserCancel Button
+    Click Element    xpath=.//*[@id='btncancel']
+
+
+
+Vaildate the No Projects Selected
+    [Arguments]    ${Projects}
+    Clicks on New Team Button
+    Enters the Team Name
+    Enters the Team Description
+    Assign Users
+    Clicks on TSave Button
+    
+Projects left empty
+    [Arguments]    ${VaildEmptyProjectsErrMsg}
+    Vaildate no projects selected    ${VaildEmptyProjectsErrMsg}
+
+Vaildate no projects selected
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_projectname    ${ErrMsg}
+
+
+Vaildate the No Users Selected
+    [Arguments]    ${Team}
+    Clicks on New Team Button
+    Enters the Team Name
+    Enters the Team Description
+    Assign Projects
+    Clicks on TSave Button
+
+Users left empty  
+    [Arguments]    ${VaildEmptyUsersErrMsg}
+    Vaildate the Select Users field  ${VaildEmptyUsersErrMsg}
+
+Vaildate the Select Users field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_loginname    ${ErrMsg}
+    Clicks on TeamCancel Button
+    
+
+
+Vaildate the Empty Team Name
+    [Arguments]    ${teamname}
+    Clicks on USettings
+    Clicks on Users Setup
+    Clicks on Teams
+    Clicks on New Team Button
+    Enters the Empty Team Name
+    Enters the Team Description
+    Assign Users
+    Assign Projects
+    Clicks on TSave Button
+
+Enters the Empty Team Name
+    Input Text    id=teamname    ${teamname}
+
+Clicks on TeamCancel Button
+    Click Element    xpath=.//*[@id='btncancel']
+
+
+Team name field left empty
+    [Arguments]    ${VaildEmptyTeamNameErrMsg}
+    Vaildate empty Team name field  ${VaildEmptyTeamNameErrMsg}
+
+Vaildate empty Team name field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_teamname    ${ErrMsg}
+    Clicks on TeamCancel Button
