@@ -123,14 +123,10 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true
     },
-    appUrl1:{
-        name:String,
-        url:String
-    },
-    appUrl2:{
-        name:String,
-        url:String
-    },
+    appUrls: [{
+        name: String,
+        url: String
+    }],
     applicationUrl: {
         type: String,
         trim: true
@@ -385,7 +381,13 @@ var InstancesDao = function() {
     this.getInstanceByProjectId = function(ProjectId, callback) {
         logger.debug("Enter getInstanceByProjectId (%s,)", ProjectId);
         var queryObj = {
-            $or:[{projectId: ProjectId},{'chef.serverId': ProjectId},{serviceIds:ProjectId}]
+            $or: [{
+                projectId: ProjectId
+            }, {
+                'chef.serverId': ProjectId
+            }, {
+                serviceIds: ProjectId
+            }]
         }
         Instances.find(queryObj, function(err, data) {
             if (err) {
@@ -447,7 +449,11 @@ var InstancesDao = function() {
 
     };
 
-    
+    this.updateAppUrl = function(instanceId, appUrlId, url, callback) {
+
+    }
+
+
     this.updateAppUrl1 = function(instanceId, appUrlData, callback) {
         logger.debug("Enter updateAppUrl1 (%s, %s)", instanceId, appUrlData);
         Instances.update({
@@ -814,12 +820,12 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit getAllActionLogs (%s)", instanceId);
-            if(data.length && data[0].actionLogs && data[0].actionLogs.length) {
+            if (data.length && data[0].actionLogs && data[0].actionLogs.length) {
                 callback(null, data[0].actionLogs);
             } else {
-                callback(null,[]);
+                callback(null, []);
             }
-            
+
         });
     };
 

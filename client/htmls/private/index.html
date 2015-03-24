@@ -390,16 +390,19 @@ function foldTreeForSetting(){
     function setleftnavigation(toplink,breadcrumbHeader){
    var TabID=$(toplink).attr('id');
         if(TabID==="workZoneNew"){
-            $('#Workspace1').show();
+            loadTreeFuncNew();
+           
             $('#Settings_nav').hide();
-
+             $('#Workspace1').show();
 
         }else if(TabID==="designNew"){
              $('#Workspace1').hide();
             $('#Settings_nav').hide();
 
         }else if(TabID==="settingsNew"){
-             foldTreeForSetting();
+            $('#tree').empty()
+            loadSettingsTree();
+            foldTreeForSetting();
             $('#Workspace1').hide();
             $('#Settings_nav').show();
            
@@ -459,12 +462,15 @@ var SettingTreeJson=[
         "name": "organizationsetup",
         "text": "Organization Setup",
         "icon": "fa fa-lg fa-fw fa-building",
+        "nodetype":"org",
         "nodes": [
             {
                 "name": "organizations",
                 "text": "Organizations",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/OrgList.html",
+                "parent":"org",
+                "nodetype":"OrgList",
                 "selectable": true,
                 "icon":"fa fa-lg fa-fw fa-building"
                 
@@ -474,6 +480,8 @@ var SettingTreeJson=[
                 "text": "Business Groups",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ProductGroupList.html",
+                "parent":"org",
+                "nodetype":"ProductGroupList",
                 "selectable": true,
                 "icon":"fa fa-lg fa-fw fa-th"
                 
@@ -482,6 +490,8 @@ var SettingTreeJson=[
                 "text": "Projects",
                 "borderColor": "#000",
                 "href": "#ajax/Settings/ProjectList.html",
+                "parent":"org",
+                "nodetype":"ProjectList",                
                 "selectable": true,
                 "icon":"fa fa-lg fa-fw fa-tags"
                 
@@ -496,6 +506,7 @@ var SettingTreeJson=[
         "name": "devopssetup",
         "text": "DevOps Setup",
         "icon": "fa fa-lg fa-fw fa-qrcode",
+        "nodetype":"devops",
         "nodes": [
             {
                 "name": "organizations",
@@ -512,7 +523,9 @@ var SettingTreeJson=[
                 "borderColor": "#000",
                 "href": "#ajax/Settings/EnvironmentConceptList.html",
                 "selectable": true,
-                "icon":"fa fa-lg fa-fw fa-tint"
+                "icon":"fa fa-lg fa-fw fa-tint",
+                "parent":"devops",
+                "nodetype":"EnvironmentConceptList"
                 
             },{
                 "name": "organizations",
@@ -640,12 +653,12 @@ var SettingTreeJson=[
 ];
 
 function loadSettingsTree(){
-                    $('#setting_tree').html('').treeview({
+                    $('#setting_tree').empty().treeview({
                         data:SettingTreeJson,
                         enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
                         expandIcon:'fa fa-angle-right',
-                        levels: 1,
+                        levels: -1,
                         onNodeSelected: function(event, node) {     
                             /*Draw the braedcrumb from ol*/
                             //var ol = $("#ribbon ol.breadcrumb");
@@ -669,7 +682,9 @@ function loadSettingsTree(){
                     console.log('ajax success');
                     //alert('New Json' + JSON.stringify(data1));
                     //lol=data1;
-                    $('#tree').html('').treeview({
+
+                    console.log(data1);
+                    $('#tree').empty().treeview({
                         data:data1,enableLinks:true,
                         collapseIcon:'fa fa-angle-down',
                         expandIcon:'fa fa-angle-right',
@@ -682,15 +697,20 @@ function loadSettingsTree(){
                             localStorage.setItem('selectedOrgId',$('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
                             /*Description from the node*/
                             localStorage.setItem("orgname", node.orgname);
-                            localStorage.setItem("projname", node.projname);
+                            localStorage.setItem("projname", node.projname ?node.projname :node.text);
                             localStorage.setItem("bgname", node.bgname);
                             localStorage.setItem("envname", node.text);
+                            localStorage.setItem('itProjectActive','no');
 
                             /*Draw the braedcrumb from ol*/
                             var ol = $("#ribbon ol.breadcrumb");
                             if(ol.children().length == 0){
                                 drawBreadCrumb();
                             }
+                            if(node.hasOwnProperty('itemtype') && node.itemtype ==="proj"){
+                                localStorage.setItem('itProjectActive','yes');
+                            }
+                          
                         }
                     });
                 }
@@ -813,7 +833,9 @@ function loadSettingsTree(){
     loadTreeFuncNew();
 
     var loaddefaultenv = function(){
+       // return false;
             //alert('loading default');
+            //alert(1);
             if($('#tree').find('.fa-angle-down').length > 0) //reload the tree only if it has been expanded to refresh.
                 loadTreeFuncNew();
             var hasOrg = false;
@@ -821,17 +843,18 @@ function loadSettingsTree(){
             var hasProj = false;
             var hasEnv = false;
             var iteratetree = function(){
-              for(var o = 0;o < $('a[itemtype="org"]').length;o++){
-                $('a[itemtype="org"]').eq(o).trigger('click');
+                var $orgList=$('a[itemtype="org"]'),orgLen=$orgList.length;
+              for(var o = 0;o <orgLen;o++){
+                $orgList.eq(o).parent().find('.expand-collapse').trigger('click');
 
                // alert($('a[itemtype="bg"]').length);
                 for(var b = 0; b < $('a[itemtype="bg"]').length;b++){
                   hasOrg = true;
-                  $('a[itemtype="bg"]').eq(b).trigger('click');
+                  $('a[itemtype="bg"]').eq(b).parent().find('.expand-collapse').trigger('click');
                   for(var p = 0; p < $('a[itemtype="proj"]').length;p++){
                     //alert("in");
                     hasBg = true;
-                    $('a[itemtype="proj"]').eq(p).trigger('click');
+                    $('a[itemtype="proj"]').eq(p).parent().find('.expand-collapse').trigger('click');
                     if($('a[itemtype="env"]').length > 0)
                     {
                       hasProj = true;
@@ -872,8 +895,10 @@ function loadSettingsTree(){
 			selectFirstEnv();
 		}
 	};
-	checkandnavigatetotab();
+checkandnavigatetotab();
 loadSettingsTree();
+foldTreeForSetting();
+
  //function ends
  
 </script>

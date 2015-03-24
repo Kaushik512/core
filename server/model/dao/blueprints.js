@@ -42,14 +42,10 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.blueprintNameValidator
     },
-    appUrl1: {
+    appUrls: [{
         name: String,
         url: String
-    },
-    appUrl2: {
-        name: String,
-        url: String
-    },
+    }],
     templateId: {
         type: String,
         required: true,
@@ -291,8 +287,7 @@ var BlueprintsDao = function() {
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             name: blueprintData.name,
-            appUrl1 : blueprintData.appUrl1,
-            appUrl2 : blueprintData.appUrl2,
+            appUrls: blueprintData.appUrls,
             iconpath: blueprintData.iconpath,
             templateId: blueprintData.templateId,
             templateType: blueprintData.templateType,

@@ -362,9 +362,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         icon: 'fa fa-fw fa-1x fa-tasks',
                                                                         nodes: envs_,
                                                                         borderColor: '#000',
-                                                                        selectable: false,
+                                                                        selectable: true,
                                                                         itemtype: 'proj',
                                                                         href: '#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'],
+                                                                        //background: '#40baf1',
+                                                                        //color: '#40baf1 !important',
                                                                         environments: envs
                                                                     });
                                                                     //javascript:void(0) #ajax/ProjectSummary.html?projid=' + docprojs[_prj]['rowid']
