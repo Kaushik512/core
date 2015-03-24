@@ -271,6 +271,7 @@ var d4dMastersProviders = new mongoose.Schema(
         accesskey:{type:String,required:true,trim:true},
         secretkey:{type:String,required:true,trim:true},
         providertype: {type:String,required:true,trim:true},
+        securitygroupids: {type:[String],required:true,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');
@@ -278,10 +279,12 @@ var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMast
 var d4dMastersImages = new mongoose.Schema(
 		{id: {type:String,required:true, trim:true},
 		imagename:{type:String,required:true,trim:true},
+		imageidentifire: {type:String,required:true,trim:true},
+		osusername: {type:String,required:true,trim:true},
+		ostype: {type:String,required:true,trim:true},
+		instancetypes: {type:[String],required:true,trim:true},
 		providername: {type:String,required:true,trim:true},
 		providername_rowid: {type:String,trim:true},
-		imageid: {type:String,required:true,trim:true},
-		region: {type:String,required:true,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersImages = mongoose.model('d4dModelMastersImages',d4dMastersImages,'d4dmastersnew');
