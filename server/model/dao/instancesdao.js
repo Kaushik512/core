@@ -303,9 +303,10 @@ var InstancesDao = function() {
         if (instanceType) {
             queryObj['blueprintData.templateType'] = instanceType;
         }
-        if (userName) {
-            queryObj.users = userName;
-        }
+        //Removed as a team check for the project happens at the route. - Vinod
+        // if (userName) {
+        //     queryObj.users = userName;
+        // }
         Instances.find(queryObj, {
             'actionLogs': false
         }, function(err, data) {

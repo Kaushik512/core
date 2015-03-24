@@ -222,7 +222,7 @@
                                              
 
                                           </div>
-                                          <div class="col-lg-6" style="margin-top:5px;">
+                                          <div class="col-lg-6 hidden" style="margin-top:5px;">
                                                 <label for="">Assign Users<span style="color:red">*</span></label>
                                                 
                                                     <div class="userListLoadingContainer">
@@ -232,7 +232,7 @@
 
                                                         </select> 
                                                   
-                                                </div>
+                                              </div>
                                               <div class="col-lg-6" style="margin-top:5px">
                                                 <label for="category">Project <span style="color:red">*</span>
                                                 </label>
@@ -1080,16 +1080,18 @@ $(document).ready(function(){
                    alert("Please choose an environment");
                    return false;
                }
+               $('#userListSelect').find('option').attr('selected','selected');
                reqBody.users = $('#userListSelect').val();
 
                if (!reqBody.users) {
+
                    alert("Please choose users");
                    return false;
                }
                //alert(JSON.stringify(reqBody));
             var appUrls = [];
             var $appURLContainers = $('.applicationURLContainer');
-            $applicationURLContainer.each(function() {
+            $appURLContainers.each(function() {
                 $this = $(this);
                 var appName = $this.find('.appName').val();
                 var appURL = $this.find('.appURL').val();
