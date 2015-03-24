@@ -347,7 +347,7 @@
                                 </tbody>
 
                             </table>
-                                <table id="envtableApp" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                     <thead>
                                         <tr class="rowCustomStyle">
                                             
@@ -1202,6 +1202,18 @@ $(document).ready(function(){
                    return false;
                }
                //alert(JSON.stringify(reqBody));
+               var appUrls = []; 
+               var $appUrlTableBody = $('#appUrlTable tbody');
+               var $trs = $appUrlTableBody.find('tr');
+               alert($trs.length);
+               $trs.each(function(e){
+                 var $this = $(this);
+                 appUrls.push($this.data('appUrlData'));
+               });
+
+               reqBody.appUrls = appUrls;
+
+
            
             
                
@@ -1408,22 +1420,36 @@ $(document).ready(function () {
 </script>
 <script>
 $('#appURLForm').submit(function(e){
+            
             var $row = $('<tr/>');
+            var appName = $(this).find('.appName').val();
+            var appUrl = $(this).find('.appURL').val();
+            if(!(appName && appUrl)) {
+              alert("Please enter name and url");
+              return;
+            }
+
+            $row.data('appUrlData',{
+              name:appName,
+              url:appUrl
+            })
 
             var $tdName =$('<td/>');
-            $tdName.append($(this).find('.appName').val());
+            $tdName.append(appName);
             var $tdURL =$('<td/>');
-            $tdURL.append($(this).find('.appURL').val());
+            $tdURL.append(appUrl);
 
             var $tdAction =$('<td/>');
-            $tdAction.append('<div class="btn-group tableactionWidth"><button class="btn btn-xs btn-danger pull-left deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button><button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>');
+            $tdAction.append('<div class="btn-group tableactionWidth"><button class="btn btn-xs btn-danger pull-left deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+            //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
 
             $tdAction.find('.deleteURL').click(function(){
               $row.remove();
             });
 
             $row.append($tdName).append($tdURL).append($tdAction);
-            $('#envtableApp').find('tbody').append($row);
+            $('#appUrlTable').find('tbody').append($row);
             $('#modalAppNameURL').modal('hide');
             return false;
 
