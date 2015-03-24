@@ -1031,6 +1031,7 @@ function readform__(formID) {
 function readform(formID) {
         var formData = null;
         var button = $("form[id*='myForm']").find('button');
+        alert(button.attr('class'));
         //    alert("force edit:" + forceEdit);
         //Prefilling dropdowns
         $('select[cdata="catalyst"]').each(function() {

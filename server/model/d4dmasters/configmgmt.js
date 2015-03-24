@@ -938,11 +938,7 @@ function Configmgmt() {
                                     var rid = {};
                                     rid[k['rowid']] = k['teamname'];
                                     rowidval.push(rid);
-                                    if (i >= teamdata_.length - 1) {
-                                        //   console.log('rowidval' + JSON.stringify(rowidval));
-                                        callback(null, rowidval);
-                                    }
-                                    i++;
+                                   
                                     //  console.log(k['rowid'], k['environmentname'],envdata_.length);
                                 });
 
@@ -953,6 +949,7 @@ function Configmgmt() {
                                 }, function(err, providerdata) {
                                 if (providerdata) {
                                     var providerdata_ = JSON.parse(JSON.stringify(providerdata));
+                                    logger.debug('-----------------providerdata:' + JSON.stringify(providerdata));
                                     if (providerdata_.length <= 0) {
                                         console.log('rowidval' + JSON.stringify(rowidval));
                                         callback(null, rowidval);
