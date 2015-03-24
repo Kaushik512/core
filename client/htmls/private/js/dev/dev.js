@@ -729,7 +729,7 @@
                     return false;
                 }
                 var hasChefRunPermission= false;
-                if(haspermission("instancechefclientrun","modify")){
+                if(haspermission("instancechefclientrun","execute")){
                     hasChefRunPermission=true;
                 }
                 if(!hasChefRunPermission){
