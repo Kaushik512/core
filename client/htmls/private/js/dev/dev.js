@@ -2716,6 +2716,7 @@
                       if ($(this).is(':checked')) {
 
                           var instid = $(this).closest('tr').attr('data-instanceid');
+                          var instbpname = $(this).closest('tr').attr('data-blueprintname');
                           if (instid)
                               var $that = $(this);
                           var $td = $that.closest('td');
@@ -2747,51 +2748,67 @@
                           // alert(lp + ' ' + sp);
                           // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
                           $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp), function(data) {
-                              if (data == "OK") {
-                                  var $statmessage = $td.find('.dockerspinner').parent();
+                            //alert(JSON.stringify(data));
+                            if (data == "OK") {
+                                var $statmessage = $td.find('.dockerspinner').parent();
 
 
-                                  if (ep == 'null') {
-                                      $td.find('.dockerspinner').detach();
-                                      $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
-                                  } else {
-                                      if ($('#Containernamefield').val() != '') {
-                                          $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep, function(data) {
-                                              if (data == "OK") {
-                                                  $td.find('.dockerspinner').detach();
-                                                  $td.find('.dockermessage').detach();
-                                                  $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
+                                if (ep == 'null') {
+                                    $td.find('.dockerspinner').detach();
+                                    $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done </span>');
+                                } else {
+                                    if ($('#Containernamefield').val() != '') {
+                                        $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep, function(data) {
+                                            if (data == "OK") {
+                                                $td.find('.dockerspinner').detach();
+                                                $td.find('.dockermessage').detach();
+                                                $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done </span>');
 
-                                              } else {
-                                                  $('.dockerspinner').detach();
-                                                  $td.find('.dockermessage').detach();
-                                                  $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                              }
-                                          }); ///instances/dockerexecute/:instanceid/:containerid/:action
-                                      } else {
-                                          $('.dockerspinner').detach();
-                                          $td.find('.dockermessage').detach();
-                                          $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                          alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
-                                      }
+                                            } else {
+                                                $('.dockerspinner').detach();
+                                                $td.find('.dockermessage').detach();
+                                                $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                            }
+                                        }); ///instances/dockerexecute/:instanceid/:containerid/:action
+                                    } else {
+                                        $('.dockerspinner').detach();
+                                        $td.find('.dockermessage').detach();
+                                        $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                        alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
+                                    }
 
-                                  }
-                                  //Updating instance card to show the docker icon.
-                                  $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
-                                  //find the instance card - to do instance table view update
-                                  var $instancecard = $('div[data-instanceid="' + instid + '"]');
-                                  if ($instancecard.find('.dockerenabledinstacne').length <= 0) {
-                                      $instancecard.find('.componentlistContainer').first().append($dockericon);
-                                  }
-                                  //debugger;
-                                  loadContainersTable(); //Clearing and loading the containers again.
-                              } else {
-                                  var $statmessage = $('.dockerspinner').parent();
-                                  $('.dockerspinner').detach();
-                                  $td.find('.dockermessage').detach();
-                                  $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                              }
-                          });
+                                }
+                                //Updating instance card to show the docker icon.
+                                $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                                //find the instance card - to do instance table view update
+                                var $instancecard = $('div[data-instanceid="' + instid + '"]');
+                                if ($instancecard.find('.dockerenabledinstacne').length <= 0) {
+                                    $instancecard.find('.componentlistContainer').first().append($dockericon);
+                                }
+                                //debugger;
+                                loadContainersTable(); //Clearing and loading the containers again.
+                            } else {
+                              //alert(data);
+                                if(data.indexOf('No Docker Found') >= 0){
+                                    var $statmessage = $('.dockerspinner').parent();
+                                    $('.dockerspinner').detach();
+                                    $td.find('.dockermessage').detach();
+                                    $statmessage.append('<span style="margin-left:5px;color:red" title="Docker not found"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                    //Prompt user to execute the docker cookbook.
+                                    if(confirm('Docker was not found on the node : "' + instbpname + '". \nDo you wish to install it?')){
+                                        //Docker launcer popup had to be hidden due to overlap issue.
+                                        $('#launchDockerInstanceSelector').modal('hide');
+                                        $('a.actionbuttonChefClientRun[data-instanceid="' + instid + '"]').first().trigger('click');
+                                    }
+                                }
+                                else{
+                                var $statmessage = $('.dockerspinner').parent();
+                                $('.dockerspinner').detach();
+                                $td.find('.dockermessage').detach();
+                                $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                }
+                            }
+                        });
                       }
                   });
               });

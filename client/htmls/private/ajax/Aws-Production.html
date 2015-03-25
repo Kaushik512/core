@@ -290,7 +290,7 @@
                                   </div>
                               </div>
                               <!--adding new collapse-->
-                              <div class="panel panel-default appSeriesNameURL notFordocker">
+                              <div class="panel panel-default appSeriesNameURL notFordocker hidden">
                                       <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure App Name &amp; URL</a>
@@ -1205,7 +1205,7 @@ $(document).ready(function(){
                var appUrls = []; 
                var $appUrlTableBody = $('#appUrlTable tbody');
                var $trs = $appUrlTableBody.find('tr');
-               alert($trs.length);
+               //alert($trs.length);
                $trs.each(function(e){
                  var $this = $(this);
                  appUrls.push($this.data('appUrlData'));
@@ -1419,6 +1419,9 @@ $(document).ready(function () {
    });
 </script>
 <script>
+$('#newAppSeries').click(function(e){
+  $('#appURLForm').trigger("reset");
+})
 $('#appURLForm').submit(function(e){
             
             var $row = $('<tr/>');
@@ -1440,7 +1443,7 @@ $('#appURLForm').submit(function(e){
             $tdURL.append(appUrl);
 
             var $tdAction =$('<td/>');
-            $tdAction.append('<div class="btn-group tableactionWidth"><button class="btn btn-xs btn-danger pull-left deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+            $tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
             //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
 
