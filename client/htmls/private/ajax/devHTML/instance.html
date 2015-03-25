@@ -95,7 +95,7 @@
                             <a class="btn pull-right btn-danger right-button" title="Remove Instance" id="removeInstance" >
                                 <i class="fa fa-trash-o"></i>
                             </a>&nbsp;
-                            <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-toggle="modal">
+                            <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
                                 <i class="fa fa-laptop"/>
                             </a>
 
@@ -221,12 +221,12 @@
 
                         </div>
                         <!--app series-->
-                        <div class="applicationURLContainer hidden" id="appSeries12"> 
+                        <div class="applicationURLContainer" id="appSeries12"> 
                                                 <div class="col-lg-6" style="margin-top:15px;">
 
                                                 <label for="">Application Name</label>
 
-                                                <input type="text" name="appNameInput" class="form-control appName">
+                                                <input placeholder="Default" maxlength="8" type="text" name="appNameInput" class="form-control appName">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
 
@@ -237,12 +237,12 @@
 
                                                 <label for="">Application URL</label>
                                                 
-                                                <input type="text" name="appNameURL" class="form-control appURL">
+                                                <input type="url" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
                                               </div>
                                             </div>
-                        <a href="javascript:void(0);" class="clearfix pull-right addNewApp1 appDesignNew hidden">Add New</a>
+                        <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add AppName &amp; URL</a>
 
 
                 </div>
@@ -262,6 +262,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Import by IP ended-->
+
+
 
 <!--instance launching pad-->
 <div class="modal fade" id="instanceLogModalContainer" tabindex="-1" style='z-index:1800' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">

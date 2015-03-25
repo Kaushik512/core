@@ -63,8 +63,19 @@
             */
 
               $('.addNewApp1').click(function() {
-                  $('#appSeries12').clone().insertAfter('.applicationURLContainer:last');
+              $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
+  
+              var countApp =$('.applicationURLContainer').length;
+                    
+              if(countApp===2){
+                 $(this).addClass('hidden');
+                 return; 
+              }
+
               });
+
+
+              
 
               function disableImportLaunch() {
                   var hasIPPermission = false;
@@ -189,6 +200,11 @@
                       if (!hasChefServerPermission) {
                           bootbox.alert('Please add a Chef Server');
                           return false;
+                      }
+                      var appURLContainer =$('.applicationURLContainer').length;
+                      if(appURLContainer >1){
+                        $('.applicationURLContainer:last').remove();
+                        $('.addNewApp1').removeClass('hidden');
                       }
                       $('#nodeimportipresultmsg').addClass("hidden");
                       $('#addInstanceForm').trigger("reset");

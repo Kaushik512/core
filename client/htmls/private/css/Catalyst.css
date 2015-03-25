@@ -5991,9 +5991,15 @@ span.icon {
 }
 
 .marginForURL{
-    margin-left:40px;
+    margin-left:-25px;
+    text-align: center;
+    display:block;
 }
-
+.marginForURLCP{
+    margin-left: -4px;
+    text-align: center;
+    display:block;   
+}
 .marginForButtons{
     margin-right:15px;
 
@@ -7380,4 +7386,10 @@ background:url('../img/galleryIcons/start_icon.png');
 }
 .appSeriesHeight{
     height:106px;
+}
+.appTop{
+    margin-top: -20px;
+}
+.appUrlInput:hover{
+    border-color: gray;
 }
