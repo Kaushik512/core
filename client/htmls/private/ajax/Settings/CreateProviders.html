@@ -65,99 +65,94 @@
 
          <div class="col-lg-6 smart-form">
            <div class="border-color" style="height: 124px;margin-bottom: 10px;">
-             <input type="text" style="  height: 24px;width: 100%;
+             <label type="text" style="  height: 24px;width: 100%;
+             background: white;
+             text-align: center;line-height:2;" class="searchoptionforCookbooks form-control padding0">Security Group <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+             <ul id="securitygroup" class="deploymentsCookbookList deploymentsListCSS" style="height:98px;">
+
+             </ul>
+           </div>
+         </div>
+         <div class="col-lg-6 smart-form" id="instancesize">
+           <div class="border-color" style="height: 124px;margin-bottom: 10px;">
+             <label type="text" style="  height: 24px;width: 100%;
              background: white;
              text-align: center;
-             cursor: default;" Value="Security Group" disabled placeholder="Search Cookbooks" class="searchoptionforCookbooks form-control padding0">
-             <ul class="deploymentsCookbookList deploymentsListCSS" style="height:100px;">
+             line-height:2;" disabled class="searchoptionforCookbooks form-control padding0">Provider Type <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+             <ul class="deploymentsCookbookList deploymentsListCSS" style="height:98px;">
                <li>
                  <label class="checkbox" style="margin: 5px;">
-                   <input type="checkbox" name="checkboxCookbook" value="recipe[sysctl]" data-cookbookname="sysctl">
-                   <i></i>sysctl</label>
+                   <input type="checkbox" name="checkboxinstancesize" value="t1.micro" data-cookbookname="sysctl">
+                   <i></i>t1.micro</label>
                  </li>
-               </ul>
-             </div>
-           </div>
-           <div class="col-lg-6 smart-form" id="instancesize">
-             <div class="border-color" style="height: 124px;margin-bottom: 10px;">
-               <input type="text" style="  height: 24px;width: 100%;
-               background: white;
-               text-align: center;
-               cursor: default;" Value="Provider Type" disabled placeholder="Search Cookbooks" class="searchoptionforCookbooks form-control padding0">
-               <ul class="deploymentsCookbookList deploymentsListCSS" style="height:100px;">
+
                  <li>
                    <label class="checkbox" style="margin: 5px;">
-                     <input type="checkbox" name="checkboxinstancesize" value="t1.micro" data-cookbookname="sysctl">
-                     <i></i>t1.micro</label>
+                     <input type="checkbox" name="checkboxinstancesize" value="m1.small" data-cookbookname="sysctl">
+                     <i></i>m1.small</label>
                    </li>
 
                    <li>
                      <label class="checkbox" style="margin: 5px;">
-                       <input type="checkbox" name="checkboxinstancesize" value="m1.small" data-cookbookname="sysctl">
-                       <i></i>m1.small</label>
+                       <input type="checkbox" name="checkboxinstancesize" value="m1.medium" data-cookbookname="sysctl">
+                       <i></i>m1.medium</label>
                      </li>
 
                      <li>
                        <label class="checkbox" style="margin: 5px;">
-                         <input type="checkbox" name="checkboxinstancesize" value="m1.medium" data-cookbookname="sysctl">
-                         <i></i>m1.medium</label>
+                         <input type="checkbox" name="checkboxinstancesize" value="m1.large" data-cookbookname="sysctl">
+                         <i></i>m1.large</label>
                        </li>
 
                        <li>
                          <label class="checkbox" style="margin: 5px;">
-                           <input type="checkbox" name="checkboxinstancesize" value="m1.large" data-cookbookname="sysctl">
-                           <i></i>m1.large</label>
+                           <input type="checkbox" name="checkboxinstancesize" value="m1.xlarge" data-cookbookname="sysctl">
+                           <i></i>m1.xlarge</label>
                          </li>
-
-                         <li>
-                           <label class="checkbox" style="margin: 5px;">
-                             <input type="checkbox" name="checkboxinstancesize" value="m1.xlarge" data-cookbookname="sysctl">
-                             <i></i>m1.xlarge</label>
-                           </li>
-                         </ul>
-                       </div>
+                       </ul>
                      </div>
-                     <div class="col-lg-6">
-                       <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                       <!-- <i class="icon-append fa fa-building"></i> -->
-                       <input name="ctl00$MainContent$orgname" value="Default" id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
-
-                       <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                     </div>
-                     <div class="col-lg-6">
-                       <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                       <!-- <i class="icon-append fa fa-building"></i> -->
-                       <input name="ctl00$MainContent$orgname" value="Default" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
-
-                       <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                     </div>
-
                    </div>
+                   <div class="col-lg-6">
+                     <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                     <!-- <i class="icon-append fa fa-building"></i> -->
+                     <input name="ctl00$MainContent$orgname" value="Default" id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+
+                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                   </div>
+                   <div class="col-lg-6">
+                     <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                     <!-- <i class="icon-append fa fa-building"></i> -->
+                     <input name="ctl00$MainContent$orgname" value="Default" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+
+                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                   </div>
+
                  </div>
-                 <!-- end widget div -->
                </div>
-               <!-- end widget -->             
-             </article>
-             <!-- END COL -->
-           </div>
-           <!-- END ROW -->
-         </section>
-         <!-- end widget grid -->
-       </div>
+               <!-- end widget div -->
+             </div>
+             <!-- end widget -->             
+           </article>
+           <!-- END COL -->
+         </div>
+         <!-- END ROW -->
+       </section>
+       <!-- end widget grid -->
      </div>
    </div>
-   <div class="widget-toolbox clearfix">
-    <div class="btn-group pull-right">
-     <button class="btn btn-primary btn-mini" style="margin-right:11px;">
-       <i class="ace-icon fa fa-check bigger-110"></i>
-       Save
-     </button>
-     <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-       <i class="ace-icon fa fa-undo bigger-110"></i>
-       Cancel
-     </a>
-   </div>
  </div>
+ <div class="widget-toolbox clearfix">
+  <div class="btn-group pull-right">
+   <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+     <i class="ace-icon fa fa-check bigger-110"></i>
+     Save
+   </button>
+   <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
+     <i class="ace-icon fa fa-undo bigger-110"></i>
+     Cancel
+   </a>
+ </div>
+</div>
 </div>
 </form>
 </div>
@@ -186,13 +181,34 @@
 
  }
 
- function inLineReady() {
-   $("input[type='text']").on("click", function () {
+ function loadSecurityGroupID(){
+   $.ajax({
+    method: "POST",
+    url: "/providers/securitygroups",
+    data:{ "accesskey": "AKIAI6TVFFD23LMBJUPA", "secretkey": "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", "region": "us-west-2" }
+  }).done(function( msg ) {
+    var str='',getTemplate=function(val){
+     return '<li>'
+     + '<label class="checkbox" style="margin: 5px;">'
+     +'<input type="checkbox" name="securitygroup" value="'+val+'">'
+     +'<i></i>'+val+'</label></li>';
+   },len=msg.length;
+   for(var i=0;i<len;i++){
+    str=str+getTemplate(msg[i].GroupId);
+  }
+  $('#securitygroup').append(str);
+});
+
+}
+
+loadSecurityGroupID();
+function inLineReady() {
+ $("input[type='text']").on("click", function () {
    $(this).select();
    $("#msgOrgName").hide();
  });
-  $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
-  var ten = 9;
+ $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
+ var ten = 9;
        readformnew('9'); //9 is for Provider
        //
 
@@ -217,6 +233,8 @@
        $('#content').css('opacity','1 !important');
       // drawBreadCrumb1();
       enableUniqueCheckingForInputs(9);
+
+
     }
 
     inLineReady();
@@ -229,11 +247,14 @@
     $("#providername").focus();
     $('#myForm54').submit(function() {
       $(this).validate();
-      if(isFormValid()){
+      if(isFormValid() && $('[name="checkboxinstancesize"]').is(":checked") && $('[name="securitygroup"]').is(":checked")){
         /*alert('valid form submitted'); // for demo*/
                //validateandsaveform();
                providerTest();
              }
+             else{
+              alert("invalid form data");
+            }
             /* }else{
                 alert('invalid valid form submitted'); // for demo
               }*/
@@ -247,9 +268,9 @@
      instancesizes=[];
      $('[name="checkboxinstancesize"]').each(function(){
       $(this).is(":checked") && instancesizes.push($(this).val().trim());
-     });
+    });
 
-     $('.securitygroupids').each(function(){
+     $('[name="securitygroup"]').each(function(){
       $(this).is(":checked") && securityList.push($(this).val().trim());
     });
      inputData.accesskey = $('#accesskey').val().trim();
