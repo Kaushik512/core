@@ -62,16 +62,20 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
-              /*$('.addNewApp1').click(function() {
-                  $('#appSeries12').clone().insertAfter('.applicationURLContainer:last');
-              });*/
+              $('.addNewApp1').click(function() {
+              $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
+  
+              var countApp =$('.applicationURLContainer').length;
+                    
+              if(countApp===2){
+                 $(this).addClass('hidden');
+                 return; 
+              }
 
-              $("#modalContainerimportInstance").draggable({
-                  handle: ".modal-header"
               });
-              $("#modalAppUrlName").draggable({
-                  handle: ".modal-header"
-              });
+
+
+              
 
               function disableImportLaunch() {
                   var hasIPPermission = false;
@@ -196,6 +200,11 @@
                       if (!hasChefServerPermission) {
                           bootbox.alert('Please add a Chef Server');
                           return false;
+                      }
+                      var appURLContainer =$('.applicationURLContainer').length;
+                      if(appURLContainer >1){
+                        $('.applicationURLContainer:last').remove();
+                        $('.addNewApp1').removeClass('hidden');
                       }
                       $('#nodeimportipresultmsg').addClass("hidden");
                       $('#addInstanceForm').trigger("reset");
