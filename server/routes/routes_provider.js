@@ -3,6 +3,7 @@ var EC2 = require('../lib/ec2.js');
 
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/providers/*",sessionVerificationFunc);
+	
 	app.post('/providers/securitygroups',function(req,res){
 		logger.debug("Enter for Provider securitygroups. %s",req.body.accesskey)
 

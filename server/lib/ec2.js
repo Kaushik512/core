@@ -1,5 +1,6 @@
 var ping = require('net-ping');
 var aws = require('aws-sdk');
+var logger = require('../lib/logger')(module);
 
 
 if (process.env.http_proxy) {
@@ -260,6 +261,24 @@ var EC2 = function(awsSettings) {
                 return;
             }
             callback(null, data.SecurityGroups);
+        });
+    }
+
+    this.checkImageAvailability = function(imageid,callback){
+        var params = {
+            ExecutableUsers: [],
+            Filters: [],
+            ImageIds: [imageid],
+            Owners: []
+        };
+        ec.describeImages(params,function(err,data){
+            if(err){
+                logger.debug("Unable to describeImages from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to Describe Images from AWS.");
+            callback(null, data);
         });
     }
 
