@@ -182,7 +182,7 @@ $(function() {
 
 
     // loading envronments 
-    $.get('/d4dMasters/3/orgname_rowid/' + urlParams.org, function(envs) {
+    $.get('../d4dMasters/3/orgname_rowid/' + urlParams.org, function(envs) {
         envs = JSON.parse(envs);
         var $envList = $('#environmentList');
         if (envs.length) {

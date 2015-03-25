@@ -5,6 +5,7 @@ var logger = require('../../../lib/logger')(module);
 var schemaValidator = require('../../dao/schema-validator');
 
 var Build = require('./build/build.js');
+var AppInstance = require('./appinstance/appInstance');
 
 var Schema = mongoose.Schema;
 
@@ -43,7 +44,8 @@ var ApplicationSchema = new Schema({
         trim: true,
         validate: schemaValidator.catalystUsernameValidator
     }],
-    buildId: {}
+    buildId: String,
+    appInstances: [AppInstance.schema]
 
 });
 
@@ -91,6 +93,21 @@ ApplicationSchema.methods.getLastBuildInfo = function(callback) {
             return;
         }
         build.getLastBuild(callback);
+    });
+};
+
+ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
+    var self = this;
+    var appInstance = new AppInstance(appInstanceData);
+    this.appInstances.push(appInstance);
+    this.save(function(err, application) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null,appInstance);
+
     });
 };
 
