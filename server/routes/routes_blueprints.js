@@ -12,6 +12,7 @@ var Cryptography = require('../lib/utils/cryptography');
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var logger = require('../lib/logger')(module);
+var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -53,7 +54,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     }); // end app.post('/blueprints/:blueprintId/update' )
 
-    app.get('/blueprints/:blueprintId/versions/:version', function(req, res) {
+    app.get('/blueprints/:blueprintId/versionsList/:version', function(req, res) {
         logger.debug("Enter /blueprints/%s/versions/%s", req.params.blueprintId, req.params.version);
         blueprintsDao.getBlueprintVersionData(req.params.blueprintId, req.params.version, function(err, data) {
             if (err) {
@@ -175,6 +176,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     }
 
                                                     logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
+
+                                                    // Here vmimage nees to use
 
                                                     var ec2 = new EC2(settings.aws);
                                                     ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
@@ -729,6 +732,55 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
 
+    });
+
+    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/images/:imageId', function(req, res) {
+        logger.debug("Enter post() for /blueprints/organizations/%s/businessgroups/%s/projects/%s/environments/%s/images/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.imageId);
+        //validating if user has permission to save a blueprint
+        logger.debug('Verifying User permission set');
+        var user = req.session.user;
+        var category = 'blueprints';
+        var permissionto = 'create';
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            
+            
+            var blueprintData = req.body.blueprintData;
+            blueprintData.orgId = req.params.orgId;
+            blueprintData.bgId = req.params.bgId;
+            blueprintData.projectId = req.params.projectId;
+            blueprintData.envId = req.params.envId;
+            if (!blueprintData.runlist) {
+                blueprintData.runlist = [];
+            }
+            if (!blueprintData.users || !blueprintData.users.length) {
+                res.send(400);
+                return;
+            }
+
+            blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(data);
+            });
+            logger.debug("Exit post() for /blueprints/organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+        });
     });
 
 };

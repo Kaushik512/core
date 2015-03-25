@@ -32,6 +32,12 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.envIdValidator
     },
+    securityGroupId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.envIdValidator
+    },
     iconpath: {
         type: String,
         trim: true

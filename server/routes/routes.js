@@ -26,6 +26,7 @@ var application = require('./routes_application');
 var jira = require('./routes_jira');
 
 var provider = require('./routes_provider');
+var vmimage = require('./routes_vmImages');
 
 module.exports.setRoutes = function(app) {
 
@@ -69,6 +70,8 @@ module.exports.setRoutes = function(app) {
     jira.setRoutes(app, sessionVerificationFunc);
 
     provider.setRoutes(app, sessionVerificationFunc);
+
+    vmimage.setRoutes(app, sessionVerificationFunc);
 
 
     app.get('/', function(req, res) {
