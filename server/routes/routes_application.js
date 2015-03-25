@@ -112,4 +112,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.post('/applications/:applicationId/appInstances', function(req, res) {
+        var appInstanceData = req.body.appInstanceData;
+        if (!appInstanceData) {
+            res.send(400);
+            return;
+        }
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!application) {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+            application.addAppInstance(appInstanceData, function(err, appInstance) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                res.send(appInstance);
+            });
+        });
+    });
+
 };

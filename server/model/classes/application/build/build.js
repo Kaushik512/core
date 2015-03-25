@@ -108,6 +108,6 @@ buildSchema.statics.getBuildById = function(buildId, callback) {
 
 
 
-var BuildModel = mongoose.model('appbuild', buildSchema);
+var BuildModel = mongoose.model('appBuilds', buildSchema);
 
 module.exports = BuildModel;
