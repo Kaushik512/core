@@ -25,6 +25,8 @@ var jenkins = require('./routes_jenkins');
 var application = require('./routes_application');
 var jira = require('./routes_jira');
 
+var provider = require('./routes_provider');
+
 module.exports.setRoutes = function(app) {
 
 
@@ -65,6 +67,8 @@ module.exports.setRoutes = function(app) {
     application.setRoutes(app, sessionVerificationFunc);
 
     jira.setRoutes(app, sessionVerificationFunc);
+
+    provider.setRoutes(app, sessionVerificationFunc);
 
 
     app.get('/', function(req, res) {
