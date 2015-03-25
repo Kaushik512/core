@@ -34,8 +34,11 @@ $(function() {
         var timeString = new Date().setTime(buildHistory.timestampStarted);
         var date = new Date(timeString).toLocaleString();
 
-        var $tdTime = $('<td></td>').append(date);
-        $trHistoryRow.append($tdTime);
+        var $tdBuildNumber = $('<td></td>').append('<span>108</span>');
+        $trHistoryRow.append($tdBuildNumber);
+
+        var $tdBuildStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
+        $trHistoryRow.append($tdBuildStatus);
 
         var $tdUserName = $('<td></td>').append(buildHistory.user);
         $trHistoryRow.append($tdUserName);
@@ -51,6 +54,9 @@ $(function() {
         $tdUrls.find('.codeAnalysisTestUrl').attr('href', buildData.codeAnalysisUrl);
 
         $trHistoryRow.append($tdUrls);
+
+        var $tdTime = $('<td></td>').append(date);
+        $trHistoryRow.append($tdTime);
         var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
         $aLogs.click(function(e) {
             var $modal = $('#buildLogsModel');
@@ -346,6 +352,10 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
+            },{
+                "bSortable": true
+            },{
+                "bSortable": true
             }, {
                 "bSortable": true
             }, {
@@ -369,6 +379,8 @@ $(function() {
             }, {
                 "bSortable": true
             }, {
+                "bSortable": true
+            },{
                 "bSortable": true
             }, {
                 "bSortable": true
