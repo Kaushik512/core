@@ -272,6 +272,7 @@ var d4dMastersProviders = new mongoose.Schema(
         secretkey:{type:String,required:true,trim:true},
         providertype: {type:String,required:true,trim:true},
         securitygroupids: {type:[String],required:true,trim:true},
+        instanceUserName: {type:String,required:true,trim:true},
         rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');

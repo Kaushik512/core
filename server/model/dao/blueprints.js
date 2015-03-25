@@ -32,6 +32,12 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.envIdValidator
     },
+    vmImageId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.envIdValidator
+    },
     securityGroupId: {
         type: String,
         required: true,
@@ -90,22 +96,6 @@ var BlueprintSchema = new Schema({
         type: String,
         required: true
     }],
-    instanceType: {
-        type: String,
-        required: true
-    },
-    instanceOS: {
-        type: String,
-        required: true
-    },
-    instanceAmiid: {
-        type: String,
-        required: true
-    },
-    instanceUsername: {
-        type: String,
-        required: true
-    },
     importInstance: {
         type: Boolean
     },
