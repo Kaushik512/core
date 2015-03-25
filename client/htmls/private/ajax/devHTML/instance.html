@@ -221,12 +221,12 @@
 
                         </div>
                         <!--app series-->
-                        <!-- <div class="applicationURLContainer" id="appSeries12"> 
+                        <div class="applicationURLContainer" id="appSeries12"> 
                                                 <div class="col-lg-6" style="margin-top:15px;">
 
                                                 <label for="">Application Name</label>
 
-                                                <input type="text" name="appNameInput" class="form-control appName">
+                                                <input placeholder="Default" maxlength="8" type="text" name="appNameInput" class="form-control appName">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
 
@@ -237,12 +237,12 @@
 
                                                 <label for="">Application URL</label>
                                                 
-                                                <input type="text" name="appNameURL" class="form-control appURL">
+                                                <input type="url" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
                                               </div>
-                                            </div> -->
-                        <a href="#modalAppUrlName" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add AppName &amp; URL</a>
+                                            </div>
+                        <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add AppName &amp; URL</a>
 
 
                 </div>
@@ -263,67 +263,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal for Import by IP ended-->
 
-<!--modal for app Series-->
-<div class="modal fade" id="modalAppUrlName" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form role="form" id="addInstanceForm12345" autocomplete="off">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title">
-                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Application Name &amp; URL
-                    </h4>
-                </div>
 
-                <div class="modal-body appSeriesHeight">
-                        
-
-                        
-                        <!--app series-->
-                        <div class="applicationURLContainer" id="appSeries12"> 
-                                                <div class="col-lg-6" style="margin-top:15px;">
-
-                                                <label for="">Application Name</label>
-
-                                                <input type="text" name="appNameInput" class="form-control appName">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
-
-
-                                               </div>
-
-                                               <div class="col-lg-6" style="margin-top:15px">
-
-                                                <label for="">Application URL</label>
-                                                
-                                                <input type="text" name="appNameURL" class="form-control appURL">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
-                                              </div>
-                                            </div>
-                        
-
-
-                </div>
-                <div class="modal-footer">
-                    <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                    <label id="nodeimportipresultmsg" class=" hidden"></label>
-                    <div class="marginForButtons">
-                        <button id="addInstanceBtn" class="btn btn-primary" type="submit">
-                            <i class="fa fa-upload fa-1x"></i>&nbsp;Add
-                        </button>
-                        <a class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal for Import by IP ended-->
-<!--modal for app series ends here-->
 
 <!--instance launching pad-->
 <div class="modal fade" id="instanceLogModalContainer" tabindex="-1" style='z-index:1800' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
