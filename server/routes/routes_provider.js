@@ -3,13 +3,13 @@ var EC2 = require('../lib/ec2.js');
 
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/providers/*",sessionVerificationFunc);
-	app.get('providers/securitygroups/:accesskey/:secretkey/:region',function(req,res){
-		logger.debug("Enter for Provider securitygroups.")
+	app.post('/providers/securitygroups',function(req,res){
+		logger.debug("Enter for Provider securitygroups. %s",req.body.accesskey)
 
 		var ec2 = new EC2({
-			"access_key": req.params.accesskey,
-			"secret_key": req.params.secretkey,
-			"region"    : req.params.region
+			"access_key": req.body.accesskey,
+			"secret_key": req.body.secretkey,
+			"region"    : req.body.region
 		});
 
 		ec2.getSecurityGroups(function(err,data){
