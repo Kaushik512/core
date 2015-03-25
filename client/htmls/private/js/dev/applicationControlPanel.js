@@ -249,6 +249,88 @@ $(function() {
         if (app) {
             $cardList.append(createAppCard(app));
         }
+
+        // loading envronments 
+        $.get('../d4dMasters/3/orgname_rowid/' + app.orgId, function(envs) {
+            envs = JSON.parse(envs);
+            var $envList = $('#environmentList');
+            if (envs.length) {
+                $envList.prop("disabled", false);
+            }
+            for (var i = 0; i < envs.length; i++) {
+                var $option = $('<option></option>').html(envs[i].environmentname).val(envs[i].rowid);
+                $envList.append($option);
+            }
+
+            $envList.change(function(e) {
+
+                var envId = $(this).val();
+                if (envId) {
+                    var $taskList = $('#deploymentTaskList').empty();
+                    $.get('/organizations/' + app.orgId + '/businessgroups/' + app.bgId + '/projects/' + app.projectId + '/environments/' + envId + '/tasks', function(tasks) {
+                        for (var i = 0; i < tasks.length; i++) {
+                            if (tasks[i].taskType === 'chef') {
+                                var $li = $('<li></li>');
+                                $li.append('<label style="margin: 5px;" class="checkbox"><input type="checkbox" data-tasknamename="' + tasks[i].name + '" name="checkboxTasklist" value="' + tasks[i]._id + '"><i></i>' + tasks[i].name + '</label>');
+                                $taskList.append($li);
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+
+    });
+
+
+
+    // addAppInstanceBtn 
+
+    $('.addAppInstanceBtn').click(function(e) {
+
+        var reqBody = {};
+        reqBody.name = $('#applicationInstanceNameInput').val();
+        if (!reqBody.name) {
+            alert('Please Enter AppInstance Name');
+            return;
+        }
+        reqBody.envId = $('#environmentList').val();
+        if (!reqBody.envId) {
+            alert('Please Choose an Environment');
+            return;
+        }
+        var taskIds = [];
+        var $inputs = $('.deploymentSelectedTasks').find('input');
+        $inputs.each(function(e) {
+            taskIds.push($(this).val());
+        });
+        reqBody.workflows = [{
+            name: $('#applicationWorkflowNameInput').val(),
+            taskIds: taskIds
+        }]
+        if (!reqBody.workflows[0].name) {
+            alert('Please Enter Workflow name');
+            return;
+        }
+
+        if (!reqBody.workflows[0].taskIds.length) {
+            alert('Please Choose tasks');
+            return;
+        }
+
+        $.post('../applications/'+urlParams.appId+'/appInstances',{
+            appInstanceData:reqBody
+        },function(data){
+            console.log(data);
+            $('#modaladdAppInstances').modal('hide');
+        }).fail(function(jxhr){
+           alert('Server Behaved Unexpectedly');
+        });
+
+
     });
 
 
@@ -288,7 +370,7 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }, {
                 "bSortable": false
@@ -381,7 +463,7 @@ $(function() {
 
     $('.btnItemAdd').click(function(e) {
         //alert('hello');
-        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        var $deploymentSelectedList = $('.deploymentSelectedTasks');
         var $selectedCookbooks = $("input[name=checkboxTasklist]:checked");
         $selectedCookbooks.each(function(idx) {
             var $this = $(this);
@@ -400,7 +482,7 @@ $(function() {
     });
 
     $('.btnItemRemove').click(function(e) {
-        var $deploymentSelectedList = $('.deploymentSelectedRunList');
+        var $deploymentSelectedList = $('.deploymentSelectedTasks');
         $deploymentSelectedList.find('.deploymentCookbookSelected').each(function() {
             var value = $(this).find('input').val();
             var selector = 'input[name=checkboxRole][value="' + value + '"]';

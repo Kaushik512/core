@@ -805,22 +805,11 @@
                   </div>
                   <div class="col-lg-6">
                     <label for="">Choose Environment:<span style="color:red">*</span></label>
-                    <select class="chooseEnvironment width-100">
-                      <option value="">Dev</option>
-                      <option value="">QA</option>
-                      <option value="">Prod</option>
+                    <select id="environmentList" class="chooseEnvironment width-100">
+                      <option>Choose</option>
                     </select>
                   </div>
-                  <!-- <div class="col-lg-6" style="padding-right:0px;">
-                    <div class="smart-forms">
-                      <label for="">Application Icon<span class="control-label" style="color:Red;">&nbsp;*</span></label>
-                      <label class="file" name="field" for="">
-                          <span class="button btn-primary btn-applicationIcon" style="margin-top:24px;margin-right:0px;">Browse</span>
-                          <input type="file" class="gui-file" id="applicationiconInput">
-                          <input type="text" class="gui-input" readonly="">
-                      </label>
-                    </div>
-                  </div> -->
+                 
                 </div>
                 <br>
                   <div class="panel-group smart-accordion-default" id="accordion-DesignaddApp">
@@ -841,23 +830,7 @@
                               </div>
                             </div>
                           </form>  
-                          <!-- <form action="" class="smart-form">
-                              <div class="widget-body no-padding">
-                                <fieldset style="padding:0px;">
-                                    <section class="col col-6">
-                                        <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                        <label class="input">
-                                            <select class="chooseEnvironment width-100">
-                                                <option value="">DEV</option>
-                                                <option value="">QA</option>
-                                                <option value="">Stage</option>
-                                                <option value="">Production</option>
-                                            </select>   
-                                        </label>
-                                    </section>                       
-                                </fieldset>
-                              </div>
-                            </form>  --> 
+                        
                           <div class="panel-body">
                             
                                 
@@ -871,29 +844,10 @@
                                         </label>
                                         <div class="row">
                                             <div class="col col-10" style="padding-left:0px;padding-right:0px">
-                                                <ul class="deploymentCookbookList" style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
+                                                <ul id="deploymentTaskList" style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
                                                     <label style="text-align:center;" class="label">Select Tasks</label>
                                                     <hr>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task1" name="checkboxTasklist" value="Task1"><i></i>Task1
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task2" name="checkboxTasklist" value="Task2"><i></i>Task2
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task3" name="checkboxTasklist" value="Task3"><i></i>Task3
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label style="margin: 5px;" class="checkbox">
-                                                        <input type="checkbox" data-tasknamename="Task4" name="checkboxTasklist" value="Task4"><i></i>Task4
-                                                    </label>
-                                                </li>
+                                            
                                             </ul>
                                             </div>
                                             <div class="col col-2" style="margin-top:50px;">
@@ -917,21 +871,10 @@
                                         </label>
                                         <div class="row">
                                             <div class="col col-10" style="padding-right:0px">
-                                                <ul class="deploymentSelectedRunList" style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
+                                                <ul class="deploymentSelectedTasks" style="border:1px solid #dddddd;list-style:none outside none;height:150px;overflow-y:auto;">
                                                     
                                                 </ul>
                                             </div>
-                                            <!-- <div class="col col-2" style="margin-top:50px;">
-                                                <div class="input-group">
-                                                    <div class="btn-group" style="padding-bottom: 10px;">
-                                                        <button type="button" style="width:30px;height:27px;" class="btn btn-default btn-primary btnItemUp" id=""><i class="fa fa-angle-double-up" style="font-size:20px;"></i></button>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                    <div class="btn-group">
-                                                        <button type="button" style="width:30px;height:27px;" class="btn btn-default btn-primary btnItemDown" id=""><i class="fa fa-angle-double-down" style="font-size:20px;"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                         </div>
                                     </section>
                                     <section class="col col-6" style="padding-left:0px;">
@@ -946,7 +889,7 @@
             </div>
              <div class="modal-footer">
                 <div class="btn-group" style="margin-left:200px;">                                 
-                 <a class="btn btn-primary importSaveBtn" data-dismiss="modal">
+                 <a class="btn btn-primary addAppInstanceBtn">
                     <i class="ace-icon fa fa-save bigger-110"></i>
                     Save
                 </a>

@@ -204,7 +204,7 @@
                                   <div class="col-lg-6">
                                     <label for="name">Blueprint Name:
                                     <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <input  id="blueprintNameInput" class="form-control" type="text" autofocus="autofocus">
+                                    <input  id="blueprintNameInput" maxlength="25" class="form-control" type="text" autofocus="autofocus" >
                                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                  </div>
  
@@ -290,10 +290,10 @@
                                   </div>
                               </div>
                               <!--adding new collapse-->
-                              <div class="panel panel-default appSeriesNameURL notFordocker hidden">
+                              <div class="panel panel-default appSeriesNameURL notFordocker">
                                       <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure App Name &amp; URL</a>
+                                            <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Application URL</a>
                                           </h4>
                                       </div>
                                       <div id="CollapseApp" class="panel-collapse collapse">
@@ -305,7 +305,7 @@
             <div class="widget-box">
                 <div class="widget-header">
                     <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Application Series</strong>
+                    <strong>Application URL</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         
@@ -323,8 +323,8 @@
                             <table id="appTable" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>Application Name</td>
-                                        <td>Application URL</td>
+                                        <td>Name</td>
+                                        <td>URL</td>
                                         <td>Action</td>
                                     </tr>
                                 </thead>
@@ -351,13 +351,13 @@
                                     <thead>
                                         <tr class="rowCustomStyle">
                                             
-                                            <td>Application Name</td>
-                                            <td>Application URL</td>
-                                            <td class="">Action</td>
+                                            <td style="width:20%">Name</td>
+                                            <td style="width:40%">URL</td>
+                                            <td style="width:20%" class="">Action</td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr><td colspan=3 id="appEntry">No Data Available</td></tr>
                                        
                                     </tbody>
                                     
@@ -477,7 +477,7 @@
 
                                                 <label for="">Application Name<span style="color:red">*</label>
 
-                                                <input type="text" name="appNameInput" class="form-control appName">
+                                                <input placeholder="Default" type="text" maxlength="8" name="appNameInput" class="form-control appName">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
 
@@ -488,7 +488,7 @@
 
                                                 <label for="">Application URL<span style="color:red">*</label>
                                                 
-                                                <input type="text" name="appNameURL" class="form-control appURL">
+                                                <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="URL">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
                                               </div>
@@ -511,7 +511,7 @@
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal for Import by IP ended-->
+</div><!-- /.modal for appSeries ends-->
 <!--app series ends here-->
 <!--launch docker-->
 <div class="modal fade bs-example-modal-lg" id="myModalLabelDockerContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -631,9 +631,9 @@ $('#launchParamDocker').click(function(){
 });
 
 //for adding the new App Series(Name and URL)
-$('.addNewApp').click(function() {
+/*$('.addNewApp').click(function() {
   $('#appSeries').clone().insertAfter('.applicationURLContainer:last');
-});
+})*/;
 
 function generateDockerLaunchParams(){
   if($('#Containernamefield').val() == ''){
@@ -1421,6 +1421,15 @@ $(document).ready(function () {
 <script>
 $('#newAppSeries').click(function(e){
   $('#appURLForm').trigger("reset");
+  
+});
+$('#addAppBtn').click(function(e){
+  var rowCount1 = $('#appUrlTable').find('tbody > tr').length;
+    //alert(rowCount1);    
+    if(rowCount1===2){
+        $('#newAppSeries').addClass('hidden');
+        return; 
+    }
 })
 $('#appURLForm').submit(function(e){
             
@@ -1428,8 +1437,8 @@ $('#appURLForm').submit(function(e){
             var appName = $(this).find('.appName').val();
             var appUrl = $(this).find('.appURL').val();
             if(!(appName && appUrl)) {
-              alert("Please enter name and url");
-              return;
+              alert("Please enter Name and Url");
+              return false;
             }
 
             $row.data('appUrlData',{
@@ -1446,16 +1455,25 @@ $('#appURLForm').submit(function(e){
             $tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
             //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
-
             $tdAction.find('.deleteURL').click(function(){
               $row.remove();
+              var rowCount2 = $('#appUrlTable').find('tbody > tr').length;
+              if(rowCount2===1){
+                $('#appEntry').removeClass('hidden');
+                return;
+              }
+              if(rowCount2<3){
+                //alert(rowCount2);
+                $('#newAppSeries').removeClass('hidden');
+                return;
+              }
             });
 
             $row.append($tdName).append($tdURL).append($tdAction);
             $('#appUrlTable').find('tbody').append($row);
             $('#modalAppNameURL').modal('hide');
+            $('#appEntry').addClass('hidden');
             return false;
 
-})
-
+});
 </script>
