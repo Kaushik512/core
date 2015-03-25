@@ -1939,11 +1939,11 @@
                       $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                       $launchResultContainer.find('.modal-title').html('Launching Blueprint');
                       $launchResultContainer.modal('show');
-                      for (var i = 0; i < $selectedItems.length; i++) {
-                          var projectId = $($selectedItems.get(i)).attr('data-projectId');
-                          var envId = $($selectedItems.get(i)).attr('data-envId');
-                          var blueprintId = $($selectedItems.get(i)).attr('data-blueprintId');
-                          var version = $($selectedItems.get(i)).find('.blueprintVersionDropDown').val();
+                      if($selectedItems.length) {
+                          var projectId = $($selectedItems.get(0)).attr('data-projectId');
+                          var envId = $($selectedItems.get(0)).attr('data-envId');
+                          var blueprintId = $($selectedItems.get(0)).attr('data-blueprintId');
+                          var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
                           // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
                           $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
 
