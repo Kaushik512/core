@@ -204,7 +204,7 @@
         url: "/providers/securitygroups",
         data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" },
         error:function(XMLHttpRequest, textStatus, errorThrown) { 
-          bootbox.alert('Invalid Access Key and Secret Key');
+          bootbox.alert('Invalid Access Key Or Secret Key');
           removeLoader();
           $('#securitygroupids').empty();
 
