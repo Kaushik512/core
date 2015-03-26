@@ -107,7 +107,7 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
             callback(err, null);
             return;
         }
-        application.getNodes(function(err, nodes) {
+        /*application.getNodes(function(err, nodes) {
             if (err) {
                 logger.error(err);
                 callback(err, null);
@@ -115,8 +115,60 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
             }
             application.nodes = nodes;
             callback(null, application);
-        });
+        });*/
+        callback(null, appInstance);
     });
+};
+
+ApplicationSchema.methods.removeAppInstance = function(appInstanceId, callback) {
+    var found = false;
+    if (!this.appInstances.length) {
+        callback({
+            message: "AppInstance does not exists"
+        }, null);
+        return;
+    }
+    var appInstance;
+    for (var i = 0; i < this.appInstances.length; i++) {
+        if (appInstanceId == this.appInstances[i]._id) {
+            appInstance = this.appInstances[i];
+            this.appInstances.splice(i, 1);
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        callback({
+            message: "AppInstance does not exists"
+        }, null);
+        return;
+    }
+    this.save(function(err, application) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, appInstance);
+    });
+};
+
+
+
+ApplicationSchema.methods.getAppInstance = function(appInstanceId) {
+    var appInstances = this.appInstances;
+    if (!appInstances.length) {
+        return null;
+    }
+    var appInstance = null;
+    for (var i = 0; i < appInstances.length; i++) {
+        if (appInstanceId == appInstances[i]._id) {
+            appInstance = appInstances[i];
+            break;
+        }
+    }
+
+    return appInstance;
 };
 
 ApplicationSchema.methods.getNodes = function(callback) {
@@ -167,22 +219,24 @@ ApplicationSchema.statics.getApplicationById = function(applicationId, callback)
             var count = 0;
 
             function getAppInstancesNodes(appInstance) {
-                count++;
-                appinstance.getNodes(err, function(err, nodes) {
+                appInstance.getNodes(function(err, nodes) {
+                    count++;
                     if (err) {
                         callback(err, null);
                         return;
                     }
                     appInstance.nodes = nodes;
-                    if (count < self.appInstances.length) {
-                        getAppInstancesNodes(self.appInstances[count]);
+                    if (count < application.appInstances.length) {
+                        getAppInstancesNodes(application.appInstances[count]);
                     } else {
                         callback(null, application);
                     }
 
                 });
 
-            }*/
+            }
+            getAppInstancesNodes(application.appInstances[count]);
+            */
             callback(null, application);
         } else {
             callback(null, null);
