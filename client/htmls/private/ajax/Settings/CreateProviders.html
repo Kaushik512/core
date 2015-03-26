@@ -39,6 +39,7 @@
                <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                <!-- <i class="icon-append fa fa-building"></i> -->
                <input name="ctl00$MainContent$orgname" value="Default" id="providername" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+               <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
              </div>                                                         
 
 
@@ -46,7 +47,7 @@
               <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
               <select id="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
                <option value="">Select Provider</option>
-               <option value="us-west-2">AWS</option>
+               <option value="aws">AWS</option>
              </select>
              <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
            </div>   
@@ -54,7 +55,26 @@
          </div>
 
          <div class="row">
-           <div class="col-lg-6">
+          
+        <!-- -->
+        <div class="col-lg-6">
+         <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+         <!-- <i class="icon-append fa fa-building"></i> -->
+         <input name="ctl00$MainContent$orgname" value="AKIAI6TVFFD23LMBJUPA" id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+
+         <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+       </div>
+       <div class="col-lg-6">
+         <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+         <!-- <i class="icon-append fa fa-building"></i> -->
+         <input name="ctl00$MainContent$orgname" value="qZOZuI2Ys0/Nc7txsc0V2eMMVnsEK6+Qa03Vqiyw" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+
+         <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+       </div>
+
+     </div>
+     <div class="row">
+        <div class="col-lg-6">
             <label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
             <select id="region" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
              <option value="">Select Region</option>
@@ -63,87 +83,31 @@
            <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
          </div>
 
-         <div class="col-lg-6 smart-form">
-           <div class="border-color" style="height: 124px;margin-bottom: 10px;">
-             <label type="text" style="  height: 24px;width: 100%;
-             background: white;
-             text-align: center;line-height:2;" class="searchoptionforCookbooks form-control padding0">Security Group <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-             <ul id="securitygroup" class="deploymentsCookbookList deploymentsListCSS" style="height:98px;">
+         <div class="col-lg-6 smart-form" style="">
+          <label for="category">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+          <div id="securitygroup" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" sourcepath="21" cdata="catalyst" cat-validation="onechecked">
 
-             </ul>
-           </div>
-         </div>
-         <div class="col-lg-6 smart-form" id="instancesize">
-           <div class="border-color" style="height: 124px;margin-bottom: 10px;">
-             <label type="text" style="  height: 24px;width: 100%;
-             background: white;
-             text-align: center;
-             line-height:2;" disabled class="searchoptionforCookbooks form-control padding0">Provider Type <span style="color:Red;" class="control-label">&nbsp;*</span></label>
-             <ul class="deploymentsCookbookList deploymentsListCSS" style="height:98px;">
-               <li>
-                 <label class="checkbox" style="margin: 5px;">
-                   <input type="checkbox" name="checkboxinstancesize" value="t1.micro" data-cookbookname="sysctl">
-                   <i></i>t1.micro</label>
-                 </li>
+          </div>
+        </div>
 
-                 <li>
-                   <label class="checkbox" style="margin: 5px;">
-                     <input type="checkbox" name="checkboxinstancesize" value="m1.small" data-cookbookname="sysctl">
-                     <i></i>m1.small</label>
-                   </li>
-
-                   <li>
-                     <label class="checkbox" style="margin: 5px;">
-                       <input type="checkbox" name="checkboxinstancesize" value="m1.medium" data-cookbookname="sysctl">
-                       <i></i>m1.medium</label>
-                     </li>
-
-                     <li>
-                       <label class="checkbox" style="margin: 5px;">
-                         <input type="checkbox" name="checkboxinstancesize" value="m1.large" data-cookbookname="sysctl">
-                         <i></i>m1.large</label>
-                       </li>
-
-                       <li>
-                         <label class="checkbox" style="margin: 5px;">
-                           <input type="checkbox" name="checkboxinstancesize" value="m1.xlarge" data-cookbookname="sysctl">
-                           <i></i>m1.xlarge</label>
-                         </li>
-                       </ul>
-                     </div>
-                   </div>
-                   <div class="col-lg-6">
-                     <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                     <!-- <i class="icon-append fa fa-building"></i> -->
-                     <input name="ctl00$MainContent$orgname" value="Default" id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
-
-                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                   </div>
-                   <div class="col-lg-6">
-                     <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                     <!-- <i class="icon-append fa fa-building"></i> -->
-                     <input name="ctl00$MainContent$orgname" value="Default" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
-
-                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                   </div>
-
-                 </div>
-               </div>
-               <!-- end widget div -->
-             </div>
-             <!-- end widget -->             
-           </article>
-           <!-- END COL -->
-         </div>
-         <!-- END ROW -->
-       </section>
-       <!-- end widget grid -->
+       
      </div>
    </div>
+   <!-- end widget div -->
  </div>
- <div class="widget-toolbox clearfix">
+ <!-- end widget -->             
+</article>
+<!-- END COL -->
+</div>
+<!-- END ROW -->
+</section>
+<!-- end widget grid -->
+</div>
+</div>
+</div>
+<div class="widget-toolbox clearfix">
   <div class="btn-group pull-right">
-   <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+   <button id="btnsubmit" class="btn btn-primary btn-mini" disabled style="margin-right:11px;" onclick="providerTest();">
      <i class="ace-icon fa fa-check bigger-110"></i>
      Save
    </button>
@@ -172,36 +136,36 @@
     //   alert(folderpath);
     $('#folderpath').val(folderpath);
   }
-  function validateandsaveform(){
+  
+function appendLoader(){
+   $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+}
+  function loadSecurityGroupID(accesskey,secretkey){
+appendLoader();
+ 
+    $.ajax({
+      method: "POST",
+      url: "/providers/securitygroups",
+      data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" }
+    }).done(function( msg ) {
 
-   if(validateForm()) {
-     setfolderpath(); 
-     saveform('23');
-   }
-
- }
-
- function loadSecurityGroupID(){
-   $.ajax({
-    method: "POST",
-    url: "/providers/securitygroups",
-    data:{ "accesskey": "AKIAI6TVFFD23LMBJUPA", "secretkey": "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", "region": "us-west-2" }
-  }).done(function( msg ) {
-    var str='',getTemplate=function(val){
-     return '<li>'
-     + '<label class="checkbox" style="margin: 5px;">'
-     +'<input type="checkbox" name="securitygroup" value="'+val+'">'
-     +'<i></i>'+val+'</label></li>';
-   },len=msg.length;
-   for(var i=0;i<len;i++){
+      var str='',getTemplate=function(val){
+     return '<label class="toggle font-sm"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
+     'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
+      'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
+    'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
+  },len=msg.length;
+  for(var i=0;i<4;i++){
+    console.log(getTemplate(msg[i].GroupId));
     str=str+getTemplate(msg[i].GroupId);
   }
-  $('#securitygroup').append(str);
+  $('#securitygroup').html('').append(str);
+  $('#btnsubmit').removeAttr('disabled');
+  $('#masterssavespinner').remove();
 });
 
 }
 
-loadSecurityGroupID();
 function inLineReady() {
  $("input[type='text']").on("click", function () {
    $(this).select();
@@ -242,52 +206,97 @@ function inLineReady() {
   </script>
   <script>
    $(document).ready(function () {
+
+    function checkForSecurityGroup(){
+      var accesskey=$('#accesskey').val(),
+      secretkey=$('#secretkey').val();
+      if(accesskey && secretkey && accesskey!=='' && secretkey!==''){
+        loadSecurityGroupID(accesskey,secretkey);
+
+      }else{
+        $('#btnsubmit').attr('disabled','disabled');
+
+      }
+    }
+
     $('#providertype').select2();
     $('#region').select2();
     $("#providername").focus();
+
+    $('#accesskey').blur(checkForSecurityGroup);
+    $('#secretkey').blur(checkForSecurityGroup);
+
     $('#myForm54').submit(function() {
       $(this).validate();
-      if(isFormValid() && $('[name="checkboxinstancesize"]').is(":checked") && $('[name="securitygroup"]').is(":checked")){
-        /*alert('valid form submitted'); // for demo*/
-               //validateandsaveform();
-               providerTest();
-             }
-             else{
-              alert("invalid form data");
-            }
-            /* }else{
-                alert('invalid valid form submitted'); // for demo
-              }*/
+      if(isFormValid()){
+        saveform(9);
+      }else{
+        alert("invalid form data");
+      }
            return false; // for demo
          });
   });
-
+/*
    function providerTest(){
      var inputData = new Object();
-     var securityList=[],
-     instancesizes=[];
-     $('[name="checkboxinstancesize"]').each(function(){
-      $(this).is(":checked") && instancesizes.push($(this).val().trim());
-    });
-
+     var formID=9;
+     var securityList=[];
+     
      $('[name="securitygroup"]').each(function(){
       $(this).is(":checked") && securityList.push($(this).val().trim());
     });
-     inputData.accesskey = $('#accesskey').val().trim();
-     inputData.secretkey = $('#secretkey').val().trim();
-     inputData.region = $('#region').val().trim();
-     inputData.providername=$("#providername").val().trim();
-     inputData.providertype=$("#providertype").val().trim();
-     inputData.securitygroupids=securityList;
-     inputData.type=instancesizes;
 
-     $.ajax({
-       url: '/providers/securitygroups',
-       type: 'POST',
-       dataType: 'json',
-       data: inputData,
-       async:false,
-       success: function (data) {
+
+     inputData.accesskey = $('#accesskey').val().trim();
+     console.log(inputData.accesskey);
+
+
+     inputData.secretkey = $('#secretkey').val().trim();
+     console.log(inputData.secretkey);
+
+//inputData.region = $('#region').val().trim();
+console.log(inputData.region);
+
+//inputData.providername=$("#providername").val().trim();
+console.log(inputData.providername);
+
+//inputData.providertype=$("#providertype").val().trim();
+console.log(inputData.providertype);
+
+//inputData.securitygroupids=securityList;
+console.log(securityList);
+   //  inputData.type=instancesizes;
+
+   //inputData.instanceUserName='root';
+ //  saveform(9);
+
+/* $.ajax({
+        url: serviceURL + "savemasterjsonrownew/" + formID + "/" + null + "/" + '%2f',
+        data: inputData,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data, success) {
+           console.log(data);
+           alert('success');
+        },
+        error: function(jqxhr) {
+           alert(jqxhr.status);
+        },
+        failure: function(data) {
+            alert(data);
+        }
+    });
+
+*/
+/*
+$.ajax({
+ url: '/providers/securitygroups',
+ type: 'POST',
+ dataType: 'json',
+ data: inputData,
+ async:false,
+ success: function (data) {
                          //alert("Success...");
                          if(validateForm())
                           saveform(9);
@@ -297,6 +306,7 @@ function inLineReady() {
                      }
                    });
 
-   }
+*/
 
- </script>
+//}
+</script>
