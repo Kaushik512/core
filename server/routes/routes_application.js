@@ -129,6 +129,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             }
             application.addAppInstance(appInstanceData, function(err, appInstance) {
+                logger.debug('added ',err);
                 if (err) {
                     res.send(500, err);
                     return;
@@ -138,4 +139,80 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.delete('/applications/:applicationId/appInstances/:appInstanceId', function(req, res) {
+        
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!application) {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+            application.removeAppInstance(req.params.appInstanceId, function(err, appInstance) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                res.send(appInstance);
+            });
+        });
+    });
+
+    app.get('/applications/:applicationId/appInstances/:appInstanceId/workflows', function(req, res) {
+
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!application) {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+            var appInstance = application.getAppInstance(req.params.appInstanceId);
+            if (!appInstance) {
+                res.send(404, {
+                    message: 'AppInstance does not exist'
+                });
+            } else {
+                res.send(appInstance.workflows);
+            }
+
+        });
+    });
+
+    app.get('/applications/:applicationId/appInstances/:appInstanceId/workflows/:workflowId/execute', function(req, res) {
+
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!application) {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+            var appInstance = application.getAppInstance(req.params.appInstanceId);
+            if (!appInstance) {
+                res.send(404, {
+                    message: 'AppInstance does not exist'
+                });
+            } else {
+                appInstance.executeWorkflow(req.params.workflowId, req.session.user.cn, function(err, tasks) {
+                    logger.debug('Workflow executed');
+                    if (err) {
+                        res.send(500, err);
+                        return;
+                    }
+
+                    res.send(tasks);
+                });
+            }
+        });
+    });
 };

@@ -17,7 +17,7 @@ $(function() {
     })();
 
     // var htmlTemplate = '<div style="max-width: 262px !important;" class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer"> <div style="border-radius: 12px;border-color: #dddddd;" class="panel panel-primary appcard-role-inner"> <div style="height:40px;text-align:center;background:#40baf1 !important;border-radius: 10px 10px 0 0;border-color: #40baf1 !important;" class="panel-heading"> <span contenteditable="false" style="float:left;" class="domain-roles-icon"> <img src="img/liferay.jpg" style="height:24px"> </span> <span style="text-align:center;width:30px;font-weight: bold;"> <a class="applicationName" style="color:white" href="javascript:void(0)">Life Ray</a> </span> <span class="pull-right"> <a data-toggle="modal" href="#modalAppCardSettings" style="padding-right:5px;cursor:pointer;color:white;font-size:20px;" class="fa fa-cog"> </a> </span> <br></div><div data-deploy-runlist="recipe[liferay]" data-instance-ip="52.11.46.8" data-jenkin-job-name="LR-Spring" class="appCardBody"> <div style="min-height: 115px;" class="appCardLoadingContainer"> <img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"> </div><div style="padding: 7px;" class="panel-body panel-primary appCardInfo"> <div class="minheight120"> <div style="height:20px;" class="col-lg-12 col-sm-12 col-xs-12"> <label style="margin-left: 90px;" class="custom-select"> <select style="font-size: 11px;"> <option>AWS_SCLT</option> <option>AWS_CHINA</option> <option>AWS_INDIA</option> </select> </label> </div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 24px;margin-left: -5px;" src="img/projectdemo/app-performanceblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a style="color: #777;font-size: 13px;" href="newrelic.html" target="_blank">App Performance</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/logsblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a style="color: #777;font-size: 13px;" href="kibana.html" target="_blank">App Logs</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/code_healthblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a class="codeHealthUrl" style="color: #777;font-size: 13px;" href="sonar.html" target="_blank">Code Health</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/UI_performanceblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a class="uiHealthUrl" style="color: #777;font-size: 13px;" href="yslow.html" target="_blank">UI Performance</a> </div></div></div></div><div style="padding:3px;border-radius:0 0 12px 12px;background:white!important;" class="panel-footer clearfix"> <div style="padding-left:4px;padding-right:4px;" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="3/3/2015 11:08:28am" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnBuild width100" data-toggle="modal" href="javascript:void(0)">Last Build </a> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="3/3/2015 17:08:52pm" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnDeploy width100" data-toggle="modal" href="javascript:void(0)">Last Deploy </a> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="2/3/2015 09:23:25am" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnTest width100" data-toggle="modal" href="javascript:void(0)">Last Test </a> </div></div><div style="padding-left:4px;padding-right:4px;margin-top:-8px" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 red;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div></div><div style="padding-left:4px;padding-right:4px;" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a class="btn btn-primary btn-sm width50borderradius50 appCardBuildBtn" data-toggle="modal" href="javascript:void(0)"> <i style="font-size: 14px;" class="fa fa-inbox"> </i> </a> <span style="font-size: 10px;">Build</span> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a class="btn btn-primary btn-sm width40borderradius50Deploy" data-toggle="modal" href="#modalappCardDeploy"> <i style="font-size: 14px;" class="fa fa-bullseye"> </i> </a> <span style="font-size: 10px;">Deploy</span> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="padding-left:10px;" class="btn btn-primary btn-sm width50borderradius50" data-toggle="modal" href="#modalappCardTest"> <i style="font-size: 14px;" class="fa fa-location-arrow"> </i> </a> <span style="font-size: 10px;">Test</span> </div></div></div></div></div></div>';
-    var htmlTemplate = '<div style="max-width: 262px !important;" class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer"> <div style="border-radius: 12px;border-color: #dddddd;" class="panel panel-primary appcard-role-inner"> <div style="height:40px;text-align:center;background:#40baf1 !important;border-radius: 10px 10px 0 0;border-color: #40baf1 !important;" class="panel-heading"> <span contenteditable="false" style="float:left;" class="domain-roles-icon"> <img src="img/liferay.jpg" style="height:24px"> </span> <span style="text-align:center;width:30px;font-weight: bold;"> <a class="applicationName" style="color:white" href="javascript:void(0)">Life Ray</a> </span> <br></div><div data-deploy-runlist="recipe[liferay]" data-instance-ip="52.11.46.8" data-jenkin-job-name="LR-Spring" class="appCardBody"> <div style="min-height: 115px;" class="appCardLoadingContainer"> <img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"> </div><div style="padding: 7px;" class="panel-body panel-primary appCardInfo"> <div class="minheight120"> <div style="height:20px;" class="col-lg-12 col-sm-12 col-xs-12 appInstancesDropdownContainer"> <label style="margin-left: 90px;" class="custom-select"> <select class="appInstancesDropdown" style="font-size: 11px;"> </select> </label> </div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 24px;margin-left: -5px;" src="img/projectdemo/app-performanceblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a style="color: #777;font-size: 13px;" href="newrelic.html" target="_blank">App Performance</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/logsblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a style="color: #777;font-size: 13px;" href="kibana.html" target="_blank">App Logs</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/code_healthblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a class="codeHealthUrl" style="color: #777;font-size: 13px;" href="sonar.html" target="_blank">Code Health</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/UI_performanceblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a class="uiHealthUrl" style="color: #777;font-size: 13px;" href="yslow.html" target="_blank">UI Performance</a> </div></div></div></div><div style="padding:3px;border-radius:0 0 12px 12px;background:white!important;" class="panel-footer clearfix"> <div style="padding-left:4px;padding-right:4px;" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="3/3/2015 11:08:28am" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnBuild width100" data-toggle="modal" href="javascript:void(0)">Last Build </a> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="3/3/2015 17:08:52pm" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnDeploy width100" data-toggle="modal" href="javascript:void(0)">Last Deploy </a> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="2/3/2015 09:23:25am" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnTest width100" data-toggle="modal" href="javascript:void(0)">Last Test </a> </div></div><div style="padding-left:4px;padding-right:4px;margin-top:-8px" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 red;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div></div><div style="padding-left:4px;padding-right:4px;" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a class="btn btn-primary btn-sm width50borderradius50 appCardBuildBtn" data-toggle="modal" href="javascript:void(0)"> <i style="font-size: 14px;" class="fa fa-inbox"> </i> </a> <span style="font-size: 10px;">Build</span> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a class="btn btn-primary btn-sm width40borderradius50Deploy" data-toggle="modal" href="#modalappCardDeploy"> <i style="font-size: 14px;" class="fa fa-bullseye"> </i> </a> <span style="font-size: 10px;">Deploy</span> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="padding-left:10px;" class="btn btn-primary btn-sm width50borderradius50" data-toggle="modal" href="#modalappCardTest"> <i style="font-size: 14px;" class="fa fa-location-arrow"> </i> </a> <span style="font-size: 10px;">Test</span> </div></div></div></div></div></div>';
+    var htmlTemplate = '<div style="max-width: 262px !important;" class="col-sm-4 col-md-4 col-lg-3 col-xs-12 appcard-role-outer"> <div style="border-radius: 12px;border-color: #dddddd;" class="panel panel-primary appcard-role-inner"> <div style="height:40px;text-align:center;background:#40baf1 !important;border-radius: 10px 10px 0 0;border-color: #40baf1 !important;" class="panel-heading"> <span contenteditable="false" style="float:left;" class="domain-roles-icon"> <img src="img/liferay.jpg" style="height:24px"> </span> <span style="text-align:center;width:30px;font-weight: bold;"> <a class="applicationName" style="color:white" href="javascript:void(0)">Life Ray</a> </span> <br></div><div data-deploy-runlist="recipe[liferay]" data-instance-ip="52.11.46.8" data-jenkin-job-name="LR-Spring" class="appCardBody"> <div style="min-height: 115px;" class="appCardLoadingContainer"> <img src="img/loading.gif" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" class="center-block"> </div><div style="padding: 7px;" class="panel-body panel-primary appCardInfo"> <div class="minheight120"> <div style="height:20px;" class="col-lg-12 col-sm-12 col-xs-12 appInstancesDropdownContainer"> <label style="margin-left: 90px;" class="custom-select"> <select class="appInstancesDropdown" style="font-size: 11px;"> </select> </label> </div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 24px;margin-left: -5px;" src="img/projectdemo/app-performanceblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a style="color: #777;font-size: 13px;" href="newrelic.html" target="_blank">App Performance</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/logsblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a style="color: #777;font-size: 13px;" href="kibana.html" target="_blank">App Logs</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/code_healthblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a class="codeHealthUrl" style="color: #777;font-size: 13px;" href="sonar.html" target="_blank">Code Health</a> </div></div><div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom10"> <img style="height: 27px;margin-left: -5px;" src="img/projectdemo/UI_performanceblack.png"> <div style=" margin-left: 30px;margin-top: -22px;"> <a class="uiHealthUrl" style="color: #777;font-size: 13px;" href="yslow.html" target="_blank">UI Performance</a> </div></div></div></div><div style="padding:3px;border-radius:0 0 12px 12px;background:white!important;" class="panel-footer clearfix"> <div style="padding-left:4px;padding-right:4px;" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="3/3/2015 11:08:28am" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnBuild width100" data-toggle="modal" href="javascript:void(0)">Last Build </a> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="3/3/2015 17:08:52pm" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnDeploy width100" data-toggle="modal" href="javascript:void(0)">Last Deploy </a> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="margin-bottom:2px;font-size:12px;color:#666" data-original-title="2/3/2015 09:23:25am" data-placement="top" rel="tooltip" class="btn btn-white btn-sm btnTest width100" data-toggle="modal" href="javascript:void(0)">Last Test </a> </div></div><div style="padding-left:4px;padding-right:4px;margin-top:-8px" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 red;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="background: none repeat scroll 0 0 #01df3a;margin-bottom:2px; height: 4px;" class="btn btn-white btn-sm btnBuild" data-toggle="modal" href="javascript:void(0)"> </a> </div></div><div style="padding-left:4px;padding-right:4px;" class="col-lg-12 col-sm-12 col-xs-12"> <div style="padding-left:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a class="btn btn-primary btn-sm width50borderradius50 appCardBuildBtn" data-toggle="modal" href="javascript:void(0)"> <i style="font-size: 14px;" class="fa fa-inbox"> </i> </a> <span style="font-size: 10px;">Build</span> </div><div style="padding-left:0px;padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a class="btn btn-primary btn-sm width40borderradius50Deploy appCardDeployBtn" data-toggle="modal" href="javascript:void(0)"> <i style="font-size: 14px;" class="fa fa-bullseye"> </i> </a> <span style="font-size: 10px;">Deploy</span> </div><div style="padding-right:0px;" class="col-lg-4 col-sm-4 col-xs-4"> <a style="padding-left:10px;" class="btn btn-primary btn-sm width50borderradius50" data-toggle="modal" href="#modalappCardTest"> <i style="font-size: 14px;" class="fa fa-location-arrow"> </i> </a> <span style="font-size: 10px;">Test</span> </div></div></div></div></div></div>';
 
     var $appCardTemplate = $(htmlTemplate);
 
@@ -87,7 +87,7 @@ $(function() {
 
     }
 
-    function addAppInstanceRow(appInstance) {
+    function addAppInstanceRow(appInstance, applicationId) {
         var dataTable = $('#appInstancesTable').DataTable();
         var $tr = $('<tr></tr>');
         var $tdSno = $('<td/>');
@@ -102,7 +102,57 @@ $(function() {
         }
         $tr.append($tdNodes);
         */
-        $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%" href="#appInstancesDeployModal" data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
+        $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-primary btn-sm appInstanceDeployBtn"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm appInstanceDelBtn"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
+        $tdAction.find('.appInstanceDeployBtn').click(function() {
+            var appInstanceId = appInstance._id;
+            var $modal = $('#deployResultModel');
+            $modal.find('.errorMsgContainer').hide();
+            $modal.find('.workFlowArea').hide();
+            $modal.find('.deployResultArea').hide();
+            $modal.find('.loadingContainer').show();
+            $modal.modal('show');
+            $.get('../applications/' + applicationId + '/appInstances/' + appInstanceId + '/workflows', function(workflows) {
+                var $workflowDropDown = $modal.find('.workflowDropdown');
+                $workflowDropDown.empty();
+                for (var j = 0; j < workflows.length; j++) {
+                    var $option = $('<option></option>').val(workflows[j]._id).html(workflows[j].name);
+                    $workflowDropDown.append($option);
+                }
+                $workflowDropDown.data('applicationId', applicationId);
+                $workflowDropDown.data('appInstanceId', appInstanceId);
+
+                $modal.find('.workFlowArea').show();
+                $modal.find('.loadingContainer').hide();
+
+            }).fail(function(jxhr) {
+                $modal.find('.loadingContainer').hide();
+                $modal.find('.workFlowArea').hide();
+                $modal.find('.deployResultArea').hide();
+
+                var $errorContainer = $modal.find('.errorMsgContainer').show();
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    $errorContainer.html(jxhr.responseJSON.message);
+                } else {
+                    $errorContainer.html("Server Behaved Unexpectedly");
+                }
+
+            });
+        });
+        $tdAction.find('.appInstanceDelBtn').click(function() {
+            $.ajax({
+                url: '../applications/' + applicationId + '/appInstances/' + appInstance._id,
+                method: 'DELETE',
+                success: function() {
+                    dataTable.row($tr).remove().draw(false);
+                    $('.appInstancesDropdown option[value="'+appInstance._id+'"]').remove();
+                },
+                error: function() {
+
+                }
+            })
+
+        });
+
         $tr.append($tdAction);
         dataTable.row.add($tr).draw();
 
@@ -128,12 +178,14 @@ $(function() {
             $(this).addClass('role-Selectedcard-app');
         });
         var buildInfo = null;
-        
-        if(!data.appInstances.length){
-           $appCard.find('.appInstancesDropdownContainer').css({'visibility':'hidden'});
+
+        if (!data.appInstances.length) {
+            $appCard.find('.appInstancesDropdownContainer').css({
+                'visibility': 'hidden'
+            });
         }
         for (var i = 0; i < data.appInstances.length; i++) {
-            addAppInstanceRow(data.appInstances[i]);
+            addAppInstanceRow(data.appInstances[i], data._id);
             $appCard.find('.appInstancesDropdown').append($('<option></option>').val(data.appInstances[i]._id).html(data.appInstances[i].name));
         }
 
@@ -161,7 +213,43 @@ $(function() {
             });
         });
 
+        $appCard.find('.appCardDeployBtn').data('applicationId', data._id).click(function(e) {
+            var applicationId = $(this).data('applicationId');
+            var appInstanceId = $appCard.find('.appInstancesDropdown').val();
+            var $modal = $('#deployResultModel');
+            $modal.find('.errorMsgContainer').hide();
+            $modal.find('.workFlowArea').hide();
+            $modal.find('.deployResultArea').hide();
+            $modal.find('.loadingContainer').show();
+            $modal.modal('show');
+            $.get('../applications/' + applicationId + '/appInstances/' + appInstanceId + '/workflows', function(workflows) {
+                var $workflowDropDown = $modal.find('.workflowDropdown');
+                $workflowDropDown.empty();
+                for (var j = 0; j < workflows.length; j++) {
+                    var $option = $('<option></option>').val(workflows[j]._id).html(workflows[j].name);
+                    $workflowDropDown.append($option);
+                }
+                $workflowDropDown.data('applicationId', applicationId);
+                $workflowDropDown.data('appInstanceId', appInstanceId);
 
+                $modal.find('.workFlowArea').show();
+                $modal.find('.loadingContainer').hide();
+
+            }).fail(function(jxhr) {
+                $modal.find('.loadingContainer').hide();
+                $modal.find('.workFlowArea').hide();
+                $modal.find('.deployResultArea').hide();
+
+                var $errorContainer = $modal.find('.errorMsgContainer').show();
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    $errorContainer.html(jxhr.responseJSON.message);
+                } else {
+                    $errorContainer.html("Server Behaved Unexpectedly");
+                }
+
+            });
+
+        });
 
         $appCard.find('.appCardBuildBtn').data('applicationId', data._id).click(function(e) {
             var applicationId = $(this).data('applicationId');
@@ -276,6 +364,37 @@ $(function() {
         return $appCard;
     }
 
+    $('.executeWorkflowBtn').click(function(e) {
+        var $modal = $('#deployResultModel');
+        $modal.find('.errorMsgContainer').hide();
+        $modal.find('.workFlowArea').hide();
+        $modal.find('.deployResultArea').hide();
+        $modal.find('.loadingContainer').show();
+        var $workflowDropDown = $modal.find('.workflowDropdown');
+        var applicationId = $workflowDropDown.data('applicationId');
+        var appInstanceId = $workflowDropDown.data('appInstanceId');
+        var workflowId = $workflowDropDown.val();
+
+        $.get('../applications/' + applicationId + '/appInstances/' + appInstanceId + '/workflows/' + workflowId + '/execute', function(result) {
+            $modal.find('.loadingContainer').hide();
+            $modal.find('.workFlowArea').hide();
+            $modal.find('.deployResultArea').show();
+
+        }).fail(function(jxhr) {
+            $modal.find('.loadingContainer').hide();
+            $modal.find('.workFlowArea').hide();
+            $modal.find('.deployResultArea').hide();
+
+            var $errorContainer = $modal.find('.errorMsgContainer').show();
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                $errorContainer.html(jxhr.responseJSON.message);
+            } else {
+                $errorContainer.html("Server Behaved Unexpectedly");
+            }
+        });
+
+    });
+
 
 
     // loading cards
@@ -360,9 +479,15 @@ $(function() {
 
         $.post('../applications/' + urlParams.appId + '/appInstances', {
             appInstanceData: reqBody
-        }, function(data) {
-            console.log(data);
+        }, function(appInstance) {
+
+            var $dropdownContainer = $('.appInstancesDropdownContainer').css({
+                'visibility': 'visible'
+            });
+            addAppInstanceRow(appInstance, urlParams.appId);
+            $dropdownContainer.find('.appInstancesDropdown').append($('<option></option>').val(appInstance._id).html(appInstance.name));
             $('#modaladdAppInstances').modal('hide');
+
         }).fail(function(jxhr) {
             alert('Server Behaved Unexpectedly');
         });

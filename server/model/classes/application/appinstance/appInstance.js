@@ -44,6 +44,37 @@ AppInstanceSchema.methods.getNodes = function(callback) {
     getWorkflowNodes(this.workflows[count]);
 };
 
+AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, callback) {
+    var workflows = this.workflows;
+    if (!workflows.length) {
+        callback({
+            message: "Workflow does not exist"
+        }, null);
+        return;
+    }
+    var workflow;
+    for (var i = 0; i < workflows.length; i++) {
+        if (workflowId == workflows[i]._id) {
+            workflow = workflows[i];
+            break;
+        }
+    }
+    if (!workflow) {
+        callback({
+            message: "Workflow does not exist"
+        }, null);
+        return;
+    }
+    workflow.execute(username, function(err, tasks) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null,tasks);
+    });
+
+};
+
 var AppInstance = mongoose.model('appInstances', AppInstanceSchema);
 
 module.exports = AppInstance;
