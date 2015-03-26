@@ -3,6 +3,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
 var logger = require('../../../lib/logger')(module);
 var schemaValidator = require('../../dao/schema-validator');
+var utils = require('../utils/utils');
 
 var Build = require('./build/build.js');
 var AppInstance = require('./appinstance/appInstance');
@@ -106,9 +107,43 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
             callback(err, null);
             return;
         }
-        callback(null,appInstance);
-
+        application.getNodes(function(err, nodes) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            application.nodes = nodes;
+            callback(null, application);
+        });
     });
+};
+
+ApplicationSchema.methods.getNodes = function(callback) {
+    var self = this;
+    var nodesList = [];
+    count = 0;
+    if (!this.appInstances.length) {
+        callback(null, nodesList);
+        return;
+    }
+
+    function getAppInstanceNodes(appInstance) {
+        appInstance.getNodes(function(err, nodes) {
+            count++;
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            nodesList = utils.arrayMerge(nodesList, nodes);
+            if (count < self.appInstances.length) {
+                getAppInstanceNodes(self.appInstances[count]);
+            } else {
+                callback(null, nodesList);
+            }
+        });
+    }
+    getAppInstanceNodes(this.appInstances[count]);
 };
 
 
@@ -116,15 +151,39 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
 ApplicationSchema.statics.getApplicationById = function(applicationId, callback) {
     this.find({
         "_id": new ObjectId(applicationId)
-    }, function(err, data) {
+    }, function(err, applications) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
         //console.log('data ==>', data);
-        if (data.length) {
-            callback(null, data[0]);
+        if (applications.length) {
+            var application = applications[0];
+            /*if (!(application.appInstances && applications.length)) {
+                callback(err, application);
+                return;
+            }
+            var count = 0;
+
+            function getAppInstancesNodes(appInstance) {
+                count++;
+                appinstance.getNodes(err, function(err, nodes) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    appInstance.nodes = nodes;
+                    if (count < self.appInstances.length) {
+                        getAppInstancesNodes(self.appInstances[count]);
+                    } else {
+                        callback(null, application);
+                    }
+
+                });
+
+            }*/
+            callback(null, application);
         } else {
             callback(null, null);
         }

@@ -979,6 +979,13 @@ $('.startstoptoggler').click(startAndStopToggler);
                                     var cssClassed = getCssClassFromStatus(data.instanceState);
                                     $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                     $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                    if (data.appUrls && data.appUrls.length) {
+                                             for (var k = 0; k < data.appUrls.length; k++) {
+                                                 var url = data.appUrls[k].url;
+                                                 url = url.replace('$host', data.instanceIP);
+                                                 $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url);
+                                             }
+                                      }
                                 }
                             }
                         })

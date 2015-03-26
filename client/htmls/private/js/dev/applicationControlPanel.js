@@ -34,7 +34,7 @@ $(function() {
         var timeString = new Date().setTime(buildHistory.timestampStarted);
         var date = new Date(timeString).toLocaleString();
 
-        var $tdBuildNumber = $('<td></td>').append('<span>'+buildHistory.jobNumber+'</span>');
+        var $tdBuildNumber = $('<td></td>').append('<span>' + buildHistory.jobNumber + '</span>');
         $trHistoryRow.append($tdBuildNumber);
 
         var $tdBuildStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
@@ -88,20 +88,23 @@ $(function() {
     }
 
     function addAppInstanceRow(appInstance) {
-      var dataTable = $('#appInstancesTable').DataTable();
-      var $tr = $('<tr></tr>');
-      var $tdSno =  $('<td/>');
-      $tr.append($tdSno);
-      var $tdName = $('<td/>').html(appInstance.name);
-      $tr.append($tdName);
-      var $tdEnv = $('<td></td>').html(appInstance.envId);
-      $tr.append($tdEnv);
-      var $tdNodes = $('<td></td>').html(appInstance.nodes.length+'(<a href="javascript:void(0) />view<a>")');
-      $tr.append($tdNodes);
-
-      $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%" href="#appInstancesDeployModal" data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
-      $tr.append($tdAction);
-      dataTable.row.add($tr).draw();
+        var dataTable = $('#appInstancesTable').DataTable();
+        var $tr = $('<tr></tr>');
+        var $tdSno = $('<td/>');
+        $tr.append($tdSno);
+        var $tdName = $('<td/>').html(appInstance.name);
+        $tr.append($tdName);
+        var $tdEnv = $('<td></td>').html(appInstance.envId);
+        $tr.append($tdEnv);
+        /*var $tdNodes = $('<td></td>');
+        if (appInstance.nodes && appInstances.nodes.length) {
+            var $tdNodes = $tdNodes.html(appInstance.nodes.length + '(<a href="javascript:void(0) />view<a>")');
+        }
+        $tr.append($tdNodes);
+        */
+        $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%" href="#appInstancesDeployModal" data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
+        $tr.append($tdAction);
+        dataTable.row.add($tr).draw();
 
     }
 
@@ -125,6 +128,10 @@ $(function() {
             $(this).addClass('role-Selectedcard-app');
         });
         var buildInfo = null;
+
+        for (var i = 0; i < data.appInstances.length; i++) {
+            addAppInstanceRow(data.appInstances[i]);
+        }
 
         $.get('../applications/' + applicationId + '/buildConf', function(buildData) {
             buildInfo = buildData;
@@ -347,13 +354,13 @@ $(function() {
             return;
         }
 
-        $.post('../applications/'+urlParams.appId+'/appInstances',{
-            appInstanceData:reqBody
-        },function(data){
+        $.post('../applications/' + urlParams.appId + '/appInstances', {
+            appInstanceData: reqBody
+        }, function(data) {
             console.log(data);
             $('#modaladdAppInstances').modal('hide');
-        }).fail(function(jxhr){
-           alert('Server Behaved Unexpectedly');
+        }).fail(function(jxhr) {
+            alert('Server Behaved Unexpectedly');
         });
 
 
@@ -372,9 +379,9 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }, {
                 "bSortable": true
@@ -400,7 +407,7 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }],
             "fnRowCallback": function(nRow, aData, iDisplayIndex) {
@@ -422,7 +429,7 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }, {
                 "bSortable": true
@@ -497,7 +504,7 @@ $(function() {
         });
     }
 
-   
+
 
 
     $('.btnItemAdd').click(function(e) {
