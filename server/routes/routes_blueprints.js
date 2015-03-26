@@ -181,31 +181,38 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     // Here vmimage nees to use
                                                     //imageidentifire
 
-                                                masterUtil.getMastersByRowid(req.params.imageId,function(err,vmimage){
+                                                    var imageSettings ={
+                                                        
+                                                    };
+                                                    logger.debug("Incomming image is:>>>>>>>>>>>>>> %s",blueprint.imageId);
+                                                masterUtil.getMastersImagesByRowid(blueprint.imageId,function(err,vmimage){
+                                                    var _object=vmimage[0];
+                                                    logger.debug(_object);
+                                                    //_object=JSON.parse(_object);
                                                             if(err){
                                                                 logger.debug("Unable to fetch vmImage record.");
                                                                 res.send("Unable to fetch vmImage record.",404);
                                                             }
-                                                            logger.debug("vmimage found from db.>>>>>>",JSON.stringify(data));
-                                                            imageSettings = {
-                                                                "access_key": vmimage.accesskey,
-                                                                "secret_key": vmimage.secretkey,
-                                                                "region": vmimage.region,
-                                                                "instanceUserName":"",
-                                                                "instanceOS":vmimage.ostype,
-                                                                "instanceAmiid":vmimage.imageidentifire
-                                                            };
-                                                    masterUtil.getMastersByRowid(vmimage.providername_rowid,function(err,provider){
+                                                            vmimage=JSON.parse(JSON.stringify(vmimage));
+                                                            logger.debug("vmimage found from db.>>>>>>",JSON.stringify(vmimage));
+                                                            
+                                                                imageSettings.access_key= _object.accesskey;
+                                                                imageSettings.secret_key=_object.secretkey;
+                                                                imageSettings.region=_object.region;
+                                                                imageSettings.instanceOS=_object.ostype;
+                                                                imageSettings.instanceAmiid=_object.imageidentifire;
+                                                            logger.debug("providername_rowid>>               >>>>>>>>>> %s ",_object.imageidentifire);
+                                                    masterUtil.getMastersProvidersByRowid(_object.providername_rowid,function(err,provider){
                                                             if(err){
                                                                 logger.debug("Unable to fetch Provider record.");
                                                                 res.send("Unable to fetch Provider record.",404);
                                                             }
-                                                            logger.debug("Provider found from db.");
+                                                            logger.debug("Provider found from db.>>>>>>>>>>>>>",JSON.stringify(provider));
                                                             imageSettings.instanceUserName = provider.instanceUsername;
                                                     });
 
                                                 });
-
+                                                        logger.debug("imageSettings.instanceUserName>>>>>>>>> %s",imageSettings.instanceUserName);
                                                     var ec2 = new EC2(imageSettings);
                                                     ec2.launchInstance(imageSettings.instanceAmiid, imageSettings.instanceType, blueprint.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
                                                         if (err) {
@@ -761,7 +768,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/images/imageId', function(req, res) {
+    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/images/:imageId', function(req, res) {
         logger.debug("Enter post() for /blueprints/organizations/%s/businessgroups/%s/projects/%s/environments/%s/images/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.imageId);
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
@@ -783,13 +790,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-
+            logger.debug("Incomming ....%s",req.params.envId);
             var blueprintData = req.body.blueprintData;
             blueprintData.orgId = req.params.orgId;
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
             blueprintData.imageId = req.params.imageId;
+            blueprintData.securityGroupId = 'sg-c00ee1a5';
+            blueprintData.instanceType = 't1.micro';
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }

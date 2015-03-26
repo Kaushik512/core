@@ -32,7 +32,7 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.envIdValidator
     },
-    vmImageId: {
+    imageId: {
         type: String,
         required: true,
         trim: true,
@@ -41,14 +41,12 @@ var BlueprintSchema = new Schema({
     securityGroupId: {
         type: String,
         required: true,
-        trim: true,
-        validate: schemaValidator.envIdValidator
+        trim: true
     },
     instanceType: {
         type: String,
         required: true,
-        trim: true,
-        validate: schemaValidator.envIdValidator
+        trim: true
     },
     iconpath: {
         type: String,
@@ -289,6 +287,7 @@ var BlueprintsDao = function() {
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             imageId: blueprintData.imageId,
+            securityGroupId: blueprintData.securityGroupId,
             name: blueprintData.name,
             appUrls: blueprintData.appUrls,
             iconpath: blueprintData.iconpath,
@@ -316,6 +315,7 @@ var BlueprintsDao = function() {
         });
 
         blueprint.save(function(err, data) {
+            logger.debug("All BP Data: >>>>>> ",JSON.stringify(blueprint));
             if (err) {
                 logger.error(" !!! Failed to create Blueprint !!!", err);
 
