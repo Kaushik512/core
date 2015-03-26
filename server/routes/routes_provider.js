@@ -25,4 +25,29 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 		});
 
 	});
+
+	app.get('/providers/test/:rowid',function(req,res){
+		logger.debug("Enter for Provider test. %s",req.params.rowid);
+		d4dModelNew.d4dModelMastersProviders.find({
+            rowid: req.params.rowid
+        }, function(err, d4dMasterJson) {
+            if (err) {
+                logger.debug("Hit and error:", err);
+            }
+            if (d4dMasterJson) {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json'
+                });
+                res.end(JSON.stringify(d4dMasterJson));
+                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+            } else {
+                res.send(400, {
+                    "error": err
+                });
+                logger.debug("none found");
+            }
+
+
+        });
+	});
 }
