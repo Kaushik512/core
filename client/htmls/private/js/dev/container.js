@@ -53,9 +53,11 @@ function containerStuff(){
         $('.instanceselectedfordocker').each(function() {
             if ($(this).is(':checked')) {
 
+
                 var instid = $(this).closest('tr').attr('data-instanceid');
                 if (instid)
                     var $that = $(this);
+                //alert(instid);
                 var $td = $that.closest('td');
                 var tdtext = $td.text();
                 $td.find('.dockerspinner').detach();
@@ -97,6 +99,7 @@ function containerStuff(){
                         var $statmessage = $('.dockerspinner').parent();
                         $('.dockerspinner').detach();
                         $td.find('.dockermessage').detach();
+                        alert(JSON.stringify(data));
                         $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
                     }
                 });
