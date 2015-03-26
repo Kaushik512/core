@@ -61,14 +61,14 @@ var EC2 = function(awsSettings) {
 
 
 
-    this.launchInstance = function(image_id, intanceType, securityGroupId,instanceName, callback) {
+    this.launchInstance = function(image_id, intanceType, securityGroupId,instanceName,minCount, callback) {
 
         var that = this; //"m1.small"
         ec.runInstances({
             "ImageId": image_id, //"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
             "InstanceType": intanceType, //"m1.medium",
-            "MinCount": 1,
-            "MaxCount": 1,
+            "MinCount": minCount,
+            "MaxCount": 5,
             "KeyName": awsSettings.keyPairName,
             SecurityGroupIds: [securityGroupId], // [awsSettings.securityGroupId],
             /*BlockDeviceMappings: [{

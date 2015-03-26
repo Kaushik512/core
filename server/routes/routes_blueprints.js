@@ -13,6 +13,7 @@ var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var logger = require('../lib/logger')(module);
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
+var masterUtil = require('../lib/utils/masterUtil.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -178,9 +179,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
 
                                                     // Here vmimage nees to use
+                                                    //imageidentifire
 
-                                                    var ec2 = new EC2(settings.aws);
-                                                    ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
+                                                masterUtil.getMastersByRowid(req.params.imageId,function(err,vmimage){
+                                                            if(err){
+                                                                logger.debug("Unable to fetch vmImage record.");
+                                                                res.send("Unable to fetch vmImage record.",404);
+                                                            }
+                                                            logger.debug("vmimage found from db.>>>>>>",JSON.stringify(data));
+                                                            imageSettings = {
+                                                                "access_key": vmimage.accesskey,
+                                                                "secret_key": vmimage.secretkey,
+                                                                "region": vmimage.region,
+                                                                "instanceUserName":"",
+                                                                "instanceOS":vmimage.ostype,
+                                                                "instanceAmiid":vmimage.imageidentifire
+                                                            };
+                                                    masterUtil.getMastersByRowid(vmimage.providername_rowid,function(err,provider){
+                                                            if(err){
+                                                                logger.debug("Unable to fetch Provider record.");
+                                                                res.send("Unable to fetch Provider record.",404);
+                                                            }
+                                                            logger.debug("Provider found from db.");
+                                                            imageSettings.instanceUserName = provider.instanceUsername;
+                                                    });
+
+                                                });
+
+                                                    var ec2 = new EC2(imageSettings);
+                                                    ec2.launchInstance(imageSettings.instanceAmiid, imageSettings.instanceType, blueprint.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
                                                         if (err) {
                                                             logger.error("launchInstance Failed >> ", err);
                                                             res.send(500);
@@ -211,10 +238,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     total: 'unknown',
                                                                     free: 'unknown',
                                                                 },
-                                                                os: blueprint.instanceOS
+                                                                os: imageSettings.instanceOS
                                                             },
                                                             credentials: {
-                                                                username: blueprint.instanceUsername,
+                                                                username: imageSettings.instanceUsername,
                                                                 pemFileLocation: encryptedPemFileLocation,
                                                             },
                                                             chef: {
@@ -734,7 +761,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/images/:imageId', function(req, res) {
+    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/images/imageId', function(req, res) {
         logger.debug("Enter post() for /blueprints/organizations/%s/businessgroups/%s/projects/%s/environments/%s/images/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.imageId);
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
@@ -757,13 +784,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
 
-            
-            
             var blueprintData = req.body.blueprintData;
             blueprintData.orgId = req.params.orgId;
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
+            blueprintData.imageId = req.params.imageId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
