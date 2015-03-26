@@ -43,8 +43,8 @@
 
                                                            <div class="col-lg-6">
                                                               <label for="name">Choose Provider:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                              <select id="chooseProvider" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                                               <option value="">Select Provider</option>
+                                                              <select id="providername" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                                              
 
                                                            </select>
                                                            <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
@@ -72,7 +72,7 @@
 
                                            <div class="row">
                                                <div class="col-lg-6 smart-form" style="">
-                                                  <label for="category">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                  <label for="category">Instance Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                   <div id="instancetypes" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" sourcepath="21" cdata="catalyst" cat-validation="onechecked">
 
                                                   </div>
@@ -106,7 +106,7 @@
 
   <div class="widget-toolbox clearfix">
    <div class="btn-group pull-right">
-    <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+    <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
         <i class="ace-icon fa fa-check bigger-110"></i>
         Save
     </button>
@@ -136,35 +136,9 @@
     $('#btncancel').click();
 }
 
-function appendLoader(){
-   $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
-}
-function loadInstanceSizes(list){
-    appendLoader();
- //var list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
- /*   $.ajax({
-      method: "POST",
-      url: "/providers/securitygroups",
-      data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" }
-    }).done(function( msg ) {
-        */
-        var str='',getTemplate=function(val){
-            return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
-         'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
-          'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-},len=list.length;
-for(var i=0;i<len;i++){
-    console.log(getTemplate(list[i]));
-    str=str+getTemplate(list[i]);
-}
-$('#instancetypes').html('').append(str);
-$('#btnsubmit').removeAttr('disabled');
-$('#masterssavespinner').remove();
-}
 
 function inLineReady() {
-    $("#chooseProvider").select2();
+    $("#providername").select2();
     $("#region").select2();
     $("input[type='text']").on("click", function () {
         $(this).select();
@@ -194,52 +168,128 @@ function inLineReady() {
     }
     $(document).ready(function () {
 
-        function getProviderList(){
+        function appendLoader(){
+          removeLoader();
+          $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+          $('#btnsubmit').attr('disabled','disabled');
+      }
+      function removeLoader(){
+          $('#masterssavespinner').remove();
+          $('#btnsubmit').removeAttr('disabled');
+      }
+       function selectDefaultValue(){
+      var value=d4ddata.securitygroupids,$inputs;
+      if(value && value.length){
+        value=value[0].split(',');
+        $inputs=$('#securitygroupids');
 
-            $.ajax({
-             type: "GET",
-             dataType: "text",
-             async: false,
-             url: "d4dMasters/readmasterjsonnew/9",
-             success: function (data) {
-                console.log(data);
+        for(var i=0;i<value.length;i++){
+          $inputs.find('input[value="'+value[i]+'"]').trigger('click');
+        }
+      }
+    }
+
+      function loadInstanceSizes(list){
+        appendLoader();
+        var str='',getTemplate=function(val){
+            return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
+            'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
+              'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
+'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
+},len=list.length;
+for(var i=0;i<len;i++){
+    str=str+getTemplate(list[i]);
+}
+$('#instancetypes').html('').append(str);
+removeLoader();
+//selectDefaultValue();
+}
+
+
+function populateInstaceSize(){
+    var val=$(this).val(),list;
+    if(val){
+        val=val.toLowerCase();
+    if(val.indexOf('cent')>-1){
+        list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge'];
+    }
+    else if(val.indexOf('ubuntu')>-1){
+        list=['t2.micro'];
+    }else if(val.indexOf('window')>-1){
+        list=['t2.micro', 'm1.small'];
+    }else{
+        list=[];
+    }
+    loadInstanceSizes(list);
+}
+}
+
+function getProviderList(){
+
+    $.ajax({
+     type: "GET",
+     dataType: "text",
+     async: false,
+     url: "/d4dMasters/readmasterjsonnew/9",
+     success: function (data) {
+        data= typeof data =="string" ? JSON.parse(data) :data;
+        console.log(data);
+        var str=' <option value="">Select Provider</option>',len=data.length;
+        for(var i=0;i<len;i++){
+            str=str+'<option rowid="'+data[i].rowid+'" value="'+data[i].providername+'" secretkey="'+data[i].secretkey+'" accesskey="'+data[i].accesskey+'">'+data[i].providername+'</option>';
+        }
+        $('#providername').html(str);
+
+    },
+    failure: function (data) {
+     alert(data.toString());
+ }
+}); 
+}
+
+function validateImgaeId(){
+    var imageid=$('#imageidentifire').val().trim(),
+    providername=$('#providername').val(),
+    secretkey=$('#providername').find('[value="'+providername+'"]').attr('secretkey'),accesskey=$('#providername').find('[value="'+providername+'"]').attr('accesskey'),region=$('#region').val();
+    if(imageid && secretkey && accesskey && region){  
+
+        appendLoader();
+       
+        $.ajax({
+            method:"POST",
+            url:"/vmimages",
+            data:{ "secretkey": secretkey, "accesskey": accesskey, "region": region, "imageid":imageid },
+            success:function(data){
+                debugger;
+                removeLoader();
+                saveform(22);
             },
-            failure: function (data) {
-             alert(data.toString());
-         }
-     }); 
-        }
-        function populateInstaceSize(){
-            var val=$(this).val().toLowerCase(),list;
-            if(val.indexOf('cent')>-1){
-                list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge'];
+            error:function(){
+                bootbox.alert("Inavlid Image ID");
+                removeLoader();
             }
-            else if(val.indexOf('ubuntu')>-1){
-                list=['t2.micro'];
-            }else if(val.indexOf('window')>-1){
-                list=['t2.micro', 'm1.small'];
-            }else{
-                list=[];
-            }
-            loadInstanceSizes(list);
-        }
+        });
 
-        $("#imagename").focus().blur(populateInstaceSize);
+    }
+}
+$("#imagename").focus().blur(populateInstaceSize);
 
-        $('#myForm22').submit(function() {
-           $(this).validate();
+       // $('#imageidentifire').blur(validateImgaeId);
 
-           if($(this).valid){
-            /*alert('valid form submitted'); // for demo*/
-            if(!saveform('22'))return false;;
+       $('#myForm22').submit(function() {
+        // $(this).validate();
+
+        if(isFormValid()){
+            validateImgaeId();
         }else{
-                alert('invalid valid form submitted'); // for demo
+                bootbox.alert('invalid form Data submitted'); // for demo
             }
            return false; // for demo
        });
 
-        getProviderList();
-    });
+       getProviderList();
+       //populateInstaceSize();
+   });
 
 inLineReady();
 
