@@ -407,8 +407,6 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            }, {
-                "bSortable": true
             }],
             "fnRowCallback": function(nRow, aData, iDisplayIndex) {
                 $("td:first", nRow).html(iDisplayIndex + 1);
