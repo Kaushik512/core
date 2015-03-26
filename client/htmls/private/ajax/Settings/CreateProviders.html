@@ -60,14 +60,14 @@
           <div class="col-lg-6">
            <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
            <!-- <i class="icon-append fa fa-building"></i> -->
-           <input name="ctl00$MainContent$orgname" value="AKIAI6TVFFD23LMBJUPA" id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+           <input name="ctl00$MainContent$orgname"  id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
 
            <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
          </div>
          <div class="col-lg-6">
            <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
            <!-- <i class="icon-append fa fa-building"></i> -->
-           <input name="ctl00$MainContent$orgname" value="qZOZuI2Ys0/Nc7txsc0V2eMMVnsEK6+Qa03Vqiyw" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
+           <input name="ctl00$MainContent$orgname" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
 
            <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
          </div>
@@ -107,7 +107,7 @@
 </div>
 <div class="widget-toolbox clearfix">
   <div class="btn-group pull-right">
-  <button id="btnsubmit" class="btn btn-primary btn-mini" disabled style="margin-right:11px;">
+    <button id="btnsubmit" class="btn btn-primary btn-mini" disabled style="margin-right:11px;">
      <i class="ace-icon fa fa-check bigger-110"></i>
      Save
    </button>
@@ -136,35 +136,7 @@
     //   alert(folderpath);
     $('#folderpath').val(folderpath);
   }
-  
-  function appendLoader(){
-    $('#masterssavespinner').remove();
-    $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
-  }
-  function loadSecurityGroupID(accesskey,secretkey){
-    appendLoader();
 
-    $.ajax({
-      method: "POST",
-      url: "/providers/securitygroups",
-      data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" }
-    }).done(function( msg ) {
-
-      var str='',getTemplate=function(val){
-       return '<label class="toggle font-sm" style="padding-left:4px"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
-       'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
-        'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-    'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-  },len=msg.length;
-  for(var i=0;i<5;i++){
-    str=str+getTemplate(msg[i].GroupId);
-  }
-  $('#securitygroupids').html('').append(str);
-  $('#btnsubmit').removeAttr('disabled');
-  $('#masterssavespinner').remove();
-});
-
-  }
 
   function inLineReady() {
    $("input[type='text']").on("click", function () {
@@ -206,13 +178,60 @@
   </script>
   <script>
    $(document).ready(function () {
+    function selectDefaultValue(){
+      var value=d4ddata.securitygroupids,$inputs;
+      if(value && value.length){
+        value=value[0].split(',');
+        $inputs=$('#securitygroupids');
 
+        for(var i=0;i<value.length;i++){
+          $inputs.find('input[value="'+value[i]+'"]').trigger('click');
+        }
+      }
+    }
+    function appendLoader(){
+      removeLoader();
+      $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+    }
+    function removeLoader(){
+      $('#masterssavespinner').remove();
+    }
+    function loadSecurityGroupID(accesskey,secretkey){
+      appendLoader();
+
+      $.ajax({
+        method: "POST",
+        url: "/providers/securitygroups",
+        data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" },
+        error:function(XMLHttpRequest, textStatus, errorThrown) { 
+          bootbox.alert('Invalid Access Key and Secret Key');
+          removeLoader();
+          $('#securitygroupids').empty();
+
+        } 
+      }).done(function( msg ) {
+
+        var str='',getTemplate=function(val){
+         return '<label class="toggle font-sm" style="padding-left:4px"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
+         'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
+          'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
+      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
+    },len=msg.length;
+    for(var i=0;i<5;i++){
+      str=str+getTemplate(msg[i].GroupId);
+    }
+    $('#securitygroupids').html('').append(str);
+    $('#btnsubmit').removeAttr('disabled');
+    removeLoader();
+    selectDefaultValue();
+  });
+
+    }
     function checkForSecurityGroup(){
       var accesskey=$('#accesskey').val(),
       secretkey=$('#secretkey').val();
       if(accesskey && secretkey && accesskey!=='' && secretkey!==''){
         loadSecurityGroupID(accesskey,secretkey);
-
       }else{
         $('#btnsubmit').attr('disabled','disabled');
 
