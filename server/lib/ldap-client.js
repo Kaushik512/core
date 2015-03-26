@@ -37,7 +37,8 @@ var Ldap = function() {
     this.authenticate = function(username, password, callback) {
         
         var dnString = createDnString(username);
-        console.log('hit authenticate =========>');
+        console.log('hit authenticate =========>' + dnString);
+        console.log('ldap://' + appConfig.ldap.host + ':' + appConfig.ldap.port);
         client.bind(dnString, password, function(err, user) {
             if (err) {
                 console.log("err ==> ", err);
