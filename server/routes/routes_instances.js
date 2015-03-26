@@ -229,7 +229,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /instances/dockerexecute/%s/%s/%s", req.params.instanceid, req.params.containerid, req.params.action);
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
-        var cmd = "sudo docker exec " + req.params.containerid + ' ' + req.params.action;
+        var cmd = "sudo docker exec " + req.params.containerid + ' bash ' + req.params.action;
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             if (!err) {
                 logsDao.insertLog({

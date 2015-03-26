@@ -11,8 +11,8 @@ RUN apt-get -y install wget && wget http://python.org/ftp/python/2.7.5/Python-2.
 RUN apt-get -y install wget && wget https://bootstrap.pypa.io/get-pip.py && python /opt/get-pip.py && pip install robotframework && pip install robotframework-selenium2library 
 
 #RUN wget https://github.com/pshorally/D4DAutomationScript/archive/master.zip && apt-get -y install unzip && unzip master.zip
-RUN apt-get install git -y
-RUN mkdir -p /home/ubuntu/development/catalyst && cd /home/ubuntu/development/catalyst
+#RUN apt-get install git -y
+#RUN mkdir -p /home/ubuntu/development/catalyst && cd /home/ubuntu/development/catalyst
  
 
 RUN apt-get -y install xvfb firefox
@@ -21,3 +21,6 @@ ENV PYTHONPATH /home/ubuntu/development/catalyst/D4D/Test/FunctionalTest/catfram
 ADD runtest.sh /usr/bin/
 RUN chmod 755 /usr/bin/runtest.sh
 CMD /usr/bin/runtest.sh
+
+#docker run -t -i -d --name catalystft --link catalyst1:catalyst --volumes-from catalystcode -v /var/www/html:/home/ubuntu/development/catalyst/Test_Results relevancelab/catalystft:1.0 /bin/bash
+#runtest.sh

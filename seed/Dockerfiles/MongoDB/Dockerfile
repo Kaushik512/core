@@ -26,5 +26,5 @@ RUN chmod 777 /usr/bin/startmongo.sh
 CMD /usr/bin/startmongo.sh
 
 
-#docker run -t -i -d -p 27017:27017 -v /data/db:/data/db --name mongodb  relevancelab/mongodb:1.2 /bin/bash
+#docker run -t -i -d -p 27017:27017 --volumes-from catalystcode  -v /data/db:/data/db --name mongodb  relevancelab/mongodb:1.0 /bin/bash
 #bash startmongo.sh
