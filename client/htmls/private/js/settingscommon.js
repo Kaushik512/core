@@ -1941,9 +1941,25 @@ function saveform(formID, operationTypes) {
 
     console.log('This is the data that gets saved:' + data1['rowid']);
     
+    /*Adding Extra param for providers */
     if(formID==9){
-        data1.instanceUserName='root';
+        data1.append('instanceUserName','root');
     }
+    /*Adding Extram params for image creation*/
+    if(formID==22){
+       var imagename= $('#imagename').val().toLowerCase().trim();
+       if(imagename.indexOf('cent')>-1){
+        data1.append('ostype','linux');
+        data1.append('username','root');
+       }else if(imagename.indexOf('window')>-1){
+        data1.append('ostype','windows');
+        data1.append('username','administrator');
+       }
+       else if(imagename.indexOf('ubuntu')>-1){
+        data1.append('ostype','linux');
+        data1.append('username','ubuntu');
+       }
+   }
     console.log(data1);
     // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({

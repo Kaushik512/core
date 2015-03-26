@@ -8,7 +8,7 @@
         <form id="myForm22" action="">
             <div class="col-md-12">
                 <div class="widget-box">
-                  <div class="widget-header"><h4 style="color:black;">Create Image <span id="
+                  <div class="widget-header"><h4 style="color:black;padding-top:9px;">Create Image <span id="
                       spnimage"></span></h4></div>
                       <div class="widget-body">
                         <div class="widget-main" style="min-height:300px">
@@ -139,30 +139,28 @@
 function appendLoader(){
    $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
 }
-  function loadInstanceSizes(list){
-appendLoader();
+function loadInstanceSizes(list){
+    appendLoader();
  //var list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
  /*   $.ajax({
       method: "POST",
       url: "/providers/securitygroups",
       data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" }
     }).done(function( msg ) {
-*/
-      var str='',getTemplate=function(val){
-     return '<label class="toggle font-sm"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
-     'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
-      'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-    'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-  },len=list.length;
-  for(var i=0;i<len;i++){
+        */
+        var str='',getTemplate=function(val){
+            return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
+         'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
+          'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
+'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
+},len=list.length;
+for(var i=0;i<len;i++){
     console.log(getTemplate(list[i]));
     str=str+getTemplate(list[i]);
-  }
-  $('#instancetypes').html('').append(str);
-  $('#btnsubmit').removeAttr('disabled');
-  $('#masterssavespinner').remove();
-//});
-
+}
+$('#instancetypes').html('').append(str);
+$('#btnsubmit').removeAttr('disabled');
+$('#masterssavespinner').remove();
 }
 
 function inLineReady() {
@@ -195,37 +193,54 @@ function inLineReady() {
         drawBreadCrumb1();
     }
     $(document).ready(function () {
-function populateInstaceSize(){
-    var val=$(this).val().toLowerCase(),list;
-    if(val.indexOf('centos')>-1){
-        list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge'];
-    }
-    else if(val.indexOf('ubuntu')>-1){
-        list=['t2.micro'];
-    }else if(val.indexOf('window')>-1){
-list=['t2.micro', 'm1.small'];
-    }else{
-        list=[];
-    }
-    loadInstanceSizes(list);
-}
 
-      $("#imagename").focus();
-        $('#imagename').blur(populateInstaceSize);
+        function getProviderList(){
 
-      $('#myForm22').submit(function() {
-       $(this).validate();
+            $.ajax({
+             type: "GET",
+             dataType: "text",
+             async: false,
+             url: "d4dMasters/readmasterjsonnew/9",
+             success: function (data) {
+                console.log(data);
+            },
+            failure: function (data) {
+             alert(data.toString());
+         }
+     }); 
+        }
+        function populateInstaceSize(){
+            var val=$(this).val().toLowerCase(),list;
+            if(val.indexOf('cent')>-1){
+                list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge'];
+            }
+            else if(val.indexOf('ubuntu')>-1){
+                list=['t2.micro'];
+            }else if(val.indexOf('window')>-1){
+                list=['t2.micro', 'm1.small'];
+            }else{
+                list=[];
+            }
+            loadInstanceSizes(list);
+        }
 
-       if($(this).valid){
-        /*alert('valid form submitted'); // for demo*/
-        if(!saveform('22'))return false;;
-    }else{
+        $("#imagename").focus().blur(populateInstaceSize);
+
+        $('#myForm22').submit(function() {
+           $(this).validate();
+
+           if($(this).valid){
+            /*alert('valid form submitted'); // for demo*/
+            if(!saveform('22'))return false;;
+        }else{
                 alert('invalid valid form submitted'); // for demo
             }
            return false; // for demo
        });
-  });
 
-    inLineReady();
-//loadInstanceSizes();
+        getProviderList();
+    });
+
+inLineReady();
+
 </script>
