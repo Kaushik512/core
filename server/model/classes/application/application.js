@@ -167,22 +167,24 @@ ApplicationSchema.statics.getApplicationById = function(applicationId, callback)
             var count = 0;
 
             function getAppInstancesNodes(appInstance) {
-                count++;
-                appinstance.getNodes(err, function(err, nodes) {
+                appInstance.getNodes(function(err, nodes) {
+                    count++;
                     if (err) {
                         callback(err, null);
                         return;
                     }
                     appInstance.nodes = nodes;
-                    if (count < self.appInstances.length) {
-                        getAppInstancesNodes(self.appInstances[count]);
+                    if (count < application.appInstances.length) {
+                        getAppInstancesNodes(application.appInstances[count]);
                     } else {
                         callback(null, application);
                     }
 
                 });
 
-            }*/
+            }
+            getAppInstancesNodes(application.appInstances[count]);
+            */
             callback(null, application);
         } else {
             callback(null, null);

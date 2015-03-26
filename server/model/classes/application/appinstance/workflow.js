@@ -26,9 +26,8 @@ WorkflowSchema.methods.getNodes = function(callback) {
             return;
         }
         for (var i = 0; i < tasks.length; i++) {
-            var nodes = tasks.getNodes();
+            var nodes = tasks[i].getChefTaskNodes();
             nodesList = utils.arrayMerge(nodesList, nodes);
-
         }
         callback(null, nodesList);
     });
