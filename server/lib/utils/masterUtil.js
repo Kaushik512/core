@@ -11,12 +11,8 @@ var MasterUtil = function(){
                 callback(err, null);
             }
             if (d4dMasterJson) {
-                /*res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                });*/
-               // res.end(JSON.stringify(d4dMasterJson));
                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                callback(null, JSON.stringify(d4dMasterJson));
+                callback(null, d4dMasterJson);
             } 
             logger.debug("Record not found.");
 
@@ -31,12 +27,8 @@ var MasterUtil = function(){
                 callback(err, null);
             }
             if (d4dMasterJson) {
-                /*res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                });*/
-               // res.end(JSON.stringify(d4dMasterJson));
                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                callback(null, JSON.stringify(d4dMasterJson));
+                callback(null, d4dMasterJson);
             } 
             logger.debug("Record not found.");
 
