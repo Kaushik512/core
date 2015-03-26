@@ -121,36 +121,48 @@
 
                                                 <div class="row " style="margin:0px;">
                                                     
-                                                   <div class="col-lg-6">
+                                                  <!--  <div class="col-lg-6">
                                                     <label for="">Choose Operating System:<span style="color:red">*</span></label>
                                                     <select id="instanceOS" class="chooseOS width-100">
                                                     </select>
 
                                                                                               
-                                                </div>
+                                                </div> -->
+                                                <div class="col-lg-6">
+                                                    <label for="">Choose Provider:<span style="color:red">*</span></label>
+                                                    <select id="providername" class="width-100">
+                                                    </select>
+
+                                                                                              
+                                                </div> 
                                                 <div class="col-lg-6">
                                                     <label for="">Choose Security Group:<span style="color:red">*</span></label>
                                                     
                                                     
-                                                        <select class="chooseSecurity width-100">
-                                                            <option value="0">default-d4d</option>
-                                                            <!--<option value="1">default-d4d</option>-->
-                                                            <option value="2">Vpc-1</option>
-                                                            <option value="3">Vpc-2</option>
-                                                            <option value="4">Default VPC</option>
-
+                                                        <select id="securityGroupId" class="chooseSecurity width-100">
+                                                           
                                                         </select>
                                                     
                                                 </div>
                                             </div>
+                                            
+                                            <div class="col-lg-6" style="margin-top:15px;">
+                                                <label for="">Choose Image:<span style="color:red">*</span></label>
+                                                
+                                                
+                                                  <select id="imageId" class="chooseInstance width-100">
+                                                  </select>
+                                                </div>
+
                                             <div class="col-lg-6" style="margin-top:15px;">
                                                 <label for="">Choose Instance Size:<span style="color:red">*</span></label>
                                                 
                                                 
-                                                  <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
+                                                  <select id="instanceType" class="instanceType chooseInstance width-100">
                                                   </select>
-                                                
-                                            </div>
+                                                </div>
+
+                                            
                                             <!-- <div class="col-lg-6" style="margin-top:15px;">
                                                     <label for="">Choose Image:<span style="color:red">*</span></label>
                                                     <select id="imagename" class="chooseImage width-100">
@@ -630,6 +642,72 @@ $('#launchParamDocker').click(function(){
   $('.chooseSelectExit').change();
 });
 
+function getImageListAssociatedWithProvider(provider_rowid){
+   $.ajax({
+           type: "GET",
+           dataType: "text",
+           async: false,
+           url: '/d4dMasters/22/providername_rowid/'+provider_rowid,
+           success: function (data) {
+            data= typeof data =="string" ? JSON.parse(data) :data;
+            console.log("Image List Associated");
+            console.log(data);
+            var str=' <option value="">Choose Image</option>',len=data.length;
+            for(var i=0;i<len;i++){
+                str=str+'<option rowid="'+data[i].rowid+'" value="'+data[i].rowid+'" instancetypes="'+data[i].instancetypes.join(',')+'">'+data[i].imagename+'</option>';
+            }
+            $('#imageId').html(str).off('change').on('change',function(){
+                var val=$(this).val(),el=$(this).find('[value="'+val+'"]'),instancetypes=
+                el.attr('instancetypes'),str='<option value="">Choose Instance Sizes</option>';
+                instancetypes=instancetypes.split(',');
+                for(var i=0;i<instancetypes.length;i++){
+                  str=str+'<option value="'+instancetypes[i]+'">'+instancetypes[i]+'</option>';
+                }
+                $('#instanceType').html(str);
+               // getImageListAssociatedWithProvider(el.attr('rowid'));
+           
+            });
+
+        },
+        failure: function (data) {
+           alert(data.toString());
+       }
+    }); 
+}
+
+    function getProviderList(){
+        $.ajax({
+           type: "GET",
+           dataType: "text",
+           async: false,
+           url: "/d4dMasters/readmasterjsonnew/9",
+           success: function (data) {
+            data= typeof data =="string" ? JSON.parse(data) :data;
+            console.log(data);
+            var str=' <option value="">Select Provider</option>',len=data.length;
+            for(var i=0;i<len;i++){
+                str=str+'<option rowid="'+data[i].rowid+'" value="'+data[i].providername+'" secretkey="'+data[i].secretkey+'" accesskey="'+data[i].accesskey+'" region="'+data[i].region+'" securitygroupids="'+data[i].securitygroupids.join(',')+'">'+data[i].providername+'</option>';
+            }
+            $('#providername').html(str).off('change').on('change',function(){
+                var val=$(this).val(),el=$(this).find('[value="'+val+'"]'),securitygroupids=
+                el.attr('securitygroupids'),str='<option value="">Choose Security Group</option>';
+                securitygroupids=securitygroupids.split(',');
+                for(var i=0;i<securitygroupids.length;i++){
+                  str=str+'<option value="'+securitygroupids[i]+'">'+securitygroupids[i]+'</option>';
+                }
+                $('#securityGroupId').html(str);
+                getImageListAssociatedWithProvider(el.attr('rowid'));
+           
+           
+            });
+
+        },
+        failure: function (data) {
+           alert(data.toString());
+       }
+    }); 
+    }
+
 //for adding the new App Series(Name and URL)
 /*$('.addNewApp').click(function() {
   $('#appSeries').clone().insertAfter('.applicationURLContainer:last');
@@ -677,7 +755,8 @@ $(document).ready(function(){
 
     $('.chooseSelect').select2();
     console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
-    $.get('../aws/ec2/amiids',function(data){
+   
+   /* $.get('../aws/ec2/amiids',function(data){
        var $instanceOS = $('#instanceOS');
        for(var i=0;i<data.length;i++) {
           $option = $('<option data-amiid="'+data[i].amiid+'" data-amiid-username="'+data[i].username+'" data-instanceOS="'+data[i].osType+'" value="'+data[i].name+'">'+data[i].name+'</option>');
@@ -706,9 +785,10 @@ $(document).ready(function(){
        $instanceOS.trigger('change');
        
     }); 
-
+*/
+getProviderList();
     $(".chooseOrgselect2").select2();    
-    $(".chooseOS").select2();
+   $("#providername").select2();
     $(".chooseSecurity").select2();
     $(".chooseInstance").select2();
     //$(".chooseImage").select2();
@@ -1148,12 +1228,16 @@ $(document).ready(function(){
                console.log("instanceType ==>", $('select.instanceType').val());
                reqBody.instanceType = $('select.instanceType').val();
 
-               var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
-               console.log($('#instanceOS').val());
-               console.log($instanceOsoptionsSelected);
-               reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
-               reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
-               reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
+             //  var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
+             //  console.log($('#instanceOS').val());
+             //  console.log($instanceOsoptionsSelected);
+
+               //reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');//ankit
+               //reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');//ankit
+               //reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');//ankit
+               reqBody.securityGroupId=$('#securityGroupId').val();
+               reqBody.instanceType=$('#instanceType').val();
+               
                // reqBody.instanceOS = $('#instanceOS').val();
                reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
                reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
@@ -1174,6 +1258,29 @@ $(document).ready(function(){
 
                reqBody.name = $('#blueprintNameInput').val();
                //alert('in');
+               if(!$('#providername').val()){
+                alert('Please Select Any Provider');
+                $('#providername').focus();
+                return false;
+               }
+               if(!$('#imageId').val()){
+                alert('Please Select Any Image');
+                $('#imageId').focus();
+                return false;
+               }
+
+               if(!reqBody.securityGroupId){
+                alert('Please Select Any Security Group ID');
+                $('#securityGroupId').focus();
+                return false;
+               }
+
+               if(!reqBody.instanceType){
+                alert('Please Select  Any Instance Type');
+                $('#instanceType').focus();
+                return false;
+               }
+
                if (!reqBody.name) {
                    alert("Please enter a blueprint name");
                    return false;
@@ -1213,13 +1320,12 @@ $(document).ready(function(){
 
                reqBody.appUrls = appUrls;
 
-
-           
+               var imageId=$('#imageId').val();           
             
                
                $('.blueprintMsgContainer').hide();
                
-               $.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
+               $.post('blueprints/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/images/'+imageId, {
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);
