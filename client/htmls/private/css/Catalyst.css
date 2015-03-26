@@ -2,6 +2,14 @@
     font-size: 18px !important;
     margin-top: 4px;
 }
+.indicatorStopped{
+    background-image:url('../img/indicator_stopped.png');
+    background-repeat:no-repeat;
+}
+.indicatorStarted{
+    background-image:url('../img/indicator_started.png');
+    background-repeat:no-repeat;
+}
 
 label.custom-select {
     position: absolute;
