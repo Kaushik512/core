@@ -90,7 +90,16 @@
         </div>
       </div>
 
-
+<div class="col-lg-6 authPemFile ipWidth" style="display: block;">
+                            <div class="smart-forms">
+                                <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                <label for="templatesicon" name="field" class="file">
+                                    <span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px 14px;position: absolute;right:4px;">Browse</span>
+                                    <input id="providerpemfile" type="file" class="gui-file">
+                                    <input type="text" readonly="" class="gui-input">
+                                </label>
+                            </div>
+                        </div>
     </div>
   </div>
   <!-- end widget div -->
@@ -137,7 +146,12 @@
     $('#folderpath').val(folderpath);
   }
 
-
+  function bindChange_importPemFile() {
+                  $('#providerpemfile').change(function() {
+                      //console.log(this.files);
+                      $(this).next().val(this.files[0].name);
+                  });
+              }
   function inLineReady() {
    $("input[type='text']").on("click", function () {
      $(this).select();
@@ -256,6 +270,7 @@
          });
 
     checkForSecurityGroup();
+    bindChange_importPemFile();
   });
 /*
    function providerTest(){
