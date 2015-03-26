@@ -1,193 +1,188 @@
-<script>
-    $(".tree-view").hide();
+    <script>
+        $(".tree-view").hide();
 
-</script>
+    </script>
 
-<div class="row" id="createimagebody">
-    <div class="col-md-12">
-        <form id="myForm22" action="">
-            <div class="col-md-12">
-                <div class="widget-box">
-                  <div class="widget-header"><h4 style="color:black;padding-top:9px;">Create Image <span id="
-                      spnimage"></span></h4></div>
-                      <div class="widget-body">
-                        <div class="widget-main" style="min-height:300px">
-                            <div>
+    <div class="row" id="createimagebody">
+        <div class="col-md-12">
+            <form id="myForm22" action="">
+                <div class="col-md-12">
+                    <div class="widget-box">
+                      <div class="widget-header"><h4 style="color:black;padding-top:9px;">Create Image <span id="
+                          spnimage"></span></h4></div>
+                          <div class="widget-body">
+                            <div class="widget-main" style="min-height:300px">
+                                <div>
 
-                                <section id="widget-grid" class="">
-                                    <!-- START ROW -->
-                                    <div class="row">
-                                        <!-- NEW COL START -->
-                                        <article class="col-sm-12 col-md-12 col-lg-12">
+                                    <section id="widget-grid" class="">
+                                        <!-- START ROW -->
+                                        <div class="row">
+                                            <!-- NEW COL START -->
+                                            <article class="col-sm-12 col-md-12 col-lg-12">
 
-                                            <!-- Widget ID (each widget will need unique ID)-->
-                                            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                                                <!-- Widget ID (each widget will need unique ID)-->
+                                                <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
 
-                                                <!-- widget div-->
-                                                <div>
+                                                    <!-- widget div-->
+                                                    <div>
 
-                                                    <!-- widget content -->
-                                                    <div class="widget-body no-padding">
+                                                        <!-- widget content -->
+                                                        <div class="widget-body no-padding">
 
 
 
-                                                        <fieldset>
-                                                            <div class="row">
-                                                              <div class="col-lg-6">
-                                                               <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                               <!-- <i class="icon-append fa fa-building"></i> -->
-                                                               <input name="ctl00$MainContent$orgname" value="Default" id="imagename" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                  <div class="col-lg-6">
+                                                                     <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                     <!-- <i class="icon-append fa fa-building"></i> -->
+                                                                     <input name="ctl00$MainContent$orgname" value="Default" id="imagename" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+                                                                     <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                                 </div>                                                         
+
+
+                                                                 <div class="col-lg-6">
+                                                                  <label for="name">Choose Provider:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                  <select id="providername" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+
+
+                                                                  </select>
+                                                                  <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                              </div>   
+
+
+                                                          </div>
+                                                          <div class="row">
+                                                             <div class="col-lg-6">
+                                                                <label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                <select id="region" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                                                   <option value="">Select Region</option>
+                                                                   <option value="us-west-2">us-west-2</option>
+                                                               </select>
                                                                <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                           </div>                                                         
-
+                                                           </div>
 
                                                            <div class="col-lg-6">
-                                                              <label for="name">Choose Provider:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                              <select id="providername" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                                              
+                                                             <label for=""> Image ID:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                             <!-- <i class="icon-append fa fa-building"></i> -->
+                                                             <input name="ctl00$MainContent$orgname" value="Default" id="imageidentifire" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+                                                         </div>    
 
-                                                           </select>
-                                                           <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                       </div>   
+                                                     </div>                                                          
 
+                                                     <div class="row">
+                                                         <div class="col-lg-6 smart-form" style="">
+                                                          <label for="category">Instance Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                          <div id="instancetypes" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" sourcepath="21" cdata="catalyst" cat-validation="onechecked">
 
-                                                   </div>
-                                                   <div class="row">
-                                                       <div class="col-lg-6">
-                                                        <label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                        <select id="region" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                                         <option value="">Select Region</option>
-                                                         <option value="us-west-2">us-west-2</option>
-                                                     </select>
-                                                     <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                 </div>
-
-                                                 <div class="col-lg-6">
-                                                   <label for=""> Image ID:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                   <!-- <i class="icon-append fa fa-building"></i> -->
-                                                   <input name="ctl00$MainContent$orgname" value="Default" id="imageidentifire" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
-                                               </div>    
-
-                                           </div>                                                          
-
-                                           <div class="row">
-                                               <div class="col-lg-6 smart-form" style="">
-                                                  <label for="category">Instance Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                  <div id="instancetypes" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" sourcepath="21" cdata="catalyst" cat-validation="onechecked">
-
+                                                          </div>
+                                                      </div>
                                                   </div>
-                                              </div>
-
-
+                                              </fieldset>
                                           </div>
-                                      </fieldset>   
+                                          <!-- end widget content -->
 
-
+                                      </div>
+                                      <!-- end widget div -->
 
                                   </div>
-                                  <!-- end widget content -->
+                                  <!-- end widget -->             
 
-                              </div>
-                              <!-- end widget div -->
-
+                              </article>
+                              <!-- END COL -->
                           </div>
-                          <!-- end widget -->             
+                          <!-- END ROW -->
+                      </section>
+                      <!-- end widget grid -->
 
-                      </article>
-                      <!-- END COL -->
                   </div>
-                  <!-- END ROW -->
-              </section>
-              <!-- end widget grid -->
+              </div>
+          </div>
 
+          <div class="widget-toolbox clearfix">
+             <div class="btn-group pull-right">
+                <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Save
+                </button>
+                <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
+                  <i class="ace-icon fa fa-undo bigger-110"></i>
+                  Cancel
+              </a>
           </div>
       </div>
-  </div>
+    </div>
 
-  <div class="widget-toolbox clearfix">
-   <div class="btn-group pull-right">
-    <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
-        <i class="ace-icon fa fa-check bigger-110"></i>
-        Save
-    </button>
-    <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-      <i class="ace-icon fa fa-undo bigger-110"></i>
-      Cancel
-  </a>
-</div>
-</div>
-</div>
+    </div>
+    </form>
+    </div>
 
-</div>
-</form>
-</div>
+    </div>
 
-</div>
-
-</div>
+    </div>
 
 
 
 
-<script>
-   function cancelClicked() {
-    $("#popupSelectProvider").modal('hide');
-    $(".modal-backdrop.fade.in").detach();
-    $('#btncancel').click();
-}
+    <script>
+     function cancelClicked() {
+        $("#popupSelectProvider").modal('hide');
+        $(".modal-backdrop.fade.in").detach();
+        $('#btncancel').click();
+    }
 
 
-function inLineReady() {
-    $("#providername").select2();
-    $("#region").select2();
-    $("input[type='text']").on("click", function () {
-        $(this).select();
-        $("#msgOrgName").hide();
-    });
-        if (readform(22) == true) {  //22 is the reference for provider master. Function returns true if in not in edit mode
-            //alert('in');
-            $('#createproviderbody').css('display','');
-            $('#spnprovidertype').html($('#providertype').val());
-        }
-
-        $('#content').css("opacity", "1 !important");
-        //Force opening the left navigation menu
-        if ($('#navSettings').is(":visible") == false) {
-            $('#navSettings').css("display", '');
-            $('#navSettings > ul > li').first().addClass('open');
-            $('#navSettings > ul > li > ul').css("display", "none");
-            $('#navSettings > ul > li > ul').first().css("display", "block");
-        }
-        //redrawing the breadcrumb and selecting the tree
-        $('#ulsettingstree > li').removeClass('active');
-        $('#ulsettingstree > li').each(function () {
-            if ($(this).text().trim() == "Images")
-                $(this).addClass('active');
+    function inLineReady() {
+        $("#providername").select2();
+        $("#region").select2();
+        $("input[type='text']").on("click", function () {
+            $(this).select();
+            $("#msgOrgName").hide();
         });
-        drawBreadCrumb1();
-    }
-    $(document).ready(function () {
+            if (readform(22) == true) {  //22 is the reference for provider master. Function returns true if in not in edit mode
+                //alert('in');
+                $('#createproviderbody').css('display','');
+                $('#spnprovidertype').html($('#providertype').val());
+            }
 
-        function appendLoader(){
-          removeLoader();
-          $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
-          $('#btnsubmit').attr('disabled','disabled');
-      }
-      function removeLoader(){
-          $('#masterssavespinner').remove();
-          $('#btnsubmit').removeAttr('disabled');
-      }
-       function selectDefaultValue(){
-      var value=d4ddata.securitygroupids,$inputs;
-      if(value && value.length){
-        value=value[0].split(',');
-        $inputs=$('#securitygroupids');
-
-        for(var i=0;i<value.length;i++){
-          $inputs.find('input[value="'+value[i]+'"]').trigger('click');
+            $('#content').css("opacity", "1 !important");
+            //Force opening the left navigation menu
+            if ($('#navSettings').is(":visible") == false) {
+                $('#navSettings').css("display", '');
+                $('#navSettings > ul > li').first().addClass('open');
+                $('#navSettings > ul > li > ul').css("display", "none");
+                $('#navSettings > ul > li > ul').first().css("display", "block");
+            }
+            //redrawing the breadcrumb and selecting the tree
+            $('#ulsettingstree > li').removeClass('active');
+            $('#ulsettingstree > li').each(function () {
+                if ($(this).text().trim() == "Images")
+                    $(this).addClass('active');
+            });
+            drawBreadCrumb1();
         }
+        $(document).ready(function () {
+
+            function appendLoader(){
+              removeLoader();
+              $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+              $('#btnsubmit').attr('disabled','disabled');
+          }
+          function removeLoader(){
+              $('#masterssavespinner').remove();
+              $('#btnsubmit').removeAttr('disabled');
+          }
+          function selectDefaultValue(){
+              var value=d4ddata.instancetypes,$inputs;
+              if(value && value.length){
+                value=value[0].split(',');
+                $inputs=$('#instancetypes');
+
+                for(var i=0;i<value.length;i++){
+                  $inputs.find('input[value="'+value[i]+'"]').trigger('click');
+              }
+          }
       }
-    }
 
       function loadInstanceSizes(list){
         appendLoader();
@@ -195,102 +190,102 @@ function inLineReady() {
             return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
             'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
               'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-},len=list.length;
-for(var i=0;i<len;i++){
-    str=str+getTemplate(list[i]);
-}
-$('#instancetypes').html('').append(str);
-removeLoader();
-//selectDefaultValue();
-}
-
-
-function populateInstaceSize(){
-    var val=$(this).val(),list;
-    if(val){
-        val=val.toLowerCase();
-    if(val.indexOf('cent')>-1){
-        list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge'];
+    'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
+    },len=list.length;
+    for(var i=0;i<len;i++){
+        str=str+getTemplate(list[i]);
     }
-    else if(val.indexOf('ubuntu')>-1){
-        list=['t2.micro'];
-    }else if(val.indexOf('window')>-1){
-        list=['t2.micro', 'm1.small'];
-    }else{
-        list=[];
+    $('#instancetypes').html('').append(str);
+    removeLoader();
+    selectDefaultValue();
     }
-    loadInstanceSizes(list);
-}
-}
 
-function getProviderList(){
 
-    $.ajax({
-     type: "GET",
-     dataType: "text",
-     async: false,
-     url: "/d4dMasters/readmasterjsonnew/9",
-     success: function (data) {
-        data= typeof data =="string" ? JSON.parse(data) :data;
-        console.log(data);
-        var str=' <option value="">Select Provider</option>',len=data.length;
-        for(var i=0;i<len;i++){
-            str=str+'<option rowid="'+data[i].rowid+'" value="'+data[i].providername+'" secretkey="'+data[i].secretkey+'" accesskey="'+data[i].accesskey+'">'+data[i].providername+'</option>';
+    function populateInstaceSize(){
+        var val=$("#imagename").val(),list;
+        if(val){
+            val=val.toLowerCase();
+            if(val.indexOf('cent')>-1){
+                list=['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge'];
+            }
+            else if(val.indexOf('ubuntu')>-1){
+                list=['t2.micro'];
+            }else if(val.indexOf('window')>-1){
+                list=['t2.micro', 'm1.small'];
+            }else{
+                list=[];
+            }
+            loadInstanceSizes(list);
         }
-        $('#providername').html(str);
-
-    },
-    failure: function (data) {
-     alert(data.toString());
- }
-}); 
-}
-
-function validateImgaeId(){
-    var imageid=$('#imageidentifire').val().trim(),
-    providername=$('#providername').val(),
-    secretkey=$('#providername').find('[value="'+providername+'"]').attr('secretkey'),accesskey=$('#providername').find('[value="'+providername+'"]').attr('accesskey'),region=$('#region').val();
-    if(imageid && secretkey && accesskey && region){  
-
-        appendLoader();
-       
-        $.ajax({
-            method:"POST",
-            url:"/vmimages",
-            data:{ "secretkey": secretkey, "accesskey": accesskey, "region": region, "imageid":imageid },
-            success:function(data){
-                debugger;
-                removeLoader();
-                saveform(22);
-            },
-            error:function(){
-                bootbox.alert("Inavlid Image ID");
-                removeLoader();
-            }
-        });
-
     }
-}
-$("#imagename").focus().blur(populateInstaceSize);
 
-       // $('#imageidentifire').blur(validateImgaeId);
-
-       $('#myForm22').submit(function() {
-        // $(this).validate();
-
-        if(isFormValid()){
-            validateImgaeId();
-        }else{
-                bootbox.alert('invalid form Data submitted'); // for demo
+    function getProviderList(){
+        $.ajax({
+           type: "GET",
+           dataType: "text",
+           async: false,
+           url: "/d4dMasters/readmasterjsonnew/9",
+           success: function (data) {
+            data= typeof data =="string" ? JSON.parse(data) :data;
+            console.log(data);
+            var str=' <option value="">Select Provider</option>',len=data.length;
+            for(var i=0;i<len;i++){
+                str=str+'<option rowid="'+data[i].rowid+'" value="'+data[i].providername+'" secretkey="'+data[i].secretkey+'" accesskey="'+data[i].accesskey+'">'+data[i].providername+'</option>';
             }
-           return false; // for demo
+            $('#providername').html(str);
+
+        },
+        failure: function (data) {
+           alert(data.toString());
+       }
+    }); 
+    }
+
+    function validateImgaeId(){
+        var imageid=$('#imageidentifire').val().trim(),
+        providername=$('#providername').val(),
+        secretkey=$('#providername').find('[value="'+providername+'"]').attr('secretkey'),accesskey=$('#providername').find('[value="'+providername+'"]').attr('accesskey'),region=$('#region').val();
+        if(imageid && secretkey && accesskey && region){
+
+            appendLoader();
+
+            $.ajax({
+                method:"POST",
+                url:"/vmimages",
+                data:{ "secretkey": secretkey, "accesskey": accesskey, "region": region, "imageid":imageid },
+                success:function(data){
+                    debugger;
+                    removeLoader();
+                    saveform(22);
+                },
+                error:function(){
+                    bootbox.alert("Inavlid Image ID");
+                    removeLoader();
+                }
+            });
+
+        }
+    }
+      populateInstaceSize();
+    $("#imagename").focus().blur(populateInstaceSize);
+
+           // $('#imageidentifire').blur(validateImgaeId);
+
+           $('#myForm22').submit(function() {
+            // $(this).validate();
+
+            if(isFormValid()){
+                validateImgaeId();
+            }else{
+                    bootbox.alert('invalid form Data submitted'); // for demo
+                }
+               return false; // for demo
+           });
+
+           getProviderList();
+         
        });
 
-       getProviderList();
-       //populateInstaceSize();
-   });
+    inLineReady();
 
-inLineReady();
-
-</script>
+    </script>
