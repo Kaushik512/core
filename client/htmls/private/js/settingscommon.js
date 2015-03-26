@@ -1950,14 +1950,14 @@ function saveform(formID, operationTypes) {
        var imagename= $('#imagename').val().toLowerCase().trim();
        if(imagename.indexOf('cent')>-1){
         data1.append('ostype','linux');
-        data1.append('username','root');
+        data1.append('osusername','root');
        }else if(imagename.indexOf('window')>-1){
         data1.append('ostype','windows');
-        data1.append('username','administrator');
+        data1.append('osusername','administrator');
        }
        else if(imagename.indexOf('ubuntu')>-1){
         data1.append('ostype','linux');
-        data1.append('username','ubuntu');
+        data1.append('osusername','ubuntu');
        }
    }
     console.log(data1);
