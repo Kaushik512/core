@@ -34,7 +34,7 @@ $(function() {
         var timeString = new Date().setTime(buildHistory.timestampStarted);
         var date = new Date(timeString).toLocaleString();
 
-        var $tdBuildNumber = $('<td></td>').append('<span>108</span>');
+        var $tdBuildNumber = $('<td></td>').append('<span>' + buildHistory.jobNumber + '</span>');
         $trHistoryRow.append($tdBuildNumber);
 
         var $tdBuildStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
@@ -64,7 +64,7 @@ $(function() {
             $modal.find('.errorMsgContainer').hide();
             $modal.find('.outputArea').hide();
             $modal.modal('show');
-            $('../jenkins/' + buildHistory.jenkinsServerId + '/jobs/' + buildHistory.jobName + '/builds/' + buildHistory.jobNumber + '/output', function(logs) {
+            $.get('../jenkins/' + buildHistory.jenkinsServerId + '/jobs/' + buildHistory.jobName + '/builds/' + buildHistory.jobNumber + '/output', function(logs) {
                 $modal.find('.loadingContainer').hide();
                 $modal.find('.errorMsgContainer').hide();
                 $modal.find('.outputArea').append(logs.output).show();
@@ -87,6 +87,29 @@ $(function() {
 
     }
 
+    function addAppInstanceRow(appInstance) {
+        var dataTable = $('#appInstancesTable').DataTable();
+        var $tr = $('<tr></tr>');
+        var $tdSno = $('<td/>');
+        $tr.append($tdSno);
+        var $tdName = $('<td/>').html(appInstance.name);
+        $tr.append($tdName);
+        var $tdEnv = $('<td></td>').html(appInstance.envId);
+        $tr.append($tdEnv);
+        /*var $tdNodes = $('<td></td>');
+        if (appInstance.nodes && appInstances.nodes.length) {
+            var $tdNodes = $tdNodes.html(appInstance.nodes.length + '(<a href="javascript:void(0) />view<a>")');
+        }
+        $tr.append($tdNodes);
+        */
+        $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%" href="#appInstancesDeployModal" data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
+        $tr.append($tdAction);
+        dataTable.row.add($tr).draw();
+
+    }
+
+
+
     function createAppCard(data) {
         var $appCard = $appCardTemplate.clone();
         var applicationId = data._id;
@@ -105,6 +128,10 @@ $(function() {
             $(this).addClass('role-Selectedcard-app');
         });
         var buildInfo = null;
+
+        for (var i = 0; i < data.appInstances.length; i++) {
+            addAppInstanceRow(data.appInstances[i]);
+        }
 
         $.get('../applications/' + applicationId + '/buildConf', function(buildData) {
             buildInfo = buildData;
@@ -327,13 +354,13 @@ $(function() {
             return;
         }
 
-        $.post('../applications/'+urlParams.appId+'/appInstances',{
-            appInstanceData:reqBody
-        },function(data){
+        $.post('../applications/' + urlParams.appId + '/appInstances', {
+            appInstanceData: reqBody
+        }, function(data) {
             console.log(data);
             $('#modaladdAppInstances').modal('hide');
-        }).fail(function(jxhr){
-           alert('Server Behaved Unexpectedly');
+        }).fail(function(jxhr) {
+            alert('Server Behaved Unexpectedly');
         });
 
 
@@ -352,14 +379,34 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }, {
                 "bSortable": true
             }, {
                 "bSortable": false
+            }],
+            "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                $("td:first", nRow).html(iDisplayIndex + 1);
+                return nRow;
+            }
+        });
+    }
+
+    if (!$.fn.dataTable.isDataTable('#appInstancesTable')) {
+        // $buildDatatable =  $('#tableBuild').DataTable({
+        $('#appInstancesTable').DataTable({
+            "pagingType": "full_numbers",
+            "aoColumns": [{
+                "bSortable": true
+            }, {
+                "bSortable": true
+            }, {
+                "bSortable": true
+            }, {
+                "bSortable": true
             }],
             "fnRowCallback": function(nRow, aData, iDisplayIndex) {
                 $("td:first", nRow).html(iDisplayIndex + 1);
@@ -380,7 +427,7 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }, {
                 "bSortable": true
@@ -455,22 +502,7 @@ $(function() {
         });
     }
 
-    var remotecardDesign = localStorage.getItem("selectedappcardDesign");
 
-    var finalcardname;
-    //console.log(typeof remotecardDesign);
-    switch (remotecardDesign) {
-        case "0":
-            finalcardname = "Life Ray";
-            break;
-        case "1":
-            finalcardname = "Drupal";
-            break;
-        case "2":
-            finalcardname = "Redaxscript";
-            break;
-    }
-    $('.appcardName').append(finalcardname);
 
 
     $('.btnItemAdd').click(function(e) {

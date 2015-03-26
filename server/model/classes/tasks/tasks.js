@@ -61,7 +61,7 @@ var taskSchema = new Schema({
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName,callback) {
+taskSchema.methods.execute = function(userName, callback) {
     logger.debug('Executing');
     var task;
     var self = this;
@@ -75,7 +75,7 @@ taskSchema.methods.execute = function(userName,callback) {
         }, null);
         return;
     }
-    task.execute(userName,function(err, taskExecuteData) {
+    task.execute(userName, function(err, taskExecuteData) {
         if (err) {
             callback(err, null);
             return;
@@ -104,9 +104,10 @@ taskSchema.methods.getChefTaskNodes = function() {
         var chefTask = new ChefTask(this.taskConfig);
         return chefTask.getNodes();
     } else {
-        return null;
+        return [];
     }
 };
+
 
 
 
@@ -185,6 +186,26 @@ taskSchema.statics.getTaskById = function(taskId, callback) {
             callback(null, null);
         }
 
+    });
+};
+
+// get task by ids
+taskSchema.statics.getTaskByIds = function(taskIds, callback) {
+    if (!(taskIds && taskIds.length)) {
+        callback(null, []);
+        return;
+    }
+    var queryObj = {};
+    queryObj._id = {
+        $in: taskIds
+    }
+    this.find(queryObj, function(err, tasks) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, tasks);
     });
 };
 
