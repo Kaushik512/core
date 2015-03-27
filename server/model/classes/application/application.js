@@ -3,6 +3,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
 var logger = require('../../../lib/logger')(module);
 var schemaValidator = require('../../dao/schema-validator');
+var utils = require('../utils/utils');
 
 var Build = require('./build/build.js');
 var AppInstance = require('./appinstance/appInstance');
@@ -106,9 +107,95 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
             callback(err, null);
             return;
         }
-        callback(null,appInstance);
-
+        /*application.getNodes(function(err, nodes) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            application.nodes = nodes;
+            callback(null, application);
+        });*/
+        callback(null, appInstance);
     });
+};
+
+ApplicationSchema.methods.removeAppInstance = function(appInstanceId, callback) {
+    var found = false;
+    if (!this.appInstances.length) {
+        callback({
+            message: "AppInstance does not exists"
+        }, null);
+        return;
+    }
+    var appInstance;
+    for (var i = 0; i < this.appInstances.length; i++) {
+        if (appInstanceId == this.appInstances[i]._id) {
+            appInstance = this.appInstances[i];
+            this.appInstances.splice(i, 1);
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        callback({
+            message: "AppInstance does not exists"
+        }, null);
+        return;
+    }
+    this.save(function(err, application) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, appInstance);
+    });
+};
+
+
+
+ApplicationSchema.methods.getAppInstance = function(appInstanceId) {
+    var appInstances = this.appInstances;
+    if (!appInstances.length) {
+        return null;
+    }
+    var appInstance = null;
+    for (var i = 0; i < appInstances.length; i++) {
+        if (appInstanceId == appInstances[i]._id) {
+            appInstance = appInstances[i];
+            break;
+        }
+    }
+
+    return appInstance;
+};
+
+ApplicationSchema.methods.getNodes = function(callback) {
+    var self = this;
+    var nodesList = [];
+    count = 0;
+    if (!this.appInstances.length) {
+        callback(null, nodesList);
+        return;
+    }
+
+    function getAppInstanceNodes(appInstance) {
+        appInstance.getNodes(function(err, nodes) {
+            count++;
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            nodesList = utils.arrayMerge(nodesList, nodes);
+            if (count < self.appInstances.length) {
+                getAppInstanceNodes(self.appInstances[count]);
+            } else {
+                callback(null, nodesList);
+            }
+        });
+    }
+    getAppInstanceNodes(this.appInstances[count]);
 };
 
 
@@ -116,15 +203,41 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
 ApplicationSchema.statics.getApplicationById = function(applicationId, callback) {
     this.find({
         "_id": new ObjectId(applicationId)
-    }, function(err, data) {
+    }, function(err, applications) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
         //console.log('data ==>', data);
-        if (data.length) {
-            callback(null, data[0]);
+        if (applications.length) {
+            var application = applications[0];
+            /*if (!(application.appInstances && applications.length)) {
+                callback(err, application);
+                return;
+            }
+            var count = 0;
+
+            function getAppInstancesNodes(appInstance) {
+                appInstance.getNodes(function(err, nodes) {
+                    count++;
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    appInstance.nodes = nodes;
+                    if (count < application.appInstances.length) {
+                        getAppInstancesNodes(application.appInstances[count]);
+                    } else {
+                        callback(null, application);
+                    }
+
+                });
+
+            }
+            getAppInstancesNodes(application.appInstances[count]);
+            */
+            callback(null, application);
         } else {
             callback(null, null);
         }

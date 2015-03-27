@@ -189,6 +189,33 @@
                           </div>
                           <div id="collapseAppURL" class="panel-collapse collapse in">
                             <div class="panel-body">
+                              <!--user has given no app name-->
+                              <form action="" id="appUrlTemplateFormCreate" data-appURLType="1" class="appUrlFormNew hidden">
+                                  <!--1st text box-->
+                                  <div class="applicationURLContainer" id="appSeries12"> 
+                                                <div class="col-lg-6" style="margin-top:15px;">
+
+                                                <label for="">Application Name</label>
+
+                                                <input placeholder="Default" maxlength="8" type="text" name="appNameInput" class="form-control appName">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+
+
+                                               </div>
+
+                                               <div class="col-lg-6" style="margin-top:15px">
+
+                                                <label for="">Application URL</label>
+                                                
+                                                <input type="url" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
+                                                <b class="tooltip tooltip-top-right">
+                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+                                              </div>
+                                            </div>
+                                            <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add AppName &amp; URL</a>
+                                </form>
+                              <!--when app name has been given-->
                                 <form action="" id="appUrlTemplateForm" style="display:none" data-appURLType="1" class="appUrlForm">
                                   <!--1st text box-->
                                   <div class="col-lg-6 appTop">
@@ -713,6 +740,14 @@ $.get('../instances/'+urlParams.id,function(data){
 
         }else if($(this).hasClass('stopped')){
             console.log('Stopped State');
+            var hasStartPermissionCP=false;
+                if(haspermission("instancestart","execute")){
+                  hasStartPermissionCP=true;
+                }
+                if(!hasStartPermissionCP){
+                  bootbox.alert('User has No Permission to Start');
+                  return;
+                }
             //debugger;
             $(this).parent().find('.actionbuttonStart').trigger('click');
         }
@@ -979,6 +1014,13 @@ $('.startstoptoggler').click(startAndStopToggler);
                                     var cssClassed = getCssClassFromStatus(data.instanceState);
                                     $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                     $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
+                                    if (data.appUrls && data.appUrls.length) {
+                                             for (var k = 0; k < data.appUrls.length; k++) {
+                                                 var url = data.appUrls[k].url;
+                                                 url = url.replace('$host', data.instanceIP);
+                                                 $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url);
+                                             }
+                                      }
                                 }
                             }
                         })
@@ -1188,7 +1230,10 @@ $('.startstoptoggler').click(startAndStopToggler);
             $collapseAppURL.append($form);
             $form.show();
         }
+    }if(data.appUrls && data.appUrls.length===0){
+      $('#appUrlTemplateFormCreate').removeClass('hidden');
     }
+
  
 
     $('.loadingControlPanelIndicator').hide();
@@ -1715,4 +1760,19 @@ $('.formSubmit').click(function(e){
 
         });
      }
+</script>
+
+<script>
+//for cloning the app Url
+              $('.addNewApp1').click(function() {
+              $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
+  
+              var countApp =$('.applicationURLContainer').length;
+                    
+              if(countApp===2){
+                 $(this).addClass('hidden');
+                 return; 
+              }
+
+              });
 </script>

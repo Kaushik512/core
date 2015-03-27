@@ -476,13 +476,14 @@ var InstancesDao = function() {
         }, {
             upsert: false
         }, function(err, data) {
-            logger.error("Failed to updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl, err);
+            
             if (err) {
+                logger.error("Failed to updateInstanceDockerStatus(%s, %s, %s) - " + err, instanceId, dockerstatus, dockerapiurl, err);
                 callback(err, null);
                 return;
             }
 
-            logger.debug("Exit updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl);
+            logger.debug("Exit updateInstanceDockerStatus(%s, %s, %s,%s)", instanceId, dockerstatus, dockerapiurl,data);
             callback(null, data);
         });
 

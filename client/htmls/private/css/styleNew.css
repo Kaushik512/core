@@ -2818,3 +2818,6 @@ padding-top:5px;
 .padding0{
     padding:0px !important;
 }
+.bootbox.modal{
+    z-index: 2500 !important;
+}
