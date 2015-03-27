@@ -1,5 +1,4 @@
 #!/bin/bash
-#git clone https://catalyst-engg:catalyst_123@github.com/RLIndia/D4D.git && cd D4D && git pull origin feature_engineered 
 ps -ef | grep Xvfb
 /usr/bin/Xvfb :99 &
 chmod 755 /usr/bin/runtest.sh

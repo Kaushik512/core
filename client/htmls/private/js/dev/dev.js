@@ -1072,8 +1072,10 @@
 
                      //Check if the docker status is succeeded
                      if (data.docker != null) {
-                         var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
 
+                         //var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+                         //Updated from above to move docker image out of circle.
+                         var $dockerStatus = $('<img style="width:auto;height:27px;margin-left:96px;margin-top:-105px" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
                          $divComponentListContainer.append($dockerStatus);
                      }
 
@@ -2810,7 +2812,9 @@
 
                                      }
                                      //Updating instance card to show the docker icon.
-                                     $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                                     //$dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                                     //Updated from above to move docker image out of circle.
+                                     $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:auto;height:27px;margin-left:96px;margin-top:-105px" class="dockerenabledinstacne"/>');
                                      //find the instance card - to do instance table view update
                                      var $instancecard = $('div[data-instanceid="' + instid + '"]');
                                      if ($instancecard.find('.dockerenabledinstacne').length <= 0) {

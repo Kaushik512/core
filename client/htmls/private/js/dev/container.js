@@ -87,7 +87,9 @@ function containerStuff(){
                         $td.find('.dockermessage').detach();
                         $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done</span>');
                         //Updating instance card to show the docker icon.
-                        var $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                       // var $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                        //Updated from above to move docker image out of circle.
+                        var $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" whatever="1" style="width:auto;height:27px;margin-left:96px;margin-top:-105px" class="dockerenabledinstacne"/>');
                         //find the instance card - to do instance table view update
                         var $instancecard = $('div[data-instanceid="' + instid + '"]');
                         if ($instancecard.find('.dockerenabledinstacne').length <= 0) {
