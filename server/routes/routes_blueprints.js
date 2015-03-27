@@ -766,8 +766,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
             blueprintData.imageId = req.params.imageId;
-            blueprintData.securityGroupId = 'sg-c00ee1a5';
-            blueprintData.instanceType = 't1.micro';
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
