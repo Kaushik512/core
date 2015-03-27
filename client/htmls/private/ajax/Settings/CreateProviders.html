@@ -45,7 +45,7 @@
 
              <div class="col-lg-6">
               <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-              <select id="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required">
+              <select id="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
                <option value="">Select Provider</option>
                <option value="aws">AWS</option>
              </select>
@@ -76,7 +76,7 @@
        <div class="row">
         <div class="col-lg-6">
           <label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <select id="region" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central" cat-validation="required">
+          <select id="region" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">
            <option value="">Select Region</option>
            <option value="us-west-2">us-west-2</option>
          </select>
@@ -87,7 +87,7 @@
        overflow-y: scroll;
        border: 1px solid gray;
        padding: 0px;">
-       
+
        <div id="securitygroupids" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" style="width:99%;" cdata="catalyst" cat-validation="onechecked">
 
        </div>
@@ -98,8 +98,9 @@
         <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
         <label for="templatesicon" name="field" class="file">
           <span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px 14px;position: absolute;right:4px;">Browse</span>
-          <input id="providerpemfile" type="file" class="gui-file">
+          <input id="providerpemfile" type="file" class="gui-file" cdata="catalyst">
           <input type="text" readonly="" class="gui-input">
+          <input type="text" id="folderpath" style="visibility:hidden;" cdata="catalyst"/>
         </label>
       </div>
     </div>
@@ -151,9 +152,10 @@
 
   function bindChange_importPemFile() {
     $('#providerpemfile').change(function() {
-                      //console.log(this.files);
-                      $(this).next().val(this.files[0].name);
-                    });
+      debugger;
+      $(this).next().val(this.files[0].name);
+      $('#folderpath').val($('#providerpemfile').val());
+    });
   }
   function inLineReady() {
    $("input[type='text']").on("click", function () {
@@ -228,7 +230,8 @@
         } 
       }).done(function( msg ) {
 
-        var str='',getTemplate=function(val){
+        var str='',
+        getTemplate=function(val){
          return '<label class="toggle font-sm" style="padding-left:4px"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
          'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
           'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
