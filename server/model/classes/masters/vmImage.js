@@ -92,7 +92,7 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
         $set: {
             id: 22,
             providerId: imageData.providerId,
-            imageIdentifier: imageData.imageId,
+            imageIdentifier: imageData.imageIdentifier,
             name: imageData.name
         }
     }, {
