@@ -1,9 +1,32 @@
 var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
+var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
 
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/providers/*",sessionVerificationFunc);
+
+
+	app.post('/providers', function(req, res) {
+        logger.debug("Enter post() for /providers");
+        var providerData={
+        accessKey: req.body.accessKey,
+        secretKey: req.body.secretKey,
+        name: req.body.name,
+        providerType: req.body.providerType,
+        regions: req.body.regions
+    };
+    logger.debug("<<<<<<<<<<<<<<<<<<<<< %s",providerData);
+        Provider.createNew(providerData, function(err, provider) {
+            if (err) {
+                logger.debug("err.....",err);
+                res.send(500);
+                return;
+            }
+            res.send(provider);
+            logger.debug("Exit post() for /providers");
+        });
+    });
 
 	app.post('/providers/securitygroups',function(req,res){
 		logger.debug("Enter for Provider securitygroups. %s",req.body.accesskey)
