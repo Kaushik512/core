@@ -70,6 +70,76 @@ providerSchema.statics.createNew = function(providerData, callback) {
     });
 };
 
+providerSchema.statics.getProviderById = function(providerId, callback) {
+    this.find({
+        "_id": new ObjectId(providerId)
+    }, function(err, aProvider) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (aProvider.length) {
+            callback(null, aProvider[0]);
+        } else {
+            callback(null, null);
+        }
+
+    });
+};
+
+providerSchema.statics.updateProviderById = function(providerId, providerData, callback) {
+    var providerConfig;
+    if (providerData.providerType === PROVIDER_TYPE.AWS_PROVIDER) {
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>",providerData.regions);
+        providerConfig = new AWSProvider({
+            providerType: providerData.providerType,
+            accessKey: providerData.accessKey,
+            secretKey: providerData.secretKey,
+            regions: providerData.regions
+        });
+    } else {
+        callback({
+            message: "Invalid Provider Type"
+        }, null);
+        return;
+    }
+
+
+    this.update({
+        "_id": new ObjectId(providerId)
+    }, {
+        $set: {
+            name: providerData.name,
+            providerConfig: providerConfig,
+            providerType: providerData.providerType
+        }
+    }, {
+        upsert: false
+    }, function(err, updateCount) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, updateCount);
+
+    });
+
+};
+
+providerSchema.statics.removeProviderById = function(providerId, callback) {
+    this.remove({
+        "_id": new ObjectId(providerId)
+    }, function(err, deleteCount) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, deleteCount);
+
+    });
+};
+
 var Providers = mongoose.model('Providers', providerSchema);
 
 module.exports = Providers;
