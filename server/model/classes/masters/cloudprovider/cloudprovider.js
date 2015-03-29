@@ -25,8 +25,7 @@ var providerSchema = new Schema({
     name: {
         type: String,
         required: true,
-        trim: true,
-        validate: schemaValidator.taskNameValidator
+        trim: true
     },
     providerType: {
         type: String,

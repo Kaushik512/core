@@ -2,6 +2,7 @@ var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
+var VMImage = require('../model/classes/masters/vmImage.js');
 
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/providers/*",sessionVerificationFunc);
@@ -85,19 +86,33 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
     });
 
     app.delete('/providers/:providerId', function(req, res) {
-        Provider.removeProviderById(req.params.providerId, function(err, deleteCount) {
+    	var providerId = req.params.providerId;
+        
+        VMImage.getImageByProviderId(providerId, function(err, anImage) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (deleteCount) {
-                res.send({
-                    deleteCount: deleteCount
-                });
-            } else {
-                res.send(400);
+            if (anImage) {
+                res.send(403,"Provider already used by an Image.To delete provider please delete respective Image first.");
+            	return;
             }
+
+        	Provider.removeProviderById(providerId, function(err, deleteCount) {
+	            if (err) {
+	                logger.error(err);
+	                res.send(500, errorResponses.db.error);
+	                return;
+	            }
+	            if (deleteCount) {
+	                res.send({
+	                    deleteCount: deleteCount
+	                });
+	            } else {
+	                res.send(400);
+	            }
+	        });
         });
     });
 
