@@ -1,6 +1,7 @@
 var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
+var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc){
 	app.all('/vmimages/*',sessionVerificationFunc);
@@ -10,19 +11,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var vmimageData={
         	id: 22,
         	providerId: req.body.providerId,
-        	imageId: req.body.imageId,
+        	imageIdentifier: req.body.imageIdentifier,
         	name: req.body.name
     };
-    logger.debug("<<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
-        VMImage.createNew(vmimageData, function(err, provider) {
-            if (err) {
-                logger.debug("err.....",err);
-                res.send(500);
-                return;
-            }
-            res.send(provider);
-            logger.debug("Exit post() for /vmimages");
-        });
+	    Provider.getProviderById(req.body.providerId, function(err, aProvider) {
+	            if (err) {
+	                logger.error(err);
+	                res.send(500, errorResponses.db.error);
+	                return;
+	            }
+	            logger.debug("Returned Provider: ",aProvider);
+	            if (aProvider){
+
+	            } else{
+	                res.send(404,"Invalid provide id,Please give correct one.");
+	                return;
+	            } 
+    		logger.debug("<<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
+        	VMImage.createNew(vmimageData, function(err, provider) {
+            	if (err) {
+                	logger.debug("err.....",err);
+                	res.send(500);
+                	return;
+            	}
+            	res.send(provider);
+            	logger.debug("Exit post() for /vmimages");
+        	});
+    	});
     });
 
     app.get('/vmimages', function(req, res) {
@@ -59,7 +74,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var vmimageData={
         	id: 22,
         	providerId: req.body.providerId,
-        	imageId: req.body.imageId,
+        	imageIdentifier: req.body.imageIdentifier,
         	name: req.body.name
     	};
         logger.debug("image >>>>>>>>>>>>");

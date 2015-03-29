@@ -20,7 +20,7 @@ var imageSchema = new Schema({
         trim: true,
         validate: schemaValidator.providerIdValidator
     },
-    imageId: {
+    imageIdentifier: {
         type: String,
         required: true,
         trim: true,
@@ -92,7 +92,7 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
         $set: {
             id: 22,
             providerId: imageData.providerId,
-            imageId: imageData.imageId,
+            imageIdentifier: imageData.imageId,
             name: imageData.name
         }
     }, {
