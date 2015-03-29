@@ -10,7 +10,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.post('/providers', function(req, res) {
         logger.debug("Enter post() for /providers");
         var providerData={
-        	id: req.body.id,
+        	id: 9,
         	accessKey: req.body.accessKey,
         	secretKey: req.body.secretKey,
         	name: req.body.name,
