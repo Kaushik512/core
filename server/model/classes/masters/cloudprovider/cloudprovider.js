@@ -18,6 +18,10 @@ var PROVIDER_TYPE = {
 
 
 var providerSchema = new Schema({
+    id:{
+        type: Number,
+        required: true
+    },
     name: {
         type: String,
         required: true,
@@ -67,6 +71,25 @@ providerSchema.statics.createNew = function(providerData, callback) {
             return;
         }
         callback(null, provider);
+    });
+};
+
+providerSchema.statics.getProviders = function(callback) {
+    logger.debug("get all providers.");
+    this.find({
+        "id" : 9
+    }, function(err, providers) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (providers.length) {
+            callback(null, providers);
+        } else {
+            callback(null, null);
+        }
+
     });
 };
 

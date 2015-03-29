@@ -10,11 +10,12 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.post('/providers', function(req, res) {
         logger.debug("Enter post() for /providers");
         var providerData={
-        accessKey: req.body.accessKey,
-        secretKey: req.body.secretKey,
-        name: req.body.name,
-        providerType: req.body.providerType,
-        regions: req.body.regions
+        	id: req.body.id,
+        	accessKey: req.body.accessKey,
+        	secretKey: req.body.secretKey,
+        	name: req.body.name,
+        	providerType: req.body.providerType,
+        	regions: req.body.regions
     };
     logger.debug("<<<<<<<<<<<<<<<<<<<<< %s",providerData);
         Provider.createNew(providerData, function(err, provider) {
@@ -25,6 +26,21 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             }
             res.send(provider);
             logger.debug("Exit post() for /providers");
+        });
+    });
+
+    app.get('/providers', function(req, res) {
+        Provider.getProviders(function(err, providers) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (providers.length) {
+                res.send(providers);
+            } else {
+                res.send(404);
+            }
         });
     });
 
