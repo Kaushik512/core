@@ -170,4 +170,25 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
         });
 	});
+
+	app.post('/providers/keypairs/list',function(req,res){
+		logger.debug("Enter for Provider keypairs.");
+
+		var ec2 = new EC2({
+			"access_key": req.body.accesskey,
+			"secret_key": req.body.secretkey,
+			"region"    : req.body.region
+		});
+
+		ec2.describeKeyPairs(function(err,data){
+			if(err){
+				logger.debug("Unable to get AWS Keypairs");
+				res.send("Unable to get AWS Keypairs.",500);
+				return;
+			}
+			logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
+			res.send(data);
+		});
+
+	});
 }

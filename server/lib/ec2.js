@@ -282,6 +282,21 @@ var EC2 = function(awsSettings) {
         });
     }
 
+    this.describeKeyPairs = function(callback){
+        var params = {
+            Filters: [],
+            KeyNames: []
+        };
+        ec.describeKeyPairs(params,function(err,data){
+            if(err){
+                logger.debug("Unable to describeKeyPairs from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to Describe KeyPairs from AWS.");
+            callback(null, data);
+        });
+    }
 
 }
 
