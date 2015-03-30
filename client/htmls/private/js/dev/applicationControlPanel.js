@@ -165,7 +165,22 @@ $(function() {
         }
         $tr.append($tdNodes);
         */
-        $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%;margin-right:10px;" href="javascript:void(0)" data-toggle="modal" class="btn btn-primary btn-sm appInstanceDeployBtn"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%;margin-right:10px;" href="#appInstancesEditModal" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm appInstanceDelBtn"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
+
+        $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%;margin-right:10px;" href="javascript:void(0)" data-toggle="modal" class="btn btn-primary btn-sm appInstanceDeployBtn"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%;margin-right:10px;" href="#appInstancesEditModal" data-toggle="modal" class="btn btn-info btn-sm editBTN"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm appInstanceDelBtn"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
+        var hasAppModifyPermission=false;
+        if(haspermission('application_instance','modify')){
+          hasAppModifyPermission=true;
+        }
+        if(!hasAppModifyPermission){
+          $tdAction.find('.editBTN').addClass('hidden');
+        }
+        var hasAppDeletePermission=false;
+        if(haspermission('application_instance','delete')){
+            hasAppDeletePermission=true;
+        }
+        if(!hasAppDeletePermission){
+            $tdAction.find('.appInstanceDelBtn').addClass('hidden');
+        }
         $tdAction.find('.appInstanceDeployBtn').click(function() {
             var appInstanceId = appInstance._id;
             var $modal = $('#deployResultModel');

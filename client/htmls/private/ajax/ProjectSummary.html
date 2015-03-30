@@ -1009,6 +1009,16 @@ $(document).ready(function(){
           $('.Applications a').trigger("click");
       }
     });
+
+  //adding permission set for Adding an Application
+  var hasApplicationCreatePermission=false;
+  if(haspermission('application','create')){
+    hasApplicationCreatePermission=true;
+  }
+  if(!hasApplicationCreatePermission){
+    $('.createAPP').addClass('hidden');
+  }
+
   function bindClick_removeAppCard() {
    $('#removeAppCard').on('click', removeSelectedAppCard);
   }

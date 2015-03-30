@@ -571,7 +571,7 @@
                                   <!-- <a class="btn btn-minier btn-primary" id="assigntask" href="#ajax/Settings/AssignTask.html" style="display:none">
                                       <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                                   </a>                -->        
-                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary" data-toggle="modal">
+                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary AddBTN" data-toggle="modal">
                                       <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                       Add New
                                   </a>                                                
@@ -1571,6 +1571,17 @@ $(document).ready(function(){
   $(".chooseEnvironment").select2();
 
 });
+
+var hasAppInstancePermission=false;
+if(haspermission('application_instance','create')){
+  hasAppInstancePermission=true;
+}
+if(!hasAppInstancePermission){
+  $('.AddBTN').addClass('hidden');
+}
+
+
+
 function editname (number) {
     $('.functionalinputedit').removeAttr('readOnly').focus();
 }

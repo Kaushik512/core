@@ -85,8 +85,35 @@
                      if (!hasIPPermission) {
                          $('#ipaddressimport').addClass('hidden');
                          $('.launchBtn').addClass('hidden');
-                     }
-                 }
+                        }
+                    }
+
+                 function disableTaskLink() {
+                     //permission set for chefTask,custom,jenkins
+                    var hasChefCreateTaskPermission=false;
+                    if(haspermission('chef_task','create')){
+                        hasChefCreateTaskPermission=true;
+                    }
+                    if(!hasChefCreateTaskPermission){
+                        $('.createTaskLink').addClass('hidden');
+                    }
+                    //custom
+                    var hasCustomCreateTaskPermission=false;
+                    if(haspermission('custom_task','create')){
+                        hasCustomCreateTaskPermission=true;
+                    }
+                    if(!hasCustomCreateTaskPermission){
+                        $('.createTaskLink').addClass('hidden');
+                    }
+                    //jenkins
+                    var hasJenkinsCreateTaskPermission=false;
+                    if(haspermission('jenkins_task','create')){
+                        hasJenkinsCreateTaskPermission=true;
+                    }
+                    if(!hasJenkinsCreateTaskPermission){
+                        $('.createTaskLink').addClass('hidden');
+                    }
+                  }
 
                  function initializeInstance() {
                      bindClick_ipaddressImport();
@@ -2386,6 +2413,56 @@
                          $tr.append($tdTime);
 
                          var $tdOptions = $('<td></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Remove" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+                         //permission set for editing and deleting for ChefTask
+
+                         var hasEditChefTaskPermission=false;
+                         if(haspermission('chef_task','modify')){
+                            hasEditChefTaskPermission=true;
+                         }
+                         if(!hasEditChefTaskPermission){
+                            $tdOptions.find('.btnEditTask').addClass('hidden');
+                         }
+
+                         var hasDeleteChefTaskPermission=false;
+                         if(haspermission('chef_task','delete')){
+                            hasDeleteChefTaskPermission=true;
+                         }
+                         if(!hasDeleteChefTaskPermission){
+                            $tdOptions.find('.btnDeleteTask').addClass('hidden');
+                         }
+                         //custom
+                         var hasEditCustomTaskPermission=false;
+                         if(haspermission('custom_task','modify')){
+                            hasEditCustomTaskPermission=true;
+                         }
+                         if(!hasEditCustomTaskPermission){
+                            $tdOptions.find('.btnEditTask').addClass('hidden');
+                         }
+
+                         var hasDeleteCustomTaskPermission=false;
+                         if(haspermission('custom_task','delete')){
+                            hasDeleteCustomTaskPermission=true;
+                         }
+                         if(!hasDeleteCustomTaskPermission){
+                            $tdOptions.find('.btnDeleteTask').addClass('hidden');
+                         }
+                         //jenkins
+                         var hasEditJenkinsTaskPermission=false;
+                         if(haspermission('jenkins_task','modify')){
+                            hasEditJenkinsTaskPermission=true;
+                         }
+                         if(!hasEditJenkinsTaskPermission){
+                            $tdOptions.find('.btnEditTask').addClass('hidden');
+                         }
+
+                         var hasDeleteJenkinsTaskPermission=false;
+                         if(haspermission('jenkins_task','delete')){
+                            hasDeleteJenkinsTaskPermission=true;
+                         }
+                         if(!hasDeleteJenkinsTaskPermission){
+                            $tdOptions.find('.btnDeleteTask').addClass('hidden');
+                         }
+
                          $tdOptions.find('.btnDeleteTask').click(function(e) {
                              var taskId = $(this).parents('td').attr('data-taskId');
                              var that = this;
@@ -3444,6 +3521,7 @@
                  };
 
                  disableImportLaunch();
+                 disableTaskLink();
                  initializeInstance();
                  initializeBluePrints();
                  initializeContainer();
