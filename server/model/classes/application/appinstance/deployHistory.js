@@ -12,7 +12,7 @@ var Schema = mongoose.Schema;
 var DeployHistorySchema = new Schema({
     applicationId: String,
     appInstanceId: String,
-    workFlowId: String,
+    workflowId: String,
     user: String,
     status: String,
     timestampStarted: Number,
