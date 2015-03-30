@@ -19,16 +19,6 @@ RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true 
     /usr/bin/debconf-set-selections && \
     apt-get install -y oracle-java8-installer
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-#RUN apt-get install git -y 
-
-#RUN mkdir -p /home/ubuntu/development/catalyst && cd /home/ubuntu/development/catalyst 
-#RUN mkdir -p /home/ubuntu/development/catalyst && cd /home/ubuntu/development/catalyst && \
- #git clone https://catalyst-engg:catalyst_123@github.com/RLIndia/D4D.git && cd D4D && git pull origin feature_engineered && cd server && rm -rf node-#modules && \
- #cd /home/ubuntu/development/catalyst/D4D/server && sudo npm install
-
-#RUN apt-get -y update && \
-#	apt-get -y install build-essential && \
-#	apt-get -y install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 
 WORKDIR /opt
 ADD runcatalyst.sh /usr/bin/
