@@ -22,10 +22,10 @@ $(function() {
     var $appCardTemplate = $(htmlTemplate);
 
     var buildUrlsHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
-    
+
     function addBuildHistoryRow(buildHistory, buildData) {
         var dataTable = $('#tableBuild').DataTable();
-        
+
 
         var $trHistoryRow = $('<tr></tr>');
         var $tdSerialNo = $('<td></td>');
@@ -38,17 +38,17 @@ $(function() {
 
         var $tdBuildNumber = $('<td></td>').append('<span>' + buildHistory.jobNumber + '</span>');
         $trHistoryRow.append($tdBuildNumber);
-        if(buildHistory.status==="success"){
+        if (buildHistory.status === "success") {
             var $tdBuildStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
             $trHistoryRow.append($tdBuildStatus);
-        }if(buildHistory.status==="failed"){
+        } else if (buildHistory.status === "failed") {
             var $tdBuildStatusFailure = $('<td></td>').append('<img src="img/indicator_stopped.png"/>');
             $trHistoryRow.append($tdBuildStatusFailure);
-        }if(buildHistory.status==="running"){
+        } else {
             var $tdBuildStatusRunning = $('<td></td>').append('<img src="img/indicator_unknown.png"/>');
             $trHistoryRow.append($tdBuildStatusRunning);
         }
-        
+
 
         var $tdUserName = $('<td></td>').append(buildHistory.user);
         $trHistoryRow.append($tdUserName);
@@ -97,56 +97,70 @@ $(function() {
 
     }
 
-    function addDeployHistoryRow(deployHistory){
-        var dataTable = $('#tableDeploy').DataTable();
-        var $trDeployHistoryRow = $('<tr></tr>');
-        var $tdSerialNo = $('<td></td>');
+    function addDeployHistoryRow(deployHistory) {
 
-        $trDeployHistoryRow.append($tdSerialNo);
+        $.get('../applications/' + deployHistory.applicationId + '/appInstances/' + deployHistory.appInstanceId, function(appInstanceData) {
+            var dataTable = $('#tableDeploy').DataTable();
+            var $trDeployHistoryRow = $('<tr></tr>');
+            var $tdSerialNo = $('<td></td>');
 
-        var $tdAppInstance =$('<td></td>');
-        $trDeployHistoryRow.append($tdAppInstance);
+            $trDeployHistoryRow.append($tdSerialNo);
 
-      
-        var $deployWorkflow=$('<td></td>');
-        $trDeployHistoryRow.append($deployWorkflow);
+            var $tdAppInstance = $('<td></td>').append(appInstanceData.name);
+            $trDeployHistoryRow.append($tdAppInstance);
 
-        var $envSet=$('<td></td>');
-        $trDeployHistoryRow.append($envSet);
+            var workflow = null;
+            for (var k = 0; k < appInstanceData.workflows.length; k++) {
+                console.log('id ==> ', appInstanceData.workflows[k]._id, " == ", deployHistory.workflowId);
+                if (deployHistory.workflowId === appInstanceData.workflows[k]._id) {
+                    workflow = appInstanceData.workflows[k];
+                    break;
+                }
+            }
+            var $deployWorkflow = $('<td></td>').append(workflow.name);
+            $trDeployHistoryRow.append($deployWorkflow);
 
-        if(deployHistory.status==="success"){
-            var $tdDeployStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
-            $trDeployHistoryRow.append($tdDeployStatus);
-        }if(deployHistory.status==="failed"){
-            var $tdDeployStatusFailure = $('<td></td>').append('<img src="img/indicator_stopped.png"/>');
-            $trDeployHistoryRow.append($tdDeployStatusFailure);
-        }if(deployHistory.status==="running"){
-            var $tdDeployStatusRunning = $('<td></td>').append('<img src="img/indicator_unknown.png"/>');
-            $trDeployHistoryRow.append($tdDeployStatusRunning);
-        }
+            var $envSet = $('<td></td>').append(appInstanceData.envId);
+            $trDeployHistoryRow.append($envSet);
 
-        var $tdUserName = $('<td></td>').append(deployHistory.user);
-        $trDeployHistoryRow.append($tdUserName);
+            if (deployHistory.status === "success") {
+                var $tdDeployStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
+                $trDeployHistoryRow.append($tdDeployStatus);
+            }
+            if (deployHistory.status === "failed") {
+                var $tdDeployStatusFailure = $('<td></td>').append('<img src="img/indicator_stopped.png"/>');
+                $trDeployHistoryRow.append($tdDeployStatusFailure);
+            }
+            if (deployHistory.status === "running") {
+                var $tdDeployStatusRunning = $('<td></td>').append('<img src="img/indicator_unknown.png"/>');
+                $trDeployHistoryRow.append($tdDeployStatusRunning);
+            }
 
-        var timeString = new Date().setTime(deployHistory.timestampStarted);
-        var date = new Date(timeString).toLocaleString();
+            var $tdUserName = $('<td></td>').append(deployHistory.user);
+            $trDeployHistoryRow.append($tdUserName);
+
+            var timeString = new Date().setTime(deployHistory.timestampStarted);
+            var date = new Date(timeString).toLocaleString();
 
 
-        var $tdTime = $('<td></td>').append(date);
-        $trDeployHistoryRow.append($tdTime);
-   
-        //logs
-        var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
-        $aLogs.click(function(e) {
-            
+            var $tdTime = $('<td></td>').append(date);
+            $trDeployHistoryRow.append($tdTime);
 
+            //logs
+            var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
+            $aLogs.click(function(e) {
+
+
+            });
+
+            var $tdLogLink = $('<td></td>').append($aLogs);
+            $trDeployHistoryRow.append($tdLogLink);
+
+            dataTable.row.add($trDeployHistoryRow).draw();
         });
 
-        var $tdLogLink = $('<td></td>').append($aLogs);
-        $trDeployHistoryRow.append($tdLogLink);
 
-        dataTable.row.add($trDeployHistoryRow).draw();
-        
+
 
     }
 
@@ -222,7 +236,7 @@ $(function() {
                 method: 'DELETE',
                 success: function() {
                     dataTable.row($tr).remove().draw(false);
-                    $('.appInstancesDropdown option[value="'+appInstance._id+'"]').remove();
+                    $('.appInstancesDropdown option[value="' + appInstance._id + '"]').remove();
                 },
                 error: function() {
 
@@ -244,7 +258,10 @@ $(function() {
         $appCard.data('applicationId', data._id);
 
         //setting up name 
-        $appCard.find('.appcard-role-outer').css({'width':'262px','height':'400px'});
+        $appCard.find('.appcard-role-outer').css({
+            'width': '262px',
+            'height': '400px'
+        });
         $appCard.find('.applicationName').html(data.name);
         $('.applicationNameLabel').html(data.name);
         if (data.git) {
@@ -284,19 +301,19 @@ $(function() {
 
             // setting build history
             $.get('../applications/' + applicationId + '/buildHistory', function(buildHistories) {
-                var dataTable = $('#tableBuild').DataTable();
-                var linkHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
                 for (var i = 0; i < buildHistories.length; i++) {
                     addBuildHistoryRow(buildHistories[i], buildData);
                 }
             });
         });
-            //searcg deploy history
-            $.get('../applications/' + applicationId + '/deployHistory', function(deployHistories){
-                for (var i = 0; i < deployHistories.length; i++) {
-                    addDeployHistoryRow(deployHistories[i]);
-                }
-            });
+        //searcg deploy history
+        $.get('../applications/' + applicationId + '/deployHistory', function(deployHistories) {
+            for (var i = 0; i < deployHistories.length; i++) {
+                addDeployHistoryRow(deployHistories[i]);
+            }
+        });
+
+
 
         $appCard.find('.appCardDeployBtn').data('applicationId', data._id).click(function(e) {
             var applicationId = $(this).data('applicationId');
@@ -464,6 +481,12 @@ $(function() {
             $modal.find('.loadingContainer').hide();
             $modal.find('.workFlowArea').hide();
             $modal.find('.deployResultArea').show();
+
+            $.get('../applications/' + applicationId + '/lastDeployInfo', function(lastDeploy) {
+                if (lastDeploy) {
+                    addDeployHistoryRow(lastDeploy);
+                }
+            });
 
         }).fail(function(jxhr) {
             $modal.find('.loadingContainer').hide();
@@ -641,7 +664,7 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": true
-            },{
+            }, {
                 "bSortable": true
             }, {
                 "bSortable": true

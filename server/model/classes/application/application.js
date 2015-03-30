@@ -201,7 +201,7 @@ ApplicationSchema.methods.deploy = function(appInstanceId, workflowId, username,
             DeployHistory.createNew({
                 applicationId: self._id,
                 appInstanceId: appInstanceId,
-                workFlowId: workflowId,
+                workflowId: workflowId,
                 user: username,
                 status: DeployHistory.DEPLOY_STATUS.RUNNING,
                 timestampStarted: timestampStarted,
