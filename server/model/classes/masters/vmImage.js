@@ -29,6 +29,12 @@ var imageSchema = new Schema({
     name: {
         type: String,
         required: true,
+        trim: true,
+        validate: schemaValidator.imageNameValidator
+    },
+    vType: {
+        type: String,
+        required: true,
         trim: true
     }
 });
@@ -93,7 +99,8 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
             id: 22,
             providerId: imageData.providerId,
             imageIdentifier: imageData.imageIdentifier,
-            name: imageData.name
+            name: imageData.name,
+            vType: imageData.vType
         }
     }, {
         upsert: false

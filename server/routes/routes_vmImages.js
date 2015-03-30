@@ -12,7 +12,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         	id: 22,
         	providerId: req.body.providerId,
         	imageIdentifier: req.body.imageIdentifier,
-        	name: req.body.name
+        	name: req.body.name,
+        	vType: req.body.vType
     };
 	    Provider.getProviderById(req.body.providerId, function(err, aProvider) {
 	            if (err) {
@@ -27,7 +28,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 	                res.send(404,"Invalid provide id,Please give correct one.");
 	                return;
 	            } 
-    		logger.debug("<<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
+    		logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
         	VMImage.createNew(vmimageData, function(err, provider) {
             	if (err) {
                 	logger.debug("err.....",err);
@@ -41,6 +42,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     });
 
     app.get('/vmimages', function(req, res) {
+    	logger.debug("Enter get() for /vmimages");
         VMImage.getImages(function(err, images) {
             if (err) {
                 logger.error(err);
@@ -48,6 +50,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 return;
             }
             if (images.length) {
+            	logger.debug("Enter get() for /vmimages");
                 res.send(images);
             } else {
                 res.send(404);
@@ -56,6 +59,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     });
 
     app.get('/vmimages/:imageId', function(req, res) {
+    	logger.debug("Enter get() for /vmimages/%s",req.params.imageId);
         VMImage.getImageById(req.params.imageId, function(err, anImage) {
             if (err) {
                 logger.error(err);
@@ -63,6 +67,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 return;
             }
             if (anImage) {
+            	logger.debug("Exit get() for /vmimages/%s",req.params.imageId);
                 res.send(anImage);
             } else {
                 res.send(404);
@@ -71,11 +76,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     });
 
     app.post('/vmimages/:imageId/update', function(req, res) {
+    	logger.debug("Enter Post() for /vmimages/%s/update",req.params.imageId);
         var vmimageData={
         	id: 22,
         	providerId: req.body.providerId,
         	imageIdentifier: req.body.imageIdentifier,
-        	name: req.body.name
+        	name: req.body.name,
+        	vType: req.body.vType
     	};
         logger.debug("image >>>>>>>>>>>>");
         VMImage.updateImageById(req.params.imageId, vmimageData, function(err, updateCount) {
@@ -85,6 +92,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 return;
             }
             if (updateCount) {
+            	logger.debug("Exit get() for /vmimages/%s/update",req.params.imageId);
                 res.send({
                     updateCount: updateCount
                 });
@@ -95,6 +103,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     });
 
     app.delete('/vmimages/:imageId', function(req, res) {
+    	logger.debug("Enter delete() for /vmimages/%s",req.params.imageId);
         VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
             if (err) {
                 logger.error(err);
@@ -102,6 +111,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 return;
             }
             if (deleteCount) {
+            	logger.debug("Exit delete() for /vmimages/%s",req.params.imageId);
                 res.send({
                     deleteCount: deleteCount
                 });
