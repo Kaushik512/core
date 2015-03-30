@@ -1408,14 +1408,153 @@
                 <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div>
                 <div class="workFlowArea" style="padding-bottom: 20px;padding-top: 20px;text-align: center;">
                   workflows : <select class="workflowDropdown">
-                  </select> <button class="executeWorkflowBtn">Execute</button>
+                  </select> 
+                  <!-- <button class="executeWorkflowBtn">Execute</button> -->
                 </div> 
                 <div class="deployResultArea" style="padding-bottom: 20px;padding-top: 20px;text-align: center;"> Workflow executed successfully </div>
 
             </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary executeWorkflowBtn" type="submit" data-dismiss="modal">
+                  <i class="fa fa-play fa-1x"></i>&nbsp;Execute
+              </button>
+              <div class="btn-group">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+              </div>
+            </div>
+            <!-- <footer>
+              <button class="btn btn-primary executeWorkflowBtn" type="submit" data-dismiss="modal">
+                  <i class="fa fa-play fa-1x"></i>&nbsp;Execute
+              </button>
+              <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                  <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+              </button>
+            </footer> -->
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
+<div class="modal fade" id="appInstancesEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">
+          <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Deploy Workflow</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered" style="border:1px solid #eeeeee !important;">
+          <thead>
+            <th>S.No</th>
+            <th>WorkFlow Name</th>
+            <th>Actions</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Full Deploy</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Update Database Schema</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Upgrade Application Service</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Update App-Server Configuration</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-save bigger-110"></i>&nbsp;Save</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="appInstancesWorkflowEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit WorkFlow
+                </h4>
+            </div>
+           
+            <div class="modal-body" style="height:300px;">
+              <div novalidate="novalidate" class="smart-form" action="">
+
+                    <div style="margin:0px;" class="row">                                                
+                        <section class="col col-10">
+                            <label for="">Name  
+                            </label>
+                            <label class="input"> 
+                               <input type="text" class="form-control" style="height:30px;">
+                            </label>                                          
+                        </section>
+                         <section class="col col-10" style="margin-top:15px;">
+                            <label class="label">Task Lists</label>
+                            <label class="select select-multiple">
+                                <select multiple="" class="custom-scroll">
+                                    <option value="1">Tasklist1</option>
+                                    <option value="2">Tasklist2</option>
+                                    <option value="3">Tasklist3</option>
+                                    <option value="4">Tasklist4</option>
+                                    <option value="5">Tasklist5</option>
+                                    <option value="6">Tasklist6</option>
+                                    <option value="3">Tasklist7</option>
+                                </select>
+                            </label>
+                        </section>
+                    </div>
+                </div>
+              
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;"> 
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-save bigger-110"></i>&nbsp;Save</button>                               
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 
 <style type="text/css">
 #myTab3 .active a{
