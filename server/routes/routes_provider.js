@@ -19,11 +19,11 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         	providerType: req.body.providerType,
         	regions: req.body.regions
     };
-    logger.debug("<<<<<<<<<<<<<<<<<<<<< %s",providerData);
+    logger.debug("<<<<<<<<<<<<<<<<<<<<< ");
         Provider.createNew(providerData, function(err, provider) {
             if (err) {
                 logger.debug("err.....",err);
-                res.send(500);
+                res.send(500,"Unable to create Provider.");
                 return;
             }
             res.send(provider);
@@ -126,11 +126,11 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
     });
 
 	app.post('/providers/securitygroups',function(req,res){
-		logger.debug("Enter for Provider securitygroups. %s",req.body.accesskey);
+		logger.debug("Enter for Provider securitygroups. %s",req.body.accessKey);
 
 		var ec2 = new EC2({
-			"access_key": req.body.accesskey,
-			"secret_key": req.body.secretkey,
+			"access_key": req.body.accessKey,
+			"secret_key": req.body.secretKey,
 			"region"    : req.body.region
 		});
 
@@ -146,7 +146,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
 	});
 
-	app.get('/providers/test/:rowid',function(req,res){
+	/*app.get('/providers/test/:rowid',function(req,res){
 		logger.debug("Enter for Provider test. %s",req.params.rowid);
 		d4dModelNew.d4dModelMastersProviders.find({
             rowid: req.params.rowid
@@ -169,14 +169,14 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
 
         });
-	});
+	});*/
 
 	app.post('/providers/keypairs/list',function(req,res){
 		logger.debug("Enter for Provider keypairs.");
 
 		var ec2 = new EC2({
-			"access_key": req.body.accesskey,
-			"secret_key": req.body.secretkey,
+			"access_key": req.body.accessKey,
+			"secret_key": req.body.secretKey,
 			"region"    : req.body.region
 		});
 

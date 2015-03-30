@@ -50,7 +50,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (images.length) {
+            if (images) {
             	logger.debug("Enter get() for /vmimages");
                 res.send(images);
             } else {
@@ -126,8 +126,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 		logger.debug("Enter post() for /vmimages: %s",req.body.imageid);
 		
 		var ec2 = new EC2({
-			"access_key": req.body.accesskey,
-			"secret_key": req.body.secretkey,
+			"access_key": req.body.accessKey,
+			"secret_key": req.body.secretKey,
 			"region"    : req.body.region
 		});
 		ec2.checkImageAvailability(req.body.imageid,function(err,data){
