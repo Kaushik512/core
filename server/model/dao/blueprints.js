@@ -32,22 +32,6 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.envIdValidator
     },
-    imageId: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.envIdValidator
-    },
-    securityGroupId: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    instanceType: {
-        type: String,
-        required: true,
-        trim: true
-    },
     iconpath: {
         type: String,
         trim: true
@@ -100,6 +84,22 @@ var BlueprintSchema = new Schema({
         type: String,
         required: true
     }],
+    instanceType: {
+        type: String,
+        required: true
+    },
+    instanceOS: {
+        type: String,
+        required: true
+    },
+    instanceAmiid: {
+        type: String,
+        required: true
+    },
+    instanceUsername: {
+        type: String,
+        required: true
+    },
     importInstance: {
         type: Boolean
     },
@@ -286,8 +286,6 @@ var BlueprintsDao = function() {
             bgId: blueprintData.bgId,
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
-            imageId: blueprintData.imageId,
-            securityGroupId: blueprintData.securityGroupId,
             name: blueprintData.name,
             appUrls: blueprintData.appUrls,
             iconpath: blueprintData.iconpath,
@@ -302,6 +300,9 @@ var BlueprintsDao = function() {
             templateComponents: blueprintData.templateComponents,
             chefServerId: blueprintData.chefServerId,
             instanceType: blueprintData.instanceType,
+            instanceOS: blueprintData.instanceOS,
+            instanceAmiid: blueprintData.instanceAmiid,
+            instanceUsername: blueprintData.instanceUsername,
             importInstance: blueprintData.importInstance,
             users: blueprintData.users,
             versionsList: [{
@@ -315,7 +316,6 @@ var BlueprintsDao = function() {
         });
 
         blueprint.save(function(err, data) {
-            logger.debug("All BP Data: >>>>>> ",JSON.stringify(blueprint));
             if (err) {
                 logger.error(" !!! Failed to create Blueprint !!!", err);
 
