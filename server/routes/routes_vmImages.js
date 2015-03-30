@@ -2,6 +2,7 @@ var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
+var appConfig = require('../config/app_config');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc){
 	app.all('/vmimages/*',sessionVerificationFunc);
@@ -139,4 +140,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 			res.send(data);
 		});
 	});
+
+	app.get('/vmimages/instancesizes/all/list', function(req, res) {
+    	logger.debug("Enter get() for /vmimages/instancesizes");
+        res.send(appConfig.aws.virtualizationType);
+    });
+
+    app.get('/vmimages/regions/list', function(req, res) {
+        logger.debug("Enter /vmimages/regions/list");
+        res.send(appConfig.aws.regions);
+    });
 }
