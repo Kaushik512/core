@@ -10,10 +10,6 @@ WORKDIR /opt
 RUN apt-get -y install wget && wget http://python.org/ftp/python/2.7.5/Python-2.7.5.tgz && tar -xvf Python-2.7.5.tgz && cd Python-2.7.5 && ./configure && make && make install
 RUN apt-get -y install wget && wget https://bootstrap.pypa.io/get-pip.py && python /opt/get-pip.py && pip install robotframework && pip install robotframework-selenium2library 
 
-#RUN wget https://github.com/pshorally/D4DAutomationScript/archive/master.zip && apt-get -y install unzip && unzip master.zip
-#RUN apt-get install git -y
-#RUN mkdir -p /home/ubuntu/development/catalyst && cd /home/ubuntu/development/catalyst
- 
 
 RUN apt-get -y install xvfb firefox
 ENV DISPLAY :99
