@@ -807,6 +807,14 @@ $('.startstoptoggler').click(startAndStopToggler);
   if (data.instanceState == 'unknown'){
     disableInstanceStartStopActionBtns(data._id);
   }
+
+  if (data.docker != null) {
+      //docker image out of circle.
+      var $componentList = $('.componentlistContainer');
+      var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">');
+      $componentList.append($dockerStatus);
+  }
+
   
   var $backRunlistContainer = $('.cardBackRunlistContaner');
   for (var j = 0; j < data.runlist.length; j++) {
