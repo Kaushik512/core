@@ -7,6 +7,7 @@ var utils = require('../utils/utils');
 
 var Build = require('./build/build.js');
 var AppInstance = require('./appinstance/appInstance');
+var DeployHistory = require('./appinstance/deployHistory');
 
 var Schema = mongoose.Schema;
 
@@ -46,8 +47,8 @@ var ApplicationSchema = new Schema({
         validate: schemaValidator.catalystUsernameValidator
     }],
     buildId: String,
-    appInstances: [AppInstance.schema]
-
+    appInstances: [AppInstance.schema],
+    deployHistoryIds: [String]
 });
 
 // instance method 
@@ -86,6 +87,7 @@ ApplicationSchema.methods.getBuildHistory = function(callback) {
     });
 };
 
+
 ApplicationSchema.methods.getLastBuildInfo = function(callback) {
     Build.getBuildById(this.buildId, function(err, build) {
         if (err) {
@@ -96,6 +98,7 @@ ApplicationSchema.methods.getLastBuildInfo = function(callback) {
         build.getLastBuild(callback);
     });
 };
+
 
 ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
     var self = this;
@@ -170,6 +173,92 @@ ApplicationSchema.methods.getAppInstance = function(appInstanceId) {
 
     return appInstance;
 };
+
+ApplicationSchema.methods.deploy = function(appInstanceId, workflowId, username, callback) {
+    var self = this;
+    var appInstances = this.appInstances;
+    if (!appInstances.length) {
+        callback({
+            message: "AppInstance does not exist"
+        }, null);
+        return;
+    }
+    var appInstance = null;
+    for (var i = 0; i < appInstances.length; i++) {
+        if (appInstanceId == appInstances[i]._id) {
+            appInstance = appInstances[i];
+            break;
+        }
+    }
+    if (appInstance) {
+        var timestampStarted = new Date().getTime();
+        var deployHistory = null;
+        appInstance.executeWorkflow(workflowId, username, function(err, tasks) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            DeployHistory.createNew({
+                applicationId: self._id,
+                appInstanceId: appInstanceId,
+                workFlowId: workflowId,
+                user: username,
+                status: DeployHistory.DEPLOY_STATUS.RUNNING,
+                timestampStarted: timestampStarted,
+            }, function(err, history) {
+                if (err) {
+                    logger.error("unable to save build history", err);
+                    return;
+                }
+                deployHistory = history;
+                self.deployHistoryIds.push(history._id);
+                self.save();
+            });
+            callback(null, tasks);
+        }, function(err, status) {
+            logger.debug('Deploy Completed');
+            if (deployHistory) {
+                deployHistory.timestampEnded = new Date().getTime();
+                if (status === 0) {
+                    deployHistory.status = DeployHistory.DEPLOY_STATUS.SUCCESS;
+                } else {
+                    deployHistory.status = DeployHistory.DEPLOY_STATUS.FAILED;
+                }
+                deployHistory.save();
+            }
+        });
+    } else {
+        callback({
+            message: "AppInstance does not exist"
+        }, null);
+    }
+
+};
+
+ApplicationSchema.methods.getLastDeploy = function(callback) {
+    if (this.deployHistoryIds && this.deployHistoryIds.length) {
+        DeployHistory.getHistoryById(this.deployHistoryIds[this.deployHistoryIds.length - 1], function(err, history) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, history);
+        });
+    } else {
+        callback(null, null);
+    }
+};
+
+ApplicationSchema.methods.getDeployHistory = function(callback) {
+    DeployHistory.getHistoryByApplicationId(this._id, function(err, histories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, histories);
+    });
+};
+
 
 ApplicationSchema.methods.getNodes = function(callback) {
     var self = this;
