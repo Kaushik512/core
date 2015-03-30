@@ -21,9 +21,11 @@ $(function() {
 
     var $appCardTemplate = $(htmlTemplate);
 
+    var buildUrlsHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
+    
     function addBuildHistoryRow(buildHistory, buildData) {
         var dataTable = $('#tableBuild').DataTable();
-        var linkHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
+        
 
         var $trHistoryRow = $('<tr></tr>');
         var $tdSerialNo = $('<td></td>');
@@ -36,14 +38,22 @@ $(function() {
 
         var $tdBuildNumber = $('<td></td>').append('<span>' + buildHistory.jobNumber + '</span>');
         $trHistoryRow.append($tdBuildNumber);
-
-        var $tdBuildStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
-        $trHistoryRow.append($tdBuildStatus);
+        if(buildHistory.status==="success"){
+            var $tdBuildStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
+            $trHistoryRow.append($tdBuildStatus);
+        }if(buildHistory.status==="failed"){
+            var $tdBuildStatusFailure = $('<td></td>').append('<img src="img/indicator_stopped.png"/>');
+            $trHistoryRow.append($tdBuildStatusFailure);
+        }if(buildHistory.status==="running"){
+            var $tdBuildStatusRunning = $('<td></td>').append('<img src="img/indicator_unknown.png"/>');
+            $trHistoryRow.append($tdBuildStatusRunning);
+        }
+        
 
         var $tdUserName = $('<td></td>').append(buildHistory.user);
         $trHistoryRow.append($tdUserName);
 
-        var $tdUrls = $('<td></td>').append(linkHtmlTemplate);
+        var $tdUrls = $('<td></td>').append(buildUrlsHtmlTemplate);
 
         $tdUrls.find('.functionalTestUrl').attr('href', buildData.functionalTestUrl);
         $tdUrls.find('.perfTestUrl').attr('href', buildData.performanceTestUrl);
@@ -84,6 +94,59 @@ $(function() {
         $trHistoryRow.append($tdLogLink);
 
         dataTable.row.add($trHistoryRow).draw();
+
+    }
+
+    function addDeployHistoryRow(deployHistory){
+        var dataTable = $('#tableDeploy').DataTable();
+        var $trDeployHistoryRow = $('<tr></tr>');
+        var $tdSerialNo = $('<td></td>');
+
+        $trDeployHistoryRow.append($tdSerialNo);
+
+        var $tdAppInstance =$('<td></td>');
+        $trDeployHistoryRow.append($tdAppInstance);
+
+      
+        var $deployWorkflow=$('<td></td>');
+        $trDeployHistoryRow.append($deployWorkflow);
+
+        var $envSet=$('<td></td>');
+        $trDeployHistoryRow.append($envSet);
+
+        if(deployHistory.status==="success"){
+            var $tdDeployStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
+            $trDeployHistoryRow.append($tdDeployStatus);
+        }if(deployHistory.status==="failed"){
+            var $tdDeployStatusFailure = $('<td></td>').append('<img src="img/indicator_stopped.png"/>');
+            $trDeployHistoryRow.append($tdDeployStatusFailure);
+        }if(deployHistory.status==="running"){
+            var $tdDeployStatusRunning = $('<td></td>').append('<img src="img/indicator_unknown.png"/>');
+            $trDeployHistoryRow.append($tdDeployStatusRunning);
+        }
+
+        var $tdUserName = $('<td></td>').append(deployHistory.user);
+        $trDeployHistoryRow.append($tdUserName);
+
+        var timeString = new Date().setTime(deployHistory.timestampStarted);
+        var date = new Date(timeString).toLocaleString();
+
+
+        var $tdTime = $('<td></td>').append(date);
+        $trDeployHistoryRow.append($tdTime);
+   
+        //logs
+        var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
+        $aLogs.click(function(e) {
+            
+
+        });
+
+        var $tdLogLink = $('<td></td>').append($aLogs);
+        $trDeployHistoryRow.append($tdLogLink);
+
+        dataTable.row.add($trDeployHistoryRow).draw();
+        
 
     }
 
@@ -211,6 +274,12 @@ $(function() {
                 }
             });
         });
+            //searcg deploy history
+            $.get('../applications/' + applicationId + '/deployHistory', function(deployHistories){
+                for (var i = 0; i < deployHistories.length; i++) {
+                    addDeployHistoryRow(deployHistories[i]);
+                }
+            });
 
         
 
@@ -565,7 +634,11 @@ $(function() {
                 "bSortable": true
             }, {
                 "bSortable": false
-            }]
+            }],
+            "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                $("td:first", nRow).html(iDisplayIndex + 1);
+                return nRow;
+            }
         });
     }
     if (!$.fn.dataTable.isDataTable('#tableDeploy2')) {

@@ -7405,3 +7405,9 @@ width:51.2%;
 }
 
 }
+.dockerIMG{
+    width:auto;
+    height:27px;
+    float:right;
+    margin-top:-55px
+}

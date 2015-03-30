@@ -56,6 +56,9 @@
                                   Control Panel
                                   </a>
                                </div>
+                               <a class="btn pull-right btn-danger right-button" title="Remove AppCard" id="removeAppCard" >
+                                <i class="fa fa-trash-o"></i>
+                            </a>
                             </div>
                             </div>
                           </div>
@@ -1006,5 +1009,32 @@ $(document).ready(function(){
           $('.Applications a').trigger("click");
       }
     });
+  function bindClick_removeAppCard() {
+   $('#removeAppCard').on('click', removeSelectedAppCard);
+  }
+  function removeSelectedAppCard() {
+                     var instanceIP = null;
+                     var jenkinsJobName = null;
+                     if ($('.appcard-role-outer').is(':visible')) {
+                         var $selectedCard = $('.appcard-role-inner .role-Selectedcard-app').find('.appCardBody');
+                         instanceIP = $selectedCard.attr('data-instance-ip');
+                         jenkinsJobName = $selectedCard.attr('data-jenkin-job-name');
+                         alert('here');
+                     }  else {
+                         instanceIP = null;
+                     }
+                                             $.ajax({
+                                             url: url,
+                                             type: 'DELETE',
+                                             success: function() {
+                                                 $('.row .appcardList').find('.appCardBody[data-instance-ip=' + instanceIP + ']').parents('.appcard-role-outer').remove();
+                                             }
+                                         });
+                                         
+                                     
+                                 
+                             
+                         }
+                 
 });
 </script>

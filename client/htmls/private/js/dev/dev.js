@@ -1075,7 +1075,7 @@
 
                          //var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
                          //Updated from above to move docker image out of circle.
-                         var $dockerStatus = $('<img style="width:auto;height:27px;margin-left:96px;margin-top:-105px" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+                         var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
                          $divComponentListContainer.append($dockerStatus);
                      }
 
