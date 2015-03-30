@@ -11,8 +11,10 @@ var buildHistory = new Schema({
     jenkinsServerId: String,
     jobName: String,
     jobNumber: String,
+    status: String,
     user: String,
     timestampStarted: Number,
+    timestampEnded: Number
 });
 
 // Do a build
@@ -20,10 +22,29 @@ buildHistory.methods.getLogs = function() {
 
 };
 
+buildHistory.methods.updateBuildStatus = function(status, callback) {
+    this.status.status = status,
+    this.save(function(err, history) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, history);
+    });
+};
+
+buildHistory.statics.BUILD_STATUS = {
+    RUNNING: 'running',
+    SUCCESS: 'success',
+    FAILED: 'failed'
+};
+
 // Do a build
 buildHistory.statics.createNew = function(historyData, callback) {
     var self = this;
     var buildHistory = new BuildHistory(historyData);
+
     buildHistory.save(function(err, bHistory) {
         if (err) {
             callback(err, null);

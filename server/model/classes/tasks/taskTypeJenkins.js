@@ -15,7 +15,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 });
 
 // Instance Method :- run task
-jenkinsTaskSchema.methods.execute = function(userName, onExecute) {
+jenkinsTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
     var self = this;
     configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
         if (err) {
@@ -71,6 +71,51 @@ jenkinsTaskSchema.methods.execute = function(userName, onExecute) {
                                 nextBuildNumber: jobInfo.nextBuildNumber
                             });
                         }
+
+                        // polling for job status
+                        function pollBuildStarted() {
+                            jenkins.getJobInfo(self.jobName, function(err, latestJobInfo) {
+                                if (err) {
+                                    logger.error(err);
+                                    if (typeof onComplete === 'function') {
+                                        onComplete(err, 1);
+                                    }
+                                    return;
+                                }
+                                if (jobInfo.nextBuildNumber <= latestJobInfo.lastBuild.number) {
+                                    function pollBuildStatus() {
+                                        jenkins.getBuildInfo(self.jobName, jobInfo.nextBuildNumber, function(err, buildInfo) {
+                                            if (err) {
+                                                logger.error(err);
+                                                if (typeof onComplete === 'function') {
+                                                    onComplete(err, 1);
+                                                }
+                                                return;
+                                            }
+                                            if (buildInfo.building) {
+                                                pollBuildStatus();
+                                            } else {
+                                                var status = 1;
+                                                if (buildInfo.result === 'SUCCESS') {
+                                                    status = 0;
+                                                }
+                                                if (typeof onComplete === 'function') {
+                                                    onComplete(null, status);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    pollBuildStatus();
+                                } else {
+                                    pollBuildStarted();
+                                }
+                            });
+                        }
+                        pollBuildStarted();
+
+
+
+
                     });
                 } else {
                     if (typeof onExecute === 'function') {
