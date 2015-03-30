@@ -206,13 +206,13 @@ $(function() {
 
             // setting build history
             $.get('../applications/' + applicationId + '/buildHistory', function(buildHistories) {
-                var dataTable = $('#tableBuild').DataTable();
-                var linkHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
                 for (var i = 0; i < buildHistories.length; i++) {
                     addBuildHistoryRow(buildHistories[i], buildData);
                 }
             });
         });
+
+        
 
         $appCard.find('.appCardDeployBtn').data('applicationId', data._id).click(function(e) {
             var applicationId = $(this).data('applicationId');
