@@ -181,18 +181,18 @@ $(function() {
         */
 
         $tdAction = $('<td><a data-original-title="Deploy" data-placement="top" rel="tooltip" style="border-radius:50%;margin-right:10px;" href="javascript:void(0)" data-toggle="modal" class="btn btn-primary btn-sm appInstanceDeployBtn"><i class="fa fa-bullseye" style="font-size: 14px;"> </i></a><a data-original-title="Edit" data-placement="top" rel="tooltip" style="border-radius:50%;margin-right:10px;" href="#appInstancesEditModal" data-toggle="modal" class="btn btn-info btn-sm editBTN"><i class="fa fa-pencil" style="font-size: 14px;"></i></a><a data-original-title="Delete" data-placement="top" rel="tooltip" style="border-radius:50%" href="javascript:void(0)" data-toggle="modal" class="btn btn-danger btn-sm appInstanceDelBtn"><i class="fa fa-trash" style="font-size: 14px;"> </i></a></td>');
-        var hasAppModifyPermission=false;
-        if(haspermission('application_instance','modify')){
-          hasAppModifyPermission=true;
+        var hasAppModifyPermission = false;
+        if (haspermission('application_instance', 'modify')) {
+            hasAppModifyPermission = true;
         }
-        if(!hasAppModifyPermission){
-          $tdAction.find('.editBTN').addClass('hidden');
+        if (!hasAppModifyPermission) {
+            $tdAction.find('.editBTN').addClass('hidden');
         }
-        var hasAppDeletePermission=false;
-        if(haspermission('application_instance','delete')){
-            hasAppDeletePermission=true;
+        var hasAppDeletePermission = false;
+        if (haspermission('application_instance', 'delete')) {
+            hasAppDeletePermission = true;
         }
-        if(!hasAppDeletePermission){
+        if (!hasAppDeletePermission) {
             $tdAction.find('.appInstanceDelBtn').addClass('hidden');
         }
         $tdAction.find('.appInstanceDeployBtn').click(function() {
@@ -249,6 +249,118 @@ $(function() {
         dataTable.row.add($tr).draw();
 
     }
+    var buildInfo = null;
+
+    function buildEventHandler(e) {
+        var applicationId = urlParams.appId;
+        var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+        var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+        var $modal = $('#appCardBuildResult');
+        $modal.find('.loadingContainer').show();
+        $modal.find('.errorMsgContainer').hide();
+        $modal.find('.outputArea').hide();
+        $modal.modal('show');
+        $.get('../applications/' + applicationId + '/build', function(data) {
+            var date = new Date().setTime(data.timestamp);
+            if (data.taskType === 'chef') {
+                $modal.find('.loadingContainer').hide();
+                $modal.find('.errorMsgContainer').hide();
+                $modal.find('.outputArea').show();
+                var instances = data.instances;
+                for (var i = 0; i < instances.length; i++) {
+                    var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                    if (i === 4) {
+                        var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
+
+                        $taskExecuteTabsHeaderContainer.append($liMoreHeader);
+
+                        $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
+
+                    }
+
+                    $taskExecuteTabsHeaderContainer.append($liHeader);
+
+                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+
+                    $taskExecuteTabsContent.append($tabContent);
+
+
+                }
+                //shown event
+                $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
+                    $(this).attr('data-taskPolling', 'true');
+                    $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
+                    var tabId = $(this).attr('href')
+                    pollTaskLogs($(this), $(tabId), null, 0, false);
+                    //e.relatedTarget // previous active tab
+                });
+
+                $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
+                    $(e.target).attr('data-taskPolling', 'true');
+                    //e.relatedTarget // previous active tab
+                }).first().click();
+
+                $('#assignedExecute').modal('show');
+            } else {
+
+                //adding to build history tab
+                $.get('../applications/' + applicationId + '/lastBuildInfo', function(lastBuildInfo) {
+                    if (buildInfo) {
+                        addBuildHistoryRow(lastBuildInfo, buildInfo);
+                    }
+
+                });
+
+
+                var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
+                $taskExecuteTabsHeaderContainer.append($liHeader);
+                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                $taskExecuteTabsContent.append($tabContent);
+
+                function pollJob() {
+                    $.get('../jenkins/' + data.jenkinsServerId + '/jobs/' + data.jobName, function(job) {
+                        console.log(job.lastBuild.number);
+                        console.log(data.lastBuildNumber);
+                        if (job.lastBuild.number > data.lastBuildNumber) {
+                            $modal.find('.loadingContainer').hide();
+                            $modal.find('.errorMsgContainer').hide();
+                            $modal.find('.outputArea').show();
+                            $liHeader.find('a').click();
+
+                            function pollJobOutput() {
+                                console.log('data==>', data);
+                                $.get('../jenkins/' + data.jenkinsServerId + '/jobs/' + data.jobName + '/builds/' + job.lastBuild.number + '/output', function(jobOutput) {
+                                    $tabContent.find('.taskLogArea').html(jobOutput.output);
+                                    setTimeout(function() {
+                                        if ($('#appCardBuildResult').data()['bs.modal'].isShown) {
+                                            pollJobOutput();
+                                        }
+                                    }, 3000);
+                                });
+                            }
+                            pollJobOutput();
+                        } else {
+                            pollJob();
+                        }
+                        console.log(job);
+                    });
+                }
+                pollJob();
+
+                console.log(data);
+            }
+
+        }).fail(function(jxhr) {
+            $modal.find('.loadingContainer').hide();
+            $modal.find('.outputArea').hide();
+            var $errorContainer = $modal.find('.errorMsgContainer').show();
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                $errorContainer.html(jxhr.responseJSON.message);
+            } else {
+                $errorContainer.html("Server Behaved Unexpectedly");
+            }
+        });
+    }
 
 
 
@@ -273,7 +385,7 @@ $(function() {
             $('.appcard-role-inner').removeClass('role-Selectedcard-app');
             $(this).addClass('role-Selectedcard-app');
         });
-        var buildInfo = null;
+        
 
         if (!data.appInstances.length) {
             $appCard.find('.appInstancesDropdownContainer').css({
@@ -352,117 +464,9 @@ $(function() {
             });
 
         });
-
-        $appCard.find('.appCardBuildBtn').data('applicationId', data._id).click(function(e) {
-            var applicationId = $(this).data('applicationId');
-            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-            var $modal = $('#appCardBuildResult');
-            $modal.find('.loadingContainer').show();
-            $modal.find('.errorMsgContainer').hide();
-            $modal.find('.outputArea').hide();
-            $modal.modal('show');
-            $.get('../applications/' + applicationId + '/build', function(data) {
-                var date = new Date().setTime(data.timestamp);
-                if (data.taskType === 'chef') {
-                    $modal.find('.loadingContainer').hide();
-                    $modal.find('.errorMsgContainer').hide();
-                    $modal.find('.outputArea').show();
-                    var instances = data.instances;
-                    for (var i = 0; i < instances.length; i++) {
-                        var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
-                        if (i === 4) {
-                            var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
-
-                            $taskExecuteTabsHeaderContainer.append($liMoreHeader);
-
-                            $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
-
-                        }
-
-                        $taskExecuteTabsHeaderContainer.append($liHeader);
-
-                        var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
-
-                        $taskExecuteTabsContent.append($tabContent);
-
-
-                    }
-                    //shown event
-                    $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
-                        $(this).attr('data-taskPolling', 'true');
-                        $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
-                        var tabId = $(this).attr('href')
-                        pollTaskLogs($(this), $(tabId), null, 0, false);
-                        //e.relatedTarget // previous active tab
-                    });
-
-                    $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
-                        $(e.target).attr('data-taskPolling', 'true');
-                        //e.relatedTarget // previous active tab
-                    }).first().click();
-
-                    $('#assignedExecute').modal('show');
-                } else {
-
-                    //adding to build history tab
-                    $.get('../applications/' + applicationId + '/lastBuildInfo', function(lastBuildInfo) {
-                        if (buildInfo) {
-                            addBuildHistoryRow(lastBuildInfo, buildInfo);
-                        }
-
-                    });
-
-
-                    var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
-                    $taskExecuteTabsHeaderContainer.append($liHeader);
-                    var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
-                    $taskExecuteTabsContent.append($tabContent);
-
-                    function pollJob() {
-                        $.get('../jenkins/' + data.jenkinsServerId + '/jobs/' + data.jobName, function(job) {
-                            console.log(job.lastBuild.number);
-                            console.log(data.lastBuildNumber);
-                            if (job.lastBuild.number > data.lastBuildNumber) {
-                                $modal.find('.loadingContainer').hide();
-                                $modal.find('.errorMsgContainer').hide();
-                                $modal.find('.outputArea').show();
-                                $liHeader.find('a').click();
-
-                                function pollJobOutput() {
-                                    console.log('data==>', data);
-                                    $.get('../jenkins/' + data.jenkinsServerId + '/jobs/' + data.jobName + '/builds/' + job.lastBuild.number + '/output', function(jobOutput) {
-                                        $tabContent.find('.taskLogArea').html(jobOutput.output);
-                                        setTimeout(function() {
-                                            if ($('#appCardBuildResult').data()['bs.modal'].isShown) {
-                                                pollJobOutput();
-                                            }
-                                        }, 3000);
-                                    });
-                                }
-                                pollJobOutput();
-                            } else {
-                                pollJob();
-                            }
-                            console.log(job);
-                        });
-                    }
-                    pollJob();
-
-                    console.log(data);
-                }
-
-            }).fail(function(jxhr) {
-                $modal.find('.loadingContainer').hide();
-                $modal.find('.outputArea').hide();
-                var $errorContainer = $modal.find('.errorMsgContainer').show();
-                if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                    $errorContainer.html(jxhr.responseJSON.message);
-                } else {
-                    $errorContainer.html("Server Behaved Unexpectedly");
-                }
-            });
-        });
+        $appCard.find('.appCardBuildBtn').click(buildEventHandler);
+        $('.appCardBuildBtn').click(buildEventHandler);
+        
         return $appCard;
     }
 
