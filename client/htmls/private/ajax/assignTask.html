@@ -248,7 +248,7 @@ $(document).ready(function() {
     function loadUIData(taskData) {
         console.log(taskData);
         if(taskData) {
-            alert(JSON.stringify(taskData));
+         //   alert(JSON.stringify(taskData));
             //debugger;
             $('.inputTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
@@ -373,7 +373,7 @@ $(document).ready(function() {
         var taskData = {};
         
         taskData.taskType = taskType;
-        alert('value:' + $('#attrtextarea').val());
+        //alert('value:' + $('#attrtextarea').val());
         if (taskType === 'chef') {
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
