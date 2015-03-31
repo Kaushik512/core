@@ -129,8 +129,14 @@ taskSchema.statics.createNew = function(taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
-        var attrJson = JSON.parse(taskData.attributesjson);
-        logger.debug('attrJson:' + JSON.stringify(attrJson));
+        var attrJson = null;
+        console.log(taskData.attributesjson != '');
+        if(taskData.attributesjson != '')
+            {
+                
+                attrJson = JSON.parse(taskData.attributesjson);
+                logger.debug('attrJson:' + JSON.stringify(attrJson));
+            }
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,

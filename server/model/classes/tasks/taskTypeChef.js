@@ -151,6 +151,7 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             hostedChefUrl: chefDetails.url,
                         });
                         console.log('instance IP ==>', instance.instanceIP);
+                        self.attributesjson = JSON.stringify(self.attributesjson);
                         console.log('>>>>> Task Config : ' + self.attributesjson);
                         var chefClientOptions = {
                             privateKey: decryptedCredentials.pemFileLocation,
