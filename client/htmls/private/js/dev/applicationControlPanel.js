@@ -122,6 +122,10 @@ $(function() {
 
             var $envSet = $('<td></td>').append(appInstanceData.envId);
             $trDeployHistoryRow.append($envSet);
+            $.get('/d4dMasters/readmasterjsonrecord/3/' + appInstanceData.envId, function(data) {
+                //console.log(JSON.stringify(data));
+                $envSet.html(data.environmentname);
+            });
 
             if (deployHistory.status === "success") {
                 var $tdDeployStatus = $('<td></td>').append('<img src="img/indicator_started.png"/>');
@@ -173,6 +177,11 @@ $(function() {
         $tr.append($tdName);
         var $tdEnv = $('<td></td>').html(appInstance.envId);
         $tr.append($tdEnv);
+        $.get('/d4dMasters/readmasterjsonrecord/3/' + appInstance.envId, function(data) {
+            //console.log(JSON.stringify(data));
+            $tdEnv.html(data.environmentname);
+        });
+
         /*var $tdNodes = $('<td></td>');
         if (appInstance.nodes && appInstances.nodes.length) {
             var $tdNodes = $tdNodes.html(appInstance.nodes.length + '(<a href="javascript:void(0) />view<a>")');
@@ -385,7 +394,7 @@ $(function() {
             $('.appcard-role-inner').removeClass('role-Selectedcard-app');
             $(this).addClass('role-Selectedcard-app');
         });
-        
+
 
         if (!data.appInstances.length) {
             $appCard.find('.appInstancesDropdownContainer').css({
@@ -408,7 +417,12 @@ $(function() {
                 $('.buildTaskName').html(task.name);
             });
 
-            $('.buildEnvLabel').html(buildData.envId);
+            $.get('/d4dMasters/readmasterjsonrecord/3/' + buildData.envId, function(data) {
+                //console.log(JSON.stringify(data));
+                $('.buildEnvLabel').html(data.environmentname);
+            });
+
+
 
 
             // setting build history
@@ -466,7 +480,7 @@ $(function() {
         });
         $appCard.find('.appCardBuildBtn').click(buildEventHandler);
         $('.appCardBuildBtn').click(buildEventHandler);
-        
+
         return $appCard;
     }
 
