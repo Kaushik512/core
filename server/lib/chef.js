@@ -564,6 +564,7 @@ var Chef = function(settings) {
             } else {
                 sshParamObj.password = options.password;
             }
+            console.log('json jsonAttributes ==> ',options.jsonAttributes);
 
             javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
                 if (err) {

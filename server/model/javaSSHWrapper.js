@@ -19,8 +19,8 @@ console.log(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
 java.classpath.push(D4DfolderPath + '/java/lib/commons-lang-2.3.jar');
 
-java.classpath.push(D4DfolderPath + '/java/classes');
-//java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
+//java.classpath.push(D4DfolderPath + '/java/classes');
+java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
 
 
 var defaults = {

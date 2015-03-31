@@ -190,7 +190,8 @@ public class SSHExec {
 		
 		String cmdWithJsonAttribute ="";
 		String jsonFileName = "chefRunjsonAttributes.json";
-		if(jsonAttributes != null) {
+		System.out.println(" jsonAttribute ==> "+ jsonAttributes);
+		if(jsonAttributes != null && !jsonAttributes.isEmpty() && !jsonAttributes.equalsIgnoreCase("null")) {
 			jsonAttributes = StringEscapeUtils.escapeJava(jsonAttributes);
 			cmdWithJsonAttribute +="echo "+jsonAttributes +" > "+jsonFileName + " && "+ cmd +" -j "+jsonFileName;
 			cmd  = cmdWithJsonAttribute;
