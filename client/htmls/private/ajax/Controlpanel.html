@@ -213,6 +213,7 @@
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
                                               </div>
                                             </div>
+                                            <button type="submit" class="btn btn-primary marginSubmit"> Submit </button>
                                             <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add Application URL</a>
                                 </form>
                               <!--when app name has been given-->
@@ -807,6 +808,14 @@ $('.startstoptoggler').click(startAndStopToggler);
   if (data.instanceState == 'unknown'){
     disableInstanceStartStopActionBtns(data._id);
   }
+
+  if (data.docker != null) {
+      //docker image out of circle.
+      var $componentList = $('.componentlistContainer');
+      var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">');
+      $componentList.append($dockerStatus);
+  }
+
   
   var $backRunlistContainer = $('.cardBackRunlistContaner');
   for (var j = 0; j < data.runlist.length; j++) {
@@ -1230,9 +1239,10 @@ $('.startstoptoggler').click(startAndStopToggler);
             $collapseAppURL.append($form);
             $form.show();
         }
-    }if(data.appUrls && data.appUrls.length===0){
+    } else {
       $('#appUrlTemplateFormCreate').removeClass('hidden');
     }
+   
 
  
 
@@ -1765,14 +1775,58 @@ $('.formSubmit').click(function(e){
 <script>
 //for cloning the app Url
               $('.addNewApp1').click(function() {
-              $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
-  
-              var countApp =$('.applicationURLContainer').length;
-                    
-              if(countApp===2){
-                 $(this).addClass('hidden');
-                 return; 
-              }
+                  $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
+
+                  var countApp = $('.applicationURLContainer').length;
+
+                  if (countApp === 2) {
+                      $(this).addClass('hidden');
+                      return;
+                  }
+
+              });
+
+              $('#appUrlTemplateFormCreate').submit(function(e) {
+                  var appUrls = []
+                  $(this).find('.applicationURLContainer').each(function() {
+                      var appUrlData = {};
+                      appUrlData.name = $(this).find('.appName').val();
+                      appUrlData.url = $(this).find('.appURL').val();
+                      if (appUrlData.name && appUrlData.url) {
+                          appUrls.push(appUrlData);
+                      }
+                      console.log('===>', appUrlData);
+
+                  });
+
+
+                  console.log('arrr===>', appUrls);
+                  if (appUrls.length) {
+                      $.post('../instances/' + urlParams.id + '/appUrl', {
+                          appUrls: appUrls
+                      }, function(data) {
+                        $('#appUrlTemplateFormCreate').addClass('hidden');
+                          $.get('../instances/' + urlParams.id, function(data) {
+                              if (data.appUrls && data.appUrls.length) {
+                                  var $collapseAppURL = $('#collapseAppURL');
+                                  var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+                                  for (var k = 0; k < data.appUrls.length; k++) {
+                                      var url = data.appUrls[k].url;
+                                      url = url.replace('$host', data.instanceIP);
+                                      var anchor = "<a class='app-url marginForURLCP' data-appUrlId='" + data.appUrls[k]._id + "' href='" + url + "'' target='_blank' title='" + data.appUrls[k].name + "'>" + data.appUrls[k].name + "</a>";
+                                      $cardAppUrlListContanier.last().append(anchor);
+                                      var $form = $('#appUrlTemplateForm').clone(true);
+                                      $form.find('.appNameLabel').html(data.appUrls[k].name);
+                                      $form.find('.appUrlId').val(data.appUrls[k]._id);
+                                      $form.find('.appUrlInput').val(data.appUrls[k].url);
+                                      $collapseAppURL.append($form);
+                                      $form.show();
+                                  }
+                              }
+                          })
+                      });
+                  }
+                  return false;
 
               });
 </script>

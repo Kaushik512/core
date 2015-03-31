@@ -444,6 +444,7 @@ function foldTreeForSetting(){
         localStorage.setItem("lasttabselected", $(toplink).attr('id'));
         if($(toplink).attr('id') == 'workZoneNew'){
             //alert('about to call selectFirstEnv');
+            console.log('selecting first env from setleftnavigation');
             selectFirstEnv();
         }
         //alert($(toplink).attr('id'));
@@ -775,36 +776,48 @@ function loadSettingsTree(){
         var hasEnv = true;
         console.log('called');
         var _orgnode = $('a[itemtype="org"][rowid="' + _org + '"]').first();
+        console.log('checking ===>>> ',_orgnode,_org,_bg,_proj,_env);
         //var _orgnode = $('a[rowid="'+_org+'"]');
         //alert('orgnode:' + _orgnode.length + ',' + _org + ' ; ' +_bg  + ' ; ' +_proj   + ' ; ' + _env );
-        if(_orgnode.length > 0 && _org != '' && _bg != '' && _proj   != '' && _env != ''){  
-            //alert('in if' + _org + _bg + _proj + _env);
-            
-            {if(_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-                          _orgnode.trigger('click');}
-     
-            var _bgnode = $('a[itemtype="bg"][orgid="' + _org + '"][rowid="' + decodeURIComponent(_bg) + '"]').first();
-            if(_bgnode.length > 0)
-            {if(_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-                _bgnode.trigger('click');}
+    if (_orgnode.length > 0 && _org != '' && _bg != '' && _proj != '' && _env != '') {
+        //alert('in if' + _org + _bg + _proj + _env);
 
-            var _projnode = $('a[itemtype="proj"][orgid="' + _org + '"][rowid="' + _proj + '"]').first();
-            if(_projnode.length > 0)
-            {if(_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0)
-                          _projnode.trigger('click');}
 
-            //var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
-            var _envnode = $('a[itemtype="env"][orgid="' + _org + '"][rowid="' + _env + '"]').first();
-              if(_envnode.length > 0)
-                  {
-                    //alert('in here');
-                    _envnode.first().trigger('click');
-                  }
-               else
-                    loaddefaultenv();
-
+        if (_orgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0) {
+             console.log('clicking first');
+            _orgnode.trigger('click');
         }
+
+        var _bgnode = $('a[itemtype="bg"][orgid="' + _org + '"][rowid="' + decodeURIComponent(_bg) + '"]').first();
+        if (_bgnode.length > 0) {
+            if (_bgnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0) {
+                console.log('click 2');
+                _bgnode.trigger('click');
+            }
+        }
+        var _projnode = $('a[itemtype="proj"][orgid="' + _org + '"][rowid="' + _proj + '"]').first();
+        if (_projnode.length > 0) {
+            if (_projnode.parent().find('.expand-collapse').first().attr('class').indexOf('fa-angle-right') > 0) {
+                console.log('click 3');
+                _projnode.trigger('click');
+            }
+        }
+
+        //var _envnode = $('a[itemtype="env"][orgname="' + _org + '"][bgname="' + decodeURIComponent(_bg) + '"][projname="' + decodeURIComponent(_proj) + '"]:contains("' + decodeURIComponent(_env) + '")').first();
+        setTimeout(function() {
+            var _envnode = $('a[rowid=' + _env + ']');
+            console.log('Env length ==> ', _envnode.length);
+            if (_envnode.length > 0) {
+                //alert('in here');
+                console.log('click 4');
+                _envnode.first().trigger('click');
+            } else {
+                loaddefaultenv();
+            }
+        },1000);
+    }
         else{
+            console.log('loading default env');
             loaddefaultenv();
             //alert('in else');
             
@@ -888,11 +901,13 @@ function loadSettingsTree(){
 		if(ltab){
 			//trigger click on tab
 			//alert('about to click on ' + ltab);
+            console.log('tab loading');
 			$('#' + ltab).trigger('click');
 			drawBreadCrumb();
         }
 		else{ //will be a first time load
-			selectFirstEnv();
+			console.log('selecting first env');
+            selectFirstEnv();
 		}
 	};
 checkandnavigatetotab();

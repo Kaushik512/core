@@ -224,7 +224,7 @@
                     <strong style="color:#3a87ad">Build Health</strong>
                   </td>
                   <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Time(GMT)</strong>
+                    <strong style="color:#3a87ad">Time</strong>
                   </td>
                   <td style="font-size: 13px;">
                     <strong style="color:#3a87ad">Logs</strong>
@@ -273,55 +273,7 @@
                 </tr>
               </thead>
               <tbody class="deployTbody" style="font-size:12px;">
-                <tr>
-                  <td>1</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Full Deploy</td>
-                  <td>Dev</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>superadmin</td>
-                  <td>Wed, 25 Feb 2015 11:52:37 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Update Database Schema</td>
-                  <td>Prod</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>consumer</td>
-                  <td>Tue, 24 Feb 2015 23:52:31 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Upgrade Application Service</td>
-                  <td>QA</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>designer</td>
-                  <td>Wed, 25 Feb 2015 19:34:31 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Update App-Server Configuration</td>
-                  <td>Prod</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>superadmin</td>
-                  <td>Wed, 25 Feb 2015 12:14:31 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-              </tbody> 
+              </tbody>
               <!-- <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#deployModalContainer">Add New Deploy</a> -->
           </table>
         </div>
@@ -571,7 +523,7 @@
                                   <!-- <a class="btn btn-minier btn-primary" id="assigntask" href="#ajax/Settings/AssignTask.html" style="display:none">
                                       <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                                   </a>                -->        
-                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary" data-toggle="modal">
+                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary AddBTN" data-toggle="modal">
                                       <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                       Add New
                                   </a>                                                
@@ -1571,6 +1523,17 @@ $(document).ready(function(){
   $(".chooseEnvironment").select2();
 
 });
+
+var hasAppInstancePermission=false;
+if(haspermission('application_instance','create')){
+  hasAppInstancePermission=true;
+}
+if(!hasAppInstancePermission){
+  $('.AddBTN').addClass('hidden');
+}
+
+
+
 function editname (number) {
     $('.functionalinputedit').removeAttr('readOnly').focus();
 }

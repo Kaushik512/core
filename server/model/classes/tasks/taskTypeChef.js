@@ -28,7 +28,7 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName,onExecute) {
+chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
     var self = this;
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
@@ -52,6 +52,36 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                 instances: instances,
             });
         }
+
+        var count = 0;
+        var overallStatus = 0;
+        var instanceResultList = [];
+
+        function instanceOnCompleteHandler(err, status, instanceId) {
+            logger.debug('Instance onComplete fired', count, instances.length);
+            count++;
+            var result = {
+                instanceId: instanceId,
+                status: 'success'
+            }
+            if (err) {
+                result.status = 'failed';
+                overallStatus = 1;
+            } else {
+                if (status === 0) {
+                    result.status = 'success';
+                } else {
+                    result.status = 'failed';
+                    overallStatus = 1;
+                }
+            }
+            instanceResultList.push(result);
+            if (!(count < instances.length)) {
+                if (typeof onComplete === 'function') {
+                    onComplete(null, overallStatus);
+                }
+            }
+        }
         for (var i = 0; i < instances.length; i++) {
             (function(instance) {
                 var timestampStarted = new Date().getTime();
@@ -67,6 +97,9 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                         timestamp: timestampEnded
                     });
                     instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                    instanceOnCompleteHandler({
+                        message: "Instance IP is not defined. Chef Client run failed"
+                    }, 1, instance._id);
                     return;
                 }
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
@@ -79,7 +112,7 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                             timestamp: timestampEnded
                         });
                         instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-
+                        instanceOnCompleteHandler(err, 1, instance._id);
                         return;
                     }
                     if (!chefDetails) {
@@ -91,6 +124,9 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                             timestamp: timestampEnded
                         });
                         instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                        instanceOnCompleteHandler({
+                            message: "Chef Data Corrupted. Chef Client run failed"
+                        }, 1, instance._id);
                         return;
                     }
                     //decrypting pem file
@@ -104,6 +140,7 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                                 timestamp: timestampEnded
                             });
                             instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                            instanceOnCompleteHandler(err, 1, instance._id);
                             return;
                         }
                         var chef = new Chef({
@@ -151,6 +188,7 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                                     timestamp: timestampEnded
                                 });
                                 instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                                instanceOnCompleteHandler(err, 1, instance._id);
                                 return;
                             }
                             console.log("knife ret code", retCode);
@@ -163,7 +201,9 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                                     timestamp: timestampEnded
                                 });
                                 instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
+                                instanceOnCompleteHandler(null, 0, instance._id);
                             } else {
+                                instanceOnCompleteHandler(null, retCode, instance._id);
                                 if (retCode === -5000) {
                                     logsDao.insertLog({
                                         referenceId: logsReferenceIds,

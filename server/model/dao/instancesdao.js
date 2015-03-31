@@ -437,6 +437,30 @@ var InstancesDao = function() {
 
     };
 
+    this.addAppUrls = function(instanceId, appUrls, callback) {
+        console.log(appUrls);
+        logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, appUrls);
+        Instances.update({
+            "_id": new ObjectId(instanceId)
+        }, {
+            $push: {
+                appUrls: {
+                    $each: appUrls
+                }
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to addAppUrl (%s, %s,%s)", instanceId, appUrls, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit addAppUrl (%s, %s)", instanceId, appUrls);
+            callback(null, data);
+        });
+    }
+
     this.updateAppUrl = function(instanceId, appUrlId, url, callback) {
         logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, url);
         Instances.update({
@@ -450,7 +474,7 @@ var InstancesDao = function() {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateAppUrl (%s, %s,%s,%s)", instanceId, appUrlId, url,err);
+                logger.error("Failed to updateAppUrl (%s, %s,%s,%s)", instanceId, appUrlId, url, err);
                 callback(err, null);
                 return;
             }
@@ -476,14 +500,14 @@ var InstancesDao = function() {
         }, {
             upsert: false
         }, function(err, data) {
-            
+
             if (err) {
                 logger.error("Failed to updateInstanceDockerStatus(%s, %s, %s) - " + err, instanceId, dockerstatus, dockerapiurl, err);
                 callback(err, null);
                 return;
             }
 
-            logger.debug("Exit updateInstanceDockerStatus(%s, %s, %s,%s)", instanceId, dockerstatus, dockerapiurl,data);
+            logger.debug("Exit updateInstanceDockerStatus(%s, %s, %s,%s)", instanceId, dockerstatus, dockerapiurl, data);
             callback(null, data);
         });
 

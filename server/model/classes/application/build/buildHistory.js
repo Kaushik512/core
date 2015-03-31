@@ -6,7 +6,7 @@ var schemaValidator = require('../../../dao/schema-validator');
 
 var Schema = mongoose.Schema;
 
-var buildHistory = new Schema({
+var buildHistorySchema = new Schema({
     buildId: String,
     jenkinsServerId: String,
     jobName: String,
@@ -18,11 +18,11 @@ var buildHistory = new Schema({
 });
 
 // Do a build
-buildHistory.methods.getLogs = function() {
+buildHistorySchema.methods.getLogs = function() {
 
 };
 
-buildHistory.methods.updateBuildStatus = function(status, callback) {
+buildHistorySchema.methods.updateBuildStatus = function(status, callback) {
     this.status.status = status,
     this.save(function(err, history) {
         if (err) {
@@ -34,14 +34,14 @@ buildHistory.methods.updateBuildStatus = function(status, callback) {
     });
 };
 
-buildHistory.statics.BUILD_STATUS = {
+buildHistorySchema.statics.BUILD_STATUS = {
     RUNNING: 'running',
     SUCCESS: 'success',
     FAILED: 'failed'
 };
 
 // Do a build
-buildHistory.statics.createNew = function(historyData, callback) {
+buildHistorySchema.statics.createNew = function(historyData, callback) {
     var self = this;
     var buildHistory = new BuildHistory(historyData);
 
@@ -54,7 +54,7 @@ buildHistory.statics.createNew = function(historyData, callback) {
     });
 };
 
-buildHistory.statics.getHistoryByBuildId = function(buildId, callback) {
+buildHistorySchema.statics.getHistoryByBuildId = function(buildId, callback) {
     var queryObj = {
         buildId: buildId
     };
@@ -72,7 +72,7 @@ buildHistory.statics.getHistoryByBuildId = function(buildId, callback) {
 
 };
 
-buildHistory.statics.getHistoryById = function(id, callback) {
+buildHistorySchema.statics.getHistoryById = function(id, callback) {
 
     this.findById(id, function(err, history) {
         if (err) {
@@ -89,6 +89,6 @@ buildHistory.statics.getHistoryById = function(id, callback) {
 
 
 
-var BuildHistory = mongoose.model('appBuildHistory', buildHistory);
+var BuildHistory = mongoose.model('appBuildHistory', buildHistorySchema);
 
 module.exports = BuildHistory;

@@ -5,16 +5,16 @@ var logger = require('../../../../lib/logger')(module);
 var schemaValidator = require('../../../dao/schema-validator');
 var utils = require('../../utils/utils');
 
-
 var Workflow = require('./workflow');
+
+var DeployHistory = require('./deployHistory');
 
 var Schema = mongoose.Schema;
 
 var AppInstanceSchema = new Schema({
     name: String,
     envId: String,
-    workflows: [Workflow.schema],
-    deployHistoryIds: [String]
+    workflows: [Workflow.schema]
 });
 
 AppInstanceSchema.methods.getNodes = function(callback) {
@@ -44,7 +44,7 @@ AppInstanceSchema.methods.getNodes = function(callback) {
     getWorkflowNodes(this.workflows[count]);
 };
 
-AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, callback) {
+AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, callback, onComplete) {
     var workflows = this.workflows;
     if (!workflows.length) {
         callback({
@@ -65,14 +65,19 @@ AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, callb
         }, null);
         return;
     }
+
     workflow.execute(username, function(err, tasks) {
         if (err) {
             callback(err, null);
             return;
         }
-        callback(null,tasks);
-    });
+        callback(null, tasks);
 
+    }, function(err, status) {
+        if (typeof onComplete === 'function') {
+            onComplete(err, status);
+        }
+    });
 };
 
 var AppInstance = mongoose.model('appInstances', AppInstanceSchema);
