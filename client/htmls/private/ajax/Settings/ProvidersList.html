@@ -1,6 +1,6 @@
 
 <script>
-//    $(".tree-view").hide();  
+    //    $(".tree-view").hide();  
 </script>
 
 <div class="row">
@@ -10,133 +10,413 @@
             <div class="widget-box">
                 <div class="widget-header">
                     <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Providers</strong>
+                        <strong>Providers</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
-                             
-                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
-                                <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                            </a>                      
-                            <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateProviders.html?new">
-                                <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
-                                New
-                            </a>                                                
-                        </div>
+
+                          <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
+                            <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
+                        </a>                      
+                        <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateProviders.html?new">
+                            <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                            New
+                        </a>                                                
                     </div>
-                                            
                 </div>
-                <div class="widget-body">
-                    <div class="widget-main" style="min-height:300px">
-                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-                            <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
-                                <thead>
-                                    <tr class="rowCustomStyle">
-                                        <td>Name</td>
-                                        <!-- <td>Description</td> -->
-                                        <td>Provider</td>
-                                        <!-- <td>Account ID</td> -->
-                                        <td class="">Action</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="hidden rowtemplate">
-                                        <td datafield="providername"></td>
-                                        <!-- <td datafield="description"></td> -->
-                                        <td datafield="providertype"></td>
-                                        <!-- <td datafield="accountid"></td> -->
-                                        <td>
-                                            <div class="btn-group tableactionWidth">
-                                                <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
-                                                <a class="btn btn-xs btn-info pull-left" title="Update">
-                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                </a>
-                                            </div>
-                                        </td>
 
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-                                <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                                    <thead>
-                                        <tr class="rowCustomStyle">
-                                            <td>Name</td>
-                                            <!-- <td>Description</td> -->
-                                            <td>Provider</td>
-                                            <!-- <td>Account ID</td> -->
-                                            <td class="">Action</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                                                               
-                                    </tbody>
-                                    
-                                </table>
-
-
-                                <script>
-                                    $(document).ready(function () {
-                                        var hasCreateProviderPermission = false;
-                                        if(haspermission('provider','create')){
-                                            hasCreateProviderPermission=true;
-                                        }
-                                        if(!hasCreateProviderPermission){
-                                            $('#newProvider').addClass('hidden');
-                                        }
-                                       
-                                        startup();
-                                    });
-
-                                    function startup() {
-                                       
-                                        //setting the addnew button to launch popup
-                                        $("#addnewitem").attr('data-toggle', 'modal');
-
-                                        CreateTableFromJson(9,'providername','CreateProviders.html'); //9 is for providers
-                                        var tab = 'envtable';
-                                        $('#envtable').dataTable({
-                                            "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
-                                            "pagingType": "full_numbers"
-                                        });
-                                         $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
-                                        $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');                                    
-                                        $('#content').css("opacity", "1 !important");
-                                        //Force opening the left navigation menu
-                                        if ($('#navSettings').is(":visible") == false) {
-                                            $('#navSettings').css("display", '');
-                                            $('#navSettings > ul > li').first().addClass('open');
-                                            $('#navSettings > ul > li > ul').css("display", "none");
-                                            $('#navSettings > ul > li > ul').first().css("display", "block");
-                                        }
-                                        //redrawing the breadcrumb and selecting the tree
-                                        $('#Settings  li').removeClass('active');
-                                        $('#Settings  li').each(function () {
-                                            if ($(this).text().trim() == "Providers"){
-                                                $(this).addClass('active');
-                                            }
-                                        });
-                                      //  drawBreadCrumb1();
-                                    }
-
-                                   
-
-                                </script>
-                            <div class="col-md-5">
-
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
-                       <div id="tableFooterLeft" class="pull-left"></div>
-                       <div id="tableFooterRight" class="pull-right"></div>
-                    </div>
-                   
-                    
-                </div>
             </div>
-        </div>
-    </div>
-</div>
+            <div class="widget-body">
+                <div class="widget-main" style="min-height:300px">
+                    <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                        <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
+                            <thead>
+                                <tr class="rowCustomStyle">
+                                    <td>Name</td>
+                                    <!-- <td>Description</td> -->
+                                    <td>Provider</td>
+                                    <!-- <td>Account ID</td> -->
+                                    <td class="">Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hidden rowtemplate">
+                                    <td datafield="name"></td>
+                                    <!-- <td datafield="description"></td> -->
+                                    <td datafield="providerType"></td>
+                                    <!-- <td datafield="accountid"></td> -->
+                                    <td>
+                                        <div class="btn-group tableactionWidth">
+                                            <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+                                            <a class="btn btn-xs btn-info pull-left" title="Update">
+                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                        <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                            <thead>
+                                <tr class="rowCustomStyle">
+                                    <td>Name</td>
+                                    <!-- <td>Description</td> -->
+                                    <td>Provider</td>
+                                    <!-- <td>Account ID</td> -->
+                                    <td class="">Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+
+
+                        <script>
+                            $(document).ready(function () {
+                                var hasCreateProviderPermission = false;
+                                if(haspermission('provider','create')){
+                                    hasCreateProviderPermission=true;
+                                }
+                                if(!hasCreateProviderPermission){
+                                    $('#newProvider').addClass('hidden');
+                                }
+
+                                saveProviderData();
+                            });
+
+                            function saveProviderData(){
+
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+      //reqBody.instanceUserName='root';
+      $.ajax({
+         method: "GET",url: "/providers",data: reqBody,   
+         success: function(data, success) {
+                //alert('Successfully Saved ' + data);
+                data= typeof data=="string" ?JSON.parse(data):data;
+                d4ddata=data;
+                //CreateTableFromJson(9,'providername','CreateProviders.html',true); //9 is for 
+               /* $('#templateTable').dataTable( {
+                    "data": [["Welcome","aws","<span>update</span><span>delete</span>"]],
+                    "columns": [
+                    { "title": "Name" },
+                    { "title": "Provider" },
+                    { "title": "Action" }
+                    ]
+                } );   */
+
+                startup();
+
+            },
+            error: function(jqxhr) {
+                removeLoader();
+                bootbox.alert(jqxhr.status);
+            },
+            failure: function(data) {
+                bootbox.alert(data);
+            }
+        });
+
+  }
+
+  function startup() {
+    //setting the addnew button to launch popup
+    $("#addnewitem").attr('data-toggle', 'modal');
+    CreateTableFromJsonForProvider(9,'providername','CreateProviders.html',true); //9 is for providers
+    var tab = 'envtable';
+    $('#envtable').dataTable({
+        "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
+        "pagingType": "full_numbers"
+    });
+    $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
+    $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');                                    
+    $('#content').css("opacity", "1 !important");
+                                            //Force opening the left navigation menu
+                                            if ($('#navSettings').is(":visible") == false) {
+                                                $('#navSettings').css("display", '');
+                                                $('#navSettings > ul > li').first().addClass('open');
+                                                $('#navSettings > ul > li > ul').css("display", "none");
+                                                $('#navSettings > ul > li > ul').first().css("display", "block");
+                                            }
+                                            //redrawing the breadcrumb and selecting the tree
+                                            $('#Settings  li').removeClass('active');
+                                            $('#Settings  li').each(function () {
+                                                if ($(this).text().trim() == "Providers"){
+                                                    $(this).addClass('active');
+                                                }
+                                            });
+                                          //  drawBreadCrumb1();
+                                      }
+
+
+function CreateTableFromJsonForProvider(formID, idFieldName, createFileName,isEscapeMasterDirectory) {
+        var formData = null;
+        //force setting the idFieldName to "rowid"
+        idFieldName = "_id";
+        formData = d4ddata;
+        var formSchema = null;
+        $.each(d4ddata, function(i, item) {
+            console.log("Top:" + JSON.stringify(item)); //rows
+            var editButton = null;
+            var idFieldValue = null;
+            var imageTD = null;
+            $.each(item, function(k, v) { //columns
+                // var inputC = null;
+               // console.log('k:' + k + ' v :' + JSON.stringify(v));
+                if (k == idFieldName) {
+                    idFieldValue = v;
+                }
+                inputC = $('.rowtemplate').find("[datafield='" + k + "']");
+                if (inputC) {
+                    console.log('Inputc===>' + inputC.attr('datafield'));
+                    if (inputC.attr('datafield') == 'active') {
+                        if (v.toString() == 'false') {
+                            inputC.html('Inactive');
+                        } else
+                            inputC.html('Active');
+                    } else {
+                        if (inputC.attr('datatype')) {
+                            // inputC.attr('data-content',v);
+                            // inputC.attr('data-toggle',"popover");
+                            if (inputC.attr('datatype') == 'list') {
+                                v = v.replace(/,/g, "<br/>");
+                                inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
+                            } else
+                                inputC.html(v);
+                        } else
+                            inputC.html(v);
+
+                    }
+                }
+            });
+
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            // $('#envtable').append(sRow);
+            imageTD = $('.rowtemplate').find("[datatype='image']");
+
+            editButton = $('.rowtemplate').find("[title='Update']");
+
+            if (idFieldValue) {
+                if (imageTD) {
+                    if (imageTD.length > 0) {
+                        console.log("Template Icon:" + idFieldValue);
+                        var imgpath = 'img/blank.png';
+                        if (imageTD.html().indexOf('<img') >= 0) {
+                            imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                        } else
+                            imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+
+                        imageTD.html('');
+                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+
+                    }
+
+                }
+                if (editButton) {
+                    editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
+                    //checking for createfilename and checking for the resources as per the JSON
+                    var hasEditPermission = false;
+                    if(createFileName==='CreateOrg.html'){
+                        if(haspermission('organization','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateProductGroup.html'){
+                        if(haspermission('businessgroups','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateProject.html'){
+                        if(haspermission('projects','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironment.html'){
+                        if(haspermission('environment','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironmentConcept.html'){
+                        if(haspermission('chefenvironment','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateConfigManagement.html'){
+                        if(haspermission('chefserver','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateUser.html'){
+                        if(haspermission('users','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateTeam.html'){
+                        if(haspermission('teams','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateTemplates.html'){
+                        if(haspermission('templates','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateJiraConfig.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    else if(createFileName==='CreateProviders.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    else if(createFileName==='CreateImages.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    //user has no permission to edit
+                    if(!hasEditPermission){
+                        
+                        editButton.addClass('disabled');
+                    }
+                    editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                    editButton.removeClass('btn-xs');
+                    editButton.addClass('btn-sg');
+                }
+                //importbutton will be present for config management screen.
+                var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
+                // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                //&& tdorgname.length > 0
+                if (importbutton && importbutton.length > 0) {
+                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                    importbutton.removeClass('btn-xs');
+                    importbutton.addClass('btn-sg');
+                    importbutton.addClass('tableactionbutton');
+                }
+
+
+
+                //setting the delete button
+
+                var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                if (deletebutton) {
+                    deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                    var hasDeletePermission = false;
+                    //checking whether the user has the authentication to delete any entry
+                    if(createFileName==='CreateOrg.html'){
+                        if(haspermission('organization','delete')){
+                        hasDeletePermission =true;
+                        }
+
+                    }else if(createFileName==='CreateProductGroup.html'){
+                        if(haspermission('businessgroups','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateProject.html'){
+                        if(haspermission('projects','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironment.html'){
+                        if(haspermission('environment','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironmentConcept.html'){
+                        if(haspermission('chefenvironment','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateConfigManagement.html'){
+                        if(haspermission('chefserver','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateUser.html'){
+                        if(haspermission('users','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateTeam.html'){
+                        if(haspermission('teams','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateTemplates.html'){
+                        if(haspermission('templates','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateJiraConfig.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateProviders.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateImages.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }
+
+                    if(!hasDeletePermission){
+                        
+                        deletebutton.addClass('disabled');
+                    }
+                    deletebutton.removeClass('btn-xs');
+                    deletebutton.addClass('btn-sg');
+                    deletebutton.addClass('tableactionbutton');
+                }
+            }
+
+
+            console.log('-----------');
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            $('#envtable').append(sRow);
+
+        });
+        //  $.each(formData.data.fields, function(i, item) { //row iteration
+
+        // var templateRow = $(".rowtemplate").clone();
+        // $.each(item,function(k, v) {
+        //     console.log('k:' + k + ',v:' + v);
+        // });
+        // var sRow = $(".rowtemplate").clone();
+        // sRow.removeClass("hidden");
+        // sRow.removeClass("rowtemplate");
+        // $('#envtable').append(sRow);
+
+        //   });
+        setPopOverForTableFields();
+
+        $(".savespinner").hide();
+
+    }
+
+                                  </script>
+                                  <div class="col-md-5">
+
+                                  </div>
+                              </div>
+
+                          </div>
+                          <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                           <div id="tableFooterLeft" class="pull-left"></div>
+                           <div id="tableFooterRight" class="pull-right"></div>
+                       </div>
+
+
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
