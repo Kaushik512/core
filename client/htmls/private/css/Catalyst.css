@@ -3525,7 +3525,6 @@ body
 }
 .instance-bootstrap-list {
     font-size: 10px;
-    padding-right: 21px;
     padding-top: 14px;
 
     text-align: center;
@@ -5996,7 +5995,7 @@ span.icon {
     display:block;
 }
 .marginForURLCP{
-    margin-left: -4px;
+    margin-left: -24px;
     text-align: center;
     display:block;   
 }

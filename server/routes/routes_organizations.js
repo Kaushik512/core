@@ -352,6 +352,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         environments: envs
                                                                     });
                                                                     var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
+                                                                    // get features.appcard from app.config
+
+                                                                    //console.log(appConfig);
+                                                                 
+
+                                                                   var selectable =!! appConfig.features.appcard
                                                                     orgTree[_i]['nodes'][__i]['nodes'].push({ //
                                                                         name: prjname,
                                                                         text: prjname,
@@ -362,9 +368,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         icon: 'fa fa-fw fa-1x fa-tasks',
                                                                         nodes: envs_,
                                                                         borderColor: '#000',
-                                                                        selectable: true,
+                                                                        selectable: selectable,
                                                                         itemtype: 'proj',
-                                                                        href: '#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'],
+                                                                        href: selectable ?'#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'] :'javascript:void(0)',
                                                                         //background: '#40baf1',
                                                                         //color: '#40baf1 !important',
                                                                         environments: envs

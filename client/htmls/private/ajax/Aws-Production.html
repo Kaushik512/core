@@ -464,7 +464,7 @@
                         &times;
                     </button>
                     <h4 class="modal-title">
-                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Application Name &amp; URL
+                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
                     </h4>
                 </div>
 
@@ -476,7 +476,7 @@
                         <div class="applicationURLContainer" id="appSeries"> 
                                                 <div class="col-lg-6 col-md-6" style="margin-top:15px;">
 
-                                                <label for="">Name<span style="color:red">*</label>
+                                                <label for="">Name</label>
 
                                                 <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
                                                 <b class="tooltip tooltip-top-right">
@@ -487,9 +487,9 @@
 
                                                <div class="col-lg-6 col-md-6" style="margin-top:15px">
 
-                                                <label for="">URL<span style="color:red">*</label>
+                                                <label for="">URL:<span style="color:Red;">&nbsp;*<span class="appUrlss hidden">Enter a Valid URL</span></span></label>
                                                 
-                                                <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="URL">
+                                                <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
                                               </div>
@@ -1431,14 +1431,19 @@ $('#addAppBtn').click(function(e){
         $('#newAppSeries').addClass('hidden');
         return; 
     }
-})
+});
 $('#appURLForm').submit(function(e){
+            var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
             
             var $row = $('<tr/>');
             var appName = $(this).find('.appName').val();
             var appUrl = $(this).find('.appURL').val();
+            if(!regexpURL.test(appUrl)){
+              alert('Please Enter a Valid URL');
+              return false;
+            }
             if(!(appName && appUrl)) {
-              alert("Please enter Name and Url");
+              alert("Please enter Name and URL");
               return false;
             }
 
@@ -1446,6 +1451,7 @@ $('#appURLForm').submit(function(e){
               name:appName,
               url:appUrl
             })
+
 
             var $tdName =$('<td/>');
             $tdName.append(appName);

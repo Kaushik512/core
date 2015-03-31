@@ -86,6 +86,9 @@ var config = {
         rootpass: 'ReleV@ance'
 
     },
+    features : {
+        appcard:true
+    },
 
     //getter methods
     get catalystHome() {

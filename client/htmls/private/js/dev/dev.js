@@ -330,7 +330,6 @@
                      $("#addInstanceForm").submit(function(e) {
                          var ipAddresRegExp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
                          var hostname = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
-
                          var $spinner = $('#nodeimportipspinner').addClass('hidden');
                          var $result = $('#nodeimportipresultmsg').addClass('hidden');
                          var reqBody = {};
@@ -356,6 +355,7 @@
 
                          });
                          reqBody.appUrls = appUrls;
+
 
 
                          if (!reqBody.fqdn) {
@@ -2218,6 +2218,30 @@
 
                  /*Initialising the data table in orchestration*/
                  function initializeTaskArea(data) {
+                    function getUpdatedData(dat){
+                        var obj;
+                        var list=$('#tableOrchestration').find('tr[data-taskid]'),available=[],key=[],index;
+                        if(list.length){
+                            for(var i=0;i<dat.length;i++){
+                                key.push(data[i]._id);
+                                if($('#tableOrchestration').find('tr[data-taskid="'+dat[i]._id+'"]').length){
+                                    available.push(data[i]._id);
+                                }
+                            }
+                            if(available.length){
+                                for(var x=0;x<available.length;x++){
+                                    index=$.inArray(available[x], key);
+                                    key.splice(index,1);
+                                    dat.splice(index,1);
+                                }                            
+                            }
+                            obj=dat;
+                        }else{
+                            obj=dat;
+                        }
+                        return obj;
+                    }
+                    data=getUpdatedData(data);
                      if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
                          //var $taskListArea = $('.taskListArea').empty();
                          $taskDatatable = $('#tableOrchestration').DataTable({
