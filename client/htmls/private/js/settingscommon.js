@@ -2791,7 +2791,10 @@ function updateInstanceCardWithDocker(instanceID) {
     //alert($_cont.find('img.dockerenabledinstacne').length);
     if ($_cont.find('img.dockerenabledinstacne').length <= 0) {
         $_cont.find('a[class*="app.url"]').detach();
-        $_cont.append('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne">');
+       // $_cont.append('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne">');
+        //Updated from above to move docker image out of circle.
+        $_cont.append('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:auto;height:27px;margin-left:96px;margin-top:-105px" class="dockerenabledinstacne">');
+        
     }
 
 }

@@ -121,7 +121,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         logger.debug("Exit delete() for /instances/%s", req.params.instanceId);
     });
-    //updateInstanceIp
+
+    app.post('/instances/:instanceId/appUrl', function(req, res) { //function(instanceId, ipaddress, callback)
+        
+        instancesDao.addAppUrls(req.params.instanceId, req.body.appUrls, function(err, updateCount) {
+            if (err) {
+                logger.error("Failed to update instanceip", err);
+                res.send(500);
+                return;
+            }
+            res.send({
+                updateCount: updateCount
+            });
+        });
+    });
+
+
     app.post('/instances/:instanceId/appUrl/:appUrlId/update', function(req, res) { //function(instanceId, ipaddress, callback)
         logger.debug("Enter post() for /instances/%s/appUrl/update", req.params.instanceId);
         instancesDao.updateAppUrl(req.params.instanceId, req.params.appUrlId, req.body.url, function(err, updateCount) {
@@ -136,6 +151,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    //updateInstanceIp
     app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
         logger.debug("Enter get() for /instances/updateip/%s/%s", req.params.instanceId, req.params.ipaddress);
         instancesDao.updateInstanceIp(req.params.instanceId, req.params.ipaddress, function(err, data) {
@@ -385,7 +401,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
-app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
+    app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
 
         logger.debug("Enter get() for /instances/dockerimagepull");
         var instanceid = req.params.instanceid;
@@ -398,15 +414,14 @@ app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagn
             logger.debug(data.length + ' ' + JSON.stringify(data));
             if (data.length) {
                 logger.debug(' Docker dockerEngineStatus : ' + data[0].docker.dockerEngineStatus);
-                if(data[0].docker.dockerEngineStatus){
-                    if(data[0].docker.dockerEngineStatus != "success"){
+                if (data[0].docker.dockerEngineStatus) {
+                    if (data[0].docker.dockerEngineStatus != "success") {
                         res.end('No Docker Found');
                         return;
                     }
-                }
-                else{
-                     res.end('No Docker Found');
-                        return;
+                } else {
+                    res.end('No Docker Found');
+                    return;
                 }
                 configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
                     if (!err) {
@@ -446,33 +461,32 @@ app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagn
                                     logsDao.insertLog({
                                         referenceId: instanceid,
                                         err: true,
-                                        log: 'Failed to Excute Docker command: . cmd : ' + cmd  + '. Error: ' + err,
+                                        log: 'Failed to Excute Docker command: . cmd : ' + cmd + '. Error: ' + err,
                                         timestamp: new Date().getTime()
                                     });
-                                    logger.error("Failed to Excute Docker command: ",err);
+                                    logger.error("Failed to Excute Docker command: ", err);
                                     res.send(err);
                                     return;
                                 }
 
                                 logger.debug("docker return ", retCode);
-                                if(retCode == 0)
+                                if (retCode == 0)
                                 //if retCode == 0 //update docker status into instacne
                                 {
                                     instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
-                                                            logger.debug('Instance Docker Status set to Success');
-                                                            res.send(200);
+                                        logger.debug('Instance Docker Status set to Success');
+                                        res.send(200);
                                     });
-                                    
 
-                                }
-                                else{
+
+                                } else {
                                     logger.debug('Failed running docker command ....');
-                                                            res.end('Image pull failed check instance log for details');
+                                    res.end('Image pull failed check instance log for details');
 
 
                                 }
                                 logger.debug("Exit get() for /instances/dockerimagepull");
-                                
+
                             },
                             function(stdOutData) {
                                 if (!stdOutData) {
@@ -503,8 +517,7 @@ app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagn
 
                     }
                 });
-            }
-            else{
+            } else {
                 logger.debug('No Instance found with id : ' + instanceid);
                 res.send(500);
                 return;
@@ -675,7 +688,7 @@ app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagn
 
                                                         }
                                                         logger.debug('Docker Check Returned:', retCode);
-                                                         if (retCode == '0' || retCode == null) {
+                                                        if (retCode == '0' || retCode == null) {
                                                             instancesDao.updateInstanceDockerStatus(req.params.instanceId, "success", '', function(data) {
                                                                 logger.debug('Instance Docker Status set to Success');
                                                                 logger.debug("Exit post() for /instances/dockerimagepull");

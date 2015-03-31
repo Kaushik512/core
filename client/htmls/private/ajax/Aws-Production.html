@@ -121,14 +121,14 @@
 
                                                 <div class="row " style="margin:0px;">
                                                     
-                                                   <div class="col-lg-6">
+                                                   <div class="col-lg-6 col-md-6">
                                                     <label for="">Choose Operating System:<span style="color:red">*</span></label>
                                                     <select id="instanceOS" class="chooseOS width-100">
                                                     </select>
 
                                                                                               
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6 col-md-6">
                                                     <label for="">Choose Security Group:<span style="color:red">*</span></label>
                                                     
                                                     
@@ -143,7 +143,7 @@
                                                     
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6" style="margin-top:15px;">
+                                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
                                                 <label for="">Choose Instance Size:<span style="color:red">*</span></label>
                                                 
                                                 
@@ -175,7 +175,7 @@
                                       <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
                                           <form action="" id="checkout-form">
                                                 
-                                                    <div class="col-lg-6" style="padding-left: 20px;">
+                                                    <div class="col-lg-6 col-md-6" style="padding-left: 20px;">
                                                         <label for="">Choose Organization <span style="color:red">*</span></label>
                                                         <select id="orgnameSelect" class="chooseOrgselect2 width-100">
                                                         </select>
@@ -201,14 +201,14 @@
                                       <div class="panel-body" style="padding-left: 8px;">
                                             <form action="" id="checkout-form">
                                               <div class="row" style="margin:0px">
-                                  <div class="col-lg-6">
+                                  <div class="col-lg-6 col-md-6">
                                     <label for="name">Blueprint Name:
                                     <span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                     <input  id="blueprintNameInput" maxlength="25" class="form-control" type="text" autofocus="autofocus" >
                                     <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                  </div>
  
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-6 col-md-6">
                                                         <label for="">Business Group <span style="color:red">*</span>
                                                         </label>
                                                          
@@ -233,7 +233,7 @@
                                                         </select> 
                                                   
                                               </div>
-                                              <div class="col-lg-6" style="margin-top:5px">
+                                              <div class="col-lg-6 col-md-6">
                                                 <label for="category">Project <span style="color:red">*</span>
                                                 </label>
                                                 
@@ -244,7 +244,7 @@
                                               </div>
 
                                               
-                                              <div class="col-lg-6" style="margin-top:5px">
+                                              <div class="col-lg-6 col-md-6">
                                                 <label for="category">Environment <span style="color:red">*</span>
                                                 </label>
                                                 
@@ -256,7 +256,7 @@
                                               </div>                                                 
                                             
                    
-                                           <div class="col-lg-6 fordocker">
+                                           <div class="col-lg-6 col-md-6 fordocker dockerProjPort">
                                                 <label for="category">Select Docker Image <span style="color:red">*</span>
                                                 </label>
                                                 
@@ -265,26 +265,27 @@
                                                     </select>
                                                    
                                             </div>
-                                            <div class="col-lg-6 fordocker">
+                                            <div class="col-lg-6 col-md-6 fordocker dockerProjPort">
                                                 <label for="category">Available Repo Tags <span style="color:red">*</span>
                                                 </label>                 
                                                 <div id="dockerrepotagsdiv">
 
                                                 </div>       
                                             </div>
-                                            <br>
-                                            <div class="col-lg-6 fordocker">
+                                            <div class="col-lg-12 col-md-12">
+                                            <div class="col-lg-6 col-md-6 fordocker dockerProjPort dockerLEFT">
 
                                                 <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick="$('[dockerparamkey]').val('');loadLaunchParams();"><i title="Add" class="icon-append fa fa-plus" ></i></a>
                                                 </label>               
                                                  <div class="btn-group pull-left">
 
                                                 
-                                                   </div> <br/>
+                                                   </div> 
                                                    
                                                     <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add"/>
                                                   
                                             </div>
+                                          </div>
                                             </form>            
                                        </div>
                                   </div>
@@ -318,7 +319,7 @@
                                             
                 </div>
                 <div class="widget-body">
-                    <div class="widget-main" style="min-height:300px">
+                    <div class="widget-main" style="min-height:100px">
                         <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
                             <table id="appTable" class="hidden" cellpadding="5px" width="100%">
                                 <thead>
@@ -473,20 +474,20 @@
                         
                         <!--app series-->
                         <div class="applicationURLContainer" id="appSeries"> 
-                                                <div class="col-lg-6" style="margin-top:15px;">
+                                                <div class="col-lg-6 col-md-6" style="margin-top:15px;">
 
-                                                <label for="">Application Name<span style="color:red">*</label>
+                                                <label for="">Name<span style="color:red">*</label>
 
-                                                <input placeholder="Default" type="text" maxlength="8" name="appNameInput" class="form-control appName">
+                                                <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
 
 
                                                </div>
 
-                                               <div class="col-lg-6" style="margin-top:15px">
+                                               <div class="col-lg-6 col-md-6" style="margin-top:15px">
 
-                                                <label for="">Application URL<span style="color:red">*</label>
+                                                <label for="">URL<span style="color:red">*</label>
                                                 
                                                 <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="URL">
                                                 <b class="tooltip tooltip-top-right">
@@ -527,49 +528,49 @@
           
               
                 <div style="margin:0px;">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <label for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
                         </label>
                         
                             <input type="text" id="Containernamefield" name="namefield" class="required form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
                         
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <label for="category">Port Mappings
                         </label>
                         
                             <input type="text" id="Portmappingfield" name="Portmappingfield" class=" form-control" placeholder="Map host ports to container ports" dockerparamkey="-p">
                         
                     </div>
-                    <div class="col-lg-6 dockerModal">
+                    <div class="col-lg-6 col-md-6 dockerModal">
                         <label for="category">Volumes
                         </label>
                         
                             <input type="text" id="Volumesfield" name="Volumesfield" class=" form-control" placeholder="Map host folders to container folders"  dockerparamkey="-v">
                         
                     </div>
-                    <div class="col-lg-6 dockerModal">
+                    <div class="col-lg-6 col-md-6 dockerModal">
                         <label for="category">Volumes-from
                         </label>
                         
                             <input type="text" id="Volumes-fromfield" name="Volumes-fromfield" class=" form-control" placeholder="Comma separated container names" dockerparamkey="--volumes-from">
                         
                     </div>
-                    <div class="col-lg-6 dockerModal">
+                    <div class="col-lg-6 col-md-6 dockerModal">
                         <label for="category">Linked Container
                         </label>
                         
                             <input type="text" id="Linkedcontainerfield" name="Linkedcontainerfield" class=" form-control" placeholder="The name of a container this one links to"  dockerparamkey="--link">
                         
                     </div>
-                    <div class="col-lg-6 dockerModal">
+                    <div class="col-lg-6 col-md-6 dockerModal">
                         <label for="category">Startup Command
                         </label>
                         
                             <input type="text" id="Startupcommandfield" name="Startupcommandfield" class=" form-control" placeholder="Optional startup command for the container" dockerparamkey="-c">
                         
                     </div>
-                    <div class="col-lg-6 dockerModal">
+                    <div class="col-lg-6 col-md-6 dockerModal">
                         <label for="category">Additional Startup
                         </label>
 

@@ -48,9 +48,6 @@ providerSchema.statics.createNew = function(providerData, callback) {
             accessKey: providerData.accessKey,
             secretKey: providerData.secretKey,
             regions: providerData.regions
-            /*regions:[{"US":"us-west-2","IND":"in-west-1",
-            keyPairs:[{"keyPairs1":"value1"},{"keyPairs2":"value2"}]
-            }]*/
         });
     } else {
         callback({
@@ -64,13 +61,13 @@ providerSchema.statics.createNew = function(providerData, callback) {
 
     var that = this;
     var provider = new that(providerObj);
-    provider.save(function(err, data) {
+    provider.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        callback(null, provider);
+        callback(null, aProvider);
     });
 };
 

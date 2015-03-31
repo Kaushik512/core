@@ -3209,12 +3209,12 @@ width:0% !important;
         position: relative;
     }
     .role-Selected {
-       border: 2px solid #40afb1;
+       border: 2px solid #40baf1;
         border-radius:4px;
     }
     .role-Selected1 {
 
-        border: 2px solid #40afb1;
+        border: 2px solid #40baf1;
         border-radius:4px;
     }
 html, 
@@ -6010,10 +6010,7 @@ span.icon {
 }*/
 
 @media screen and (max-width:1200px) {
-
-    .modal-height{
-    height:610px;
-}
+ 
 .topNew
 {
     margin-top: 15px;
@@ -6025,7 +6022,7 @@ span.icon {
 
 }
 .btn-importbyIP{
-    top:11px !important;
+    top:7px !important;
 }
 
 /*ui-css*/
@@ -7350,6 +7347,7 @@ background:url('../img/galleryIcons/start_icon.png');
     width:52.5%;
 }
 
+
 .cpTop{
     margin-top: 1px;
 }
@@ -7392,4 +7390,28 @@ background:url('../img/galleryIcons/start_icon.png');
 }
 .appUrlInput:hover{
     border-color: gray;
+}
+.dockerProjPort{
+    margin-top: 20px;
+}
+
+@media screen and (max-width:1200px){
+ 
+.ipWidth{
+width:51.2%;
+}
+.dockerModalHeight{
+    height:336px;
+}
+
+}
+.dockerIMG{
+    width:auto;
+    height:27px;
+    float:right;
+    margin-top:-55px
+}
+.marginSubmit{
+    margin-top: 20px;
+    margin-left: 374px;
 }

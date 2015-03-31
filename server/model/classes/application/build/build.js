@@ -9,6 +9,7 @@ var Task = require('../../tasks/tasks.js');
 
 var Schema = mongoose.Schema;
 
+
 var buildSchema = new Schema({
     envId: String,
     taskId: String,
@@ -34,6 +35,7 @@ buildSchema.methods.execute = function(user, callback) {
             res.send(500, errorResponses.db.error);
             return;
         }
+        var buildHistory;
         var timestampStarted = new Date().getTime();
         task.execute(user, function(err, taskRes) {
             if (err) {
@@ -49,15 +51,28 @@ buildSchema.methods.execute = function(user, callback) {
                 jobNumber: taskRes.buildNumber,
                 user: user,
                 timestampStarted: timestampStarted,
-            }, function(err, buildHistory) {
+                status: BuildHistory.BUILD_STATUS.RUNNING
+            }, function(err, history) {
                 if (err) {
                     logger.error("unable to save build history", err);
                     return;
                 }
-                self.buildHistoryIds.push(buildHistory._id);
+                buildHistory = history;
+                self.buildHistoryIds.push(history._id);
                 self.save();
             });
             callback(err, taskRes);
+        }, function(err, status) {
+            
+            if (buildHistory) {
+                buildHistory.timestampEnded = new Date().getTime();
+                if (status === 0) {
+                    buildHistory.status = BuildHistory.BUILD_STATUS.SUCCESS;
+                } else {
+                    buildHistory.status = BuildHistory.BUILD_STATUS.FAILED;
+                }
+                buildHistory.save();
+            }
         });
     });
 };

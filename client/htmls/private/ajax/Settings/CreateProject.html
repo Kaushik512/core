@@ -24,30 +24,30 @@
                                  <!-- widget content -->
                                  <div class="widget-body no-padding">
                                     
-                                       <div class="col-lg-6">
+                                       <div class="col-lg-6 col-md-6">
                                           <label for="name">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                           <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                           <br>
                                           <input autofocus name="ctl00$MainContent$orgname" value="" id="projectname" class="form-control" type="text"  cdata="catalyst" cat-validation="required,nospecial,max15,nospace"  unique="true"  uniqueconditionedby="projectname,orgname,productgroupname">
                                        </div>
-                                       <div class="col-lg-6 topNew">
+                                       <div class="col-lg-6 col-md-6">
                                           <label for="name">Description:</label>
                                           <input name="ctl00$MainContent$orgname" value="" id="description" class="form-control" type="text"  cdata="catalyst" maxlength="50">
                                        </div>
                                        
-                                       <div class="col-lg-6" style="margin-top:25px;">
+                                       <div class="col-lg-6 col-md-6" style="margin-top:25px;">
                                           <label for="">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                           <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname','environmentname']"  cdata="catalyst" cat-validation="required">
                                              <option value="">Select Organization</option>
                                           </select>
                                        </div>
-                                       <div class="col-lg-6" style="margin-top:25px;">
+                                       <div class="col-lg-6 col-md-6" style="margin-top:25px;">
                                           <label for="">Business Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                           <select id="productgroupname" class="chooseBG width-100" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst" cat-validation="required">
                                              <option value="">Select Business Group</option>
                                           </select>
                                        </div>
-                                 <div class="col-lg-6 smart-form" style="margin-top:25px;">
+                                 <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
                                  <label for="category">Environments:</label>
                                     <div  id="environmentname" multiselect="multiselect" datatype="select" sourcepath="3" datapath="masterjson.rows.row"  linkedto="orgname" class="input-group from-control col-md-12 widthBox" cdata="catalyst">
                                     </div>
