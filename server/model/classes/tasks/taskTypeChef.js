@@ -159,7 +159,7 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             instanceOS: instance.hardware.os,
                             port: 22,
                             runlist: self.runlist, // runing service runlist
-                            attributesjson: self.attributesjson,
+                            jsonAttributes: self.attributesjson,
                             overrideRunlist: true
                         }
                         if (decryptedCredentials.pemFileLocation) {

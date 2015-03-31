@@ -548,6 +548,7 @@ var Chef = function(settings) {
             runlist = [];
         }
         //options.jsonAttributes = JSON.stringify({"A":{"B":{"passedin":"Cool Test"}}});
+        
         if (options.instanceOS != 'windows') {
             var sshParamObj = {
                 host: options.host,
