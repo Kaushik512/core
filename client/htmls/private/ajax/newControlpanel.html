@@ -23,9 +23,7 @@
           <li class="pull-left" style="margin-right: 20px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-inbox"></i>Build</a>
           </li>
-          <li class="pull-left" style="margin-right: 20px;">
-              <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-bullseye"></i>Deploy History</a>
-          </li>
+          
           <!-- <li class="pull-left" style="margin-right: 20px;">
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-eraser"></i>Test</a>
           </li> -->
@@ -35,6 +33,9 @@
           <li class="pull-left" style="margin-right: 20px;">
               <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l6" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-sun-o"></i>AppInstances</a>
           </li>
+          <li class="pull-left" style="margin-right: 20px;">
+              <a style="color: #eee;border-radius: 5px 5px 0 0 ;padding: 9px 10px 13px;" href="#l3" data-toggle="tab" style="font-size: 14px"><i class="fa fa-fw fa-bullseye"></i>Deploy History</a>
+          </li>
           <!-- <li class="pull-left" style="margin-right: 20px;">
               <a id="" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l7" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Monitoring</a>
           </li> -->
@@ -42,7 +43,7 @@
       <div id="" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 100%;margin-top:4px;">
 
       <!-- info tab contents starts here -->
-      <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
+      <div class="tab-pane fade in active " id="l1" style="height:415px;overflow-y:auto;">
         <div class="appcardList" style="padding-left:0 !important;padding-right:0 !important">
         
         </div>
@@ -80,10 +81,17 @@
             <div id="collapseSourceControl" class="panel-collapse collapse in">
               <div class="panel-body">
                 <form action="" id="">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <label for="name" class="font-size12">GIT Repo URL:</label>&nbsp;&nbsp;
                     <label for="" class="font-size12 gitUrlLabel">https://github.com/RLIndia/D4D</label>
-                    <!--<input  id="gitURLInput" class="form-control" type="text" autofocus> -->
+                  </div>
+                  <div class="col-lg-12">
+                    <label for="name" class="font-size12">Username :</label>&nbsp;&nbsp;
+                    <label for="" class="font-size12 gitUsernameLabel"></label>
+                  </div>
+                  <div class="col-lg-12">
+                    <label for="name" class="font-size12">Password :</label>&nbsp;&nbsp;
+                    <label for="" class="font-size12 gitPasswordLabel"></label>
                   </div>
                 </form>
               </div>
@@ -99,11 +107,11 @@
             <div id="collapseBuild" class="panel-collapse collapse in">
               <div class="panel-body">
                 <form action="" id="">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <label for="name" class="font-size12">Environment: </label>&nbsp;&nbsp;
                     <label for="name" class="font-size12 buildEnvLabel">Build1</label>
                   </div>
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                      <label for="name" class="font-size12">Task:</label>&nbsp;&nbsp;
                       <label for="name" class="font-size12 buildTaskName"></label>
                   </div>
@@ -116,38 +124,71 @@
           <!--Deploy Starts Here-->
           <div class="panel panel-default" id="accordion-BuildHealthParameters">
             <div class="panel-heading">
-              <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-BuildHealthParameters" href="#collapseBuildHealthParameters"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bullseye" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Health Parameters</u></b></a></h4>
+              <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-BuildHealthParameters" href="#collapseBuildHealthParameters"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bullseye" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Build Health Parameters</u></b></a></h4>
             </div>
             <div id="collapseBuildHealthParameters" class="panel-collapse collapse in">
               <div class="panel-body">
                   <form class="appUrlForm" action="">
                     <div class="col-lg-6">
-                      <label for="" id="">App Performance</label>
+                      <label for="" id="" style="font-size:12px">Functional Test URL :</label>
                       <br>
-                        <input type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
-                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
+                        <input type="text" id="" class="functionalinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(1)"></span>
                     </div>
 
                     <div class="col-lg-6">
-                      <label for="" id="">App Logs</label>
+                      <label for="" id="" style="font-size:12px">Performance Test URL :</label>
                       <br>
-                        <input type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
-                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
+                        <input type="text" id="" class="performanceinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(2)"></span>
+                    </div>
+                    <div class="col-lg-6" style="margin-top:15px">
+                      <label for="" id="" style="font-size:12px">Non Functional Test URL :</label>
+                      <br>
+                        <input class="" type="text" id="" class="nonfunctionalinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(3)"></span>
                     </div>
 
-                    <div class="col-lg-6">
-                      <label for="" id="">Code Health</label>
+                    <div class="col-lg-6" style="margin-top:15px">
+                      <label for="" id="" style="font-size:12px">Security Test URL :</label>
+                      <br>
+                        <input class="" type="text" id="" class="securityinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(4)"></span>
+                    </div>
+                    <div class="col-lg-6" style="margin-top:15px">
+                      <label for="" id="" style="font-size:12px">Unit Test URL :</label>
+                      <br>
+                        <input class="" type="text" id="" class="unitinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(5)"></span>
+                    </div>
+
+                    <div class="col-lg-6" style="margin-top:15px">
+                      <label for="" id="" style="font-size:12px">Code Analysis URL :</label>
+                      <br>
+                        <input class="" type="text" id="" class="codeanalysisinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(6)"></span>
+                    </div>
+                    <div class="col-lg-6" style="margin-top:15px">
+                      <label for="" id="" style="font-size:12px">UI Performance Test URL :</label>
+                      <br>
+                        <input class="" type="text" id="" class="uiperformanceinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                      <span style="cursor:pointer;" class="glyphicon glyphicon-pencil" onclick="editname(7)"></span>
+                    </div>
+
+
+                    <!-- <div class="col-lg-12">
+                      <label for="" id=""></label>
                       <br>
                         <input class="codeHealthUrl" type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
                       <span style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
 
-                    <div class="col-lg-6">
-                      <label for="" id="">UI Performance</label>
+                    <div class="col-lg-12">
+                      <label for="" id=""></label>
                       <br>
                         <input class="uiHealthUrl" type="text" id="" placeholder="URL" style="border: 1px solid #ccc;height: 32px;width: 90%;">
                       <span style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
-                    </div>
+                    </div> -->
                   </form>
               </div>
             </div>
@@ -168,7 +209,7 @@
                     <strong style="color:#3a87ad">S.No</strong>
                   </td>
                   <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Build Name</strong>
+                    <strong style="color:#3a87ad">Name</strong>
                   </td>
                   <td style="font-size: 13px;">
                     <strong style="color:#3a87ad">Build No.</strong>
@@ -192,7 +233,7 @@
               </thead>
               <tbody class="buildTbody">
               </tbody>
-              <!-- <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#buildModalContainer">Add New Build</a> -->
+              <a class="btn btn-primary appCardBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="javascript:void(0)">Trigger new Build</a>
           </table>
         </div>
       </div> 
@@ -209,10 +250,13 @@
                     <strong style="color:#3a87ad">S.No</strong>
                   </td>
                   <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">AppInstance Name</strong>
+                    <strong style="color:#3a87ad">AppInstance</strong>
                   </td>
                   <td style="font-size: 13px;">
-                    <strong style="color:#3a87ad">Deployed Workflow Environment</strong>
+                    <strong style="color:#3a87ad">Deploy Workflow</strong>
+                  </td>
+                  <td style="font-size: 13px;">
+                    <strong style="color:#3a87ad">Environment</strong>
                   </td>
                   <td style="font-size: 13px;">
                     <strong style="color:#3a87ad">Status</strong>
@@ -229,51 +273,7 @@
                 </tr>
               </thead>
               <tbody class="deployTbody" style="font-size:12px;">
-                <tr>
-                  <td>1</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Dev</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>superadmin</td>
-                  <td>Wed, 25 Feb 2015 11:52:37 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Prod</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>consumer</td>
-                  <td>Tue, 24 Feb 2015 23:52:31 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>QA</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>designer</td>
-                  <td>Wed, 25 Feb 2015 19:34:31 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>SLZ_AWS_AUS</td>
-                  <td>Prod</td>
-                  <td><img src="img/indicator_started.png"></td>
-                  <td>superadmin</td>
-                  <td>Wed, 25 Feb 2015 12:14:31 GMT</td>
-                  <td>
-                    <a data-toggle="modal" href="#DeploymoreInfo" class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>
-                  </td>
-                </tr>
-              </tbody> 
+              </tbody>
               <!-- <a class="btn btn-primary addBuildBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#deployModalContainer">Add New Deploy</a> -->
           </table>
         </div>
@@ -523,7 +523,7 @@
                                   <!-- <a class="btn btn-minier btn-primary" id="assigntask" href="#ajax/Settings/AssignTask.html" style="display:none">
                                       <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                                   </a>                -->        
-                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary" data-toggle="modal">
+                                  <a href="#modaladdAppInstances" class="btn btn-minier btn-primary AddBTN" data-toggle="modal">
                                       <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                       Add New
                                   </a>                                                
@@ -951,7 +951,7 @@
                           <form action="">
                             <div class="row " style="margin:0px;">
                               <div class="col-lg-6">
-                                <label for="name">Workflow Name:
+                                <label for="name">Name:
                                 </label>
                                 <input id="applicationWorkflowNameInput" class="form-control" type="text" style="height:36px;" placeholder="">
                               </div>
@@ -967,7 +967,7 @@
                                     <section class="col col-6">
                                         <label class="label">
                                           <img src="img/templateicons/Order-run-list---deployment.png">
-                                            <strong>Create TaskList</strong>
+                                            <strong>Choose TaskList</strong>
                                         </label>
                                         <div class="row">
                                             <div class="col col-10" style="padding-left:0px;padding-right:0px">
@@ -1005,7 +1005,7 @@
                                         </div>
                                     </section>
                                     <section class="col col-6" style="padding-left:0px;">
-                                      <span style="color:red">*Task will be executed in Parallel</span>
+                                      <span style="color:red">*Tasks will be executed in Parallel</span>
                                     </section>
                                 </fieldset>
                             </form>             
@@ -1360,14 +1360,153 @@
                 <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div>
                 <div class="workFlowArea" style="padding-bottom: 20px;padding-top: 20px;text-align: center;">
                   workflows : <select class="workflowDropdown">
-                  </select> <button class="executeWorkflowBtn">Execute</button>
+                  </select> 
+                  <!-- <button class="executeWorkflowBtn">Execute</button> -->
                 </div> 
                 <div class="deployResultArea" style="padding-bottom: 20px;padding-top: 20px;text-align: center;"> Workflow executed successfully </div>
 
             </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary executeWorkflowBtn" type="submit" data-dismiss="modal">
+                  <i class="fa fa-play fa-1x"></i>&nbsp;Execute
+              </button>
+              <div class="btn-group">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+              </div>
+            </div>
+            <!-- <footer>
+              <button class="btn btn-primary executeWorkflowBtn" type="submit" data-dismiss="modal">
+                  <i class="fa fa-play fa-1x"></i>&nbsp;Execute
+              </button>
+              <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                  <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+              </button>
+            </footer> -->
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
+<div class="modal fade" id="appInstancesEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">
+          <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Deploy Workflow</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered" style="border:1px solid #eeeeee !important;">
+          <thead>
+            <th>S.No</th>
+            <th>WorkFlow Name</th>
+            <th>Actions</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Full Deploy</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Update Database Schema</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Upgrade Application Service</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Update App-Server Configuration</td>
+              <td>
+                <a class="btn btn-info btn-sm" data-toggle="modal" href="#appInstancesWorkflowEditModal" style="border-radius:50%" rel="tooltip" data-placement="top" data-original-title="Edit">
+                <i style="font-size: 14px;" class="fa fa-pencil"> </i> 
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-save bigger-110"></i>&nbsp;Save</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="appInstancesWorkflowEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit WorkFlow
+                </h4>
+            </div>
+           
+            <div class="modal-body" style="height:300px;">
+              <div novalidate="novalidate" class="smart-form" action="">
+
+                    <div style="margin:0px;" class="row">                                                
+                        <section class="col col-10">
+                            <label for="">Name  
+                            </label>
+                            <label class="input"> 
+                               <input type="text" class="form-control" style="height:30px;">
+                            </label>                                          
+                        </section>
+                         <section class="col col-10" style="margin-top:15px;">
+                            <label class="label">Task Lists</label>
+                            <label class="select select-multiple">
+                                <select multiple="" class="custom-scroll">
+                                    <option value="1">Tasklist1</option>
+                                    <option value="2">Tasklist2</option>
+                                    <option value="3">Tasklist3</option>
+                                    <option value="4">Tasklist4</option>
+                                    <option value="5">Tasklist5</option>
+                                    <option value="6">Tasklist6</option>
+                                    <option value="3">Tasklist7</option>
+                                </select>
+                            </label>
+                        </section>
+                    </div>
+                </div>
+              
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;"> 
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-save bigger-110"></i>&nbsp;Save</button>                               
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 
 <style type="text/css">
 #myTab3 .active a{
@@ -1382,6 +1521,21 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $(".chooseEnvironment").select2();
+
 });
+
+var hasAppInstancePermission=false;
+if(haspermission('application_instance','create')){
+  hasAppInstancePermission=true;
+}
+if(!hasAppInstancePermission){
+  $('.AddBTN').addClass('hidden');
+}
+
+
+
+function editname (number) {
+    $('.functionalinputedit').removeAttr('readOnly').focus();
+}
 
 </script>

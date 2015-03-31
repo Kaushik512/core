@@ -61,7 +61,7 @@ var taskSchema = new Schema({
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName, callback) {
+taskSchema.methods.execute = function(userName, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
@@ -95,6 +95,10 @@ taskSchema.methods.execute = function(userName, callback) {
         taskExecuteData.timestamp = timestamp;
         taskExecuteData.taskType = task.taskType;
         callback(null, taskExecuteData);
+    }, function(err, status) {
+        if (typeof onComplete === 'function') {
+            onComplete(err, status);
+        }
     });
 };
 
@@ -247,7 +251,6 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
         }, null);
         return;
     }
-
 
     Tasks.update({
         "_id": new ObjectId(taskId)
