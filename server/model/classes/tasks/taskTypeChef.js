@@ -17,7 +17,8 @@ var taskTypeSchema = require('./taskTypeSchema');
 
 var chefTaskSchema = taskTypeSchema.extend({
     nodeIds: [String],
-    runlist: [String]
+    runlist: [String],
+    attributesjson: {}
 });
 
 //Instance Methods :- getNodes
@@ -113,6 +114,7 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                             hostedChefUrl: chefDetails.url,
                         });
                         console.log('instance IP ==>', instance.instanceIP);
+                        console.log('>>>>> Task Config : ' + self.attributesjson);
                         var chefClientOptions = {
                             privateKey: decryptedCredentials.pemFileLocation,
                             username: decryptedCredentials.username,
@@ -120,6 +122,7 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                             instanceOS: instance.hardware.os,
                             port: 22,
                             runlist: self.runlist, // runing service runlist
+                            attributesjson: self.attributesjson,
                             overrideRunlist: true
                         }
                         if (decryptedCredentials.pemFileLocation) {
@@ -128,6 +131,7 @@ chefTaskSchema.methods.execute = function(userName,onExecute) {
                             chefClientOptions.password = decryptedCredentials.password;
                         }
                         console.log('running chef client');
+                        console.log('>>>>chefClientOptions:' + JSON.stringify(chefClientOptions));
                         chef.runChefClient(chefClientOptions, function(err, retCode) {
                             if (decryptedCredentials.pemFileLocation) {
                                 fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {

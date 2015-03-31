@@ -120,6 +120,7 @@ taskSchema.methods.getChefTaskNodes = function() {
 
 // creates a new task
 taskSchema.statics.createNew = function(taskData, callback) {
+
     var taskConfig;
     if (taskData.taskType === TASK_TYPE.JENKINS_TASK) {
         taskConfig = new JenkinsTask({
@@ -128,10 +129,13 @@ taskSchema.statics.createNew = function(taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
+        var attrJson = JSON.parse(taskData.attributesjson);
+        logger.debug('attrJson:' + JSON.stringify(attrJson));
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
-            runlist: taskData.runlist
+            runlist: taskData.runlist,
+            attributesjson: attrJson
         });
     } else {
         callback({
@@ -144,6 +148,8 @@ taskSchema.statics.createNew = function(taskData, callback) {
 
     var that = this;
     var task = new that(taskObj);
+    logger.debug('saved task:' + JSON.stringify(task));
+   
     task.save(function(err, data) {
         if (err) {
             logger.error(err);
@@ -233,6 +239,7 @@ taskSchema.statics.removeTaskById = function(taskId, callback) {
 // update tasks by id
 taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
     var taskConfig;
+
     if (taskData.taskType === TASK_TYPE.JENKINS_TASK) {
         taskConfig = new JenkinsTask({
             taskType: TASK_TYPE.JENKINS_TASK,
@@ -240,10 +247,13 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
+         var attrJson = JSON.parse(taskData.attributesjson);
+        logger.debug('attrJson:' + JSON.stringify(attrJson));
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
-            runlist: taskData.runlist
+            runlist: taskData.runlist,
+            attributesjson: attrJson
         });
     } else {
         callback({
@@ -268,6 +278,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             return;
         }
         //console.log('data ==>', data);
+        logger.debug('Updated task:' + JSON.stringify(Tasks));
         callback(null, updateCount);
 
     });
