@@ -54,10 +54,7 @@
             <!-- widget div-->
             <div id="appender">
              <!-- widget content -->
-             <div class="row">                                                        
-
-
-
+             <div class="row">
                <div class="col-lg-6 col-md-6">
                 <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                 <select id="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
@@ -90,7 +87,7 @@
            </div>
 
          </div>
-         
+
        </div>
        <!-- end widget div -->
      </div>
@@ -243,8 +240,6 @@
 
  inLineReady();
 
-</script>
-<script>
   function appendLoader(){
     removeLoader();
     $("form[id*='myForm']").find("div.pull-right > button").attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
@@ -264,7 +259,7 @@
         }
       }
     }
-    
+
     function loadSecurityGroupID(accessKey,secretKey){
       appendLoader();
 
@@ -306,10 +301,12 @@
 
       }
     }
+    /*
     $('#providertype').select2();
     $('#region').select2();
     $('#keyvalue').select2();
-
+*/
+$('select').select2();
     $("#name").focus();
 
     //  $('#accessKey').blur(checkForSecurityGroup);
@@ -336,7 +333,7 @@
     appendLoader();
 
 
-    function getRegionList(){
+    function getRegionListForFormSubmission(){
       var list=[];
       $('select.region').each(function(){
         var obj={},keyPair=[];
@@ -360,7 +357,7 @@
     reqBody.accessKey=$('#accessKey').val();
     reqBody.secretKey=$('#secretKey').val();
     reqBody.providerType=$('#providertype').val();
-    reqBody.regions=getRegionList();
+    reqBody.regions=getRegionListForFormSubmission();
     //reqBody.instanceUserName='root';
     $.ajax({
      method: "POST",url: "/providers",data: reqBody,   
@@ -387,6 +384,10 @@
         });
 
   }
+
+function getKeyPairList(){
+  
+}
 
   /*
      function providerTest(){

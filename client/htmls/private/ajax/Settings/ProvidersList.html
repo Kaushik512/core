@@ -1,9 +1,9 @@
 
-<script>
+    <script>
     //    $(".tree-view").hide();  
-</script>
+    </script>
 
-<div class="row">
+    <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
 
@@ -101,21 +101,9 @@
       $.ajax({
          method: "GET",url: "/providers",data: reqBody,   
          success: function(data, success) {
-                //alert('Successfully Saved ' + data);
                 data= typeof data=="string" ?JSON.parse(data):data;
                 d4ddata=data;
-                //CreateTableFromJson(9,'providername','CreateProviders.html',true); //9 is for 
-               /* $('#templateTable').dataTable( {
-                    "data": [["Welcome","aws","<span>update</span><span>delete</span>"]],
-                    "columns": [
-                    { "title": "Name" },
-                    { "title": "Provider" },
-                    { "title": "Action" }
-                    ]
-                } );   */
-
                 startup();
-
             },
             error: function(jqxhr) {
                 removeLoader();
@@ -126,12 +114,12 @@
             }
         });
 
-  }
+    }
 
-  function startup() {
+    function startup() {
     //setting the addnew button to launch popup
     $("#addnewitem").attr('data-toggle', 'modal');
-    CreateTableFromJsonForProvider(9,'providername','CreateProviders.html',true); //9 is for providers
+    CreateTableFromJsonForProvider(9,'CreateProviders.html',true); //9 is for providers
     var tab = 'envtable';
     $('#envtable').dataTable({
         "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
@@ -140,25 +128,24 @@
     $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
     $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');                                    
     $('#content').css("opacity", "1 !important");
-                                            //Force opening the left navigation menu
-                                            if ($('#navSettings').is(":visible") == false) {
-                                                $('#navSettings').css("display", '');
-                                                $('#navSettings > ul > li').first().addClass('open');
-                                                $('#navSettings > ul > li > ul').css("display", "none");
-                                                $('#navSettings > ul > li > ul').first().css("display", "block");
-                                            }
-                                            //redrawing the breadcrumb and selecting the tree
-                                            $('#Settings  li').removeClass('active');
-                                            $('#Settings  li').each(function () {
-                                                if ($(this).text().trim() == "Providers"){
-                                                    $(this).addClass('active');
-                                                }
-                                            });
-                                          //  drawBreadCrumb1();
-                                      }
+    //Force opening the left navigation menu
+    if ($('#navSettings').is(":visible") == false) {
+        $('#navSettings').css("display", '');
+        $('#navSettings > ul > li').first().addClass('open');
+        $('#navSettings > ul > li > ul').css("display", "none");
+        $('#navSettings > ul > li > ul').first().css("display", "block");
+    }
+    //redrawing the breadcrumb and selecting the tree
+    $('#Settings  li').removeClass('active');
+    $('#Settings  li').each(function () {
+        if ($(this).text().trim() == "Providers"){
+            $(this).addClass('active');
+        }
+    });
+    }
 
 
-function CreateTableFromJsonForProvider(formID, idFieldName, createFileName,isEscapeMasterDirectory) {
+    function CreateTableFromJsonForProvider(formID,createFileName,isEscapeMasterDirectory) {
         var formData = null;
         //force setting the idFieldName to "rowid"
         idFieldName = "_id";
@@ -308,7 +295,7 @@ function CreateTableFromJsonForProvider(formID, idFieldName, createFileName,isEs
 
                 var deletebutton = $('.rowtemplate').find("[title='Remove']");
                 if (deletebutton) {
-                    deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                    deletebutton.attr('onClick', 'deleteItemFromProvider(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                     var hasDeletePermission = false;
                     //checking whether the user has the authentication to delete any entry
                     if(createFileName==='CreateOrg.html'){
@@ -382,23 +369,66 @@ function CreateTableFromJsonForProvider(formID, idFieldName, createFileName,isEs
             sRow.removeClass("hidden");
             sRow.removeClass("rowtemplate");
             $('#envtable').append(sRow);
-
         });
-        //  $.each(formData.data.fields, function(i, item) { //row iteration
-
-        // var templateRow = $(".rowtemplate").clone();
-        // $.each(item,function(k, v) {
-        //     console.log('k:' + k + ',v:' + v);
-        // });
-        // var sRow = $(".rowtemplate").clone();
-        // sRow.removeClass("hidden");
-        // sRow.removeClass("rowtemplate");
-        // $('#envtable').append(sRow);
-
-        //   });
         setPopOverForTableFields();
-
         $(".savespinner").hide();
+
+    }
+
+    function deleteItemFromProvider(docid, key, value, button) {
+
+    bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
+        if (result) {
+            $.ajax({
+                type: "delete",
+                dataType: "text",
+
+                async: false,
+                url: "/providers/" + value,
+                success: function(data) {
+                    // alert(data.toString());  
+                    // debugger;
+                    //d4ddata = JSON.parse(data);
+                    // $('#refreshpage').click();
+                    if(data != '401')
+                    {
+                        var $tr = $(button).closest('tr');
+                        //$tr.addClass('hidden').remove();
+                        var $table = $tr.parents('table');
+
+                        if ($.fn.DataTable.isDataTable($table)) {
+                            var $dataTable = $table.DataTable();
+                            $dataTable.row($tr).remove().draw(false);
+                        } else {
+
+                            $tr.fadeOut("slow");
+                            $tr.addClass('hidden').remove();
+                        }
+
+
+                        var tab = 'envtable';
+                        $('#' + tab).dataTable();
+                        if (parseInt(docid) < 5) {
+                            //adTreeFuncNew();
+                            //  alert('in saved');
+                            //   selectFirstEnv();
+                        }
+                    }
+                    else
+                    {
+                        bootbox.alert('Insufficient permission to perform this operation.');
+                    }
+                },
+                failure: function(data) {
+                    // debugger;
+                    bootbox.alert(data.toString());
+                },
+                error: function(data) {
+                    bootbox.alert(data.responseText);
+                }
+            });
+        }
+    });
 
     }
 
@@ -419,4 +449,4 @@ function CreateTableFromJsonForProvider(formID, idFieldName, createFileName,isEs
                </div>
            </div>
        </div>
-   </div>
+    </div>
