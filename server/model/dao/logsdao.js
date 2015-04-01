@@ -60,6 +60,35 @@ var LogsDao = function() {
         });
 
     }
+
+    this.getLogsByReferenceIdAndTimestamp = function(referenceId, timestampStarted, timestampEnded, callback) {
+        logger.debug(timestampStarted, timestampEnded);
+        var queryObj = {
+            referenceId: {
+                $in: [referenceId]
+            }
+        }
+        if (timestampStarted) {
+            queryObj.timestamp = {
+                "$gt": timestampStarted
+            };
+            if (timestampEnded) {
+                queryObj.timestamp.$lte = timestampEnded
+            }
+        }
+
+        logger.debug('queryObj ==>',queryObj);
+
+
+        Logs.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+
+    }
 }
 
 

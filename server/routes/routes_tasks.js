@@ -65,6 +65,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.post('/tasks', function(req, res) {
+        Tasks.getTaskByIds(req.body.taskIds, function(err, data) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (data) {
+                res.send(data);
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
     app.post('/tasks/:taskId/update', function(req, res) {
         var taskData = req.body.taskData;
 
