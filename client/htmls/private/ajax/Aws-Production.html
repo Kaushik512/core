@@ -151,13 +151,15 @@
                                                   </select>
                                                 
                                             </div>
-                                            <!-- <div class="col-lg-6" style="margin-top:15px;">
+                                            <div class="col-lg-6" style="margin-top:15px;">
                                                     <label for="">Choose Image:<span style="color:red">*</span></label>
-                                                    <select id="imagename" class="chooseImage width-100">
+                                                    <select id="imageid" class="chooseImage width-100">
+                                                    <option value="">Choose Image From Available</option>
+                                                    <option value="551b800df3fddc1519873f14">CentOS_64x</option>
                                                     </select>
 
                                                                                               
-                                                </div> -->
+                                                </div>
                                             <!--To add the Swipe Functionality-->                            
                                             
                                             </form><!--end-->
@@ -673,9 +675,30 @@ function loadLaunchParams(){
     $('#myModalLabelDockerContainer').modal('show');
 }
 
-   
+  function getImageList(){
+ $.ajax({
+         method: "GET",
+         url: "/vmimages",
+         success: function(data, success) {
+          data = typeof data ==="string" ?JSON.parse(data) :data ;
+          var str='<option value="">Choose Image</option>';
+          for(var i=0;i<data.length;i++){
+            str=str+'<option value="'+data[i].imageIdentifier+'">'+data[i].name+'</option>';
+          }
+          $('#imageid').html(str).select2();
+            },
+            error: function(jqxhr) {
+              console.log(jqxhr.responseText);
+              alert(jqxhr.responseText);
+            },
+            failure: function(data) {
+                bootbox.alert(data);
+            }
+        });
+  } 
 $(document).ready(function(){
-
+  getImageList();
+    $('#imageid').select2();
     $('.chooseSelect').select2();
     console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
@@ -1173,8 +1196,14 @@ $(document).ready(function(){
                reqBody.projectId = $('#projectListInput').val();
                reqBody.envId = $('#envList').val();
 
+               var imageid=$('#imageid').val();
+
                reqBody.name = $('#blueprintNameInput').val();
-               //alert('in');
+
+               if(!imageid){
+                alert("Please Select Any Image");
+               }
+
                if (!reqBody.name) {
                    alert("Please enter a blueprint name");
                    return false;
@@ -1220,7 +1249,8 @@ $(document).ready(function(){
                
                $('.blueprintMsgContainer').hide();
                
-               $.post('/blueprints/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/images/551bbd1b546efd7737768edd', {
+
+               $.post('/blueprints/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/images/'+imageid', {
                    blueprintData: reqBody
                }, function(data) {
                    console.log(data);
