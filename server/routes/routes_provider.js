@@ -4,13 +4,14 @@ var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/aws.js');
+var ProviderUtil = require('../lib/utils/providerUtil.js');
 
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/providers/*",sessionVerificationFunc);
 
 
 	app.post('/providers', function(req, res) {
-        logger.debug("Enter post() for /providers");
+        logger.debug("Enter post() for /providers. %s",req.body.regions);
         var providerData= {
         	id: 9,
         	accessKey: req.body.accessKey,
@@ -19,15 +20,19 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         	providerType: req.body.providerType,
         	regions: req.body.regions
     };
-    logger.debug("<<<<<<<<<<<<<<<<<<<<< ");
-        Provider.createNew(providerData, function(err, provider) {
-            if (err) {
-                logger.debug("err.....",err);
-                res.send(500,"Unable to create Provider.");
-                return;
+        logger.debug("<<<<<<<<<<<<<<<<<<<<< ",typeof req.body.regions);
+        ProviderUtil.saveAwsPemFiles(req.body.regions,function(err,flag){
+            if(flag){
+                Provider.createNew(providerData, function(err, provider) {
+                    if (err) {
+                        logger.debug("err.....",err);
+                        res.send(500,"Unable to create Provider.");
+                        return;
+                    }
+                    res.send(provider);
+                    logger.debug("Exit post() for /providers");
+                });
             }
-            res.send(provider);
-            logger.debug("Exit post() for /providers");
         });
     });
 
@@ -43,7 +48,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             	logger.debug("Exit get() for /providers");
                 res.send(providers);
             } else {
-                res.send(404);
+                res.send([]);
             }
         });
     });

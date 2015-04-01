@@ -55,7 +55,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             	logger.debug("Enter get() for /vmimages");
                 res.send(images);
             } else {
-                res.send(404);
+                res.send([]);
             }
         });
     });
@@ -106,13 +106,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 
     app.delete('/vmimages/:imageId', function(req, res) {
     	logger.debug("Enter delete() for /vmimages/%s",req.params.imageId);
-        blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
+        blueprintsDao.getBlueprintByImageId(req.params.imageId, function(err, data) {
                 if (err) {
                     logger.error('Failed to getBlueprint. Error = ', err);
                     res.send(500);
                     return;
                 }
                 if (data) {
+                    logger.debug("Returned Blueprint:>>>>> %s",data.imageId);
                     res.send(403,"Image already used by some Blueprints.To delete Image please delete respective Blueprints first.");
                     return;
                 }
