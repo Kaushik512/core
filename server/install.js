@@ -137,6 +137,9 @@ function getDefaultsConfig() {
             port: 389
 
         },
+        features : {
+            appcard:true
+        },
 
         //getter methods
         get catalystHome() {

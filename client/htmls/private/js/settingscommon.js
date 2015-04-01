@@ -2617,6 +2617,15 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "urlcheck":
+                    var str = currCtrl.val();
+                    //regex from stackoverflow(check-if-url-is-valid-or-not)
+                    if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+                        currCtrl.focus();
+                    }
+                    break;    
                 case "max15":
                     if (currCtrl.val().length > 15) {
                         isValid = false;

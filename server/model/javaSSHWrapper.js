@@ -17,8 +17,10 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 
 console.log(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
-java.classpath.push(D4DfolderPath + '/java/classes');
-//java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
+java.classpath.push(D4DfolderPath + '/java/lib/commons-lang-2.3.jar');
+
+//java.classpath.push(D4DfolderPath + '/java/classes');
+java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
 
 
 var defaults = {
@@ -54,7 +56,7 @@ function JavaSSH(javaSSHInstance, options) {
     /**
      * @param: runlist, chef runlist
      */
-    this.execChefClient = function(runlist, overrideRunlist, onComplete, onStdOut, onStdErr) {
+    this.execChefClient = function(runlist, overrideRunlist, jsonAttributes, onComplete, onStdOut, onStdErr) {
         var stdOutLogFile = options.tempDir + uuid.v4();
         var stdErrLogFile = options.tempDir + uuid.v4();
         var tailStdOut = null;
@@ -84,7 +86,7 @@ function JavaSSH(javaSSHInstance, options) {
                     tailStdErr.startTailing();
                 }
 
-                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, stdOutLogFile, stdErrLogFile, function(err, retCode) {
+                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, jsonAttributes, stdOutLogFile, stdErrLogFile, function(err, retCode) {
                     // deleting log files
                     if (tailStdOut) {
                         tailStdOut.stopTailing();
@@ -143,7 +145,7 @@ function JavaSSH(javaSSHInstance, options) {
                     tailStdErr = new LogFileTail(stdErrLogFile, onStdErr);
                     tailStdErr.startTailing();
                 }
-                var newopts = java.newArray('java.lang.String',opts);
+                var newopts = java.newArray('java.lang.String', opts);
                 java.callMethod(javaSSHInstance, 'executeListOfCmds', newopts, stdOutLogFile, stdErrLogFile, function(err, retCode) {
                     // deleting log files
                     if (tailStdOut) {
@@ -214,7 +216,7 @@ function JavaSSH(javaSSHInstance, options) {
                     }
                     if (err) {
                         console.log("error in runnnig method");
-                        
+
                         console.log(err);
                         if (typeof onComplete === 'function') {
                             onComplete(err, null);

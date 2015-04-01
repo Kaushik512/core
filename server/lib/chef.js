@@ -547,6 +547,8 @@ var Chef = function(settings) {
         if (!runlist) {
             runlist = [];
         }
+        //options.jsonAttributes = JSON.stringify({"A":{"B":{"passedin":"Cool Test"}}});
+        
         if (options.instanceOS != 'windows') {
             var sshParamObj = {
                 host: options.host,
@@ -562,6 +564,7 @@ var Chef = function(settings) {
             } else {
                 sshParamObj.password = options.password;
             }
+            console.log('json jsonAttributes ==> ',options.jsonAttributes);
 
             javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
                 if (err) {
@@ -569,7 +572,7 @@ var Chef = function(settings) {
                     return;
                 }
                 console.log('Run List:' + runlist.join());
-                javaSSh.execChefClient(runlist.join(), overrideRunlist, callback, callbackOnStdOut, callbackOnStdErr);
+                javaSSh.execChefClient(runlist.join(), overrideRunlist, options.jsonAttributes, callback, callbackOnStdOut, callbackOnStdErr);
             });
 
         } else {

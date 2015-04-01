@@ -2,6 +2,8 @@ package com.relevancelab.catalyst.security.ssh;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.jcraft.jsch.*;
 import com.relevancelab.catalyst.security.ssh.exceptions.AuthFailedException;
 import com.relevancelab.catalyst.security.ssh.exceptions.HostUnreachableException;
@@ -174,7 +176,7 @@ public class SSHExec {
 	 * @throws AuthFailedException 
 	 * @throws HostUnreachableException 
 	 */
-	public int execChefClient(String runlist,boolean overrideRunlist,String stdOutLogFile,String stdErrLogFile) {
+	public int execChefClient(String runlist,boolean overrideRunlist,String jsonAttributes,String stdOutLogFile,String stdErrLogFile) {
 		if(runlist == null || runlist.length() == 0){
 			return -1002; //Need to think about the return codes
 		}
@@ -185,6 +187,17 @@ public class SSHExec {
 			cmd += " -r";
 		}
 		cmd += " "+runlist;
+		
+		String cmdWithJsonAttribute ="";
+		String jsonFileName = "chefRunjsonAttributes.json";
+		System.out.println(" jsonAttribute ==> "+ jsonAttributes);
+		if(jsonAttributes != null && !jsonAttributes.isEmpty() && !jsonAttributes.equalsIgnoreCase("null")) {
+			jsonAttributes = StringEscapeUtils.escapeJava(jsonAttributes);
+			cmdWithJsonAttribute +="echo "+jsonAttributes +" > "+jsonFileName + " && "+ cmd +" -j "+jsonFileName;
+			cmd  = cmdWithJsonAttribute;
+		}
+		System.out.println(cmd);
+		
 		try {
 			return  doSSh(cmd,stdOutLogFile,stdErrLogFile);
 		} catch(AuthFailedException afe) {

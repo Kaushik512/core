@@ -310,16 +310,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var settings = appConfig.chef;
         var chefRepoPath = settings.chefReposLocation;
         console.log(chefRepoPath);
-        fs.readFile(chefRepoPath + 'catalyst_files/' + req.params.imagename, function(err, data) {
-            if (err) {
-                res.end(404);
+        var file = chefRepoPath + 'catalyst_files/' + req.params.imagename;
+        logger.debug("File:>>>>>>>>>>>> %s",file);
+        fs.exists(file,function(exists){ 
+            if(exists){ 
+                fs.readFile(chefRepoPath + 'catalyst_files/' + req.params.imagename, function(err, data) {
+                    if (err) {
+                        logger.debug("File not founnd>>>>>>>>");
+                        res.end(404);
+                    }
+                    res.writeHead(200, {
+                        'Content-Type': 'image/gif'
+                    });
+                    res.end(data, 'binary');
+                });
             }
-            res.writeHead(200, {
-                'Content-Type': 'image/gif'
-            });
-            res.end(data, 'binary');
         });
-        logger.debug("Exit get() for /d4dMasters/image/%s", req.params.imagename);
+            logger.debug("Exit get() for /d4dMasters/image/%s", req.params.imagename);
     });
 
     app.get('/d4dMasters/readmasterjson/:id', function(req, res) {

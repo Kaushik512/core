@@ -148,7 +148,11 @@ var config = {
         rootpass: 'ReleV@ance'
 
     },
-    
+
+    features : {
+        appcard:true
+    },
+
     //getter methods
     get catalystHome() {
         return this.userHomeDir + '/' + this.catalysHomeDirName + '/';
