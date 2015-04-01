@@ -1,16 +1,36 @@
-<script>
-  // $(".tree-view").hide();
+  <script>
+    // $(".tree-view").hide();
 
-</script>
-<style type="text/css">
- #createProvider .marginbottom{
+  </script>
+  <style type="text/css">
+   #createProvider .marginbottom{
+    margin-bottom: 10px;
+  }
+  #createProvider .width-60{
+    width:60%;
+  }
+  #createProvider .width-20{
+    width:20%;
+  }
+  #createProvider .addimage, .removeimage{
+   cursor: pointer;
+ }
+ #createProvider .addNewRegion {
+  border:solid gray 1px; padding:10px;
+  margin-bottom: 15px;
+}
+#createProvider .addRow ,.removeRow{
+  float: left;
+  margin-top: 32px;
+  margin-left:3.5px;
+}
+#createProvider .addRegion, .removeRegion{
+  position: relative;
+  top: -20px;
+  left: -18px;
+}
+#createProvider .row{
   margin-bottom: 10px;
-}
-#createProvider .width-60{
-  width:60%;
-}
-#createProvider .width-20{
-  width:20%;
 }
 </style>
 <div class="row" id="createProvider">
@@ -32,87 +52,50 @@
            <!-- Widget ID (each widget will need unique ID)-->
            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
             <!-- widget div-->
-            <div>
+            <div id="appender">
              <!-- widget content -->
-             <div class="row">                                                        
-              <div class="col-lg-6">
+             <div class="row">
+               <div class="col-lg-6 col-md-6">
+                <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                <select id="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
+                 <option value="">Select Provider</option>
+                 <option value="aws">AWS</option>
+               </select>
+             </div>   
+             <div class="col-lg-6 col-md-6">
                <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                <!-- <i class="icon-append fa fa-building"></i> -->
-               <input name="ctl00$MainContent$orgname" value="Default" id="providername" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
-               <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-             </div>                                                         
+               <input name="ctl00$MainContent$orgname" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+             </div>    
+           </div>
 
+           <div class="row">
+            <!-- -->
+            <div class="col-lg-6 col-md-6">
+             <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+             <!-- <i class="icon-append fa fa-building"></i> -->
+             <input name="ctl00$MainContent$orgname" value="AKIAI6TVFFD23LMBJUPA" id="accessKey" class="form-control" type="text"  cdata="catalyst" cat-validation="required" placeholder="Enter the Access Key">
 
-             <div class="col-lg-6">
-              <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-              <select id="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
-               <option value="">Select Provider</option>
-               <option value="aws">AWS</option>
-             </select>
-             <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-           </div>   
+             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+           </div>
+           <div class="col-lg-6 col-md-6">
+             <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+             <!-- <i class="icon-append fa fa-building"></i> -->
+             <input name="ctl00$MainContent$orgname" value="qZOZuI2Ys0/Nc7txsc0V2eMMVnsEK6+Qa03Vqiyw" id="secretKey" class="form-control" type="text"  cdata="catalyst" cat-validation="required" placeholder="Enter the Secret Key">
+
+             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+           </div>
 
          </div>
 
-         <div class="row">
-
-          <!-- -->
-          <div class="col-lg-6">
-           <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-           <!-- <i class="icon-append fa fa-building"></i> -->
-           <input name="ctl00$MainContent$orgname"  id="accesskey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
-
-           <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-         </div>
-         <div class="col-lg-6">
-           <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-           <!-- <i class="icon-append fa fa-building"></i> -->
-           <input name="ctl00$MainContent$orgname" id="secretkey" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
-
-           <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-         </div>
-
        </div>
-       <div class="row">
-        <div class="col-lg-6">
-          <label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          <select id="region" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">
-           <option value="">Select Region</option>
-           <option value="us-west-2">us-west-2</option>
-         </select>
-         <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-       </div>
-       <label for="category">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-       <div class="col-lg-6 smart-form" style="  height: 140px;
-       overflow-y: scroll;
-       border: 1px solid gray;
-       padding: 0px;">
-
-       <div id="securitygroupids" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" style="width:99%;" cdata="catalyst" cat-validation="onechecked">
-
-       </div>
+       <!-- end widget div -->
      </div>
-
-     <div class="col-lg-6 authPemFile ipWidth" style="display: block;">
-      <div class="smart-forms">
-        <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-        <label for="templatesicon" name="field" class="file">
-          <span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px 14px;position: absolute;right:4px;">Browse</span>
-          <input id="providerpemfile" type="file" class="gui-file" cdata="catalyst">
-          <input type="text" readonly="" class="gui-input">
-          <input type="text" id="folderpath" style="visibility:hidden;" cdata="catalyst"/>
-        </label>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end widget div -->
-</div>
-<!-- end widget -->             
-</article>
-<!-- END COL -->
-</div>
-<!-- END ROW -->
+     <!-- end widget -->             
+   </article>
+   <!-- END COL -->
+ </div>
+ <!-- END ROW -->
 </section>
 <!-- end widget grid -->
 </div>
@@ -120,7 +103,7 @@
 </div>
 <div class="widget-toolbox clearfix">
   <div class="btn-group pull-right">
-    <button id="btnsubmit" class="btn btn-primary btn-mini" disabled style="margin-right:11px;">
+    <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
      <i class="ace-icon fa fa-check bigger-110"></i>
      Save
    </button>
@@ -138,23 +121,113 @@
 <!--row ends here-->
 <!--Popup for selecting a cloud provider before proceeding-->
 <script>
-   //Form Name
-   function cancelClicked() {
-     $("#popupSelectProvider").modal('hide');
-     $(".modal-backdrop.fade.in").detach();
-     $('#btncancel').click();
-   }
-   function setfolderpath(){ //Uncomment below line to set the folder path to uploaded files.
-       var folderpath = ''; //'/' + $('#dockerreponame').val() + "/dockerfiles/";
-    //   alert(folderpath);
-    $('#folderpath').val(folderpath);
+
+  function createTemplate(parentToAttach){
+    var that=this,parentEl=$(parentToAttach).addClass('customTemplateParent');
+    var getAddButton=function(classs){
+      var title=''
+      if(classs=='addRegion'){
+        titile='title="Add New Region" data-placement="right"';
+      }else if(classs=='addRow'){
+        titile='title="Add New Key Pair" data-placement="top"';
+      }
+      return '<img src="img/add.png" class="addimage '+(classs ?classs :'')+'" '+ titile +' rel="tooltip" data-placement="top" />'
+    };
+
+    var getRemoveButton=function(classs){
+      var title=''
+      if(classs=='removeRegion'){
+        titile='title="Remove this Region" data-placement="right"';
+      }else if(classs=='removeRow'){
+        titile='title="Remove this Key Pair" data-placement="top"';
+      }
+      return '<img src="img/remove.png" class="removeimage '+(classs ?classs :'')+'" '+ titile +' rel="tooltip"  />'
+    };
+    var getKeyValueList=function(){
+      return '<div class="col-lg-6 col-md-6" style="width:47%;">'
+      +'<label for="name">Select Key Pair:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      +'<select id="'+getRandom()+'" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" '
+      +'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
+      +'  <option value="">Select Any Key Pair</option>'
+      +'<option value="option1">option1</option>'
+      +'<option value="option2">option2</option></select>'
+      +'</div>' ;
+    };
+    var getRegion=function(){
+      return  '<div class="row">'
+      +'<div class="col-lg-6 col-md-6">'
+      +'<label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      +'<select id="'+getRandom()+'" unique="true" uniqueconditionedby="orgname"  class="region chooseOrganization width-100" style="'+'vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
+      +'<option value="">Select Region</option>'
+      +'<option value="us-west-2">us-west-2</option>'
+      +'</select>'
+      +'</div></div>';
+    };
+    var getPemFileRow=function(){
+      return '<div class="col-lg-6 col-md-6 authPemFile" style="display: block;"><div class="smart-forms"><label for="" style="margin-left:16px;">Upload .pem file for Provider<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      +'<label for="templatesicon" name="field" class="file">'
+      +'<span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px '
+      +'14px;position: absolute;right:4px;">Browse</span>'
+      +'<input id="'+getRandom()+'" type="file" class="gui-file file" cdata="catalyst" cat-validation="required">'
+      +'<input type="text" readonly="" class="gui-input filename">'
+      +'<input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />'
+      +'</label></div></div>';
+    };
+
+    var tooltipInit=function(){
+      var $tool=$("[rel=tooltip]");
+      if ($tool.length) {
+        $tool.tooltip();
+      }
+    };
+
+    var getRandom=function(){
+      return parseInt(Math.random()*10000000000);
+    };
+
+    this.getRow=function(isAdd,isRemove,notrequired){
+      var str='';
+      if(isAdd){
+        str=getAddButton('addRow');
+      }else if(isRemove){
+        str=getRemoveButton('removeRow');
+      }else if(notrequired){
+        str='';
+      }
+      return '<div class="row pemrow">'+getKeyValueList() + getPemFileRow() + str+'</div>';
+    };
+
+    this.getFinalTemplate=function(isAddApplicable){
+      return '<div class="addNewRegion">'+ (isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion'))+getRegion() + that.getRow(true)+'</div>'
+    };
+
+    $(parentEl).delegate('.addimage','click',function(){
+      if($(this).hasClass('addRow')){
+        $(this).parent().parent().append(that.getRow(false,true)).find('select').select2();
+      }else if($(this).hasClass('addRegion')){
+        $(this).parents('.customTemplateParent').append(that.getFinalTemplate()).find('select').select2();
+      }
+      tooltipInit();
+      bindChange_importPemFile();
+    });
+
+    $(parentEl).delegate('.removeimage','click',function(){
+      if($(this).hasClass('removeRow')){
+        $(this).parent().remove();
+
+      }else if($(this).hasClass('removeRegion')){
+        $(this).parent().remove();
+      }
+      tooltipInit();
+    });
+
   }
 
+
   function bindChange_importPemFile() {
-    $('#providerpemfile').change(function() {
-      debugger;
+    $('input[type="file"]').off('change').on('change',function() {
       $(this).next().val(this.files[0].name);
-      $('#folderpath').val($('#providerpemfile').val());
+      $(this).next().next().val($(this).val());
     });
   }
   function inLineReady() {
@@ -162,41 +235,19 @@
      $(this).select();
      $("#msgOrgName").hide();
    });
-   $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
-   var ten = 9;
-       readformnew('9'); //9 is for Provider
-       //
+   enableUniqueCheckingForInputs(9);
+ }
 
-       $('#content').css("opacity", "1 !important");
-       //Force opening the left navigation menu
-       if ($('#navSettings').is(":visible") == false) {
-         $('#navSettings').css("display", '');
-         $('#navSettings > ul > li').first().addClass('open');
-         $('#navSettings > ul > li > ul').css("display", "none");
-         $('#navSettings > ul > li > ul').first().css("display", "block");
-       }
-       //redrawing the breadcrumb and selecting the tree
-       $('#Settings  li').removeClass('active');
-       $('#Settings  li').each(function () {
+ inLineReady();
 
-         if ($(this).text().trim() == "Docker"){
-
-           $(this).addClass('active');
-         }
-       });
-
-       $('#content').css('opacity','1 !important');
-      // drawBreadCrumb1();
-      enableUniqueCheckingForInputs(9);
-
-
-    }
-
-    inLineReady();
-
-  </script>
-  <script>
-   $(document).ready(function () {
+  function appendLoader(){
+    removeLoader();
+    $("form[id*='myForm']").find("div.pull-right > button").attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+  }
+  function removeLoader(){
+    $('#masterssavespinner').remove();
+  }
+  $(document).ready(function () {
     function selectDefaultValue(){
       var value=d4ddata.securitygroupids,$inputs;
       if(value && value.length){
@@ -208,25 +259,18 @@
         }
       }
     }
-    function appendLoader(){
-      removeLoader();
-      $('#btnsubmit').attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
-    }
-    function removeLoader(){
-      $('#masterssavespinner').remove();
-    }
-    function loadSecurityGroupID(accesskey,secretkey){
+
+    function loadSecurityGroupID(accessKey,secretKey){
       appendLoader();
 
       $.ajax({
         method: "POST",
         url: "/providers/securitygroups",
-        data:{ "accesskey": accesskey, "secretkey": secretkey, "region": "us-west-2" },
-        error:function(XMLHttpRequest, textStatus, errorThrown) { 
+        data:{ "accesskey": accessKey, "secretkey": secretKey, "region": "us-west-2" },
+        error:function(XMLHttpRequest, textStatus, errorThrown) {
           bootbox.alert('Invalid Access Key Or Secret Key');
           removeLoader();
           $('#securitygroupids').empty();
-
         } 
       }).done(function( msg ) {
 
@@ -248,107 +292,174 @@
 
     }
     function checkForSecurityGroup(){
-      var accesskey=$('#accesskey').val(),
-      secretkey=$('#secretkey').val();
-      if(accesskey && secretkey && accesskey!=='' && secretkey!==''){
-        loadSecurityGroupID(accesskey,secretkey);
+      var accessKey=$('#accessKey').val(),
+      secretKey=$('#secretKey').val();
+      if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
+        loadSecurityGroupID(accessKey,secretKey);
       }else{
         $('#btnsubmit').attr('disabled','disabled');
 
       }
     }
-
+    /*
     $('#providertype').select2();
     $('#region').select2();
-    $("#providername").focus();
-
-    $('#accesskey').blur(checkForSecurityGroup);
-    $('#secretkey').blur(checkForSecurityGroup);
-
-    $('#myForm54').submit(function() {
-      $(this).validate();
-      if(isFormValid()){
-        saveform(9);
-      }else{
-        bootbox.alert("invalid form data");
-      }
-           return false; // for demo
-         });
-
-    checkForSecurityGroup();
-    bindChange_importPemFile();
-  });
-/*
-   function providerTest(){
-     var inputData = new Object();
-     var formID=9;
-     var securityList=[];
-     
-     $('[name="securitygroup"]').each(function(){
-      $(this).is(":checked") && securityList.push($(this).val().trim());
-    });
-
-
-     inputData.accesskey = $('#accesskey').val().trim();
-     console.log(inputData.accesskey);
-
-
-     inputData.secretkey = $('#secretkey').val().trim();
-     console.log(inputData.secretkey);
-
-//inputData.region = $('#region').val().trim();
-console.log(inputData.region);
-
-//inputData.providername=$("#providername").val().trim();
-console.log(inputData.providername);
-
-//inputData.providertype=$("#providertype").val().trim();
-console.log(inputData.providertype);
-
-//inputData.securitygroupids=securityList;
-console.log(securityList);
-   //  inputData.type=instancesizes;
-
-   //inputData.instanceUserName='root';
- //  saveform(9);
-
-/* $.ajax({
-        url: serviceURL + "savemasterjsonrownew/" + formID + "/" + null + "/" + '%2f',
-        data: inputData,
-        processData: false,
-        contentType: false,
-        type: 'POST',
-        success: function(data, success) {
-           console.log(data);
-           alert('success');
-        },
-        error: function(jqxhr) {
-           alert(jqxhr.status);
-        },
-        failure: function(data) {
-            alert(data);
-        }
-    });
-
+    $('#keyvalue').select2();
 */
-/*
-$.ajax({
- url: '/providers/securitygroups',
- type: 'POST',
- dataType: 'json',
- data: inputData,
- async:false,
- success: function (data) {
-                         //alert("Success...");
-                         if(validateForm())
-                          saveform(9);
-                      },
-                      error: function (err) {
-                       bootbox.alert("Invalid UserName or Password.");
-                     }
-                   });
+$('select').select2();
+    $("#name").focus();
 
-*/
+    //  $('#accessKey').blur(checkForSecurityGroup);
+   //   $('#secretKey').blur(checkForSecurityGroup);
 
-//}
+   $('#myForm54').submit(function() {
+    $(this).validate();
+    if(isFormValid()){
+      saveProviderData();
+    }else{
+      bootbox.alert("invalid form data");
+    }
+        return false; // for demo
+      });
+
+   var createTemplateInstance=new createTemplate($('#appender'));
+   $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+   $('.addNewRegion').find('select').select2();
+   bindChange_importPemFile();
+
+ });
+
+  function saveProviderData(){
+    appendLoader();
+
+
+    function getRegionListForFormSubmission(){
+      var list=[];
+      $('select.region').each(function(){
+        var obj={},keyPair=[];
+        obj.region_name=$(this).val();
+        $(this).parents('.addNewRegion').find('.pemrow').each(function(){
+          keyPair.push({
+            "keyPair_name":$(this).find('select.keyvalue').val(),
+            "file_name" :$(this).find('input.filename').val(),
+            "file":$(this).find('input.file')[0].files[0]
+          });
+        });
+
+        obj.keyPairs=keyPair;
+        list.push(obj);
+      });
+      return list;
+    }
+
+    var reqBody={};
+    reqBody.name=$('#name').val();
+    reqBody.accessKey=$('#accessKey').val();
+    reqBody.secretKey=$('#secretKey').val();
+    reqBody.providerType=$('#providertype').val();
+    reqBody.regions=getRegionListForFormSubmission();
+    //reqBody.instanceUserName='root';
+    $.ajax({
+     method: "POST",url: "/providers",data: reqBody,   
+     success: function(data, success) {
+              //alert('Successfully Saved ' + data);
+              if (data!=500) {
+                if ($('#btncancel').length){
+                  $('#btncancel').click(); 
+                }                
+                removeLoader();
+              }
+              else{
+               removeLoader();
+               alert('Insufficient permission to perform this operation.');
+             }
+           },
+           error: function(jqxhr) {
+            removeLoader();
+            bootbox.alert(jqxhr.status);
+          },
+          failure: function(data) {
+            bootbox.alert(data);
+          }
+        });
+
+  }
+
+function getKeyPairList(){
+  
+}
+
+  /*
+     function providerTest(){
+       var inputData = new Object();
+       var formID=9;
+       var securityList=[];
+       
+       $('[name="securitygroup"]').each(function(){
+        $(this).is(":checked") && securityList.push($(this).val().trim());
+      });
+
+
+       inputData.accessKey = $('#accessKey').val().trim();
+       console.log(inputData.accessKey);
+
+
+       inputData.secretKey = $('#secretKey').val().trim();
+       console.log(inputData.secretKey);
+
+  //inputData.region = $('#region').val().trim();
+  console.log(inputData.region);
+
+  //inputData.name=$("#name").val().trim();
+  console.log(inputData.name);
+
+  //inputData.providertype=$("#providertype").val().trim();
+  console.log(inputData.providertype);
+
+  //inputData.securitygroupids=securityList;
+  console.log(securityList);
+     //  inputData.type=instancesizes;
+
+     //inputData.instanceUserName='root';
+   //  saveform(9);
+
+  /* $.ajax({
+          url: serviceURL + "savemasterjsonrownew/" + formID + "/" + null + "/" + '%2f',
+          data: inputData,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          success: function(data, success) {
+             console.log(data);
+             alert('success');
+          },
+          error: function(jqxhr) {
+             alert(jqxhr.status);
+          },
+          failure: function(data) {
+              alert(data);
+          }
+      });
+
+  */
+  /*
+  $.ajax({
+   url: '/providers/securitygroups',
+   type: 'POST',
+   dataType: 'json',
+   data: inputData,
+   async:false,
+   success: function (data) {
+                           //alert("Success...");
+                           if(validateForm())
+                            saveform(9);
+                        },
+                        error: function (err) {
+                         bootbox.alert("Invalid UserName or Password.");
+                       }
+                     });
+
+  */
+
+  //}
 </script>
