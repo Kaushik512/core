@@ -13,8 +13,13 @@ var Schema = mongoose.Schema;
 var TASK_TYPE = {
     CHEF_TASK: 'chef',
     JENKINS_TASK: 'jenkins'
-}
+};
 
+var TASK_STATUS = {
+    SUCCESS: 'success',
+    RUNNING: 'running',
+    FAILED: 'failed'
+};
 
 
 var taskSchema = new Schema({
@@ -54,8 +59,9 @@ var taskSchema = new Schema({
         trim: true
     },
     taskConfig: Schema.Types.Mixed,
-
+    lastTaskStatus: String,
     lastRunTimestamp: Number,
+    timestampEnded: Number,
 });
 
 // instance method :-  
@@ -75,13 +81,15 @@ taskSchema.methods.execute = function(userName, callback, onComplete) {
         }, null);
         return;
     }
+    var timestamp = new Date().getTime();
+
     task.execute(userName, function(err, taskExecuteData) {
         if (err) {
             callback(err, null);
             return;
         }
-        var timestamp = new Date().getTime();
         self.lastRunTimestamp = timestamp;
+        self.lastTaskStatus = TASK_STATUS.RUNNING;
         self.save(function(err, data) {
             if (err) {
                 logger.error("Unable to update task timestamp");
@@ -96,6 +104,13 @@ taskSchema.methods.execute = function(userName, callback, onComplete) {
         taskExecuteData.taskType = task.taskType;
         callback(null, taskExecuteData);
     }, function(err, status) {
+        self.timestampEnded = new Date().getTime();
+        if (status == 0) {
+            self.lastTaskStatus = TASK_STATUS.SUCCESS;
+        } else {
+            self.lastTaskStatus = TASK_STATUS.FAILED;
+        }
+        self.save();
         if (typeof onComplete === 'function') {
             onComplete(err, status);
         }
@@ -131,12 +146,11 @@ taskSchema.statics.createNew = function(taskData, callback) {
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
         console.log(taskData.attributesjson != '');
-        if(taskData.attributesjson != '')
-            {
-                
-                attrJson = JSON.parse(taskData.attributesjson);
-                logger.debug('attrJson:' + JSON.stringify(attrJson));
-            }
+        if (taskData.attributesjson != '') {
+
+            attrJson = JSON.parse(taskData.attributesjson);
+            logger.debug('attrJson:' + JSON.stringify(attrJson));
+        }
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
@@ -155,7 +169,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
     var that = this;
     var task = new that(taskObj);
     logger.debug('saved task:' + JSON.stringify(task));
-   
+
     task.save(function(err, data) {
         if (err) {
             logger.error(err);
@@ -215,6 +229,7 @@ taskSchema.statics.getTaskByIds = function(taskIds, callback) {
     queryObj._id = {
         $in: taskIds
     }
+    console.log(taskIds);
     this.find(queryObj, function(err, tasks) {
         if (err) {
             logger.error(err);
@@ -253,9 +268,10 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
-         var attrJson = '';
-         if(taskData.attributesjson != '')
+        var attrJson = '';
+        if (taskData.attributesjson != '') {
             attrJson = JSON.parse(taskData.attributesjson);
+        }
         logger.debug('attrJson:' + JSON.stringify(attrJson));
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,

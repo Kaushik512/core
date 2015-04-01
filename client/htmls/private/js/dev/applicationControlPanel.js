@@ -69,15 +69,25 @@ $(function() {
         $trHistoryRow.append($tdTime);
         var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
         $aLogs.click(function(e) {
-            var $modal = $('#buildLogsModel');
+            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+            var $modal = $('#appCardBuildResult');
+
             $modal.find('.loadingContainer').show();
             $modal.find('.errorMsgContainer').hide();
             $modal.find('.outputArea').hide();
             $modal.modal('show');
             $.get('../jenkins/' + buildHistory.jenkinsServerId + '/jobs/' + buildHistory.jobName + '/builds/' + buildHistory.jobNumber + '/output', function(logs) {
+
+                var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
+                $taskExecuteTabsHeaderContainer.append($liHeader);
+                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                $tabContent.find('.taskLogArea').empty().append(logs.output);
+                $taskExecuteTabsContent.append($tabContent);
+                $liHeader.find('a').click();
                 $modal.find('.loadingContainer').hide();
                 $modal.find('.errorMsgContainer').hide();
-                $modal.find('.outputArea').append(logs.output).show();
+                $modal.find('.outputArea').show();
             }).fail(function(jxhr) {
                 $modal.find('.loadingContainer').hide();
                 $modal.find('.outputArea').hide();
@@ -151,10 +161,9 @@ $(function() {
             $trDeployHistoryRow.append($tdTime);
 
             //logs
-            var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
+            var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="Deploy Logs"></a>');
             $aLogs.click(function(e) {
-
-
+                $('#showDeployLogsLink').data('deployHistoryId', deployHistory._id).click();
             });
 
             var $tdLogLink = $('<td></td>').append($aLogs);
@@ -206,7 +215,7 @@ $(function() {
         }
         $tdAction.find('.appInstanceDeployBtn').click(function() {
             var appInstanceId = appInstance._id;
-            var $modal = $('#deployResultModel');
+            var $modal = $('#deployConfiguretModel');
             $modal.find('.errorMsgContainer').hide();
             $modal.find('.workFlowArea').hide();
             $modal.find('.deployResultArea').hide();
@@ -224,6 +233,7 @@ $(function() {
 
                 $modal.find('.workFlowArea').show();
                 $modal.find('.loadingContainer').hide();
+
 
             }).fail(function(jxhr) {
                 $modal.find('.loadingContainer').hide();
@@ -270,46 +280,9 @@ $(function() {
         $modal.find('.outputArea').hide();
         $modal.modal('show');
         $.get('../applications/' + applicationId + '/build', function(data) {
-            var date = new Date().setTime(data.timestamp);
+
             if (data.taskType === 'chef') {
-                $modal.find('.loadingContainer').hide();
-                $modal.find('.errorMsgContainer').hide();
-                $modal.find('.outputArea').show();
-                var instances = data.instances;
-                for (var i = 0; i < instances.length; i++) {
-                    var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
-                    if (i === 4) {
-                        var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
-                        $taskExecuteTabsHeaderContainer.append($liMoreHeader);
-
-                        $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
-
-                    }
-
-                    $taskExecuteTabsHeaderContainer.append($liHeader);
-
-                    var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
-
-                    $taskExecuteTabsContent.append($tabContent);
-
-
-                }
-                //shown event
-                $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
-                    $(this).attr('data-taskPolling', 'true');
-                    $(this).attr('data-taskPollLastTimestamp', new Date().getTime());
-                    var tabId = $(this).attr('href')
-                    pollTaskLogs($(this), $(tabId), null, 0, false);
-                    //e.relatedTarget // previous active tab
-                });
-
-                $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
-                    $(e.target).attr('data-taskPolling', 'true');
-                    //e.relatedTarget // previous active tab
-                }).first().click();
-
-                $('#assignedExecute').modal('show');
             } else {
 
                 //adding to build history tab
@@ -356,7 +329,6 @@ $(function() {
                 }
                 pollJob();
 
-                console.log(data);
             }
 
         }).fail(function(jxhr) {
@@ -370,6 +342,203 @@ $(function() {
             }
         });
     }
+
+    $('#showDeployLogsLink').click(function(e) {
+        var $this = $(this);
+        var $modal = $('#deployResultModel');
+        $modal.find('.errorMsgContainer').hide();
+        $modal.find('.outputArea').hide();
+        $modal.find('.loadingContainer').show();
+        $modal.modal('show');
+        var deployHistoryId = $this.data('deployHistoryId');
+        $.get('../applications/' + urlParams.appId + '/deployHistory/' + deployHistoryId, function(history) {
+
+            $.get('../applications/' + history.applicationId + '/appInstances/' + history.appInstanceId + '/workflows/' + history.workflowId, function(workflow) {
+                $.post('../tasks', {
+                    taskIds: workflow.taskIds
+                }, function(tasks) {
+                    var $taskList = $('#logTaskList').empty();
+                    for (var i = 0; i < tasks.length; i++) {
+                        var $option = $('<option></option>').val(tasks[i]._id).html(tasks[i].name).data('task', tasks[i]);
+                        $option.data('timestampStarted', history.timestampStarted);
+                        $option.data('timestampEnded', history.timestampEnded);
+                        $taskList.append($option);
+                    }
+                    if (tasks.length) {
+                        $taskList.change();
+                    }
+                    $modal.find('.loadingContainer').hide();
+                    $modal.find('.outputArea').show();
+                }).fail(function(jxhr) {
+                    $modal.find('.loadingContainer').hide();
+                    $modal.find('.outputArea').hide();
+                    var $errorContainer = $modal.find('.errorMsgContainer').show();
+                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                        $errorContainer.html(jxhr.responseJSON.message);
+                    } else {
+                        $errorContainer.html("Server Behaved Unexpectedly");
+                    }
+
+                });
+            }).fail(function(jxhr) {
+                $modal.find('.loadingContainer').hide();
+                $modal.find('.outputArea').hide();
+                var $errorContainer = $modal.find('.errorMsgContainer').show();
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    $errorContainer.html(jxhr.responseJSON.message);
+                } else {
+                    $errorContainer.html("Server Behaved Unexpectedly");
+                }
+
+            });
+        }).fail(function(jxhr) {
+            $modal.find('.loadingContainer').hide();
+            $modal.find('.outputArea').hide();
+            var $errorContainer = $modal.find('.errorMsgContainer').show();
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                $errorContainer.html(jxhr.responseJSON.message);
+            } else {
+                $errorContainer.html("Server Behaved Unexpectedly");
+            }
+
+        });
+    });
+
+
+    function pollTaskLogs($tabLink, $tab, timestamp, timestampEnded, delay, clearData) {
+        var instanceId = $tabLink.attr('data-taskInstanceId');
+        var poll = $tabLink.attr('data-taskPolling');
+        if (poll !== 'true') {
+            console.log('not polling');
+            return;
+        }
+
+        var url = '../instances/' + instanceId + '/logs';
+        if (timestamp) {
+            url = url + '?timestamp=' + timestamp;
+            if (timestampEnded) {
+                url = url + '&timestampEnded=' + timestampEnded;
+            }
+        }
+
+        timeout = setTimeout(function() {
+            $.get(url, function(data) {
+                var $modalBody = $tab.find('.taskLogArea')
+                if (clearData) {
+                    $modalBody.empty();
+                }
+                var $table = $('<table></table>');
+
+                for (var i = 0; i < data.length; i++) {
+                    var $rowDiv = $('<tr class="row"></tr>');
+                    var timeString = new Date().setTime(data[i].timestamp);
+                    var date = new Date(timeString).toLocaleString(); //converts to human readable strings
+
+                    /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
+
+                    if (data[i].err) {
+                        $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                    } else {
+                        $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                    }
+
+                    $table.append($rowDiv);
+                    $table.append('<hr/>');
+
+                }
+
+
+                if (data.length) {
+                    lastTimestamp = data[data.length - 1].timestamp;
+                    console.log(lastTimestamp);
+                    $modalBody.append($table);
+                    $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                    $tabLink.attr('data-taskPollLastTimestamp', data[data.length - 1].timestamp);
+
+                }
+
+
+                console.log('polling again');
+                if (!timestampEnded && $tabLink.attr('data-taskPolling') === 'true' && $('#deployResultModel').data()['bs.modal'].isShown) {
+
+                    pollTaskLogs($tabLink, $tab, $tabLink.attr('data-taskPollLastTimestamp'), null, 1000, false);
+
+                } else {
+                    console.log('not polling again');
+                }
+            });
+        }, delay);
+    }
+
+    $('#logTaskList').change(function(e) {
+        var $option = $(this).find(":selected");
+        console.log($option, $(this).val());
+        var task = $option.data('task');
+        var instanceIds = task.taskConfig.nodeIds;
+
+        var timestampStarted = $option.data('timestampStarted');
+        var timestampEnded = $option.data('timestampEnded');
+
+        var $modal = $('#deployResultModel');
+        $modal.find('.instanceErrorMsgContainer').hide();
+        $modal.find('.instanceLogsOutputContainer').hide();
+        $modal.find('.instanceLoadingContainer').show();
+
+        var $taskExecuteTabsHeaderContainer = $('#deployTaskExecuteTabsHeader').empty();
+        var $taskExecuteTabsContent = $('#deployTaskExecuteTabsContent').empty();
+
+        $.post('../instances', {
+            instanceIds: instanceIds
+        }, function(instances) {
+            for (var i = 0; i < instances.length; i++) {
+                var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                if (i === 4) {
+                    var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
+
+                    $taskExecuteTabsHeaderContainer.append($liMoreHeader);
+
+                    $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
+
+                }
+
+                $taskExecuteTabsHeaderContainer.append($liHeader);
+
+                var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+
+                $taskExecuteTabsContent.append($tabContent);
+
+
+            }
+            //shown event
+            $taskExecuteTabsHeaderContainer.find('a[data-toggle="tab"]').each(function(e) {
+                $(this).attr('data-taskPolling', 'true');
+                var tabId = $(this).attr('href')
+                var lastTimestamp = null;
+                if (timestampEnded) {
+                    lastTimestamp = timestampEnded;
+                }
+                pollTaskLogs($(this), $(tabId), timestampStarted, lastTimestamp, 0, false);
+                //e.relatedTarget // previous active tab
+            });
+
+            $taskExecuteTabsHeaderContainer.find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
+                $(e.target).attr('data-taskPolling', 'true');
+                //e.relatedTarget // previous active tab
+            }).first().click();
+            $modal.find('.instanceErrorMsgContainer').hide();
+            $modal.find('.instanceLoadingContainer').hide();
+            $modal.find('.instanceLogsOutputContainer').show();
+        }).fail(function(jxhr) {
+            $modal.find('.instanceLoadingContainer').hide();
+            $modal.find('.instanceLogsOutputContainer').hide();
+            var $errorContainer = $modal.find('.instanceErrorMsgContainer').show();
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                $errorContainer.html(jxhr.responseJSON.message);
+            } else {
+                $errorContainer.html("Server Behaved Unexpectedly");
+            }
+        });
+    });
 
 
 
@@ -444,7 +613,7 @@ $(function() {
         $appCard.find('.appCardDeployBtn').data('applicationId', data._id).click(function(e) {
             var applicationId = $(this).data('applicationId');
             var appInstanceId = $appCard.find('.appInstancesDropdown').val();
-            var $modal = $('#deployResultModel');
+            var $modal = $('#deployConfiguretModel');
             $modal.find('.errorMsgContainer').hide();
             $modal.find('.workFlowArea').hide();
             $modal.find('.deployResultArea').hide();
@@ -485,7 +654,7 @@ $(function() {
     }
 
     $('.executeWorkflowBtn').click(function(e) {
-        var $modal = $('#deployResultModel');
+        var $modal = $('#deployConfiguretModel');
         $modal.find('.errorMsgContainer').hide();
         $modal.find('.workFlowArea').hide();
         $modal.find('.deployResultArea').hide();
@@ -503,6 +672,7 @@ $(function() {
             $.get('../applications/' + applicationId + '/lastDeployInfo', function(lastDeploy) {
                 if (lastDeploy) {
                     addDeployHistoryRow(lastDeploy);
+                    $('#showDeployLogsLink').data('deployHistoryId', lastDeploy._id).click();
                 }
             });
 

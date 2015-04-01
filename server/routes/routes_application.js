@@ -144,12 +144,33 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     message: "application not founds"
                 });
             }
-            application.getDeployHistory(function(err, buildHistories) {
+            application.getDeployHistory(function(err, deployHistories) {
                 if (err) {
                     res.send(500, err);
                     return;
                 }
-                res.send(buildHistories);
+                res.send(deployHistories);
+            });
+        });
+    });
+
+    app.get('/applications/:applicationId/deployHistory/:deployHistoryId', function(req, res) {
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!application) {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+            application.getDeployHistoryById(req.params.deployHistoryId, function(err, history) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                res.send(history);
             });
         });
     });
@@ -270,7 +291,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     message: 'AppInstance does not exist'
                 });
             } else {
-                res.send(appInstance.workflows);
+                var workflow;
+                for (var i = 0; i < appInstance.workflows.length; i++) {
+                    if (req.params.workflowId == appInstance.workflows[i]._id) {
+                        workflow = appInstance.workflows[i];
+                        break;
+                    }
+                }
+                if (workflow) {
+                    res.send(workflow);
+                } else {
+                    res.send(404, {
+                        message: 'Workflow does not exist'
+                    });
+                }
             }
         });
     });

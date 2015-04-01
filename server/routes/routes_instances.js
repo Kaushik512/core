@@ -123,7 +123,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances/:instanceId/appUrl', function(req, res) { //function(instanceId, ipaddress, callback)
-        
+
         instancesDao.addAppUrls(req.params.instanceId, req.body.appUrls, function(err, updateCount) {
             if (err) {
                 logger.error("Failed to update instanceip", err);
@@ -1002,7 +1002,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         if (timestamp) {
             timestamp = parseInt(timestamp);
         }
-        logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
+        var timestampEnded = req.query.timestampEnded;
+        if (timestampEnded) {
+            timestampEnded = parseInt(timestampEnded);
+        }
+        logsDao.getLogsByReferenceIdAndTimestamp(req.params.instanceId, timestamp, timestampEnded, function(err, data) {
             if (err) {
                 logger.error("Found error to fetch Logs: ", err);
                 res.send(500);
@@ -1012,7 +1016,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(data);
 
         });
+        /*logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
+            if (err) {
+                logger.error("Found error to fetch Logs: ", err);
+                res.send(500);
+                return;
+            }
+            logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
+            res.send(data);
 
+        });*/
     });
 
 
