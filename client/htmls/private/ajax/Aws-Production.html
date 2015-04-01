@@ -683,7 +683,7 @@ function loadLaunchParams(){
           data = typeof data ==="string" ?JSON.parse(data) :data ;
           var str='<option value="">Choose Image</option>';
           for(var i=0;i<data.length;i++){
-            str=str+'<option value="'+data[i].imageIdentifier+'">'+data[i].name+'</option>';
+            str=str+'<option value="'+data[i]._id+'">'+data[i].name+'</option>';
           }
           $('#imageid').html(str).select2();
             },

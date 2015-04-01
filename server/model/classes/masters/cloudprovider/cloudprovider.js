@@ -42,7 +42,7 @@ var providerSchema = new Schema({
 providerSchema.statics.createNew = function(providerData, callback) {
     var providerConfig;
     if (providerData.providerType === PROVIDER_TYPE.AWS_PROVIDER) {
-        logger.debug(">>>>>>>>>>>>>>>>>>>>>>> %s//////////",providerData.regions);
+        //logger.debug(">>>>>>>>>>>>>>>>>>>>>>> %s//////////",providerData.regions);
         providerConfig = new AWSProvider({
             providerType: providerData.providerType,
             accessKey: providerData.accessKey,
@@ -56,7 +56,7 @@ providerSchema.statics.createNew = function(providerData, callback) {
         return;
     }
     var providerObj = providerData;
-    logger.debug("providerConfig>>>>>>>>>>>>>>>>>>>>>>>............%s",providerConfig.regions);
+    //logger.debug("providerConfig>>>>>>>>>>>>>>>>>>>>>>>............%s",providerConfig.regions);
     providerObj.providerConfig = providerConfig;
 
     var that = this;

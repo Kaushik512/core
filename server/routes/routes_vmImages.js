@@ -10,14 +10,37 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 
 	app.post('/vmimages', function(req, res) {
         logger.debug("Enter post() for /vmimages");
+
+        var providerId = req.body.providerId.trim();
+        var imageIdentifier = req.body.imageIdentifier.trim();
+        var name = req.body.name.trim();
+        var vType = req.body.vType.trim();
+
+        if(typeof providerId === 'undefined' || providerId.length === 0){
+            res.send(500,"Please Enter ProviderId.");
+            return;
+        }
+        if(typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0){
+            res.send(500,"Please Enter ImageIdentifier.");
+            return;
+        }
+        if(typeof name === 'undefined' || name.length === 0){
+            res.send(500,"Please Enter Name.");
+            return;
+        }
+        if(typeof vType === 'undefined' || vType.length === 0){
+            res.send(500,"Please Enter VirtualizationType.");
+            return;
+        }
+
         var vmimageData={
         	id: 22,
-        	providerId: req.body.providerId,
-        	imageIdentifier: req.body.imageIdentifier,
-        	name: req.body.name,
-        	vType: req.body.vType
+        	providerId: providerId,
+        	imageIdentifier: imageIdentifier,
+        	name: name,
+        	vType: vType
     };
-	    Provider.getProviderById(req.body.providerId, function(err, aProvider) {
+	    Provider.getProviderById(providerId, function(err, aProvider) {
 	            if (err) {
 	                logger.error(err);
 	                res.send(500, errorResponses.db.error);
@@ -62,7 +85,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 
     app.get('/vmimages/:imageId', function(req, res) {
     	logger.debug("Enter get() for /vmimages/%s",req.params.imageId);
-        VMImage.getImageById(req.params.imageId, function(err, anImage) {
+        var imageId = req.params.imageId.trim();
+        if(typeof imageId === 'undefined' || imageId.length === 0){
+            res.send(500,"Please Enter ImageId.");
+            return;
+        }
+        VMImage.getImageById(imageId, function(err, anImage) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
@@ -79,15 +107,41 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 
     app.post('/vmimages/:imageId/update', function(req, res) {
     	logger.debug("Enter Post() for /vmimages/%s/update",req.params.imageId);
+        var imageId = req.params.imageId.trim();
+        var providerId = req.body.providerId.trim();
+        var imageIdentifier = req.body.imageIdentifier.trim();
+        var name = req.body.name.trim();
+        var vType = req.body.vType.trim();
+
+        if(typeof providerId === 'undefined' || providerId.length === 0){
+            res.send(500,"Please Enter ProviderId.");
+            return;
+        }
+        if(typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0){
+            res.send(500,"Please Enter ImageIdentifier.");
+            return;
+        }
+        if(typeof name === 'undefined' || name.length === 0){
+            res.send(500,"Please Enter Name.");
+            return;
+        }
+        if(typeof vType === 'undefined' || vType.length === 0){
+            res.send(500,"Please Enter VirtualizationType.");
+            return;
+        }
+        if(typeof imageId === 'undefined' || imageId.length === 0){
+            res.send(500,"Please Enter ImageId.");
+            return;
+        }
         var vmimageData={
         	id: 22,
-        	providerId: req.body.providerId,
-        	imageIdentifier: req.body.imageIdentifier,
-        	name: req.body.name,
-        	vType: req.body.vType
+        	providerId: providerId,
+        	imageIdentifier: imageIdentifier,
+        	name: name,
+        	vType: vType
     	};
         logger.debug("image >>>>>>>>>>>>");
-        VMImage.updateImageById(req.params.imageId, vmimageData, function(err, updateCount) {
+        VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
@@ -106,7 +160,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 
     app.delete('/vmimages/:imageId', function(req, res) {
     	logger.debug("Enter delete() for /vmimages/%s",req.params.imageId);
-        blueprintsDao.getBlueprintByImageId(req.params.imageId, function(err, data) {
+        var imageId = req.params.imageId.trim();
+        if(typeof imageId === 'undefined' || imageId.length === 0){
+            res.send(500,"Please Enter ImageId.");
+            return;
+        }
+        blueprintsDao.getBlueprintByImageId(imageId, function(err, data) {
                 if (err) {
                     logger.error('Failed to getBlueprint. Error = ', err);
                     res.send(500);

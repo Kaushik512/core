@@ -11,17 +11,42 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
 
 	app.post('/providers', function(req, res) {
-        logger.debug("Enter post() for /providers. %s",req.body.regions);
+        logger.debug("Enter post() for /providers.");
+        var accessKey = req.body.accessKey.trim();
+        var secretKey = req.body.secretKey.trim();
+        var name = req.body.name.trim();
+        var providerType = req.body.providerType.trim();
+        var regions = req.body.regions;
+        if(typeof regions === 'undefined' || regions.length === 0){
+            res.send(500,"Please Enter Resgions.");
+            return;
+        }
+        if(typeof accessKey === 'undefined' || accessKey.length === 0){
+            res.send(500,"Please Enter AccessKey.");
+            return;
+        }
+        if(typeof secretKey === 'undefined' || secretKey.length === 0){
+            res.send(500,"Please Enter SecretKey.");
+            return;
+        }
+        if(typeof name === 'undefined' || name.length === 0){
+            res.send(500,"Please Enter Name.");
+            return;
+        }
+        if(typeof providerType === 'undefined' || providerType.length === 0){
+            res.send(500,"Please Enter ProviderType.");
+            return;
+        }
         var providerData= {
         	id: 9,
-        	accessKey: req.body.accessKey,
-        	secretKey: req.body.secretKey,
-        	name: req.body.name,
-        	providerType: req.body.providerType,
-        	regions: req.body.regions
+        	accessKey: accessKey,
+        	secretKey: secretKey,
+        	name: name,
+        	providerType: providerType,
+        	regions: regions
     };
-        logger.debug("<<<<<<<<<<<<<<<<<<<<< ",typeof req.body.regions);
-        ProviderUtil.saveAwsPemFiles(req.body.regions,function(err,flag){
+        //logger.debug("<<<<<<<<<<<<<<<<<<<<< ",typeof req.body.regions);
+        ProviderUtil.saveAwsPemFiles(regions,function(err,flag){
             if(flag){
                 Provider.createNew(providerData, function(err, provider) {
                     if (err) {
@@ -55,7 +80,12 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
     app.get('/providers/:providerId', function(req, res) {
     	logger.debug("Enter get() for /providers/%s",req.params.providerId);
-        Provider.getProviderById(req.params.providerId, function(err, aProvider) {
+        var providerId = req.params.providerId.trim();
+        if(typeof providerId === 'undefined' || providerId.length === 0){
+            res.send(500,"Please Enter ProviderId.");
+            return;
+        }
+        Provider.getProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
@@ -72,12 +102,44 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
     app.post('/providers/:providerId/update', function(req, res) {
     	logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
+
+        var accessKey = req.body.accessKey.trim();
+        var secretKey = req.body.secretKey.trim();
+        var name = req.body.name.trim();
+        var providerType = req.body.providerType.trim();
+        var regions = req.body.regions;
+        var providerId = req.params.providerId.trim();
+        if(typeof providerId === 'undefined' || providerId.length === 0){
+            res.send(500,"Please Enter ProviderId.");
+            return;
+        }
+        if(typeof regions === 'undefined' || regions.length === 0){
+            res.send(500,"Please Enter Resgions.");
+            return;
+        }
+        if(typeof accessKey === 'undefined' || accessKey.length === 0){
+            res.send(500,"Please Enter AccessKey.");
+            return;
+        }
+        if(typeof secretKey === 'undefined' || secretKey.length === 0){
+            res.send(500,"Please Enter SecretKey.");
+            return;
+        }
+        if(typeof name === 'undefined' || name.length === 0){
+            res.send(500,"Please Enter Name.");
+            return;
+        }
+        if(typeof providerType === 'undefined' || providerType.length === 0){
+            res.send(500,"Please Enter ProviderType.");
+            return;
+        }
+
         var providerData={
-        accessKey: req.body.accessKey,
-        secretKey: req.body.secretKey,
-        name: req.body.name,
-        providerType: req.body.providerType,
-        regions: req.body.regions
+        accessKey: accessKey,
+        secretKey: secretKey,
+        name: name,
+        providerType: providerType,
+        regions: regions
     	};
         logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
         Provider.updateProviderById(req.params.providerId, providerData, function(err, updateCount) {
@@ -99,7 +161,11 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
     app.delete('/providers/:providerId', function(req, res) {
     	logger.debug("Enter delete() for /providers/%s",req.params.providerId);
-    	var providerId = req.params.providerId;
+    	var providerId = req.params.providerId.trim();
+        if(typeof providerId === 'undefined' || providerId.length === 0){
+            res.send(500,"Please Enter ProviderId.");
+            return;
+        }
         
         VMImage.getImageByProviderId(providerId, function(err, anImage) {
             if (err) {
