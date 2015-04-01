@@ -103,7 +103,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 return;
             }
             if (anImage) {
-                res.send(403,"Provider already used by an Image.To delete provider please delete respective Image first.");
+                res.send(403,"Provider already used by Some Images.To delete provider please delete respective Images first.");
             	return;
             }
 

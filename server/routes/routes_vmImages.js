@@ -3,6 +3,7 @@ var EC2 = require('../lib/ec2.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
 var appConfig = require('../config/app_config');
+var blueprintsDao = require('../model/dao/blueprints');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc){
 	app.all('/vmimages/*',sessionVerificationFunc);
@@ -105,20 +106,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 
     app.delete('/vmimages/:imageId', function(req, res) {
     	logger.debug("Enter delete() for /vmimages/%s",req.params.imageId);
-        VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
-            if (err) {
-                logger.error(err);
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (deleteCount) {
-            	logger.debug("Exit delete() for /vmimages/%s",req.params.imageId);
-                res.send({
-                    deleteCount: deleteCount
-                });
-            } else {
-                res.send(400);
-            }
+        blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
+                if (err) {
+                    logger.error('Failed to getBlueprint. Error = ', err);
+                    res.send(500);
+                    return;
+                }
+                if (data) {
+                    res.send(403,"Image already used by some Blueprints.To delete Image please delete respective Blueprints first.");
+                    return;
+                }
+            VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
+                if (err) {
+                    logger.error(err);
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (deleteCount) {
+                	logger.debug("Exit delete() for /vmimages/%s",req.params.imageId);
+                    res.send({
+                        deleteCount: deleteCount
+                    });
+                } else {
+                    res.send(400);
+                }
+            });
         });
     });
 

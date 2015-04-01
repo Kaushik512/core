@@ -430,6 +430,22 @@ var BlueprintsDao = function() {
             }
         });
     }
+
+    this.getBlueprintByImageId = function(imageId, callback) {
+        logger.debug("Enter getBlueprintByImageId(%s)", imageId);
+        Blueprint.find({
+            "imageId": imageId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed get Blueprint >> %s", imageId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintByImageId (ID = %s)", imageId);
+            callback(null, data);
+
+        });
+    };
 }
 
 module.exports = new BlueprintsDao();
