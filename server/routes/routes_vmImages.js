@@ -123,14 +123,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     });
 
 	app.post('/vmimages/availability',function(req,res){
-		logger.debug("Enter post() for /vmimages: %s",req.body.imageid);
+		logger.debug("Enter post() for /vmimages: %s",req.body.imageId);
 		
 		var ec2 = new EC2({
 			"access_key": req.body.accessKey,
 			"secret_key": req.body.secretKey,
 			"region"    : req.body.region
 		});
-		ec2.checkImageAvailability(req.body.imageid,function(err,data){
+		ec2.checkImageAvailability(req.body.imageId,function(err,data){
 			if(err){
 				logger.debug("Unable to describeImages from AWS.",err);
 				res.send("Unable to Describe Images from AWS.",500);
@@ -149,5 +149,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     app.get('/vmimages/regions/list', function(req, res) {
         logger.debug("Enter /vmimages/regions/list");
         res.send(appConfig.aws.regions);
+    });
+
+    app.get('/vmimages/os/type/all/list', function(req, res) {
+        logger.debug("Enter /vmimages/regions/list");
+        res.send(appConfig.aws.operatingSystems);
     });
 }

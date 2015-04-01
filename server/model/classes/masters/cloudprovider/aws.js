@@ -9,7 +9,11 @@ var providerTypeSchema = require('./providerTypeSchema');
 var awsProviderSchema = providerTypeSchema.extend({
     accessKey: String,
     secretKey: String,
-    regions: []
+    regions: {
+        type: [],
+        required: true,
+        trim: true
+    }
 });
 
 // Instance Method 

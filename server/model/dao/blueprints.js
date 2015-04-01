@@ -32,6 +32,12 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.envIdValidator
     },
+    imageId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.imageIdValidator
+    },
     iconpath: {
         type: String,
         trim: true
@@ -286,6 +292,7 @@ var BlueprintsDao = function() {
             bgId: blueprintData.bgId,
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
+            imageId: blueprintData.imageId,
             name: blueprintData.name,
             appUrls: blueprintData.appUrls,
             iconpath: blueprintData.iconpath,

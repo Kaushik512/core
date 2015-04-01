@@ -83,15 +83,15 @@ var config = {
                 'c3.4xlarge','c3.8xlarge','hs1.8xlarge']
         }],
 
-        regions:[{
+        regions:[/*{
             
                 region_name: "US East (N. Virginia)",
                 region: "us-east-1"
-            },
+            },*/
             {
                 region_name: "US West (Oregon)",
                 region: "us-west-2"
-            },
+            }/*,
             {
                 region_name: "US West (N. California)",
                 region: "us-west-1"
@@ -119,6 +119,21 @@ var config = {
             {
                 region_name: "South America (Sao Paulo)",
                 region: "sa-east-1"
+            }*/],
+            operatingSystems:[{
+            
+                os_name: "Cent OS",
+                osType: "linux"
+            },
+            {
+            
+                os_name: "Windows 2008",
+                osType: "windows"
+            },
+            {
+            
+                os_name: "Ubuntu",
+                osType: "linux"
             }]
     },
     db: {
