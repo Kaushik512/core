@@ -56,6 +56,7 @@ var taskSchema = new Schema({
     taskConfig: Schema.Types.Mixed,
 
     lastRunTimestamp: Number,
+    timestampEnded: Number,
 });
 
 // instance method :-  
@@ -96,10 +97,12 @@ taskSchema.methods.execute = function(userName, callback, onComplete) {
         taskExecuteData.taskType = task.taskType;
         callback(null, taskExecuteData);
     }, function(err, status) {
+        self.timestampEnded = new Date().getTime();
+        self.save();
         if (typeof onComplete === 'function') {
             onComplete(err, status);
         }
-    });
+   });
 };
 
 // Get Nodes list
@@ -131,12 +134,11 @@ taskSchema.statics.createNew = function(taskData, callback) {
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
         console.log(taskData.attributesjson != '');
-        if(taskData.attributesjson != '')
-            {
-                
-                attrJson = JSON.parse(taskData.attributesjson);
-                logger.debug('attrJson:' + JSON.stringify(attrJson));
-            }
+        if (taskData.attributesjson != '') {
+
+            attrJson = JSON.parse(taskData.attributesjson);
+            logger.debug('attrJson:' + JSON.stringify(attrJson));
+        }
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
@@ -155,7 +157,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
     var that = this;
     var task = new that(taskObj);
     logger.debug('saved task:' + JSON.stringify(task));
-   
+
     task.save(function(err, data) {
         if (err) {
             logger.error(err);
@@ -253,7 +255,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
-         var attrJson = JSON.parse(taskData.attributesjson);
+        var attrJson = JSON.parse(taskData.attributesjson);
         logger.debug('attrJson:' + JSON.stringify(attrJson));
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,

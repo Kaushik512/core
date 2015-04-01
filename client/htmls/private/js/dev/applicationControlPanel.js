@@ -69,15 +69,25 @@ $(function() {
         $trHistoryRow.append($tdTime);
         var $aLogs = $('<a class="moreinfoBuild" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>');
         $aLogs.click(function(e) {
-            var $modal = $('#buildLogsModel');
+            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+            var $modal = $('#appCardBuildResult');
+
             $modal.find('.loadingContainer').show();
             $modal.find('.errorMsgContainer').hide();
             $modal.find('.outputArea').hide();
             $modal.modal('show');
             $.get('../jenkins/' + buildHistory.jenkinsServerId + '/jobs/' + buildHistory.jobName + '/builds/' + buildHistory.jobNumber + '/output', function(logs) {
+
+                var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
+                $taskExecuteTabsHeaderContainer.append($liHeader);
+                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                $tabContent.find('.taskLogArea').empty().append(logs.output);
+                $taskExecuteTabsContent.append($tabContent);
+                $liHeader.find('a').click();
                 $modal.find('.loadingContainer').hide();
                 $modal.find('.errorMsgContainer').hide();
-                $modal.find('.outputArea').append(logs.output).show();
+                $modal.find('.outputArea').show();
             }).fail(function(jxhr) {
                 $modal.find('.loadingContainer').hide();
                 $modal.find('.outputArea').hide();
@@ -356,7 +366,6 @@ $(function() {
                 }
                 pollJob();
 
-                console.log(data);
             }
 
         }).fail(function(jxhr) {
