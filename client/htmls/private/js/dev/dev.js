@@ -1115,7 +1115,8 @@
                      $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
 
-                     $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 15) + '</td>');
+                     $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 25) + '</td>');
+
                      $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
                      var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
 
