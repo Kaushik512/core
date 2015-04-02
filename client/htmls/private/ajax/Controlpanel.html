@@ -811,9 +811,12 @@ $('.startstoptoggler').click(startAndStopToggler);
 
   if (data.docker != null) {
       //docker image out of circle.
+    if(data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null)
+    {
       var $componentList = $('.instance-bootstrap-list');
       var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">');
       $componentList.append($dockerStatus);
+    }
   }
 
   

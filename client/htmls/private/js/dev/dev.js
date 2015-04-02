@@ -1102,8 +1102,11 @@
 
                          //var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
                          //Updated from above to move docker image out of circle.
-                         var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
-                         $divComponentListContainer.append($dockerStatus);
+                          if(data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null)
+                         {
+                            var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+                            $divComponentListContainer.append($dockerStatus);
+                        }
                      }
 
 
