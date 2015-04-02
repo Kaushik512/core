@@ -1322,7 +1322,9 @@
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
 
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="buildLogsModel" class="modal fade" data-backdrop="static">
+
+<!-- Card Modal starts here -->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="deployResultModel" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1336,15 +1338,45 @@
             <div class="modal-body no-padding">
                 <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                 <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
-                <div class="outputArea"></div>
+                <form class="smart-form outputArea" action="" novalidate="novalidate">
+                   <div class="taskListArea" style=" padding-top: 10px;text-align: center;">
+                    <select id="logTaskList" class="taskList"></select>
+                  </div>
+                   <div class="deployLogContainer">
+                   <div class="instanceLoadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                   <div class="instanceErrorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div>  
+                    <fieldset style="padding-top:7px !important;" class="instanceLogsOutputContainer">
+                        <section>
 
+                            <div role="content">
+                                <div class="widget-body">
+
+                                    <ul id="deployTaskExecuteTabsHeader" class="nav nav-tabs bordered">
+
+                                    </ul>
+
+                                    <div id="deployTaskExecuteTabsContent" class="tab-content padding-10">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+                    </fieldset>
+                  </div>  
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
+<a id="showDeployLogsLink" style="display:none"></a>
 
 
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="deployResultModel" class="modal fade" data-backdrop="static">
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="deployConfiguretModel" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
