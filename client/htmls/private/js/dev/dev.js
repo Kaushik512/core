@@ -2351,7 +2351,7 @@
 
                                          $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                                         var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                                         var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
 
                                          $taskExecuteTabsContent.append($tabContent);
 
@@ -2378,7 +2378,7 @@
                                  } else {
                                      var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
                                      $taskExecuteTabsHeaderContainer.append($liHeader);
-                                     var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                                     var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
                                      $taskExecuteTabsContent.append($tabContent);
 
                                      function pollJob() {

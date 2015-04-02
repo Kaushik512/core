@@ -7414,3 +7414,28 @@ width:51.2%;
     margin-top: 20px;
     margin-left: 374px;
 }
+.taskLOGS{
+height:400px !important;
+overflow-y:auto;
+overflow-x:hidden;
+padding-left: 20px;
+word-break:break-word;
+}
+.chefLOGS{
+    height:400px !important;
+    overflow-y: auto;
+    overflow-x:hidden;
+    word-break:break-word;
+}
+.projectRepo{
+    margin-top: 10px;
+}
+.jenkinsChefModal{
+    height:520px;
+}
+.jenkinsChefModalApp{
+    height:570px;
+}
+.imgMargin{
+    margin-left: -12px;
+}
