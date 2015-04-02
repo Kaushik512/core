@@ -811,9 +811,12 @@ $('.startstoptoggler').click(startAndStopToggler);
 
   if (data.docker != null) {
       //docker image out of circle.
+    if(data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null)
+    {
       var $componentList = $('.instance-bootstrap-list');
       var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">');
       $componentList.append($dockerStatus);
+    }
   }
 
   
@@ -1230,7 +1233,7 @@ $('.startstoptoggler').click(startAndStopToggler);
         for (var k = 0; k < data.appUrls.length; k++) {
           var url = data.appUrls[k].url;
           url = url.replace('$host',data.instanceIP);
-          var anchor = "<a class='app-url marginForURLCP' data-appUrlId='"+data.appUrls[k]._id+"' href='"+url+"'' target='_blank' title='"+data.appUrls[k].name+"'>"+data.appUrls[k].name+"</a>";
+          var anchor = "<span class='marginForURLCP'><a class='app-url ' data-appUrlId='"+data.appUrls[k]._id+"' href='"+url+"'' target='_blank' title='"+data.appUrls[k].name+"'>"+data.appUrls[k].name+"</a></span>";
             $cardAppUrlListContanier.last().append(anchor);
             var $form = $('#appUrlTemplateForm').clone(true);
             $form.find('.appNameLabel').html(data.appUrls[k].name);
@@ -1813,7 +1816,7 @@ $('.formSubmit').click(function(e){
                                   for (var k = 0; k < data.appUrls.length; k++) {
                                       var url = data.appUrls[k].url;
                                       url = url.replace('$host', data.instanceIP);
-                                      var anchor = "<a class='app-url marginForURLCP' data-appUrlId='" + data.appUrls[k]._id + "' href='" + url + "'' target='_blank' title='" + data.appUrls[k].name + "'>" + data.appUrls[k].name + "</a>";
+                                      var anchor = "<span class='marginForURLCP'><a class='app-url ' data-appUrlId='" + data.appUrls[k]._id + "' href='" + url + "'' target='_blank' title='" + data.appUrls[k].name + "'>" + data.appUrls[k].name + "</a></span>";
                                       $cardAppUrlListContanier.last().append(anchor);
                                       var $form = $('#appUrlTemplateForm').clone(true);
                                       $form.find('.appNameLabel').html(data.appUrls[k].name);

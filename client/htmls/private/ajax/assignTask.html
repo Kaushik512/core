@@ -253,8 +253,10 @@ $(document).ready(function() {
             $('.inputTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
             $('#taskType').val(taskData.taskType);
-            if(taskData.taskConfig.attributesjson != '')
-            $('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
+            if(taskData.taskConfig.attributesjson != '' && taskData.taskConfig.attributesjson != null)
+                {
+                    $('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
+                }
            // $('#attrtextarea').setValue(JSON.stringify(taskData.taskConfig.attributesjson));
         }
 
