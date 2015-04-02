@@ -259,6 +259,16 @@ ApplicationSchema.methods.getDeployHistory = function(callback) {
     });
 };
 
+ApplicationSchema.methods.getDeployHistoryById = function(id, callback) {
+    DeployHistory.getHistoryById(id, function(err, history) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, history);
+    });
+};
+
 
 ApplicationSchema.methods.getNodes = function(callback) {
     var self = this;

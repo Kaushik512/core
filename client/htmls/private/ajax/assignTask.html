@@ -66,10 +66,10 @@
                     </div>
                 </div>
             </div>
-            <div class="smart-form" style="margin-left:15px">
+            <div class="smart-form" style="margin-top:15px;margin-left:15px">
                 <label>
                     <img src="img/templateicons/Select-nodes---deployment.png">
-                    <strong>Attribute (JSON) <span style="color:red" id="attrmessage"></span></strong>
+                    <strong>Cookbook Attributes (JSON) <span style="color:red" id="attrmessage"></span></strong>
                 </label>
                 <div class="row">
                     <div class="col-lg-9">
@@ -253,6 +253,7 @@ $(document).ready(function() {
             $('.inputTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
             $('#taskType').val(taskData.taskType);
+            if(taskData.taskConfig.attributesjson != '')
             $('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
            // $('#attrtextarea').setValue(JSON.stringify(taskData.taskConfig.attributesjson));
         }

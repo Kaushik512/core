@@ -30,6 +30,11 @@ chefTaskSchema.methods.getNodes = function() {
 // Instance Method :- run task
 chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
     var self = this;
+    //self.attributesjson = JSON.stringify(self.attributesjson);
+    var parsedAttrJson = JSON.stringify(self.attributesjson);
+    if(parsedAttrJson == '\"\"'){
+        parsedAttrJson = '';
+    }
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
         if (typeof onExecute === 'function') {
@@ -151,8 +156,11 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             hostedChefUrl: chefDetails.url,
                         });
                         console.log('instance IP ==>', instance.instanceIP);
-                        self.attributesjson = JSON.stringify(self.attributesjson);
-                        console.log('>>>>> Task Config : ' + self.attributesjson);
+                       // if(self.attributesjson.toString().indexOf('"\\') <= 0)
+                           // self.attributesjson = JSON.stringify(self.attributesjson);
+                        
+                        
+                        console.log('>>>>> Task Config : ' + parsedAttrJson);
                         var chefClientOptions = {
                             privateKey: decryptedCredentials.pemFileLocation,
                             username: decryptedCredentials.username,
@@ -160,7 +168,7 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             instanceOS: instance.hardware.os,
                             port: 22,
                             runlist: self.runlist, // runing service runlist
-                            jsonAttributes: self.attributesjson,
+                            jsonAttributes: parsedAttrJson,
                             overrideRunlist: true
                         }
                         if (decryptedCredentials.pemFileLocation) {
