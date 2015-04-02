@@ -330,6 +330,7 @@
                      $("#addInstanceForm").submit(function(e) {
                          var ipAddresRegExp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
                          var hostname = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+                         var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
                          var $spinner = $('#nodeimportipspinner').addClass('hidden');
                          var $result = $('#nodeimportipresultmsg').addClass('hidden');
                          var reqBody = {};
@@ -342,6 +343,7 @@
                          };
                          var appUrls = [];
                          var $appURLContainers = $('.applicationURLContainer');
+                         var isAppUrlValid=true;
                          $appURLContainers.each(function() {
                              $this = $(this);
                              var appName = $this.find('.appName').val();
@@ -351,9 +353,17 @@
                                      name: appName,
                                      url: appURL
                                  });
+                                 if(!regexpURL.test(appURL)){                                   
+                                    isAppUrlValid=false;
+                                  }
                              }
 
                          });
+                         if(!isAppUrlValid){
+                            alert('Please enter a Valid URL');
+                            e.preventDefault();
+                            return false;
+                         }
                          reqBody.appUrls = appUrls;
 
 
