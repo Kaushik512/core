@@ -49,7 +49,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     var count =0;
     if(keyPairs.length > 0){
         logger.debug("Inside if>>>> ");
-            for(var i in keyPairs){
+            for(var i=0;i< keyPairs.length;i++){
             var keyPairObj = keyPairs[i];
             logger.debug("Keypair:>>>>>>>>>>>>>>>>>>> ",JSON.stringify(keyPairObj));
             keyPairObj.providerId = providerId;
@@ -149,7 +149,7 @@ awsKeyPairSchema.statics.getAWSKeyPairByProviderId = function(providerId, callba
         if (aKeyPair.length) {
             callback(null, aKeyPair);
         } else {
-            callback(null, null);
+            callback(null, []);
         }
 
     });

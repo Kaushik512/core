@@ -94,7 +94,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
                         if(keyPair){
                             var dommyProvider = {
-                                _id: keyPair[0].providerId,
+                                _id: providers[i]._id,
                                 id: 9,
                                 accessKey: providers[i].accessKey,
                                 secretKey: providers[i].secretKey,

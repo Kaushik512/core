@@ -13,7 +13,7 @@ var ProviderUtil = function(){
 			if(exists){
 				logger.debug("Directory already exists.");
 				var myFiles = req.files;
-		        for(var i in myFiles){
+		        for(var i=0;i< myFiles.length;i++){
 		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
 		        }
 		        fs.readFile(req.files.fileName.path, function (err, data) {
@@ -38,7 +38,7 @@ var ProviderUtil = function(){
 					logger.debug("Error happen while creating directory.");
 					}
 					var myFiles = req.files;
-		        for(var i in myFiles){
+		        for(var i=0;i< myFiles.length;i++){
 		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
 		        }
 		        fs.readFile(req.files.fileName.path, function (err, data) {
