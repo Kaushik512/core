@@ -85,14 +85,6 @@
                     <label for="name" class="font-size12">GIT Repo URL:</label>&nbsp;&nbsp;
                     <label for="" class="font-size12 gitUrlLabel">https://github.com/RLIndia/D4D</label>
                   </div>
-                  <div class="col-lg-12">
-                    <label for="name" class="font-size12">Username :</label>&nbsp;&nbsp;
-                    <label for="" class="font-size12 gitUsernameLabel"></label>
-                  </div>
-                  <div class="col-lg-12">
-                    <label for="name" class="font-size12">Password :</label>&nbsp;&nbsp;
-                    <label for="" class="font-size12 gitPasswordLabel"></label>
-                  </div>
                 </form>
               </div>
             </div>
@@ -534,13 +526,12 @@
                       <div class="widget-body">
                           <div style="min-height:300px;padding-top:50px" class="widget-main">
                               <div class="col-md-12 table-responsive">
-                                  <table id="appInstancesTable" cellpadding="5px" width="100%" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                  <table id="appInstancesTable" cellpadding="5px" width="100%" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter">
                                       <thead>
                                           <tr class="rowCustomStyle">    
                                               <td>S.No</td>
                                               <td>Name</td>
                                               <td>Environment</td>
-                                            <!--  <td>Nodes</td> -->
                                               <td>Actions</td>
                                           </tr>
                                       </thead>
@@ -913,20 +904,20 @@
 <div class="modal fade" id="modaladdAppInstances" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-          <form role="form" id="" autocomplete="off">
+          <form role="form" id="appInstanceForm" autocomplete="off">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     X
                 </button>
                 <h4 class="modal-title">
-                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add an AppInstance
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add AppInstance
                 </h4>
             </div>
            
             <div class="modal-body">
                 <div class="row" style="margin:0px">
                   <div class="col-lg-6" style="padding-left:0px;">
-                    <label for="name">Name:
+                    <label for="name">Name:<span style="color:red">*</span>
                     </label>
                     <input id="applicationInstanceNameInput" class="form-control" type="text" style="height:36px;" placeholder="Example : Prod_AUS">
                   </div>
@@ -950,7 +941,7 @@
                         <div id="CollapseChefCookbookrunlistParameteraddApp" class="panel-collapse collapse in">
                           <form action="">
                             <div class="row " style="margin:0px;">
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 projectRepo">
                                 <label for="name">Name:
                                 </label>
                                 <input id="applicationWorkflowNameInput" class="form-control" type="text" style="height:36px;" placeholder="">
@@ -966,8 +957,8 @@
 
                                     <section class="col col-6">
                                         <label class="label">
-                                          <img src="img/templateicons/Order-run-list---deployment.png">
-                                            <strong>Choose TaskList</strong>
+                                          <img class="imgMargin" src="img/templateicons/Order-run-list---deployment.png">
+                                            <strong>Choose Tasklist</strong>
                                         </label>
                                         <div class="row">
                                             <div class="col col-10" style="padding-left:0px;padding-right:0px">
@@ -994,7 +985,7 @@
                                     <section class="col col-6">
                                         <label class="label">
                                             <img src="img/templateicons/Order-run-list---deployment.png">
-                                            <strong>Order TaskList</strong>
+                                            <strong>Tasklists</strong>
                                         </label>
                                         <div class="row">
                                             <div class="col col-10" style="padding-right:0px">
@@ -1290,12 +1281,10 @@
                     <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
                 </h4>
             </div>
-            <div class="modal-body no-padding">
+            <div class="modal-body no-padding jenkinsChefModal">
                 <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                 <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
-                <form class="smart-form outputArea" action="" novalidate="novalidate">
-                    <fieldset style="padding-top:7px !important;">
-                        <section>
+                <form class="outputArea" action="" novalidate="novalidate">
 
                             <div role="content">
                                 <div class="widget-body">
@@ -1308,12 +1297,9 @@
                                     </div>
                                 </div>
                             </div>
-
-                        </section>
-                    </fieldset>
                     <footer>
-                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        <button class="btn btn-primary pull-right" style="margin-right:10px;margin-top:10px;" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Close
                         </button>
                     </footer>
                 </form>
@@ -1335,18 +1321,19 @@
                     <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
                 </h4>
             </div>
-            <div class="modal-body no-padding">
+            <div class="modal-body no-padding jenkinsChefModalApp">
                 <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                 <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
-                <form class="smart-form outputArea" action="" novalidate="novalidate">
-                   <div class="taskListArea" style=" padding-top: 10px;text-align: center;">
-                    <select id="logTaskList" class="taskList"></select>
+                <form class="outputArea" action="" novalidate="novalidate">
+                   <div class="taskListArea" style="padding-top: 10px;text-align:center">
+                    <label>Select Tasks:</label>
+                    <select id="logTaskList" class="taskList" style="width:25%;"></select>
                   </div>
                    <div class="deployLogContainer">
                    <div class="instanceLoadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                    <div class="instanceErrorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div>  
-                    <fieldset style="padding-top:7px !important;" class="instanceLogsOutputContainer">
-                        <section>
+                    <div style="padding-top:7px !important;" class="instanceLogsOutputContainer">
+                        
 
                             <div role="content">
                                 <div class="widget-body">
@@ -1360,12 +1347,12 @@
                                 </div>
                             </div>
 
-                        </section>
-                    </fieldset>
+                        
+                    </div>
                   </div>  
                     <footer>
-                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        <button class="btn btn-primary pull-right" style="margin-right:10px;margin-top:10px" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Close
                         </button>
                     </footer>
                 </form>
@@ -1553,7 +1540,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $(".chooseEnvironment").select2();
+  $('#logTaskList').select2();
 
+});
+
+$('.AddBTN').click(function(e){
+    $('#appInstanceForm').trigger("reset");
 });
 
 var hasAppInstancePermission=false;
@@ -1563,6 +1555,8 @@ if(haspermission('application_instance','create')){
 if(!hasAppInstancePermission){
   $('.AddBTN').addClass('hidden');
 }
+
+
 
 
 

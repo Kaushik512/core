@@ -18,7 +18,7 @@ var imageSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        validate: schemaValidator.providerIdValidator
+        validate: schemaValidator.idValidator
     },
     imageIdentifier: {
         type: String,
@@ -31,6 +31,11 @@ var imageSchema = new Schema({
         required: true,
         trim: true,
         validate: schemaValidator.imageNameValidator
+    },
+    osType: {
+        type: String,
+        required: true,
+        trim: true
     },
     vType: {
         type: String,

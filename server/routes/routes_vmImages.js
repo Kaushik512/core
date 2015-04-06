@@ -1,13 +1,14 @@
 var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
-var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
+var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var appConfig = require('../config/app_config');
 var blueprintsDao = require('../model/dao/blueprints');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc){
 	app.all('/vmimages/*',sessionVerificationFunc);
 
+// Create Image for a AWS Provider.
 	app.post('/vmimages', function(req, res) {
         logger.debug("Enter post() for /vmimages");
 
@@ -40,7 +41,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         	name: name,
         	vType: vType
     };
-	    Provider.getProviderById(providerId, function(err, aProvider) {
+	    AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
 	            if (err) {
 	                logger.error(err);
 	                res.send(500, errorResponses.db.error);
@@ -66,6 +67,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     	});
     });
 
+// Return list of all Images.
     app.get('/vmimages', function(req, res) {
     	logger.debug("Enter get() for /vmimages");
         VMImage.getImages(function(err, images) {
@@ -83,6 +85,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         });
     });
 
+// Return a particular Image for id.
     app.get('/vmimages/:imageId', function(req, res) {
     	logger.debug("Enter get() for /vmimages/%s",req.params.imageId);
         var imageId = req.params.imageId.trim();
@@ -105,6 +108,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         });
     });
 
+// Update a paricular Image values.
     app.post('/vmimages/:imageId/update', function(req, res) {
     	logger.debug("Enter Post() for /vmimages/%s/update",req.params.imageId);
         var imageId = req.params.imageId.trim();
@@ -158,6 +162,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         });
     });
 
+// Delete a particular Image from DB.
     app.delete('/vmimages/:imageId', function(req, res) {
     	logger.debug("Enter delete() for /vmimages/%s",req.params.imageId);
         var imageId = req.params.imageId.trim();
@@ -194,6 +199,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         });
     });
 
+// Return AMI from AWS w.r.t. amiid
 	app.post('/vmimages/availability',function(req,res){
 		logger.debug("Enter post() for /vmimages: %s",req.body.imageId);
 		
@@ -213,16 +219,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 		});
 	});
 
+// Return available instance sizes.
 	app.get('/vmimages/instancesizes/all/list', function(req, res) {
     	logger.debug("Enter get() for /vmimages/instancesizes");
         res.send(appConfig.aws.virtualizationType);
     });
 
+// Return available regions.
     app.get('/vmimages/regions/list', function(req, res) {
         logger.debug("Enter /vmimages/regions/list");
         res.send(appConfig.aws.regions);
     });
 
+// Return available os types.
     app.get('/vmimages/os/type/all/list', function(req, res) {
         logger.debug("Enter /vmimages/regions/list");
         res.send(appConfig.aws.operatingSystems);

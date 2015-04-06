@@ -56,9 +56,9 @@
                                   Control Panel
                                   </a>
                                </div>
-                               <a class="btn pull-right btn-danger right-button" title="Remove AppCard" id="removeAppCard" >
+                               <!-- <a class="btn pull-right btn-danger right-button" title="Remove AppCard" id="removeAppCard" >
                                 <i class="fa fa-trash-o"></i>
-                            </a>
+                            </a> -->
                             </div>
                             </div>
                           </div>
@@ -77,7 +77,7 @@
 <div class="modal fade" id="modaladdAppCard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-          <form role="form" id="" autocomplete="off">
+          <form role="form" id="appCardForm" autocomplete="off">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     X
@@ -91,13 +91,13 @@
               <form action="" id="checkout-form">
                 <div class="row" style="margin:0px">
                   <div class="col-lg-6" style="padding-left:0px;">
-                    <label for="name">Application Name:
+                    <label for="name">Application Name:<span style="color:Red;" class="control-label">&nbsp;*</span>
                     </label>
                     <input id="applicationNameInput" class="form-control" type="text" autofocus>
                   </div>
                   <div class="col-lg-6">
                     <div class="smart-forms">
-                      <label for="">Application Icon<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                      <label for="">Application Icon</label>
                       <label for="" name="field" class="file">
                           <span class="button btn-primary btn-applicationIcon" style="margin-top: 19px;">Browse</span>
                           <input id="applicationiconInput" type="file" class="gui-file">
@@ -120,7 +120,7 @@
                              <div class="widget-body no-padding">
                                   <form action="" id="checkout-form">
                                     <div class="row" style="margin:0px">
-                                      <div class="col-lg-6">
+                                      <div class="col-lg-6 projectRepo">
                                         <label for="name">Repo URL:
                                           <span style="color:Red;" class="control-label">&nbsp;*</span>
                                         </label>
@@ -130,13 +130,13 @@
                                     <br>
                                     <hr>
                                     <div class="row" style="margin:0px">
-                                      <div class="col-lg-6" style="margin-top:15px">
+                                      <div class="col-lg-6 projectRepo">
                                          <label for="">
                                          Username<span style="color:Red;" class="control-label">&nbsp;*</span>
                                          </label>
                                          <input id="gitusernameaddApp" class="form-control" type="text">
                                       </div>
-                                      <div class="col-lg-6" style="margin-top:15px">
+                                      <div class="col-lg-6 projectRepo">
                                          <label for="">Password <span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                          <input id="gitpasswordaddApp" class="form-control" type="password">
                                       </div>
@@ -157,7 +157,7 @@
                             <form action="" id="checkout-form" class="smart-form">
                               <div class="widget-body no-padding">
                                 <fieldset>
-                                    <section class="col col-6">
+                                    <section class="col col-6 projectRepo">
                                         <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                         <label class="input">
                                             <select id="environmentList" class="chooseAppEnvironment width-100">
@@ -165,7 +165,7 @@
                                             </select>   
                                         </label>
                                     </section>
-                                    <section class="col col-6">
+                                    <section class="col col-6 projectRepo">
                                         <label for="category">Choose Tasks<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                         <label class="input">                                                
                                             <select id="taskList" class="chooseTasks width-100" disabled>
@@ -193,50 +193,50 @@
                           <div class="panel-body">
                             <form action="" id="checkout-form">
                               <div class="widget-body no-padding">
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-crosshairs txt-color-blue" style="font-size:20px"></i>
                                    Funtional Test Result
                                     </label>
                                    <input id="appFunctionalTest" class="form-control" type="url" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-dot-circle-o txt-color-blue" style="font-size:20px"></i>
                                    Performance Test Result</label>
                                    <input id="appPerformanceTest" class="form-control" type="url" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6" style="margin-top:15px">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-compass txt-color-blue" style="font-size:20px"></i>
                                    Non Functional Test Result</label>
                                    <input id="appNonFunctionalTest" class="form-control" type="text" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6" style="margin-top:15px">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-lock txt-color-blue" style="font-size:20px"></i>
                                     Security Test Result</label>
                                    <input id="appSecurityTest" class="form-control" type="text" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6" style="margin-top:15px">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-lemon-o txt-color-blue" style="font-size:20px"></i>
                                     Unit Test Result</label>
                                    <input id="appUnitTest" class="form-control" type="text" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6" style="margin-top:15px">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-bookmark-o txt-color-blue" style="font-size:20px"></i>
                                     Code Coverage</label>
                                    <input id="appCodeCoverage" class="form-control" type="text" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6" style="margin-top:15px">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-barcode txt-color-blue" style="font-size:20px"></i>
                                     Code Analysis</label>
                                    <input id="appCodeAnalysis" class="form-control" type="text" placeholder="URL">
                                 </div>
-                                <div class="col-lg-6" style="margin-top:15px">
+                                <div class="col-lg-6 projectRepo">
                                    <label for="">
                                     <i class="fa fa-fw fa-barcode txt-color-blue" style="font-size:20px"></i>
                                     UI Performace Analysis</label>
@@ -1070,6 +1070,11 @@ $(document).ready(function(){
           $('.Applications a').trigger("click");
       }
     });
+
+  //resetting the form
+  $('.createAPP').click(function(e){
+      $('#appCardForm').trigger("reset");
+  });
 
   //adding permission set for Adding an Application
   var hasApplicationCreatePermission=false;

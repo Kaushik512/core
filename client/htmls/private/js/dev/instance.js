@@ -1042,7 +1042,7 @@
 
          for (var k = 0; k < data.appUrls.length; k++) {
              console.log('adding');
-             var $anchor = "<a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrls[k].name + "' href='" + data.appUrls[k].url + "'' target='_blank' >WSS</a>";
+             var $anchor = "<span class='marginForURL'><a style='font-size:10px;' class='app.url marginForURL' title='" + data.appUrls[k].name + "' href='" + data.appUrls[k].url + "'' target='_blank' >WSS</a></span>";
              $divComponentListContainer.append($anchor);
          }
      }

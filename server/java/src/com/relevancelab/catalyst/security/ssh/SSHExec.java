@@ -193,7 +193,7 @@ public class SSHExec {
 		System.out.println(" jsonAttribute ==> "+ jsonAttributes);
 		if(jsonAttributes != null && !jsonAttributes.isEmpty() && !jsonAttributes.equalsIgnoreCase("null")) {
 			jsonAttributes = StringEscapeUtils.escapeJava(jsonAttributes);
-			cmdWithJsonAttribute +="echo "+jsonAttributes +" > "+jsonFileName + " && sudo "+ cmd +" -j "+jsonFileName;
+			cmdWithJsonAttribute +="echo \""+jsonAttributes +"\" > "+jsonFileName + " && sudo "+ cmd +" -j "+jsonFileName;
 			cmd  = cmdWithJsonAttribute;
 		}
 		System.out.println(cmd);

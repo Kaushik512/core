@@ -124,6 +124,7 @@
 <script>
 
   var UtilityMethods={
+
     initTooltip:function(){
      var $tool=$("[rel=tooltip]");
      if ($tool.length) {
@@ -142,12 +143,15 @@
   }
 };
 
+
 function bindChange_importPemFile() {
   $('input[type="file"]').off('change').on('change',function() {
     $(this).next().val(this.files[0].name);
     $(this).next().next().val($(this).val());
   });
 }
+
+
 function inLineReady(){
  $("input[type='text']").on("click", function () {
    $(this).select();
@@ -166,15 +170,13 @@ function removeLoader(){
   $('#masterssavespinner').remove();
 }
 
-function selectDefaultValue(){
-  var value=d4ddata.securitygroupids,$inputs;
-  if(value && value.length){
-    value=value[0].split(',');
-    $inputs=$('#securitygroupids');
-
-    for(var i=0;i<value.length;i++){
-      $inputs.find('input[value="'+value[i]+'"]').trigger('click');
-    }
+function checkForKeyPair(){
+  var accessKey=$('#accessKey').val(),
+  secretKey=$('#secretKey').val();
+  if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
+    loadKeyPair(accessKey,secretKey);
+  }else{
+    $('#btnsubmit').attr('disabled','disabled');
   }
 }
 
@@ -186,7 +188,7 @@ function loadKeyPair(accessKey,secretKey){
   data1.append('region',"us-west-2");
   $.ajax({
     method: "POST",
-    url: "/providers/keypairs/list",
+    url: "/aws/providers/keypairs/list",
     data:data1,
     processData: false,
     contentType:false,
@@ -195,46 +197,30 @@ function loadKeyPair(accessKey,secretKey){
       removeLoader();
     } 
   }).done(function( msg ) {
-    var str='<option value="">Choose Any Key Pair</option>',
-    getTemplate=function(val){
-
-  /* return '<label class="toggle font-sm" style="padding-left:4px"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
-       'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
-        'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-    'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-    */
-
-  },val=msg['KeyPairs'],len=val.length;
+    var str='<option value="">Choose Any Key Pair</option>',val=msg['KeyPairs'],len=val.length;
   for(var i=0;i<len;i++){
     str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
   }
-  //debugger;
   $('select.keyvalue').html(str);
   $('#btnsubmit').removeAttr('disabled');
   removeLoader();
- // selectDefaultValue();
 });
 }
-function checkForKeyPair(){
-  var accessKey=$('#accessKey').val(),
-  secretKey=$('#secretKey').val();
-  if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
-    loadKeyPair(accessKey,secretKey);
-  }else{
-    $('#btnsubmit').attr('disabled','disabled');
 
-  }
-}
 function setValues(data){
   $('#name').val(data.name);
   $('#accessKey').val(data.accessKey);
   $('#secretKey').val(data.secretKey);
   $('#providertype').val(data.providerType);
   var createTemplateInstance=new createTemplate($('#appender'));
-  for(var i=0;i<data.regions.length;i++){
-    $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+  for(var i=0;i<data.keyPairs.length;i++){
+    if(i==0){
+      $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+    }else{
+      $('#appender').append(createTemplateInstance.getFinalTemplate(false));
+    }
+    
   }
-
 }
 $(document).ready(function () {
   $("#name").focus();
@@ -242,28 +228,33 @@ $(document).ready(function () {
   $('#secretKey').blur(checkForKeyPair);
 
   $('#myForm54').submit(function() {
-    $(this).validate();
-    if(isFormValid()){
-      saveProviderData();
-    }else{
-      bootbox.alert("invalid form data");
-    }
-        return false; // for demo
-      });
+  $(this).validate();
+  if(isFormValid()){
+    saveProviderData();
+  }else{
+    bootbox.alert("invalid form data");
+  }
+  return false; // for demo
+});
+
+
   if(!UtilityMethods.getIdFromURL()){
     var createTemplateInstance=new createTemplate($('#appender'));
     $('#appender').append(createTemplateInstance.getFinalTemplate(true,1));
-
-  //  $('.addNewRegion').find('select').select2();
   bindChange_importPemFile();
+  UtilityMethods.initializeSelect2();
 
 }else{
+  
   $.ajax({
-   method: "GET",url: "/providers/"+UtilityMethods.getIdFromURL(),   
+   method: "GET",url: "/aws/providers/"+UtilityMethods.getIdFromURL(),   
    success: function(data, success) {
+    debugger;
     data= typeof data=="string" ?JSON.parse(data):data;
     d4ddata=data;
     setValues(data);
+    UtilityMethods.initializeSelect2();
+    checkForKeyPair();
   },
   error: function(jqxhr) {
     removeLoader();
@@ -276,7 +267,7 @@ $(document).ready(function () {
 
 }
 
-UtilityMethods.initializeSelect2();
+
 
 });
 
@@ -293,7 +284,7 @@ UtilityMethods.initializeSelect2();
           keyPair.push({
             "keyPair_name":$(this).find('select.keyvalue').val(),
             "file_name" :$(this).find('input.filename').val(),
-          //  "file":$(this).find('input.file')[0].files[0]
+            "file":$(this).find('input.file')[0].files[0]
           });
         });
 
@@ -308,7 +299,7 @@ UtilityMethods.initializeSelect2();
     reqBody.accessKey=$('#accessKey').val();
     reqBody.secretKey=$('#secretKey').val();
     reqBody.providerType=$('#providertype').val();
-    reqBody.keyPairs=getRegionListForFormSubmission();
+    reqBody.regions=getRegionListForFormSubmission();
     
     formdata=new FormData();
     formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
@@ -373,8 +364,6 @@ UtilityMethods.initializeSelect2();
       +'<select id="'+UtilityMethods.getRandomNumber()+'" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" '
       +'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
       +'  <option value="">Select Any Key Pair</option>'
-      +'<option value="option1">option1</option>'
-      +'<option value="option2">option2</option></select>'
       +'</div>' ;
     };
     var getRegion=function(){
@@ -415,10 +404,9 @@ UtilityMethods.initializeSelect2();
       var str='';
       for(var i=0;i<noOfRow;i++){
         if(i==0){
-          str=str+that.getRow(true);
-
+          str=str+that.getRow(false,false,false);
         }else{
-          str=str+that.getRow(false,true);
+          str=str+that.getRow(false,false,false);
         }
 
       }

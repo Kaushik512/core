@@ -99,7 +99,7 @@
                                 reqBody.regions=[];
       //reqBody.instanceUserName='root';
       $.ajax({
-         method: "GET",url: "/providers",data: reqBody,   
+         method: "GET",url: "/aws/providers",data: reqBody,   
          success: function(data, success) {
                 data= typeof data=="string" ?JSON.parse(data):data;
                 d4ddata=data;
@@ -384,7 +384,7 @@
                 dataType: "text",
 
                 async: false,
-                url: "/providers/" + value,
+                url: "/aws/providers/" + value,
                 success: function(data) {
                     // alert(data.toString());  
                     // debugger;

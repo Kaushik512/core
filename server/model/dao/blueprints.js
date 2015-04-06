@@ -38,6 +38,23 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.imageIdValidator
     },
+    providerId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.imageIdValidator
+    },
+    keyPairId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.imageIdValidator
+    },
+    securityGroupId: {
+        type: String,
+        required: true,
+        trim: true
+    },
     iconpath: {
         type: String,
         trim: true
@@ -293,6 +310,7 @@ var BlueprintsDao = function() {
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             imageId: blueprintData.imageId,
+            securityGroupId: blueprintData.securityGroupId,
             name: blueprintData.name,
             appUrls: blueprintData.appUrls,
             iconpath: blueprintData.iconpath,

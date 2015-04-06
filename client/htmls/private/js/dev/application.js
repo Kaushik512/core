@@ -503,12 +503,11 @@ $(function() {
             return;
         }
 
-        var iconFileInput = $('#applicationiconInput')[0].files;
+        /*var iconFileInput = $('#applicationiconInput')[0].files;
         if (!iconFileInput.length) {
             alert("Please add an icon file");
             return;
-        }
-
+        }*/
 
         appCardData.git = {
             repoUrl: $('#gitURLInputaddApp').val(),
