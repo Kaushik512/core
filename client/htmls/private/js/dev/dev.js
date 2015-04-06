@@ -330,6 +330,7 @@
                      $("#addInstanceForm").submit(function(e) {
                          var ipAddresRegExp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
                          var hostname = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+                         var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
                          var $spinner = $('#nodeimportipspinner').addClass('hidden');
                          var $result = $('#nodeimportipresultmsg').addClass('hidden');
                          var reqBody = {};
@@ -342,6 +343,7 @@
                          };
                          var appUrls = [];
                          var $appURLContainers = $('.applicationURLContainer');
+                         var isAppUrlValid=true;
                          $appURLContainers.each(function() {
                              $this = $(this);
                              var appName = $this.find('.appName').val();
@@ -351,9 +353,17 @@
                                      name: appName,
                                      url: appURL
                                  });
+                                 if(!regexpURL.test(appURL)){                                   
+                                    isAppUrlValid=false;
+                                  }
                              }
 
                          });
+                         if(!isAppUrlValid){
+                            alert('Please enter a Valid URL');
+                            e.preventDefault();
+                            return false;
+                         }
                          reqBody.appUrls = appUrls;
 
 
@@ -1102,8 +1112,11 @@
 
                          //var $dockerStatus = $('<img style="width:42px;height:42px;margin-left:32px;" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
                          //Updated from above to move docker image out of circle.
-                         var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
-                         $divComponentListContainer.append($dockerStatus);
+                          if(data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null)
+                         {
+                            var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
+                            $divComponentListContainer.append($dockerStatus);
+                        }
                      }
 
 
@@ -1115,7 +1128,8 @@
                      $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
 
-                     $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 15) + '</td>');
+                     $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 25) + '</td>');
+
                      $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
                      var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
 
@@ -1160,7 +1174,7 @@
                          for (var k = 0; k < data.appUrls.length; k++) {
                              var url = data.appUrls[k].url;
                              url = url.replace('$host', data.instanceIP);
-                             var $anchor = "<a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url marginForURL' title='" + data.appUrls[k].name + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a>";
+                             var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + data.appUrls[k].name + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
                              $divComponentListContainer.append($anchor);
                              temp = temp + ' ' + $anchor;
                          }
@@ -2351,7 +2365,7 @@
 
                                          $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                                         var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                                         var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
 
                                          $taskExecuteTabsContent.append($tabContent);
 
@@ -2378,7 +2392,7 @@
                                  } else {
                                      var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
                                      $taskExecuteTabsHeaderContainer.append($liHeader);
-                                     var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                                     var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
                                      $taskExecuteTabsContent.append($tabContent);
 
                                      function pollJob() {

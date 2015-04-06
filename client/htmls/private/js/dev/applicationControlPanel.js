@@ -21,7 +21,7 @@ $(function() {
 
     var $appCardTemplate = $(htmlTemplate);
 
-    var buildUrlsHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
+    var buildUrlsHtmlTemplate = '<a data-original-title="Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="functionalTestUrl" target="_blank"> <i class="fa fa-fw fa-crosshairs txt-color-blue"></i> </a> <a data-original-title="Performance Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="perfTestUrl" target="_blank"> <i class="fa fa-fw fa-dot-circle-o txt-color-blue"></i> </a> <a data-original-title="Non Functional Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="nonFunctionalTestUrl" target="_blank"> <i class="fa fa-fw fa-compass txt-color-blue"></i> </a> <a data-original-title="Security Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="secTestUrl" target="_blank"> <i class="fa fa-fw fa-lock txt-color-blue"></i> </a> <a data-original-title="Unit Test" data-placement="top" rel="tooltip" href="javascript:void(0)" class="unitTestUrl" target="_blank"> <i class="fa fa-fw fa-lemon-o txt-color-blue"></i> </a> <a data-original-title="Code Coverage" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeCoverageTestUrl" target="_blank"> <i class="fa fa-fw fa-bookmark-o txt-color-blue"></i> </a> <a data-original-title="Code Analysis" data-placement="top" rel="tooltip" href="javascript:void(0)" class="codeAnalysisTestUrl" target="_blank"> <i class="fa fa-fw fa-barcode txt-color-blue"></i> </a>';
 
     function addBuildHistoryRow(buildHistory, buildData) {
         var dataTable = $('#tableBuild').DataTable();
@@ -81,7 +81,7 @@ $(function() {
 
                 var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
                 $taskExecuteTabsHeaderContainer.append($liHeader);
-                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea chefLOGS"></div></div>');
                 $tabContent.find('.taskLogArea').empty().append(logs.output);
                 $taskExecuteTabsContent.append($tabContent);
                 $liHeader.find('a').click();
@@ -296,7 +296,7 @@ $(function() {
 
                 var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
                 $taskExecuteTabsHeaderContainer.append($liHeader);
-                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
                 $taskExecuteTabsContent.append($tabContent);
 
                 function pollJob() {
@@ -503,7 +503,7 @@ $(function() {
 
                 $taskExecuteTabsHeaderContainer.append($liHeader);
 
-                var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea" style="height:400px !important;overflow: scroll;padding-left: 20px;"></div></div>');
+                var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS" style="font-size:13px;"></div></div>');
 
                 $taskExecuteTabsContent.append($tabContent);
 

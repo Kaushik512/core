@@ -411,15 +411,10 @@ var Chef = function(settings) {
 
         } else {
             if (params.instanceOS != 'windows') {
-                argList.push('-P');
-                argList.push(params.instancePassword);
+                argList.push('--use-sudo-password');
             }
-        }
-        //If windows box then credetial to be updated to stored password
-        if (params.instanceOS == 'windows') {
             argList.push('-P');
             argList.push(params.instancePassword);
-            //argList.push('Zaq!2wsx');
         }
 
         if (params.instanceOS == 'windows') {
@@ -428,7 +423,6 @@ var Chef = function(settings) {
         } else {
             argList.push('--sudo');
         }
-
 
         if (runlist.length) {
             argList.push('-r');
@@ -548,7 +542,7 @@ var Chef = function(settings) {
             runlist = [];
         }
         //options.jsonAttributes = JSON.stringify({"A":{"B":{"passedin":"Cool Test"}}});
-        
+
         if (options.instanceOS != 'windows') {
             var sshParamObj = {
                 host: options.host,
@@ -564,7 +558,7 @@ var Chef = function(settings) {
             } else {
                 sshParamObj.password = options.password;
             }
-            console.log('json jsonAttributes ==> ',options.jsonAttributes);
+            console.log('json jsonAttributes ==> ', options.jsonAttributes);
 
             javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
                 if (err) {
