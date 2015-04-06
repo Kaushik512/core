@@ -248,7 +248,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 
                                                 // pem file should come from provider
                                                 //cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
-                                                cryptography.encryptFile(encryptedPemFileLocation + aKeyPair.fileName, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
+                                                cryptography.encryptFile(encryptedPemFileLocation + aKeyPair._id, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                                                     if (err) {
                                                         logger.log("encryptFile Failed >> ", err);
                                                         res.send(500);

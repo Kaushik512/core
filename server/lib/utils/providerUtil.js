@@ -17,7 +17,7 @@ var ProviderUtil = function(){
 		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
 		        }
 		        fs.readFile(req.files.fileName.path, function (err, data) {
-		        var pathNew = pemFileLocation + uuid.v1() + path.extname(req.files.fileName.name)
+		        var pathNew = pemFileLocation + keyPair._id + path.extname(req.files.fileName.name)
 
 		        fs.writeFile(pathNew, data, function (err) {
 		            console.log('uploaded', pathNew);
@@ -38,7 +38,7 @@ var ProviderUtil = function(){
 		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
 		        }
 		        fs.readFile(req.files.fileName.path, function (err, data) {
-		        var pathNew = pemFileLocation + uuid.v1() + path.extname(req.files.fileName.name)
+		        var pathNew = pemFileLocation + keyPair._id + path.extname(req.files.fileName.name)
 
 		        fs.writeFile(pathNew, data, function (err) {
 		            console.log('uploaded', pathNew);

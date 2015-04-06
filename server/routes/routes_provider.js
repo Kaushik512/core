@@ -111,7 +111,6 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                         }
 
                     });
-                    //res.send(allProviders);
                 }
             	
             } else {
@@ -193,13 +192,13 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             return;
         }
 
-        var providerData={
-        accessKey: accessKey,
-        secretKey: secretKey,
-        name: name,
-        providerType: providerType,
-        regions: regions
-    	};
+        var providerData= {
+            id: 9,
+            accessKey: accessKey,
+            secretKey: secretKey,
+            name: name,
+            providerType: providerType
+        };
         logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
         AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
             if (err) {
