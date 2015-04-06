@@ -99,7 +99,7 @@
                                 reqBody.regions=[];
       //reqBody.instanceUserName='root';
       $.ajax({
-         method: "GET",url: "/providers",data: reqBody,   
+         method: "GET",url: "/aws/providers",data: reqBody,   
          success: function(data, success) {
                 data= typeof data=="string" ?JSON.parse(data):data;
                 d4ddata=data;
@@ -148,7 +148,7 @@
     function CreateTableFromJsonForProvider(formID,createFileName,isEscapeMasterDirectory) {
         var formData = null;
         //force setting the idFieldName to "rowid"
-        idFieldName = "_id";
+      var idFieldName = "_id";
         formData = d4ddata;
         var formSchema = null;
         $.each(d4ddata, function(i, item) {
@@ -384,7 +384,7 @@
                 dataType: "text",
 
                 async: false,
-                url: "/providers/" + value,
+                url: "/aws/providers/" + value,
                 success: function(data) {
                     // alert(data.toString());  
                     // debugger;
