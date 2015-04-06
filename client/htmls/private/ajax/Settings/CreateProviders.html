@@ -124,7 +124,6 @@
 <script>
 
   var UtilityMethods={
-
     initTooltip:function(){
      var $tool=$("[rel=tooltip]");
      if ($tool.length) {
@@ -171,16 +170,10 @@ function removeLoader(){
 }
 
 function checkForKeyPair(){
-  var accessKey=$('#accessKey').val(),
-  secretKey=$('#secretKey').val();
-  if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
-    loadKeyPair(accessKey,secretKey);
-  }else{
-    $('#btnsubmit').attr('disabled','disabled');
-  }
-}
+
 
 function loadKeyPair(accessKey,secretKey){
+
   appendLoader();
   var data1=new FormData();
   data1.append('accessKey',accessKey);
@@ -198,13 +191,23 @@ function loadKeyPair(accessKey,secretKey){
     } 
   }).done(function( msg ) {
     var str='<option value="">Choose Any Key Pair</option>',val=msg['KeyPairs'],len=val.length;
-  for(var i=0;i<len;i++){
-    str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
+    for(var i=0;i<len;i++){
+      str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
+    }
+    $('select.keyvalue').html(str);
+    $('#btnsubmit').removeAttr('disabled');
+    removeLoader();
+  });
+}
+
+
+  var accessKey=$('#accessKey').val(),
+  secretKey=$('#secretKey').val();
+  if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
+    loadKeyPair(accessKey,secretKey);
+  }else{
+    $('#btnsubmit').attr('disabled','disabled');
   }
-  $('select.keyvalue').html(str);
-  $('#btnsubmit').removeAttr('disabled');
-  removeLoader();
-});
 }
 
 function setValues(data){
@@ -228,44 +231,47 @@ $(document).ready(function () {
   $('#secretKey').blur(checkForKeyPair);
 
   $('#myForm54').submit(function() {
-  $(this).validate();
-  if(isFormValid()){
-    saveProviderData();
-  }else{
-    bootbox.alert("invalid form data");
-  }
+    $(this).validate();
+    if(isFormValid()){
+      saveProviderData();
+    }else{
+      bootbox.alert("invalid form data");
+    }
   return false; // for demo
 });
 
-
   if(!UtilityMethods.getIdFromURL()){
-    var createTemplateInstance=new createTemplate($('#appender'));
-    $('#appender').append(createTemplateInstance.getFinalTemplate(true,1));
-  bindChange_importPemFile();
-  UtilityMethods.initializeSelect2();
-
-}else{
-  
-  $.ajax({
-   method: "GET",url: "/aws/providers/"+UtilityMethods.getIdFromURL(),   
-   success: function(data, success) {
     debugger;
-    data= typeof data=="string" ?JSON.parse(data):data;
-    d4ddata=data;
-    setValues(data);
+    var createTemplateInstance=new createTemplate($('#appender'));
+    $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+    bindChange_importPemFile();
     UtilityMethods.initializeSelect2();
-    checkForKeyPair();
-  },
-  error: function(jqxhr) {
-    removeLoader();
-    bootbox.alert(jqxhr.status);
-  },
-  failure: function(data) {
-    bootbox.alert(data);
-  }
-});
+  }else{
+    $.ajax({
+     method: "GET",
+     url: "/aws/providers/"+UtilityMethods.getIdFromURL(),   
+     success: function(data, success) {
 
-}
+      data= typeof data=="string" ?JSON.parse(data):data;
+      
+      d4ddata=data;
+      
+      setValues(data);
+      
+      //UtilityMethods.initializeSelect2();
+      
+      checkForKeyPair();
+    },
+    error: function(jqxhr) {
+      removeLoader();
+      bootbox.alert(jqxhr.status);
+    },
+    failure: function(data) {
+      bootbox.alert(data);
+    }
+  });
+
+  }
 
 
 
@@ -279,40 +285,55 @@ $(document).ready(function () {
       var list=[];
       $('select.region').each(function(){
         var obj={},keyPair=[];
-        obj.region_name=$(this).val();
+        obj.region=$(this).val();
         $(this).parents('.addNewRegion').find('.pemrow').each(function(){
-          keyPair.push({
-            "keyPair_name":$(this).find('select.keyvalue').val(),
-            "file_name" :$(this).find('input.filename').val(),
-            "file":$(this).find('input.file')[0].files[0]
+            obj["name"]=$(this).find('select.keyvalue').val();
+            obj["fileName"] =$(this).find('input.filename').val();
+          //  "file":$(this).find('input.file')[0].files[0]
           });
-        });
-
-        obj.keyPairs=keyPair;
         list.push(obj);
-      });
-      return list;
-    },
-    reqBody={},
-    FormData;
-    reqBody.name=$('#name').val();
-    reqBody.accessKey=$('#accessKey').val();
-    reqBody.secretKey=$('#secretKey').val();
-    reqBody.providerType=$('#providertype').val();
-    reqBody.regions=getRegionListForFormSubmission();
+        });        
+        return list;
+      },appendINObject=function(soruceObj,DestObj){
+        for(key in soruceObj){
+          if(soruceObj.hasOwnProperty(key))
+          DestObj.append(key,soruceObj[key]);
+        }
+      },
+    reqBody={},formdata1;
+
+    reqBody.name=$('#name').val().trim();
+    reqBody.accessKey=$('#accessKey').val().trim();
+    reqBody.secretKey=$('#secretKey').val().trim();
+    reqBody.providerType=$('#providertype').val().trim();
+    reqBody.keyPairs=getRegionListForFormSubmission();
     
-    formdata=new FormData();
-    formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
+    formdata1=new FormData();
+   // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
     //debugger;
+   //appendINObject(reqBody,FormData1);
+formdata1.append('name',reqBody.name);
+formdata1.append('accessKey',reqBody.accessKey);
+formdata1.append('secretKey',reqBody.secretKey);
+formdata1.append('providerType',reqBody.providerType);
+formdata1.append('keyPairs',reqBody.keyPairs);
+formdata1.append(reqBody.keyPairs[0].fileName,$('input[type="file"]')[0].files[0]);
+
     console.log(reqBody);
-    //reqBody.instanceUserName='root';
+    if(!UtilityMethods.getIdFromURL()){
+      var url="/aws/providers"
+    }else{
+      var url="/aws/providers/"+UtilityMethods.getIdFromURL()+"/update"
+    }
+    
     $.ajax({
      method: "POST",
-     url: "/providers",
-     data: formdata,  
+     url: url,
+     data: formdata1,  
      processData: false,
-     contentType:false,
+     contentType: false,
      success: function(data, success) {
+     // alert(1);
               //alert('Successfully Saved ' + data);
               if (data!=500) {
                 if ($('#btncancel').length){
@@ -434,6 +455,8 @@ $(document).ready(function () {
     });
 
   }
+
+
 
 
 </script>
