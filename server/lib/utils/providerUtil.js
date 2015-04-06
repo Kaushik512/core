@@ -17,15 +17,19 @@ var ProviderUtil = function(){
 		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
 		        }
 		        fs.readFile(req.files.fileName.path, function (err, data) {
-		        var pathNew = pemFileLocation + keyPair._id + path.extname(req.files.fileName.name)
+		        	if(err){
+		        		logger.debug("File not found in specified path.");
+		        		callback(err,null);
+		        	}
+		        	var pathNew = pemFileLocation + keyPair._id + path.extname(req.files.fileName.name)
 
-		        fs.writeFile(pathNew, data, function (err) {
-		            console.log('uploaded', pathNew);
-		            if(err){
-		            	callback(err,null);
-		            }
-		        });
-		    });
+			        fs.writeFile(pathNew, data, function (err) {
+			            console.log('uploaded', pathNew);
+			            if(err){
+			            	callback(err,null);
+			           	}
+			        });
+		    	});
 			}else{
 
 				// If directory does not exist,then create.

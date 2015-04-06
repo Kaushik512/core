@@ -18,6 +18,8 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         var name = req.body.name.trim();
         var providerType = req.body.providerType.trim();
         var keyPairs = req.body.keyPairs;
+        
+        // Field validation for undefined and empty
         if(typeof keyPairs === 'undefined' || keyPairs.length === 0){
             res.send(500,"Please Enter keyPairs.");
             return;
