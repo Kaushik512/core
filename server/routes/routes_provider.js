@@ -48,7 +48,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 AWSProvider.createNew(providerData, function(err, provider) {
                     if (err) {
                         logger.debug("err.....",err);
-                        res.send(500,"Unable to create Provider.");
+                        res.send(500,"Provider creation failed due to either Provider name already exist or some other issue.");
                         return;
                     }
                     logger.debug("Provider id:  %s",JSON.stringify(provider._id));
