@@ -1,40 +1,52 @@
 var logger = require('../../lib/logger')(module);
-var ProviderUtil = function(){
-	this.saveAwsPemFiles = function(regions,callback){
-		var recursive = function(regions){
-			logger.debug("recursive called>>>>>>>>>>>");
-			if(regions){
-				  var i, j, keys, length, newArray, _results;
-				  i = void 0;
-				  keys = void 0;
-				  length = void 0;
-				  keys = Object.keys(regions);
-				  i = 0;
-				  length = keys.length;
-				  _results = [];
-					  while (i < length) {
-					    regions[keys[i]];
-					    if (typeof regions[keys[i]] === "object") {
-					      newArray = regions[keys[i]];
-					      for (var j in newArray) {
-					        if (typeof newArray[j] === "object") {
-					          recursive(newArray[j]);
-					          //logger.debug("Print all array values: ", newArray[j]);
-					        }
-								
-					      }
-					      logger.debug("Print all region values: ", regions[keys[i]]);
-					    }
-					    
-					    _results.push(i++);
+var currentDirectory = __dirname;
+var fs = require('fs');
+var path = require('path');
 
-					  }
-				}
-		}
-		recursive(regions);
+// saveAwsPemFiles() capture all uploaded files from request and save.
+var ProviderUtil = function(){
+	this.saveAwsPemFiles = function(keyPair,req,callback){
+		var pemFileLocation= currentDirectory + '/../../catdata/catalyst/provider-pemfiles';
+		
+		// Check the directory already exist or not.
+		path.exists(pemFileLocation,function(exists){
+			if(exists){
+				logger.debug("Directory already exists.");
+				var myFiles = req.files;
+		        for(var i in myFiles){
+		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
+		        }
+		        fs.readFile(req.files.fileName.path, function (err, data) {
+		        var pathNew = pemFileLocation + uuid.v1() + path.extname(req.files.fileName.name)
+
+		        fs.writeFile(pathNew, data, function (err) {
+		            console.log('uploaded', pathNew);
+		        });
+		    });
+			}else{
+
+				// If directory does not exist,then create.
+				fs.mkdir(pemFileLocation, function(error) {
+				if(error){
+					logger.debug("Error happen while creating directory.");
+					}
+					var myFiles = req.files;
+		        for(var i in myFiles){
+		            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
+		        }
+		        fs.readFile(req.files.fileName.path, function (err, data) {
+		        var pathNew = pemFileLocation + uuid.v1() + path.extname(req.files.fileName.name)
+
+		        fs.writeFile(pathNew, data, function (err) {
+		            console.log('uploaded', pathNew);
+		        		});
+		    		});
+				});
+			}
+		});
+			
 		callback(null,true);
 	}
-
 }
 
 module.exports = new ProviderUtil();

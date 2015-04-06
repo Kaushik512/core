@@ -12,14 +12,16 @@ var Cryptography = require('../lib/utils/cryptography');
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var logger = require('../lib/logger')(module);
-var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
+var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
+var currentDirectory = __dirname;
+var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
 
-    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/images/:imageId', function(req, res) {
+    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/providers/:providerId/keyPairs/:kpId/images/:imageId', function(req, res) {
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/images/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.imageId);
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
@@ -47,6 +49,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
             blueprintData.imageId = req.params.imageId;
+            // hardcoded securityGroupId need to remove
+            blueprintData.securityGroupId = 'sg-c00ee1a5';
+            blueprintData.providerId = req.params.providerId;
+            blueprintData.keyPairId = req.params.kpId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
@@ -215,7 +221,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         return;
                                                     }
                                                     logger.debug("Loaded Image: >>>>>>>>>>> %s",anImage.providerId);
-                                                Provider.getProviderById(anImage.providerId, function(err, aProvider) {
+                                                AWSProvider.getAWSProviderById(anImage.providerId, function(err, aProvider) {
+                                                    if (err) {
+                                                        logger.error(err);
+                                                        res.send(500, errorResponses.db.error);
+                                                        return;
+                                                    }
+                                                    AWSKeyPair.getAWSKeyPairById(blueprint.keyPairId, function(err, aKeyPair) {
                                                     if (err) {
                                                         logger.error(err);
                                                         res.send(500, errorResponses.db.error);
@@ -225,13 +237,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                             function launchInstance() {
                                                 logger.debug("Enter launchInstance");
+                                                // New add
+                                                var encryptedPemFileLocation= currentDirectory + '/../catdata/catalyst/provider-pemfiles';
 
                                                 var settings = appConfig;
                                                 //encrypting default pem file
                                                 var cryptoConfig = appConfig.cryptoSettings;
                                                 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                                                var encryptedPemFileLocation = settings.instancePemFilesDir + uuid.v4();
-                                                cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
+                                                //var encryptedPemFileLocation = settings.instancePemFilesDir + uuid.v4();
+                                                
+                                                // pem file should come from provider
+                                                //cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
+                                                cryptography.encryptFile(encryptedPemFileLocation + aKeyPair.fileName, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                                                     if (err) {
                                                         logger.log("encryptFile Failed >> ", err);
                                                         res.send(500);
@@ -245,11 +262,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     var awsSettings ={ 
                                                         "access_key": aProvider.providerConfig.accessKey,
                                                         "secret_key": aProvider.providerConfig.secretKey,
-                                                        "region"    : "us-west-2",
-                                                        "keyPairName": "catalyst"
+                                                        "region"    : aKeyPair.region, // both hard coded value need to remove
+                                                        "keyPairName": aKeyPair.name
                                                     };
                                                     var ec2 = new EC2(awsSettings);
-                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
+                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, blueprint.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
                                                         if (err) {
                                                             logger.error("launchInstance Failed >> ", err);
                                                             res.send(500);
@@ -553,11 +570,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     launchInstance();
                                                 }
 
-                                            });
+                                                    });
+                                                });
+                                             });
                                         });
-                                    });
-                                 });
-                                        }); 
+                                     });
+                                }); 
 
 
                                 } else {

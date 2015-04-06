@@ -32,6 +32,11 @@ var imageSchema = new Schema({
         trim: true,
         validate: schemaValidator.imageNameValidator
     },
+    osType: {
+        type: String,
+        required: true,
+        trim: true
+    },
     vType: {
         type: String,
         required: true,

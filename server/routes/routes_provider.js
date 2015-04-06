@@ -1,24 +1,25 @@
 var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
-var Provider = require('../model/classes/masters/cloudprovider/cloudprovider.js');
+var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
-var AWSProvider = require('../model/classes/masters/cloudprovider/aws.js');
-var ProviderUtil = require('../lib/utils/providerUtil.js');
-
+var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
+var uuid = require('node-uuid'); //Unique ID
+var fs = require('fs');
+var path = require('path');
 module.exports.setRoutes = function(app,sessionVerificationFunc){
-	app.all("/providers/*",sessionVerificationFunc);
+	app.all("/aws/providers/*",sessionVerificationFunc);
 
-
-	app.post('/providers', function(req, res) {
+// Create AWS Provider.
+	app.post('/aws/providers', function(req, res) {
         logger.debug("Enter post() for /providers.");
         var accessKey = req.body.accessKey.trim();
         var secretKey = req.body.secretKey.trim();
         var name = req.body.name.trim();
         var providerType = req.body.providerType.trim();
-        var regions = req.body.regions;
-        if(typeof regions === 'undefined' || regions.length === 0){
-            res.send(500,"Please Enter Resgions.");
+        var keyPairs = req.body.keyPairs;
+        if(typeof keyPairs === 'undefined' || keyPairs.length === 0){
+            res.send(500,"Please Enter keyPairs.");
             return;
         }
         if(typeof accessKey === 'undefined' || accessKey.length === 0){
@@ -42,65 +43,114 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         	accessKey: accessKey,
         	secretKey: secretKey,
         	name: name,
-        	providerType: providerType,
-        	regions: regions
-    };
-        //logger.debug("<<<<<<<<<<<<<<<<<<<<< ",typeof req.body.regions);
-        ProviderUtil.saveAwsPemFiles(regions,function(err,flag){
-            if(flag){
-                Provider.createNew(providerData, function(err, provider) {
+        	providerType: providerType
+        };
+                AWSProvider.createNew(providerData, function(err, provider) {
                     if (err) {
                         logger.debug("err.....",err);
                         res.send(500,"Unable to create Provider.");
                         return;
                     }
-                    res.send(provider);
+                    logger.debug("Provider id:  %s",JSON.stringify(provider._id));
+                    AWSKeyPair.createNew(req,provider._id,function(err,keyPair){
+                        
+                        logger.debug("Returned keypair: >>>>> ",JSON.stringify(keyPair));
+                        provider.keyPairs = keyPair;
+                        logger.debug("Provider:>>>>>>>>>>>>>>>>>>>> ",JSON.stringify(provider.keyPairs));
+                    }); 
                     logger.debug("Exit post() for /providers");
+                    res.send(provider);
                 });
-            }
-        });
     });
 
-    app.get('/providers', function(req, res) {
+// Return list of all available AWS Providers.
+    app.get('/aws/providers', function(req, res) {
     	logger.debug("Enter get() for /providers");
-        Provider.getProviders(function(err, providers) {
+        
+        AWSProvider.getAWSProviders(function(err, providers) {
+            
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
                 return;
             }
             if (providers) {
-            	logger.debug("Exit get() for /providers");
-                res.send(providers);
+                var allProviders = [];
+                var count =0;
+                for(var i in providers){
+                    logger.debug("For loop called....");
+                    AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id,function(err,keyPair){
+                        logger.debug("keyPairs length::::: ",keyPair.length);
+                        if(keyPair){
+                            var dommyProvider = {
+                                _id: keyPair[0].providerId,
+                                id: 9,
+                                accessKey: providers[i].accessKey,
+                                secretKey: providers[i].secretKey,
+                                name: providers[i].name,
+                                providerType: providers[i].providerType,
+                                __v: providers[i].__v,
+                                keyPairs: keyPair
+                            };
+                                    allProviders.push(dommyProvider);
+                                    logger.debug("Provider:::::::::::: ",JSON.stringify(dommyProvider));
+                                    count++;
+                                    if(providers.length === count){
+                                        logger.debug("Exit get() for /providers",JSON.stringify(allProviders.length));
+                                        res.send(allProviders);
+                                    }
+                        }
+
+                    });
+                    //res.send(allProviders);
+                }
+            	
             } else {
                 res.send([]);
             }
         });
     });
 
-    app.get('/providers/:providerId', function(req, res) {
+// Return AWS Provider respect to id.
+    app.get('/aws/providers/:providerId', function(req, res) {
     	logger.debug("Enter get() for /providers/%s",req.params.providerId);
         var providerId = req.params.providerId.trim();
         if(typeof providerId === 'undefined' || providerId.length === 0){
             res.send(500,"Please Enter ProviderId.");
             return;
         }
-        Provider.getProviderById(providerId, function(err, aProvider) {
+        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
                 return;
             }
             if (aProvider) {
-            	logger.debug("Exit get() for /providers/%s",req.params.providerId);
-                res.send(aProvider);
+            	AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
+                        logger.debug("keyPairs length::::: ",keyPair.length);
+                        if(keyPair){
+                            var dommyProvider = {
+                                _id: keyPair[0].providerId,
+                                id: 9,
+                                accessKey: providers[i].accessKey,
+                                secretKey: providers[i].secretKey,
+                                name: providers[i].name,
+                                providerType: providers[i].providerType,
+                                __v: providers[i].__v,
+                                keyPairs: keyPair
+                            };
+                            res.send(dommyProvider);        
+                        }
+
+                    });
             } else {
                 res.send(404);
             }
         });
     });
 
-    app.post('/providers/:providerId/update', function(req, res) {
+// Update a particular AWS Provider
+    app.post('/aws/providers/:providerId/update', function(req, res) {
     	logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
 
         var accessKey = req.body.accessKey.trim();
@@ -142,7 +192,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         regions: regions
     	};
         logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
-        Provider.updateProviderById(req.params.providerId, providerData, function(err, updateCount) {
+        AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
@@ -159,7 +209,8 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         });
     });
 
-    app.delete('/providers/:providerId', function(req, res) {
+// Delete a particular AWS Provider.
+    app.delete('/aws/providers/:providerId', function(req, res) {
     	logger.debug("Enter delete() for /providers/%s",req.params.providerId);
     	var providerId = req.params.providerId.trim();
         if(typeof providerId === 'undefined' || providerId.length === 0){
@@ -178,7 +229,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             	return;
             }
 
-        	Provider.removeProviderById(providerId, function(err, deleteCount) {
+        	AWSProvider.removeAWSProviderById(providerId, function(err, deleteCount) {
 	            if (err) {
 	                logger.error(err);
 	                res.send(500, errorResponses.db.error);
@@ -196,7 +247,8 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         });
     });
 
-	app.post('/providers/securitygroups',function(req,res){
+// Return all available security groups from AWS.
+	app.post('/aws/providers/securitygroups',function(req,res){
 		logger.debug("Enter for Provider securitygroups. %s",req.body.accessKey);
 
 		var ec2 = new EC2({
@@ -242,7 +294,8 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         });
 	});*/
 
-	app.post('/providers/keypairs/list',function(req,res){
+// Return all available keypairs from AWS.
+	app.post('/aws/providers/keypairs/list',function(req,res){
 		logger.debug("Enter for Provider keypairs.");
 
 		var ec2 = new EC2({
@@ -262,4 +315,21 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 		});
 
 	});
+
+    app.post('/aws/providers/file/upload/test',function(req,res){
+        logger.debug("Enter for Provider file upload.");
+        logger.debug("uploaded file: ",req.files)
+        var myFiles = req.files;
+        for(var i in myFiles){
+            logger.debug("Incomming files: ",JSON.stringify(myFiles[i]));
+        }
+        fs.readFile(req.files.fileLogo.path, function (err, data) {
+        var pathNew = '/home/gobinda/' + uuid.v1() + path.extname(req.files.fileLogo.name)
+
+        fs.writeFile(pathNew, data, function (err) {
+            console.log('uploaded', pathNew);
+        });
+    });
+
+    });
 }
