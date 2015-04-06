@@ -17,7 +17,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var name = req.body.name.trim();
         var vType = req.body.vType.trim();
         var osType = req.body.osType.trim();
-
+        
+        // Field validation for undefined and empty
         if(typeof providerId === 'undefined' || providerId.length === 0){
             res.send(500,"Please Enter ProviderId.");
             return;
