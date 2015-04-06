@@ -17,7 +17,7 @@ var awsProviderSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        validate: schemaValidator.providerNameValidator
+        validate: schemaValidator.nameValidator
     },
     providerType: {
         type: String,

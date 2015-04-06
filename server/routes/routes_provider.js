@@ -53,13 +53,22 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                     }
                     logger.debug("Provider id:  %s",JSON.stringify(provider._id));
                     AWSKeyPair.createNew(req,provider._id,function(err,keyPair){
-                        
-                        logger.debug("Returned keypair: >>>>> ",JSON.stringify(keyPair));
-                        provider.keyPairs = keyPair;
-                        logger.debug("Provider:>>>>>>>>>>>>>>>>>>>> ",JSON.stringify(provider.keyPairs));
+                        if(keyPair){
+                            var dommyProvider = {
+                                _id: provider._id,
+                                id: 9,
+                                accessKey: provider.accessKey,
+                                secretKey: provider.secretKey,
+                                name: provider.name,
+                                providerType: provider.providerType,
+                                __v: provider.__v,
+                                keyPairs: keyPair
+                            };
+                            res.send(dommyProvider);        
+                        }
                     }); 
                     logger.debug("Exit post() for /providers");
-                    res.send(provider);
+                    //res.send(provider);
                 });
     });
 
@@ -80,7 +89,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 for(var i in providers){
                     logger.debug("For loop called....");
                     AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id,function(err,keyPair){
-                        logger.debug("keyPairs length::::: ",keyPair.length);
+
                         if(keyPair){
                             var dommyProvider = {
                                 _id: keyPair[0].providerId,
@@ -132,11 +141,11 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                             var dommyProvider = {
                                 _id: keyPair[0].providerId,
                                 id: 9,
-                                accessKey: providers[i].accessKey,
-                                secretKey: providers[i].secretKey,
-                                name: providers[i].name,
-                                providerType: providers[i].providerType,
-                                __v: providers[i].__v,
+                                accessKey: aProvider.accessKey,
+                                secretKey: aProvider.secretKey,
+                                name: aProvider.name,
+                                providerType: aProvider.providerType,
+                                __v: aProvider.__v,
                                 keyPairs: keyPair
                             };
                             res.send(dommyProvider);        

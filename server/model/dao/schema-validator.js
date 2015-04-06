@@ -29,9 +29,9 @@ var validators = {
     blueprintNameValidator : [getLengthValidator(1, 100, 'Invalid Blueprint Name')],
     taskNameValidator : [getLengthValidator(1, 100, 'Invalid Task Name')],
     appCardNameValidator : [getLengthValidator(1, 100, 'Invalid App Card Name')],
-    providerIdValidator: [getLengthValidator(1, 100, 'Invalid Provider Id '),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Provider Id')],
+    idValidator: [getLengthValidator(1, 100, 'Invalid Provider Id '),getRegExValidator(/^[a-zA-Z0-9-_]+$/,'Invalid Provider Id')],
     imageNameValidator : [getLengthValidator(1, 100, 'Invalid Image Name')],
-    providerNameValidator : [getLengthValidator(1, 100, 'Invalid Image Name')]
+    nameValidator : [getLengthValidator(1, 100, 'Invalid  Name.')]
 
 };
 

@@ -19,7 +19,7 @@ var awsKeyPairSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        validate: schemaValidator.providerNameValidator
+        validate: schemaValidator.nameValidator
     },
     region: {
         type: String,
@@ -29,7 +29,8 @@ var awsKeyPairSchema = new Schema({
     providerId: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        validate: schemaValidator.idValidator
     },
     fileName: {
         type: String,
@@ -45,6 +46,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     var keyPairs = req.body.keyPairs;
     logger.debug("Create Keypair called:>>>> %s",keyPairs.length);
     var returnKeyPair = [];
+    var count =0;
     if(keyPairs.length > 0){
         logger.debug("Inside if>>>> ");
             for(var i in keyPairs){
@@ -55,12 +57,32 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
             var that = this;
             //logger.debug("keyPairObj:>>>>> ",JSON.stringify(keyPairObj))
             var keyPair = new that(keyPairObj);
-            returnKeyPair.push(saveKeyPair(keyPair,req));
-            logger.debug(";;;;;;;;;;;;;;;;;;;;;;;;");
+            keyPair.save(function(err, aKeyPair) {
+                logger.debug("Save called......");
+                if (err) {
+                    logger.error(err);
+                    callback(err, null);
+                    return ;
+                }
+                logger.debug("created kepair::::::::::",JSON.stringify(aKeyPair));
+
+            returnKeyPair.push(keyPair);
+            count++;
+                ProviderUtil.saveAwsPemFiles(keyPair,req,function(err,flag){
+                    if(err){
+                        logger.debug("Unable to save pem files.");
+                        res.send(500,"Unable to save pem files.");
+                        return;
+                    }
+                });
+             
+                if(keyPairs.length === count){
+                    logger.debug("returnKeyPair :>>>>>>>>>>> ",JSON.stringify(returnKeyPair));
+                    callback(null,returnKeyPair);
+                }
+            });
         }
     }
-    logger.debug("returnKeyPair :>>>>>>>>>>> ",JSON.stringify(returnKeyPair.length));
-    callback(null,returnKeyPair);
 };
 
 function saveKeyPair(keyPair,req){
@@ -72,7 +94,7 @@ function saveKeyPair(keyPair,req){
                     return ;
                 }
                 logger.debug("created kepair::::::::::",JSON.stringify(aKeyPair));
-                ProviderUtil.saveAwsPemFiles(keyPair,req);
+                //ProviderUtil.saveAwsPemFiles(keyPair,req);
                 return aKeyPair;
             });
 }

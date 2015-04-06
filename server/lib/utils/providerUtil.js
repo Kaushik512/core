@@ -21,6 +21,9 @@ var ProviderUtil = function(){
 
 		        fs.writeFile(pathNew, data, function (err) {
 		            console.log('uploaded', pathNew);
+		            if(err){
+		            	callback(err,null);
+		            }
 		        });
 		    });
 			}else{
@@ -39,6 +42,9 @@ var ProviderUtil = function(){
 
 		        fs.writeFile(pathNew, data, function (err) {
 		            console.log('uploaded', pathNew);
+		            if(err){
+		            	callback(err,null);
+		            }
 		        		});
 		    		});
 				});
