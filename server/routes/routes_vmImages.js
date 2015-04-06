@@ -16,6 +16,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var imageIdentifier = req.body.imageIdentifier.trim();
         var name = req.body.name.trim();
         var vType = req.body.vType.trim();
+        var osType = req.body.osType.trim();
 
         if(typeof providerId === 'undefined' || providerId.length === 0){
             res.send(500,"Please Enter ProviderId.");
@@ -39,12 +40,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         	providerId: providerId,
         	imageIdentifier: imageIdentifier,
         	name: name,
-        	vType: vType
+        	vType: vType,
+            osType: osType
     };
 	    AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
 	            if (err) {
 	                logger.error(err);
-	                res.send(500, errorResponses.db.error);
+	                res.send(500, "Image creation failed due to either Image name already exist or some other issue.");
 	                return;
 	            }
 	            logger.debug("Returned Provider: ",aProvider);
@@ -116,6 +118,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var imageIdentifier = req.body.imageIdentifier.trim();
         var name = req.body.name.trim();
         var vType = req.body.vType.trim();
+        var osType = req.body.osType.trim();
 
         if(typeof providerId === 'undefined' || providerId.length === 0){
             res.send(500,"Please Enter ProviderId.");
@@ -142,7 +145,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         	providerId: providerId,
         	imageIdentifier: imageIdentifier,
         	name: name,
-        	vType: vType
+        	vType: vType,
+            osType: osType
     	};
         logger.debug("image >>>>>>>>>>>>");
         VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {

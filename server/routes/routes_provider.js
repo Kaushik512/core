@@ -48,7 +48,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 AWSProvider.createNew(providerData, function(err, provider) {
                     if (err) {
                         logger.debug("err.....",err);
-                        res.send(500,"Unable to create Provider.");
+                        res.send(500,"Provider creation failed due to either Provider name already exist or some other issue.");
                         return;
                     }
                     logger.debug("Provider id:  %s",JSON.stringify(provider._id));
@@ -111,7 +111,6 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                         }
 
                     });
-                    //res.send(allProviders);
                 }
             	
             } else {
@@ -193,13 +192,13 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             return;
         }
 
-        var providerData={
-        accessKey: accessKey,
-        secretKey: secretKey,
-        name: name,
-        providerType: providerType,
-        regions: regions
-    	};
+        var providerData= {
+            id: 9,
+            accessKey: accessKey,
+            secretKey: secretKey,
+            name: name,
+            providerType: providerType
+        };
         logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
         AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
             if (err) {
