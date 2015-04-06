@@ -1438,12 +1438,17 @@ $('#appURLForm').submit(function(e){
             var $row = $('<tr/>');
             var appName = $(this).find('.appName').val();
             var appUrl = $(this).find('.appURL').val();
-            if(!regexpURL.test(appUrl)){
-              alert('Please Enter a Valid URL');
+            if(!(appName)) {
+              alert("Please Enter Name");
               return false;
             }
-            if(!(appName && appUrl)) {
-              alert("Please enter Name and URL");
+            if(!(appUrl)){
+              alert('Please Enter URL');
+              return false;
+            }
+
+            if(!regexpURL.test(appUrl)){
+              alert('Please Enter a Valid URL');
               return false;
             }
 
