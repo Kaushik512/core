@@ -17,7 +17,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var name = req.body.name.trim();
         var vType = req.body.vType.trim();
         var osType = req.body.osType.trim();
-        
+
         // Field validation for undefined and empty
         if(typeof providerId === 'undefined' || providerId.length === 0){
             res.send(500,"Please Enter ProviderId.");
@@ -201,6 +201,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                     res.send(400);
                 }
             });
+        });
+    });
+
+// Return images for a provider.
+    app.get('/vmimages/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /vmimages/providers/%s",req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if(typeof providerId === 'undefined' || providerId.length === 0){
+            res.send(500,"Please Enter providerId.");
+            return;
+        }
+        VMImage.getImageByProviderId(providerId, function(err, images) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (images) {
+                logger.debug("Exit get() for /vmimages/%s",req.params.providerId);
+                res.send(images);
+            } else {
+                res.send(404);
+            }
         });
     });
 
