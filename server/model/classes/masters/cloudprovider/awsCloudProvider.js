@@ -13,7 +13,7 @@ var awsProviderSchema = new Schema({
         type: Number,
         required: true
     },
-    name: {
+    providerName: {
         type: String,
         required: true,
         trim: true,

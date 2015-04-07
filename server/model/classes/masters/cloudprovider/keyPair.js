@@ -15,7 +15,7 @@ var awsKeyPairSchema = new Schema({
         required: true,
         trim: true
     },
-    name: {
+    keyPairName: {
         type: String,
         required: true,
         trim: true,
@@ -43,13 +43,20 @@ var awsKeyPairSchema = new Schema({
 
 // creates a new Provider
 awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
-    var keyPairs = req.body.keyPairs;
+    //var keyPairs = req.body.keyPairs;
     //keyPairs = JSON.parse(keyPairs);
-    logger.debug("Create Keypair called:>>>> %s",typeof keyPairs);
+    var keyPairs1= {
+            keyPairName: req.body.keyPairName[0],
+            region: req.body.region[0],
+            fileName: req.body.fileName[0]
+        };
+        var keyPairs = [];
+        keyPairs.push(keyPairs1);
+    logger.debug("Create Keypair called:>>>> %s",keyPairs);
     var returnKeyPair = [];
     var count =0;
-    if(keyPairs.length > 0){
-        //logger.debug("Inside if>>>> ",req.files);
+    if(keyPairs){
+        logger.debug("Inside if>>>> ",typeof keyPairs);
         var inFiles = req.files;
             for(var i=0;i< keyPairs.length;i++){
             var keyPairObj = keyPairs[i];
@@ -70,7 +77,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
 
                 returnKeyPair.push(keyPair);
                 count++;
-                ProviderUtil.saveAwsPemFiles(keyPair,inFiles[i],function(err,flag){
+                ProviderUtil.saveAwsPemFiles(keyPair,inFiles,function(err,flag){
                     if(err){
                         logger.debug("Unable to save pem files.");
                         res.send(500,"Unable to save pem files.");
@@ -163,7 +170,7 @@ awsKeyPairSchema.statics.updateAWSKeyPairById = function(keyPairId, KeyPairData,
             "_id": new ObjectId(keyPairId)
         }, {
             $set: {
-                name: KeyPairData.name,
+                name: KeyPairData.keyPairName,
                 accessKey: KeyPairData.region
             }
         }, {

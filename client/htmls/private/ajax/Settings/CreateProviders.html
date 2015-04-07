@@ -58,7 +58,7 @@
              <div class="row">
                <div class="col-lg-6 col-md-6">
                 <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                <select id="providertype" name="providertype" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
+                <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
                  <option value="">Select Provider</option>
                  <option value="aws">AWS</option>
                </select>
@@ -66,7 +66,7 @@
              <div class="col-lg-6 col-md-6">
                <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                <!-- <i class="icon-append fa fa-building"></i> -->
-               <input name="name" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+               <input name="providerName" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
              </div>    
            </div>
 
@@ -235,7 +235,7 @@ $(document).ready(function () {
 
 
    $('#myForm54').ajaxForm(function() { 
-    alert("Thank you for your comment!"); 
+    //alert("Thank you for your comment!"); 
 }); 
   
   /*$('#myForm54').submit(function() {
@@ -396,7 +396,7 @@ console.log(serialize)
     getKeyValueList=function(){
       return '<div class="col-lg-6 col-md-6" style="width:47%;">'
       +'<label for="name">Select Key Pair:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
-      +'<select id="'+UtilityMethods.getRandomNumber()+'" name="keyPairs" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" '
+      +'<select id="'+UtilityMethods.getRandomNumber()+'" name="keyPairName" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" '
       +'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
       +'  <option value="">Select Any Key Pair</option></select>'
       +'</div>' ;

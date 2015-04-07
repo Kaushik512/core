@@ -13,18 +13,24 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 // Create AWS Provider.
 	app.post('/aws/providers', function(req, res) {
 
-        logger.debug("Enter post() for /providers.",req.files.fileObject.path);
+        logger.debug("Enter post() for /providers.");
+        console.log(req.files.fileObject);
         var accessKey = req.body.accessKey;
         var secretKey = req.body.secretKey;
-        var name = req.body.name;
+        var providerName = req.body.providerName;
         var providerType = req.body.providerType;
-        var keyPairs = req.body.keyPairs;
+        //var keyPairs = req.body.keyPairs;
+        /*var keyPairs= {
+            name: req.body.keyPairs[0].name,
+            region: req.body.region[0],
+            fileName: req.body.fileName[0]
+        };*/
         
         // Field validation for undefined and empty
-        if(typeof keyPairs === 'undefined' || keyPairs.length === 0){
+        /*if(typeof keyPairs === 'undefined' || keyPairs.length === 0){
             res.send(500,"Please Enter keyPairs.");
             return;
-        }
+        }*/
         if(typeof accessKey === 'undefined' || accessKey.length === 0){
             res.send(500,"Please Enter AccessKey.");
             return;
@@ -33,7 +39,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             res.send(500,"Please Enter SecretKey.");
             return;
         }
-        if(typeof name === 'undefined' || name.length === 0){
+        if(typeof providerName === 'undefined' || providerName.length === 0){
             res.send(500,"Please Enter Name.");
             return;
         }
@@ -45,7 +51,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         	id: 9,
         	accessKey: accessKey,
         	secretKey: secretKey,
-        	name: name,
+        	providerName: providerName,
         	providerType: providerType
         };
                 AWSProvider.createNew(providerData, function(err, provider) {
@@ -62,7 +68,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                                 id: 9,
                                 accessKey: provider.accessKey,
                                 secretKey: provider.secretKey,
-                                name: provider.name,
+                                providerName: provider.providerName,
                                 providerType: provider.providerType,
                                 __v: provider.__v,
                                 keyPairs: keyPair
@@ -148,7 +154,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                                 id: 9,
                                 accessKey: aProvider.accessKey,
                                 secretKey: aProvider.secretKey,
-                                name: aProvider.name,
+                                providerName: aProvider.providerName,
                                 providerType: aProvider.providerType,
                                 __v: aProvider.__v,
                                 keyPairs: keyPair
@@ -169,7 +175,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
         var accessKey = req.body.accessKey.trim();
         var secretKey = req.body.secretKey.trim();
-        var name = req.body.name.trim();
+        var providerName = req.body.providerName.trim();
         var providerType = req.body.providerType.trim();
         var regions = req.body.regions;
         var providerId = req.params.providerId.trim();
@@ -189,7 +195,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             res.send(500,"Please Enter SecretKey.");
             return;
         }
-        if(typeof name === 'undefined' || name.length === 0){
+        if(typeof providerName === 'undefined' || providerName.length === 0){
             res.send(500,"Please Enter Name.");
             return;
         }
@@ -202,7 +208,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             id: 9,
             accessKey: accessKey,
             secretKey: secretKey,
-            name: name,
+            providerName: providerName,
             providerType: providerType
         };
         logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
