@@ -12,7 +12,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
 // Create AWS Provider.
 	app.post('/aws/providers', function(req, res) {
-        logger.debug("Enter post() for /providers.");
+        logger.debug("Enter post() for /providers.",req.files);
         var accessKey = req.body.accessKey.trim();
         var secretKey = req.body.secretKey.trim();
         var name = req.body.name.trim();
@@ -86,13 +86,15 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 return;
             }
             if (providers) {
-                var allProviders = [];
+                res.send(providers);
+                /*var allProviders = [];
                 var count =0;
                 for(var i in providers){
                     logger.debug("For loop called....");
                     AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id,function(err,keyPair){
 
                         if(keyPair){
+                            logger.debug("Return providers:::: %s %s",providers[i]._id,providers[i].name);
                             var dommyProvider = {
                                 _id: providers[i]._id,
                                 id: 9,
@@ -109,11 +111,12 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                                     if(providers.length === count){
                                         logger.debug("Exit get() for /providers",JSON.stringify(allProviders.length));
                                         res.send(allProviders);
+                                        return;
                                     }
                         }
 
                     });
-                }
+                }*/
             	
             } else {
                 res.send([]);

@@ -47,7 +47,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 	    AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
 	            if (err) {
 	                logger.error(err);
-	                res.send(500, "Image creation failed due to either Image name already exist or some other issue.");
+	                res.send(500, "Image creation failed due to Image name already exist.");
 	                return;
 	            }
 	            logger.debug("Returned Provider: ",aProvider);
