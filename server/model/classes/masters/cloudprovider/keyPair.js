@@ -44,7 +44,7 @@ var awsKeyPairSchema = new Schema({
 // creates a new Provider
 awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     var keyPairs = req.body.keyPairs;
-    keyPairs = JSON.parse(keyPairs);
+    //keyPairs = JSON.parse(keyPairs);
     logger.debug("Create Keypair called:>>>> %s",typeof keyPairs);
     var returnKeyPair = [];
     var count =0;
