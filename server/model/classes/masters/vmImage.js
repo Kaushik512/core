@@ -137,14 +137,14 @@ imageSchema.statics.removeImageById = function(imageId, callback) {
 imageSchema.statics.getImageByProviderId = function(providerId, callback) {
     this.find({
         "providerId": providerId
-    }, function(err, anImage) {
+    }, function(err, images) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        if (anImage.length) {
-            callback(null, anImage[0]);
+        if (images.length) {
+            callback(null, images);
         } else {
             callback(null, null);
         }
