@@ -140,7 +140,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                         logger.debug("keyPairs length::::: ",keyPair.length);
                         if(keyPair){
                             var dommyProvider = {
-                                _id: keyPair[0].providerId,
+                                _id: aProvider._id,
                                 id: 9,
                                 accessKey: aProvider.accessKey,
                                 secretKey: aProvider.secretKey,

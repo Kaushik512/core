@@ -44,18 +44,20 @@ var awsKeyPairSchema = new Schema({
 // creates a new Provider
 awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     var keyPairs = req.body.keyPairs;
-    logger.debug("Create Keypair called:>>>> %s",keyPairs.length);
+    keyPairs = JSON.parse(keyPairs);
+    logger.debug("Create Keypair called:>>>> %s",typeof keyPairs);
     var returnKeyPair = [];
     var count =0;
     if(keyPairs.length > 0){
-        logger.debug("Inside if>>>> ");
+        //logger.debug("Inside if>>>> ",req.files);
+        var inFiles = req.files;
             for(var i=0;i< keyPairs.length;i++){
             var keyPairObj = keyPairs[i];
+            //keyPairObj = JSON.parse(keyPairObj);
             logger.debug("Keypair:>>>>>>>>>>>>>>>>>>> ",JSON.stringify(keyPairObj));
             keyPairObj.providerId = providerId;
             keyPairObj.id = 99;
             var that = this;
-            //logger.debug("keyPairObj:>>>>> ",JSON.stringify(keyPairObj))
             var keyPair = new that(keyPairObj);
             keyPair.save(function(err, aKeyPair) {
                 logger.debug("Save called......");
@@ -66,9 +68,9 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
                 }
                 logger.debug("created kepair::::::::::",JSON.stringify(aKeyPair));
 
-            returnKeyPair.push(keyPair);
-            count++;
-                ProviderUtil.saveAwsPemFiles(keyPair,req,function(err,flag){
+                returnKeyPair.push(keyPair);
+                count++;
+                ProviderUtil.saveAwsPemFiles(keyPair,inFiles[i],function(err,flag){
                     if(err){
                         logger.debug("Unable to save pem files.");
                         res.send(500,"Unable to save pem files.");
