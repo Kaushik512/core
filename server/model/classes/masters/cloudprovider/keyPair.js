@@ -70,13 +70,13 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
 
                 returnKeyPair.push(keyPair);
                 count++;
-                /*ProviderUtil.saveAwsPemFiles(keyPair,inFiles[i],function(err,flag){
+                ProviderUtil.saveAwsPemFiles(keyPair,inFiles[i],function(err,flag){
                     if(err){
                         logger.debug("Unable to save pem files.");
                         res.send(500,"Unable to save pem files.");
                         return;
                     }
-                });*/
+                });
              
                 if(keyPairs.length === count){
                     logger.debug("returnKeyPair :>>>>>>>>>>> ",JSON.stringify(returnKeyPair));
