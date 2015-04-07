@@ -12,11 +12,11 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 
 // Create AWS Provider.
 	app.post('/aws/providers', function(req, res) {
-        logger.debug("Enter post() for /providers.");
-        var accessKey = req.body.accessKey.trim();
-        var secretKey = req.body.secretKey.trim();
-        var name = req.body.name.trim();
-        var providerType = req.body.providerType.trim();
+        logger.debug("Enter post() for /providers.",req.files.fileObject.path);
+        var accessKey = req.body.accessKey;
+        var secretKey = req.body.secretKey;
+        var name = req.body.name;
+        var providerType = req.body.providerType;
         var keyPairs = req.body.keyPairs;
         
         // Field validation for undefined and empty
