@@ -241,7 +241,6 @@ $(document).ready(function () {
 });
 
   if(!UtilityMethods.getIdFromURL()){
-    debugger;
     var createTemplateInstance=new createTemplate($('#appender'));
     $('#appender').append(createTemplateInstance.getFinalTemplate(true));
     bindChange_importPemFile();
@@ -317,15 +316,16 @@ formdata1.append('accessKey',reqBody.accessKey);
 formdata1.append('secretKey',reqBody.secretKey);
 formdata1.append('providerType',reqBody.providerType);
 formdata1.append('keyPairs',reqBody.keyPairs);
-formdata1.append(reqBody.keyPairs[0].fileName,$('input[type="file"]')[0].files[0]);
+//formdata1.append(reqBody.keyPairs[0].fileName,$('input[type="file"]')[0].files[0]);
 
     console.log(reqBody);
+
     if(!UtilityMethods.getIdFromURL()){
       var url="/aws/providers"
     }else{
       var url="/aws/providers/"+UtilityMethods.getIdFromURL()+"/update"
     }
-    
+
     $.ajax({
      method: "POST",
      url: url,
@@ -384,7 +384,7 @@ formdata1.append(reqBody.keyPairs[0].fileName,$('input[type="file"]')[0].files[0
       +'<label for="name">Select Key Pair:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
       +'<select id="'+UtilityMethods.getRandomNumber()+'" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" '
       +'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
-      +'  <option value="">Select Any Key Pair</option>'
+      +'  <option value="">Select Any Key Pair</option></select>'
       +'</div>' ;
     };
     var getRegion=function(){

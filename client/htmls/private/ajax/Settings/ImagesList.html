@@ -1,6 +1,6 @@
 
 <script>
-    $(".tree-view").hide();  
+  //  $(".tree-view").hide();  
 </script>
 
 <div class="row">
@@ -40,9 +40,9 @@
                                 </thead>
                                 <tbody>
                                     <tr class="hidden rowtemplate">
-                                        <td datafield="imagename"></td>
-                                        <td datafield="imageidentifire"></td>
-                                        <td datafield="providername"></td>
+                                        <td datafield="name"></td>
+                                        <td datafield="imageIdentifier"></td>
+                                        <td datafield="providerId"></td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
                                                 <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
@@ -75,9 +75,323 @@
 
 
                                 <script>
+                                   function saveProviderData(){
+
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+      //reqBody.instanceUserName='root';
+      $.ajax({
+         method: "GET",url: "/vmimages",data: reqBody,   
+         success: function(data, success) {
+                data= typeof data=="string" ?JSON.parse(data):data;
+                d4ddata=data;
+                startup();
+            },
+            error: function(jqxhr) {
+                removeLoader();
+                bootbox.alert(jqxhr.status);
+            },
+            failure: function(data) {
+                bootbox.alert(data);
+            }
+        });
+
+    }
+
+    function CreateTableFromJsonForProvider(formID,createFileName,isEscapeMasterDirectory) {
+        var formData = null;
+        //force setting the idFieldName to "rowid"
+      var idFieldName = "_id";
+        formData = d4ddata;
+        var formSchema = null;
+        $.each(d4ddata, function(i, item) {
+            console.log("Top:" + JSON.stringify(item)); //rows
+            var editButton = null;
+            var idFieldValue = null;
+            var imageTD = null;
+            $.each(item, function(k, v) { //columns
+                // var inputC = null;
+               // console.log('k:' + k + ' v :' + JSON.stringify(v));
+                if (k == idFieldName) {
+                    idFieldValue = v;
+                }
+                inputC = $('.rowtemplate').find("[datafield='" + k + "']");
+                if (inputC) {
+                    console.log('Inputc===>' + inputC.attr('datafield'));
+                    if (inputC.attr('datafield') == 'active') {
+                        if (v.toString() == 'false') {
+                            inputC.html('Inactive');
+                        } else
+                            inputC.html('Active');
+                    } else {
+                        if (inputC.attr('datatype')) {
+                            // inputC.attr('data-content',v);
+                            // inputC.attr('data-toggle',"popover");
+                            if (inputC.attr('datatype') == 'list') {
+                                v = v.replace(/,/g, "<br/>");
+                                inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
+                            } else
+                                inputC.html(v);
+                        } else
+                            inputC.html(v);
+
+                    }
+                }
+            });
+
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            // $('#envtable').append(sRow);
+            imageTD = $('.rowtemplate').find("[datatype='image']");
+
+            editButton = $('.rowtemplate').find("[title='Update']");
+
+            if (idFieldValue) {
+                if (imageTD) {
+                    if (imageTD.length > 0) {
+                        console.log("Template Icon:" + idFieldValue);
+                        var imgpath = 'img/blank.png';
+                        if (imageTD.html().indexOf('<img') >= 0) {
+                            imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                        } else
+                            imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+
+                        imageTD.html('');
+                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
+
+                    }
+
+                }
+                if (editButton) {
+                    editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
+                    //checking for createfilename and checking for the resources as per the JSON
+                    var hasEditPermission = false;
+                    if(createFileName==='CreateOrg.html'){
+                        if(haspermission('organization','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateProductGroup.html'){
+                        if(haspermission('businessgroups','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateProject.html'){
+                        if(haspermission('projects','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironment.html'){
+                        if(haspermission('environment','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironmentConcept.html'){
+                        if(haspermission('chefenvironment','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateConfigManagement.html'){
+                        if(haspermission('chefserver','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateUser.html'){
+                        if(haspermission('users','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateTeam.html'){
+                        if(haspermission('teams','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateTemplates.html'){
+                        if(haspermission('templates','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }else if(createFileName==='CreateJiraConfig.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    else if(createFileName==='CreateProviders.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    else if(createFileName==='CreateImages.html'){
+                        if(haspermission('services','modify')){
+                        hasEditPermission =true;
+                        }
+                    }
+                    //user has no permission to edit
+                    if(!hasEditPermission){
+                        
+                        editButton.addClass('disabled');
+                    }
+                    editButton.addClass("tableactionbutton tableactionbuttonpadding");
+                    editButton.removeClass('btn-xs');
+                    editButton.addClass('btn-sg');
+                }
+                //importbutton will be present for config management screen.
+                var importbutton = $('.rowtemplate').find('a[title="Import Nodes"]');
+                // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                //&& tdorgname.length > 0
+                if (importbutton && importbutton.length > 0) {
+                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                    importbutton.removeClass('btn-xs');
+                    importbutton.addClass('btn-sg');
+                    importbutton.addClass('tableactionbutton');
+                }
+
+
+
+                //setting the delete button
+
+                var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                if (deletebutton) {
+                    deletebutton.attr('onClick', 'deleteItemFromProvider(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
+                    var hasDeletePermission = false;
+                    //checking whether the user has the authentication to delete any entry
+                    if(createFileName==='CreateOrg.html'){
+                        if(haspermission('organization','delete')){
+                        hasDeletePermission =true;
+                        }
+
+                    }else if(createFileName==='CreateProductGroup.html'){
+                        if(haspermission('businessgroups','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateProject.html'){
+                        if(haspermission('projects','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironment.html'){
+                        if(haspermission('environment','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateEnvironmentConcept.html'){
+                        if(haspermission('chefenvironment','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateConfigManagement.html'){
+                        if(haspermission('chefserver','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateUser.html'){
+                        if(haspermission('users','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateTeam.html'){
+                        if(haspermission('teams','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateTemplates.html'){
+                        if(haspermission('templates','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateServiceCommand.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateJiraConfig.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateProviders.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateImages.html'){
+                        if(haspermission('services','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }
+
+                    if(!hasDeletePermission){
+                        
+                        deletebutton.addClass('disabled');
+                    }
+                    deletebutton.removeClass('btn-xs');
+                    deletebutton.addClass('btn-sg');
+                    deletebutton.addClass('tableactionbutton');
+                }
+            }
+
+
+            console.log('-----------');
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
+            $('#envtable').append(sRow);
+        });
+        setPopOverForTableFields();
+        $(".savespinner").hide();
+
+    }
+
+    function deleteItemFromProvider(docid, key, value, button) {
+
+    bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
+        if (result) {
+            $.ajax({
+                type: "delete",
+                dataType: "text",
+
+                async: false,
+                url: "/aws/providers/" + value,
+                success: function(data) {
+                    // alert(data.toString());  
+                    // debugger;
+                    //d4ddata = JSON.parse(data);
+                    // $('#refreshpage').click();
+                    if(data != '401')
+                    {
+                        var $tr = $(button).closest('tr');
+                        //$tr.addClass('hidden').remove();
+                        var $table = $tr.parents('table');
+
+                        if ($.fn.DataTable.isDataTable($table)) {
+                            var $dataTable = $table.DataTable();
+                            $dataTable.row($tr).remove().draw(false);
+                        } else {
+
+                            $tr.fadeOut("slow");
+                            $tr.addClass('hidden').remove();
+                        }
+
+
+                        var tab = 'envtable';
+                        $('#' + tab).dataTable();
+                        if (parseInt(docid) < 5) {
+                            //adTreeFuncNew();
+                            //  alert('in saved');
+                            //   selectFirstEnv();
+                        }
+                    }
+                    else
+                    {
+                        bootbox.alert('Insufficient permission to perform this operation.');
+                    }
+                },
+                failure: function(data) {
+                    // debugger;
+                    bootbox.alert(data.toString());
+                },
+                error: function(data) {
+                    bootbox.alert(data.responseText);
+                }
+            });
+        }
+    });
+
+    }
+
                                     $(document).ready(function () {
-                                       
-                                        startup();
+                                       saveProviderData();
+                                        
                                     });
 
                                     function startup() {
@@ -85,7 +399,7 @@
                                         //setting the addnew button to launch popup
                                         $("#addnewitem").attr('data-toggle', 'modal');
 
-                                        CreateTableFromJson(22,'imagename','CreateImages.html'); //22 is for Images
+                                        CreateTableFromJsonForProvider(22,'CreateProviders.html',true); //22 is for Images
                                         var tab = 'envtable';
                                         $('#envtable').dataTable({
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',

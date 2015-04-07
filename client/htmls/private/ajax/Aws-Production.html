@@ -120,45 +120,69 @@
                                             <form action="" id="checkout-form">
 
                                                 <div class="row " style="margin:0px;">
-                                                    
+                                                  <!--   
                                                    <div class="col-lg-6 col-md-6">
                                                     <label for="">Choose Operating System:<span style="color:red">*</span></label>
                                                     <select id="instanceOS" class="chooseOS width-100">
-                                                    </select>
-
-                                                                                              
+                                                    </select>                                                      
                                                 </div>
-                                                <div class="col-lg-6 col-md-6">
+ -->
+                                                   <div class="col-lg-6 col-md-6">
+                                                    <label for="">Choose Provider:<span style="color:red">*</span></label>
+                                                    <select id="providerId" class="chooseOS width-100">
+                                                    <option value="">Select Any Provider</option>
+                                                    </select>                                                      
+                                                </div>
+
+
+                                               <!--  <div class="col-lg-6 col-md-6">
                                                     <label for="">Choose Security Group:<span style="color:red">*</span></label>
                                                     
                                                     
                                                         <select class="chooseSecurity width-100">
                                                             <option value="0">default-d4d</option>
-                                                            <!--<option value="1">default-d4d</option>-->
                                                             <option value="2">Vpc-1</option>
                                                             <option value="3">Vpc-2</option>
                                                             <option value="4">Default VPC</option>
 
                                                         </select>
                                                     
+                                                </div> -->
+
+                                                 <div class="col-lg-6 col-md-6">
+                                                    <label for="">Choose Available Images:<span style="color:red">*</span></label>
+                                                    
+                                                    
+                                                        <select id="imageId" class="chooseSecurity width-100">
+                                                        <option value="">Choose Image </option>
+                                                        </select>
+                                                    
                                                 </div>
+
                                             </div>
-                                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                                          <!--   <div class="col-lg-6 col-md-6" style="margin-top:15px;">
                                                 <label for="">Choose Instance Size:<span style="color:red">*</span></label>
                                                 
                                                 
                                                   <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
                                                   </select>
                                                 
+                                            </div> -->
+                                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                                                <label for="">Select Any KeyPair :<span style="color:red">*</span></label>
+                                                
+                                                
+                                                  <select id="keypairId" class="instanceType chooseInstance width-100">
+                                                  <option value="">Choose KeyPair </option>
+                                                  </select>
+                                                
                                             </div>
-                                            <div class="col-lg-6" style="margin-top:15px;">
-                                                    <label for="">Choose Image:<span style="color:red">*</span></label>
-                                                    <select id="imageid" class="chooseImage width-100">
-                                                    <option value="">Choose Image From Available</option>
-                                                    <option value="551b800df3fddc1519873f14">CentOS_64x</option>
-                                                    </select>
 
-                                                                                              
+                                             <div class="col-lg-6" style="margin-top:15px;">
+                                                    <label for="">Select Security Group:<span style="color:red">*</span></label>
+                                                    <select id="securityGroupId" class="chooseSelect chooseImage width-100">
+                                                    <option value="">Select Any Security Group</option>                          
+                                                    </select>                                                                                            
                                                 </div>
                                             <!--To add the Swipe Functionality-->                            
                                             
@@ -698,8 +722,10 @@ function loadLaunchParams(){
   } 
 $(document).ready(function(){
   getImageList();
+    
     $('#imageid').select2();
     $('.chooseSelect').select2();
+
     console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
        var $instanceOS = $('#instanceOS');
