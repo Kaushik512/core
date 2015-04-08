@@ -69,7 +69,7 @@ function getDefaultsConfig() {
                 'c4.2xlarge','c4.4xlarge','c4.8xlarge','r3.large','r3.xlarge','r3.2xlarge','r3.4xlarge',
                 'r3.8xlarge','i2.xlarge','i2.2xlarge','i2.4xlarge','i2.8xlarge','hs1.8xlarge']
         }, {
-            pv: ['m3.medium','m3.large','m3.xlarge','m3.2xlarge','c3.large','c3.xlarge','c3.2xlarge',
+            paravirtual: ['m3.medium','m3.large','m3.xlarge','m3.2xlarge','c3.large','c3.xlarge','c3.2xlarge',
                 'c3.4xlarge','c3.8xlarge','hs1.8xlarge']
         }],
 

@@ -235,17 +235,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             function launchInstance() {
                                                 logger.debug("Enter launchInstance");
                                                 // New add
-                                                var encryptedPemFileLocation= currentDirectory + '/../catdata/catalyst/provider-pemfiles';
+                                                //var encryptedPemFileLocation= currentDirectory + '/../catdata/catalyst/provider-pemfiles/';
 
                                                 var settings = appConfig;
                                                 //encrypting default pem file
                                                 var cryptoConfig = appConfig.cryptoSettings;
                                                 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                                                //var encryptedPemFileLocation = settings.instancePemFilesDir + uuid.v4();
+                                                var encryptedPemFileLocation = settings.instancePemFilesDir + aKeyPair._id;
                                                 
                                                 // pem file should come from provider
                                                 //cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
-                                                cryptography.encryptFile(encryptedPemFileLocation + aKeyPair._id, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
+                                                cryptography.encryptFile(encryptedPemFileLocation, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                                                     if (err) {
                                                         logger.log("encryptFile Failed >> ", err);
                                                         res.send(500);
@@ -257,10 +257,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     logger.debug("Loaded Provider: >>>>>>>>>>> %s",blueprint.instanceType);
                                                     //var ec2 = new EC2(settings.aws);
                                                     var awsSettings ={ 
-                                                        "access_key": aProvider.providerConfig.accessKey,
-                                                        "secret_key": aProvider.providerConfig.secretKey,
+                                                        "access_key": aProvider.accessKey,
+                                                        "secret_key": aProvider.secretKey,
                                                         "region"    : aKeyPair.region, // both hard coded value need to remove
-                                                        "keyPairName": aKeyPair.name
+                                                        "keyPairName": aKeyPair.keyPairName
                                                     };
                                                     var ec2 = new EC2(awsSettings);
                                                     ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, blueprint.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {

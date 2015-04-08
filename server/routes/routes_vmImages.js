@@ -4,7 +4,7 @@ var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var appConfig = require('../config/app_config');
 var blueprintsDao = require('../model/dao/blueprints');
-
+var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 module.exports.setRoutes = function(app, sessionVerificationFunc){
 	app.all('/vmimages/*',sessionVerificationFunc);
 
@@ -41,9 +41,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         	providerId: providerId,
         	imageIdentifier: imageIdentifier,
         	name: name,
-        	vType: vType,
             osType: osType
     };
+        
 	    AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
 	            if (err) {
 	                logger.error(err);
@@ -51,24 +51,39 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
 	                return;
 	            }
 	            logger.debug("Returned Provider: ",aProvider);
-	            if (aProvider){
-
-	            } else{
-	                res.send(404,"Invalid provide id,Please give correct one.");
-	                return;
-	            } 
-    		logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
-        	VMImage.createNew(vmimageData, function(err, provider) {
-            	if (err) {
-                	logger.debug("err.....",err);
-                	res.send(500);
-                	return;
-            	}
-            	res.send(provider);
-            	logger.debug("Exit post() for /vmimages");
-        	});
-    	});
-    });
+	            AWSKeyPair.getAWSKeyPairByProviderId(providerId,function(err,keyPair){
+                        logger.debug("keyPairs length::::: ",keyPair[0].region);
+                        if(err){
+                            res.send(500,"Error getting to fetch Keypair.")      
+                        }
+                		logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
+                        var ec2 = new EC2({
+                        "access_key": aProvider.accessKey,
+                        "secret_key": aProvider.secretKey,
+                        "region"    : keyPair[0].region
+                    });
+                        logger.debug("ec2>>>>>>>>>>>>>>>>> ",JSON.stringify(ec2));
+                    ec2.checkImageAvailability(vmimageData.imageIdentifier,function(err,data){
+                        if(err){
+                            logger.debug("Unable to describeImages from AWS.",err);
+                            res.send("Unable to Describe Images from AWS.",500);
+                            return;
+                        }
+                        logger.debug("Success to Describe Images from AWS. %s",data.Images[0].VirtualizationType);
+                        vmimageData.vType = data.Images[0].VirtualizationType;
+                    	VMImage.createNew(vmimageData, function(err, anImage) {
+                        	if (err) {
+                            	logger.debug("err.....",err);
+                            	res.send(500);
+                            	return;
+                        	}
+                        	res.send(anImage);
+                        	logger.debug("Exit post() for /vmimages");
+                        });
+                    });
+                });
+    	   });
+        });
 
 // Return list of all Images.
     app.get('/vmimages', function(req, res) {
