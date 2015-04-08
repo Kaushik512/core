@@ -1,3 +1,18 @@
+.divtablemarginpadding{
+    margin-left:15px;
+    padding-top:15px;
+}
+.margin0{
+    margin:0px;
+}
+.width100{
+    width:100%;
+}
+.searchCookbooksRolesLabel{
+    width:80%;
+    margin-bottom: 8px;
+}
+
 .font-size18{
     font-size: 18px !important;
     margin-top: 4px;

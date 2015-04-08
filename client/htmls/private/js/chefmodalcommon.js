@@ -1,4 +1,35 @@
-//Chef Cookbook and Recipes Selection
+// var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, readMode) {
+//     if (!selectedRunlist) {
+//         selectedRunlist = [];
+//     }
+//     var $chefItemdiv = $("<div></div>").addClass('smart-form');
+//     var $row = $("<div></div>").addClass('row margin0');
+//     var $divtable = $("<div id=\"divtable\"></div>").addClass('divtablemarginpadding');
+//     var $firstcol6 = $("<div></div>").addClass('col-lg-6');
+//     var $inputgroup = $("<div></div>").addClass('input-group width100');
+//     var $firstlabelinput = $("<label></label>").addClass('input searchCookbooksRolesLabel');
+//     var $searchiconappend = $("<i></i>").addClass('icon-append fa fa-search');
+    
+//     var $searchinputtextbox = $('<input type="text" placeholder="Search Cookbooks/Roles" id="textbox"/>');
+//     $firstlabelinput.append($searchiconappend);
+//     $firstlabelinput.append($searchinputtextbox);
+    
+
+//     $inputgroup.append($firstlabelinput);
+//     $firstcol6.append($inputgroup);
+//     $divtable.append($firstcol6);
+
+//     var $secondcol6 = $("<div></div>").addClass('col-lg-6');
+
+//     $divtable.append($secondcol6);
+//     $row.append($divtable);
+//     $chefItemdiv.append($divtable);
+//     $errorContainer = $('<div></div>').addClass('errorContainer').addClass('hidden').text('This is Error Cointainer div');
+//     $chefItemdiv.append($errorContainer);
+    
+//     $chefItemdiv.find('.chooseCheforgType').select2();
+//     return $chefItemdiv;
+// }
  
 //ChefItem added below
 var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, readMode) {
@@ -10,18 +41,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     var $panelbody = $("<div></div>").addClass('panel-body');
     var $fieldsetpanel = $("<fieldset></fieldset>").addClass('padding0');
     var $section = $("<section></section>").addClass('col col-sm-6 col-xs-12');
-    // var $label = $("<label></label>").text('Choose Organization');
-    // var $divpanel = $("<div></div>").addClass('col col-9 padding0')
-    // var $select = $("<select></select>").addClass('form-control width-100 chooseCheforgType');
-    // var $optionorg1 = $("<option></option>").text('Choose');
-    // var $optionorg2 = $("<option></option>").text('Phoenix');
 
-    // $select.append($optionorg1);
-    // $select.append($optionorg2);
-    // $section.append($label);
-    // $divpanel.append($select);
-    // $section.append($divpanel);  
-    //alert('in' + catorgname);
     $loadingContainer = $('<div></div>').addClass('loadingContainer').addClass('hidden');
     var $imgerrorContainer = $("<img />").attr('src', 'img/loading.gif').addClass('center-block chefItemwithoutOrgloadingContainerCSS');
     $loadingContainer.append($imgerrorContainer);
