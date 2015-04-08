@@ -497,6 +497,7 @@ $(function() {
 
     $('.appCardSaveBtn').click(function(e) {
         var appCardData = {};
+        var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
         appCardData.name = $('#applicationNameInput').val();
         if (!appCardData.name) {
             alert("App card name is empty");
@@ -515,10 +516,26 @@ $(function() {
             repoPassword: $('#gitpasswordaddApp').val(),
         };
 
-        if (!(appCardData.git.repoUrl && appCardData.git.repoUsername && appCardData.git.repoPassword)) {
-            alert("Git configuration is incorrect");
+
+        if (!appCardData.git.repoUrl) {
+            alert("Enter a URL");
             return;
         }
+        if(!regexpURL.test(appCardData.git.repoUrl)){
+            alert('Enter a Valid URL');
+            return;
+        }
+        if(!appCardData.git.repoUsername){
+            alert('Enter a Username');
+            return;
+        }
+        if(!appCardData.git.repoPassword){
+            alert('Enter Password');
+            return;
+        }
+        
+
+
 
         appCardData.build = {
             envId: $('#environmentList').val(),

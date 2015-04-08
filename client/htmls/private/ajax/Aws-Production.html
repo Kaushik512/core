@@ -1695,56 +1695,62 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
    return; 
  }
 });
-	$('#appURLForm').submit(function(e){
-   var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
-
-   var $row = $('<tr/>');
-   var appName = $(this).find('.appName').val();
-   var appUrl = $(this).find('.appURL').val();
-   if(!regexpURL.test(appUrl)){
-     alert('Please Enter a Valid URL');
-     return false;
-   }
-   if(!(appName && appUrl)) {
-     alert("Please enter Name and URL");
-     return false;
-   }
-
-   $row.data('appUrlData',{
-     name:appName,
-     url:appUrl
-   })
-
-
-   var $tdName =$('<td/>');
-   $tdName.append(appName);
-   var $tdURL =$('<td/>');
-   $tdURL.append(appUrl);
-
-   var $tdAction =$('<td/>');
-   $tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
-	//<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
-	$tdAction.find('.deleteURL').click(function(){
-   $row.remove();
-   var rowCount2 = $('#appUrlTable').find('tbody > tr').length;
-   if(rowCount2===1){
-     $('#appEntry').removeClass('hidden');
-     return;
-   }
-   if(rowCount2<3){
-	//alert(rowCount2);
-	$('#newAppSeries').removeClass('hidden');
-	return;
-}
-});
 	
-	$row.append($tdName).append($tdURL).append($tdAction);
-	$('#appUrlTable').find('tbody').append($row);
-	$('#modalAppNameURL').modal('hide');
-	$('#appEntry').addClass('hidden');
-	return false;
-	
+$('#appURLForm').submit(function(e){
+            var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
+            
+            var $row = $('<tr/>');
+            var appName = $(this).find('.appName').val();
+            var appUrl = $(this).find('.appURL').val();
+            if(!(appName)) {
+              alert("Please Enter Name");
+              return false;
+            }
+            if(!(appUrl)){
+              alert('Please Enter URL');
+              return false;
+            }
+
+            if(!regexpURL.test(appUrl)){
+              alert('Please Enter a Valid URL');
+              return false;
+            }
+
+            $row.data('appUrlData',{
+              name:appName,
+              url:appUrl
+            })
+
+
+            var $tdName =$('<td/>');
+            $tdName.append(appName);
+            var $tdURL =$('<td/>');
+            $tdURL.append(appUrl);
+
+            var $tdAction =$('<td/>');
+            $tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+            //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+            $tdAction.find('.deleteURL').click(function(){
+              $row.remove();
+              var rowCount2 = $('#appUrlTable').find('tbody > tr').length;
+              if(rowCount2===1){
+                $('#appEntry').removeClass('hidden');
+                return;
+              }
+              if(rowCount2<3){
+                //alert(rowCount2);
+                $('#newAppSeries').removeClass('hidden');
+                return;
+              }
+            });
+
+            $row.append($tdName).append($tdURL).append($tdAction);
+            $('#appUrlTable').find('tbody').append($row);
+            $('#modalAppNameURL').modal('hide');
+            $('#appEntry').addClass('hidden');
+            return false;
+
 });
 </script>
 
