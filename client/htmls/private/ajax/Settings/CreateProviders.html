@@ -166,10 +166,11 @@ inLineReady();
 
 function appendLoader(){
   removeLoader();
-  $("form[id*='myForm']").find("div.pull-right > button").attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+  $("form[id*='myForm']").find("div.pull-right > input").attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
 }
 function removeLoader(){
   $('#masterssavespinner').remove();
+  $("form[id*='myForm']").find("div.pull-right > input").removeAttr('disabled');
 }
 
 function checkForKeyPair(){
@@ -235,6 +236,18 @@ $(document).ready(function () {
 
 
    $('#myForm54').ajaxForm( {
+    beforeSubmit: function(arr, $form, options) { 
+    // The array of form data takes the following form: 
+    // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
+     
+    // return false to cancel submit  
+    appendLoader();                
+      if(isFormValid()){
+        return true;
+      }else{
+        return false;
+      }
+},
     dataType:  'json',
     success: function(data, success) {
   //   debugger;
@@ -243,12 +256,12 @@ $(document).ready(function () {
                 if ($('#btncancel').length){
                   $('#btncancel').click(); 
                 }                
-                removeLoader();
+               
               }
               else{
-               removeLoader();
                alert(data.toString());
              }
+              removeLoader();
            },
            error: function(jqxhr) {
          //  debugger;
@@ -257,6 +270,7 @@ $(document).ready(function () {
           },
           failure: function(data) {
            // debugger;
+           removeLoader();
             bootbox.alert(data);
           }
         }); 
