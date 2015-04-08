@@ -46,32 +46,37 @@ var imageSchema = new Schema({
 });
 
 imageSchema.statics.createNew = function(imageData, callback) {
-
+    logger.debug("Enter createNew");
     var that = this;
     var vmimage = new that(imageData);
     vmimage.save(function(err, imageData) {
         if (err) {
             logger.error(err);
+            logger.debug("Exit createNew with error");
             callback(err, null);
             return;
         }
+        logger.debug("Exit createNew with Image present");
         callback(null, imageData);
     });
 };
 
 imageSchema.statics.getImages = function(callback) {
-    logger.debug("get all providers.");
+    logger.debug("Enter getImages");
     this.find({
         "id" : 22
     }, function(err, images) {
         if (err) {
             logger.error(err);
+            logger.debug("Exit getImages with error");
             callback(err, null);
             return;
         }
         if (images.length) {
+            logger.debug("Exit getImages with Images present");
             callback(null, images);
         } else {
+            logger.debug("Exit getImages with no Images present");
             callback(null, null);
         }
 
@@ -79,17 +84,21 @@ imageSchema.statics.getImages = function(callback) {
 };
 
 imageSchema.statics.getImageById = function(imageId, callback) {
+    logger.debug("Enter getImageById");
     this.find({
         "_id": new ObjectId(imageId)
     }, function(err, anImage) {
         if (err) {
             logger.error(err);
+            logger.debug("Exit getImageById with error");
             callback(err, null);
             return;
         }
         if (anImage.length) {
+            logger.debug("Exit getImageById with Image present");
             callback(null, anImage[0]);
         } else {
+            logger.debug("Exit getImageById with no Image present");
             callback(null, null);
         }
 
@@ -97,7 +106,7 @@ imageSchema.statics.getImageById = function(imageId, callback) {
 };
 
 imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
-
+    logger.debug("Enter updateImageById");
     this.update({
         "_id": new ObjectId(imageId)
     }, {
@@ -112,9 +121,11 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
         upsert: false
     }, function(err, updateCount) {
         if (err) {
+            logger.debug("Exit updateImageById with error");
             callback(err, null);
             return;
         }
+        logger.debug("Exit updateImageById with success");
         callback(null, updateCount);
 
     });
@@ -122,30 +133,37 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
 };
 
 imageSchema.statics.removeImageById = function(imageId, callback) {
+    logger.debug("Enter removeImageById");
     this.remove({
         "_id": new ObjectId(imageId)
     }, function(err, deleteCount) {
         if (err) {
+            logger.debug("Exit removeImageById with error");
             callback(err, null);
             return;
         }
+        logger.debug("Exit removeImageById with success");
         callback(null, deleteCount);
 
     });
 };
 
 imageSchema.statics.getImageByProviderId = function(providerId, callback) {
+    logger.debug("Enter getImageByProviderId");
     this.find({
         "providerId": providerId
     }, function(err, images) {
         if (err) {
             logger.error(err);
+            logger.debug("Exit getImageByProviderId with error");
             callback(err, null);
             return;
         }
         if (images.length) {
+            logger.debug("Exit getImageByProviderId with Image present");
             callback(null, images);
         } else {
+            logger.debug("Exit getImageByProviderId with no Image present");
             callback(null, null);
         }
 

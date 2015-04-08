@@ -49,10 +49,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
             blueprintData.imageId = req.params.imageId;
-            // hardcoded securityGroupId need to remove
-            blueprintData.securityGroupId = 'sg-c00ee1a5';
             blueprintData.providerId = req.params.providerId;
-            blueprintData.keyPairId = req.params.kpId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }

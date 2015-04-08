@@ -43,8 +43,7 @@ var awsKeyPairSchema = new Schema({
 
 // creates a new Provider
 awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
-    //var keyPairs = req.body.keyPairs;
-    //keyPairs = JSON.parse(keyPairs);
+    logger.debug("Enter createNew for keyPair.");
     var keyPairs1= {
             keyPairName: req.body.keyPairName,
             region: req.body.region,
@@ -86,7 +85,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
                 });
              
                 if(keyPairs.length === count){
-                    logger.debug("returnKeyPair :>>>>>>>>>>> ",JSON.stringify(returnKeyPair));
+                    logger.debug("Exit createNew with keyPair present");
                     callback(null,returnKeyPair);
                 }
             });
@@ -119,8 +118,10 @@ awsKeyPairSchema.statics.getKeyPairs = function(callback) {
             return;
         }
         if (keyPairs.length) {
+            logger.debug("Exit getKeyPairs with keyPair present");
             callback(null, keyPairs);
         } else {
+            logger.debug("Exit getKeyPairs with no keyPair present");
             callback(null, null);
         }
 
@@ -128,17 +129,21 @@ awsKeyPairSchema.statics.getKeyPairs = function(callback) {
 };
 
 awsKeyPairSchema.statics.getAWSKeyPairById = function(keyPairId, callback) {
+    logger.debug("Enter getAWSKeyPairById");
     this.find({
         "_id": new ObjectId(keyPairId)
     }, function(err, aKeyPair) {
         if (err) {
             logger.error(err);
+            logger.debug("Exit getAWSKeyPairById with error");
             callback(err, null);
             return;
         }
         if (aKeyPair.length) {
+            logger.debug("Exit getAWSKeyPairById with keyPair present");
             callback(null, aKeyPair[0]);
         } else {
+            logger.debug("Exit getAWSKeyPairById with keyPair present");
             callback(null, null);
         }
 
@@ -146,18 +151,21 @@ awsKeyPairSchema.statics.getAWSKeyPairById = function(keyPairId, callback) {
 };
 
 awsKeyPairSchema.statics.getAWSKeyPairByProviderId = function(providerId, callback) {
-    logger.debug("getAWSKeyPairByProviderId....................");
+    logger.debug("Enter getAWSKeyPairByProviderId");
     this.find({
         "providerId": new ObjectId(providerId)
     }, function(err, aKeyPair) {
         if (err) {
             logger.error(err);
+            logger.debug("Exit getAWSKeyPairByProviderId with error");
             callback(err, null);
             return;
         }
         if (aKeyPair.length) {
+            logger.debug("Exit getAWSKeyPairByProviderId with keyPair present");
             callback(null, aKeyPair);
         } else {
+            logger.debug("Exit getAWSKeyPairByProviderId with no keyPair present");
             callback(null, []);
         }
 
@@ -165,7 +173,7 @@ awsKeyPairSchema.statics.getAWSKeyPairByProviderId = function(providerId, callba
 };
 
 awsKeyPairSchema.statics.updateAWSKeyPairById = function(keyPairId, KeyPairData, callback) {
-    
+        logger.debug("Enter updateAWSKeyPairById");
         this.update({
             "_id": new ObjectId(keyPairId)
         }, {
@@ -177,22 +185,27 @@ awsKeyPairSchema.statics.updateAWSKeyPairById = function(keyPairId, KeyPairData,
             upsert: false
         }, function(err, updateCount) {
             if (err) {
+                logger.debug("Exit updateAWSKeyPairById with error");
                 callback(err, null);
                 return;
             }
+            logger.debug("Exit updateAWSKeyPairById with success");
             callback(null, updateCount);
 
         });
 };
 
 awsKeyPairSchema.statics.removeAWSKeyPairById = function(keyPairId, callback) {
+    logger.debug("Enter removeAWSKeyPairById");
     this.remove({
         "_id": new ObjectId(keyPairId)
     }, function(err, deleteCount) {
         if (err) {
+            logger.debug("Exit removeAWSKeyPairById with error");
             callback(err, null);
             return;
         }
+        logger.debug("Exit removeAWSKeyPairById with success");
         callback(null, deleteCount);
 
     });
