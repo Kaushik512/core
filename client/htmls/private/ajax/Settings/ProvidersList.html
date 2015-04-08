@@ -101,6 +101,7 @@
       $.ajax({
          method: "GET",url: "/aws/providers",data: reqBody,   
          success: function(data, success) {
+            debugger;
                 data= typeof data=="string" ?JSON.parse(data):data;
                 d4ddata=data;
                 startup();
@@ -382,10 +383,10 @@
             $.ajax({
                 type: "delete",
                 dataType: "text",
-
                 async: false,
                 url: "/aws/providers/" + value,
                 success: function(data) {
+                    debugger;
                     // alert(data.toString());  
                     // debugger;
                     //d4ddata = JSON.parse(data);
@@ -433,20 +434,20 @@
     }
 
                                   </script>
-                                  <div class="col-md-5">
+                             <div class="col-md-5">
 
-                                  </div>
-                              </div>
-
-                          </div>
-                          <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
-                           <div id="tableFooterLeft" class="pull-left"></div>
-                           <div id="tableFooterRight" class="pull-right"></div>
-                       </div>
-
-
-                   </div>
-               </div>
-           </div>
-       </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                       <div id="tableFooterLeft" class="pull-left"></div>
+                       <div id="tableFooterRight" class="pull-right"></div>
+                    </div>
+                   
+                    
+                </div>
+            </div>
+        </div>
     </div>
+</div>
