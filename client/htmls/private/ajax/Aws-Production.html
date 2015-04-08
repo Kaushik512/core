@@ -739,7 +739,7 @@ function getProviderList(){
 //var osSelected=$('#instanceOS').find("option:seleceted").data('instanceOS');
 
 var str=' <option value="">Select Image</option>',len=data.length;
-str=str + helperConstructOption(data,['providerId','vType','osType'],'name','imageIdentifier');
+str=str + helperConstructOption(data,['providerId','vType','osType','_id'],'name','imageIdentifier');
 $('#imageId').html(str).select2();
 });
        }else{
@@ -851,9 +851,9 @@ function getkeypairList(){
   }
   $('#keypairId').html(str).select2();
 
-   var str1='<option value="">Select Any Region</option>';
+  var str1='<option value="">Select Any Region</option>';
 
-   for(var i=0;i<keylist.length;i++){
+  for(var i=0;i<keylist.length;i++){
     str1=str1+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
   }
   $('#region').html(str1).select2();
@@ -883,8 +883,8 @@ function getkeypairList(){
 });
     }
 
-}*/
-$(document).ready(function(){
+  }*/
+  $(document).ready(function(){
 	// getImageList();
 	getProviderList();
 	getImageInstances();
@@ -1391,16 +1391,24 @@ if ($('#tab2 .role-Selected').length > 0) {
 	reqBody.projectId = $('#projectListInput').val();
 	reqBody.envId = $('#envList').val();
 	
-	var imageId=$('#imageId').val();
+	var imageIdentifier=$('#imageId').val();
+  var imageId=$('#imageId').find('option:selected').attr('_id');
 	var securityGroupId=$('#securityGroupId').val();
 	var providerId=$('#providerId').val();
-	var keyPairId=$('#keyPairId').val();
-  var InstanceSize=$('#instancesize').val();
+	var keyPairId = $('#keypairId').val();
+  var instanceType=$('#instancesize').val();
+ // var instanceOS=$('#instanceOS').data('instanceOS')
 
+ // reqBody.providerId=providerId;
+ reqBody.keyPairId=keyPairId;
+ reqBody.securityGroupId=securityGroupId;
+ reqBody.instanceType=instanceType;
+ reqBody.instanceAmiid=imageIdentifier;
+ reqBody.instanceUsername='root';
 
-  reqBody.name = $('#blueprintNameInput').val();
+ reqBody.name = $('#blueprintNameInput').val();
 
-  if(!providerId){
+ if(!providerId){
    alert("Please Select Any Provider");
    return false;
  }
@@ -1418,12 +1426,16 @@ if ($('#tab2 .role-Selected').length > 0) {
    alert("Please Select Any KEyPAir");
    return false;
  }
- if(!InstanceSize){
+ if(!instanceType){
   alert("Please Select Any Instance Size");
   return false;
 
 }
+if(!reqBody.instanceOS){
+  alert('Please Select Any Operating System');
+  return false;
 
+}
 
 if (!reqBody.name) {
  alert("Please enter a blueprint name");
@@ -1471,7 +1483,7 @@ if (!reqBody.users) {
 	$('.blueprintMsgContainer').hide();
 	
 	
-	$.post('/blueprints/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/images/'+imageId, {
+	$.post('/blueprints/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/providers/'+providerId+ '/images/'+imageId, {
    blueprintData: reqBody
  }, function(data) {
    console.log(data);
