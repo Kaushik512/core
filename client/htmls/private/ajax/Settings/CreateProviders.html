@@ -468,7 +468,7 @@ console.log(serialize)
         }
 
       }
-      return '<div class="addNewRegion">'+ (isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion'))+getRegion() + str+'</div>'
+      return '<div class="addNewRegion">'+ /*(isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion'))+*/getRegion() + str+'</div>'
     };
 
     $(parentEl).delegate('.addimage','click',function(){

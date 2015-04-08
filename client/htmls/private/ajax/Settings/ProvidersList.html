@@ -101,7 +101,6 @@
       $.ajax({
          method: "GET",url: "/aws/providers",data: reqBody,   
          success: function(data, success) {
-            debugger;
                 data= typeof data=="string" ?JSON.parse(data):data;
                 d4ddata=data;
                 startup();
@@ -386,10 +385,6 @@
                 async: false,
                 url: "/aws/providers/" + value,
                 success: function(data) {
-                    debugger;
-                    // alert(data.toString());  
-                    // debugger;
-                    //d4ddata = JSON.parse(data);
                     // $('#refreshpage').click();
                     if(data != '401')
                     {
@@ -414,6 +409,7 @@
                             //  alert('in saved');
                             //   selectFirstEnv();
                         }
+                         $('#refreshpage').click();
                     }
                     else
                     {
