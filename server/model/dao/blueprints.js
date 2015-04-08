@@ -310,6 +310,8 @@ var BlueprintsDao = function() {
             projectId: blueprintData.projectId,
             envId: blueprintData.envId,
             imageId: blueprintData.imageId,
+            keyPairId : blueprintData.keyPairId,
+            providerId : blueprintData.providerId,
             securityGroupId: blueprintData.securityGroupId,
             name: blueprintData.name,
             appUrls: blueprintData.appUrls,
