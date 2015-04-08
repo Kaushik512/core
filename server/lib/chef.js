@@ -349,6 +349,7 @@ var Chef = function(settings) {
             });
         });
     };
+    var bootstrapDelay = 600 * 1000;
 
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
         console.log('Chef Repo Location : ', settings.userChefRepoLocation)
@@ -372,7 +373,7 @@ var Chef = function(settings) {
         if (typeof callbackOnStdErr === 'function') {
 
             options.onStdErr = function(data) {
-                if (bootstrapattemptcount < 4) {
+                /*            if (secondsWaited < totalSeconds) {
                     //retrying bootstrap .... needed for windows
                     if (data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0) {
                         callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount + 1) + '/4 ...');
@@ -386,6 +387,8 @@ var Chef = function(settings) {
                     console.log('Hit an error :' + data);
                     callbackOnStdErr(data);
                 }
+                return;*/
+                callbackOnStdErr(data);
             }
         }
         if ((!(params.runlist) || !params.runlist.length)) {
@@ -414,7 +417,11 @@ var Chef = function(settings) {
                 argList.push('--use-sudo-password');
             }
             argList.push('-P');
-            argList.push(params.instancePassword);
+            if (params.instanceOS == 'windows' && !params.instancePassword) {
+                argList.push('Zaq!2wsx'); // temp hack
+            } else {
+                argList.push(params.instancePassword);
+            }
         }
 
         if (params.instanceOS == 'windows') {
@@ -463,8 +470,15 @@ var Chef = function(settings) {
         procNodeDelete.on('close', function(code) {
             console.log('procNodeDelete closed');
             console.log('Command : knife ' + argList.join());
-            var proc = new Process('knife', argList, options);
-            proc.start();
+            var delay = 0;
+            if (params.instanceOS === 'windows') {
+                delay = bootstrapDelay;
+            }
+            setTimeout(function() {
+                var proc = new Process('knife', argList, options);
+                proc.start();
+            }, delay);
+
         });
 
 

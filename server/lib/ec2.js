@@ -60,7 +60,7 @@ var EC2 = function(awsSettings) {
 
 
 
-    this.launchInstance = function(image_id, intanceType, securityGroupId,instanceName, callback) {
+    this.launchInstance = function(image_id, intanceType, securityGroupId, instanceName, callback) {
 
         var that = this; //"m1.small"
         ec.runInstances({
@@ -261,7 +261,23 @@ var EC2 = function(awsSettings) {
             }
             callback(null, data.SecurityGroups);
         });
-    }
+    };
+    this.waitForEvent = function(instanceId, eventName, callback) {
+        console.log("waiting for ==> ",instanceId,eventName);
+        ec.waitFor(eventName, {
+            InstanceIds: [instanceId]
+        }, function(err, data) {
+            if (err) {
+                console.log(err, err.stack); // an error occurred
+                callback(err, null);
+            } else {
+                console.log(data);
+                callback(null, data);
+            } // successful response
+        });
+    };
+
+
 
 
 }
