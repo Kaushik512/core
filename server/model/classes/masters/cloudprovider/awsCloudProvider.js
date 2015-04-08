@@ -99,27 +99,27 @@ awsProviderSchema.statics.getAWSProviderById = function(providerId, callback) {
 
 awsProviderSchema.statics.updateAWSProviderById = function(providerId, providerData, callback) {
     logger.debug("Enter updateAWSProviderById");
-        this.update({
-            "_id": new ObjectId(providerId)
-        }, {
-            $set: {
-                name: providerData.name,
-                accessKey: providerData.accessKey,
-                secretKey: providerData.secretKey,
-                providerType: providerData.providerType
-            }
-        }, {
-            upsert: false
-        }, function(err, updateCount) {
-            if (err) {
-                logger.debug("Exit updateAWSProviderById with no update.");
-                callback(err, null);
-                return;
-            }
-            logger.debug("Exit updateAWSProviderById with update success.");
-            callback(null, updateCount);
+    this.update({
+        "_id": new ObjectId(providerId)
+    }, {
+        $set: {
+            name: providerData.name,
+            accessKey: providerData.accessKey,
+            secretKey: providerData.secretKey,
+            providerType: providerData.providerType
+        }
+    }, {
+        upsert: false
+    }, function(err, updateCount) {
+        if (err) {
+            logger.debug("Exit updateAWSProviderById with no update.");
+            callback(err, null);
+            return;
+        }
+        logger.debug("Exit updateAWSProviderById with update success.");
+        callback(null, updateCount);
 
-        });
+    });
 };
 
 awsProviderSchema.statics.removeAWSProviderById = function(providerId, callback) {

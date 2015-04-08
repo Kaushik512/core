@@ -297,6 +297,42 @@ var EC2 = function(awsSettings) {
             callback(null, data);
         });
     }
+    this.describeVpcs = function(callback){
+        var params = {
+            Filters: [],
+            VpcIds: []
+        };
+        ec.describeVpcs(params,function(err,data){
+            if(err){
+                logger.debug("Unable to describeVpcs from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to Describe Vpcs from AWS.");
+            callback(null, data);
+        });
+    }
+
+    this.describeSubnets = function(vpcId,callback){
+        var params = {
+            Filters: [
+            {
+                Name: 'vpc-id',
+                Values:[vpcId]
+            }
+                  ],
+            SubnetIds: []
+        };
+        ec.describeSubnets(params,function(err,data){
+            if(err){
+                logger.debug("Unable to describeSubnets from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to describeSubnets from AWS.");
+            callback(null, data);
+        });
+    }
 
 }
 

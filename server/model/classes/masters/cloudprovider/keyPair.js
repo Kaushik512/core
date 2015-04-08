@@ -45,22 +45,20 @@ var awsKeyPairSchema = new Schema({
 awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     logger.debug("Enter createNew for keyPair.");
     var keyPairs1= {
-            keyPairName: req.body.keyPairName,
-            region: req.body.region,
-            fileName: req.body.fileName
-        };
-        var keyPairs = [];
-        keyPairs.push(keyPairs1);
+        keyPairName: req.body.keyPairName,
+        region: req.body.region,
+        fileName: req.body.fileName
+    };
+    var keyPairs = [];
+    keyPairs.push(keyPairs1);
     logger.debug("Create Keypair called:>>>> %s",keyPairs);
     var returnKeyPair = [];
     var count =0;
     if(keyPairs){
         logger.debug("Inside if>>>> ",typeof keyPairs);
         var inFiles = req.files;
-            for(var i=0;i< keyPairs.length;i++){
+        for(var i=0;i< keyPairs.length;i++){
             var keyPairObj = keyPairs[i];
-            //keyPairObj = JSON.parse(keyPairObj);
-            logger.debug("Keypair:>>>>>>>>>>>>>>>>>>> ",JSON.stringify(keyPairObj));
             keyPairObj.providerId = providerId;
             keyPairObj.id = 99;
             var that = this;
@@ -83,7 +81,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
                         return;
                     }
                 });
-             
+                
                 if(keyPairs.length === count){
                     logger.debug("Exit createNew with keyPair present");
                     callback(null,returnKeyPair);
@@ -94,17 +92,16 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
 };
 
 function saveKeyPair(keyPair,req){
-            keyPair.save(function(err, aKeyPair) {
-                logger.debug("Save called......");
-                if (err) {
-                    logger.error(err);
-                    callback(err, null);
-                    return ;
-                }
-                logger.debug("created kepair::::::::::",JSON.stringify(aKeyPair));
-                //ProviderUtil.saveAwsPemFiles(keyPair,req);
-                return aKeyPair;
-            });
+    keyPair.save(function(err, aKeyPair) {
+        logger.debug("Save called......");
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return ;
+        }
+        logger.debug("created kepair::::::::::",JSON.stringify(aKeyPair));
+        return aKeyPair;
+    });
 }
 
 awsKeyPairSchema.statics.getKeyPairs = function(callback) {
@@ -173,26 +170,26 @@ awsKeyPairSchema.statics.getAWSKeyPairByProviderId = function(providerId, callba
 };
 
 awsKeyPairSchema.statics.updateAWSKeyPairById = function(keyPairId, KeyPairData, callback) {
-        logger.debug("Enter updateAWSKeyPairById");
-        this.update({
-            "_id": new ObjectId(keyPairId)
-        }, {
-            $set: {
-                name: KeyPairData.keyPairName,
-                accessKey: KeyPairData.region
-            }
-        }, {
-            upsert: false
-        }, function(err, updateCount) {
-            if (err) {
-                logger.debug("Exit updateAWSKeyPairById with error");
-                callback(err, null);
-                return;
-            }
-            logger.debug("Exit updateAWSKeyPairById with success");
-            callback(null, updateCount);
+    logger.debug("Enter updateAWSKeyPairById");
+    this.update({
+        "_id": new ObjectId(keyPairId)
+    }, {
+        $set: {
+            name: KeyPairData.keyPairName,
+            accessKey: KeyPairData.region
+        }
+    }, {
+        upsert: false
+    }, function(err, updateCount) {
+        if (err) {
+            logger.debug("Exit updateAWSKeyPairById with error");
+            callback(err, null);
+            return;
+        }
+        logger.debug("Exit updateAWSKeyPairById with success");
+        callback(null, updateCount);
 
-        });
+    });
 };
 
 awsKeyPairSchema.statics.removeAWSKeyPairById = function(keyPairId, callback) {
