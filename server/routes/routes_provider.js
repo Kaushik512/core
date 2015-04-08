@@ -14,7 +14,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.post('/aws/providers', function(req, res) {
 
         logger.debug("Enter post() for /providers.");
-        console.log(req.files.fileObject);
+        console.log(req.body.providerName);
         var accessKey = req.body.accessKey;
         var secretKey = req.body.secretKey;
         var providerName = req.body.providerName;
@@ -57,7 +57,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 AWSProvider.createNew(providerData, function(err, provider) {
                     if (err) {
                         logger.debug("err.....",err);
-                        res.send(500,"Provider creation failed due to either Provider name already exist or some other issue.");
+                        res.send(500,"Provider creation failed due to Provider name already exist.");
                         return;
                     }
                     logger.debug("Provider id:  %s",JSON.stringify(provider._id));
@@ -94,7 +94,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             }
             if (providers) {
                 res.send(providers);
-                /*var allProviders = [];
+                var allProviders = [];
                 var count =0;
                 for(var i in providers){
                     logger.debug("For loop called....");
@@ -123,7 +123,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                         }
 
                     });
-                }*/
+                }
             	
             } else {
                 res.send([]);
