@@ -46,9 +46,9 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     //var keyPairs = req.body.keyPairs;
     //keyPairs = JSON.parse(keyPairs);
     var keyPairs1= {
-            keyPairName: req.body.keyPairName[0],
-            region: req.body.region[0],
-            fileName: req.body.fileName[0]
+            keyPairName: req.body.keyPairName,
+            region: req.body.region,
+            fileName: req.body.fileName
         };
         var keyPairs = [];
         keyPairs.push(keyPairs1);

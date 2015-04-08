@@ -92,24 +92,25 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 res.send(500, errorResponses.db.error);
                 return;
             }
+            logger.debug("providers>>> ",   JSON.stringify(providers));
             if (providers) {
                 res.send(providers);
                 var allProviders = [];
                 var count =0;
-                for(var i in providers){
-                    logger.debug("For loop called....");
-                    AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id,function(err,keyPair){
+                /*for(var i in providers){
+                    logger.debug("For loop called....",providers[i]["_id"]);
+                    AWSKeyPair.getAWSKeyPairByProviderId(providers[i]["_id"],function(err,keyPair){
 
                         if(keyPair){
-                            logger.debug("Return providers:::: %s %s",providers[i]._id,providers[i].name);
+                            logger.debug("Return providers:::: %s %s",providers[i]._id,providers[i].providerName);
                             var dommyProvider = {
-                                _id: providers[i]._id,
+                                _id: providers[i]["_id"],
                                 id: 9,
-                                accessKey: providers[i].accessKey,
-                                secretKey: providers[i].secretKey,
-                                name: providers[i].name,
-                                providerType: providers[i].providerType,
-                                __v: providers[i].__v,
+                                accessKey: providers[i]["accessKey"],
+                                secretKey: providers[i]["secretKey"],
+                                providerName: providers[i]["providerName"],
+                                providerType: providers[i]["providerType"],
+                                __v: providers[i]["__v"],
                                 keyPairs: keyPair
                             };
                                     allProviders.push(dommyProvider);
@@ -122,8 +123,8 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                                     }
                         }
 
-                    });
-                }
+                    });*/
+                //}
             	
             } else {
                 res.send([]);

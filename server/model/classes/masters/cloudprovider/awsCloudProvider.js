@@ -56,7 +56,7 @@ awsProviderSchema.statics.createNew = function(providerData, callback) {
 };
 
 awsProviderSchema.statics.getAWSProviders = function(callback) {
-    logger.debug("get all providers.");
+    logger.debug("Enter getAWSProviders");
     this.find({
         "id" : 9
     }, function(err, providers) {
@@ -66,8 +66,10 @@ awsProviderSchema.statics.getAWSProviders = function(callback) {
             return;
         }
         if (providers.length) {
+            logger.debug("Exit getAWSProviders with providers present");
             callback(null, providers);
         } else {
+            logger.debug("Exit getAWSProviders with no providers present");
             callback(null, null);
         }
 
