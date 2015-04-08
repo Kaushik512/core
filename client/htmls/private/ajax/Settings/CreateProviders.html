@@ -104,7 +104,7 @@
 </div>
 <div class="widget-toolbox clearfix">
   <div class="btn-group pull-right">
-     <input type="submit" value=" Save" /> 
+     <input type="submit" value=" Save" class="btn btn-primary btn-mini" style="margin-right:11px;" /> 
 
    <!--  <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
      <i class="ace-icon fa fa-check bigger-110"></i>
@@ -234,9 +234,32 @@ $(document).ready(function () {
   $('#secretKey').blur(checkForKeyPair);
 
 
-   $('#myForm54').ajaxForm(function() { 
-    //alert("Thank you for your comment!"); 
-}); 
+   $('#myForm54').ajaxForm( {
+    dataType:  'json',
+    success: function(data, success) {
+  //   debugger;
+              //alert('Successfully Saved ' + data);
+              if (data!=500) {
+                if ($('#btncancel').length){
+                  $('#btncancel').click(); 
+                }                
+                removeLoader();
+              }
+              else{
+               removeLoader();
+               alert(data.toString());
+             }
+           },
+           error: function(jqxhr) {
+         //  debugger;
+            removeLoader();
+            bootbox.alert(jqxhr.responseText);
+          },
+          failure: function(data) {
+           // debugger;
+            bootbox.alert(data);
+          }
+        }); 
   
   /*$('#myForm54').submit(function() {
     $(this).validate();
