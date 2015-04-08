@@ -21,6 +21,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
 
+    // This post() Not in use
     app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/providers/:providerId/images/:imageId', function(req, res) {
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/images/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.imageId);
         //validating if user has permission to save a blueprint

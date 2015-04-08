@@ -1483,7 +1483,7 @@ if (!reqBody.users) {
 	$('.blueprintMsgContainer').hide();
 	
 	
-	$.post('/blueprints/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/providers/'+providerId+ '/images/'+imageId, {
+	$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/providers/'+providerId+ '/images/'+imageId+'/blueprints', {
    blueprintData: reqBody
  }, function(data) {
    console.log(data);
