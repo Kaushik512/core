@@ -54,13 +54,13 @@
 
                                   </div>
                                   <div class="row">
-                                   <div class="col-lg-6">
+                                <!--    <div class="col-lg-6">
                                     <label for="name">Virtualization Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                     <select id="vType" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
                                      <option value="">Select Virtualization Type</option>
                                    </select>
                                    <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                 </div>
+                                 </div> -->
                                 <!--  <div class="col-lg-6">
                                   <label for="name">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                   <select id="instancesize" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
@@ -210,13 +210,13 @@
     name=$('#name').val().trim(),
     osType=$('#osType').val().trim(),
     providerId=$('#providerId').val().trim()
-    vType=$('#vType').val().trim();
-    if(imageIdentifier && providerId && osType && name && vType){
+  //  vType=$('#vType').val().trim();
+    if(imageIdentifier && providerId && osType && name ){
       appendLoader();
       $.ajax({
         method:"POST",
         url:"/vmimages",
-        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"vType":vType },
+        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier},
         success: function(data, success) {
      // alert(1);
               //alert('Successfully Saved ' + data);
