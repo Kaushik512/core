@@ -190,8 +190,13 @@
               for(var i=0;i<len;i++){
                 str=str+'<option value="'+data[i]._id+'" secretKey="'+data[i].secretKey+'" accessKey="'+data[i].accessKey+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
               }
-                $('#providerId').html(str)/*.off('change').on('change',function(){
+                $('#providerId').html(str);
+                if($('#providerId').attr('answer')){
+                  $('#providerId').val($('#providerId').attr('answer')).select2();
+                }
+                /*.off('change').on('change',function(){
                   debugger;
+                  
                   var val=$(this).val(),region=
                   $(this).find('[value="'+val+'"]').attr('region');
                   $('#region').html('<option value="'+region+'">'+region+'</option>').val(region);
@@ -209,13 +214,25 @@
     var imageIdentifier=$('#imageidentifire').val().trim(),
     name=$('#name').val().trim(),
     osType=$('#osType').val().trim(),
-    providerId=$('#providerId').val().trim()
+    providerId=$('#providerId').val().trim(),url;
   //  vType=$('#vType').val().trim();
+
+
     if(imageIdentifier && providerId && osType && name ){
+
+
       appendLoader();
+
+if(!UtilityMethods.getIdFromURL()){
+      url="/vmimages";
+    }else{
+      url="/vmimages/"+UtilityMethods.getIdFromURL()+"/update"
+    }
+
+
       $.ajax({
         method:"POST",
-        url:"/vmimages",
+        url:url,
         data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier},
         success: function(data, success) {
      // alert(1);
@@ -262,6 +279,11 @@
      }
      $('#osType').html(str).select2();
 
+     
+                if($('#osType').attr('answer')){
+                  $('#osType').val($('#osType').attr('answer')).select2();
+                }
+
    },
    failure: function (data) {
      alert(data.toString());
@@ -303,6 +325,26 @@
 
   }
 
+
+  var UtilityMethods={
+    initTooltip:function(){
+     var $tool=$("[rel=tooltip]");
+     if ($tool.length) {
+      $tool.tooltip();
+    }
+  },
+  getRandomNumber:function(){      
+    return parseInt(Math.random()*10000000000);
+  },
+  getIdFromURL:function(){
+    var options=location.toString().split('?');
+    return options.length >1 ? (options[1]!=="new" ? options[1]:"" ):"";
+  },
+  initializeSelect2:function(){
+    $('select').select2();
+  }
+};
+
   $(document).ready(function () {
 
 
@@ -320,12 +362,22 @@
                return false; // for demo
              });
 
-           populateVirtualizationType();
+          // populateVirtualizationType();
            populateOSList();
            getProviderList();
            $('select').select2();
-           
-         });
+
+if(UtilityMethods.getIdFromURL()){
+   $.get('/vmimages/'+UtilityMethods.getIdFromURL(),function(data){
+
+$('#imageidentifire').val(data.imageIdentifier).attr('answer',data.imageidentifire);
+$('#name').val(data.name).attr('answer',data.imageidentifire);
+$('#osType').attr('answer',data.osType).val(data.osType).select2();
+$('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
+   });
+}
+
+    });
 
   inLineReady();
 

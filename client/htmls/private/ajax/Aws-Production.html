@@ -1490,8 +1490,8 @@ if (!reqBody.users) {
    $('.blueprintSaveSuccess').show();
    var wizard = $wizard.data('bootstrapWizard');
    wizard.disablePreviouBtn();
- }).error(function(){
-   $('.blueprintSaveFail').find('h3').first().html('Insufficient permission to perform operation.')
+ }).error(function(xhr){
+   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
    $('.blueprintSaveFail').show();
  });
  console.log('final', reqBody);
