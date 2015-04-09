@@ -192,7 +192,7 @@
                               <!--user has given no app name-->
                               <form action="" id="appUrlTemplateFormCreate" data-appURLType="1" class="appUrlFormNew hidden">
                                   <!--1st text box-->
-                                  <div class="applicationURLContainer" id="appSeries12"> 
+                                            <div class="applicationURLContainer" id="appSeries12"> 
                                                 <div class="col-lg-6 col-md-6" style="margin-top:15px;">
 
                                                 <label for="">Application Name</label>
@@ -216,16 +216,17 @@
                                             <button type="submit" class="btn btn-primary marginSubmit"> Submit </button>
                                             <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add Application URL</a>
                                 </form>
-                              <!--when app name has been given-->
+                                <!--form ends here-->
+                              <!--when app name is given during blueprint save or Import by IP-->
                                 <form action="" id="appUrlTemplateForm" style="display:none" data-appURLType="1" class="appUrlForm">
                                   <!--1st text box-->
                                   <div class="col-lg-6 col-md-6 appTop">
                                     <input type="hidden" class="appUrlId" />
                                     <label class="appNameLabel" for=""></label><span class="hidden urlsaved" >&nbsp;&nbsp;Saved</span>
                                     <br>
-                                      <input type="text" class="appUrlInput" type="url">
+                                      <input name="check" type="text" class="appUrlInput" type="url">
 
-                                    <span class="glyphicon glyphicon-pencil" onclick=editName('1') style="cursor:pointer;"></span>
+                                    <span name="editText" class="glyphicon glyphicon-pencil" style="cursor:pointer;"></span>
                                   </div>
                                 </form>
                                 
@@ -1686,22 +1687,12 @@ $('.goback').click(function(e) {
 </script>
 
 <script>
-function editName(number) {
-   // document.getElementById('name' + number).readOnly=false;
-    $("#txtapplicationurl").removeAttr('readOnly').focus();
-};
-function editName1(number) {
-   // document.getElementById('name' + number).readOnly=false;
-    $("#txtapplicationurl1").removeAttr('readOnly').focus();
-};
-</script>
-<!-- <script>
-$('.formSubmit').click(function(e){
-  $('.instance-bootstrap-list').last().append('<a href="#txtapplicationurl" target="_blank"><img style="width:20px;height:20px" src="img/internet.png"></a>');
-  return false;
+$(document).ready(function(e){
+  $('span[name=editText]').click(function(e){
+      $('input[name=check]',$(this).closest('div')).focus();
+  });
 });
-</script>-->
-
+</script>
 <script>
    $(document).ready(function() {
 

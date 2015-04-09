@@ -16,6 +16,8 @@ var uuid = require('node-uuid');
 var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
 var logger = require('../lib/logger')(module);
+var waitForPort = require('wait-for-port');
+
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 

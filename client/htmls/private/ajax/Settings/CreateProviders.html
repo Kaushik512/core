@@ -225,9 +225,10 @@ function setValues(data){
   for(var i=0;i<data.keyPairs.length;i++){
     if(i==0){
       $('#appender').append(createTemplateInstance.getFinalTemplate(true));
-      $('.region').val(data.keyPairs[0].region).select2();
-      $('.keyvalue').val(data.keyPairs[0].keyPairName).attr('answer',data.keyPairs[0].keyPairName).select2();
-      $('.filename').val(data.keyPairs[0].fileName);
+      $('.region').val(data.keyPairs[0].region).attr('disabled','disabled').select2();
+      $('.keyvalue').val(data.keyPairs[0].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[0].keyPairName).select2();
+      $('.filename').attr('disabled','disabled').val(data.keyPairs[0].fileName).removeAttr('cat-validation');
+      $('input.file').attr('disabled','disabled').removeAttr('cat-validation');
     }else{
       $('#appender').append(createTemplateInstance.getFinalTemplate(false));
     }
@@ -245,8 +246,9 @@ $(document).ready(function () {
     // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
      
     // return false to cancel submit  
-    appendLoader();                
+            debugger;     
       if(isFormValid()){
+         appendLoader();  
         return true;
       }else{
         return false;
@@ -307,10 +309,8 @@ $(document).ready(function () {
       
       d4ddata=data;
       
-      setValues(data);
-      
+      setValues(data);      
       //UtilityMethods.initializeSelect2();
-      
       checkForKeyPair();
     },
     error: function(jqxhr) {
