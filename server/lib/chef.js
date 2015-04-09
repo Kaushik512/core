@@ -349,7 +349,8 @@ var Chef = function(settings) {
             });
         });
     };
-    var bootstrapDelay = 600 * 1000;
+    //var bootstrapDelay = 1200000;
+    var bootstrapDelay = 0;
 
     this.bootstrapInstance = function(params, callback, callbackOnStdOut, callbackOnStdErr) {
         console.log('Chef Repo Location : ', settings.userChefRepoLocation)
@@ -373,7 +374,7 @@ var Chef = function(settings) {
         if (typeof callbackOnStdErr === 'function') {
 
             options.onStdErr = function(data) {
-                /*            if (secondsWaited < totalSeconds) {
+                if (secondsWaited < totalSeconds) {
                     //retrying bootstrap .... needed for windows
                     if (data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0) {
                         callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount + 1) + '/4 ...');
@@ -387,8 +388,8 @@ var Chef = function(settings) {
                     console.log('Hit an error :' + data);
                     callbackOnStdErr(data);
                 }
-                return;*/
-                callbackOnStdErr(data);
+                return;
+                //callbackOnStdErr(data);
             }
         }
         if ((!(params.runlist) || !params.runlist.length)) {
