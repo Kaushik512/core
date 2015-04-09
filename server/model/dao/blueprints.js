@@ -53,8 +53,12 @@ var BlueprintSchema = new Schema({
     subnetId: {
         type: String,
         required: true,
-        trim: true,
-        validate: schemaValidator.imageIdValidator
+        trim: true
+    },
+    vpcId: {
+        type: String,
+        required: true,
+        trim: true
     },
     securityGroupIds: {
         type: [String],
@@ -318,8 +322,9 @@ var BlueprintsDao = function() {
                     imageId: blueprintData.imageId,
                     keyPairId : blueprintData.keyPairId,
                     subnetId : blueprintData.subnetId,
+                    vpcId : blueprintData.vpcId,
                     providerId : blueprintData.providerId,
-                    securityGroupId: blueprintData.securityGroupId,
+                    securityGroupIds: blueprintData.securityGroupIds,
                     name: blueprintData.name,
                     appUrls: blueprintData.appUrls,
                     iconpath: blueprintData.iconpath,
