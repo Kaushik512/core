@@ -250,7 +250,7 @@ app.post('/aws/providers/keypairs/list',function(req,res){
         ec2.describeKeyPairs(function(err,data){
            if(err){
             logger.debug("Unable to get AWS Keypairs");
-            res.send("Unable to get AWS Keypairs.",500);
+            res.send("Invalid AccessKey or SecretKey.",500);
             return;
              }
             logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));

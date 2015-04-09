@@ -132,7 +132,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        var providerId = req.body.providerId.trim();
        var imageIdentifier = req.body.imageIdentifier.trim();
        var name = req.body.name.trim();
-       var vType = req.body.vType.trim();
        var osType = req.body.osType.trim();
 
        if(typeof providerId === 'undefined' || providerId.length === 0){
@@ -147,10 +146,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         res.send(500,"Please Enter Name.");
         return;
     }
-    if(typeof vType === 'undefined' || vType.length === 0){
-        res.send(500,"Please Enter VirtualizationType.");
-        return;
-    }
+    
     if(typeof imageId === 'undefined' || imageId.length === 0){
         res.send(500,"Please Enter ImageId.");
         return;
@@ -164,24 +160,34 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        providerId: providerId,
        imageIdentifier: imageIdentifier,
        name: name,
-       vType: vType,
        osType: osType
     };
     logger.debug("image >>>>>>>>>>>>",vmimageData);
-    VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
-            if (err) {
-                logger.error(err);
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (updateCount) {
-               logger.debug("Exit get() for /vmimages/%s/update",req.params.imageId);
-               res.send({
-                updateCount: updateCount
-            });
-           } else {
-            res.send(400);
-            }
+        VMImage.getImageById(imageId, function(err, anImage) {
+                if (err) {
+                    logger.error(err);
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (anImage) {
+                   vmimageData.vType = anImage.vType;
+               } 
+               logger.debug("ImageData:>>>>>>>>>>> ",JSON.stringify(vmimageData));
+            VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
+                    if (err) {
+                        logger.error(err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    if (updateCount) {
+                       logger.debug("Exit get() for /vmimages/%s/update",req.params.imageId);
+                       res.send({
+                        updateCount: updateCount
+                    });
+                   } else {
+                    res.send(400);
+                    }
+                });
         });
     });
 
