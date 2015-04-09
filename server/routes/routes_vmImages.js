@@ -16,7 +16,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var imageIdentifier = req.body.imageIdentifier.trim();
         var name = req.body.name.trim();
         var osType = req.body.osType.trim();
-        var osName = req.body.osType.trim();
+        var osName = req.body.osName.trim();
 
             // Field validation for undefined and empty
             if(typeof providerId === 'undefined' || providerId.length === 0){
