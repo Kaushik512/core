@@ -22,8 +22,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/blueprints/*', sessionVerificationFunc);
 
     // This post() Not in use
-    app.post('/blueprints/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/providers/:providerId/images/:imageId', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/images/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.imageId);
+    app.post('/blueprints') {
+        logger.debug("Enter post() for /blueprints");
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
         var user = req.session.user;
@@ -45,12 +45,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             var blueprintData = req.body.blueprintData;
-            blueprintData.orgId = req.params.orgId;
-            blueprintData.bgId = req.params.bgId;
-            blueprintData.projectId = req.params.projectId;
-            blueprintData.envId = req.params.envId;
-            blueprintData.imageId = req.params.imageId;
-            blueprintData.providerId = req.params.providerId;
+            
+            //All comming with blueprintData
+            /*blueprintData.orgId = req.body.orgId;
+            blueprintData.bgId = req.body.bgId;
+            blueprintData.projectId = req.body.projectId;
+            blueprintData.envId = req.body.envId;
+            blueprintData.imageId = req.body.imageId;
+            blueprintData.providerId = req.body.providerId;*/
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
@@ -66,7 +68,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
                 res.send(data);
             });
-            logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+            logger.debug("Exit post() for /blueprints");
         });
     });
 
