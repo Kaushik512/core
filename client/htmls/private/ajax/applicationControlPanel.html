@@ -116,64 +116,74 @@
           <!--Deploy Starts Here-->
           <div class="panel panel-default" id="accordion-BuildHealthParameters">
             <div class="panel-heading">
-              <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-BuildHealthParameters" href="#collapseBuildHealthParameters"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bullseye" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Build Health Parameters</u></b></a></h4>
+              <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-BuildHealthParameters" href="#collapseBuildHealthParameters"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bullseye" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Build Health Parameters</u></b></a>
+              </h4><span class="buildParameterSaveNotification" style="display:none"> Saved </span>
             </div>
             <div id="collapseBuildHealthParameters" class="panel-collapse collapse in">
               <div class="panel-body">
-                  <form class="appUrlForm" action="">
-                    <div class="col-lg-6">
+                  <form class="buildParameterForm" action="">
+                    <div class="col-lg-6 functionalTestUrlContainer">
                       <label for="" id="" style="font-size:12px">Functional Test URL:</label>
                       <br>
-                        <input name="check" type="text" id="" class="functionalinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 performanceTestUrlContainer">
                       <label for="" id="" style="font-size:12px">Performance Test URL:</label>
                       <br>
-                        <input name="check" type="text" id="" class="performanceinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
-                    <div class="col-lg-6" style="margin-top:15px">
+                    <div class="col-lg-6 nonFunctionalTestUrlContainer" style="margin-top:15px">
                       <label for="" id="" style="font-size:12px">Non Functional Test URL:</label>
                       <br>
-                        <input name="check" class="" type="text" id="" class="nonfunctionalinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
 
-                    <div class="col-lg-6" style="margin-top:15px">
+                    <div class="col-lg-6 securityTestUrlContainer"  style="margin-top:15px">
                       <label for="" id="" style="font-size:12px">Security Test URL:</label>
                       <br>
-                        <input name="check" class="" type="text" id="" class="securityinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
-                    <div class="col-lg-6" style="margin-top:15px">
+                    <div class="col-lg-6 unitTestUrlContainer" style="margin-top:15px">
                       <label for="" id="" style="font-size:12px">Unit Test URL:</label>
                       <br>
-                        <input name="check" class="" type="text" id="" class="unitinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
 
                     <!--code coverage field-->
-                    <div class="col-lg-6" style="margin-top:15px">
+                    <div class="col-lg-6 codeCoverageUrlContainer" style="margin-top:15px">
                       <label for="" id="" style="font-size:12px">Code Coverage:</label>
                       <br>
-                        <input name="check" class="" type="text" id="" class="codeinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
 
-                    <div class="col-lg-6" style="margin-top:15px">
+                    <div class="col-lg-6 codeAnalysisUrlContainer" style="margin-top:15px">
                       <label for="" id="" style="font-size:12px">Code Analysis:</label>
                       <br>
-                        <input name="check" class="" type="text" id="" class="codeanalysisinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
-                    <div class="col-lg-6" style="margin-top:15px">
+                    <div class="col-lg-6 uiPerformanceTestUrlContainer" style="margin-top:15px">
                       <label for="" id="" style="font-size:12px">UI Performance Analysis:</label>
                       <br>
-                        <input name="check" class="" type="text" id="" class="uiperformanceinputedit" placeholder="http://$host:port/<path>" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);">
+                        <input type="hidden" class="keyName" />
+                        <input name="check" type="text" class="urlValue" placeholder="" style="width: 90%; font-size: 12px; height: 30px; color: rgb(102, 102, 102); border: 1px solid rgb(204, 204, 204);" />
                       <span name="editText" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>
                     </div>
+                    <input type="submit" style="display:none" />
                   </form>
               </div>
             </div>
