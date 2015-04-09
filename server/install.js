@@ -107,11 +107,11 @@ function parseArguments() {
         name: "catalyst-port",
         type: String,
         description: "Catalyst port number"
-    }, {
+    }, /*{
         name: "catalyst-home",
         type: String,
         description: "catalyst home directory name"
-    }, {
+    },*/ {
         name: "db-host",
         type: String,
         description: "DB Host"
@@ -169,7 +169,7 @@ function getConfig(config, options) {
             config.express.port = catalystPort;
         }
     }
-    config.catalysHomeDirName = options['catalyst-home'] ? options['catalyst-home'] : config.catalysHomeDirName;
+    //config.catalysHomeDirName = options['catalyst-home'] ? options['catalyst-home'] : config.catalysHomeDirName;
     config.db.host = options['db-host'] ? options['db-host'] : config.db.host;
     config.db.port = options['db-port'] ? options['db-port'] : config.db.port;
     config.db.dbName = options['db-name'] ? options['db-name'] : config.db.dbName;
