@@ -103,7 +103,8 @@ awsProviderSchema.statics.updateAWSProviderById = function(providerId, providerD
         "_id": new ObjectId(providerId)
     }, {
         $set: {
-            name: providerData.name,
+            id: providerData.id,
+            providerName: providerData.providerName,
             accessKey: providerData.accessKey,
             secretKey: providerData.secretKey,
             providerType: providerData.providerType
