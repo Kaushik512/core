@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/blueprints/*', sessionVerificationFunc);
 
     // This post() Not in use
-    app.post('/blueprints') {
+    app.post('/blueprints',function(req, res) {
         logger.debug("Enter post() for /blueprints");
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
@@ -45,7 +45,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             var blueprintData = req.body.blueprintData;
-            
+
             //All comming with blueprintData
             /*blueprintData.orgId = req.body.orgId;
             blueprintData.bgId = req.body.bgId;
@@ -256,17 +256,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     }
 
                                                     logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
-
-                                                    logger.debug("Loaded Provider: >>>>>>>>>>> %s",blueprint.instanceType);
-                                                    //var ec2 = new EC2(settings.aws);
                                                     var awsSettings ={ 
                                                         "access_key": aProvider.accessKey,
                                                         "secret_key": aProvider.secretKey,
-                                                        "region"    : aKeyPair.region, // both hard coded value need to remove
+                                                        "region"    : aKeyPair.region, 
                                                         "keyPairName": aKeyPair.keyPairName
                                                     };
                                                     var ec2 = new EC2(awsSettings);
-                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, blueprint.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
+                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, blueprint.securityGroupIds,blueprint.subnetId, 'D4D-' + blueprint.name,aKeyPair.keyPairName, function(err, instanceData) {
                                                         if (err) {
                                                             logger.error("launchInstance Failed >> ", err);
                                                             res.send(500);

@@ -16,6 +16,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var imageIdentifier = req.body.imageIdentifier.trim();
         var name = req.body.name.trim();
         var osType = req.body.osType.trim();
+        var osName = req.body.osType.trim();
 
             // Field validation for undefined and empty
             if(typeof providerId === 'undefined' || providerId.length === 0){
@@ -34,13 +35,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 res.send(500,"Please Enter OS Type.");
                 return;
             }
+            if(typeof osName === 'undefined' || osName.length === 0){
+                res.send(500,"Please Enter OS Name.");
+                return;
+            }
 
             var vmimageData={
             	id: 22,
             	providerId: providerId,
             	imageIdentifier: imageIdentifier,
             	name: name,
-                osType: osType
+                osType: osType,
+                osName: osName
             };
             
             AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
@@ -133,6 +139,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        var imageIdentifier = req.body.imageIdentifier.trim();
        var name = req.body.name.trim();
        var osType = req.body.osType.trim();
+       var osName = req.body.osName.trim();
 
        if(typeof providerId === 'undefined' || providerId.length === 0){
         res.send(500,"Please Enter ProviderId.");
@@ -155,12 +162,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         res.send(500,"Please Enter OS Type.");
         return;
     }
+    if(typeof osName === 'undefined' || osName.length === 0){
+        res.send(500,"Please Enter OS Name.");
+        return;
+    }
     var vmimageData={
        id: 22,
        providerId: providerId,
        imageIdentifier: imageIdentifier,
        name: name,
-       osType: osType
+       osType: osType,
+       osName: osName
     };
     logger.debug("image >>>>>>>>>>>>",vmimageData);
         VMImage.getImageById(imageId, function(err, anImage) {
@@ -287,45 +299,5 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     app.get('/vmimages/os/type/all/list', function(req, res) {
         logger.debug("Enter /vmimages/regions/list");
         res.send(appConfig.aws.operatingSystems);
-    });
-
-    // Return all VPCs w.r.t. region
-    app.post('/vmimages/describe/vpcs',function(req,res){
-        logger.debug("Enter describeVpcs ");
-            
-        var ec2 = new EC2({
-                "access_key": req.body.accessKey,
-                "secret_key": req.body.secretKey,
-                "region"    : req.body.region
-        });
-        ec2.describeVpcs(function(err,data){
-                if(err){
-                    logger.debug("Unable to describe Vpcs from AWS.",err);
-                    res.send("Unable to Describe Vpcs from AWS.",500);
-                    return;
-                }
-            logger.debug("Success to Describe Vpcs from AWS.",data);
-            res.send(data);
-        });
-    });
-
-    // Return all Subnets w.r.t. vpc
-    app.post('/vmimages/vpc/:vpcId/subnets',function(req,res){
-        logger.debug("Enter describeSubnets ");
-        
-        var ec2 = new EC2({
-            "access_key": req.body.accessKey,
-            "secret_key": req.body.secretKey,
-            "region"    : req.body.region
-        });
-        ec2.describeSubnets(req.params.vpcId,function(err,data){
-            if(err){
-                logger.debug("Unable to describeSubnets from AWS.",err);
-                res.send("Unable to describeSubnets from AWS.",500);
-                return;
-            }
-            logger.debug("Success to describeSubnets from AWS.",data);
-            res.send(data);
-        });
     });
 }

@@ -257,4 +257,65 @@ app.post('/aws/providers/keypairs/list',function(req,res){
             res.send(data);
          });
     });
+
+  // Return all available security groups from AWS for VPC.
+  app.post('/aws/providers/vpc/:vpcId/securitygroups',function(req,res){
+    logger.debug("Enter for Provider securitygroups fro vpc. %s",req.body.accessKey);
+
+        var ec2 = new EC2({
+         "access_key": req.body.accessKey,
+         "secret_key": req.body.secretKey,
+         "region"    : req.body.region
+      });
+
+        ec2.getSecurityGroupsForVPC(req.params.vpcId,function(err,data){
+         if(err){
+          logger.debug("Unable to get AWS Security Groups for VPC.");
+          res.send("Unable to get AWS Security Groups for VPC.",500);
+          return;
+          }
+          logger.debug("Able to get AWS Security Groups for VPC. %s",JSON.stringify(data));
+          res.send(data);
+      });
+  });
+
+  // Return all VPCs w.r.t. region
+    app.post('/aws/providers/describe/vpcs',function(req,res){
+        logger.debug("Enter describeVpcs ");
+            
+        var ec2 = new EC2({
+                "access_key": req.body.accessKey,
+                "secret_key": req.body.secretKey,
+                "region"    : req.body.region
+        });
+        ec2.describeVpcs(function(err,data){
+                if(err){
+                    logger.debug("Unable to describe Vpcs from AWS.",err);
+                    res.send("Unable to Describe Vpcs from AWS.",500);
+                    return;
+                }
+            logger.debug("Success to Describe Vpcs from AWS.",data);
+            res.send(data);
+        });
+    });
+
+    // Return all Subnets w.r.t. vpc
+    app.post('/aws/providers/vpc/:vpcId/subnets',function(req,res){
+        logger.debug("Enter describeSubnets ");
+        
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region"    : req.body.region
+        });
+        ec2.describeSubnets(req.params.vpcId,function(err,data){
+            if(err){
+                logger.debug("Unable to describeSubnets from AWS.",err);
+                res.send("Unable to describeSubnets from AWS.",500);
+                return;
+            }
+            logger.debug("Success to describeSubnets from AWS.",data);
+            res.send(data);
+        });
+    });
 }

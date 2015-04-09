@@ -61,7 +61,7 @@ var EC2 = function(awsSettings) {
 
 
 
-    this.launchInstance = function(image_id, intanceType, securityGroupId,instanceName, callback) {
+    this.launchInstance = function(image_id, intanceType, securityGroupIds,subnetId,instanceName,keyPairName, callback) {
 
         var that = this; //"m1.small"
         ec.runInstances({
@@ -69,8 +69,9 @@ var EC2 = function(awsSettings) {
             "InstanceType": intanceType, //"m1.medium",
             "MinCount": 1,
             "MaxCount": 1,
-            "KeyName": awsSettings.keyPairName,
-            SecurityGroupIds: [securityGroupId], // [awsSettings.securityGroupId],
+            "KeyName": keyPairName,
+            SecurityGroupIds: [securityGroupIds],
+            SubnetId: subnetId // [awsSettings.securityGroupId],
             /*BlockDeviceMappings: [{
                 DeviceName: "/dev/sda",
                 Ebs: {
@@ -331,6 +332,27 @@ var EC2 = function(awsSettings) {
             }
             logger.debug("Success to describeSubnets from AWS.");
             callback(null, data);
+        });
+    }
+
+    this.getSecurityGroupsForVPC = function(vpcId,callback) {
+        var params = {
+          Filters: [
+          {
+              Name: 'vpc-id',
+              Values: [vpcId]
+          }
+          ],
+          GroupIds: [],
+          GroupNames: []
+      };
+        ec.describeSecurityGroups(params, function(err, data) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data.SecurityGroups);
         });
     }
 
