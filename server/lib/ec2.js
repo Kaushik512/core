@@ -62,24 +62,19 @@ var EC2 = function(awsSettings) {
 
 
     this.launchInstance = function(image_id, intanceType, securityGroupIds,subnetId,instanceName,keyPairName, callback) {
-
+        logger.debug("SecurityGroupIds and SubnetId %s %s ",securityGroupIds,subnetId);
         var that = this; //"m1.small"
-        ec.runInstances({
-            "ImageId": image_id, //"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
-            "InstanceType": intanceType, //"m1.medium",
-            "MinCount": 1,
-            "MaxCount": 1,
-            "KeyName": keyPairName,
-            SecurityGroupIds: [securityGroupIds],
-            SubnetId: subnetId // [awsSettings.securityGroupId],
-            /*BlockDeviceMappings: [{
-                DeviceName: "/dev/sda",
-                Ebs: {
-                    DeleteOnTermination: true,
-                    "VolumeSize": 10
-                }
-            }]*/
-        }, function(err, data) {
+        var param = {
+          ImageId: image_id, /* required */
+          MaxCount: 1, /* required */
+          MinCount: 1, /* required */
+          InstanceType: intanceType, /* required */
+          KeyName: keyPairName, /* required */
+          SecurityGroupIds: securityGroupIds, /* required */
+          SubnetId: subnetId /* required if use vpc*/
+      };
+      logger.debug("Param obj:>>>>  ",JSON.stringify(param));
+        ec.runInstances(param, function(err, data) {
             if (err) {
                 console.log("error occured while launching instance");
                 console.log(err);

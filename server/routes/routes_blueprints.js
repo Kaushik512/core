@@ -254,6 +254,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         res.send(500);
                                                         return;
                                                     }
+                                                    var securityGroupIds =[];
+                                                    for(var i =0;i<blueprint.securityGroupIds.length;i++){
+                                                        securityGroupIds.push(blueprint.securityGroupIds[i]);
+                                                    }
 
                                                     logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
                                                     var awsSettings ={ 
@@ -263,7 +267,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         "keyPairName": aKeyPair.keyPairName
                                                     };
                                                     var ec2 = new EC2(awsSettings);
-                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, blueprint.securityGroupIds,blueprint.subnetId, 'D4D-' + blueprint.name,aKeyPair.keyPairName, function(err, instanceData) {
+                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, securityGroupIds,blueprint.subnetId, 'D4D-' + blueprint.name,aKeyPair.keyPairName, function(err, instanceData) {
                                                         if (err) {
                                                             logger.error("launchInstance Failed >> ", err);
                                                             res.send(500);
