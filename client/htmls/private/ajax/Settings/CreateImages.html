@@ -177,6 +177,7 @@
           }
           function removeLoader(){
             $('#masterssavespinner').remove();
+            $("form[id*='myForm']").find("div.pull-right > button").removeAttr('disabled');
           }
 
           function getProviderList(){
@@ -247,6 +248,7 @@
       },
       failure: function(data) {
         bootbox.alert(data.responseText);
+        removeLoader();
       }
     });
 
