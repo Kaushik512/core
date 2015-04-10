@@ -10,73 +10,85 @@
             <div class="widget-box">
                 <div class="widget-header">
                     <h5 class="widget-title" style="color:#4e5964;">
-                    <strong>Images</strong>
+                        <strong>Images</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
-                             
-                              <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ImagesList.html" style="display:none">
-                                <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                            </a>                      
-                            <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateImages.html?new">
-                                <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
-                                New
-                            </a>                                                
-                        </div>
+
+                          <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ImagesList.html" style="display:none">
+                            <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
+                        </a>                      
+                        <a class="btn btn-minier btn-primary" id="addnewitem" href="#ajax/Settings/CreateImages.html?new">
+                            <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                            New
+                        </a>                                                
                     </div>
-                                            
                 </div>
-                <div class="widget-body">
-                    <div class="widget-main" style="min-height:300px">
-                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-                            <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
-                                <thead>
-                                    <tr class="rowCustomStyle">
-                                        <td>Name</td>
-                                        <td>Image Identifire</td>
-                                        <td>Provider</td>
-                                        <td class="">Action</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="hidden rowtemplate">
-                                        <td datafield="name"></td>
-                                        <td datafield="imageIdentifier"></td>
-                                        <td datafield="providerId"></td>
-                                        <td>
-                                            <div class="btn-group tableactionWidth">
-                                                <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
-                                                <a class="btn btn-xs btn-info pull-left" title="Update">
-                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                </a>
-                                            </div>
-                                        </td>
 
-                                    </tr>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main" style="min-height:300px">
+                    <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                        <table id="templateTable" class="hidden" cellpadding="5px" width="100%">
+                            <thead>
+                                <tr class="rowCustomStyle">
+                                    <td>Name</td>
+                                    <td>Image Identifire</td>
+                                    <td>Provider</td>
+                                    <td class="">Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hidden rowtemplate">
+                                    <td datafield="name"></td>
+                                    <td datafield="imageIdentifier"></td>
+                                    <td datafield="providerName"></td>
+                                    <td>
+                                        <div class="btn-group tableactionWidth">
+                                            <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+                                            <a class="btn btn-xs btn-info pull-left" title="Update">
+                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                            </a>
+                                        </div>
+                                    </td>
 
-                                </tbody>
+                                </tr>
 
-                            </table>
-                                <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                                    <thead>
-                                        <tr class="rowCustomStyle">
-                                            <td>Name</td>
-                                            <td>Image Identifire</td>
-                                            <td>Provider</td>
-                                            <td class="">Action</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                       
-                                    </tbody>
-                                    
-                                </table>
+                            </tbody>
+
+                        </table>
+                        <table id="envtable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                            <thead>
+                                <tr class="rowCustomStyle">
+                                    <td>Name</td>
+                                    <td>Image Identifire</td>
+                                    <td>Provider</td>
+                                    <td class="">Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
 
 
-                                <script>
-                                   function saveProviderData(){
+                            </tbody>
 
+                        </table>
+
+
+                        <script>
+                            function updateImageListByGivingProviderName(imageList,ProviderList){
+                                for(var i=0;i<imageList.length;i++){
+                                    for(var j=0;i<ProviderList.length;j++){
+                                        if(imageList[i].providerId ===ProviderList[j]._id){
+                                            imageList[i].providerName=ProviderList[j].providerName;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                return imageList;
+                            }
+
+                            function getProviderData(){
                                 var reqBody={};
                                 reqBody.name=''
                                 reqBody.accessKey='';
@@ -85,10 +97,11 @@
                                 reqBody.regions=[];
       //reqBody.instanceUserName='root';
       $.ajax({
-         method: "GET",url: "/vmimages",data: reqBody,   
-         success: function(data, success) {
-                data= typeof data=="string" ?JSON.parse(data):data;
-                d4ddata=data;
+       method: "GET",url: "/aws/providers",data: reqBody,   
+       success: function(data, success) {
+        data= typeof data=="string" ?JSON.parse(data):data;
+                //d4ddata=data;
+               d4ddata= updateImageListByGivingProviderName(d4ddata,data);
                 startup();
             },
             error: function(jqxhr) {
@@ -100,12 +113,38 @@
             }
         });
 
-    }
+  }
 
-    function CreateTableFromJsonForProvider(formID,createFileName,isEscapeMasterDirectory) {
-        var formData = null;
+  function getImagesList(){
+    var reqBody={};
+    reqBody.name=''
+    reqBody.accessKey='';
+    reqBody.secretKey='';
+    reqBody.providerType='';
+    reqBody.regions=[];
+                            //reqBody.instanceUserName='root';
+                            $.ajax({
+                                method: "GET",url: "/vmimages",data: reqBody,
+                                success: function(data, success) {
+                                    data= typeof data=="string" ?JSON.parse(data):data;
+                                    d4ddata=data;
+                                    getProviderData();
+                                    
+                                },
+                                error: function(jqxhr) {
+                                    removeLoader();
+                                    bootbox.alert(jqxhr.status);
+                                },
+                                failure: function(data) {
+                                    bootbox.alert(data);
+                                }
+                            });
+                        }
+
+                        function CreateTableFromJsonForProvider(formID,createFileName,isEscapeMasterDirectory) {
+                            var formData = null;
         //force setting the idFieldName to "rowid"
-      var idFieldName = "_id";
+        var idFieldName = "_id";
         formData = d4ddata;
         var formSchema = null;
         $.each(d4ddata, function(i, item) {
@@ -116,36 +155,36 @@
             $.each(item, function(k, v) { //columns
                 // var inputC = null;
                // console.log('k:' + k + ' v :' + JSON.stringify(v));
-                if (k == idFieldName) {
-                    idFieldValue = v;
-                }
-                inputC = $('.rowtemplate').find("[datafield='" + k + "']");
-                if (inputC) {
-                    console.log('Inputc===>' + inputC.attr('datafield'));
-                    if (inputC.attr('datafield') == 'active') {
-                        if (v.toString() == 'false') {
-                            inputC.html('Inactive');
-                        } else
-                            inputC.html('Active');
-                    } else {
-                        if (inputC.attr('datatype')) {
+               if (k == idFieldName) {
+                idFieldValue = v;
+            }
+            inputC = $('.rowtemplate').find("[datafield='" + k + "']");
+            if (inputC) {
+                console.log('Inputc===>' + inputC.attr('datafield'));
+                if (inputC.attr('datafield') == 'active') {
+                    if (v.toString() == 'false') {
+                        inputC.html('Inactive');
+                    } else
+                    inputC.html('Active');
+                } else {
+                    if (inputC.attr('datatype')) {
                             // inputC.attr('data-content',v);
                             // inputC.attr('data-toggle',"popover");
                             if (inputC.attr('datatype') == 'list') {
                                 v = v.replace(/,/g, "<br/>");
                                 inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
                             } else
-                                inputC.html(v);
-                        } else
                             inputC.html(v);
+                        } else
+                        inputC.html(v);
 
                     }
                 }
             });
 
-            var sRow = $(".rowtemplate").clone();
-            sRow.removeClass("hidden");
-            sRow.removeClass("rowtemplate");
+var sRow = $(".rowtemplate").clone();
+sRow.removeClass("hidden");
+sRow.removeClass("rowtemplate");
             // $('#envtable').append(sRow);
             imageTD = $('.rowtemplate').find("[datatype='image']");
 
@@ -159,7 +198,7 @@
                         if (imageTD.html().indexOf('<img') >= 0) {
                             imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
                         } else
-                            imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+                        imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
 
                         imageTD.html('');
                         imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
@@ -173,62 +212,62 @@
                     var hasEditPermission = false;
                     if(createFileName==='CreateOrg.html'){
                         if(haspermission('organization','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateProductGroup.html'){
                         if(haspermission('businessgroups','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateProject.html'){
                         if(haspermission('projects','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateEnvironment.html'){
                         if(haspermission('environment','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateEnvironmentConcept.html'){
                         if(haspermission('chefenvironment','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateConfigManagement.html'){
                         if(haspermission('chefserver','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateUser.html'){
                         if(haspermission('users','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateTeam.html'){
                         if(haspermission('teams','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateServiceCommand.html'){
                         if(haspermission('services','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }else if(createFileName==='CreateJiraConfig.html'){
                         if(haspermission('services','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }
                     else if(createFileName==='CreateProviders.html'){
                         if(haspermission('services','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }
                     else if(createFileName==='CreateImages.html'){
                         if(haspermission('services','modify')){
-                        hasEditPermission =true;
+                            hasEditPermission =true;
                         }
                     }
                     //user has no permission to edit
                     if(!hasEditPermission){
-                        
+
                         editButton.addClass('disabled');
                     }
                     editButton.addClass("tableactionbutton tableactionbuttonpadding");
@@ -257,61 +296,61 @@
                     //checking whether the user has the authentication to delete any entry
                     if(createFileName==='CreateOrg.html'){
                         if(haspermission('organization','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
 
                     }else if(createFileName==='CreateProductGroup.html'){
                         if(haspermission('businessgroups','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateProject.html'){
                         if(haspermission('projects','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateEnvironment.html'){
                         if(haspermission('environment','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateEnvironmentConcept.html'){
                         if(haspermission('chefenvironment','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateConfigManagement.html'){
                         if(haspermission('chefserver','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateUser.html'){
                         if(haspermission('users','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateTeam.html'){
                         if(haspermission('teams','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateServiceCommand.html'){
                         if(haspermission('services','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateJiraConfig.html'){
                         if(haspermission('services','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateProviders.html'){
                         if(haspermission('services','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateImages.html'){
                         if(haspermission('services','delete')){
-                        hasDeletePermission =true;
+                            hasDeletePermission =true;
                         }
                     }
 
                     if(!hasDeletePermission){
-                        
+
                         deletebutton.addClass('disabled');
                     }
                     deletebutton.removeClass('btn-xs');
@@ -327,12 +366,12 @@
             sRow.removeClass("rowtemplate");
             $('#envtable').append(sRow);
         });
-        setPopOverForTableFields();
-        $(".savespinner").hide();
+setPopOverForTableFields();
+$(".savespinner").hide();
 
-    }
+}
 
-    function deleteItemFromProvider(docid, key, value, button) {
+function deleteItemFromProvider(docid, key, value, button) {
 
     bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
         if (result) {
@@ -384,18 +423,18 @@
                     bootbox.alert(data.responseText);
                 }
             });
-        }
-    });
+}
+});
 
-    }
+}
 
-                                    $(document).ready(function () {
-                                       saveProviderData();
-                                        
-                                    });
+$(document).ready(function () {
+   getImagesList();
 
-                                    function startup() {
-                                       
+});
+
+function startup() {
+
                                         //setting the addnew button to launch popup
                                         $("#addnewitem").attr('data-toggle', 'modal');
 
@@ -405,7 +444,7 @@
                                             "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
                                             "pagingType": "full_numbers"
                                         });
-                                         $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
+                                        $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
                                         $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
 
                                         $('#content').css("opacity", "1 !important");
@@ -424,25 +463,25 @@
                                             }
                                         });
                                       //  drawBreadCrumb1();
-                                    }
+                                  }
 
-                                   
 
-                                </script>
-                            <div class="col-md-5">
 
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                              </script>
+                              <div class="col-md-5">
+
+                              </div>
+                          </div>
+
+                      </div>
+                      <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
                        <div id="tableFooterLeft" class="pull-left"></div>
                        <div id="tableFooterRight" class="pull-right"></div>
-                    </div>
-                   
-                    
-                </div>
-            </div>
-        </div>
-    </div>
+                   </div>
+
+
+               </div>
+           </div>
+       </div>
+   </div>
 </div>
