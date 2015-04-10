@@ -71,7 +71,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                 ec2.checkImageAvailability(vmimageData.imageIdentifier,function(err,data){
                     if(err){
                         logger.debug("Unable to describeImages from AWS.",err);
-                        res.send("Unable to Describe Images from AWS.",500);
+                        res.send(500,"Invalid Image Id.");
                         return;
                     }
                     logger.debug("Success to Describe Images from AWS. %s",data.Images[0].VirtualizationType);
@@ -79,7 +79,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                     VMImage.createNew(vmimageData, function(err, anImage) {
                        if (err) {
                            logger.debug("err.....",err);
-                           res.send(500);
+                           res.send(500,"Image creation fail.");
                            return;
                        }
                        res.send(anImage);
@@ -175,6 +175,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        osName: osName
     };
     logger.debug("image >>>>>>>>>>>>",vmimageData);
+
+            AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
+               if (err) {
+                   logger.error(err);
+                   res.send(500, "Image creation failed due to Image name already exist.");
+                   return;
+               }
+               logger.debug("Returned Provider: ",aProvider);
+               AWSKeyPair.getAWSKeyPairByProviderId(providerId,function(err,keyPair){
+                logger.debug("keyPairs length::::: ",keyPair[0].region);
+                if(err){
+                    res.send(500,"Error getting to fetch Keypair.")      
+                }
+                logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
+                var ec2 = new EC2({
+                    "access_key": aProvider.accessKey,
+                    "secret_key": aProvider.secretKey,
+                    "region"    : keyPair[0].region
+                });
+                logger.debug("ec2>>>>>>>>>>>>>>>>> ",JSON.stringify(ec2));
+                ec2.checkImageAvailability(vmimageData.imageIdentifier,function(err,data){
+                    if(err){
+                        logger.debug("Unable to describeImages from AWS.",err);
+                        res.send(500,"Invalid Image Id.");
+                        return;
+                    }
         VMImage.getImageById(imageId, function(err, anImage) {
                 if (err) {
                     logger.error(err);
@@ -200,7 +226,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                     res.send(400);
                     }
                 });
+              });
+            });
         });
+      });
     });
 
     // Delete a particular Image from DB.

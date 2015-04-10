@@ -248,12 +248,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 
                                                 // pem file should come from provider
                                                 //cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
-                                                cryptography.encryptFile(encryptedPemFileLocation, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
+                                                /*cryptography.encryptFile(encryptedPemFileLocation, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                                                     if (err) {
                                                         logger.log("encryptFile Failed >> ", err);
                                                         res.send(500);
                                                         return;
-                                                    }
+                                                    }*/
                                                     var securityGroupIds =[];
                                                     for(var i =0;i<blueprint.securityGroupIds.length;i++){
                                                         securityGroupIds.push(blueprint.securityGroupIds[i]);
@@ -282,6 +282,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             bgId: blueprint.bgId,
                                                             projectId: blueprint.projectId,
                                                             envId: blueprint.envId,
+                                                            providerId: blueprint.providerId,
                                                             chefNodeName: instanceData.InstanceId,
                                                             runlist: version.runlist,
                                                             platformId: instanceData.InstanceId,
@@ -540,7 +541,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         });
 
 
-                                                    });
+                                                   // });
 
                                                 });
 
