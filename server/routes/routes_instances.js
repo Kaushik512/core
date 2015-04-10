@@ -795,7 +795,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send(500);
                             return;
                         }
-                        logger.debug("data.providerId: ::::   ",data[0].providerId);
+                        logger.debug("data.providerId: ::::   ",JSON.stringify(data[0]));
                         if (data.length) {
                             AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                if (err) {
