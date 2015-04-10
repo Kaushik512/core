@@ -47,6 +47,11 @@ var imageSchema = new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    userName: {
+        type: String,
+        required: true,
+        trim: true
     }
 });
 
@@ -121,7 +126,8 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
             imageIdentifier: imageData.imageIdentifier,
             name: imageData.name,
             vType: imageData.vType,
-            osName: imageData.osType
+            osName: imageData.osType,
+            userName: imageData.userName
         }
     }, {
         upsert: false

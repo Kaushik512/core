@@ -21,19 +21,19 @@ app.post('/aws/providers', function(req, res) {
     var providerType = req.body.providerType;
 
     if(typeof accessKey === 'undefined' || accessKey.length === 0){
-        res.send(500,"Please Enter AccessKey.");
+        res.send(400,"{Please Enter AccessKey.}");
         return;
     }
     if(typeof secretKey === 'undefined' || secretKey.length === 0){
-        res.send(500,"Please Enter SecretKey.");
+        res.send(400,"{Please Enter SecretKey.}");
         return;
     }
     if(typeof providerName === 'undefined' || providerName.length === 0){
-        res.send(500,"Please Enter Name.");
+        res.send(400,"{Please Enter Name.}");
         return;
     }
     if(typeof providerType === 'undefined' || providerType.length === 0){
-        res.send(500,"Please Enter ProviderType.");
+        res.send(400,"{Please Enter ProviderType.}");
         return;
     }
     var providerData= {
@@ -133,23 +133,23 @@ app.post('/aws/providers/:providerId/update', function(req, res) {
  var providerType = req.body.providerType.trim();
  var providerId = req.params.providerId.trim();
  if(typeof providerId === 'undefined' || providerId.length === 0){
-    res.send(500,"Please Enter ProviderId.");
+    res.send(400,"{Please Enter ProviderId.}");
     return;
 }
 if(typeof accessKey === 'undefined' || accessKey.length === 0){
-    res.send(500,"Please Enter AccessKey.");
+    res.send(400,"{Please Enter AccessKey.}");
     return;
 }
 if(typeof secretKey === 'undefined' || secretKey.length === 0){
-    res.send(500,"Please Enter SecretKey.");
+    res.send(400,"{Please Enter SecretKey.}");
     return;
 }
 if(typeof providerName === 'undefined' || providerName.length === 0){
-    res.send(500,"Please Enter Name.");
+    res.send(400,"{Please Enter Name.}");
     return;
 }
 if(typeof providerType === 'undefined' || providerType.length === 0){
-    res.send(500,"Please Enter ProviderType.");
+    res.send(400,"{Please Enter ProviderType.}");
     return;
 }
 

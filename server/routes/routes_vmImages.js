@@ -17,26 +17,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var name = req.body.name.trim();
         var osType = req.body.osType.trim();
         var osName = req.body.osName.trim();
+        var userName = req.body.userName.trim();
+
 
             // Field validation for undefined and empty
             if(typeof providerId === 'undefined' || providerId.length === 0){
-                res.send(500,"Please Enter ProviderId.");
+                res.send(400,"{Please Enter ProviderId.}");
                 return;
             }
             if(typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0){
-                res.send(500,"Please Enter ImageIdentifier.");
+                res.send(400,"{Please Enter ImageIdentifier.}");
                 return;
             }
             if(typeof name === 'undefined' || name.length === 0){
-                res.send(500,"Please Enter Name.");
+                res.send(400,"{Please Enter Name.}");
                 return;
             }
             if(typeof osType === 'undefined' || osType.length === 0){
-                res.send(500,"Please Enter OS Type.");
+                res.send(400,"{Please Enter OS Type.}");
                 return;
             }
             if(typeof osName === 'undefined' || osName.length === 0){
-                res.send(500,"Please Enter OS Name.");
+                res.send(400,"{Please Enter OS Name.}");
+                return;
+            }
+            if(typeof userName === 'undefined' || userName.length === 0){
+                res.send(400,"{Please Enter OS UserName.}");
                 return;
             }
 
@@ -45,8 +51,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             	providerId: providerId,
             	imageIdentifier: imageIdentifier,
             	name: name,
-                osType: osType,
-                osName: osName
+              osType: osType,
+              osName: osName,
+              userName: userName
             };
             
             AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
@@ -140,39 +147,45 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        var name = req.body.name.trim();
        var osType = req.body.osType.trim();
        var osName = req.body.osName.trim();
+       var userName = req.body.userName.trim();
 
        if(typeof providerId === 'undefined' || providerId.length === 0){
-        res.send(500,"Please Enter ProviderId.");
+        res.send(400,"{Please Enter ProviderId.}");
         return;
     }
     if(typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0){
-        res.send(500,"Please Enter ImageIdentifier.");
+        res.send(400,"{Please Enter ImageIdentifier.}");
         return;
     }
     if(typeof name === 'undefined' || name.length === 0){
-        res.send(500,"Please Enter Name.");
+        res.send(400,"{Please Enter Name.}");
         return;
     }
     
     if(typeof imageId === 'undefined' || imageId.length === 0){
-        res.send(500,"Please Enter ImageId.");
+        res.send(400,"{Please Enter ImageId.}");
         return;
     }
     if(typeof osType === 'undefined' || osType.length === 0){
-        res.send(500,"Please Enter OS Type.");
+        res.send(400,"{Please Enter OS Type.}");
         return;
     }
     if(typeof osName === 'undefined' || osName.length === 0){
-        res.send(500,"Please Enter OS Name.");
+        res.send(400,"{Please Enter OS Name.}");
         return;
     }
+    if(typeof userName === 'undefined' || userName.length === 0){
+                res.send(400,"{Please Enter OS UserName.}");
+                return;
+            }
     var vmimageData={
        id: 22,
        providerId: providerId,
        imageIdentifier: imageIdentifier,
        name: name,
        osType: osType,
-       osName: osName
+       osName: osName,
+       userName: userName
     };
     logger.debug("image >>>>>>>>>>>>",vmimageData);
 

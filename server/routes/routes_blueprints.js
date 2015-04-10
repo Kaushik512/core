@@ -245,15 +245,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 var cryptoConfig = appConfig.cryptoSettings;
                                                 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
                                                 var encryptedPemFileLocation = settings.instancePemFilesDir + aKeyPair._id;
-                                                
-                                                // pem file should come from provider
-                                                //cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
-                                                /*cryptography.encryptFile(encryptedPemFileLocation, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
-                                                    if (err) {
-                                                        logger.log("encryptFile Failed >> ", err);
-                                                        res.send(500);
-                                                        return;
-                                                    }*/
                                                     var securityGroupIds =[];
                                                     for(var i =0;i<blueprint.securityGroupIds.length;i++){
                                                         securityGroupIds.push(blueprint.securityGroupIds[i]);
@@ -302,7 +293,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 os: blueprint.instanceOS
                                                             },
                                                             credentials: {
-                                                                username: blueprint.instanceUsername,
+                                                                username: anImage.userName,
                                                                 pemFileLocation: encryptedPemFileLocation,
                                                             },
                                                             chef: {
@@ -540,15 +531,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             });
                                                         });
 
-
-                                                   // });
-
                                                 });
 
                                             }
 
-
-                                       
 
                                             chef.getEnvironment(blueprint.envId, function(err, env) {
                                                 if (err) {

@@ -13,18 +13,14 @@ var ProviderUtil = function(){
         var cryptoConfig = appConfig.cryptoSettings;
         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
         var encryptedPemFileLocation = settings.instancePemFilesDir + keyPair._id;
-		//var pemFileLocation= settings.instancePemFilesDir + keyPair._id;
 		fs.readFile(inFiles.fileObject.path, function (err, data) {
 			if(err){
 				logger.debug("File not found in specified path.");
 				callback(err,null);
 			}
-			//var pathNew = pemFileLocation;
-
 			cryptography.encryptFile(inFiles.fileObject.path, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                  if (err) {
                    logger.log("encryptFile Failed >> ", err);
-                   //res.send(500);
                    return;
                    }
                    logger.debug("Encryted Pemfile saved...");
