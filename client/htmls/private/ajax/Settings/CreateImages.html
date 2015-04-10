@@ -243,10 +243,10 @@
        },
        error: function(jqxhr) {
         removeLoader();
-        bootbox.alert(jqxhr.status);
+        bootbox.alert(jqxhr.responseText);
       },
       failure: function(data) {
-        bootbox.alert(data);
+        bootbox.alert(data.responseText);
       }
     });
 
