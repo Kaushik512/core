@@ -1,241 +1,519 @@
-<script>
-//    $(".tree-view").hide();
-   
-</script>
+  <script>
+    // $(".tree-view").hide();
 
-<div class="row" id="createproviderbody">
-    <div class="col-md-12">
-        <div class="col-md-12">
-            <div class="widget-box">
-             <div class="widget-header"><h4 style="color:black;">Create Provider <span id="spnprovidertype"></span></h4></div>
-                <div class="widget-body">
-                    <div class="widget-main" style="min-height:300px">
-                        <div>
-
-                            <section id="widget-grid" class="">
-                                <!-- START ROW -->
-                                <div class="row">
-                                    <!-- NEW COL START -->
-                                    <article class="col-sm-12 col-md-12 col-lg-12">
-                                                                                                    
-                                        <!-- Widget ID (each widget will need unique ID)-->
-                                        <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
-                                            
-                                            <!-- widget div-->
-                                            <div>
-
-                                                <!-- widget content -->
-                                                <div class="widget-body no-padding">
-                                                    
-                                                    <form action="" class="smart-form" novalidate="novalidate">
-                                                        
-
-                                                        <fieldset>
-                                                            <div class="row">
-                                                            <section class="col col-6">
-                                                                 <label for="">Provider Type:<span style="color:Red;" class="
-                                                                    control-label">&nbsp;*</span></label>
-                                                                <select id="providertype" class="chooseProvider width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
-                                                                    <option value="">Select Provider</option>
-                                                                    <option value="aws">AWS</option>
-                                                                    <option value="azure">Azure</option>
-                                                                </select>
-                                                            </section>
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Name:<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <!-- <i class="icon-append fa fa-building"></i> -->
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Provider" id="providername" class="form-control" type="text"  cdata="catalyst">
-                                                                    </label>
-                                                                    <span id="spnprovidertype"></span>
-
-                                                                </section>
-                                                                                                                        
-                                                            </div>
-                                                            <div class="row">
-                                                            <section class="col col-6">
-                                                                    <label for="">
-                                                                        Description:
-
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <!-- <i class="icon-append fa fa-building"></i> -->
-                                                                        <input name="ctl00$MainContent$orgname" value="Default Description" id="description" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="orgname" id="Span2" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                                    </label>
-
-                                                                </section>
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Account ID:<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <!-- <i class="icon-append fa fa-building"></i> -->
-                                                                        <input name="ctl00$MainContent$accountid" value="Default Account ID" id="accountid" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                                    </label>
-
-                                                                </section>
-                                                                
-                                                            </div>
-                                                            <div class="row">
-                                                            <section class="col col-6">
-                                                              <label for="">Region:<span style="color:Red;" class="
-                                                                    control-label">&nbsp;*</span></label>
-                                                                <select id="region" class="chooseRegion width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
-                                                                    <option value="">Select Region</option>
-                                                                    <option value="us-west-2">us-west-2</option>
-                                                                </select>
-                                                            </section>
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Access Key:
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <!-- <i class="icon-append fa fa-key"></i> -->
-                                                                        <input name="ctl00$MainContent$accountid" value="" id="accesskey" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                                    </label>
-
-                                                                </section>
-                                                                
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Secret Key:
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <!-- <i class="icon-append fa fa-key"></i> -->
-                                                                        <input name="ctl00$MainContent$accountid" value="" id="secretkey" class="form-control" type="text"  cdata="catalyst"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                                                    </label>
-
-                                                                </section>
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Key Pair Name:
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <input name="ctl00$MainContent$accountid" value="" id="keypairname" class="form-control" type="text"  cdata="catalyst">
-                                                                    </label>
-
-                                                                </section>
-                                                                
-                                                            </div>
-                                                                                                                       
-                                                                <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label for="">
-                                                                        Security Group ID:
-                                                                        <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
-                                                                    </label>
-                                                                    <label class="input">
-                                                                        <input name="ctl00$MainContent$accountid" value="" id="securitygroupid" class="form-control" type="text"  cdata="catalyst">
-                                                                    </label>
-
-                                                                </section>
-                                                                <section class="col col-6">
-                                                                <div class="col-lg-12" id="frmprovider">
-                                                                <div class="smart-forms">
-                                                            
-                                                                    <label>Account PEM File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                                        <label for="accountpemfile" class="field file">
-                                                                            <div class="imgdiv" value="1"></div>
-                                                                                <span class="button btn-primary" style="margin-right: 0;margin-top: 12px;">Browse</span><input id="accountpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file" cat-validation="required"><input type="text" readonly="" class="gui-input">
-                                                                        </label>
-                                                                       
-                                                                </div>
-                                                            </div>
-                                                            </section>
-                                                            </div>
-                                                             
-                                                        </fieldset>   
-                                                                
-                                                    </form>
-
-                                                </div>
-                                                <!-- end widget content -->
-                                                
-                                            </div>
-                                            <!-- end widget div -->
-                                            
-                                        </div>
-                                        <!-- end widget -->             
-
-                                    </article>
-                                    <!-- END COL -->
-                                </div>
-                                <!-- END ROW -->
-                            </section>
-                            <!-- end widget grid -->
-                            
-                        </div>
-                    </div>
-                </div>
-
-                <div class="widget-toolbox clearfix">
-                       <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="if(validateForm())saveform(9);">
-                            <i class="ace-icon fa fa-check bigger-110"></i>
-                             Save
-                        </button>
-                           <button class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                               <i class="ace-icon fa fa-undo bigger-110"></i>
-                               Cancel
-                           </button>
-                        </div>
-                </div>
-                </div>
-            </div>
-
-        </div>
-
+  </script>
+  <style type="text/css">
+   #createProvider .marginbottom{
+    margin-bottom: 10px;
+  }
+  #createProvider .width-60{
+    width:60%;
+  }
+  #createProvider .width-20{
+    width:20%;
+  }
+  #createProvider .addimage, .removeimage{
+   cursor: pointer;
+ }
+ #createProvider .addNewRegion {
+  border:solid gray 1px; padding:10px;
+  margin-bottom: 15px;
+}
+#createProvider .addRow ,.removeRow{
+  float: left;
+  margin-top: 32px;
+  margin-left:3.5px;
+}
+#createProvider .addRegion, .removeRegion{
+  position: relative;
+  top: -18px;
+  left: 17px;
+  float: right;
+}
+#createProvider .row{
+  margin-bottom: 10px;
+}
+</style>
+<div class="row" id="createProvider">
+ <div class="col-md-12">
+  <div class="col-md-12">
+   <form id="myForm54" enctype="mutlipart/form-data" action="/aws/providers" method="post">
+    <div class="widget-box">
+     <div class="widget-header">
+      <h4 class="widget-margin" style="color:black;">Add New Provider<span id="spnprovider"></span></h4>
     </div>
+    <div class="widget-body">
+      <div class="widget-main" style="min-height:300px">
+       <div>
+        <section id="widget-grid" class="">
+         <!-- START ROW -->
+         <div class="row">
+          <!-- NEW COL START -->
+          <article class="col-sm-12 col-md-12 col-lg-12">
+           <!-- Widget ID (each widget will need unique ID)-->
+           <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+            <!-- widget div-->
+            <div id="appender">
+             <!-- widget content -->
+             <div class="row">
+               <div class="col-lg-6 col-md-6">
+                <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
+                 <option value="">Select Provider</option>
+                 <option value="aws">AWS</option>
+               </select>
+             </div>   
+             <div class="col-lg-6 col-md-6">
+               <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+               <!-- <i class="icon-append fa fa-building"></i> -->
+               <input name="providerName" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+             </div>    
+           </div>
 
+           <div class="row">
+            <!-- -->
+            <div class="col-lg-6 col-md-6">
+             <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+             <!-- <i class="icon-append fa fa-building"></i> -->
+             <input name="accessKey" id="accessKey" class="form-control" type="text"  cdata="catalyst" cat-validation="required" placeholder="Enter the Access Key">
+
+             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+           </div>
+           <div class="col-lg-6 col-md-6">
+             <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+             <!-- <i class="icon-append fa fa-building"></i> -->
+             <input name="secretKey" id="secretKey" class="form-control" type="text"  cdata="catalyst" cat-validation="required" placeholder="Enter the Secret Key">
+
+             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+           </div>
+
+         </div>
+
+       </div>
+       <!-- end widget div -->
+     </div>
+     <!-- end widget -->             
+   </article>
+   <!-- END COL -->
+ </div>
+ <!-- END ROW -->
+</section>
+<!-- end widget grid -->
 </div>
+</div>
+</div>
+<div class="widget-toolbox clearfix">
+  <div class="btn-group pull-right">
+   <input type="submit" value=" Save" class="btn btn-primary btn-mini" style="margin-right:11px;" /> 
 
-
+   <!--  <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
+     <i class="ace-icon fa fa-check bigger-110"></i>
+     Save
+   </button> -->
+   <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
+     <i class="ace-icon fa fa-undo bigger-110"></i>
+     Cancel
+   </a>
+ </div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!--row ends here-->
+<!--Popup for selecting a cloud provider before proceeding-->
+<script type="text/javascript" src="js/jquery.form.js"></script>
 <script>
-    //Form Name
-    function cancelClicked() {
-        $(".modal-backdrop.fade.in").detach();
-        $('#btncancel').click();
+
+  var UtilityMethods={
+    initTooltip:function(){
+     var $tool=$("[rel=tooltip]");
+     if ($tool.length) {
+      $tool.tooltip();
+    }
+  },
+  getRandomNumber:function(){      
+    return parseInt(Math.random()*10000000000);
+  },
+  getIdFromURL:function(){
+    var options=location.toString().split('?');
+    return options.length >1 ? (options[1]!=="new" ? options[1]:"" ):"";
+  },
+  initializeSelect2:function(){
+    $('select').select2();
+  }
+};
+
+
+function bindChange_importPemFile() {
+  $('input[type="file"]').off('change').on('change',function() {
+    $(this).next().val(this.files[0].name);
+    $(this).next().next().val($(this).val());
+  });
+}
+
+
+function inLineReady(){
+ $("input[type='text']").on("click", function () {
+   $(this).select();
+   $("#msgOrgName").hide();
+ });
+ //enableUniqueCheckingForInputs(9);
+}
+
+inLineReady();
+
+function appendLoader(){
+  removeLoader();
+  $("form[id*='myForm']").find("div.pull-right > input").attr('disabled','disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+}
+function removeLoader(){
+  $('#masterssavespinner').remove();
+  $("form[id*='myForm']").find("div.pull-right > input").removeAttr('disabled');
+}
+
+function checkForKeyPair(){
+
+
+  function loadKeyPair(accessKey,secretKey){
+
+    appendLoader();
+    var data1=new FormData();
+    data1.append('accessKey',accessKey);
+    data1.append('secretKey',secretKey);
+    data1.append('region',"us-west-2");
+    $.ajax({
+      method: "POST",
+      url: "/aws/providers/keypairs/list",
+      data:data1,
+      processData: false,
+      contentType:false,
+      error:function(XMLHttpRequest, textStatus, errorThrown) {
+        bootbox.alert(XMLHttpRequest.responseText);
+        removeLoader();
+      } 
+    }).done(function( msg ) {
+      var str='<option value="">Choose Any Key Pair</option>',val=msg['KeyPairs'],len=val.length;
+      for(var i=0;i<len;i++){
+        str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
+      }
+      $('select.keyvalue').html(str).each(function(){
+        $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
+      });
+      $('#btnsubmit').removeAttr('disabled');
+      removeLoader();
+    });
+  }
+
+
+  var accessKey=$('#accessKey').val(),
+  secretKey=$('#secretKey').val();
+  if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
+    loadKeyPair(accessKey,secretKey);
+  }else{
+    $('#btnsubmit').attr('disabled','disabled');
+  }
+}
+
+function setValues(data){
+  $('#name').val(data.providerName);
+  $('#accessKey').val(data.accessKey);
+  $('#secretKey').val(data.secretKey);
+  $('#providertype').val(data.providerType).select2();
+  var createTemplateInstance=new createTemplate($('#appender'));
+  for(var i=0;i<data.keyPairs.length;i++){
+    if(i==0){
+      $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+      $('.region').val(data.keyPairs[0].region).attr('disabled','disabled').select2();
+      $('.keyvalue').val(data.keyPairs[0].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[0].keyPairName).select2();
+      $('.filename').attr('disabled','disabled').val(data.keyPairs[0].fileName).removeAttr('cat-validation');
+      $('input.file').attr('disabled','disabled').removeAttr('cat-validation');
+    }else{
+      $('#appender').append(createTemplateInstance.getFinalTemplate(false));
+    }
+  }
+}
+$(document).ready(function () {
+  $("#name").focus();
+  $('#accessKey').blur(checkForKeyPair);
+  $('#secretKey').blur(checkForKeyPair);
+
+
+  $('#myForm54').ajaxForm( {
+    beforeSubmit: function(arr, $form, options) { 
+    // The array of form data takes the following form: 
+    // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
+
+    // return false to cancel submit  
+    debugger;     
+    if(isFormValid()){
+     appendLoader();  
+     return true;
+   }else{
+    return false;
+  }
+},
+dataType:  'json',
+success: function(data, success) {
+  //   debugger;
+              //alert('Successfully Saved ' + data);
+              if (data!=500) {
+                if ($('#btncancel').length){
+                  $('#btncancel').click(); 
+                }                
+
+              }
+              else{
+               alert(data.toString());
+             }
+             removeLoader();
+           },
+           error: function(jqxhr) {
+         //  debugger;
+         removeLoader();
+         bootbox.alert(jqxhr.responseText);
+       },
+       failure: function(data) {
+           // debugger;
+           removeLoader();
+           bootbox.alert(data);
+         }
+       }); 
+  
+  /*$('#myForm54').submit(function() {
+    $(this).validate();
+    if(isFormValid()){
+   //   saveProviderData();
+   return true;
+    }else{
+      bootbox.alert("invalid form data");
+    }
+  return false; // for demo
+});*/
+
+  if(!UtilityMethods.getIdFromURL()){
+    var createTemplateInstance=new createTemplate($('#appender'));
+    $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+    bindChange_importPemFile();
+    UtilityMethods.initializeSelect2();
+    $('#myForm54').attr('action','/aws/providers');
+  }else{
+   $('#myForm54').attr('action','/aws/providers/'+UtilityMethods.getIdFromURL()+'/update');
+   $.ajax({
+     method: "GET",
+     url: "/aws/providers/"+UtilityMethods.getIdFromURL(),   
+     success: function(data, success) {
+
+      data= typeof data=="string" ?JSON.parse(data):data;
+      
+      d4ddata=data;
+      
+      setValues(data);      
+      //UtilityMethods.initializeSelect2();
+      checkForKeyPair();
+    },
+    error: function(jqxhr) {
+      removeLoader();
+      bootbox.alert(jqxhr.status);
+    },
+    failure: function(data) {
+      bootbox.alert(data);
+    }
+  });
+
+ }
+
+
+
+});
+
+  function saveProviderData(){
+    appendLoader();
+
+
+    var getRegionListForFormSubmission=function(){
+      var list=[];
+      $('select.region').each(function(){
+        var obj={},keyPair=[];
+        obj.region=$(this).val();
+        $(this).parents('.addNewRegion').find('.pemrow').each(function(){
+          obj["name"]=$(this).find('select.keyvalue').val();
+          obj["fileName"] =$(this).find('input.filename').val();
+          //  "file":$(this).find('input.file')[0].files[0]
+        });
+        list.push(obj);
+      });        
+      return list;
+    },appendINObject=function(soruceObj,DestObj){
+      for(key in soruceObj){
+        if(soruceObj.hasOwnProperty(key))
+          DestObj.append(key,soruceObj[key]);
+      }
+    },
+    reqBody={},
+    formdata1;
+
+    reqBody.name=$('#name').val().trim();
+    reqBody.accessKey=$('#accessKey').val().trim();
+    reqBody.secretKey=$('#secretKey').val().trim();
+    reqBody.providerType=$('#providertype').val().trim();
+    reqBody.keyPairs=getRegionListForFormSubmission();
+
+    
+    formdata1=new FormData();
+   // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
+    //debugger;
+   //appendINObject(reqBody,FormData1);
+   formdata1.append('name',reqBody.name);
+   formdata1.append('accessKey',reqBody.accessKey);
+   formdata1.append('secretKey',reqBody.secretKey);
+   formdata1.append('providerType',reqBody.providerType);
+   formdata1.append('keyPairs',reqBody.keyPairs);
+   formdata1.append("fileName",$('input[type="file"]')[0].files[0]);
+   var serialize=$('form').serialize();
+   console.log(serialize)
+    //console.log(reqBody);
+
+    if(!UtilityMethods.getIdFromURL()){
+      var url="/aws/providers"
+    }else{
+      var url="/aws/providers/"+UtilityMethods.getIdFromURL()+"/update"
     }
 
-    function inLineReady() {
-        $('.chooseProvider').select2();
-        $('.chooseRegion').select2();
-        $("input[type='text']").on("click", function () {
-            $(this).select();
-            $("#msgOrgName").hide();
+    $.ajax({
+     method: "POST",
+     url: url,
+     data: serialize,  
+   /*  mimeType:"multipart/form-data",
+    contentType: false,
+    cache: false,*/
+    processData:false,
+    success: function(data, success) {
+     // alert(1);
+              //alert('Successfully Saved ' + data);
+              if (data!=500) {
+                if ($('#btncancel').length){
+                  $('#btncancel').click(); 
+                }                
+                removeLoader();
+              }
+              else{
+               removeLoader();
+               alert(data.toString());
+             }
+           },
+           error: function(jqxhr) {
+            removeLoader();
+            bootbox.alert(jqxhr.status);
+          },
+          failure: function(data) {
+            bootbox.alert(data);
+          }
         });
-        if (readform(9) == true) {  //9 is the reference for provider master. Function returns true if in not in edit mode
-            //alert('in');
-            $('#createproviderbody').css('display','');
-            $('#spnprovidertype').html($('#providertype').val());
-        }
-       
-      $('#content').css("opacity", "1 !important");
-        //Force opening the left navigation menu
-        if ($('#navSettings').is(":visible") == false) {
-            $('#navSettings').css("display", '');
-            $('#navSettings > ul > li').first().addClass('open');
-            $('#navSettings > ul > li > ul').css("display", "none");
-            $('#navSettings > ul > li > ul').first().css("display", "block");
-        }
-        //redrawing the breadcrumb and selecting the tree
-        $('#ulsettingstree > li').removeClass('active');
-        $('#ulsettingstree > li').each(function () {
-            if ($(this).text().trim() == "Projects")
-                $(this).addClass('active');
-        });
-        drawBreadCrumb1();
-    }
 
-    inLineReady();
+  }
+
+
+  function createTemplate(parentToAttach){
+    var that=this,parentEl=$(parentToAttach).addClass('customTemplateParent');
+    var getAddButton=function(classs){
+      var title=''
+      if(classs=='addRegion'){
+        titile='title="Add New Region" data-placement="top"';
+      }else if(classs=='addRow'){
+        titile='title="Add New Key Pair" data-placement="top"';
+      }
+      return '<img src="img/add.png" class="addimage '+(classs ?classs :'')+'" '+ titile +' rel="tooltip" data-placement="top" />'
+    },
+
+    getRemoveButton=function(classs){
+      var title=''
+      if(classs=='removeRegion'){
+        titile='title="Remove this Region" data-placement="top"';
+      }else if(classs=='removeRow'){
+        titile='title="Remove this Key Pair" data-placement="top"';
+      }
+      return '<img src="img/remove.png" class="removeimage '+(classs ?classs :'')+'" '+ titile +' rel="tooltip"  />'
+    },
+    getKeyValueList=function(){
+      return '<div class="col-lg-6 col-md-6" style="width:47%;">'
+      +'<label for="name">Select Key Pair:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      +'<select id="'+UtilityMethods.getRandomNumber()+'" name="keyPairName" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" '
+      +'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
+      +'  <option value="">Select Any Key Pair</option></select>'
+      +'</div>' ;
+    };
+    var getRegion=function(){
+      return  '<div class="row">'
+      +'<div class="col-lg-6 col-md-6" style="width:47%">'
+      +'<label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      +'<select id="'+UtilityMethods.getRandomNumber()+'" name="region" unique="true" uniqueconditionedby="orgname"  class="region chooseOrganization width-100" style="'+'vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
+      +'<option value="">Select Region</option>'
+      +'<option value="us-west-2">us-west-2</option>'
+      +'</select>'
+      +'</div></div>';
+    };
+    var getPemFileRow=function(){
+      return '<div class="col-lg-6 col-md-6 authPemFile" style="display: block;"><div class="smart-forms" style="  margin-left: 7%;"><label for="" style="margin-left:16px;">Upload .pem file for Provider<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      +'<label for="templatesicon" name="field" class="file">'
+      +'<span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px '
+      +'14px;position: absolute;right:4px;margin-top: 4.5%;">Browse</span>'
+      +'<input id="'+UtilityMethods.getRandomNumber()+'" type="file" class="gui-file file" cdata="catalyst" cat-validation="required" name="fileObject">'
+      +'<input type="text" readonly="" class="gui-input filename" name="fileName">'
+      +'<input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />'
+      +'</label></div></div>';
+    };
+
+    this.getRow=function(isAdd,isRemove,notrequired){
+      var str='';
+      if(isAdd){
+        str=getAddButton('addRow');
+      }else if(isRemove){
+        str=getRemoveButton('removeRow');
+      }else if(notrequired){
+        str='';
+      }
+      return '<div class="row pemrow">'+getKeyValueList() + getPemFileRow() + str+'</div>';
+    };
+
+    this.getFinalTemplate=function(isAddApplicable,noOfRow){
+      noOfRow=noOfRow ? parseInt(noOfRow) : 1;
+      var str='';
+      for(var i=0;i<noOfRow;i++){
+        if(i==0){
+          str=str+that.getRow(false,false,false);
+        }else{
+          str=str+that.getRow(false,false,false);
+        }
+
+      }
+      return '<div class="addNewRegion">'+ /*(isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion'))+*/getRegion() + str+'</div>'
+    };
+
+    $(parentEl).delegate('.addimage','click',function(){
+      if($(this).hasClass('addRow')){
+        $(this).parent().parent().append(that.getRow(false,true)).find('select').select2();
+      }else if($(this).hasClass('addRegion')){
+        $(this).parents('.customTemplateParent').append(that.getFinalTemplate()).find('select').select2();
+      }
+      UtilityMethods.initTooltip();
+      bindChange_importPemFile();
+    });
+
+    $(parentEl).delegate('.removeimage','click',function(){
+      if($(this).hasClass('removeRow')){
+        $(this).parent().remove();
+
+      }else if($(this).hasClass('removeRegion')){
+        $(this).parent().remove();
+      }
+      UtilityMethods.initTooltip();
+    });
+
+  }
+
+
+
 
 </script>

@@ -23,6 +23,10 @@ var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');
 var application = require('./routes_application');
+var jira = require('./routes_jira');
+
+var provider = require('./routes_provider');
+var vmimage = require('./routes_vmImages');
 
 module.exports.setRoutes = function(app) {
 
@@ -62,6 +66,12 @@ module.exports.setRoutes = function(app) {
     jenkins.setRoutes(app, sessionVerificationFunc);
 
     application.setRoutes(app, sessionVerificationFunc);
+
+    jira.setRoutes(app, sessionVerificationFunc);
+
+    provider.setRoutes(app, sessionVerificationFunc);
+
+    vmimage.setRoutes(app, sessionVerificationFunc);
 
 
     app.get('/', function(req, res) {
