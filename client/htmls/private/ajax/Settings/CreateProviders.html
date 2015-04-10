@@ -104,7 +104,7 @@
 </div>
 <div class="widget-toolbox clearfix">
   <div class="btn-group pull-right">
-     <input type="submit" value=" Save" class="btn btn-primary btn-mini" style="margin-right:11px;" /> 
+   <input type="submit" value=" Save" class="btn btn-primary btn-mini" style="margin-right:11px;" /> 
 
    <!--  <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
      <i class="ace-icon fa fa-check bigger-110"></i>
@@ -176,35 +176,35 @@ function removeLoader(){
 function checkForKeyPair(){
 
 
-function loadKeyPair(accessKey,secretKey){
+  function loadKeyPair(accessKey,secretKey){
 
-  appendLoader();
-  var data1=new FormData();
-  data1.append('accessKey',accessKey);
-  data1.append('secretKey',secretKey);
-  data1.append('region',"us-west-2");
-  $.ajax({
-    method: "POST",
-    url: "/aws/providers/keypairs/list",
-    data:data1,
-    processData: false,
-    contentType:false,
-    error:function(XMLHttpRequest, textStatus, errorThrown) {
-      bootbox.alert(XMLHttpRequest.responseText);
+    appendLoader();
+    var data1=new FormData();
+    data1.append('accessKey',accessKey);
+    data1.append('secretKey',secretKey);
+    data1.append('region',"us-west-2");
+    $.ajax({
+      method: "POST",
+      url: "/aws/providers/keypairs/list",
+      data:data1,
+      processData: false,
+      contentType:false,
+      error:function(XMLHttpRequest, textStatus, errorThrown) {
+        bootbox.alert(XMLHttpRequest.responseText);
+        removeLoader();
+      } 
+    }).done(function( msg ) {
+      var str='<option value="">Choose Any Key Pair</option>',val=msg['KeyPairs'],len=val.length;
+      for(var i=0;i<len;i++){
+        str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
+      }
+      $('select.keyvalue').html(str).each(function(){
+        $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
+      });
+      $('#btnsubmit').removeAttr('disabled');
       removeLoader();
-    } 
-  }).done(function( msg ) {
-    var str='<option value="">Choose Any Key Pair</option>',val=msg['KeyPairs'],len=val.length;
-    for(var i=0;i<len;i++){
-      str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
-    }
-    $('select.keyvalue').html(str).each(function(){
-      $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
     });
-    $('#btnsubmit').removeAttr('disabled');
-    removeLoader();
-  });
-}
+  }
 
 
   var accessKey=$('#accessKey').val(),
@@ -240,46 +240,46 @@ $(document).ready(function () {
   $('#secretKey').blur(checkForKeyPair);
 
 
-   $('#myForm54').ajaxForm( {
+  $('#myForm54').ajaxForm( {
     beforeSubmit: function(arr, $form, options) { 
     // The array of form data takes the following form: 
     // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
-     
+
     // return false to cancel submit  
-            debugger;     
-      if(isFormValid()){
-         appendLoader();  
-        return true;
-      }else{
-        return false;
-      }
+    debugger;     
+    if(isFormValid()){
+     appendLoader();  
+     return true;
+   }else{
+    return false;
+  }
 },
-    dataType:  'json',
-    success: function(data, success) {
+dataType:  'json',
+success: function(data, success) {
   //   debugger;
               //alert('Successfully Saved ' + data);
               if (data!=500) {
                 if ($('#btncancel').length){
                   $('#btncancel').click(); 
                 }                
-               
+
               }
               else{
                alert(data.toString());
              }
-              removeLoader();
+             removeLoader();
            },
            error: function(jqxhr) {
          //  debugger;
-            removeLoader();
-            bootbox.alert(jqxhr.responseText);
-          },
-          failure: function(data) {
+         removeLoader();
+         bootbox.alert(jqxhr.responseText);
+       },
+       failure: function(data) {
            // debugger;
            removeLoader();
-            bootbox.alert(data);
-          }
-        }); 
+           bootbox.alert(data);
+         }
+       }); 
   
   /*$('#myForm54').submit(function() {
     $(this).validate();
@@ -300,7 +300,7 @@ $(document).ready(function () {
     $('#myForm54').attr('action','/aws/providers');
   }else{
    $('#myForm54').attr('action','/aws/providers/'+UtilityMethods.getIdFromURL()+'/update');
-    $.ajax({
+   $.ajax({
      method: "GET",
      url: "/aws/providers/"+UtilityMethods.getIdFromURL(),   
      success: function(data, success) {
@@ -322,7 +322,7 @@ $(document).ready(function () {
     }
   });
 
-  }
+ }
 
 
 
@@ -338,19 +338,19 @@ $(document).ready(function () {
         var obj={},keyPair=[];
         obj.region=$(this).val();
         $(this).parents('.addNewRegion').find('.pemrow').each(function(){
-            obj["name"]=$(this).find('select.keyvalue').val();
-            obj["fileName"] =$(this).find('input.filename').val();
+          obj["name"]=$(this).find('select.keyvalue').val();
+          obj["fileName"] =$(this).find('input.filename').val();
           //  "file":$(this).find('input.file')[0].files[0]
-          });
+        });
         list.push(obj);
-        });        
-        return list;
-      },appendINObject=function(soruceObj,DestObj){
-        for(key in soruceObj){
-          if(soruceObj.hasOwnProperty(key))
+      });        
+      return list;
+    },appendINObject=function(soruceObj,DestObj){
+      for(key in soruceObj){
+        if(soruceObj.hasOwnProperty(key))
           DestObj.append(key,soruceObj[key]);
-        }
-      },
+      }
+    },
     reqBody={},
     formdata1;
 
@@ -365,14 +365,14 @@ $(document).ready(function () {
    // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
     //debugger;
    //appendINObject(reqBody,FormData1);
-formdata1.append('name',reqBody.name);
-formdata1.append('accessKey',reqBody.accessKey);
-formdata1.append('secretKey',reqBody.secretKey);
-formdata1.append('providerType',reqBody.providerType);
-formdata1.append('keyPairs',reqBody.keyPairs);
-formdata1.append("fileName",$('input[type="file"]')[0].files[0]);
-var serialize=$('form').serialize();
-console.log(serialize)
+   formdata1.append('name',reqBody.name);
+   formdata1.append('accessKey',reqBody.accessKey);
+   formdata1.append('secretKey',reqBody.secretKey);
+   formdata1.append('providerType',reqBody.providerType);
+   formdata1.append('keyPairs',reqBody.keyPairs);
+   formdata1.append("fileName",$('input[type="file"]')[0].files[0]);
+   var serialize=$('form').serialize();
+   console.log(serialize)
     //console.log(reqBody);
 
     if(!UtilityMethods.getIdFromURL()){
@@ -389,7 +389,7 @@ console.log(serialize)
     contentType: false,
     cache: false,*/
     processData:false,
-     success: function(data, success) {
+    success: function(data, success) {
      // alert(1);
               //alert('Successfully Saved ' + data);
               if (data!=500) {
@@ -446,7 +446,7 @@ console.log(serialize)
     };
     var getRegion=function(){
       return  '<div class="row">'
-      +'<div class="col-lg-6 col-md-6">'
+      +'<div class="col-lg-6 col-md-6" style="width:47%">'
       +'<label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
       +'<select id="'+UtilityMethods.getRandomNumber()+'" name="region" unique="true" uniqueconditionedby="orgname"  class="region chooseOrganization width-100" style="'+'vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">'
       +'<option value="">Select Region</option>'
@@ -455,10 +455,10 @@ console.log(serialize)
       +'</div></div>';
     };
     var getPemFileRow=function(){
-      return '<div class="col-lg-6 col-md-6 authPemFile" style="display: block;"><div class="smart-forms"><label for="" style="margin-left:16px;">Upload .pem file for Provider<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
+      return '<div class="col-lg-6 col-md-6 authPemFile" style="display: block;"><div class="smart-forms" style="  margin-left: 7%;"><label for="" style="margin-left:16px;">Upload .pem file for Provider<span style="color:Red;" class="control-label">&nbsp;*</span></label>'
       +'<label for="templatesicon" name="field" class="file">'
       +'<span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px '
-      +'14px;position: absolute;right:4px;">Browse</span>'
+      +'14px;position: absolute;right:4px;margin-top: 4.5%;">Browse</span>'
       +'<input id="'+UtilityMethods.getRandomNumber()+'" type="file" class="gui-file file" cdata="catalyst" cat-validation="required" name="fileObject">'
       +'<input type="text" readonly="" class="gui-input filename" name="fileName">'
       +'<input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />'
