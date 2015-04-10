@@ -5,6 +5,7 @@ var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var chefDefaults = require('../config/app_config').chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
+var logger = require('./logger.js')(module);
 
 var Chef = function(settings) {
 
@@ -374,7 +375,7 @@ var Chef = function(settings) {
         if (typeof callbackOnStdErr === 'function') {
 
             options.onStdErr = function(data) {
-                if (secondsWaited < totalSeconds) {
+                /*if ( bootstrapattemptcount < 4) {
                     //retrying bootstrap .... needed for windows
                     if (data.toString().indexOf('No response received from remote node after') >= 0 || data.toString().indexOf('ConnectTimeoutError:') >= 0) {
                         callbackOnStdOut(data.toString() + '.Retrying. Attempt ' + (bootstrapattemptcount + 1) + '/4 ...');
@@ -388,8 +389,8 @@ var Chef = function(settings) {
                     console.log('Hit an error :' + data);
                     callbackOnStdErr(data);
                 }
-                return;
-                //callbackOnStdErr(data);
+                return;*/
+                callbackOnStdErr(data);
             }
         }
         if ((!(params.runlist) || !params.runlist.length)) {
@@ -408,7 +409,7 @@ var Chef = function(settings) {
         var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
 
         var credentialArg;
-        if (params.pemFilePath) {
+        if (params.pemFilePath && (params.instanceOS != 'windows')) {
             argList.push('-i');
             argList.push(params.pemFilePath);
             //    credentialArg = '-i' + params.pemFilePath;
@@ -465,20 +466,16 @@ var Chef = function(settings) {
             }
         });
 
+
         procEnv.on('close', function(code) {
             console.log('procEnv closed: ');
         });
         procNodeDelete.on('close', function(code) {
             console.log('procNodeDelete closed');
-            console.log('Command : knife ' + argList.join());
-            var delay = 0;
-            if (params.instanceOS === 'windows') {
-                delay = bootstrapDelay;
-            }
-            setTimeout(function() {
-                var proc = new Process('knife', argList, options);
-                proc.start();
-            }, delay);
+            //console.log('Command : knife ' + argList.join());
+            logger.debug('knife command ==> ', 'knife ' + argList.join(' '));
+            var proc = new Process('knife', argList, options);
+            proc.start();
 
         });
 
