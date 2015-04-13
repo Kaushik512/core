@@ -1,5 +1,6 @@
 var ping = require('net-ping');
 var aws = require('aws-sdk');
+var logger = require('../lib/logger')(module);
 
 
 if (process.env.http_proxy) {
@@ -60,24 +61,20 @@ var EC2 = function(awsSettings) {
 
 
 
-    this.launchInstance = function(image_id, intanceType, securityGroupId,instanceName, callback) {
-
+    this.launchInstance = function(image_id, intanceType, securityGroupIds,subnetId,instanceName,keyPairName, callback) {
+        logger.debug("SecurityGroupIds and SubnetId %s %s ",securityGroupIds,subnetId);
         var that = this; //"m1.small"
-        ec.runInstances({
-            "ImageId": image_id, //"ami-10503820", // "ami-b3bf2f83",ami-0b06483b
-            "InstanceType": intanceType, //"m1.medium",
-            "MinCount": 1,
-            "MaxCount": 1,
-            "KeyName": awsSettings.keyPairName,
-            SecurityGroupIds: [securityGroupId], // [awsSettings.securityGroupId],
-            /*BlockDeviceMappings: [{
-                DeviceName: "/dev/sda",
-                Ebs: {
-                    DeleteOnTermination: true,
-                    "VolumeSize": 10
-                }
-            }]*/
-        }, function(err, data) {
+        var param = {
+          ImageId: image_id, /* required */
+          MaxCount: 1, /* required */
+          MinCount: 1, /* required */
+          InstanceType: intanceType, /* required */
+          KeyName: keyPairName, /* required */
+          SecurityGroupIds: securityGroupIds, /* required */
+          SubnetId: subnetId /* required if use vpc*/
+      };
+      logger.debug("Param obj:>>>>  ",JSON.stringify(param));
+        ec.runInstances(param, function(err, data) {
             if (err) {
                 console.log("error occured while launching instance");
                 console.log(err);
@@ -263,6 +260,84 @@ var EC2 = function(awsSettings) {
         });
     }
 
+    this.checkImageAvailability = function(imageid,callback){
+        var params = {
+            ImageIds: [imageid]
+        };
+        ec.describeImages(params,function(err,data){
+            if(err){
+                logger.debug("Unable to describeImages from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to Describe Images from AWS.");
+            callback(null, data);
+        });
+    }
+
+    this.describeKeyPairs = function(callback){
+        
+        ec.describeKeyPairs({},function(err,data){
+            if(err){
+                logger.debug("Unable to describeKeyPairs from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to Describe KeyPairs from AWS.");
+            callback(null, data);
+        });
+    }
+    this.describeVpcs = function(callback){
+       
+        ec.describeVpcs({},function(err,data){
+            if(err){
+                logger.debug("Unable to describeVpcs from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to Describe Vpcs from AWS.");
+            callback(null, data);
+        });
+    }
+
+    this.describeSubnets = function(vpcId,callback){
+        var params = {
+            Filters: [
+            {
+                Name: 'vpc-id',
+                Values:[vpcId]
+            }
+                  ]
+        };
+        ec.describeSubnets(params,function(err,data){
+            if(err){
+                logger.debug("Unable to describeSubnets from AWS.",err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Success to describeSubnets from AWS.");
+            callback(null, data);
+        });
+    }
+
+    this.getSecurityGroupsForVPC = function(vpcId,callback) {
+        var params = {
+          Filters: [
+          {
+              Name: 'vpc-id',
+              Values: [vpcId]
+          }
+          ]
+      };
+        ec.describeSecurityGroups(params, function(err, data) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data.SecurityGroups);
+        });
+    }
 
 }
 

@@ -1031,6 +1031,7 @@ function readform__(formID) {
 function readform(formID) {
         var formData = null;
         var button = $("form[id*='myForm']").find('button');
+       // alert(button.attr('class'));
         //    alert("force edit:" + forceEdit);
         //Prefilling dropdowns
         $('select[cdata="catalyst"]').each(function() {
@@ -1816,7 +1817,8 @@ function saveform(formID, operationTypes) {
 
         if (($(this).prop("type") == "password" || $(this).prop("type") == "text" || $(this).prop("type").indexOf("select") >= 0) && $(this).prop("type") != '') {
             data1.append($(this).prop("id"), $(this).val());
-            if ($(this).prop("type").indexOf("select") >= 0) {
+
+            if ($(this).prop("type").indexOf("select") >= 0 &&  !$(this).attr('skiprowid')) {
                 //alert('found one ' + $(this).prop("id") + '_rowid' + ' ' + $(this).find('option:selected').attr('rowid'));
                 //debugger;
                 data1.append($(this).prop("id") + '_rowid', $(this).find('option:selected').attr('rowid'));
@@ -1939,6 +1941,27 @@ function saveform(formID, operationTypes) {
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
 
     console.log('This is the data that gets saved:' + data1['rowid']);
+    
+    /*Adding Extra param for providers */
+    if(formID==9){
+        data1.append('instanceUserName','root');
+    }
+    /*Adding Extram params for image creation*/
+    if(formID==22){
+       var imagename= $('#imagename').val().toLowerCase().trim();
+       if(imagename.indexOf('cent')>-1){
+        data1.append('ostype','linux');
+        data1.append('osusername','root');
+       }else if(imagename.indexOf('window')>-1){
+        data1.append('ostype','windows');
+        data1.append('osusername','administrator');
+       }
+       else if(imagename.indexOf('ubuntu')>-1){
+        data1.append('ostype','linux');
+        data1.append('osusername','ubuntu');
+       }
+   }
+    console.log(data1);
     // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,

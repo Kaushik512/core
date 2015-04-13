@@ -76,6 +76,33 @@ ApplicationSchema.methods.getBuild = function(callback) {
     });
 };
 
+ApplicationSchema.methods.updateBuildParameters = function(buildParameters, callback) {
+    Build.getBuildById(this.buildId, function(err, build) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        build.functionalTestUrl = buildParameters.functionalTestUrl;
+        build.performanceTestUrl = buildParameters.performanceTestUrl;
+        build.securityTestUrl = buildParameters.securityTestUrl;
+        build.nonFunctionalTestUrl = buildParameters.nonFunctionalTestUrl;
+        build.unitTestUrl = buildParameters.unitTestUrl;
+        build.codeCoverageTestUrl = buildParameters.codeCoverageTestUrl;
+        build.codeAnalysisUrl = buildParameters.codeAnalysisUrl;
+        build.uiPerformaceUrl = buildParameters.uiPerformaceUrl;
+        build.save(function(err, build) {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, build);
+            }
+
+        });
+
+    });
+};
+
 ApplicationSchema.methods.getBuildHistory = function(callback) {
     Build.getBuildById(this.buildId, function(err, build) {
         if (err) {

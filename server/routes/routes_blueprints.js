@@ -12,10 +12,65 @@ var Cryptography = require('../lib/utils/cryptography');
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 var logger = require('../lib/logger')(module);
+var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var VMImage = require('../model/classes/masters/vmImage.js');
+var currentDirectory = __dirname;
+var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
+
+    // This post() Not in use
+    app.post('/blueprints',function(req, res) {
+        logger.debug("Enter post() for /blueprints");
+        //validating if user has permission to save a blueprint
+        logger.debug('Verifying User permission set');
+        var user = req.session.user;
+        var category = 'blueprints';
+        var permissionto = 'create';
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+            var blueprintData = req.body.blueprintData;
+
+            //All comming with blueprintData
+            /*blueprintData.orgId = req.body.orgId;
+            blueprintData.bgId = req.body.bgId;
+            blueprintData.projectId = req.body.projectId;
+            blueprintData.envId = req.body.envId;
+            blueprintData.imageId = req.body.imageId;
+            blueprintData.providerId = req.body.providerId;*/
+            if (!blueprintData.runlist) {
+                blueprintData.runlist = [];
+            }
+            if (!blueprintData.users || !blueprintData.users.length) {
+                res.send(400);
+                return;
+            }
+
+            blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(data);
+            });
+            logger.debug("Exit post() for /blueprints");
+        });
+    });
 
     app.post('/blueprints/:blueprintId/update', function(req, res) {
         logger.debug("Enter /blueprints/%s/update", req.params.blueprintId);
@@ -159,25 +214,51 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                             logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
 
+                                            VMImage.getImageById(blueprint.imageId, function(err, anImage) {
+                                                    if (err) {
+                                                        logger.error(err);
+                                                        res.send(500, errorResponses.db.error);
+                                                        return;
+                                                    }
+                                                    logger.debug("Loaded Image: >>>>>>>>>>> %s",anImage.providerId);
+                                                AWSProvider.getAWSProviderById(anImage.providerId, function(err, aProvider) {
+                                                    if (err) {
+                                                        logger.error(err);
+                                                        res.send(500, errorResponses.db.error);
+                                                        return;
+                                                    }
+                                                    AWSKeyPair.getAWSKeyPairById(blueprint.keyPairId, function(err, aKeyPair) {
+                                                    if (err) {
+                                                        logger.error(err);
+                                                        res.send(500, errorResponses.db.error);
+                                                        return;
+                                                    }
+                                                
+
                                             function launchInstance() {
                                                 logger.debug("Enter launchInstance");
+                                                // New add
+                                                //var encryptedPemFileLocation= currentDirectory + '/../catdata/catalyst/provider-pemfiles/';
 
                                                 var settings = appConfig;
                                                 //encrypting default pem file
                                                 var cryptoConfig = appConfig.cryptoSettings;
                                                 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                                                var encryptedPemFileLocation = settings.instancePemFilesDir + uuid.v4();
-                                                cryptography.encryptFile(settings.aws.pemFileLocation + settings.aws.pemFile, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
-                                                    if (err) {
-                                                        logger.log("encryptFile Failed >> ", err);
-                                                        res.send(500);
-                                                        return;
+                                                var encryptedPemFileLocation = settings.instancePemFilesDir + aKeyPair._id;
+                                                    var securityGroupIds =[];
+                                                    for(var i =0;i<blueprint.securityGroupIds.length;i++){
+                                                        securityGroupIds.push(blueprint.securityGroupIds[i]);
                                                     }
 
                                                     logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
-
-                                                    var ec2 = new EC2(settings.aws);
-                                                    ec2.launchInstance(blueprint.instanceAmiid, blueprint.instanceType, settings.aws.securityGroupId, 'D4D-' + blueprint.name, function(err, instanceData) {
+                                                    var awsSettings ={ 
+                                                        "access_key": aProvider.accessKey,
+                                                        "secret_key": aProvider.secretKey,
+                                                        "region"    : aKeyPair.region, 
+                                                        "keyPairName": aKeyPair.keyPairName
+                                                    };
+                                                    var ec2 = new EC2(awsSettings);
+                                                    ec2.launchInstance(anImage.imageIdentifier, blueprint.instanceType, securityGroupIds,blueprint.subnetId, 'D4D-' + blueprint.name,aKeyPair.keyPairName, function(err, instanceData) {
                                                         if (err) {
                                                             logger.error("launchInstance Failed >> ", err);
                                                             res.send(500);
@@ -186,12 +267,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                         logger.debug("Instance Launched. Runlist = ", version.runlist);
                                                         logger.debug("Instance Launched. Instance data = ", instanceData);
-
+                                                        logger.debug("UserName:::::::::: ",anImage.userName);
                                                         var instance = {
                                                             orgId: blueprint.orgId,
                                                             bgId: blueprint.bgId,
                                                             projectId: blueprint.projectId,
                                                             envId: blueprint.envId,
+                                                            providerId: blueprint.providerId,
                                                             chefNodeName: instanceData.InstanceId,
                                                             runlist: version.runlist,
                                                             platformId: instanceData.InstanceId,
@@ -211,7 +293,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 os: blueprint.instanceOS
                                                             },
                                                             credentials: {
-                                                                username: blueprint.instanceUsername,
+                                                                username: anImage.userName,
                                                                 pemFileLocation: encryptedPemFileLocation,
                                                             },
                                                             chef: {
@@ -449,12 +531,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             });
                                                         });
 
-
-                                                    });
-
                                                 });
 
                                             }
+
 
                                             chef.getEnvironment(blueprint.envId, function(err, env) {
                                                 if (err) {
@@ -478,9 +558,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     launchInstance();
                                                 }
 
-                                            });
+                                                    });
+                                                });
+                                             });
                                         });
-                                    });
+                                     });
+                                }); 
 
 
                                 } else {

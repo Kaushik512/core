@@ -578,9 +578,8 @@ $(function() {
         $.get('../applications/' + applicationId + '/buildConf', function(buildData) {
             buildInfo = buildData;
             $appCard.find('.codeHealthUrl').attr('href', buildData.codeAnalysisUrl);
-            $('.codeHealthUrl').val(buildData.codeAnalysisUrl);
             $appCard.find('.uiHealthUrl').attr('href', buildData.uiPerformaceUrl);
-            $('.uiHealthUrl').val(buildData.uiPerformaceUrl);
+
             // getting task name
             $.get('../tasks/' + buildData.taskId, function(task) {
                 $('.buildTaskName').html(task.name);
@@ -590,7 +589,31 @@ $(function() {
                 //console.log(JSON.stringify(data));
                 $('.buildEnvLabel').html(data.environmentname);
             });
-
+            var $buildParameterForm = $('.buildParameterForm');
+            if (buildData.functionalTestUrl) {
+                $buildParameterForm.find('.functionalTestUrlContainer').find('.urlValue').val(buildData.functionalTestUrl);
+            }
+            if (buildData.performanceTestUrl) {
+                $buildParameterForm.find('.performanceTestUrlContainer').find('.urlValue').val(buildData.performanceTestUrl);
+            }
+            if (buildData.securityTestUrl) {
+                $buildParameterForm.find('.securityTestUrlContainer').find('.urlValue').val(buildData.securityTestUrl);
+            }
+            if (buildData.nonFunctionalTestUrl) {
+                $buildParameterForm.find('.nonFunctionalTestUrlContainer').find('.urlValue').val(buildData.nonFunctionalTestUrl);
+            }
+            if (buildData.unitTestUrl) {
+                $buildParameterForm.find('.unitTestUrlContainer').find('.urlValue').val(buildData.unitTestUrl);
+            }
+            if (buildData.codeCoverageTestUrl) {
+                $buildParameterForm.find('.codeCoverageUrlContainer').find('.urlValue').val(buildData.codeCoverageTestUrl);
+            }
+            if (buildData.codeAnalysisUrl) {
+                $buildParameterForm.find('.codeAnalysisUrlContainer').find('.urlValue').val(buildData.codeAnalysisUrl);
+            }
+            if (buildData.uiPerformaceUrl) {
+                $buildParameterForm.find('.uiPerformanceTestUrlContainer').find('.urlValue').val(buildData.uiPerformaceUrl);
+            }
 
 
 
@@ -689,6 +712,28 @@ $(function() {
             }
         });
 
+    });
+
+    $('.buildParameterForm').submit(function(e) {
+        var buildParameters = {};
+        var $this = $(this);
+        buildParameters.functionalTestUrl = $this.find('.functionalTestUrlContainer').find('.urlValue').val();
+        buildParameters.performanceTestUrl = $this.find('.performanceTestUrlContainer').find('.urlValue').val();
+        buildParameters.nonFunctionalTestUrl = $this.find('.nonFunctionalTestUrlContainer').find('.urlValue').val();
+        buildParameters.securityTestUrl = $this.find('.securityTestUrlContainer').find('.urlValue').val();
+        buildParameters.unitTestUrl = $this.find('.unitTestUrlContainer').find('.urlValue').val();
+        buildParameters.codeCoverageTestUrl = $this.find('.codeCoverageUrlContainer').find('.urlValue').val();
+        buildParameters.codeAnalysisUrl = $this.find('.codeAnalysisUrlContainer').find('.urlValue').val();
+        buildParameters.uiPerformaceUrl = $this.find('.uiPerformanceTestUrlContainer').find('.urlValue').val();
+        $.post('../applications/'+urlParams.appId+'/buildConf/buildParameters', {
+            buildParameters: buildParameters
+        }, function(buildData) {
+            $('.codeHealthUrl').attr('href', buildData.codeAnalysisUrl);
+            $('.uiHealthUrl').attr('href', buildData.uiPerformaceUrl);
+            var $saveNotification = $('.buildParameterSaveNotification').show();
+            $saveNotification.fadeOut(1000);
+        });
+        return false;
     });
 
 

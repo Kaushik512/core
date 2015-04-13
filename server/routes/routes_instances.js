@@ -16,6 +16,10 @@ var uuid = require('node-uuid');
 var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
 var logger = require('../lib/logger')(module);
+var waitForPort = require('wait-for-port');
+var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
+
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -34,6 +38,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(data);
             logger.debug("Exit get() for /instances");
         });
+    });
+
+    app.get('/instances/rdp/:vmname/:port',function(req,res){
+
+        res.setHeader('Content-disposition', 'attachment; filename='+ req.params.vmname + '.rdp');
+        res.setHeader('Content-type', 'rdp');
+        //res.charset = 'UTF-8';
+        var rdptext = "full address:s:" + req.params.vmname + ".cloudapp.net:"+ req.params.port + "\n\r";
+        rdptext += "prompt for credentials:i:1"
+        res.write(rdptext);
+        res.end();
+
     });
 
     app.post('/instances', function(req, res) {
@@ -791,7 +807,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send(500);
                             return;
                         }
+                        logger.debug("data.providerId: ::::   ",JSON.stringify(data[0]));
                         if (data.length) {
+                            AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
+                               if (err) {
+                                   logger.error(err);
+                                   res.send(500, "Unable to get Provider.");
+                                   return;
+                               }
+                               logger.debug("Provider:>>>>>>>>>> ",JSON.stringify(aProvider));
+                               AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
+                                logger.debug("keyPairs length::::: ",keyPair[0].region);
+                                if(err){
+                                    res.send(500,"Error getting to fetch Keypair.")      
+                                }
                             var timestampStarted = new Date().getTime();
 
                             var actionLog = instancesDao.insertStopActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
@@ -807,8 +836,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 timestamp: timestampStarted
                             });
 
-                            var settings = appConfig.aws;
-                            var ec2 = new EC2(settings);
+                            var ec2 = new EC2({
+                             "access_key": aProvider.accessKey,
+                             "secret_key": aProvider.secretKey,
+                             "region"    : keyPair[0].region
+                            });
                             ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
                                 if (err) {
                                     var timestampEnded = new Date().getTime();
@@ -860,9 +892,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
 
+                                 });
                             });
-
-
+                        });
 
 
                         } else {
@@ -895,6 +927,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
                         if (data.length) {
+
+                            AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
+                               if (err) {
+                                   logger.error(err);
+                                   res.send(500, "Unable to find Provider.");
+                                   return;
+                               }
+                               AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
+                                logger.debug("keyPairs length::::: ",keyPair[0].region);
+                                if(err){
+                                    res.send(500,"Error getting to fetch Keypair.")      
+                                }
+
                             var timestampStarted = new Date().getTime();
 
                             var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
@@ -912,8 +957,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 timestamp: timestampStarted
                             });
 
-                            var settings = appConfig.aws;
-                            var ec2 = new EC2(settings);
+                            var ec2 = new EC2({
+                             "access_key": aProvider.accessKey,
+                             "secret_key": aProvider.secretKey,
+                             "region"    : keyPair[0].region
+                            });
                             ec2.startInstance([data[0].platformId], function(err, startingInstances) {
                                 if (err) {
                                     var timestampEnded = new Date().getTime();
@@ -981,6 +1029,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     }
                                 });
                             });
+                        });
+                        });
 
                         } else {
                             res.send(404);

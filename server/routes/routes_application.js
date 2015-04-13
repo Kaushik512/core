@@ -63,6 +63,34 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.post('/applications/:applicationId/buildConf/buildParameters', function(req, res) {
+        if (!req.body.buildParameters) {
+            res.send(400, {
+                message: "Invalid buildParameters"
+            });
+            return;
+        }
+        Application.getApplicationById(req.params.applicationId, function(err, application) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (application) {
+                application.updateBuildParameters(req.body.buildParameters, function(err, build) {
+                    if (err) {
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    res.send(build)
+                });
+            } else {
+                res.send(404, {
+                    message: "application not founds"
+                });
+            }
+        });
+    });
+
     app.get('/applications/:applicationId/lastBuildInfo', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
@@ -86,7 +114,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         message: "Last Build Info not found"
                     });
                 }
-
             });
         });
     });

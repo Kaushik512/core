@@ -26,18 +26,18 @@
                                        <div class="widget-body no-padding">
                                           <div class="col-lg-6 col-md-6">
                                              <label for="">
-                                             Reference Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                                             <input name="ctl00$MainContent$orgname" value="" id="jiraname" class="form-control" type="text"  cdata="catalyst" unique="true"  uniqueconditionedby="jiraname"  cat-validation="required,max15">
+                                             <input name="ctl00$MainContent$orgname" value="" id="jiraname" class="form-control" type="text"  cdata="catalyst" uniqueconditionedby="jiraname"  cat-validation="required,max15">
                                           </div>
                                           <div class="col-lg-6 col-md-6">
                                              <label for="">
-                                             Jira URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             Jira URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                              <input name="ctl00$MainContent$orgname" value="" id="jiraurl" class="form-control" type="text"  cdata="catalyst"  cat-validation="required">
                                           </div>
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                              <label for="">
-                                             User ID <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                             User ID:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                              </label>
                                              <input name="ctl00$MainContent$orgname" value="" id="jirausername" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
                                           </div>
@@ -62,7 +62,7 @@
                </div>
                <div class="widget-toolbox clearfix">
                   <div class="btn-group pull-right">
-                     <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+                     <button class="btn btn-primary btn-mini" style="margin-right:11px;" onclick="jiraTest()">
                      <i class="ace-icon fa fa-check bigger-110"></i>
                      Save
                      </button>
@@ -108,7 +108,7 @@
        });
        $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
        var ten = 23;
-       readformnew('23'); //6 is for role
+       readformnew('23'); //23 is for jira
        //
       
        $('#content').css("opacity", "1 !important");
@@ -145,12 +145,35 @@
    
            if($(this).valid){
                 /*alert('valid form submitted'); // for demo*/
-               validateandsaveform();
+               //validateandsaveform();
            }else{
                 alert('invalid valid form submitted'); // for demo
            }
            return false; // for demo
        });
    });
+
+   function jiraTest(){
+                 var inputData = new Object();
+                 inputData.jirausername = $('#jirausername').val();
+                 inputData.jirapassword = $('#jirapassword').val();
+                 inputData.jiraurl = $('#jiraurl').val();
+                 //alert(inputData.accesskey);
+ 
+                 $.ajax({
+                     url: '/jira/test',
+                     type: 'POST',
+                     dataType: 'json',
+                     data: inputData,
+                     success: function (data) {
+                         //alert("Success...");
+                         if(validateForm())saveform(23);
+                     },
+                     error: function (err) {
+                         alert("Invalid Username or Password.")
+                     }
+                 });
+  
+                }
        
 </script>

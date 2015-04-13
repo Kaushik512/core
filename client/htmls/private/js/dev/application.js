@@ -585,7 +585,7 @@ $(function() {
         var $selectedCard = $('.role-Selectedcard-app');
         if ($selectedCard.length) {
             var applicationId = $selectedCard.parent().data('applicationId');
-            window.location.href = 'index.html#ajax/newControlpanel.html?appId=' + applicationId;
+            window.location.href = 'index.html#ajax/applicationControlPanel.html?appId=' + applicationId;
         }
     });
 

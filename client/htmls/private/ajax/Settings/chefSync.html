@@ -247,6 +247,11 @@ $('#buttonForIP').click(function(e){
     return;
   }
   else{
+     var $checkBoxes = $('.nodeCheckBox:checked');
+     if (!$checkBoxes.length) {
+        alert('Please Choose nodes first');
+        return;
+     }
     $('#chefImportNodesModal').modal('show');
     $('#chefImportBgSelect').select2('val', 'All');
     $('#chefImportProjectSelect').select2('val', 'All');
@@ -631,14 +636,14 @@ $(function() {
     }
 
 
-    $('.showChefImportNodesModalBtn').click(function(e) {
+    /*$('.showChefImportNodesModalBtn').click(function(e) {
         var $checkBoxes = $('.nodeCheckBox:checked');
         if (!$checkBoxes.length) {
             alert('Please Choose nodes first');
             return;
         }
         //$('#chefImportNodesModal').modal('show');
-    });
+    });*/
     $('#importPemfileInput').change(function() {
         //console.log(this.files);
         $(this).next().val(this.files[0].name);
