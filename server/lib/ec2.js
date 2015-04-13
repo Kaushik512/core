@@ -262,10 +262,7 @@ var EC2 = function(awsSettings) {
 
     this.checkImageAvailability = function(imageid,callback){
         var params = {
-            ExecutableUsers: [],
-            Filters: [],
-            ImageIds: [imageid],
-            Owners: []
+            ImageIds: [imageid]
         };
         ec.describeImages(params,function(err,data){
             if(err){
@@ -279,11 +276,8 @@ var EC2 = function(awsSettings) {
     }
 
     this.describeKeyPairs = function(callback){
-        var params = {
-            Filters: [],
-            KeyNames: []
-        };
-        ec.describeKeyPairs(params,function(err,data){
+        
+        ec.describeKeyPairs({},function(err,data){
             if(err){
                 logger.debug("Unable to describeKeyPairs from AWS.",err);
                 callback(err, null);
@@ -294,11 +288,8 @@ var EC2 = function(awsSettings) {
         });
     }
     this.describeVpcs = function(callback){
-        var params = {
-            Filters: [],
-            VpcIds: []
-        };
-        ec.describeVpcs(params,function(err,data){
+       
+        ec.describeVpcs({},function(err,data){
             if(err){
                 logger.debug("Unable to describeVpcs from AWS.",err);
                 callback(err, null);
@@ -316,8 +307,7 @@ var EC2 = function(awsSettings) {
                 Name: 'vpc-id',
                 Values:[vpcId]
             }
-                  ],
-            SubnetIds: []
+                  ]
         };
         ec.describeSubnets(params,function(err,data){
             if(err){
@@ -337,9 +327,7 @@ var EC2 = function(awsSettings) {
               Name: 'vpc-id',
               Values: [vpcId]
           }
-          ],
-          GroupIds: [],
-          GroupNames: []
+          ]
       };
         ec.describeSecurityGroups(params, function(err, data) {
             if (err) {
