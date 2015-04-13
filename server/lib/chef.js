@@ -671,8 +671,25 @@ var Chef = function(settings) {
 
     };
 
+    this.downloadCookbook = function(cookbookName, callback) {
+        var options = {
+            cwd: settings.userChefRepoLocation + '/.chef',
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                console.log(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
 
-
+            }
+        };
+        var proc = new Process('knife', ['cookbook', 'download', cookbookName, '--force'], options);
+        proc.start();
+    };
 
 }
 

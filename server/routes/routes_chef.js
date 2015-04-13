@@ -327,7 +327,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 console.log('orgId ==>', orgId);
                                 console.log('bgid ==>', bgId);
                                 // console.log('node ===>', node);
-                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId,envId, function(err, data) {
+                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, envId, function(err, data) {
 
                                     if (err) {
                                         console.log(err, 'occured in creating environment in mongo');
@@ -353,12 +353,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             return;
                                         }
                                         if (instances.length) {
-                                            configmgmtDao.getOrgBgProjEnvNameFromIds(instances[0].orgId,instances[0].bgId,instances[0].projectId,instances[0].envId,function(err,names){
-                                             if(err) {
-                                                updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
-                                                return;
-                                             }
-                                             updateTaskStatusNode(node.name, "Node exist in " + names.orgName + "/" + names.bgName + "/" + names.projName + "/" + names.envName + " : " + node.name, true, count);
+                                            configmgmtDao.getOrgBgProjEnvNameFromIds(instances[0].orgId, instances[0].bgId, instances[0].projectId, instances[0].envId, function(err, names) {
+                                                if (err) {
+                                                    updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
+                                                    return;
+                                                }
+                                                updateTaskStatusNode(node.name, "Node exist in " + names.orgName + "/" + names.bgName + "/" + names.projName + "/" + names.envName + " : " + node.name, true, count);
                                             });
                                             return;
                                         }
@@ -430,7 +430,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.post('/chef/environments/create/:serverId', function(req, res) {
 
-       
+
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
@@ -447,15 +447,15 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-                chef.createEnvironment(req.body.envName, function(err, envName) {
-                    if (err) {
-                        res.send(500);
-                        return;
-                    } else {
-                        res.send(envName);
-                    }
-                });
-         });
+            chef.createEnvironment(req.body.envName, function(err, envName) {
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(envName);
+                }
+            });
+        });
     });
 
     app.get('/chef/servers/:serverId/cookbooks', function(req, res) {
@@ -527,6 +527,39 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
 
+    app.get('/chef/servers/:serverId/cookbooks/:cookbookName/download', function(req, res) {
+
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+
+            chef.downloadCookbook(req.params.cookbookName, function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(cookbooks);
+                }
+            });
+
+
+        });
+
+    });
 
     app.get('/chef/servers/:serverId/receipeforcookbooks/:cookbookName', function(req, res) {
 
