@@ -1,120 +1,120 @@
-  <script>
+
+<script>
     // $(".tree-view").hide();
 
   </script>
-  <style type="text/css">
-   #createProvider .marginbottom{
-    margin-bottom: 10px;
-  }
-  #createProvider .width-60{
-    width:60%;
-  }
-  #createProvider .width-20{
-    width:20%;
-  }
-  #createProvider .addimage, .removeimage{
-   cursor: pointer;
- }
- #createProvider .addNewRegion {
-  border:solid gray 1px; padding:10px;
-  margin-bottom: 15px;
+<style type="text/css">
+#createProvider .marginbottom {
+	margin-bottom: 10px;
 }
-#createProvider .addRow ,.removeRow{
-  float: left;
-  margin-top: 32px;
-  margin-left:3.5px;
+
+#createProvider .width-60 {
+	width: 60%;
 }
-#createProvider .addRegion, .removeRegion{
-  position: relative;
-  top: -18px;
-  left: 17px;
-  float: right;
+
+#createProvider .width-20 {
+	width: 20%;
 }
-#createProvider .row{
-  margin-bottom: 10px;
+
+#createProvider .addimage,.removeimage {
+	cursor: pointer;
+}
+
+#createProvider .addNewRegion {
+	border: solid gray 1px;
+	padding: 10px;
+	margin-bottom: 15px;
+}
+
+#createProvider .addRow,.removeRow {
+	float: left;
+	margin-top: 32px;
+	margin-left: 3.5px;
+}
+
+#createProvider .addRegion,.removeRegion {
+	position: relative;
+	top: -18px;
+	left: 17px;
+	float: right;
+}
+
+#createProvider .row {
+	margin-bottom: 10px;
 }
 </style>
 <div class="row" id="createProvider">
- <div class="col-md-12">
-  <div class="col-md-12">
-   <form id="myForm54" enctype="mutlipart/form-data" action="/aws/providers" method="post">
-    <div class="widget-box">
-     <div class="widget-header">
-      <h4 class="widget-margin" style="color:black;">Add New Provider<span id="spnprovider"></span></h4>
-    </div>
-    <div class="widget-body">
-      <div class="widget-main" style="min-height:300px">
-       <div>
-        <section id="widget-grid" class="">
-         <!-- START ROW -->
-         <div class="row">
-          <!-- NEW COL START -->
-          <article class="col-sm-12 col-md-12 col-lg-12">
-           <!-- Widget ID (each widget will need unique ID)-->
-           <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
-            <!-- widget div-->
-            <div id="appender">
-             <!-- widget content -->
-             <div class="row">
-               <div class="col-lg-6 col-md-6">
-                <label for="name">Provider Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cat-validation="required" cdata="catalyst" skiprowid="yes">
-                 <option value="">Select Provider</option>
-                 <option value="aws">AWS</option>
-               </select>
-             </div>   
-             <div class="col-lg-6 col-md-6">
-               <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-               <!-- <i class="icon-append fa fa-building"></i> -->
-               <input name="providerName" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
-             </div>    
-           </div>
-
-           <div class="row">
-            <!-- -->
-            <div class="col-lg-6 col-md-6">
-             <label for="">Access Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-             <!-- <i class="icon-append fa fa-building"></i> -->
-             <input name="accessKey" id="accessKey" class="form-control" type="text"  cdata="catalyst" cat-validation="required" placeholder="Enter the Access Key">
-
-             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-           </div>
-           <div class="col-lg-6 col-md-6">
-             <label for="">Secret Key:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-             <!-- <i class="icon-append fa fa-building"></i> -->
-             <input name="secretKey" id="secretKey" class="form-control" type="text"  cdata="catalyst" cat-validation="required" placeholder="Enter the Secret Key">
-
-             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-           </div>
-
-         </div>
-
-       </div>
-       <!-- end widget div -->
-     </div>
-     <!-- end widget -->             
-   </article>
-   <!-- END COL -->
- </div>
- <!-- END ROW -->
-</section>
-<!-- end widget grid -->
+<div class="col-md-12">
+<div class="col-md-12">
+<form id="myForm54" enctype="mutlipart/form-data"
+	action="/aws/providers" method="post">
+<div class="widget-box">
+<div class="widget-header">
+<h4 class="widget-margin" style="color: black;">Add New Provider<span
+	id="spnprovider"></span></h4>
 </div>
+<div class="widget-body">
+<div class="widget-main" style="min-height: 300px">
+<div><section id="widget-grid" class=""> <!-- START ROW -->
+<div class="row"><!-- NEW COL START --> <article
+	class="col-sm-12 col-md-12 col-lg-12"> <!-- Widget ID (each widget will need unique ID)-->
+<div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false"
+	data-widget-custombutton="false"><!-- widget div-->
+<div id="appender"><!-- widget content -->
+<div class="row">
+<div class="col-lg-6 col-md-6"><label for="name">Provider
+Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <select
+	id="providertype" name="providerType" unique="true"
+	uniqueconditionedby="orgname" class="chooseOrganization width-100"
+	style="vertical-align: central" cat-validation="required"
+	cdata="catalyst" skiprowid="yes">
+	<option value="">Select Provider</option>
+	<option value="aws">AWS</option>
+</select></div>
+<div class="col-lg-6 col-md-6"><label for="">Name:<span
+	style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="providerName" placeholder="Enter Name of the Provider"
+	id="name" class="form-control" type="text" cdata="catalyst"
+	cat-validation="required,max15"></div>
+</div>
+
+<div class="row"><!-- -->
+<div class="col-lg-6 col-md-6"><label for="">Access Key:<span
+	style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="accessKey" id="accessKey" class="form-control" type="text"
+	cdata="catalyst" cat-validation="required"
+	placeholder="Enter the Access Key"> <span
+	data-val-controltovalidate="orgname" id="MainContent_Req_orgname"
+	data-val="true"
+	data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
+	data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+<div class="col-lg-6 col-md-6"><label for="">Secret Key:<span
+	style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="secretKey" id="secretKey" class="form-control" type="text"
+	cdata="catalyst" cat-validation="required"
+	placeholder="Enter the Secret Key"> <span
+	data-val-controltovalidate="orgname" id="MainContent_Req_orgname"
+	data-val="true"
+	data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
+	data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+
+</div>
+
+</div>
+<!-- end widget div --></div>
+<!-- end widget --> </article> <!-- END COL --></div>
+<!-- END ROW --> </section> <!-- end widget grid --></div>
 </div>
 </div>
 <div class="widget-toolbox clearfix">
-  <div class="btn-group pull-right">
-   <input type="submit" value=" Save" class="btn btn-primary btn-mini" style="margin-right:11px;" /> 
-
-   <!--  <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
+<div class="btn-group pull-right"><input type="submit"
+	value=" Save" class="btn btn-primary btn-mini"
+	style="margin-right: 11px;" /> <!--  <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
      <i class="ace-icon fa fa-check bigger-110"></i>
      Save
-   </button> -->
-   <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-     <i class="ace-icon fa fa-undo bigger-110"></i>
-     Cancel
-   </a>
- </div>
+   </button> --> <a class="btn btn-primary btn-mini"
+	onclick="window.history.back();" id="btncancel"> <i
+	class="ace-icon fa fa-undo bigger-110"></i> Cancel </a></div>
 </div>
 </div>
 </form>
@@ -175,14 +175,14 @@ function removeLoader(){
 
 function checkForKeyPair(){
 
-
-  function loadKeyPair(accessKey,secretKey){
+debugger;
+  function loadKeyPair(accessKey,secretKey,region){
 
     appendLoader();
     var data1=new FormData();
     data1.append('accessKey',accessKey);
     data1.append('secretKey',secretKey);
-    data1.append('region',"us-west-2");
+    data1.append('region',region);
     $.ajax({
       method: "POST",
       url: "/aws/providers/keypairs/list",
@@ -198,7 +198,7 @@ function checkForKeyPair(){
       for(var i=0;i<len;i++){
         str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
       }
-      $('select.keyvalue').html(str).each(function(){
+      $('select.keyvalue').html(str).val('').each(function(){
         $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
       });
       $('#btnsubmit').removeAttr('disabled');
@@ -208,9 +208,10 @@ function checkForKeyPair(){
 
 
   var accessKey=$('#accessKey').val(),
-  secretKey=$('#secretKey').val();
-  if(accessKey && secretKey && accessKey!=='' && secretKey!==''){
-    loadKeyPair(accessKey,secretKey);
+  secretKey=$('#secretKey').val(),
+  region=$('select.region').val();
+  if(accessKey && secretKey && accessKey!=='' && secretKey!=='' && region && region!==''){
+    loadKeyPair(accessKey,secretKey,region);
   }else{
     $('#btnsubmit').attr('disabled','disabled');
   }
@@ -225,28 +226,29 @@ function setValues(data){
   for(var i=0;i<data.keyPairs.length;i++){
     if(i==0){
       $('#appender').append(createTemplateInstance.getFinalTemplate(true));
-      $('.region').val(data.keyPairs[0].region).attr('disabled','disabled').select2();
-      $('.keyvalue').val(data.keyPairs[0].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[0].keyPairName).select2();
+      $('select.region').attr('answer',data.keyPairs[0].region).val(data.keyPairs[0].region).attr('disabled','disabled').select2();
+      $('select.keyvalue').val(data.keyPairs[0].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[0].keyPairName).select2();
       $('.filename').attr('disabled','disabled').val(data.keyPairs[0].fileName).removeAttr('cat-validation');
       $('input.file').attr('disabled','disabled').removeAttr('cat-validation');
     }else{
       $('#appender').append(createTemplateInstance.getFinalTemplate(false));
     }
   }
+  $('select.region').change(checkForKeyPair);
+  getRegionList();      
 }
 $(document).ready(function () {
   $("#name").focus();
  // $('#accessKey').blur(checkForKeyPair);
-  $('#secretKey').blur(checkForKeyPair);
+ // $('#secretKey').blur(checkForKeyPair);
 
-
-  $('#myForm54').ajaxForm( {
+ $('#myForm54').ajaxForm( {
     beforeSubmit: function(arr, $form, options) { 
     // The array of form data takes the following form: 
     // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
 
     // return false to cancel submit  
-    debugger;     
+     
     if(isFormValid()){
      appendLoader();  
      return true;
@@ -298,6 +300,8 @@ success: function(data, success) {
     bindChange_importPemFile();
     UtilityMethods.initializeSelect2();
     $('#myForm54').attr('action','/aws/providers');
+    getRegionList();
+    $('select.region').change(checkForKeyPair);
   }else{
    $('#myForm54').attr('action','/aws/providers/'+UtilityMethods.getIdFromURL()+'/update');
    $.ajax({
@@ -309,9 +313,11 @@ success: function(data, success) {
       
       d4ddata=data;
       
-      setValues(data);      
+      setValues(data);
+      
       //UtilityMethods.initializeSelect2();
       checkForKeyPair();
+     // $('select.region').change(checkForKeyPair);
     },
     error: function(jqxhr) {
       removeLoader();
@@ -321,12 +327,21 @@ success: function(data, success) {
       bootbox.alert(data);
     }
   });
-
  }
-
-
-
 });
+
+function getRegionList(){
+	$.get('/vmimages/regions/list',function(data){
+		var str='<option value="">Select Region</option>';
+		for(var i=0;i<data.length;i++){
+			str=str+'<option value="'+data[i].region+'">'+data[i].region_name+'</option>'
+			}
+		$('select.region').html(str).each(function(){
+			   $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
+			});	
+		$('select.region').trigger('change');	
+		});	
+}
 
   function saveProviderData(){
     appendLoader();
