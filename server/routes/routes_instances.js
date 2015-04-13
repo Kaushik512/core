@@ -40,6 +40,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    app.get('/instances/rdp/:vmname/:port',function(req,res){
+
+        res.setHeader('Content-disposition', 'attachment; filename='+ req.params.vmname + '.rdp');
+        res.setHeader('Content-type', 'rdp');
+        //res.charset = 'UTF-8';
+        var rdptext = "full address:s:" + req.params.vmname + ".cloudapp.net:"+ req.params.port + "\n\r";
+        rdptext += "prompt for credentials:i:1"
+        res.write(rdptext);
+        res.end();
+
+    });
+
     app.post('/instances', function(req, res) {
         logger.debug("Enter post() for /instances");
         instancesDao.getInstances(req.body.instanceIds, function(err, data) {
