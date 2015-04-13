@@ -12,6 +12,62 @@
     width:80%;
     margin-bottom: 8px;
 }
+.selectCookbooksandRecipesdiv{
+    width: 80%;
+}
+.selectCookbooksandRecipes{
+    height: 250px;
+    width:100%;
+    margin-bottom: 10px;
+}
+.cookbook{
+    background: url("../img/cookbook.png");
+    background-repeat: no-repeat;
+    height: 24px;
+    padding-left: 36px; 
+    padding-top: 6px;
+    background-position:4px 2px;
+    font-size: 12px;
+}
+.roles{
+    /*background: url("img/Runlist.png");background-repeat : no-repeat; height: 47px;padding-left: 50px; background-position:2px 2px;*/
+    background: url("../img/recipe.png");
+    background-repeat: no-repeat;
+    height: 24px;
+    padding-left: 34px; 
+    padding-top: 6px;
+    background-position:4px 2px;
+    font-size: 12px;
+}
+.marginleft12{
+    margin-left:12px;
+}
+.anchorAdd{
+    border-radius: 50% !important;
+    height: 32px;
+    width: 32px;
+    margin-bottom: 15px !important;
+}
+.anchorAddi{
+    font-size:14px;
+    margin-top: 8px;
+}
+.anchorRemove{
+    border-radius: 50% !important;
+    height: 32px;
+    margin-top: 15px !important;
+    width: 32px;
+}
+.anchorRemovei{
+    font-size:14px;
+    margin-top: 8px;
+}
+
+
+
+
+
+
 
 .font-size18{
     font-size: 18px !important;
@@ -7454,4 +7510,137 @@ word-break:break-word;
 }
 .imgMargin{
     margin-left: -12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.smart-form .icon-append, .smart-form .icon-prepend {
+    position: absolute;
+    top: 5px;
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+}
+.smart-form .icon-append {
+    right: 5px;
+    padding-left: 3px;
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+.smart-form .icon-prepend {
+    left: 5px;
+    padding-right: 3px;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+.smart-form .input .icon-prepend+input, .smart-form .textarea .icon-prepend+textarea {
+    padding-left: 37px;
+}
+.smart-form .input .icon-append+input, .smart-form .textarea .icon-append+textarea {
+    padding-right: 37px;
+}
+.smart-form .input .icon-prepend+.icon-append+input, .smart-form .textarea .icon-prepend+.icon-append+textarea {
+    padding-left: 37px;
+}
+.smart-form .row {
+    margin: 0 -15px;
+}
+.smart-form .row:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+
+
+
+
+
+
+
+.widget-toolbar .smart-form .icon-append, .widget-toolbar .smart-form .icon-prepend, .widget-toolbar.smart-form .icon-append, .widget-toolbar.smart-form .icon-prepend {
+    top: 3px!important;
+}
+.smart-form {
+    margin: 0;
+    outline: 0;
+    color: #666;
+    position: relative;
+}
+.smart-form .label {
+    display: block;
+    margin-bottom: 6px;
+    line-height: 19px;
+    font-weight: 400;
+    font-size: 13px;
+    color: #333;
+    text-align: left;
+}
+.smart-form .label.col {
+    margin: 0;
+    padding-top: 7px;
+}
+.smart-form .button, .smart-form .checkbox, .smart-form .input, .smart-form .radio, .smart-form .select, .smart-form .textarea, .smart-form .toggle {
+    position: relative;
+    display: block;
+    font-weight: 400;
+}
+.smart-form .input input, .smart-form .select select, .smart-form .textarea textarea {
+    display: block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    /*Arabinda deleted height height: 32px;
+    */padding: 8px 10px;
+    outline: 0;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    background: #fff;
+    font: 13px/16px 'Open Sans', Helvetica, Arial, sans-serif;
+    color: #404040;
+    appearance: normal;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
