@@ -175,7 +175,7 @@ function removeLoader(){
 
 function checkForKeyPair(){
 
-debugger;
+	
   function loadKeyPair(accessKey,secretKey,region){
 
     appendLoader();
@@ -190,6 +190,7 @@ debugger;
       processData: false,
       contentType:false,
       error:function(XMLHttpRequest, textStatus, errorThrown) {
+    	$('.modal-dialog').find('.close').trigger('click');
         bootbox.alert(XMLHttpRequest.responseText);
         removeLoader();
       } 
@@ -239,11 +240,11 @@ function setValues(data){
 }
 $(document).ready(function () {
   $("#name").focus();
- // $('#accessKey').blur(checkForKeyPair);
- // $('#secretKey').blur(checkForKeyPair);
+  $('#accessKey').blur(checkForKeyPair);
+  $('#secretKey').blur(checkForKeyPair);
 
  $('#myForm54').ajaxForm( {
-    beforeSubmit: function(arr, $form, options) { 
+    beforeSubmit: function(arr, $form, options) {
     // The array of form data takes the following form: 
     // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
 
@@ -258,8 +259,6 @@ $(document).ready(function () {
 },
 dataType:  'json',
 success: function(data, success) {
-  //   debugger;
-              //alert('Successfully Saved ' + data);
               if (data!=500) {
                 if ($('#btncancel').length){
                   $('#btncancel').click(); 
@@ -272,7 +271,6 @@ success: function(data, success) {
              removeLoader();
            },
            error: function(jqxhr) {
-         //  debugger;
          removeLoader();
          bootbox.alert(jqxhr.responseText);
        },
@@ -282,17 +280,6 @@ success: function(data, success) {
            bootbox.alert(data);
          }
        }); 
-  
-  /*$('#myForm54').submit(function() {
-    $(this).validate();
-    if(isFormValid()){
-   //   saveProviderData();
-   return true;
-    }else{
-      bootbox.alert("invalid form data");
-    }
-  return false; // for demo
-});*/
 
   if(!UtilityMethods.getIdFromURL()){
     var createTemplateInstance=new createTemplate($('#appender'));
