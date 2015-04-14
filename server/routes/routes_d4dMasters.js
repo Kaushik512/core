@@ -815,61 +815,146 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
         logger.debug("Enter get() for  /d4dMasters/readmasterjsoncounts");
+        logger.debug("Logged in User: ",req.session.user.cn);
+       
         var ret = [];
         var masts = ['2', '3', '4'];
+        var orgCount =0;
+        var bgCount = 0;
+        var envCount = 0;
+        var projectCount = 0;
         var counts = [];
-        for(var i =1;i<5;i++)
-            counts[i] = 0;
-          d4dModelNew.d4dModelMastersOrg.find({
-            id: 1,
-            active:true
-        }, function(err, docorgs) {
-            var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.rowid;
-            });
-        d4dModelNew.d4dModelMastersOrg.find({
-            id: {
-                $in: masts,
-            },
-            orgname_rowid:{$in:orgnames}
-        }, function(err, d4dMasterJson) {
-            if (err) {
-                logger.error("Hit and error:", err);
-            }
-            if (d4dMasterJson) {
-                // res.send(200, d4dMasterJson);
-                // res.writeHead(200, { 'Content-Type': 'text/plain' });
-                res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                });
-                
-                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                logger.debug(d4dMasterJson.length);
-                var i = 0;
-                for(var i=0;i < d4dMasterJson.length;i++){
-                    //Need to do a org check.
+        if(req.session.user.cn === 'superadmin'){
+                for(var i =1;i<5;i++)
+                    counts[i] = 0;
+                  d4dModelNew.d4dModelMastersOrg.find({
+                    id: 1,
+                    active:true
+                }, function(err, docorgs) {
+                    var orgnames = docorgs.map(function(docorgs1) {
+                        return docorgs1.rowid;
+                    });
+                d4dModelNew.d4dModelMastersOrg.find({
+                    id: {
+                        $in: masts,
+                    },
+                    orgname_rowid:{$in:orgnames}
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        logger.error("Hit and error:", err);
+                    }
+                    if (d4dMasterJson) {
+                        // res.send(200, d4dMasterJson);
+                        // res.writeHead(200, { 'Content-Type': 'text/plain' });
+                        res.writeHead(200, {
+                            'Content-Type': 'application/json'
+                        });
+                        
+                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                        logger.debug(d4dMasterJson.length);
+                        var i = 0;
+                        for(var i=0;i < d4dMasterJson.length;i++){
+                            //Need to do a org check.
 
-                    logger.debug(d4dMasterJson[i]["id"]);
-                    counts[d4dMasterJson[i]["id"]]++;
+                            logger.debug(d4dMasterJson[i]["id"]);
+                            counts[d4dMasterJson[i]["id"]]++;
+                        }
+                        for(var i =2;i<5;i++){
+                            ret.push('{"' + i + '":"' + counts[i] + '"}');
+                        }
+                        ret.push('{"1":"' + orgnames.length + '"}');
+                        logger.debug("Configured json:>>>>> ", '[' + ret.join(',') + ']');
+                        res.end('[' + ret.join(',') + ']');
+                        //res.end();
+                        logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
+                        return;
+                    } else {
+                        //res.send(400, {
+                        ret.push(i + ':' + '');
+                        // "error": err
+                        // });
+                        logger.debug("none found");
+                    }
+                });
+            });
+        }else{
+            
+            var loggedInUser = req.session.user.cn;
+            d4dModelNew.d4dModelMastersTeams.find({
+                loginname : loggedInUser
+            },function(err,teams){
+                if(teams){
+                    logger.debug("Team size: ",teams.length);
+                    logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
+                    for(var i =0; i< teams.length; i++){
+                        if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
+                            logger.debug("Only Team: ",JSON.stringify(teams[i]));
+                            d4dModelNew.d4dModelMastersProjects.find({
+                                projectname : teams[i].projectname
+                            },function(err,projects){
+                                if(projects){
+                                    logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
+                                    for(var j =0; j< projects.length; j++){
+                                        if(projects[j].id === '4'){
+                                            d4dModelNew.d4dModelMastersOrg.find({
+                                            orgname : projects[j].orgname
+                                            },function(err,orgs){
+                                            if(orgs){
+                                                for(var x = 0; x< orgs.length; x++){
+                                                    if(orgs[x].id ==='1'){
+                                                logger.debug("Returned Org: >>>>>>> ",JSON.stringify(orgs));
+                                                d4dModelNew.d4dModelMastersEnvironments.find({
+                                                orgname : orgs[x].orgname
+                                                },function(err,envs){
+                                                    if(envs){
+                                                        for(var y =0; y< envs.length; y++){
+                                                            if(envs[y].id === '3'){
+                                                                envCount += 1;
+                                                            }
+                                                        }
+                                                    }
+
+                                                    });
+                                                  }
+                                                }
+                                                for(var k =0; k<orgs.length; k++){
+                                                    switch(orgs[k].id){
+                                                        case '1' : orgCount += 1;
+                                                                    break;
+                                                        case '2' : bgCount += 1;
+                                                                    break;
+                                                        case '4' : projectCount += 1;
+                                                                    break;
+                                                        default : '';
+                                                                            
+                                                     }
+
+                                                 }
+                                                 logger.debug("All values:  ",orgCount,bgCount,envCount,projectCount);
+                                                 ret.push({"2":bgCount});
+                                                 ret.push({"3":envCount});
+                                                 ret.push({"4":projectCount});
+                                                 ret.push({"1":orgCount});
+
+                                                 logger.debug("Send Response: ",ret);
+                                                 res.send(ret);
+                                                 return;
+                                              }
+
+                                            });
+                                        }
+                                    }
+                                }
+
+                            });
+                        }
+                    }
                 }
-                for(var i =2;i<5;i++){
-                    ret.push('{"' + i + '":"' + counts[i] + '"}');
-                }
-                ret.push('{"1":"' + orgnames.length + '"}');
-                res.end('[' + ret.join(',') + ']');
-                //res.end();
-                logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
-                return;
-            } else {
-                //res.send(400, {
-                ret.push(i + ':' + '');
-                // "error": err
-                // });
-                logger.debug("none found");
-            }
-        });
-    });
-    });
+
+            });
+        }
+//else
+});
 
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
         logger.debug("Enter get() for  /d4dMasters/getdashboardvalues/%s", req.params.items);
