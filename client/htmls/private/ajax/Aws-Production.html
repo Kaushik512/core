@@ -206,7 +206,7 @@
 
 <div class="col-lg-6" style="margin-top:15px;">
  <label for="category">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
- <div class="col-lg-6 smart-form" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">       
+ <div class="col-lg-6 smart-form multiselect" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">       
    <div id="securityGroupIds" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px" cdata="catalyst" cat-validation="onechecked">
    </div>
  </div>
@@ -805,6 +805,7 @@ function getSecurityCheckedList(){
   });
   return list;
 }
+
 function getImageInstances(){
   $('#imageId').on('change',function(){
     $.get("/vmimages/instancesizes/all/list",function(data){
@@ -869,6 +870,7 @@ else{
 
 $('#vpcId').on('change',populateData);
 }
+
 function getkeypairList(){
   $('#providerId').on('change',function(){
 
@@ -943,6 +945,7 @@ else{
 $('#providerId').on('change',populateData);
 $('#region').on('change',populateData);
 }
+
 function getSubnet(){
   function populateData(){
     var $provider=$('#providerId');
@@ -988,6 +991,12 @@ function getSubnet(){
   }
 
   $('#vpcId').on('change',populateData);
+}
+
+function resetForm(){
+	$('input').val('');
+	$('select').val('').select2();
+	$('[multiselect]').empty();
 }
 /*function getRegionList(){
   $('#providerId').on('change',function(){
@@ -1140,11 +1149,12 @@ $("#templateContent #grid0").addClass("role-Selected");
 
  });
 	$('#individualTemplateNameGrid').on("click",'.productdiv2', function () {
-   console.log(this);
-   $('#individualTemplateNameGrid .role-Selected').removeClass('role-Selected');
-   $(this).addClass('role-Selected');
-
- });
+		if(!$(this).hasClass('role-Selected')){
+			$('#individualTemplateNameGrid').find('.role-Selected').removeClass('role-Selected');
+			$(this).addClass('role-Selected');
+			resetForm();			
+			}
+		 });
 });
 	
 </script>
