@@ -328,7 +328,7 @@ function getRegionList(){
 	$.get('/vmimages/regions/list',function(data){
 		var str='<option value="">Select Region</option>';
 		for(var i=0;i<data.length;i++){
-			str=str+'<option value="'+data[i].region+'">'+data[i].region_name+'</option>'
+			str=str+'<option value="'+data[i].region+'">'+data[i].region_name+' | '+data[i].region+'</option>'
 			}
 		$('select.region').html(str).each(function(){
 			   $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
