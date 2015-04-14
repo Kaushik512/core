@@ -308,16 +308,10 @@ success: function(data, success) {
      method: "GET",
      url: "/aws/providers/"+UtilityMethods.getIdFromURL(),   
      success: function(data, success) {
-
       data= typeof data=="string" ?JSON.parse(data):data;
-      
       d4ddata=data;
-      
       setValues(data);
-      
-      //UtilityMethods.initializeSelect2();
       checkForKeyPair();
-     // $('select.region').change(checkForKeyPair);
     },
     error: function(jqxhr) {
       removeLoader();
@@ -343,7 +337,7 @@ function getRegionList(){
 		});	
 }
 
-  function saveProviderData(){
+ /* function saveProviderData(){
     appendLoader();
 
 
@@ -403,7 +397,7 @@ function getRegionList(){
    /*  mimeType:"multipart/form-data",
     contentType: false,
     cache: false,*/
-    processData:false,
+   /* processData:false,
     success: function(data, success) {
      // alert(1);
               //alert('Successfully Saved ' + data);
@@ -428,7 +422,7 @@ function getRegionList(){
         });
 
   }
-
+*/
 
   function createTemplate(parentToAttach){
     var that=this,parentEl=$(parentToAttach).addClass('customTemplateParent');

@@ -129,7 +129,7 @@
                        <div class="col-lg-6 col-md-6">
                          <label for="">Choose Provider:<span style="color:red">*</span></label>
                          <select id="providerId" class="chooseOS width-100">
-                           <option value="">Select Any Provider</option>
+                           <option value="">Select Provider</option>
                          </select>                                                      
                        </div>
 
@@ -150,7 +150,7 @@
 
 
                          <select id="region" class="chooseSecurity width-100">
-                           <option value="">Select Any Region</option>
+                           <option value="">Select Region</option>
                          </select>
 
                        </div> 
@@ -158,14 +158,14 @@
                        <div class="col-lg-6" style="margin-top:15px;">
                          <label for="">Select VPC:<span style="color:red">*</span></label>
                          <select id="vpcId" class="chooseSelect chooseImage width-100">
-                           <option value="">Select Any VPC</option>                          
+                           <option value="">Select VPC</option>                          
                          </select>                                                                                            
                        </div>
 
                        <div class="col-lg-6" style="margin-top:15px;">
                          <label for="">Select Subnet:<span style="color:red">*</span></label>
                          <select id="subnetId" class="chooseSelect chooseImage width-100">
-                           <option value="">Select Any Subnet</option>                          
+                           <option value="">Select Subnet</option>                          
                          </select>                                                     
                        </div>
 
@@ -179,7 +179,7 @@
 </div> -->
 
 <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Select Any KeyPair :<span style="color:red">*</span></label>
+ <label for="">Select KeyPair :<span style="color:red">*</span></label>
 
 
  <select id="keypairId" class="instanceType chooseInstance width-100">
@@ -191,7 +191,7 @@
 <!--<div class="col-lg-6" style="margin-top:15px;">
  <label for="">Select Security Group:<span style="color:red">*</span></label>
  <select id="securityGroupId" class="chooseSelect chooseImage width-100">
-   <option value="">Select Any Security Group</option>                          
+   <option value="">Select Security Group</option>                          
  </select>                                                                                            
 </div>
 -->
@@ -212,9 +212,9 @@
  </div>
 </div>
 <!--<div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select any Security group:<span style="color:red">*</span></label>
+ <label for="">Select Security group:<span style="color:red">*</span></label>
  <select id="securityGroupIds" class="chooseSelect chooseImage width-100">
-   <option value="">Select Any Security Group</option>                          
+   <option value="">Select Security Group</option>                          
  </select>                                                                                            
 </div>-->
 
@@ -764,10 +764,10 @@
            $.get("/vmimages/providers/"+val,function(data){
             var str=' <option value="">Select Image</option>',len=data.length;
             str=str + helperConstructOption(data,['providerId','vType','osType','_id'],'name','imageIdentifier');
-            $('#imageId').html(str).select2();
+            $('#imageId').html(str).select2().trigger('change');
           });
          }else{
-           $('#imageId').html(' <option value="">Select Image</option>').select2();
+           $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
          }
        });
      },
@@ -808,7 +808,7 @@ function getSecurityCheckedList(){
 function getImageInstances(){
   $('#imageId').on('change',function(){
     $.get("/vmimages/instancesizes/all/list",function(data){
-      var vType= $('#imageId').find('option:selected').attr('vType'),str='<option value=""> Select Any Instance Size</option>';
+      var vType= $('#imageId').find('option:selected').attr('vType'),str='<option value=""> Select Instance Size</option>';
       var list;
 
       for(var i=0;i<data.length;i++){
@@ -876,7 +876,7 @@ function getkeypairList(){
     if(key){
       $.get('/aws/providers/'+key,function(data){
         var keylist=data.keyPairs;
-        var str='<option value="">Select Any KeyPairs</option>';
+        var str='<option value="">Select KeyPairs</option>';
 
         for(var i=0;i<keylist.length;i++){
           str=str+'<option value="'+keylist[i]._id+'">'+keylist[i].keyPairName+'</option>';
@@ -884,7 +884,7 @@ function getkeypairList(){
         $('#keypairId').html(str).select2();
 
         /*bring Region list from providers*/
-        var str1='<option value="">Select Any Region</option>';
+        var str1='<option value="">Select Region</option>';
         for(var i=0;i<keylist.length;i++){
           str1=str1+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
         }
@@ -936,7 +936,7 @@ function getVPC(){
     });
 }
 else{
-  $('#vpcId').html('<option value="">Select Any VPC</option>').select2()
+  $('#vpcId').html('<option value="">Select VPC</option>').select2()
 }
 }
 
@@ -958,7 +958,7 @@ function getSubnet(){
         success:function(data){
          // debugger;
           console.log(data);
-          var str='<option value="">Select Any Subnet</option>';
+          var str='<option value="">Select Subnet</option>';
           var filteredData=[];
           for(var i=0;i<data.Subnets.length;i++){
             if(data.Subnets[i].State.toLowerCase()=="available"){
@@ -983,7 +983,7 @@ function getSubnet(){
       });
     }
     else{
-      $('#subnetId').html('<option value="">Select Any Subnet</option>').select2()
+      $('#subnetId').html('<option value="">Select Subnet</option>').select2()
     }
   }
 
@@ -999,7 +999,7 @@ function getSubnet(){
 
  // var regionList=$(this).find("option:selected").attr('keyPairs');
    // regionList=regionList ?regionList.split(',') :[];
-   var str='<option value="">Select Any Region</option>';
+   var str='<option value="">Select Region</option>';
 
    for(var i=0;i<keylist.length;i++){
     str=str+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
@@ -1022,7 +1022,7 @@ function getSubnet(){
     console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
      var $instanceOS = $('#instanceOS');
-     $instanceOS.append('<option value="">Select Any Operating System</option>')
+     $instanceOS.append('<option value="">Select Operating System</option>')
      for(var i=0;i<data.length;i++) {
        $option = $('<option data-amiid="'+data[i].amiid+'" data-amiid-username="'+data[i].username+'" data-instanceOS="'+data[i].osType+'" value="'+data[i].name+'">'+data[i].name+'</option>');
        $option.data('supportedInstanceType',data[i].supportedInstanceType);
@@ -1166,21 +1166,7 @@ $("#templateContent #grid0").addClass("role-Selected");
        }
        var $clone = $selectedItem.clone().removeClass('role-Selected');
        var selectedText = $clone.attr("data-templateType");
-       var getID = parseInt($clone.attr("id").replace("grid", ""), 10);
-
-	// var getParent = '<div class="" style="width:222px;float:left">'+
-	//                   ' <div class="blueprintdiv appfactory" data-'+
-	//                   'templateType="">'+
-	//                   '<div style="">'+
-	//                   '<img  style="height:25px;padding:2px" alt="JBoss Stack" src="img/app-store-'+
-	//                   'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;'+
-	//                   'padding-left: 4px;">'+
-	//                   '<b>'+selectedText+'</b>'+
-	//                   '</span></div>'+
-	//                   '<div style="padding-top:10px;padding-left:27px;">'+
-	//                   '<img  style="" alt="JBoss Stack" src="img/app-store-icons/Appfactory.png">'+
-	//                   '</div></div></div><div cls=="clearfix"></div>';
-	
+       var getID = parseInt($clone.attr("id").replace("grid", ""), 10);	
 	$.ajax({
    url: "/d4dMasters/readmasterjsonnew/17",
    dataType: "json",
@@ -1516,15 +1502,15 @@ if ($('#tab2 .role-Selected').length > 0) {
 	reqBody.bgId = $('#bgListInput').val();
 	reqBody.projectId = $('#projectListInput').val();
 	reqBody.envId = $('#envList').val();
-	
 	var imageIdentifier=$('#imageId').val();
-  var imageId=$('#imageId').find('option:selected').attr('_id');
-  var securityGroupIds=getSecurityCheckedList();
-  var providerId=$('#providerId').val();
-  var keyPairId = $('#keypairId').val();
-  var instanceType=$('#instancesize').val();
-  var vpcId=$('#vpcId').val();
-  var subnetId=$('#subnetId').val();
+	var imageId=$('#imageId').find('option:selected').attr('_id');
+	var securityGroupIds=getSecurityCheckedList();
+	var providerId=$('#providerId').val();
+	var keyPairId = $('#keypairId').val();
+	var instanceType=$('#instancesize').val();
+	var vpcId=$('#vpcId').val();
+	var subnetId=$('#subnetId').val();
+	var region=$('#region').val();
  // var instanceOS=$('#instanceOS').data('instanceOS')
 
  // reqBody.providerId=providerId;
@@ -1539,43 +1525,51 @@ if ($('#tab2 .role-Selected').length > 0) {
  reqBody.name = $('#blueprintNameInput').val();
 
  if(!reqBody.instanceOS){
-  alert('Please Select Any Operating System');
+  alert('Please Select Operating System');
   return false;
 
 }
 
 if(!providerId){
- alert("Please Select Any Provider");
+ alert("Please Select Provider");
  return false;
 }
 
 if(!imageId){
- alert("Please Select Any Image");
+ alert("Please Select Image");
  return false;
-}
-if(!securityGroupIds.length){
- alert("Please Select Any Security Group");
- return false;
-}
-if(!vpcId){
-  alert("Please Select Any VPC");
-  return false;
 }
 
+if(!region){
+alert("Please Select Region");
+return false;
+}
+
+if(!vpcId){
+	alert("Please Select VPC");
+	return false;
+	}
+
+
 if(!subnetId){
-  alert("Please Select Any Subnet");
+  alert("Please Select Subnet");
   return false;
 }
 
 if(!keyPairId){
- alert("Please Select Any KEyPAir");
+ alert("Please Select KEyPAir");
  return false;
 }
 if(!instanceType){
-  alert("Please Select Any Instance Size");
+  alert("Please Select Instance Size");
   return false;
 
 }
+
+if(!securityGroupIds.length){
+	 alert("Please Select Security Group");
+	 return false;
+	 }
 
 
 if (!reqBody.name) {
@@ -1601,7 +1595,6 @@ $('#userListSelect').find('option').attr('selected','selected');
 reqBody.users = $('#userListSelect').val();
 
 if (!reqBody.users) {
-
  alert("Please choose users");
  return false;
 }
@@ -1613,13 +1606,8 @@ if (!reqBody.users) {
 	$trs.each(function(e){
    var $this = $(this);
    appUrls.push($this.data('appUrlData'));
- });
-	
+ });	
 	reqBody.appUrls = appUrls;
-	
-	
-	
-	
 	
 	$('.blueprintMsgContainer').hide();
 	
@@ -1638,16 +1626,6 @@ if (!reqBody.users) {
  console.log('final', reqBody);
 
 } 
-
-
-
-
-
-	//$('#tab'+(index)).removeClass('active');
-	//$('#tab'+(index+1)).addClass('active');
-	//return true;
-	
-	
 },
 'onPrevious': function(tab, navigation, index) {
 	//console.log(index);
@@ -1702,24 +1680,23 @@ if (!reqBody.users) {
    async: false,
    url: "../organizations/getTreeNew",
    success: function(data) {
-	//alert(JSON.stringify(data));
-	//alert(typeof data);
+	
 	console.log(data);
 	data = JSON.parse(JSON.stringify(data));
 	var $orgListInput = $('#orgnameSelect');
 	//$orgListInput.append($('<option></option>').val('choose').html('Choose'));
 	$bgList = $('#bgListInput');
 	var $envList = $('#envList');
-	// alert(data.length);
+
 	for (var i = 0; i < data.length; i++) {
-	// alert('BG:' + JSON.stringify(data[i].businessGroups));
+	
 	console.log(data[i].businessGroups);
 	$orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
 }
 $orgListInput.change(function(e) {
-	// alert('trigged org selection');
+	
 	var orgName = $(this).val();
-	// alert(orgName);
+	
 	if (orgName == 'choose') {
    return;
  }
