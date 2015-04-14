@@ -485,6 +485,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
+        logger.debug("Logged in user: ",req.session.user.cn);
          configmgmtDao.getRowids(function(err,rowidlist){
 
             logger.debug("Rowid List----&&&&----> %s", rowidlist);
