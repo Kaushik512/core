@@ -35,6 +35,7 @@
                                     <td>Name</td>
                                     <td>Image Identifire</td>
                                     <td>Provider</td>
+                                    <td>Operating System</td>
                                     <td class="">Action</td>
                                 </tr>
                             </thead>
@@ -43,6 +44,7 @@
                                     <td datafield="name"></td>
                                     <td datafield="imageIdentifier"></td>
                                     <td datafield="providerName"></td>
+                                    <td datafield="osName"></td>
                                     <td>
                                         <div class="btn-group tableactionWidth">
                                             <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
@@ -63,6 +65,7 @@
                                     <td>Name</td>
                                     <td>Image Identifire</td>
                                     <td>Provider</td>
+                                    <td>Operating System</td>
                                     <td class="">Action</td>
                                 </tr>
                             </thead>
@@ -126,6 +129,7 @@
                             $.ajax({
                                 method: "GET",url: "/vmimages",data: reqBody,
                                 success: function(data, success) {
+
                                     data= typeof data=="string" ?JSON.parse(data):data;
                                     d4ddata=data;
                                     getProviderData();

@@ -758,24 +758,48 @@
        console.log(data);
        var str=' <option value="">Select Provider</option>',len=data.length;
        str=str+helperConstructOption(data,['secretKey','accessKey','providerType'],'providerName','_id');
-       $('#providerId').html(str).on('change',function(){
-         var val=$(this).val();
-         if(val){
-           $.get("/vmimages/providers/"+val,function(data){
-            var str=' <option value="">Select Image</option>',len=data.length;
-            str=str + helperConstructOption(data,['providerId','vType','osType','_id'],'name','imageIdentifier');
-            $('#imageId').html(str).select2().trigger('change');
-          });
-         }else{
-           $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
-         }
-       });
+       $('#providerId').html(str);
      },
      failure: function (data) {
        alert(data.toString());
      }
    }); 
  }
+
+function getImagesWithOSFilter(){
+
+function getFilteredList(data,value){
+  if(!value){
+    return data;
+  }
+  var list=[];
+  for(var i=0;i<data.length;i++){
+    if(data[i].osName.toLowerCase()===value.toLowerCase()){
+      list.push(data[i]);
+    }
+  }
+  console.log(list);
+return list;
+}
+
+
+function loadData(){
+  var providerVal=$('#providerId').val();
+    if(providerVal){
+           $.get("/vmimages/providers/"+providerVal,function(data){
+            var str=' <option value="">Select Image</option>',data=getFilteredList(data,$('#instanceOS').val()),
+            len=data.length;
+            str=str + helperConstructOption(data,['providerId','vType','osType','_id'],'name','imageIdentifier');
+            $('#imageId').html(str).select2().trigger('change');
+          });
+         }else{
+           $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
+         }
+}
+
+  $('#providerId').on('change',loadData);
+  $('#instanceOS').on('change',loadData);
+}
 
 /*function getImageList(){
 	$.ajax({
@@ -810,7 +834,7 @@ function getImageInstances(){
   $('#imageId').on('change',function(){
     $.get("/vmimages/instancesizes/all/list",function(data){
       var vType= $('#imageId').find('option:selected').attr('vType'),str='<option value=""> Select Instance Size</option>';
-      var list;
+      var list=[];
 
       for(var i=0;i<data.length;i++){
         for(var key in data[i]){
@@ -1027,6 +1051,7 @@ function resetForm(){
     getkeypairList();
     getVPC();
     getSubnet();
+    getImagesWithOSFilter();
 
     console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
     $.get('../aws/ec2/amiids',function(data){
