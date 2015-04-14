@@ -8,7 +8,34 @@ mkdirp.sync(log_folder);
 
 winston.emitErrs = true;
 
-////////
+/**
+ * Custom logger hat will append the current module name in front of each log
+ */
+var CatLogger = function(logger, calling_module){    
+    var exports = {};
+    var methods = ["info", "debug", "warn", "error", "log"];
+
+    // We will modify the args we send to logger's log methods.
+    // We want the file name as part of the logs !!
+    function change_args(args){
+        var label = '';
+        if(calling_module && calling_module.filename){
+            label = "[" + path.basename(calling_module.filename) + "] ";
+            args[0]=label+args[0];
+        }
+        return args;
+    }
+
+    // add info,debug, warn, error, log method into exports
+    methods.forEach(function(method){
+        exports[method] = function(msg){
+            var args = change_args(arguments);
+            logger[method].apply(logger, args);
+        };
+    });
+
+    return exports;
+};
 /**
  * This is the single logger used for logging application level logs
  */
@@ -39,42 +66,9 @@ var logger = new winston.Logger({
 });
 
 /**
- * This is how application level loggers are created in a specific module.
- * This method is more efficient than returning one logger for each module.
- *
- * var logger = require('./lib/logger')(module);
- *
- * @param module - The the calling module.
- */
-function create_logger(calling_module){
-    if(! calling_module.filename ){
-        throw new Error("Expecting a valid module object.Got this instead >> "+ calling_module);
-    }
-
-    // We will modify the args we send to logger's log methods.
-    // We want the file name as part of the logs !!
-    function change_args(args){
-        var label = "[" + path.basename(calling_module.filename) + "] ";
-        args[0]=label+args[0];
-        return args
-    }
-
-    return {
-        info: function(msg){logger.info.apply(logger, change_args(arguments));}, 
-        debug: function(msg){logger.debug.apply(logger, change_args(arguments));}, 
-        warn: function(msg, vars){logger.warn.apply(logger, change_args(arguments));}, 
-        error: function(msg, vars){logger.error.apply(logger, change_args(arguments));}, 
-        log: function(msg, vars){logger.log.apply(logger, change_args(arguments));}
-    }
-    
-};// end create_logger
-
-/**
- * Used to log Express Logs.Not to be used for anything else !!!!
- */
-function create_express_logger(){
-
-    var logger = new winston.Logger({
+ * The logger by express
+ */ 
+var express_logger = new winston.Logger({
         transports: [
             new winston.transports.DailyRotateFile({
                 level: 'debug',
@@ -87,39 +81,30 @@ function create_express_logger(){
                 maxFiles: 5,
                 colorize: true,
                 timestamp:true,
-                name:'express-file-log',
-                label:"Express"
+                name:'express-file-log'
             })
         ],
         exitOnError: false
     });
 
-    return logger;
-};// end create_express_logger
-
-//  
 /**
- * Used to log logs from instances nodes, docker containers to logstash/ELK
- * Logs.Not to be used for anything else !!!!
+ * This is how application level loggers are created in a specific module.
+ * This method is more efficient than returning one logger for each module.
+ *
+ * var logger = require('./lib/logger')(module);
+ *
+ * @param module - The the calling module.
  */
-function create_instance_logger(){
-    // will make 
-    require('winston-logstash');
+function create_logger(calling_module){
+    return new CatLogger(logger, calling_module);    
+};// end create_logger
 
-    var logger = new winston.Logger({
-        transports: [
-            new winston.transports.Logstash({
-                port: 28777,
-                node_name: 'my node name',
-                host: '127.0.0.1'
-            })
-        ],
-        exitOnError: false
-    });
-
-    return logger;
+/**
+ * Used to log Express Logs.Not to be used for anything else !!!!
+ */
+function create_express_logger(){
+    return new CatLogger(express_logger);
 };// end create_express_logger
-
 
 module.exports = create_logger;
 module.exports.ExpressLogger = create_express_logger;
