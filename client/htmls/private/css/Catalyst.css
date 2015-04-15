@@ -1,31 +1,46 @@
+.loadingcookbookandroles{
+    float: right !important; 
+    margin-right: 10px !important;
+}
+.loadCookbookroleslabel{
+    font-weight: bold;
+    height: 36px;
+}
+.loadingContainerGap{
+    height:20px;
+}
 .divtablemarginpadding{
-    margin-left:15px;
-    padding-top:15px;
+    margin-left:15px !important;
+    padding-top:15px !important;
 }
 .margin0{
-    margin:0px;
+    margin:0px !important;
 }
 .width100{
     width:100%;
 }
 .searchCookbooksRolesLabel{
     width:80%;
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
+}
+.runlistLabel{
+    font-size: 16px;
+    margin-bottom:20px !important;
 }
 .selectCookbooksandRecipesdiv{
     width: 80%;
 }
 .selectCookbooksandRecipes{
-    height: 250px;
-    width:100%;
-    margin-bottom: 10px;
+    height: 250px !important;
+    width:100% !important;
+    margin-bottom: 10px !important;
 }
 .cookbook{
     background: url("../img/cookbook.png");
     background-repeat: no-repeat;
     height: 24px;
-    padding-left: 36px; 
-    padding-top: 6px;
+    padding-left: 36px !important; 
+    padding-top: 6px !important;
     background-position:4px 2px;
     font-size: 12px;
 }
@@ -34,13 +49,19 @@
     background: url("../img/recipe.png");
     background-repeat: no-repeat;
     height: 24px;
-    padding-left: 34px; 
-    padding-top: 6px;
+    padding-left: 34px !important; 
+    padding-top: 6px !important;
     background-position:4px 2px;
     font-size: 12px;
 }
 .marginleft12{
     margin-left:12px;
+}
+.marginleft5{
+    margin-left:5% !important;
+}
+.fontsize13{
+    font-size: 13px !important;
 }
 .anchorAdd{
     border-radius: 50% !important;
@@ -49,8 +70,8 @@
     margin-bottom: 15px !important;
 }
 .anchorAddi{
-    font-size:14px;
-    margin-top: 8px;
+    font-size:14px !important;
+    margin-top: 8px !important;
 }
 .anchorRemove{
     border-radius: 50% !important;
@@ -59,8 +80,28 @@
     width: 32px;
 }
 .anchorRemovei{
-    font-size:14px;
-    margin-top: 8px;
+    font-size:14px !important;
+    margin-top: 8px !important;
+}
+.anchorUp{
+    border-radius: 50% !important;
+    height: 32px;
+    width: 32px;
+    margin-bottom: 15px !important;
+}
+.anchorUpi{
+    font-size:14px !important;
+    margin-top: 8px !important;
+}
+.anchorDown{
+    border-radius: 50% !important;
+    height: 32px;
+    margin-top: 15px !important;
+    width: 32px;
+}
+.anchorDowni{
+    font-size:14px !important;
+    margin-top: 8px !important;
 }
 
 
