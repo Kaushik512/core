@@ -596,6 +596,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }); //rowidlist
 
                 // For non-catalystadmin
+            }else if(req.params.id === '1'){
+                // For BusinessGroup
+                masterUtil.getOrgs(loggedInUser,function(orgList){
+                    logger.debug("Returned Org List:>>>> ",JSON.stringify(orgList));
+                    res.send(orgList);
+                });
             }else if(req.params.id === '2'){
                 // For BusinessGroup
                 masterUtil.getBusinessGroups(loggedInUser,function(bgList){

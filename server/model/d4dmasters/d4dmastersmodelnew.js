@@ -152,6 +152,8 @@ var d4dMastersDockerConfig = new mongoose.Schema(
 	dockeruserid: {type:String,required:true, trim:true},
 	dockeremailid: {type:String, trim:true},
 	dockerpassword: {type:String,required:true, trim:true},
+	orgname: {type:String,required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:String, trim:true},
 	folderpath: {type:String,trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}	
@@ -258,6 +260,8 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 	jenkinsusername: {type:String,required:true, trim:true, validate:nameValidator},
 	jenkinspassword: {type:String,required:true, trim:true},
 	jenkinstokenfile_filename: {type:String, trim:true},
+	orgname: {type:String,required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}

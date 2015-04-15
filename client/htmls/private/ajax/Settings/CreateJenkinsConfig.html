@@ -25,6 +25,11 @@
                                        <!-- widget content -->
                                        <div class="widget-body no-padding">
                                           <div class="col-lg-6 col-md-6">
+                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
+                                          <option value="">Select an Organization</option>
+                                          </select>               
+                                        </div>
+                                          <div class="col-lg-6 col-md-6">
                                              <label for="">
                                              Reference Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
@@ -150,6 +155,7 @@
 <script>
    $(document).ready(function () {
       $("#jenkinsname").focus();
+      $('select').select2();
        $('#myForm50').submit(function() {
            $(this).validate();
    
