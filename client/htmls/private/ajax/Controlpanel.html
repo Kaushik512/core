@@ -1108,13 +1108,8 @@ $('.startstoptoggler').click(startAndStopToggler);
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
         $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        var $selectedRunlist = $chefRunModalContainer.find('.deploymentSelectedRunList');
-
-        var runlist = [];
-        var $inputs = $selectedRunlist.find('input');
-        $inputs.each(function() {
-            runlist.push($(this).val());
-        });
+        var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+               
         if(!runlist.length) {
           bootbox.alert("Runlist is empty");
           return;

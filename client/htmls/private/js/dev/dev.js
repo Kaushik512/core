@@ -834,7 +834,7 @@
                      var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
                      }, runlist, readMode);
-                     $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid', instanceId);
+                     $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
 
 
 
@@ -1845,7 +1845,7 @@
                                                  var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
                                                  }, versionData.runlist);
-                                                 $ccrs.find('.deploymentSelectedRunList').attr('data-blueprintId', blueprintId);
+                                                 $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId', blueprintId);
                                                  $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs);
 
 
@@ -2141,14 +2141,11 @@
                      $('.blueprintUpdateBtn').click(function(e) {
 
                          var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-                         var $selectedRunlist = $blueprintEditResultContainer.find('.deploymentSelectedRunList');
+                         var $selectedRunlist = $blueprintEditResultContainer.find('#cookbooksrecipesselectedList');
                          var blueprintId = $selectedRunlist.attr('data-blueprintId');
                          if (blueprintId) {
-                             var runlist = [];
-                             var $inputs = $selectedRunlist.find('input');
-                             $inputs.each(function() {
-                                 runlist.push($(this).val());
-                             });
+                             var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+                             
 
                              var blueprintData = {
                                  runlist: runlist,
@@ -2176,14 +2173,11 @@
                                  return;
                              }
                              $chefRunModalContainer = $('#chefRunModalContainer');
-                             var $selectedRunlist = $chefRunModalContainer.find('.deploymentSelectedRunList');
+                             var $selectedRunlist = $chefRunModalContainer.find('#cookbooksrecipesselectedList');
                              var instanceId = $selectedRunlist.attr('data-instanceId');
 
-                             var runlist = [];
-                             var $inputs = $selectedRunlist.find('input');
-                             $inputs.each(function() {
-                                 runlist.push($(this).val());
-                             });
+                             var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+                             
                              if (!runlist.length) {
                                  bootbox.alert('Runlist is empty');
                                  return;

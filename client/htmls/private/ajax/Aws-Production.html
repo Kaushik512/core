@@ -1486,12 +1486,10 @@ if ($('#tab2 .role-Selected').length > 0) {
 }*/
 	//Get all the runlist 
 	var cbs = [];
-	$('.deploymentSelectedRunList input').each(function() {
-   cbs.push($(this).val());
- });
+  cbs = $chefCookbookRoleSelector.getSelectedRunlist();
 	reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
 	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
-	reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
+	reqBody.chefServerId = $chefCookbookRoleSelector.getChefServerId();
 	reqBody.instanceType = $('select.instanceType').val();
 	reqBody.instanceOS = $('#instanceOS').val();
 	console.log(reqBody);
@@ -1504,12 +1502,10 @@ if ($('#tab2 .role-Selected').length > 0) {
  }
 	//reqBody.runlist = $('#cookbookSelect').val();
 	var cbs = [];
-	$('.deploymentSelectedRunList input').each(function() {
-   cbs.push($(this).val());
- });
+	cbs = $chefCookbookRoleSelector.getSelectedRunlist();
 	reqBody.runlist = cbs; //$('#cookbookSelect').val();
 	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-	reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
+	reqBody.chefServerId = $chefCookbookRoleSelector.getChefServerId();
 	console.log("instanceType ==>", $('select.instanceType').val());
 	reqBody.instanceType = $('select.instanceType').val();
 	

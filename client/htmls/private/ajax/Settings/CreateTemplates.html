@@ -274,18 +274,18 @@
       
        if(csid != undefined){
             //alert(csid);
-       
+       var itms = $('#templatescookbooks').attr('savedvalue').split(',');
        var $cookbookselectorcontrol = $chefCookbookRoleSelector('usechefserver/' + csid,function(data){
-               var itms = $('#templatescookbooks').attr('savedvalue').split(',');
-               //Adding previously saved items
-               $.each(itms,function(i,v){
-                 console.log(i + ' ' + v.replace(/"/g, "") );
-                 $('.deploymentsCookbookList input[value="' + v.replace(/"/g, "") + '"],.deploymentRoleList input[value="' + v.replace(/"/g, "")  + '"]').attr('checked','checked');
-                 $('.btnItemAdd').trigger('click');
-               });
-              
+               // var itms = $('#templatescookbooks').attr('savedvalue').split(',');
+               // //Adding previously saved items
+               // $.each(itms,function(i,v){
+               //   console.log(i + ' ' + v.replace(/"/g, "") );
+               //   $('.deploymentsCookbookList input[value="' + v.replace(/"/g, "") + '"],.deploymentRoleList input[value="' + v.replace(/"/g, "")  + '"]').attr('checked','checked');
+               //   $('.btnItemAdd').trigger('click');
+               // });
+             
                    
-       });
+       },itms);
         $('#templatescookbooks').html($cookbookselectorcontrol);
    
        }

@@ -1,4 +1,4 @@
-var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, readMode) {
+function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMode) {
     if (!selectedRunlist) {
         selectedRunlist = [];
     }
@@ -7,10 +7,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     var $row = $("<div></div>").addClass('row margin0');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
     var $firstcol6 = $("<div></div>").addClass('col-lg-6');
-    
+
     var $inputgroup = $("<div></div>").addClass('input-group width100');
     var $firstlabelinput = $("<label></label>").addClass('input searchCookbooksRolesLabel');
-    
+
     $loadingContainer = $('<div></div>').addClass('loadingContainer');
     var $imgerrorContainer = $("<img />").attr('src', 'img/select2-spinner.gif').addClass('center-block cookbookspinner loadingcookbookandroles');
     $loadingContainer.append($imgerrorContainer);
@@ -38,8 +38,15 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     $searchiconappend.hide();
     $('.btnUpdateInstanceRunlist').removeClass('pointereventsDisabled');
     $('.btnUpdateInstanceRunlist').addClass('pointereventsEnabled');
+
+
+
+
     $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
-        console.log("Cookbooks Query:" + data);
+        //console.log("Cookbooks Query:" + data);
+        $chefItemdiv.find('#cookbooksrecipesselectedList').first().data('chefServerId', data.serverId);
+        $chefItemdiv.find('#cookbooksrecipesselectedList').first().attr('data-chefServerId', data.serverId);
+
 
         var cookbooks = data.cookbooks;
         var keys = Object.keys(cookbooks);
@@ -47,12 +54,22 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
         keys.sort(function(a, b) {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
-        
+
         var cookbookrecipesTotallist = []
-    
-       
+
+
         for (i = 0; i < keys.length; i++) {
-          cookbookrecipesTotallist.push( { value: 'recipe[' + keys[i] + ']',name:keys[i], Class: "cookbook" });
+            var display = 'none';
+            var obj = {
+                value: 'recipe[' + keys[i] + ']',
+                name: keys[i],
+                Class: "cookbook",
+                display: display
+            };
+            if (selectedRunlist.indexOf(obj.value) === -1) {
+                obj.display = 'block';
+            }
+            cookbookrecipesTotallist.push(obj);
         }
         var roles = data.roles;
         var keys = Object.keys(roles);
@@ -61,19 +78,30 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
         });
         //alert("ServerID:" + data.serverId);
         for (i = 0; i < keys.length; i++) {
-          cookbookrecipesTotallist.push( { value: 'role[' + keys[i] + ']',name:keys[i], Class: "roles" });
+            var display = 'none';
+            var obj = {
+                value: 'role[' + keys[i] + ']',
+                name: keys[i],
+                Class: "roles",
+                display: display
+            };
+            if (selectedRunlist.indexOf(obj.value) === -1) {
+                obj.display = 'block';
+            }
+            cookbookrecipesTotallist.push(obj);
         }
-      
-        var optionstoAdd = "<option class=${Class} value=${value}>${name}</option>";
-        $.template( "optionTemplate", optionstoAdd );
+
+        var optionstoAdd = '<option class=${Class} value=${value} style="display:${display}">${name}</option>';
+        $.template("optionTemplate", optionstoAdd);
         var tempoptions = $chefItemdiv.find("#cookbooksrecipesList");
-        $.tmpl( "optionTemplate", cookbookrecipesTotallist ).appendTo(tempoptions);
+        $.tmpl("optionTemplate", cookbookrecipesTotallist).appendTo(tempoptions);
 
         $loadingContainerGap.hide();
         $beforesearchappend.hide();
         $searchinputtextbox.show();
         $searchiconappend.show();
         $('.cookbookspinner').detach();
+        $chefItemdiv.find('#cookbooksrecipesList').filterByText($chefItemdiv.find('#textbox'), false);
         if (typeof callback === 'function') {
             callback('done');
         }
@@ -85,12 +113,15 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
         $strong1.append($erroMsgArea);
     });
 
-    
+
 
     $selectCookbooksandRecipesparentdiv.append($selectCookbooksandRecipes);
     $inputgroup.append($selectCookbooksandRecipesparentdiv);
     var $btngroupAddRemove = $("<div></div>").addClass("btn-group marginleft5");
-    var $anchorAdd = $("<a id='btnaddToRunlist' type='button'></a>").addClass('btn btn-default btn-primary anchorAdd');
+    var $anchorAdd = $("<button id='btnaddToRunlist' type='button'></button>").addClass('btn btn-default btn-primary anchorAdd');
+    if (readMode) {
+        $anchorAdd.attr('disabled', 'disabled');
+    }
     var $anchorAddi = $("<i></i>").addClass("fa fa-chevron-right anchorAddi");
     $anchorAdd.append($anchorAddi);
     $btngroupAddRemove.append($anchorAdd);
@@ -98,10 +129,13 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     var $clearfix = $("<div></div>").addClass("clearfix");
     $btngroupAddRemove.append($clearfix);
     $btngroupAddRemove.append($clearfix);
-    var $anchorAdd = $("<a id='btnremoveFromRunlist' type='button'></a>").addClass('btn btn-default btn-primary anchorRemove');
+    var $anchorRemove = $("<button id='btnremoveFromRunlist' type='button'></button>").addClass('btn btn-default btn-primary anchorRemove');
+    if (readMode) {
+        $anchorRemove.attr('disabled', 'disabled');
+    }
     var $anchorAddi = $("<i></i>").addClass("fa fa-chevron-left anchorRemovei");
-    $anchorAdd.append($anchorAddi);
-    $btngroupAddRemove.append($anchorAdd);
+    $anchorRemove.append($anchorAddi);
+    $btngroupAddRemove.append($anchorRemove);
     $inputgroup.append($btngroupAddRemove);
 
     $firstcol6.append($inputgroup);
@@ -123,7 +157,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     $inputgroupsecond.append($selectRunlistparentdiv);
 
     var $btngroupUpDown = $("<div></div>").addClass("btn-group marginleft5");
-    var $anchorUp = $("<a id='btnRunlistItemUp' type='button'></a>").addClass('btn btn-default btn-primary anchorUp');
+    var $anchorUp = $("<button id='btnRunlistItemUp' type='button'></button>").addClass('btn btn-default btn-primary anchorUp');
+    if (readMode) {
+        $anchorUp.attr('disabled', 'disabled');
+    }
     var $anchorUpi = $("<i></i>").addClass("fa fa-chevron-up anchorUpi");
     $anchorUp.append($anchorUpi);
     $btngroupUpDown.append($anchorUp);
@@ -131,7 +168,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     var $clearfixsecond = $("<div></div>").addClass("clearfix");
     $btngroupUpDown.append($clearfixsecond);
     $btngroupUpDown.append($clearfixsecond);
-    var $anchorDown = $("<a id='btnRunlistItemDown' type='button'></a>").addClass('btn btn-default btn-primary anchorDown');
+    var $anchorDown = $("<button id='btnRunlistItemDown' type='button'></button>").addClass('btn btn-default btn-primary anchorDown');
+    if (readMode) {
+        $anchorDown.attr('disabled', 'disabled');
+    }
     var $anchorDowni = $("<i></i>").addClass("fa fa-chevron-down anchorDowni");
     $anchorDown.append($anchorDowni);
     $btngroupUpDown.append($anchorDown);
@@ -139,81 +179,105 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
 
 
 
-    
+
     $secondcol6.append($inputgroupsecond);
     $divtable.append($secondcol6);
     $row.append($divtable);
     $chefItemdiv.append($row);
+
+
     $errorContainer = $('<div></div>').addClass('errorContainer').addClass('hidden').text('This is Error Cointainer div');
     $chefItemdiv.append($errorContainer);
-    
+
     $chefItemdiv.find('.chooseCheforgType').select2();
     
+    console.log(selectedRunlist);
+    for (var i = 0; i < selectedRunlist.length; i++) {
+        var className = 'cookbook';
+        if (selectedRunlist[i].indexOf('recipe') === 0) {
+            className = 'cookbook';
+        } else {
+            className = 'roles';
+        }
+        var name = '';
+        var item = selectedRunlist[i];
+        var indexOfBracketOpen = item.indexOf('[');
+        if (indexOfBracketOpen != -1) {
+            var indexOfBracketClose = item.indexOf(']');
+            if (indexOfBracketClose != -1) {
+                name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+            }
+        }
+        var $selOption = $('<option class=' + className + ' value=' + selectedRunlist[i] + '>' + name + '</option>')
+        console.log($selOption);
+        $chefItemdiv.find('#cookbooksrecipesselectedList').append($selOption);
+    }
 
     //Image load dynamically
-    var secondcollabelimagesrc = [
-        {src: "img/templateicons/Create-run-list---deployment.png"},
-    ];
+    var secondcollabelimagesrc = [{
+        src: "img/templateicons/Create-run-list---deployment.png"
+    }, ];
     var imagetoAdd = "<img src=${src}>";
-     /* Compile the markup as a named template */
-    $.template( "imageTemplate", imagetoAdd );
+    /* Compile the markup as a named template */
+    $.template("imageTemplate", imagetoAdd);
     var loadimageandtextlabel = $chefItemdiv.find("#loadimageandtextlabel");
     /* Render the template with the secondcollabelimagesrc data and insert
        the rendered HTML under the "loadimageandtextlabel" element */
-    $.tmpl( "imageTemplate", secondcollabelimagesrc ).appendTo(loadimageandtextlabel);
+    $.tmpl("imageTemplate", secondcollabelimagesrc).appendTo(loadimageandtextlabel);
 
     //Text load dynamically
-    var secondcollabeltext = [
-        {text: "Runlist", Class: "fontsize13"}
-    ];
+    var secondcollabeltext = [{
+        text: "Runlist",
+        Class: "fontsize13"
+    }];
     var texttoAdd = "<strong class=${Class}>${text}</strong>";
-    $.template( "textTemplate", texttoAdd );
+    $.template("textTemplate", texttoAdd);
     var loadimageandtextlabel = $chefItemdiv.find("#loadimageandtextlabel");
-    $.tmpl( "textTemplate", secondcollabeltext ).appendTo(loadimageandtextlabel);
+    $.tmpl("textTemplate", secondcollabeltext).appendTo(loadimageandtextlabel);
 
     //To Add
-    $chefItemdiv.find('#cookbooksrecipesList').on('dblclick','option',function(){
+    $chefItemdiv.find('#cookbooksrecipesList').on('dblclick', 'option', function() {
         var $this = $(this);
         var $selectedList = $chefItemdiv.find("#cookbooksrecipesselectedList");
         $selectedList.append($this.clone());
         $this.hide();
     });
     //To Remove
-    $chefItemdiv.find('#cookbooksrecipesselectedList').on('dblclick','option',function(){
+    $chefItemdiv.find('#cookbooksrecipesselectedList').on('dblclick', 'option', function() {
         var $instanceCookbookList = $chefItemdiv.find('#cookbooksrecipesList');
         var $this = $(this);
         var value = $this.val();
         //alert(value);
         $this.remove();
-        $instanceCookbookList.find('option[value="'+value+'"]').show();
+        $instanceCookbookList.find('option[value="' + value + '"]').show();
     });
 
     //To add the wizard
-    $chefItemdiv.find("#btnaddToRunlist").on('click', function () {
+    $chefItemdiv.find("#btnaddToRunlist").on('click', function() {
         var $options = $chefItemdiv.find('#cookbooksrecipesList option:selected');
         var $selectedList = $chefItemdiv.find("#cookbooksrecipesselectedList");
-        $options.each(function(){
+        $options.each(function() {
             var $this = $(this);
             $selectedList.append($this.clone());
             $this.hide();
         });
     });
 
-    $chefItemdiv.find("#btnremoveFromRunlist").on('click', function () {
+    $chefItemdiv.find("#btnremoveFromRunlist").on('click', function() {
         var $instanceCookbookList = $chefItemdiv.find('#cookbooksrecipesList');
 
-        $chefItemdiv.find("#cookbooksrecipesselectedList option:selected").each(function(){
-           var $this = $(this);
-           var value = $this.val();
-           $this.remove();
-           $instanceCookbookList.find('option[value="'+value+'"]').show();
+        $chefItemdiv.find("#cookbooksrecipesselectedList option:selected").each(function() {
+            var $this = $(this);
+            var value = $this.val();
+            $this.remove();
+            $instanceCookbookList.find('option[value="' + value + '"]').show();
 
         });
         //$("#cookbooksrecipesselectedList option:selected").remove();
     });
 
-    $chefItemdiv.find("#btnRunlistItemUp").on('click', function () {
-        $chefItemdiv.find("#cookbooksrecipesselectedList option:selected").each(function () {
+    $chefItemdiv.find("#btnRunlistItemUp").on('click', function() {
+        $chefItemdiv.find("#cookbooksrecipesselectedList option:selected").each(function() {
             var listItem = $(this);
             var listItemPosition = $chefItemdiv.find("#cookbooksrecipesselectedList option").index(listItem) + 1;
 
@@ -224,10 +288,10 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
 
     });
 
-    $chefItemdiv.find("#btnRunlistItemDown").on('click', function () {
+    $chefItemdiv.find("#btnRunlistItemDown").on('click', function() {
         var itemsCount = $chefItemdiv.find("#cookbooksrecipesselectedList option").length;
 
-        $($chefItemdiv.find("#cookbooksrecipesselectedList option:selected").get().reverse()).each(function () {
+        $($chefItemdiv.find("#cookbooksrecipesselectedList option:selected").get().reverse()).each(function() {
             var listItem = $(this);
             var listItemPosition = $chefItemdiv.find("#cookbooksrecipesselectedList option").index(listItem) + 1;
 
@@ -237,16 +301,21 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
 
         });
     });
-    
+
     //Filter the Roles/Cookbooks
-   jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
+    jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
         return this.each(function() {
             var select = this;
             var options = [];
+            //console.log('this == >',this);
             $(select).find('option').each(function() {
                 //alert($(this).val());
                 //alert($(this).hasClass('cookbook'));
-                options.push({value: $(this).val(), text: $(this).text(),class:$(this).attr("class")});
+                options.push({
+                    value: $(this).val(),
+                    text: $(this).text(),
+                    class: $(this).attr("class")
+                });
             });
             $(select).data('options', options);
             var $selectedList = $chefItemdiv.find("#cookbooksrecipesselectedList");
@@ -255,44 +324,58 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
                 //alert('11');
                 var options = $(select).empty().data('options');
                 var search = $(this).val().trim();
-                var regex = new RegExp(search,"gi");
-                
-                
+                var regex = new RegExp(search, "gi");
+
+                //console.log(options);
                 $.each(options, function(i) {
                     var option = options[i];
                     var $options = $('<option>').text(option.text).val(option.value).addClass(option.class);
-                    if(option.text.match(regex) !== null) { 
-                       var $selectedOption = $selectedList.find('option[value="'+option.value+'"]');
-                       console.log($selectedOption.length);
-                       if(!$selectedOption.length) {
-                       
-                       } else {
-                         $options.hide();
-                       }                       
-                        
+                    if (option.text.match(regex) !== null) {
+                        var $selectedOption = $selectedList.find('option[value="' + option.value + '"]');
+                        console.log($selectedOption.length);
+                        if (!$selectedOption.length) {
+
+                        } else {
+                            //console.log('hiding');
+                            $options.hide();
+                        }
                     } else {
+                        //console.log('hiding ==>');
                         $options.hide();
                     }
-                     $(select).append($options);
+                    $(select).append($options);
                 });
 
                 if (selectSingleMatch === true && $(select).children().length === 1) {
                     $(select).children().get(0).selected = true;
                 }
 
-            });            
+            });
         });
     };
 
-    $(function() {
-        $chefItemdiv.find('#cookbooksrecipesList').filterByText($chefItemdiv.find('#textbox'), false);
-    });
+    // $(function() {
+    //     $chefItemdiv.find('#cookbooksrecipesList').filterByText($chefItemdiv.find('#textbox'), false);
+    // });
 
     return $chefItemdiv;
 }
 
+$chefCookbookRoleSelector.getSelectedRunlist = function() {
+    var $options = $('#cookbooksrecipesselectedList').find('option');
+    var runlist = [];
+    $options.each(function() {
+        var $option = $(this);
+        runlist.push($option.val());
+    });
+    return runlist;
+};
 
-    
+$chefCookbookRoleSelector.getChefServerId = function() {
+    return $('#cookbooksrecipesselectedList').attr('data-chefServerId');
+}
+
+
 //ChefItem added below
 // var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, readMode) {
 //     if (!selectedRunlist) {
