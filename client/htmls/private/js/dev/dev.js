@@ -62,6 +62,35 @@
             This is the entry method for initialising the instance in Dev.html.
             */
 
+  function populateOSList(){
+    $.ajax({
+     type: "GET",
+     url: "/vmimages/os/type/all/list",
+     success: function (data) {
+      data= typeof data =="string" ? JSON.parse(data) :data;
+      console.log(data);
+
+
+      var str=' <option value="">Select OS</option>',len=data.length;
+
+
+      for(var i=0;i<len;i++){
+       str=str+'<option value="'+data[i]["osType"]+'" ostype="'+data[i]["os_name"]+'">'+data[i]["os_name"]+'</option>';
+     }
+     $('#importinstanceOS').html(str).select2();
+   /*  
+     if($('#importinstanceOS').attr('answer')){
+      $('#importinstanceOS').val($('#importinstanceOS').attr('answer')).select2();
+    }
+*/
+  },
+  failure: function (data) {
+   alert(data.toString());
+ }
+}); 
+  }
+
+
                  $('.addNewApp1').click(function() {
                      $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
 
@@ -122,6 +151,7 @@
                      bindChange_importPemFile();
                      bindSubmit_AddInstance();
                      bindClick_removeInstance();
+                     populateOSList();
                  }
 
                  function bindClick_removeInstance() {
@@ -3570,6 +3600,7 @@
                  loadcarousel();
                  getViewTile();
                  $('#defaultViewButton').click(); //setting the detault view
-                 // serachBoxInInstance.init();
+                 
+                 
 
              });

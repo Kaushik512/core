@@ -43,30 +43,44 @@ app.post('/aws/providers', function(req, res) {
      providerName: providerName,
      providerType: providerType
  };
- AWSProvider.createNew(providerData, function(err, provider) {
-    if (err) {
-        logger.debug("err.....",err);
-        res.send(500,"Provider creation failed due to Provider name already exist.");
-        return;
-    }
-    logger.debug("Provider id:  %s",JSON.stringify(provider._id));
-    AWSKeyPair.createNew(req,provider._id,function(err,keyPair){
-        if(keyPair){
-            var dommyProvider = {
-                _id: provider._id,
-                id: 9,
-                accessKey: provider.accessKey,
-                secretKey: provider.secretKey,
-                providerName: provider.providerName,
-                providerType: provider.providerType,
-                __v: provider.__v,
-                keyPairs: keyPair
-                };
-                res.send(dommyProvider);        
-            }
-        }); 
-        logger.debug("Exit post() for /providers");
-    });
+      var ec2 = new EC2({
+           "access_key": accessKey,
+           "secret_key": secretKey,
+           "region"    : req.body.region
+        });
+
+        ec2.describeKeyPairs(function(err,data){
+           if(err){
+            logger.debug("Unable to get AWS Keypairs");
+            res.send("Invalid AccessKey or SecretKey.",500);
+            return;
+             }
+            logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
+           AWSProvider.createNew(providerData, function(err, provider) {
+              if (err) {
+                  logger.debug("err.....",err);
+                  res.send(500,"Provider creation failed due to Provider name already exist.");
+                  return;
+              }
+              logger.debug("Provider id:  %s",JSON.stringify(provider._id));
+              AWSKeyPair.createNew(req,provider._id,function(err,keyPair){
+                  if(keyPair){
+                      var dommyProvider = {
+                          _id: provider._id,
+                          id: 9,
+                          accessKey: provider.accessKey,
+                          secretKey: provider.secretKey,
+                          providerName: provider.providerName,
+                          providerType: provider.providerType,
+                          __v: provider.__v,
+                          keyPairs: keyPair
+                          };
+                          res.send(dommyProvider);        
+                      }
+                  }); 
+                  logger.debug("Exit post() for /providers");
+              });
+      });
 });
 
 // Return list of all available AWS Providers.
@@ -161,6 +175,19 @@ var providerData= {
     providerType: providerType
 };
 logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
+var ec2 = new EC2({
+           "access_key": accessKey,
+           "secret_key": secretKey,
+           "region"    : req.body.region
+        });
+
+        ec2.describeKeyPairs(function(err,data){
+           if(err){
+            logger.debug("Unable to get AWS Keypairs");
+            res.send("Invalid AccessKey or SecretKey.",500);
+            return;
+             }
+            logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
 AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
     if (err) {
         logger.error(err);
@@ -175,7 +202,8 @@ AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(
  } else {
     res.send(400);
         }
-    });
+     });
+  });
 });
 
 // Delete a particular AWS Provider.
