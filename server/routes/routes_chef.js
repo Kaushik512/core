@@ -580,12 +580,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hostedChefUrl: chefDetails.url,
             });
 
-            chef.createAndUploadCookbook(req.params.cookbookName, ['starter'], function(err, cookbooks) {
+            chef.getCookbookAttributes(['starter','apache2'], function(err, attributes) {
                 if (err) {
                     res.send(500);
                     return;
                 } else {
-                    res.send(cookbooks);
+                    res.send(attributes);
                 }
             });
 

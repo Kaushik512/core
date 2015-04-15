@@ -2,7 +2,6 @@ var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var readline = require('readline');
 
-var userHomeDir = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 
 var currentDirectory = __dirname;
 
@@ -14,7 +13,8 @@ function getDefaultsConfig() {
             sessionSecret: 'sessionSekret'
         },
         app_run_port: 3001,
-        userHomeDir: currentDirectory+'/catdata',
+        //userHomeDir: currentDirectory + '/catdata',
+        catalystDataDir: currentDirectory + '/catdata',
         catalysHomeDirName: 'catalyst',
         instancePemFilesDirName: 'instance-pemfiles',
         tempDirName: 'temp',
@@ -27,12 +27,17 @@ function getDefaultsConfig() {
         },
         chef: {
             chefReposDirName: 'chef-repos',
+            cookbooksDirName: 'cookbooks',
             defaultChefCookbooks: [],
             ohaiHints: ['ec2'],
+            attributeExtractorCookbookName: 'attrib',
 
             // getter methods
             get chefReposLocation() {
                 return config.catalystHome + this.chefReposDirName + '/';
+            },
+            get cookbooksDir() {
+                return config.catalystHome + this.cookbooksDirName + "/";
             }
         },
         aws: {
@@ -64,65 +69,57 @@ function getDefaultsConfig() {
                 supportedInstanceType: ['t2.micro']
             }],
             virtualizationType: [{
-            hvm: ['t2.micro','t2.small','t2.medium','m3.medium','m3.large','m3.xlarge','m3.2xlarge',
-                'c3.large','c3.xlarge','c3.2xlarge','c3.4xlarge','c3.8xlarge','c4.large','c4.xlarge',
-                'c4.2xlarge','c4.4xlarge','c4.8xlarge','r3.large','r3.xlarge','r3.2xlarge','r3.4xlarge',
-                'r3.8xlarge','i2.xlarge','i2.2xlarge','i2.4xlarge','i2.8xlarge','hs1.8xlarge']
-        }, {
-            paravirtual: ['m3.medium','m3.large','m3.xlarge','m3.2xlarge','c3.large','c3.xlarge','c3.2xlarge',
-                'c3.4xlarge','c3.8xlarge','hs1.8xlarge']
-        }],
+                hvm: ['t2.micro', 't2.small', 't2.medium', 'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge',
+                    'c3.large', 'c3.xlarge', 'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge', 'c4.large', 'c4.xlarge',
+                    'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge', 'r3.large', 'r3.xlarge', 'r3.2xlarge', 'r3.4xlarge',
+                    'r3.8xlarge', 'i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge', 'hs1.8xlarge'
+                ]
+            }, {
+                paravirtual: ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge', 'c3.large', 'c3.xlarge', 'c3.2xlarge',
+                    'c3.4xlarge', 'c3.8xlarge', 'hs1.8xlarge'
+                ]
+            }],
 
-        regions:[{
-            
+            regions: [{
+
                 region_name: "US East (N. Virginia)",
                 region: "us-east-1"
-            },
-            {
+            }, {
                 region_name: "US West (Oregon)",
                 region: "us-west-2"
-            },
-            {
+            }, {
                 region_name: "US West (N. California)",
                 region: "us-west-1"
-            },
-            {
+            }, {
                 region_name: "EU (Ireland)",
                 region: "eu-west-1"
-            },
-            {
+            }, {
                 region_name: "EU (Frankfurt)",
                 region: "eu-central-1"
-            },
-            {
+            }, {
                 region_name: "Asia Pacific (Singapore)",
                 region: "ap-southeast-1"
-            },
-            {
+            }, {
                 region_name: "Asia Pacific (Sydney)",
                 region: "ap-southeast-2"
-            },
-            {
+            }, {
                 region_name: "Asia Pacific (Tokyo)",
                 region: "ap-northeast-1"
-            },
-            {
+            }, {
                 region_name: "South America (Sao Paulo)",
                 region: "sa-east-1"
             }],
 
-            operatingSystems:[{
-            
+            operatingSystems: [{
+
                 os_name: "Cent OS",
                 osType: "linux"
-            },
-            {
-            
+            }, {
+
                 os_name: "Windows 2008",
                 osType: "windows"
-            },
-            {
-            
+            }, {
+
                 os_name: "Ubuntu",
                 osType: "linux"
             }]
@@ -137,13 +134,13 @@ function getDefaultsConfig() {
             port: 389
 
         },
-        features : {
-            appcard:true
+        features: {
+            appcard: true
         },
 
         //getter methods
         get catalystHome() {
-            return this.userHomeDir + '/' + this.catalysHomeDirName + '/';
+            return this.catalystDataDir + '/' + this.catalysHomeDirName + '/';
         },
 
         get instancePemFilesDir() {
@@ -152,7 +149,6 @@ function getDefaultsConfig() {
         get tempDir() {
             return this.catalystHome + this.tempDirName + "/";
         }
-
     };
 
     return config;
@@ -162,47 +158,50 @@ function getDefaultsConfig() {
 function parseArguments() {
     var cliArgs = require("command-line-args");
     var cli = cliArgs([{
-        name: "help",
-        alias: "h",
-        type: Boolean,
-        description: "Help"
-    }, {
-        name: "catalyst-port",
-        type: String,
-        description: "Catalyst port number"
-    }, /*{
+            name: "help",
+            alias: "h",
+            type: Boolean,
+            description: "Help"
+        }, {
+            name: "catalyst-port",
+            type: String,
+            description: "Catalyst port number"
+        },
+        /*{
         name: "catalyst-home",
         type: String,
         description: "catalyst home directory name"
-    },*/ {
-        name: "db-host",
-        type: String,
-        description: "DB Host"
-    }, {
-        name: "db-port",
-        type: String,
-        description: "DB Port"
-    }, {
-        name: "db-name",
-        type: String,
-        description: "DB Port"
-    }, {
-        name: "ldap-host",
-        type: String,
-        description: "Ldap Host"
-    }, {
-        name: "ldap-port",
-        type: String,
-        description: "Ldap Host"
-    }, {
-        name: "seed-data",
-        type: Boolean,
-        description: "Restore Seed Data"
-    }, {
-        name: "ldap-user",
-        type: Boolean,
-        description: "Setup Ldap user"
-    }]);
+    },*/
+        {
+            name: "db-host",
+            type: String,
+            description: "DB Host"
+        }, {
+            name: "db-port",
+            type: String,
+            description: "DB Port"
+        }, {
+            name: "db-name",
+            type: String,
+            description: "DB Port"
+        }, {
+            name: "ldap-host",
+            type: String,
+            description: "Ldap Host"
+        }, {
+            name: "ldap-port",
+            type: String,
+            description: "Ldap Host"
+        }, {
+            name: "seed-data",
+            type: Boolean,
+            description: "Restore Seed Data"
+        }, {
+            name: "ldap-user",
+            type: Boolean,
+            description: "Setup Ldap user"
+        }
+    ]);
 
     var options = cli.parse();
 
@@ -281,15 +280,7 @@ function restoreSeedData(config, callback) {
             console.log('mongo restore successfull');
             fse = require('fs-extra');
             console.log('copying seed data');
-            fse.copy('../seed/catalyst/chef-repos/', config.chef.chefReposLocation + '/', function(err) {
-                if (err) {
-                    console.error('Unable to copy seed data');
-                    throw err
-                    return;
-                }
-
-            });
-
+            fse.copySync('../seed/catalyst', config.catalystHome);
             callback();
         } else {
             throw "Unable to restore mongodb"
@@ -364,7 +355,7 @@ function createConfigFile(config) {
 
 
 console.log('Installing node packages required for installation');
-proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.14.0', 'ldapjs@0.7.1']);
+proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.18.0', 'ldapjs@0.7.1']);
 proc.on('close', function(code) {
     if (code !== 0) {
         throw "Unable to install packages"
@@ -375,12 +366,17 @@ proc.on('close', function(code) {
         var config = getConfig(defaultConfig, options);
         console.log('creating catalyst home directory');
 
+        var fsExtra = require('fs-extra');
+        fsExtra.emptydirSync(config.catalystDataDir);
+
         var mkdirp = require('mkdirp');
 
         mkdirp.sync(config.catalystHome);
         mkdirp.sync(config.instancePemFilesDir);
         mkdirp.sync(config.tempDir);
         mkdirp.sync(config.chef.chefReposLocation);
+        mkdirp.sync(config.chef.cookbooksDir);
+
 
         if (options['seed-data']) {
             restoreSeedData(config, function() {
@@ -388,7 +384,6 @@ proc.on('close', function(code) {
                     setupLdapUser(config, function() {
                         createConfigFile(config);
                         installPackageJson();
-
                     });
                 } else {
                     createConfigFile(config);

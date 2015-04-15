@@ -127,11 +127,14 @@ module.exports.copyFile = function(src, dst, callback) {
 module.exports.removeFile = function(path, callback) {
     fs.unlink(path, function(err) {
         if (err) {
-            callback(err);
+            if (typeof callback === 'function') {
+                callback(err);
+            }
             return;
         }
-        callback(null);
-
+        if (typeof callback === 'function') {
+            callback(null);
+        }
     });
 };
 
