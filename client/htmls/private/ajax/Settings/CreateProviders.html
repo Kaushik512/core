@@ -484,7 +484,7 @@ function getRegionList(){
         }
 
       }
-      return '<div class="addNewRegion">'+ /*(isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion'))+*/getRegion() + str+'</div>'
+      return '<div class="addNewRegion">'+ (isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion'))+getRegion() + str+'</div>'
     };
 
     $(parentEl).delegate('.addimage','click',function(){
@@ -492,6 +492,7 @@ function getRegionList(){
         $(this).parent().parent().append(that.getRow(false,true)).find('select').select2();
       }else if($(this).hasClass('addRegion')){
         $(this).parents('.customTemplateParent').append(that.getFinalTemplate()).find('select').select2();
+        getRegionList();
       }
       UtilityMethods.initTooltip();
       bindChange_importPemFile();
