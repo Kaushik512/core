@@ -10,6 +10,7 @@ var appConfig = require('../config/app_config');
 var logger  = require('../lib/logger')(module);
 var childProcess = require('child_process');
 var exec = childProcess.exec;
+var masterUtil = require('../lib/utils/masterUtil.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -486,6 +487,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
         logger.debug("Logged in user: ",req.session.user.cn);
+        var loggedInUser = req.session.user.cn;
+        if(loggedInUser === 'superadmin'){
          configmgmtDao.getRowids(function(err,rowidlist){
 
             logger.debug("Rowid List----&&&&----> %s", rowidlist);
@@ -587,14 +590,74 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.debug("sent response 579 %s", JSON.stringify(collection));
                                     res.end(JSON.stringify(collection));
                                     logger.debug("Exit get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
+                            });
+                        }
                     });
-                }
-            });
-        }); //rowidlist
+                }); //rowidlist
+
+                // For non-catalystadmin
+            }else if(req.params.id === '2'){
+                // For BusinessGroup
+                masterUtil.getBusinessGroups(loggedInUser,function(bgList){
+                    logger.debug("Returned BG List:>>>> ",JSON.stringify(bgList));
+                    res.send(bgList);
+                });
+            }else if(req.params.id === '3'){
+                // For Environment
+                masterUtil.getEnvironments(loggedInUser,function(envList){
+                    logger.debug("Returned ENV List:>>>>> ",JSON.stringify(envList));
+                    res.send(envList);
+                });
+            }else if(req.params.id === '4'){    
+                // For Projects
+                masterUtil.getProjects(loggedInUser,function(projectList){
+                    logger.debug("Returned Project List:>>>>> ",JSON.stringify(projectList));
+                    res.send(projectList);
+                })
+            }else if(req.params.id === '10'){    
+                // For ConfigManagement
+                masterUtil.getCongifMgmts(loggedInUser,function(configMgmtList){
+                    logger.debug("Returned ConfigManagement List:>>>>> ",configMgmtList);
+                    res.send(configMgmtList);
+                });
+                
+            }else if(req.params.id === '18'){    
+                // For Docker
+                logger.debug("Id for docker:>> ",req.params.id);
+                masterUtil.getDockers(req.params.id,function(dockerList){
+                    logger.debug("Returned Dockers List:>>>>> ",JSON.stringify(dockerList));
+                    res.send(dockerList);
+                });
+                
+            }else if(req.params.id === '17'){    
+                // For Template
+                logger.debug("Id for template:>> ",req.params.id);
+                masterUtil.getTemplates(req.params.id,function(templateList){
+                    logger.debug("Returned Template List:>>>>> ",JSON.stringify(templateList));
+                    res.send(templateList);
+                });
+                
+            }else if(req.params.id === '19'){    
+                // For ServiceCommand
+                masterUtil.getServiceCommands(req.params.id,function(serviceCommandList){
+                    logger.debug("Returned ServiceCommand List:>>>>> ",JSON.stringify(serviceCommandList));
+                    res.send(serviceCommandList);
+                });
+                
+            }else if(req.params.id === '20'){    
+                // For Jenkins
+                masterUtil.getJenkins(req.params.id,function(jenkinList){
+                    logger.debug("Returned Jenkins List:>>>>> ",JSON.stringify(jenkinList));
+                    res.send(jenkinList);
+                });
+                
+            }
     });
 
      app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
+        var loggedInUser = req.session.user.cn;
+        if(loggedInUser === 'superadmin'){
          configmgmtDao.getRowids(function(err,rowidlist){
 
             logger.debug("Rowid List----&&&&----> ", rowidlist);
@@ -694,10 +757,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.debug("sent response 686 %s", JSON.stringify(collection));
                                     res.end(JSON.stringify(collection));
                                     logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
-                    });
+                         });
+                     }
+                });
+             }); //rowidlist
+        }else{
+            // For non-catalystadmin
+
+            masterUtil.getOrgs(loggedInUser,function(orgList){
+                if(orgList){
+                    logger.debug("Returned Org List: >>>>>> ",JSON.stringify(orgList));
+                    res.send(orgList);
                 }
-            });
-        }); //rowidlist
+            })
+
+        }
     });
     //for kana to be reverted to the original function 
     app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
