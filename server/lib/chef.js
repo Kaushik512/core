@@ -7,6 +7,8 @@ var chefDefaults = require('../config/app_config').chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 var logger = require('./logger.js')(module);
 
+var getDefaultCookbook = require('./defaultTaskCookbook');
+
 var Chef = function(settings) {
 
 
@@ -651,7 +653,7 @@ var Chef = function(settings) {
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {
         console.log('Chef Repo Location : ', settings.userChefRepoLocation)
         var options = {
-            cwd: settings.userChefRepoLocation + '/.chef',
+            cwd: settings.userChefRepoLocation,
             onError: function(err) {
                 callback(err, null);
             },
@@ -673,7 +675,7 @@ var Chef = function(settings) {
 
     this.downloadCookbook = function(cookbookName, callback) {
         var options = {
-            cwd: settings.userChefRepoLocation + '/.chef',
+            cwd: settings.userChefRepoLocation,
             onError: function(err) {
                 callback(err, null);
             },
@@ -690,6 +692,95 @@ var Chef = function(settings) {
         var proc = new Process('knife', ['cookbook', 'download', cookbookName, '--force'], options);
         proc.start();
     };
+
+    this.createCookbook = function(cookbookName, callback) {
+        var createCookbookOption = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                console.log(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
+
+            },
+            onStdOut: function(outData) {
+                console.log(outData);
+            }
+        };
+        var procCreateCookbook = new Process('knife', ['cookbook', 'create', cookbookName], createCookbookOption);
+        procCreateCookbook.start();
+    };
+
+    this.uploadCookbook = function(cookbookName, callback) {
+        var uploadCookbookOption = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                console.log(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
+
+            },
+            onStdOut: function(outData) {
+                console.log(outData);
+            },
+            onStdErr: function(outData) {
+                console.log("err ==> " + outData);
+            }
+        };
+        var procUploadCookbook = new Process('knife', ['cookbook', 'upload', cookbookName, '--force'], uploadCookbookOption);
+        procUploadCookbook.start();
+    };
+
+    this.createAndUploadCookbook = function(cookbookName, dependencies, callback) {
+        var self = this;
+        this.createCookbook(cookbookName, function(err, status) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (dependencies && dependencies.length) {
+                var dependecyDataToAppend = '';
+                for (var i = 0; i < dependencies.length; i++) {
+                    dependecyDataToAppend = dependecyDataToAppend + "\ndepends '" + dependencies[i] + "'";
+                    console.log(dependecyDataToAppend);
+                }
+                console.log(dependencies);
+                console.log(dependecyDataToAppend);
+                fileIo.appendToFile(settings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/metadata.rb', dependecyDataToAppend, function(err) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    self.uploadCookbook(cookbookName, function(err) {
+                        if (err) {
+                            callback(err, null);
+                            return;
+                        }
+                        callback(null, null);
+                    });
+                });
+            } else {
+                self.uploadCookbook(cookbookName, function(err) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, null);
+                });
+            }
+        });
+    }
 
 }
 

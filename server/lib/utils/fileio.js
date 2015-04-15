@@ -133,4 +133,14 @@ module.exports.removeFile = function(path, callback) {
         callback(null);
 
     });
-}
+};
+
+module.exports.appendToFile = function(path, data, callback) {
+    fs.appendFile(path, data, function(err) {
+        if (err) {
+            callback(err);
+            return;
+        }
+        callback(null);
+    });
+};
