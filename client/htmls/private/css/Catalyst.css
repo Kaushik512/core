@@ -1,3 +1,9 @@
+.pointereventsDisabled{
+    pointer-events: none;
+}
+.pointereventsEnabled{
+    pointer-events: visible;
+}
 .loadingcookbookandroles{
     float: right !important; 
     margin-right: 10px !important;

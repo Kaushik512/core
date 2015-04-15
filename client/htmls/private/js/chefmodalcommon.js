@@ -2,6 +2,7 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     if (!selectedRunlist) {
         selectedRunlist = [];
     }
+    $('.btnUpdateInstanceRunlist').addClass('pointereventsDisabled');
     var $chefItemdiv = $("<div></div>").addClass('smart-form');
     var $row = $("<div></div>").addClass('row margin0');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
@@ -35,6 +36,8 @@ var $chefCookbookRoleSelector = function(catorgname, callback, selectedRunlist, 
     $beforesearchappend.show();
     $searchinputtextbox.hide();
     $searchiconappend.hide();
+    $('.btnUpdateInstanceRunlist').removeClass('pointereventsDisabled');
+    $('.btnUpdateInstanceRunlist').addClass('pointereventsEnabled');
     $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
         console.log("Cookbooks Query:" + data);
 
