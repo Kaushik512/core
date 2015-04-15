@@ -2,6 +2,7 @@ var logger = require('../../lib/logger')(module);
 var d4dModelNew = require('../../model/d4dmasters/d4dmastersmodelnew.js');
 
 var MasterUtil = function(){
+    // Return All Orgs specific to User
 	this.getOrgs = function (loggedInUser,callback){
         var orgList = [];
 		d4dModelNew.d4dModelMastersTeams.find({
@@ -46,6 +47,7 @@ var MasterUtil = function(){
             });
 	}
 
+    // Return all BusinessGroups specific to User
     this.getBusinessGroups = function (loggedInUser,callback){
         var productGroupList = [];
         d4dModelNew.d4dModelMastersTeams.find({
@@ -90,6 +92,7 @@ var MasterUtil = function(){
             });
     }
 
+    // Return all Environments specific to User
     this.getEnvironments = function (loggedInUser,callback){
         var envList = [];
         d4dModelNew.d4dModelMastersTeams.find({
@@ -134,6 +137,7 @@ var MasterUtil = function(){
             });
     }
 
+    // Return all Projects specific to User
     this.getProjects = function (loggedInUser,callback){
         var projectList = [];
         d4dModelNew.d4dModelMastersTeams.find({
@@ -166,6 +170,7 @@ var MasterUtil = function(){
             });
     }
 
+    // Return all ConfigManagement specific to User
     this.getCongifMgmts = function(loggedInUser,callback){
         var congifMgmtList = [];
         d4dModelNew.d4dModelMastersConfigManagement.find({
@@ -182,6 +187,7 @@ var MasterUtil = function(){
         });
     }
 
+    // Return all Dockers
     this.getDockers = function(anId,callback){
         var dockerList = [];
         logger.debug("Enter to Docker: ",anId);
@@ -200,6 +206,7 @@ var MasterUtil = function(){
         });
     }
 
+    // Return all Templates
     this.getTemplates = function(anId,callback){
         var templateList = [];
         logger.debug("Enter to Template: ",anId);
@@ -218,6 +225,7 @@ var MasterUtil = function(){
         });
     }
 
+    // Return all ServiceCommands
     this.getServiceCommands = function(anId,callback){
         var serviceCommandList = [];
         d4dModelNew.d4dModelMastersServicecommands.find({
@@ -235,6 +243,7 @@ var MasterUtil = function(){
         });
     }
 
+    // Return all Jenkins
     this.getJenkins = function(anId,callback){
         var jenkinList = [];
         d4dModelNew.d4dModelJenkinsConfig.find({
@@ -249,6 +258,69 @@ var MasterUtil = function(){
                 callback(jenkinList);
             }
 
+        });
+    }
+
+    // Return all UserRoles specific to User
+    this.getUserRoles = function(loggedInUser,callback){
+        var userRoleList = [];
+        d4dModelNew.d4dModelMastersUsers.find({
+            loginname : loggedInUser
+        },function(err,users){
+            if(users){
+                for(var i =0; i< users.length; i++){
+                    if(users[i].id === '7'){
+                        d4dModelNew.d4dModelMastersUserroles.find({
+                            userrolename : users[i].userrolename
+                        },function(err,userRoles){
+                            if(userRoles){
+                                for(var j=0; j< userRoles.length; j++){
+                                    if(userRoles[j].id === '6'){
+                                        userRoleList.push(userRoles[j]);
+                                    }
+                                }
+                                 callback(userRoleList);
+                            }
+
+                        });
+                    }
+                }
+            }
+
+        });
+    }
+
+    // Return all Users whose are associated to loggedIn User
+    this.getUsers = function(loggedInUser,callback){
+        var userList = [];
+        d4dModelNew.d4dModelMastersUsers.find({
+            loginname : loggedInUser
+        },function(err,users){
+            if(users){
+                for(var i =0; i< users.length; i++){
+                    if(users[i].id === '7'){
+                        userList.push(users[i]);
+                    }
+                }
+                callback(userList);
+            }
+
+        });
+    }
+
+    this.getTeams = function(loggedInUser,callback){
+        var teamList = [];
+        d4dModelNew.d4dModelMastersTeams.find({
+            loginname : loggedInUser
+        },function(err,teams){
+            if(teams){
+                for(var i=0; i< teams.length; i++){
+                    if(teams[i].id === '21'){
+                        teamList.push(teams[i]);
+                    }
+                }
+                callback(teamList);
+            }
         });
     }
 }

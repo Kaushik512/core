@@ -651,6 +651,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     res.send(jenkinList);
                 });
                 
+            }else if(req.params.id === '6'){    
+                // For User Role
+                masterUtil.getUserRoles(loggedInUser,function(userRoleList){
+                    logger.debug("Returned UserRole List:>>>>> ",JSON.stringify(userRoleList));
+                    res.send(userRoleList);
+                });
+                
+            }else if(req.params.id === '7'){    
+                // For User
+                masterUtil.getUsers(loggedInUser,function(userList){
+                    logger.debug("Returned User List:>>>>> ",JSON.stringify(userList));
+                    res.send(userList);
+                });
+                
+            }else if(req.params.id === '21'){    
+                // For Team
+                masterUtil.getTeams(loggedInUser,function(teamList){
+                    logger.debug("Returned Team List:>>>>> ",JSON.stringify(teamList));
+                    res.send(teamList);
+                });
+                
             }
     });
 
