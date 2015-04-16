@@ -800,7 +800,7 @@
 
 
 
-     $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+     $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs).data('$ccrs',$ccrs);
      $chefRunModalContainer.modal('show');
 
  };

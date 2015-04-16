@@ -350,6 +350,7 @@ $(document).ready(function() {
            }
         });
         $('.runlistContainer').append($ccrs);
+        $('.runlistContainer').data('$ccrs',$ccrs);
 
         // jenkins 
 
@@ -449,7 +450,9 @@ $(document).ready(function() {
                 alert('Please choose nodes');
                 return;
             }
-            var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+            
+            var $ccrs = $('.runlistContainer').data('$ccrs');
+            var runlist = $ccrs.getSelectedRunlist();
             
 
             if (!runlist.length) {
@@ -514,7 +517,8 @@ $(document).ready(function() {
     });
 
     $('#editAttributesBtn').click(function(e){
-        var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+        var $ccrs = $('.runlistContainer').data('$ccrs');
+        var runlist = $ccrs.getSelectedRunlist();
         if(!runlist.length) {
            alert('Please choose a runlist first');
            return false;
@@ -552,7 +556,9 @@ $(document).ready(function() {
             }
           
         }
-        var chefServerId = $chefCookbookRoleSelector.getChefServerId();
+        //var chefServerId = $chefCookbookRoleSelector.getChefServerId();
+        var $ccrs = $('.runlistContainer').data('$ccrs');
+        var chefServerId = $ccrs.getChefServerId();
         $.post('../chef/servers/' + chefServerId + '/attributes', reqBody, function(attributesList) {
             //var dataTable = $('#attributesEditListArea').DataTable();
             //dataTable.clear();

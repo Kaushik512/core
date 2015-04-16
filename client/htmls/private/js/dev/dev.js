@@ -835,10 +835,9 @@
 
                      }, runlist, readMode);
                      $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
-
-
-
-                     $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+                     
+                     $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs).data('$ccrs',$ccrs);
+                     
                      $chefRunModalContainer.modal('show');
 
                  };
@@ -1846,7 +1845,8 @@
 
                                                  }, versionData.runlist);
                                                  $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId', blueprintId);
-                                                 $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs);
+                                                 $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs).data('$ccrs',$ccrs);
+                                                 
 
 
                                              }).error(function() {
@@ -2141,10 +2141,12 @@
                      $('.blueprintUpdateBtn').click(function(e) {
 
                          var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-                         var $selectedRunlist = $blueprintEditResultContainer.find('#cookbooksrecipesselectedList');
-                         var blueprintId = $selectedRunlist.attr('data-blueprintId');
+                         var $ccrs = $blueprintEditResultContainer.find('.modal-body').data('$ccrs');
+
+                         var $selectedRunlist = $ccrs.find('#cookbooksrecipesselectedList');
+                         var blueprintId = $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId');
                          if (blueprintId) {
-                             var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+                             var runlist = $ccrs.getSelectedRunlist();
                              
 
                              var blueprintData = {
@@ -2173,10 +2175,12 @@
                                  return;
                              }
                              $chefRunModalContainer = $('#chefRunModalContainer');
-                             var $selectedRunlist = $chefRunModalContainer.find('#cookbooksrecipesselectedList');
-                             var instanceId = $selectedRunlist.attr('data-instanceId');
+                             var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
+                     
+                             
+                             var instanceId = $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceId');
 
-                             var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+                             var runlist = $ccrs.getSelectedRunlist();
                              
                              if (!runlist.length) {
                                  bootbox.alert('Runlist is empty');

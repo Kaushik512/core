@@ -1093,6 +1093,7 @@ $('.startstoptoggler').click(startAndStopToggler);
          var $ccrs = $chefCookbookRoleSelector(urlParams.org,null,runlist,readMode);
          var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
          $controlPanelChefRunModalContainer.find('.modal-body').empty().append($ccrs);
+         $controlPanelChefRunModalContainer.find('.modal-body').data('$ccrs',$ccrs);
          $controlPanelChefRunModalContainer.modal('show');
 
     });
@@ -1108,7 +1109,9 @@ $('.startstoptoggler').click(startAndStopToggler);
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
         $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+        var $ccrs = $chefRunModalContainer.find('.modal-body').data('$ccrs');
+         
+        var runlist = $ccrs.getSelectedRunlist();
                
         if(!runlist.length) {
           bootbox.alert("Runlist is empty");

@@ -4,6 +4,24 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     }
     $('.btnUpdateInstanceRunlist').addClass('pointereventsDisabled');
     var $chefItemdiv = $("<div></div>").addClass('smart-form');
+
+    var $chefItemdiv = $.extend($chefItemdiv, {
+        getSelectedRunlist: function() {
+            var $options = this.find('#cookbooksrecipesselectedList').find('option');
+            var runlist = [];
+            $options.each(function() {
+                var $option = $(this);
+                runlist.push($option.val());
+            });
+            return runlist;
+        },
+        getChefServerId: function() {
+            return this.find('#cookbooksrecipesselectedList').attr('data-chefServerId');
+        }
+    });
+
+
+
     var $row = $("<div></div>").addClass('row margin0');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
     var $firstcol6 = $("<div></div>").addClass('col-lg-6');
@@ -39,79 +57,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     $('.btnUpdateInstanceRunlist').removeClass('pointereventsDisabled');
     $('.btnUpdateInstanceRunlist').addClass('pointereventsEnabled');
 
-
-
-
-    $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
-        //console.log("Cookbooks Query:" + data);
-        $chefItemdiv.find('#cookbooksrecipesselectedList').first().data('chefServerId', data.serverId);
-        $chefItemdiv.find('#cookbooksrecipesselectedList').first().attr('data-chefServerId', data.serverId);
-
-
-        var cookbooks = data.cookbooks;
-        var keys = Object.keys(cookbooks);
-        //alert(keys);
-        keys.sort(function(a, b) {
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-
-        var cookbookrecipesTotallist = []
-
-
-        for (i = 0; i < keys.length; i++) {
-            var display = 'none';
-            var obj = {
-                value: 'recipe[' + keys[i] + ']',
-                name: keys[i],
-                Class: "cookbook",
-                display: display
-            };
-            if (selectedRunlist.indexOf(obj.value) === -1) {
-                obj.display = 'block';
-            }
-            cookbookrecipesTotallist.push(obj);
-        }
-        var roles = data.roles;
-        var keys = Object.keys(roles);
-        keys.sort(function(a, b) {
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-        });
-        //alert("ServerID:" + data.serverId);
-        for (i = 0; i < keys.length; i++) {
-            var display = 'none';
-            var obj = {
-                value: 'role[' + keys[i] + ']',
-                name: keys[i],
-                Class: "roles",
-                display: display
-            };
-            if (selectedRunlist.indexOf(obj.value) === -1) {
-                obj.display = 'block';
-            }
-            cookbookrecipesTotallist.push(obj);
-        }
-
-        var optionstoAdd = '<option class=${Class} value=${value} style="display:${display}">${name}</option>';
-        $.template("optionTemplate", optionstoAdd);
-        var tempoptions = $chefItemdiv.find("#cookbooksrecipesList");
-        $.tmpl("optionTemplate", cookbookrecipesTotallist).appendTo(tempoptions);
-
-        $loadingContainerGap.hide();
-        $beforesearchappend.hide();
-        $searchinputtextbox.show();
-        $searchiconappend.show();
-        $('.cookbookspinner').detach();
-        $chefItemdiv.find('#cookbooksrecipesList').filterByText($chefItemdiv.find('#textbox'), false);
-        if (typeof callback === 'function') {
-            callback('done');
-        }
-    }).fail(function(data) {
-        var $erroMsgArea = $('<span></span>').css({
-            'color': 'red'
-        }).text(' ' + data.responseJSON.message);
-        $('.cookbookspinner').detach();
-        $strong1.append($erroMsgArea);
-    });
 
 
 
@@ -190,28 +135,104 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     $chefItemdiv.append($errorContainer);
 
     $chefItemdiv.find('.chooseCheforgType').select2();
-    
-    console.log(selectedRunlist);
-    for (var i = 0; i < selectedRunlist.length; i++) {
-        var className = 'cookbook';
-        if (selectedRunlist[i].indexOf('recipe') === 0) {
-            className = 'cookbook';
-        } else {
-            className = 'roles';
-        }
-        var name = '';
-        var item = selectedRunlist[i];
-        var indexOfBracketOpen = item.indexOf('[');
-        if (indexOfBracketOpen != -1) {
-            var indexOfBracketClose = item.indexOf(']');
-            if (indexOfBracketClose != -1) {
-                name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+
+    $.get('../organizations/' + catorgname + '/chefRunlist', function(data) {
+        //console.log("Cookbooks Query:" + data);
+        $chefItemdiv.find('#cookbooksrecipesselectedList').first().data('chefServerId', data.serverId);
+        $chefItemdiv.find('#cookbooksrecipesselectedList').first().attr('data-chefServerId', data.serverId);
+
+
+        var cookbooks = data.cookbooks;
+        var keys = Object.keys(cookbooks);
+        //alert(keys);
+        keys.sort(function(a, b) {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+
+        var cookbookrecipesTotallist = []
+
+
+        for (i = 0; i < keys.length; i++) {
+            var display = 'none';
+            var obj = {
+                value: 'recipe[' + keys[i] + ']',
+                name: keys[i],
+                Class: "cookbook",
+                display: display
+            };
+            if (selectedRunlist.indexOf(obj.value) === -1) {
+                obj.display = 'block';
             }
+            cookbookrecipesTotallist.push(obj);
         }
-        var $selOption = $('<option class=' + className + ' value=' + selectedRunlist[i] + '>' + name + '</option>')
-        console.log($selOption);
-        $chefItemdiv.find('#cookbooksrecipesselectedList').append($selOption);
-    }
+        var roles = data.roles;
+        var keys = Object.keys(roles);
+        keys.sort(function(a, b) {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+        //alert("ServerID:" + data.serverId);
+        for (i = 0; i < keys.length; i++) {
+            var display = 'none';
+            var obj = {
+                value: 'role[' + keys[i] + ']',
+                name: keys[i],
+                Class: "roles",
+                display: display
+            };
+            if (selectedRunlist.indexOf(obj.value) === -1) {
+                obj.display = 'block';
+            }
+            cookbookrecipesTotallist.push(obj);
+        }
+
+        var optionstoAdd = '<option class=${Class} value=${value} style="display:${display}">${name}</option>';
+        $.template("optionTemplate", optionstoAdd);
+        var tempoptions = $chefItemdiv.find("#cookbooksrecipesList");
+        $.tmpl("optionTemplate", cookbookrecipesTotallist).appendTo(tempoptions);
+
+        $loadingContainerGap.hide();
+        $beforesearchappend.hide();
+        $searchinputtextbox.show();
+        $searchiconappend.show();
+        $('.cookbookspinner').detach();
+        $chefItemdiv.find('#cookbooksrecipesList').filterByText($chefItemdiv.find('#textbox'), false);
+
+        // loading selected runlist
+
+        for (var i = 0; i < selectedRunlist.length; i++) {
+            var className = 'cookbook';
+            if (selectedRunlist[i].indexOf('recipe') === 0) {
+                className = 'cookbook';
+            } else {
+                className = 'roles';
+            }
+            var name = '';
+            var item = selectedRunlist[i];
+            var indexOfBracketOpen = item.indexOf('[');
+            if (indexOfBracketOpen != -1) {
+                var indexOfBracketClose = item.indexOf(']');
+                if (indexOfBracketClose != -1) {
+                    name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+                }
+            }
+            var $selOption = $('<option class=' + className + ' value=' + selectedRunlist[i] + '>' + name + '</option>')
+            console.log($selOption);
+            $chefItemdiv.find('#cookbooksrecipesselectedList').append($selOption);
+        }
+
+
+        if (typeof callback === 'function') {
+            callback('done');
+        }
+    }).fail(function(data) {
+        var $erroMsgArea = $('<span></span>').css({
+            'color': 'red'
+        }).text(' ' + data.responseJSON.message);
+        $('.cookbookspinner').detach();
+        $strong1.append($erroMsgArea);
+    });
+
+
 
     //Image load dynamically
     var secondcollabelimagesrc = [{
@@ -357,6 +378,9 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     // $(function() {
     //     $chefItemdiv.find('#cookbooksrecipesList').filterByText($chefItemdiv.find('#textbox'), false);
     // });
+
+
+
 
     return $chefItemdiv;
 }
