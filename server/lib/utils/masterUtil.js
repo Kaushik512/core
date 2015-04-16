@@ -72,6 +72,9 @@ var MasterUtil = function(){
                             d4dModelNew.d4dModelMastersProjects.find({
                                 projectname : teams[i].projectname
                             },function(err,projects){
+                                if(err){
+                                        callback(err,null);
+                                     }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
                                     for(var j =0; j< projects.length; j++){
@@ -79,6 +82,9 @@ var MasterUtil = function(){
                                             d4dModelNew.d4dModelMastersProductGroup.find({
                                             productgroupname : projects[j].productgroupname
                                             },function(err,productGroups){
+                                                if(err){
+                                                    callback(err,null);
+                                                    }
                                             if(productGroups){
                                                 for(var x = 0; x< productGroups.length; x++){
                                                     if(productGroups[x].id ==='2'){
@@ -119,6 +125,9 @@ var MasterUtil = function(){
                             d4dModelNew.d4dModelMastersProjects.find({
                                 projectname : teams[i].projectname
                             },function(err,projects){
+                                if(err){
+                                        callback(err,null);
+                                        }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
                                     for(var j =0; j< projects.length; j++){
@@ -126,6 +135,9 @@ var MasterUtil = function(){
                                             d4dModelNew.d4dModelMastersEnvironments.find({
                                             environmentname : projects[j].environmentname
                                             },function(err,envs){
+                                                if(err){
+                                                    callback(err,null);
+                                                 }
                                             if(envs){
                                                 for(var x = 0; x< envs.length; x++){
                                                     if(envs[x].id ==='3'){
@@ -166,6 +178,9 @@ var MasterUtil = function(){
                             d4dModelNew.d4dModelMastersProjects.find({
                                 projectname : teams[i].projectname
                             },function(err,projects){
+                                if(err){
+                                        callback(err,null);
+                                        }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
                                     for(var j =0; j< projects.length; j++){
@@ -299,6 +314,9 @@ var MasterUtil = function(){
                         d4dModelNew.d4dModelMastersUserroles.find({
                             userrolename : users[i].userrolename
                         },function(err,userRoles){
+                            if(err){
+                                    callback(err,null);
+                                    }
                             if(userRoles){
                                 for(var j=0; j< userRoles.length; j++){
                                     if(userRoles[j].id === '6'){

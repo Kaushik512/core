@@ -598,31 +598,46 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // For non-catalystadmin
             }else if(req.params.id === '1'){
                 // For BusinessGroup
-                masterUtil.getOrgs(loggedInUser,function(orgList){
+                masterUtil.getOrgs(loggedInUser,function(err,orgList){
+                    if(err){
+                        res.send(500,'Not able to fetch Orgs.');
+                    }
                     logger.debug("Returned Org List:>>>> ",JSON.stringify(orgList));
                     res.send(orgList);
                 });
             }else if(req.params.id === '2'){
                 // For BusinessGroup
-                masterUtil.getBusinessGroups(loggedInUser,function(bgList){
+                masterUtil.getBusinessGroups(loggedInUser,function(err,bgList){
+                    if(err){
+                        res.send(500,'Not able to fetch BG.');
+                    }
                     logger.debug("Returned BG List:>>>> ",JSON.stringify(bgList));
                     res.send(bgList);
                 });
             }else if(req.params.id === '3'){
                 // For Environment
-                masterUtil.getEnvironments(loggedInUser,function(envList){
+                masterUtil.getEnvironments(loggedInUser,function(err,envList){
+                    if(err){
+                        res.send(500,'Not able to fetch ENV.');
+                    }
                     logger.debug("Returned ENV List:>>>>> ",JSON.stringify(envList));
                     res.send(envList);
                 });
             }else if(req.params.id === '4'){    
                 // For Projects
-                masterUtil.getProjects(loggedInUser,function(projectList){
+                masterUtil.getProjects(loggedInUser,function(err,projectList){
+                    if(err){
+                        res.send(500,'Not able to fetch Project.');
+                    }
                     logger.debug("Returned Project List:>>>>> ",JSON.stringify(projectList));
                     res.send(projectList);
                 })
             }else if(req.params.id === '10'){    
                 // For ConfigManagement
-                masterUtil.getCongifMgmts(loggedInUser,function(configMgmtList){
+                masterUtil.getCongifMgmts(loggedInUser,function(err,configMgmtList){
+                    if(err){
+                        res.send(500,'Not able to fetch ConfigManagement.');
+                    }
                     logger.debug("Returned ConfigManagement List:>>>>> ",configMgmtList);
                     res.send(configMgmtList);
                 });
@@ -630,7 +645,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }else if(req.params.id === '18'){    
                 // For Docker
                 logger.debug("Id for docker:>> ",req.params.id);
-                masterUtil.getDockers(req.params.id,function(dockerList){
+                masterUtil.getDockers(req.params.id,function(err,dockerList){
+                    if(err){
+                        res.send(500,'Not able to fetch Dockers.');
+                    }
                     logger.debug("Returned Dockers List:>>>>> ",JSON.stringify(dockerList));
                     res.send(dockerList);
                 });
@@ -638,42 +656,60 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }else if(req.params.id === '17'){    
                 // For Template
                 logger.debug("Id for template:>> ",req.params.id);
-                masterUtil.getTemplates(req.params.id,function(templateList){
+                masterUtil.getTemplates(req.params.id,function(err,templateList){
+                    if(err){
+                        res.send(500,'Not able to fetch Template.');
+                    }
                     logger.debug("Returned Template List:>>>>> ",JSON.stringify(templateList));
                     res.send(templateList);
                 });
                 
             }else if(req.params.id === '19'){    
                 // For ServiceCommand
-                masterUtil.getServiceCommands(req.params.id,function(serviceCommandList){
+                masterUtil.getServiceCommands(req.params.id,function(err,serviceCommandList){
+                    if(err){
+                        res.send(500,'Not able to fetch ServiceCommand.');
+                    }
                     logger.debug("Returned ServiceCommand List:>>>>> ",JSON.stringify(serviceCommandList));
                     res.send(serviceCommandList);
                 });
                 
             }else if(req.params.id === '20'){    
                 // For Jenkins
-                masterUtil.getJenkins(req.params.id,function(jenkinList){
+                masterUtil.getJenkins(req.params.id,function(err,jenkinList){
+                    if(err){
+                        res.send(500,'Not able to fetch Jenkins.');
+                    }
                     logger.debug("Returned Jenkins List:>>>>> ",JSON.stringify(jenkinList));
                     res.send(jenkinList);
                 });
                 
             }else if(req.params.id === '6'){    
                 // For User Role
-                masterUtil.getUserRoles(loggedInUser,function(userRoleList){
+                masterUtil.getUserRoles(loggedInUser,function(err,userRoleList){
+                    if(err){
+                        res.send(500,'Not able to fetch UserRole.');
+                    }
                     logger.debug("Returned UserRole List:>>>>> ",JSON.stringify(userRoleList));
                     res.send(userRoleList);
                 });
                 
             }else if(req.params.id === '7'){    
                 // For User
-                masterUtil.getUsers(loggedInUser,function(userList){
+                masterUtil.getUsers(loggedInUser,function(err,userList){
+                    if(err){
+                        res.send(500,'Not able to fetch User.');
+                    }
                     logger.debug("Returned User List:>>>>> ",JSON.stringify(userList));
                     res.send(userList);
                 });
                 
             }else if(req.params.id === '21'){    
                 // For Team
-                masterUtil.getTeams(loggedInUser,function(teamList){
+                masterUtil.getTeams(loggedInUser,function(err,teamList){
+                    if(err){
+                        res.send(500,'Not able to fetch Team.');
+                    }
                     logger.debug("Returned Team List:>>>>> ",JSON.stringify(teamList));
                     res.send(teamList);
                 });
@@ -791,7 +827,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }else{
             // For non-catalystadmin
 
-            masterUtil.getOrgs(loggedInUser,function(orgList){
+            masterUtil.getOrgs(loggedInUser,function(err,orgList){
                 if(orgList){
                     logger.debug("Returned Org List: >>>>>> ",JSON.stringify(orgList));
                     res.send(orgList);
