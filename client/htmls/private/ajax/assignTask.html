@@ -69,11 +69,22 @@
             <div class="smart-form" style="margin-top:15px;margin-left:15px">
                 <label>
                     <img src="img/templateicons/Select-nodes---deployment.png">
-                    <strong>Cookbook Attributes (JSON) <span><button id="editAttributesBtn">Edit Attributes</button></span><span style="color:red" id="attrmessage"></span></strong>
+                    <strong>Cookbook Attributes <button id="editAttributesBtn">Edit</button><span style="color:red" id="attrmessage"></span></strong>
                 </label>
                 <div class="row">
                     <div class="col-lg-9">
-                        <textarea id="attrtextarea" style="width:100%" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));"> </textarea>
+                        <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
+                        <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                     <thead>
+                      <tr>
+                        <th>Attributes</th>
+                        <th>Values</th>
+                      </tr>
+                     </thead>
+                     <tbody class="attributesViewTableBody">
+
+                     </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -219,7 +230,7 @@
                     <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
                 </h4>
             </div>
-            <div class="modal-body no-padding jenkinsChefModal">
+            <div class="modal-body no-padding">
                 <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                 <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
                 <form  class="attributesEditFormArea" action="">
@@ -296,6 +307,7 @@ $(document).ready(function() {
             if(taskData.taskConfig.attributesjson != '' && taskData.taskConfig.attributesjson != null)
                 {
                     $('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
+                    createAttribTableRowFromJson(taskData.taskConfig.attributesjson);
                 }
            // $('#attrtextarea').setValue(JSON.stringify(taskData.taskConfig.attributesjson));
         }
@@ -569,32 +581,59 @@ $(document).ready(function() {
         return false;
     });
 
-    $('.saveAttribBtn').click(function(e){
+    function createAttribTableRowFromJson(attributeObj) {
+        var $table = $('#attributesViewListTable');
+        var $tbody = $table.find('tbody').empty();
+
+        function getVal(obj, currentKey) {
+            var keys = Object.keys(obj);
+            for (var i = 0; i < keys.length; i++) {
+                if (typeof obj[keys[i]] === 'object') {
+                    getVal(obj[keys[i]],currentKey+'/'+keys[i]);
+                } else {
+                    var $tr = $('<tr/>');
+                    var $tdAttributeKey = $('<td/>').html(currentKey+'/'+keys[i]);
+                    var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                    $tr.append($tdAttributeKey).append($tdAttributeVal);
+                    $tbody.append($tr);
+                }
+            }
+        }
+        getVal(attributeObj,'');
+    }
+
+    $('.saveAttribBtn').click(function(e) {
         var $modal = $('#editAttributesModalContainer');
         var $tbody = $modal.find('.attributesEditTableBody');
         var $input = $tbody.find('.attribValue');
-
         var attributeObj = {};
-        $input.each(function(){
+        $input.each(function() {
             var $this = $(this);
             var attributeName = $this.attr('data-attribName');
             var attribValue = $this.val();
-            var lastReference = null;
-            if(attribValue) {
+            if (attribValue) {
                 var attribPathParts = attributeName.split('/');
-                for(var i=0;i<attribPathParts.length;i++) {
-                    var key = attribPathParts[i];
-
-                    if(!attributeObj[key]) {
-                        attributeObj[key] = {};
+                var currentObj = attributeObj;
+                for (var i = 0; i < attribPathParts.length; i++) {
+                    if (!currentObj[attribPathParts[i]]) {
+                        if (i === attribPathParts.length - 1) {
+                            currentObj[attribPathParts[i]] = attribValue;
+                        } else {
+                            currentObj[attribPathParts[i]] = {};
+                        }
                     }
-                    lastReference = attributeObj[key];
+                    currentObj = currentObj[attribPathParts[i]];
                 }
-            } 
+            }
         });
-
-
+        console.log('attributeObj ==>',JSON.stringify(attributeObj));
+        $('#attrtextarea').text(JSON.stringify(attributeObj));
+        createAttribTableRowFromJson(attributeObj);
+        $modal.modal('hide');
+   
     });
+
+
 
     $("#Jenkins-dropdown").hide();
     $("#Custom-dropdown").hide();
