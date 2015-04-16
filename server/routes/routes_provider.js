@@ -174,6 +174,14 @@ if(typeof providerType === 'undefined' || providerType.length === 0){
     return;
 }
 
+var region;
+    if(typeof req.body.region === 'string'){
+      logger.debug("inside single region: ",req.body.region);
+      region = req.body.region;
+    }else{
+      region = req.body.region[0];
+    }
+    logger.debug("Final Region:  ",region)
 var providerData= {
     id: 9,
     accessKey: accessKey,
@@ -185,7 +193,7 @@ logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
 var ec2 = new EC2({
            "access_key": accessKey,
            "secret_key": secretKey,
-           "region"    : req.body.region
+           "region"    : region
         });
 
         ec2.describeKeyPairs(function(err,data){
