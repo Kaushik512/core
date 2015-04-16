@@ -69,7 +69,7 @@
             <div class="smart-form" style="margin-top:15px;margin-left:15px">
                 <label>
                     <img src="img/templateicons/Select-nodes---deployment.png">
-                    <strong>Cookbook Attributes (JSON) <span style="color:red" id="attrmessage"></span></strong>
+                    <strong>Cookbook Attributes (JSON) <span><button id="editAttributesBtn">Edit Attributes</button></span><span style="color:red" id="attrmessage"></span></strong>
                 </label>
                 <div class="row">
                     <div class="col-lg-9">
@@ -206,6 +206,45 @@
             </div>
         </div>
 </div>
+
+<!--execute modal-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="editAttributesModalContainer" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
+                </h4>
+            </div>
+            <div class="modal-body no-padding jenkinsChefModal">
+                <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
+                <form  class="attributesEditFormArea" action="">
+                    <table id="attributesEditListArea" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                     <thead>
+                      <tr>
+                        <th>Attributes</th>
+                        <th>Values</th>
+                      </tr>
+                     </thead>
+                     <tbody class="attributesEditTableBody">
+
+                     </tbody>
+                    </table>
+                    
+                </form>
+            </div>
+           <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary saveAttribBtn">Save</button>
+      </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
+
 <script type="text/javascript">
 
 
@@ -398,11 +437,8 @@ $(document).ready(function() {
                 alert('Please choose nodes');
                 return;
             }
-            var $selectedRunlist = $('.deploymentSelectedRunList input');
-            var runlist = [];
-            $selectedRunlist.each(function() {
-                runlist.push(this.value);
-            });
+            var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+            
 
             if (!runlist.length) {
                 alert('Please choose runlist');
@@ -465,6 +501,101 @@ $(document).ready(function() {
 
     });
 
+    $('#editAttributesBtn').click(function(e){
+        var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+        if(!runlist.length) {
+           alert('Please choose a runlist first');
+           return false;
+        }
+        var $modal = $('#editAttributesModalContainer');
+        $modal.find('.attributesEditFormArea').hide();
+        $modal.find('.errorMsgContainer').hide();
+        $modal.find('.loadingContainer').show();
+        $modal.modal('show');
+        
+        var reqBody = {
+            cookbooks: [],
+            roles: []
+        }
+        for (var i = 0; i < runlist.length; i++) {
+           
+            if (runlist[i].indexOf('recipe') === 0) {
+                className = 'cookbook';
+            } else {
+                className = 'roles';
+            }
+            var name = '';
+            var item = runlist[i];
+            var indexOfBracketOpen = item.indexOf('[');
+            if (indexOfBracketOpen != -1) {
+                var indexOfBracketClose = item.indexOf(']');
+                if (indexOfBracketClose != -1) {
+                    name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+                }
+            }
+            if (runlist[i].indexOf('recipe') === 0) {
+                reqBody.cookbooks.push(name);
+            } else {
+                reqBody.roles.push(name);
+            }
+          
+        }
+        var chefServerId = $chefCookbookRoleSelector.getChefServerId();
+        $.post('../chef/servers/' + chefServerId + '/attributes', reqBody, function(attributesList) {
+            //var dataTable = $('#attributesEditListArea').DataTable();
+            //dataTable.clear();
+            var $tbody = $modal.find('.attributesEditTableBody');
+            $tbody.empty();
+            for (var i = 0; i < attributesList.length; i++) {
+                var attributesNamesList = Object.keys(attributesList[i].attributes);
+                for (var j = 0; j < attributesNamesList.length;j++) {
+                    var $tr = $('<tr/>');
+                    var $tdAttribName = $('<td/>').html(attributesNamesList[j]);
+                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribName="'+attributesNamesList[j]+'"/>');
+                    $tr.append($tdAttribName).append($tdAttribEditor);
+                    //dataTable.row.add($tr).draw();
+                    $tbody.append($tr)
+                }
+            }
+            $modal.find('.errorMsgContainer').hide();
+            $modal.find('.loadingContainer').hide();
+            $modal.find('.attributesEditFormArea').show();
+            
+        }).fail(function(e){
+            $modal.find('.errorMsgContainer').html('Unable to fetch attributes. Please try again later').show();
+            $modal.find('.loadingContainer').hide();
+            $modal.find('.attributesEditFormArea').hide();
+        });
+        return false;
+    });
+
+    $('.saveAttribBtn').click(function(e){
+        var $modal = $('#editAttributesModalContainer');
+        var $tbody = $modal.find('.attributesEditTableBody');
+        var $input = $tbody.find('.attribValue');
+
+        var attributeObj = {};
+        $input.each(function(){
+            var $this = $(this);
+            var attributeName = $this.attr('data-attribName');
+            var attribValue = $this.val();
+            var lastReference = null;
+            if(attribValue) {
+                var attribPathParts = attributeName.split('/');
+                for(var i=0;i<attribPathParts.length;i++) {
+                    var key = attribPathParts[i];
+
+                    if(!attributeObj[key]) {
+                        attributeObj[key] = {};
+                    }
+                    lastReference = attributeObj[key];
+                }
+            } 
+        });
+
+
+    });
+
     $("#Jenkins-dropdown").hide();
     $("#Custom-dropdown").hide();
 
@@ -484,8 +615,18 @@ $(document).ready(function() {
         }
     });
 
-    
+    /*if (!$.fn.dataTable.isDataTable('#attributesEditListArea')) {
+        //var $taskListArea = $('.taskListArea').empty();
+        $taskDatatable = $('#attributesEditListArea').DataTable({
+            "pagingType": "full_numbers",
+            "aoColumns": [
+                null, {
+                    "bSortable": false
+                }
+            ]
 
+        });
+    }*/
 
 });
 

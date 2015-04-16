@@ -561,7 +561,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    app.get('/chef/servers/:serverId/cookbooks/:cookbookName/create', function(req, res) {
+    app.post('/chef/servers/:serverId/attributes', function(req, res) {
+
+        if (!((req.body.cookbooks && req.body.cookbooks.length) || (req.body.roles && req.body.roles.length))) {
+            res.send(400, {
+                message: "Invalid cookbooks or roles"
+            });
+            return;
+        }
 
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
@@ -579,15 +586,20 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
+            if (req.body.cookbooks && req.body.cookbooks.length) {
+                chef.getCookbookAttributes(req.body.cookbooks, function(err, attributesList) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    } else {
+                        res.send(attributesList);
+                    }
+                });
+            } else {
+                // get roles attributes
+                res.send([]);
+            }
 
-            chef.getCookbookAttributes(['starter','apache2'], function(err, attributes) {
-                if (err) {
-                    res.send(500);
-                    return;
-                } else {
-                    res.send(attributes);
-                }
-            });
 
 
         });

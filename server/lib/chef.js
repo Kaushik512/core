@@ -240,7 +240,7 @@ var Chef = function(settings) {
                     return;
                 }
                 console.log("chef status ", chefRes.statusCode);
-                console.log(chefResBody);
+               
                 if (chefRes.statusCode === 200) {
                     callback(null, chefResBody);
                 } else {
@@ -798,128 +798,32 @@ var Chef = function(settings) {
 
     this.getCookbookAttributes = function(cookbooksList, callback) {
 
-        console.log('get attribute called ==>');
-
-        var cookbookDir = appConfig.chef.cookbooksDir;
-        console.log("cookbookDir ==> " + cookbookDir);
-
-        var chefSoloConfigFile = appConfig.tempDir + 'chefSoloConfigFile-' + new Date().getTime() + '.rb';
-        var jsonAttributesInputFile = appConfig.tempDir + 'jsonAttributesFile-' + new Date().getTime() + '.json';
-        var jsonAttributeOutputFile = appConfig.tempDir + 'jsonAttributesOutputFile-' + new Date().getTime() + '.json';
-        var tempCookbookName = 'attributeFetchTempCookbook-' + new Date().getTime();
-
         var self = this;
         var cookbooksListNew = [];
         var count = 0;
+        var attributesList = [];
 
-        function removeTempFiles() {
-            // fileIo.removeFile(chefSoloConfigFile);
-            // fileIo.removeFile(jsonAttributesInputFile);
-            // fileIo.removeFile(jsonAttributeOutputFile);
-        }
-
-        function runChefSolo(runlist) {
-
-            var chefSoloConfigFileContent = 'cookbook_path \\\"' + cookbookDir + '\\\"'
-
-            // var jsonAttributesInputFileContent = JSON.stringify({
-            //     attribute_filepath: jsonAttributeOutputFile
-            // });
-            var jsonAttributesInputFileContent = '{\\\"attribute_filepath\\\":\\\"' + jsonAttributeOutputFile + '\\\"}';
-
-            var jsonAttributesInputFileContent = '{\\\"default\\\":{\\\"attribute_filepath\\\":\\\"' + jsonAttributeOutputFile + '\\\"}}';
-
-            var chefSoloOptions = {
-                cwd: settings.userChefRepoLocation,
-                onError: function(err) {
-                    removeTempFiles();
-                    callback(err, null);
-                },
-                onClose: function(code) {
-                    console.log(code);
-                    if (code === 0) {
-                        fileIo.readFile(jsonAttributeOutputFile, function(err, jsonAttributes) {
-                            removeTempFiles();
-                            if (err) {
-                                callback(err, null);
-                                return;
-                            }
-                            var cookbookAttribs = JSON.parse(jsonAttributes);
-                            callback(null, cookbookAttribs);
-                        });
-                    } else {
-                        removeTempFiles();
-                        callback({
-                            errCode: code,
-                            message: "Unable to run chef-solo process"
-                        }, null);
-                    }
-
-                },
-                onStdOut: function(outData) {
-                    console.log(outData);
-                },
-                onStdErr: function(outData) {
-                    console.log("err ==> " + outData);
-                }
-            };
-            var cmd = 'echo "' + jsonAttributesInputFileContent + '" > ' + jsonAttributesInputFile + ' && echo "' + chefSoloConfigFileContent + '" > ' + chefSoloConfigFile;
-            cmd += ' && chef-solo -c ' + chefSoloConfigFile + ' -j ' + jsonAttributesInputFile + ' -o recipe[' + tempCookbookName + '],recipe[' + appConfig.chef.attributeExtractorCookbookName + ']';
-            logger.debug('chef-solo cmd ==> ', cmd);
-            var procChefSolo = new Process(cmd, [], chefSoloOptions);
-            procChefSolo.start();
-
-        }
-
-        function createCookbook() {
-            // creating temp cookbook
-            self.createCookbook(tempCookbookName, cookbookDir, function(err) {
-                if (err) {
-                    callback(err, null);
-                    return;
-                }
-                var dependecyDataToAppend = '';
-                for (var i = 0; i < cookbooksListNew.length; i++) {
-                    dependecyDataToAppend = dependecyDataToAppend + "\ndepends '" + cookbooksListNew[i] + "'";
-                    console.log(dependecyDataToAppend);
-                }
-                fileIo.appendToFile(cookbookDir + tempCookbookName + '/metadata.rb', dependecyDataToAppend, function(err) {
-                    if (err) {
-                        callback(err, null);
-                        return;
-                    }
-                    runChefSolo();
-                });
-            });
-        }
-
-        function downloadCookbooks(cookbookName) {
-            console.log('downloadCookbook called');
-            self.downloadCookbook(cookbookName, cookbookDir, function(err) {
+        function getCookbook(cookbookName) {
+            self.getCookbook(cookbookName, function(err, cookbookData) {
                 count++;
                 if (err) {
                     callback(err, null);
                     return;
                 }
-                self.getCookbook(cookbookName, function(err, cookbookData) {
-                    if (err) {
-                        callback(err, null);
-                        return;
-                    }
-                    cookbooksListNew.push(cookbookData.name);
-                    console.log('count ==> ', count, " length==> ", cookbooksList.length);
-                    if (count < cookbooksList.length) {
-                        downloadCookbooks(cookbooksList[count]);
-                    } else {
-                        console.log('creating temp cookbook');
-                        createCookbook();
-                    }
-                });
-
+                var attributeObj = {
+                    cookbookName: cookbookName,
+                    attributes: cookbookData.metadata.attributes
+                };
+                attributesList.push(attributeObj);
+                if (count < cookbooksList.length) {
+                    getCookbook(cookbooksList[count]);
+                } else {
+                    callback(null, attributesList);
+                }
             });
         }
 
-        downloadCookbooks(cookbooksList[count]);
+        getCookbook(cookbooksList[count]);
     };
 
 }
