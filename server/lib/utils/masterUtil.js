@@ -17,6 +17,9 @@ var MasterUtil = function(){
                             d4dModelNew.d4dModelMastersProjects.find({
                                 projectname : teams[i].projectname
                             },function(err,projects){
+                                if(err){
+                                    callback(err,null);
+                                }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
                                     for(var j =0; j< projects.length; j++){
@@ -24,6 +27,9 @@ var MasterUtil = function(){
                                             d4dModelNew.d4dModelMastersOrg.find({
                                             orgname : projects[j].orgname
                                             },function(err,orgs){
+                                                if(err){
+                                                    callback(err,null);
+                                                }
                                             if(orgs){
                                                 for(var x = 0; x< orgs.length; x++){
                                                     if(orgs[x].id ==='1'){
@@ -31,7 +37,8 @@ var MasterUtil = function(){
                                                     orgList.push(orgs[x]);
                                                   }
                                                 }
-                                                 callback(orgList);
+                                                logger.debug("callback fire..");
+                                                 callback(null,orgList);
                                               }
 
                                             });
@@ -42,6 +49,9 @@ var MasterUtil = function(){
                             });
                         }
                     }
+                   // callback(null,orgList);
+                }else{
+                    callback(err,null);
                 }
 
             });
@@ -76,7 +86,7 @@ var MasterUtil = function(){
                                                     productGroupList.push(productGroups[x]);
                                                   }
                                                 }
-                                                 callback(productGroupList);
+                                                 callback(null,productGroupList);
                                               }
 
                                             });
@@ -87,6 +97,8 @@ var MasterUtil = function(){
                             });
                         }
                     }
+                }else{
+                    callback(err,null);
                 }
 
             });
@@ -121,7 +133,7 @@ var MasterUtil = function(){
                                                     envList.push(envs[x]);
                                                   }
                                                 }
-                                                 callback(envList);
+                                                 callback(null,envList);
                                               }
 
                                             });
@@ -132,6 +144,8 @@ var MasterUtil = function(){
                             });
                         }
                     }
+                }else{
+                    callback(err,null);
                 }
 
             });
@@ -159,12 +173,14 @@ var MasterUtil = function(){
                                             projectList.push(projects[j]);
                                         }
                                     }
-                                    callback(projectList);
+                                    callback(null,projectList);
                                 }
 
                             });
                         }
                     }
+                }else{
+                    callback(err,null);
                 }
 
             });
@@ -182,7 +198,9 @@ var MasterUtil = function(){
                         congifMgmtList.push(configMgmt[i]);
                     }
                 }
-                callback(congifMgmtList);
+                callback(null,congifMgmtList);
+            }else{
+                callback(err,null);
             }
         });
     }
@@ -200,7 +218,9 @@ var MasterUtil = function(){
                         dockerList.push(dockers[i]);
                     }
                 }
-                callback(dockerList);
+                callback(null,dockerList);
+            }else{
+                callback(err,null);
             }
 
         });
@@ -219,7 +239,9 @@ var MasterUtil = function(){
                         templateList.push(templates[i]);
                     }
                 }
-                callback(templateList);
+                callback(null,templateList);
+            }else{
+                callback(err,null);
             }
 
         });
@@ -237,7 +259,9 @@ var MasterUtil = function(){
                         serviceCommandList.push(serviceCommands[i]);
                     }
                 }
-                callback(serviceCommandList);
+                callback(null,serviceCommandList);
+            }else{
+                callback(err,null);
             }
 
         });
@@ -255,7 +279,9 @@ var MasterUtil = function(){
                         jenkinList.push(jenkins[i]);
                     }
                 }
-                callback(jenkinList);
+                callback(null,jenkinList);
+            }else{
+                callback(err,null);
             }
 
         });
@@ -279,12 +305,14 @@ var MasterUtil = function(){
                                         userRoleList.push(userRoles[j]);
                                     }
                                 }
-                                 callback(userRoleList);
+                                 callback(null,userRoleList);
                             }
 
                         });
                     }
                 }
+            }else{
+                callback(err,null);
             }
 
         });
@@ -302,7 +330,9 @@ var MasterUtil = function(){
                         userList.push(users[i]);
                     }
                 }
-                callback(userList);
+                callback(null,userList);
+            }else{
+                callback(err,null);
             }
 
         });
@@ -319,7 +349,9 @@ var MasterUtil = function(){
                         teamList.push(teams[i]);
                     }
                 }
-                callback(teamList);
+                callback(null,teamList);
+            }else{
+                callback(err,null);
             }
         });
     }
