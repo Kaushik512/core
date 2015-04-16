@@ -1023,7 +1023,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if(teams){
                     logger.debug("Team size: ",teams.length);
                     logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i =0; i< teams.length; i++){
+                    for(var i1 =0; i1< teams.length; i1++){
+                        (function(i){
                         if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
                             logger.debug("Only Team: ",JSON.stringify(teams[i]));
                             d4dModelNew.d4dModelMastersProjects.find({
@@ -1031,30 +1032,36 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             },function(err,projects){
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j =0; j< projects.length; j++){
+                                    for(var j1 =0; j1< projects.length; j1++){
+                                        (function(j){
                                         if(projects[j].id === '4'){
                                             d4dModelNew.d4dModelMastersOrg.find({
                                             orgname : projects[j].orgname
                                             },function(err,orgs){
                                             if(orgs){
-                                                for(var x = 0; x< orgs.length; x++){
+                                                for(var x1 = 0; x1< orgs.length; x1++){
+                                                    (function(x){
                                                     if(orgs[x].id ==='1'){
                                                 logger.debug("Returned Org: >>>>>>> ",JSON.stringify(orgs));
                                                 d4dModelNew.d4dModelMastersEnvironments.find({
                                                 orgname : orgs[x].orgname
                                                 },function(err,envs){
                                                     if(envs){
-                                                        for(var y =0; y< envs.length; y++){
+                                                        for(var y1 =0; y1< envs.length; y1++){
+                                                            (function(y){
                                                             if(envs[y].id === '3'){
                                                                 envCount += 1;
                                                             }
+                                                        })(y1);
                                                         }
                                                     }
 
                                                     });
                                                   }
+                                              })(x1);
                                                 }
-                                                for(var k =0; k<orgs.length; k++){
+                                                for(var k1 =0; k1<orgs.length; k1++){
+                                                    (function(k){
                                                     switch(orgs[k].id){
                                                         case '1' : orgCount += 1;
                                                                     break;
@@ -1065,7 +1072,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         default : '';
                                                                             
                                                      }
-
+                                                 })(k1);
                                                  }
                                                  logger.debug("All values:  ",orgCount,bgCount,envCount,projectCount);
                                                  ret.push({"2":bgCount});
@@ -1080,11 +1087,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                             });
                                         }
+                                    })(j1);
                                     }
                                 }
 
                             });
+                            //
                         }
+                    })(i1);
                     }
                 }
 

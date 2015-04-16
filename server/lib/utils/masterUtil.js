@@ -11,7 +11,8 @@ var MasterUtil = function(){
                 if(teams){
                     logger.debug("Team size: ",teams.length);
                     logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i =0; i< teams.length; i++){
+                    for(var i1 =0; i1< teams.length; i1++){
+                        (function(i){
                         if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
                             logger.debug("Only Team: ",JSON.stringify(teams[i]));
                             d4dModelNew.d4dModelMastersProjects.find({
@@ -22,7 +23,8 @@ var MasterUtil = function(){
                                 }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j =0; j< projects.length; j++){
+                                    for(var j1 =0; j1< projects.length; j1++){
+                                        (function(j){
                                         if(projects[j].id === '4'){
                                             d4dModelNew.d4dModelMastersOrg.find({
                                             orgname : projects[j].orgname
@@ -31,11 +33,13 @@ var MasterUtil = function(){
                                                     callback(err,null);
                                                 }
                                             if(orgs){
-                                                for(var x = 0; x< orgs.length; x++){
+                                                for(var x1 = 0; x1< orgs.length; x1++){
+                                                    (function(x){
                                                     if(orgs[x].id ==='1'){
                                                 logger.debug("Returned Org: >>>>>>> ",JSON.stringify(orgs[x]));
                                                     orgList.push(orgs[x]);
                                                   }
+                                              })(x1);
                                                 }
                                                 logger.debug("callback fire..");
                                                  callback(null,orgList);
@@ -43,11 +47,13 @@ var MasterUtil = function(){
 
                                             });
                                         }
+                                    })(j1);
                                     }
                                 }
 
                             });
                         }
+                    })(i1);
                     }
                    // callback(null,orgList);
                 }else{
@@ -66,7 +72,8 @@ var MasterUtil = function(){
                 if(teams){
                     logger.debug("Team size: ",teams.length);
                     logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i =0; i< teams.length; i++){
+                    for(var i1 =0; i1< teams.length; i1++){
+                        (function(i){
                         if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
                             logger.debug("Only Team: ",JSON.stringify(teams[i]));
                             d4dModelNew.d4dModelMastersProjects.find({
@@ -77,7 +84,8 @@ var MasterUtil = function(){
                                      }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j =0; j< projects.length; j++){
+                                    for(var j1 =0; j1< projects.length; j1++){
+                                        (function(j){
                                         if(projects[j].id === '4'){
                                             d4dModelNew.d4dModelMastersProductGroup.find({
                                             productgroupname : projects[j].productgroupname
@@ -86,22 +94,26 @@ var MasterUtil = function(){
                                                     callback(err,null);
                                                     }
                                             if(productGroups){
-                                                for(var x = 0; x< productGroups.length; x++){
+                                                for(var x1 = 0; x1< productGroups.length; x1++){
+                                                    (function(x){
                                                     if(productGroups[x].id ==='2'){
                                                 logger.debug("Returned BG: >>>>>>> ",JSON.stringify(productGroups[x]));
                                                     productGroupList.push(productGroups[x]);
                                                   }
+                                              })(x1);
                                                 }
                                                  callback(null,productGroupList);
                                               }
 
                                             });
                                         }
+                                    })(j1);
                                     }
                                 }
 
                             });
                         }
+                    })(i1);
                     }
                 }else{
                     callback(err,null);
@@ -119,7 +131,8 @@ var MasterUtil = function(){
                 if(teams){
                     logger.debug("Team size: ",teams.length);
                     logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i =0; i< teams.length; i++){
+                    for(var i1 =0; i1< teams.length; i1++){
+                        (function(i){
                         if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
                             logger.debug("Only Team: ",JSON.stringify(teams[i]));
                             d4dModelNew.d4dModelMastersProjects.find({
@@ -130,7 +143,8 @@ var MasterUtil = function(){
                                         }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j =0; j< projects.length; j++){
+                                    for(var j1 =0; j1< projects.length; j1++){
+                                        (function(j){
                                         if(projects[j].id === '4'){
                                             d4dModelNew.d4dModelMastersEnvironments.find({
                                             environmentname : projects[j].environmentname
@@ -139,22 +153,26 @@ var MasterUtil = function(){
                                                     callback(err,null);
                                                  }
                                             if(envs){
-                                                for(var x = 0; x< envs.length; x++){
+                                                for(var x1 = 0; x1< envs.length; x1++){
+                                                    (function(x){
                                                     if(envs[x].id ==='3'){
                                                     logger.debug("Returned Env: >>>>>>> ",JSON.stringify(envs[x]));
                                                     envList.push(envs[x]);
                                                   }
+                                              })(x1);
                                                 }
                                                  callback(null,envList);
                                               }
 
                                             });
                                         }
+                                    })(j1);
                                     }
                                 }
 
                             });
                         }
+                    })(i1);
                     }
                 }else{
                     callback(err,null);
@@ -172,7 +190,8 @@ var MasterUtil = function(){
                 if(teams){
                     logger.debug("Team size: ",teams.length);
                     logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i =0; i< teams.length; i++){
+                    for(var i1 =0; i1< teams.length; i1++){
+                        (function(i){
                         if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
                             logger.debug("Only Team: ",JSON.stringify(teams[i]));
                             d4dModelNew.d4dModelMastersProjects.find({
@@ -183,16 +202,19 @@ var MasterUtil = function(){
                                         }
                                 if(projects){
                                     logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j =0; j< projects.length; j++){
+                                    for(var j1 =0; j1< projects.length; j1++){
+                                        (function(j){
                                         if(projects[j].id === '4'){
                                             projectList.push(projects[j]);
                                         }
+                                    })(j1);
                                     }
                                     callback(null,projectList);
                                 }
 
                             });
                         }
+                    })(i1);
                     }
                 }else{
                     callback(err,null);
@@ -309,7 +331,8 @@ var MasterUtil = function(){
             loginname : loggedInUser
         },function(err,users){
             if(users){
-                for(var i =0; i< users.length; i++){
+                for(var i1 =0; i1< users.length; i1++){
+                    (function(i){
                     if(users[i].id === '7'){
                         d4dModelNew.d4dModelMastersUserroles.find({
                             userrolename : users[i].userrolename
@@ -318,16 +341,19 @@ var MasterUtil = function(){
                                     callback(err,null);
                                     }
                             if(userRoles){
-                                for(var j=0; j< userRoles.length; j++){
+                                for(var j1=0; j1< userRoles.length; j1++){
+                                    (function(j){
                                     if(userRoles[j].id === '6'){
                                         userRoleList.push(userRoles[j]);
                                     }
+                                })(j1);
                                 }
                                  callback(null,userRoleList);
                             }
 
                         });
                     }
+                })(i1);
                 }
             }else{
                 callback(err,null);
