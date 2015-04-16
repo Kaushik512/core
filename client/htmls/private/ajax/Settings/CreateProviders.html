@@ -142,9 +142,19 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
   },
   initializeSelect2:function(){
     $('select').select2();
+  },
+  initializeRegionlist:function(){
+    $('select.region').off('change').on('change',checkForKeyPair).select2();
+  },
+  emptyRegion:function(){
+    $('select.region').val('').select2().trigger('change');
+  },
+  emptyKeyPairs:function(){
+     $('select.keyvalue').html('<option value="">Choose Any Key Pair</option>').select2();
+  },
+  triggerRegionChange:function(){
   }
 };
-
 
 function bindChange_importPemFile() {
   $('input[type="file"]').off('change').on('change',function() {
@@ -173,16 +183,29 @@ function removeLoader(){
   $("form[id*='myForm']").find("div.pull-right > input").removeAttr('disabled');
 }
 
-function checkForKeyPair(){
 
-	
-  function loadKeyPair(accessKey,secretKey,region){
 
+function KeyChangeHandler(e){  
+   var accessKey=$('#accessKey').val().trim(),
+  secretKey=$('#secretKey').val().trim();
+ 
+  if(accessKey && secretKey){
+    $('select.region').trigger('change');
+  }else{
+  UtilityMethods.emptyRegion();
+  UtilityMethods.emptyKeyPairs();
+}
+}
+
+
+function checkForKeyPair(e){
+debugger;
+  function loadKeyPair(accessKey,secretKey,regionValue){
     appendLoader();
     var data1=new FormData();
     data1.append('accessKey',accessKey);
     data1.append('secretKey',secretKey);
-    data1.append('region',region);
+    data1.append('region',regionValue);
     $.ajax({
       method: "POST",
       url: "/aws/providers/keypairs/list",
@@ -190,8 +213,9 @@ function checkForKeyPair(){
       processData: false,
       contentType:false,
       error:function(XMLHttpRequest, textStatus, errorThrown) {
-    	$('.modal-dialog').find('.close').trigger('click');
+      $('.modal-dialog').find('.close').trigger('click');
         bootbox.alert(XMLHttpRequest.responseText);
+        $region.parents('.addNewRegion').find('select.keyvalue').html('<option value=""> Select Keypair</option>').val("").select2();
         removeLoader();
       } 
     }).done(function( msg ) {
@@ -199,7 +223,8 @@ function checkForKeyPair(){
       for(var i=0;i<len;i++){
         str=str+'<option value="'+val[i].KeyName+'">'+val[i].KeyName+'</option>';
       }
-      $('select.keyvalue').html(str).val('').each(function(){
+      $region.parents('.addNewRegion').find('select.keyvalue').html(str).val('').select2().each(function(){
+        console.log($(this).attr('answer'));
         $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
       });
       $('#btnsubmit').removeAttr('disabled');
@@ -207,10 +232,10 @@ function checkForKeyPair(){
     });
   }
 
-
   var accessKey=$('#accessKey').val(),
   secretKey=$('#secretKey').val(),
-  region=$('select.region').val();
+  $region=$(this);
+  region=$region.val();
   if(accessKey && secretKey && accessKey!=='' && secretKey!=='' && region && region!==''){
     loadKeyPair(accessKey,secretKey,region);
   }else{
@@ -227,29 +252,36 @@ function setValues(data){
   for(var i=0;i<data.keyPairs.length;i++){
     if(i==0){
       $('#appender').append(createTemplateInstance.getFinalTemplate(true));
-      $('select.region').attr('answer',data.keyPairs[0].region).val(data.keyPairs[0].region).attr('disabled','disabled').select2();
-      $('select.keyvalue').val(data.keyPairs[0].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[0].keyPairName).select2();
-      $('.filename').attr('disabled','disabled').val(data.keyPairs[0].fileName).removeAttr('cat-validation');
-      $('input.file').attr('disabled','disabled').removeAttr('cat-validation');
     }else{
       $('#appender').append(createTemplateInstance.getFinalTemplate(false));
     }
+
   }
-  $('select.region').change(checkForKeyPair);
+
+  var parentList=$('.addNewRegion');
+ $('select.region').on('change',checkForKeyPair);
+for(var i=0;i<data.keyPairs.length;i++){
+  parentList.eq(i).find('select.region').attr('answer',data.keyPairs[i].region).val(data.keyPairs[i].region).attr('disabled','disabled').select2();
+
+  parentList.eq(i).find('select.keyvalue').val(data.keyPairs[i].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[i].keyPairName).select2();
+  parentList.eq(i).find('.filename').attr('disabled','disabled').val(data.keyPairs[i].fileName).removeAttr('cat-validation');
+parentList.eq(i).find('input.file').attr('disabled','disabled').removeAttr('cat-validation');
+} 
   getRegionList();      
 }
-$(document).ready(function () {
-  $("#name").focus();
-  $('#accessKey').blur(checkForKeyPair);
-  $('#secretKey').blur(checkForKeyPair);
 
+
+
+$(document).ready(function (){
+  $("#name").focus();
+  $('#accessKey').blur(KeyChangeHandler);
+  $('#secretKey').blur(KeyChangeHandler);
  $('#myForm54').ajaxForm( {
     beforeSubmit: function(arr, $form, options) {
     // The array of form data takes the following form: 
     // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
 
-    // return false to cancel submit  
-     
+    // return false to cancel submit       
     if(isFormValid()){
      appendLoader();  
      return true;
@@ -263,7 +295,6 @@ success: function(data, success) {
                 if ($('#btncancel').length){
                   $('#btncancel').click(); 
                 }                
-
               }
               else{
                alert(data.toString());
@@ -298,7 +329,7 @@ success: function(data, success) {
       data= typeof data=="string" ?JSON.parse(data):data;
       d4ddata=data;
       setValues(data);
-      checkForKeyPair();
+      //checkForKeyPair();
     },
     error: function(jqxhr) {
       removeLoader();
@@ -317,10 +348,16 @@ function getRegionList(){
 		for(var i=0;i<data.length;i++){
 			str=str+'<option value="'+data[i].region+'">'+data[i].region_name+' | '+data[i].region+'</option>'
 			}
+       UtilityMethods.initializeRegionlist();
 		$('select.region').html(str).each(function(){
 			   $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
+           if($(this).attr('disabled')){
+      $(this).trigger('change');
+    }
 			});	
-		$('select.region').trigger('change');	
+
+  
+		//$('select.region').trigger('change');	
 		});	
 }
 
