@@ -10,7 +10,8 @@
 require 'json'
 filepath = node['attribute_filepath']
 node.default_attrs.delete(:attribute_filepath)
-
+node.normal_attrs.delete(:attribute_filepath)
+node.normal_attrs.delete(:tags)
 content = node.attributes.default
 content.merge!(node.attributes.normal)
 content.merge!(node.attributes.override)
