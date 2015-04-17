@@ -208,7 +208,7 @@ AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(
             res.send(500, errorResponses.db.error);
             return;
         }
-      AWSKeyPair.createNew(req,provider._id,function(err,keyPair){  
+      AWSKeyPair.createNew(req,providerId,function(err,keyPair){  
         if (updateCount) {
          logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
          res.send({
@@ -275,7 +275,8 @@ app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
             res.send(500, errorResponses.db.error);
             return;
         }
-        if (aBluePrint) {
+        logger.debug("BluePrints:>>>>> ",JSON.stringify(aBluePrint));
+        if (aBluePrint.length) {
             res.send(403,"KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
             return;
         }else{
@@ -285,7 +286,7 @@ app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
                      res.send(500, errorResponses.db.error);
                      return;
                  }
-                 if (anInstance) {
+                 if (anInstance.length) {
                   res.send(403,"KeyPair is already used by Instance.");
               } else {
                   AWSKeyPair.removeAWSKeyPairById(keyPairId,function(err,deleteCount){  

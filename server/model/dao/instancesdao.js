@@ -995,7 +995,7 @@ var InstancesDao = function() {
     };
 
     this.getInstanceByKeyPairId = function(keyPairId, callback) {
-        logger.debug("Enter getInstanceByKeyPairId (%s)", blueprintId);
+        logger.debug("Enter getInstanceByKeyPairId (%s)", keyPairId);
 
         Instances.find({
             "keyPairId": keyPairId
