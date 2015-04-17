@@ -120,8 +120,8 @@ var InstanceSchema = new Schema({
     chefNodeName: String,
     runlist: [{
         type: String,
-        trim: true,
-        validate: schemaValidator.recipeValidator
+        trim: true
+        //validate: schemaValidator.recipeValidator
     }],
     platformId: String,
     instanceIP: {
