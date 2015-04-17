@@ -853,7 +853,13 @@ function getImageInstances(){
 
   });
 }
-
+var regionList;
+function getCompleteRegionList(){
+  $.get('/vmimages/regions/list',function(data){
+  regionList=data;
+    }); 
+}
+getCompleteRegionList();
 function getSecurityGroup(){
 
   function populateData(){
@@ -896,6 +902,13 @@ $('#vpcId').on('change',populateData);
 }
 
 function getkeypairList(){
+	function getRegionName(regionValue){
+		for(var i=0;i<regionList.length;i++){
+			if(regionList[i].region.toLowerCase()==regionValue.toLowerCase()){
+				return regionList[i].region_name;
+			}
+		}
+	}
   $('#providerId').on('change',function(){
 
     var key=$(this).val();
@@ -912,7 +925,7 @@ function getkeypairList(){
         /*bring Region list from providers*/
         var str1='<option value="">Select Region</option>';
         for(var i=0;i<keylist.length;i++){
-          str1=str1+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
+          str1=str1+'<option value="'+keylist[i].region+'">'+getRegionName(keylist[i].region)+' | '+keylist[i].region+'</option>';
         }
         $('#region').html(str1).select2();
 

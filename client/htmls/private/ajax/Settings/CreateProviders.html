@@ -261,7 +261,7 @@ function setValues(data){
   var parentList=$('.addNewRegion');
  $('select.region').on('change',checkForKeyPair);
 for(var i=0;i<data.keyPairs.length;i++){
-  parentList.eq(i).find('select.region').attr('answer',data.keyPairs[i].region).val(data.keyPairs[i].region).attr('disabled','disabled').select2();
+  parentList.eq(i).find('select.region').attr('answer',data.keyPairs[i].region).attr('disabled','disabled').select2();
 
   parentList.eq(i).find('select.keyvalue').val(data.keyPairs[i].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[i].keyPairName).select2();
   parentList.eq(i).find('.filename').attr('disabled','disabled').val(data.keyPairs[i].fileName).removeAttr('cat-validation');
@@ -355,6 +355,7 @@ function getRegionList(){
         $(this).html(str);
       }
     }).each(function(){
+      debugger;
     $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
     if($(this).attr('disabled')){
       $(this).trigger('change');
