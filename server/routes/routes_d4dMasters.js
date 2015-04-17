@@ -1079,7 +1079,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                  ret.push({"3":envCount});
                                                  ret.push({"4":projectCount});
                                                  ret.push({"1":orgCount});
-
+                                                 // check wheather array has element
                                                  logger.debug("Send Response: ",ret);
                                                  res.send(ret);
                                                  return;
