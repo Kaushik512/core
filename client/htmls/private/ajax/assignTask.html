@@ -227,7 +227,7 @@
                     x
                 </button>
                 <h4 class="modal-title">
-                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Edit Attributes
                 </h4>
             </div>
             <div class="modal-body no-padding">
@@ -598,7 +598,9 @@ $(document).ready(function() {
                     getVal(obj[keys[i]],currentKey+'/'+keys[i]);
                 } else {
                     var $tr = $('<tr/>');
-                    var $tdAttributeKey = $('<td/>').html(currentKey+'/'+keys[i]);
+                    var keyString = currentKey+'/'+keys[i];
+                    keyString = keyString.substring(1);
+                    var $tdAttributeKey = $('<td/>').html(keyString);
                     var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
                     $tr.append($tdAttributeKey).append($tdAttributeVal);
                     $tbody.append($tr);
