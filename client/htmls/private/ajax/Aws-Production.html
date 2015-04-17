@@ -1587,7 +1587,7 @@ if ($('#tab2 .role-Selected').length > 0) {
  reqBody.subnetId=subnetId;
 
  reqBody.name = $('#blueprintNameInput').val();
-
+if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
  if(!reqBody.instanceOS){
   alert('Please Select Operating System');
   return false;
@@ -1635,6 +1635,7 @@ if(!securityGroupIds.length){
   return false;
 }
 
+}
 
 if (!reqBody.name) {
  alert("Please enter a blueprint name");
