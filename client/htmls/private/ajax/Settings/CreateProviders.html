@@ -355,6 +355,7 @@ function getRegionList(){
         $(this).html(str);
       }
     }).each(function(){
+      debugger;
     $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
     if($(this).attr('disabled')){
       $(this).trigger('change');

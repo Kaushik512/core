@@ -27,6 +27,11 @@ var awsKeyPairSchema = new Schema({
         required: true,
         trim: true
     },
+    regionName: {
+        type: String,
+        required: true,
+        trim: true
+    },
     providerId: {
         type: String,
         required: true,
@@ -48,6 +53,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     var keyPairs = [];
     var keyPairNames = req.body.keyPairName;
     var regions = req.body.region;
+    var regionNames = req.body.regionName;
     var fileNames = req.body.fileName;
     if(typeof keyPairNames === "object"){
         logger.debug("Inside array>>>>");
@@ -55,6 +61,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
             var keyPairs1= {
             keyPairName: keyPairNames[p],
             region: regions[p],
+            regionName: regionNames[p]
             fileName: fileNames[p]
           };
           keyPairs.push(keyPairs1);
@@ -63,6 +70,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
     var keyPairs1= {
         keyPairName: req.body.keyPairName,
         region: req.body.region,
+        regionName: req.body.regionName
         fileName: req.body.fileName
         };
         keyPairs.push(keyPairs1);
