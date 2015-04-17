@@ -1008,8 +1008,11 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit getInstanceByKeyPairId (%s)", keyPairId);
+            if(data){
             callback(null, data);
-
+            }else{
+                callback(null,null);
+            }
         });
     };
 

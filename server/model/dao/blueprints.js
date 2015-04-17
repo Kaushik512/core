@@ -495,7 +495,11 @@ this.getBlueprintByKeyPairId = function(keyPairId, callback) {
                 return;
             }
             logger.debug("Exit getBlueprintByKeyPairId (ID = %s)", keyPairId);
+            if(data){
             callback(null, data);
+            }else{
+                callback(null,null);
+            }
 
         });
     };
