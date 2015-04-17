@@ -343,22 +343,26 @@ success: function(data, success) {
 });
 
 function getRegionList(){
-	$.get('/vmimages/regions/list',function(data){
-		var str='<option value="">Select Region</option>';
-		for(var i=0;i<data.length;i++){
-			str=str+'<option value="'+data[i].region+'">'+data[i].region_name+' | '+data[i].region+'</option>'
-			}
+  $.get('/vmimages/regions/list',function(data){
+    var str='<option value="">Select Region</option>';
+    for(var i=0;i<data.length;i++){
+      str=str+'<option value="'+data[i].region+'">'+data[i].region_name+' | '+data[i].region+'</option>'
+      }
        UtilityMethods.initializeRegionlist();
-		$('select.region').html(str).each(function(){
-			   $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
-           if($(this).attr('disabled')){
+
+    $('select.region').each(function(){
+      if(!$(this).val()){
+        $(this).html(str);
+      }
+    }).each(function(){
+    $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
+    if($(this).attr('disabled')){
       $(this).trigger('change');
     }
-			});	
-
+      }); 
   
-		//$('select.region').trigger('change');	
-		});	
+    //$('select.region').trigger('change'); 
+    }); 
 }
 
  /* function saveProviderData(){

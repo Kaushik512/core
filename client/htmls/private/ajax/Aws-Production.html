@@ -868,15 +868,15 @@ function getSecurityGroup(){
         method:"post",
         data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
         success:function(list){
-        //  debugger;
-        var str='',getTemplate=function(val){
+         // debugger;
+        var str='',getTemplate=function(val,name){
           return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
           'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
             'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
+      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+name+'</label>';
     },len=list.length;
     for(var i=0;i<len;i++){
-      str=str+getTemplate(list[i].GroupId);
+      str=str+getTemplate(list[i].GroupId,list[i].GroupId+' | '+list[i].GroupName);
     }
     $('#securityGroupIds').html('').append(str);
 
