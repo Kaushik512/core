@@ -4,9 +4,8 @@ var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
-var uuid = require('node-uuid'); //Unique ID
-var fs = require('fs');
-var path = require('path');
+var blueprints = require('../model/dao/blueprints');
+var instances = require('../model/dao/instancesdao');
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/aws/providers/*",sessionVerificationFunc);
 
@@ -204,19 +203,21 @@ var ec2 = new EC2({
              }
             logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
 AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
-    if (err) {
-        logger.error(err);
-        res.send(500, errorResponses.db.error);
-        return;
-    }
-    if (updateCount) {
-     logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
-     res.send({
-        updateCount: updateCount
-    });
- } else {
-    res.send(400);
+        if (err) {
+            logger.error(err);
+            res.send(500, errorResponses.db.error);
+            return;
         }
+      AWSKeyPair.createNew(req,provider._id,function(err,keyPair){  
+        if (updateCount) {
+         logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
+         res.send({
+            updateCount: updateCount
+        });
+     } else {
+        res.send(400);
+            }
+        });//
      });
   });
 });
@@ -256,6 +257,47 @@ app.delete('/aws/providers/:providerId', function(req, res) {
              res.send(400);
             }
         });
+    });
+});
+
+// Delete a particular AWS Provider.
+app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
+ logger.debug("Enter delete() for /aws/providers/keypairs/%s",req.params.keyPairId);
+ var keyPairId = req.params.keyPairId.trim();
+ if(typeof keyPairId === 'undefined' || keyPairId.length === 0){
+    res.send(500,"Please Enter keyPairId.");
+    return;
+}
+
+    blueprints.getBlueprintByKeyPairId(keyPairId, function(err, aBluePrint) {
+        if (err) {
+            logger.error(err);
+            res.send(500, errorResponses.db.error);
+            return;
+        }
+        if (aBluePrint) {
+            res.send(403,"KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
+            return;
+        }else{
+                instances.getInstanceByKeyPairId(keyPairId, function(err, anInstance) {
+                 if (err) {
+                     logger.error(err);
+                     res.send(500, errorResponses.db.error);
+                     return;
+                 }
+                 if (anInstance) {
+                  res.send(403,"KeyPair is already used by Instance.");
+              } else {
+                  AWSKeyPair.removeAWSKeyPairById(keyPairId,function(err,deleteCount){  
+                    if (deleteCount) {
+                      logger.debug("KeyPair deleted",keyPairId);
+                      res.send({
+                        deleteCount: deleteCount
+                    });
+                  }
+                }
+            });
+          }
     });
 });
 

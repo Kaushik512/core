@@ -484,6 +484,22 @@ this.getBlueprintByImageId = function(imageId, callback) {
     });
 };
 
+this.getBlueprintByKeyPairId = function(keyPairId, callback) {
+        logger.debug("Enter getBlueprintByKeyPairId(%s)", keyPairId);
+        Blueprint.find({
+            "keyPairId": keyPairId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getting Blueprint >> %s", keyPairId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintByKeyPairId (ID = %s)", keyPairId);
+            callback(null, data);
+
+        });
+    };
+
 }
 
 module.exports = new BlueprintsDao();
