@@ -860,7 +860,26 @@ function getCompleteRegionList(){
     }); 
 }
 getCompleteRegionList();
+
+
 function getSecurityGroup(){
+
+function bringAllOpenFirst(data){
+var temp,index;
+for(var i=0;i<data.length;i++){
+	if(data[i].GroupName=="all_open"){
+		temp=data[i];
+		index=i;
+		break;
+	}
+}
+if(temp){
+
+data[index]=data[0];
+data[0]=temp;
+}
+return data;
+}
 
   function populateData(){
     var $provider=$('#providerId');
@@ -880,7 +899,7 @@ function getSecurityGroup(){
           'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
             'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
       'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+name+'</label>';
-    },len=list.length;
+    },list=bringAllOpenFirst(list),len=list.length;
     for(var i=0;i<len;i++){
       str=str+getTemplate(list[i].GroupId,list[i].GroupId+' | '+list[i].GroupName);
     }
