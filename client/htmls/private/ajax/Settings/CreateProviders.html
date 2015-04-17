@@ -199,7 +199,7 @@ function KeyChangeHandler(e){
 
 
 function checkForKeyPair(e){
-debugger;
+//debugger;
   function loadKeyPair(accessKey,secretKey,regionValue){
     appendLoader();
     var data1=new FormData();
@@ -355,7 +355,7 @@ function getRegionList(){
         $(this).html(str);
       }
     }).each(function(){
-      debugger;
+     // debugger;
     $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
     if($(this).attr('disabled')){
       $(this).trigger('change');
