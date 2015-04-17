@@ -759,13 +759,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
+            logger.debug("Provider Id: ",req.body.providerId);
             var blueprintData = req.body.blueprintData;
             blueprintData.orgId = req.params.orgId;
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
-            blueprintData.imageId = req.body.imageId;
-            blueprintData.providerId = req.body.providerId;
+            
+            logger.debug("Enviornment ID:: ",req.params.envId);
+            //blueprintData.imageId = req.body.imageId;
+           // blueprintData.providerId = req.body.providerId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }

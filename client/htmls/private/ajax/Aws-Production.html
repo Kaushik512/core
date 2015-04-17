@@ -1581,8 +1581,9 @@ if ($('#tab2 .role-Selected').length > 0) {
  reqBody.instanceUsername='root';
  reqBody.vpcId=vpcId;
  reqBody.subnetId=subnetId;
- reqBody.imageId=imageIdentifier;
+ reqBody.imageId=imageId;
  reqBody.providerId=providerId;
+ //alert(reqBody.providerId);
  reqBody.name = $('#blueprintNameInput').val();
 if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
  if(!reqBody.instanceOS){
