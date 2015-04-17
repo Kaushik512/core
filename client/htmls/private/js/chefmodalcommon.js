@@ -229,7 +229,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
             'color': 'red'
         }).text(' ' + data.responseJSON.message);
         $('.cookbookspinner').detach();
-        $strong1.append($erroMsgArea);
+        $firstlabelinput.append($erroMsgArea);
     });
 
 
