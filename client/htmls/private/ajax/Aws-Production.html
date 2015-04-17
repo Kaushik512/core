@@ -853,8 +853,33 @@ function getImageInstances(){
 
   });
 }
+var regionList;
+function getCompleteRegionList(){
+  $.get('/vmimages/regions/list',function(data){
+  regionList=data;
+    }); 
+}
+getCompleteRegionList();
+
 
 function getSecurityGroup(){
+
+function bringAllOpenFirst(data){
+var temp,index;
+for(var i=0;i<data.length;i++){
+	if(data[i].GroupName=="all_open"){
+		temp=data[i];
+		index=i;
+		break;
+	}
+}
+if(temp){
+
+data[index]=data[0];
+data[0]=temp;
+}
+return data;
+}
 
   function populateData(){
     var $provider=$('#providerId');
@@ -868,15 +893,15 @@ function getSecurityGroup(){
         method:"post",
         data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
         success:function(list){
-        //  debugger;
-        var str='',getTemplate=function(val){
+         // debugger;
+        var str='',getTemplate=function(val,name){
           return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
           'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
             'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-    },len=list.length;
+      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+name+'</label>';
+    },list=bringAllOpenFirst(list),len=list.length;
     for(var i=0;i<len;i++){
-      str=str+getTemplate(list[i].GroupId);
+      str=str+getTemplate(list[i].GroupId,list[i].GroupId+' | '+list[i].GroupName);
     }
     $('#securityGroupIds').html('').append(str);
 
@@ -896,6 +921,13 @@ $('#vpcId').on('change',populateData);
 }
 
 function getkeypairList(){
+	function getRegionName(regionValue){
+		for(var i=0;i<regionList.length;i++){
+			if(regionList[i].region.toLowerCase()==regionValue.toLowerCase()){
+				return regionList[i].region_name;
+			}
+		}
+	}
   $('#providerId').on('change',function(){
 
     var key=$(this).val();
@@ -912,7 +944,7 @@ function getkeypairList(){
         /*bring Region list from providers*/
         var str1='<option value="">Select Region</option>';
         for(var i=0;i<keylist.length;i++){
-          str1=str1+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
+          str1=str1+'<option value="'+keylist[i].region+'">'+getRegionName(keylist[i].region)+' | '+keylist[i].region+'</option>';
         }
         $('#region').html(str1).select2();
 

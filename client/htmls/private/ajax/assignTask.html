@@ -642,12 +642,19 @@ $(document).ready(function() {
             //dataTable.clear();
             var $tbody = $modal.find('.attributesEditTableBody');
             $tbody.empty();
+            var $tbodyViewAttributes = $('#attributesViewListTable').find('tbody');
             for (var i = 0; i < attributesList.length; i++) {
                 var attributesNamesList = Object.keys(attributesList[i].attributes);
                 for (var j = 0; j < attributesNamesList.length;j++) {
                     var $tr = $('<tr/>');
                     var $tdAttribName = $('<td/>').html(attributesNamesList[j]);
-                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribName="'+attributesNamesList[j]+'"/>');
+                    var value = '';
+
+                    var $tdView = $tbodyViewAttributes.find('td[attributeKey="'+attributesNamesList[j]+'"]');
+                    if($tdView.length) {
+                        value = $tdView.attr('attributeValue');
+                    }
+                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribName="'+attributesNamesList[j]+'" value="'+value+'"/>');
                     $tr.append($tdAttribName).append($tdAttribEditor);
                     //dataTable.row.add($tr).draw();
                     $tbody.append($tr)
@@ -676,8 +683,13 @@ $(document).ready(function() {
                     getVal(obj[keys[i]],currentKey+'/'+keys[i]);
                 } else {
                     var $tr = $('<tr/>');
-                    var $tdAttributeKey = $('<td/>').html(currentKey+'/'+keys[i]);
-                    var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                    var keyString = currentKey+'/'+keys[i];
+                    keyString = keyString.substring(1);
+                    var $tdAttributeKey = $('<td/>').html(keyString);
+                    var $tdAttributeVal = $('<td/>').html(obj[keys[i]]).attr({
+                        'attributeKey': keyString,
+                        'attributeValue': obj[keys[i]]
+                    });
                     $tr.append($tdAttributeKey).append($tdAttributeVal);
                     $tbody.append($tr);
                 }
