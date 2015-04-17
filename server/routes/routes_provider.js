@@ -295,12 +295,12 @@ app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
                         deleteCount: deleteCount
                     });
                   }
-                }
             });
           }
     });
+}
 });
-
+});
 // Return all available security groups from AWS.
 app.post('/aws/providers/securitygroups',function(req,res){
   logger.debug("Enter for Provider securitygroups. %s",req.body.accessKey);
