@@ -1581,13 +1581,13 @@ if ($('#tab2 .role-Selected').length > 0) {
  reqBody.instanceUsername='root';
  reqBody.vpcId=vpcId;
  reqBody.subnetId=subnetId;
-
+ reqBody.imageId=imageIdentifier;
+ reqBody.providerId=providerId;
  reqBody.name = $('#blueprintNameInput').val();
 if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
  if(!reqBody.instanceOS){
   alert('Please Select Operating System');
   return false;
-
 }
 
 if(!providerId){
@@ -1617,7 +1617,7 @@ if(!subnetId){
 }
 
 if(!keyPairId){
- alert("Please Select KEyPAir");
+ alert("Please Select KeyPair");
  return false;
 }
 if(!instanceType){
@@ -1670,8 +1670,8 @@ if (!reqBody.users) {
 	
 	$('.blueprintMsgContainer').hide();
 	
-	
-	$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/providers/'+providerId+ '/images/'+imageId+'/blueprints', {
+//if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
+	$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
    blueprintData: reqBody
  }, function(data) {
    console.log(data);
@@ -1684,7 +1684,27 @@ if (!reqBody.users) {
  });
  console.log('final', reqBody);
 
-} 
+
+//}	else{
+/*
+		$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId+'/blueprints' , {
+   blueprintData: reqBody
+ }, function(data) {
+   console.log(data);
+   $('.blueprintSaveSuccess').show();
+   var wizard = $wizard.data('bootstrapWizard');
+   wizard.disablePreviouBtn();
+ }).error(function(xhr){
+   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+   $('.blueprintSaveFail').show();
+ });
+ console.log('final', reqBody);
+
+}*/
+
+}
+
+
 },
 'onPrevious': function(tab, navigation, index) {
 	//console.log(index);

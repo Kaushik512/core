@@ -34,35 +34,35 @@ var BlueprintSchema = new Schema({
     },
     imageId: {
         type: String,
-        required: true,
+        //required: true,
         trim: true,
         validate: schemaValidator.imageIdValidator
     },
     providerId: {
         type: String,
-        required: true,
+       // required: true,
         trim: true,
         validate: schemaValidator.imageIdValidator
     },
     keyPairId: {
         type: String,
-        required: true,
+       // required: true,
         trim: true,
         validate: schemaValidator.imageIdValidator
     },
     subnetId: {
         type: String,
-        required: true,
+       // required: true,
         trim: true
     },
     vpcId: {
         type: String,
-        required: true,
+        //required: true,
         trim: true
     },
     securityGroupIds: {
         type: [String],
-        required: true,
+        //required: true,
         trim: true
     },
     iconpath: {
@@ -119,15 +119,15 @@ var BlueprintSchema = new Schema({
     }],
     instanceType: {
         type: String,
-        required: true
+      //  required: true
     },
     instanceOS: {
         type: String,
-        required: true
+       // required: true
     },
     instanceAmiid: {
         type: String,
-        required: true
+      //  required: true
     },
     instanceUsername: {
         type: String,

@@ -737,8 +737,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
-    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/providers/:providerId/images/:imageId/blueprints', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
         var user = req.session.user;
@@ -764,8 +764,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
-            blueprintData.imageId = req.params.imageId;
-            blueprintData.providerId = req.params.providerId;
+            blueprintData.imageId = req.body.imageId;
+            blueprintData.providerId = req.body.providerId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
