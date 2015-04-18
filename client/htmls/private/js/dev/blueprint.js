@@ -1,4 +1,3 @@
-
 /**************************************Blueprint.js*************************************/
 
 /*Binding Click events to Blueprints*/
@@ -63,7 +62,7 @@ function bindClick_bluePrintTab() {
 
             if (DummyBreadCrumb != null && DummyBreadCrumb != 'undefined') {
                 localStorage.removeItem("breadcrumb");
-              var  splitBread = DummyBreadCrumb.split('>');
+                var splitBread = DummyBreadCrumb.split('>');
                 if (splitBread.length > 0) {
                     $('#ribbon').find('.breadcrumb').find('li').detach();
                     for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
@@ -159,15 +158,15 @@ function initializeBlueprintArea(data) {
 
 
             $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
-            '<div class="panel-heading">' +
+                '<div class="panel-heading">' +
 
             '<h4 class="panel-title">' +
-            '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
-            '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
-            '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
-            '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-            '<div class="panel-body ' + getDesignTypeName + '"></div>' +
-            '</div>';
+                '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
+                '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
+                '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
+                '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
+                '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                '</div>';
             // $($containerTemp).find('#collapse' + i).append($currRolePanel);
             /*if($('#accordion-2').find('#collapse' + i).length > 0){
              alert('in');
@@ -250,9 +249,9 @@ function initializeBlueprintArea(data) {
                                 var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
                                 }, versionData.runlist);
-                                $ccrs.find('.deploymentSelectedRunList').attr('data-blueprintId', blueprintId);
-                                $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs);
-
+                                $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId', blueprintId);
+                                $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs).data('$ccrs',$ccrs);
+                                
 
                             }).error(function() {
                                 $blueprintEditResultContainer.find('.modal-body').empty();
@@ -531,14 +530,15 @@ function bindClick_bluePrintUpdate() {
     $('.blueprintUpdateBtn').click(function(e) {
 
         var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-        var $selectedRunlist = $blueprintEditResultContainer.find('.deploymentSelectedRunList');
+        var $ccrs = $blueprintEditResultContainer.find('.modal-body').data('$ccrs');
+  
+        var $selectedRunlist = $ccrs.find('#cookbooksrecipesselectedList');
         var blueprintId = $selectedRunlist.attr('data-blueprintId');
         if (blueprintId) {
             var runlist = [];
-            var $inputs = $selectedRunlist.find('input');
-            $inputs.each(function() {
-                runlist.push($(this).val());
-            });
+
+            
+            var runlist = $ccrs.getSelectedRunlist();
 
             var blueprintData = {
                 runlist: runlist,
@@ -566,14 +566,11 @@ function bindClick_updateInstanceRunList() {
                 return;
             }
             $chefRunModalContainer = $('#chefRunModalContainer');
-            var $selectedRunlist = $chefRunModalContainer.find('.deploymentSelectedRunList');
+           
             var instanceId = $selectedRunlist.attr('data-instanceId');
 
-            var runlist = [];
-            var $inputs = $selectedRunlist.find('input');
-            $inputs.each(function() {
-                runlist.push($(this).val());
-            });
+            //var runlist = $chefCookbookRoleSelector.getSelectedRunlist();
+           
 
 
             console.log(runlist);

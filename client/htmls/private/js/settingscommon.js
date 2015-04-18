@@ -1872,11 +1872,15 @@ function saveform(formID, operationTypes) {
         });
 
         //for chef cookbook selections
-        if ($(this).find('.deploymentSelectedRunList').length > 0) {
+        //if ($(this).find('.deploymentSelectedRunList').length > 0) {
+        var $ccrs = $(this).data('$ccrs');  
+        if ($ccrs) {
+            var runlist = $ccrs.getSelectedRunlist();
             var v2 = [];
-            $(this).find('input[type="hidden"]').each(function() {
-                v2.push("\"" + $(this).val() + "\"");
-            });
+            for(kk=0;kk<runlist.length;kk++) {
+                v2.push("\"" + runlist[kk] + "\"");
+            } 
+            
             //alert('hit on run list' + v2.join(','));
             v.push(v2.join(','));
         }

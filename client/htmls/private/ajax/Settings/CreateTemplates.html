@@ -274,19 +274,25 @@
       
        if(csid != undefined){
             //alert(csid);
-       
-       var $cookbookselectorcontrol = $chefCookbookRoleSelector('usechefserver/' + csid,function(data){
-               var itms = $('#templatescookbooks').attr('savedvalue').split(',');
-               //Adding previously saved items
-               $.each(itms,function(i,v){
-                 console.log(i + ' ' + v.replace(/"/g, "") );
-                 $('.deploymentsCookbookList input[value="' + v.replace(/"/g, "") + '"],.deploymentRoleList input[value="' + v.replace(/"/g, "")  + '"]').attr('checked','checked');
-                 $('.btnItemAdd').trigger('click');
-               });
-              
+       var itms = $('#templatescookbooks').attr('savedvalue');
+       if(itms) {
+         itms = itms.split(',');
+       } else {
+         itms = [];
+       }
+       console.log(itms);
+       var $ccrs = $chefCookbookRoleSelector('usechefserver/' + csid,function(data){
+               // var itms = $('#templatescookbooks').attr('savedvalue').split(',');
+               // //Adding previously saved items
+               // $.each(itms,function(i,v){
+               //   console.log(i + ' ' + v.replace(/"/g, "") );
+               //   $('.deploymentsCookbookList input[value="' + v.replace(/"/g, "") + '"],.deploymentRoleList input[value="' + v.replace(/"/g, "")  + '"]').attr('checked','checked');
+               //   $('.btnItemAdd').trigger('click');
+               // });
+             
                    
-       });
-        $('#templatescookbooks').html($cookbookselectorcontrol);
+       },itms);
+        $('#templatescookbooks').empty().append($ccrs).data('$ccrs',$ccrs);
    
        }
    }

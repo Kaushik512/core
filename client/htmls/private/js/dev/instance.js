@@ -796,11 +796,11 @@
      var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
      }, runlist);
-     $ccrs.find('.deploymentSelectedRunList').attr('data-instanceid', instanceId);
+     $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
 
 
 
-     $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+     $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs).data('$ccrs',$ccrs);
      $chefRunModalContainer.modal('show');
 
  };

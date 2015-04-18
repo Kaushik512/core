@@ -853,8 +853,33 @@ function getImageInstances(){
 
   });
 }
+var regionList;
+function getCompleteRegionList(){
+  $.get('/vmimages/regions/list',function(data){
+  regionList=data;
+    }); 
+}
+getCompleteRegionList();
+
 
 function getSecurityGroup(){
+
+function bringAllOpenFirst(data){
+var temp,index;
+for(var i=0;i<data.length;i++){
+	if(data[i].GroupName=="all_open"){
+		temp=data[i];
+		index=i;
+		break;
+	}
+}
+if(temp){
+
+data[index]=data[0];
+data[0]=temp;
+}
+return data;
+}
 
   function populateData(){
     var $provider=$('#providerId');
@@ -868,15 +893,15 @@ function getSecurityGroup(){
         method:"post",
         data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
         success:function(list){
-        //  debugger;
-        var str='',getTemplate=function(val){
+         // debugger;
+        var str='',getTemplate=function(val,name){
           return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
           'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
             'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+val+'</label>';
-    },len=list.length;
+      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+name+'</label>';
+    },list=bringAllOpenFirst(list),len=list.length;
     for(var i=0;i<len;i++){
-      str=str+getTemplate(list[i].GroupId);
+      str=str+getTemplate(list[i].GroupId,list[i].GroupId+' | '+list[i].GroupName);
     }
     $('#securityGroupIds').html('').append(str);
 
@@ -896,6 +921,13 @@ $('#vpcId').on('change',populateData);
 }
 
 function getkeypairList(){
+	function getRegionName(regionValue){
+		for(var i=0;i<regionList.length;i++){
+			if(regionList[i].region.toLowerCase()==regionValue.toLowerCase()){
+				return regionList[i].region_name;
+			}
+		}
+	}
   $('#providerId').on('change',function(){
 
     var key=$(this).val();
@@ -912,7 +944,7 @@ function getkeypairList(){
         /*bring Region list from providers*/
         var str1='<option value="">Select Region</option>';
         for(var i=0;i<keylist.length;i++){
-          str1=str1+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
+          str1=str1+'<option value="'+keylist[i].region+'">'+getRegionName(keylist[i].region)+' | '+keylist[i].region+'</option>';
         }
         $('#region').html(str1).select2();
 
@@ -1484,12 +1516,12 @@ if ($('#tab2 .role-Selected').length > 0) {
 }*/
 	//Get all the runlist 
 	var cbs = [];
-	$('.deploymentSelectedRunList input').each(function() {
-   cbs.push($(this).val());
- });
+	var $ccrs = $('.cookbookShow').data('$ccrs');
+    cbs = $ccrs.getSelectedRunlist();
 	reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
 	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
-	reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
+	var $ccrs = $('.cookbookShow').data('$ccrs');
+	reqBody.chefServerId = $ccrs.getChefServerId();
 	reqBody.instanceType = $('select.instanceType').val();
 	reqBody.instanceOS = $('#instanceOS').val();
 	console.log(reqBody);
@@ -1501,13 +1533,12 @@ if ($('#tab2 .role-Selected').length > 0) {
    var reqBody = {};
  }
 	//reqBody.runlist = $('#cookbookSelect').val();
+	var $ccrs = $('.cookbookShow').data('$ccrs');
 	var cbs = [];
-	$('.deploymentSelectedRunList input').each(function() {
-   cbs.push($(this).val());
- });
+	cbs = $ccrs.getSelectedRunlist();
 	reqBody.runlist = cbs; //$('#cookbookSelect').val();
 	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-	reqBody.chefServerId = $('.deploymentSelectedRunList').first().data('chefServerId');
+	reqBody.chefServerId = $ccrs.getChefServerId();
 	console.log("instanceType ==>", $('select.instanceType').val());
 	reqBody.instanceType = $('select.instanceType').val();
 	
@@ -1556,7 +1587,7 @@ if ($('#tab2 .role-Selected').length > 0) {
  reqBody.subnetId=subnetId;
 
  reqBody.name = $('#blueprintNameInput').val();
-
+if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
  if(!reqBody.instanceOS){
   alert('Please Select Operating System');
   return false;
@@ -1604,6 +1635,7 @@ if(!securityGroupIds.length){
   return false;
 }
 
+}
 
 if (!reqBody.name) {
  alert("Please enter a blueprint name");
@@ -1777,6 +1809,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
  },tcb);
  $cookbookShow.empty();
  $cookbookShow.append($ccrs);
+ $cookbookShow.data('$ccrs',$ccrs)
 
 
 

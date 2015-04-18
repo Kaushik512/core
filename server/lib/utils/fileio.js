@@ -127,10 +127,23 @@ module.exports.copyFile = function(src, dst, callback) {
 module.exports.removeFile = function(path, callback) {
     fs.unlink(path, function(err) {
         if (err) {
+            if (typeof callback === 'function') {
+                callback(err);
+            }
+            return;
+        }
+        if (typeof callback === 'function') {
+            callback(null);
+        }
+    });
+};
+
+module.exports.appendToFile = function(path, data, callback) {
+    fs.appendFile(path, data, function(err) {
+        if (err) {
             callback(err);
             return;
         }
         callback(null);
-
     });
-}
+};

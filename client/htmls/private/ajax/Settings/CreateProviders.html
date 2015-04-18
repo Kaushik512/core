@@ -140,6 +140,9 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
     var options=location.toString().split('?');
     return options.length >1 ? (options[1]!=="new" ? options[1]:"" ):"";
   },
+  isEditModeAvailable:function(){
+    return UtilityMethods.getIdFromURL() == "" ? false : true;
+  },
   initializeSelect2:function(){
     $('select').select2();
   },
@@ -199,7 +202,6 @@ function KeyChangeHandler(e){
 
 
 function checkForKeyPair(e){
-debugger;
   function loadKeyPair(accessKey,secretKey,regionValue){
     appendLoader();
     var data1=new FormData();
@@ -261,13 +263,13 @@ function setValues(data){
   var parentList=$('.addNewRegion');
  $('select.region').on('change',checkForKeyPair);
 for(var i=0;i<data.keyPairs.length;i++){
-  parentList.eq(i).find('select.region').attr('answer',data.keyPairs[i].region).val(data.keyPairs[i].region).attr('disabled','disabled').select2();
+  parentList.eq(i).find('select.region').attr('answer',data.keyPairs[i].region).attr('disabled','disabled').select2();
 
-  parentList.eq(i).find('select.keyvalue').val(data.keyPairs[i].keyPairName).attr('disabled','disabled').attr('answer',data.keyPairs[i].keyPairName).select2();
+  parentList.eq(i).find('select.keyvalue').val(data.keyPairs[i].keyPairName).attr({'disabled':'disabled','keyID':data.keyPairs[i]._id}).attr('answer',data.keyPairs[i].keyPairName).select2();
   parentList.eq(i).find('.filename').attr('disabled','disabled').val(data.keyPairs[i].fileName).removeAttr('cat-validation');
 parentList.eq(i).find('input.file').attr('disabled','disabled').removeAttr('cat-validation');
 } 
-  getRegionList();      
+  getRegionList();
 }
 
 
@@ -306,7 +308,6 @@ success: function(data, success) {
          bootbox.alert(jqxhr.responseText);
        },
        failure: function(data) {
-           // debugger;
            removeLoader();
            bootbox.alert(data);
          }
@@ -343,22 +344,26 @@ success: function(data, success) {
 });
 
 function getRegionList(){
-	$.get('/vmimages/regions/list',function(data){
-		var str='<option value="">Select Region</option>';
-		for(var i=0;i<data.length;i++){
-			str=str+'<option value="'+data[i].region+'">'+data[i].region_name+' | '+data[i].region+'</option>'
-			}
+  $.get('/vmimages/regions/list',function(data){
+    var str='<option value="">Select Region</option>';
+    for(var i=0;i<data.length;i++){
+      str=str+'<option value="'+data[i].region+'">'+data[i].region_name+' | '+data[i].region+'</option>'
+      }
        UtilityMethods.initializeRegionlist();
-		$('select.region').html(str).each(function(){
-			   $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
-           if($(this).attr('disabled')){
+
+    $('select.region').each(function(){
+      if(!$(this).val()){
+        $(this).html(str);
+      }
+    }).each(function(){
+    $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2(): "";
+    if($(this).attr('disabled')){
       $(this).trigger('change');
     }
-			});	
-
+      }); 
   
-		//$('select.region').trigger('change');	
-		});	
+    //$('select.region').trigger('change'); 
+    }); 
 }
 
  /* function saveProviderData(){
@@ -396,7 +401,6 @@ function getRegionList(){
     
     formdata1=new FormData();
    // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
-    //debugger;
    //appendINObject(reqBody,FormData1);
    formdata1.append('name',reqBody.name);
    formdata1.append('accessKey',reqBody.accessKey);
@@ -536,12 +540,47 @@ function getRegionList(){
     });
 
     $(parentEl).delegate('.removeimage','click',function(){
+      var parent=$(this).parent();
       if($(this).hasClass('removeRow')){
-        $(this).parent().remove();
+        
+        parent.remove();
 
-      }else if($(this).hasClass('removeRegion')){
-        $(this).parent().remove();
+      }else if($(this).hasClass('removeRegion') && !parent.find('select.keyvalue').attr('keyID')){
+      
+        parent.remove();  
       }
+      else{
+ bootbox.confirm('You are about to remove this KeyPair <strong>'+parent.find('select.keyvalue').val()+'</strong>', function(result) {
+        if (result) {
+            $.ajax({
+                type: "delete",
+                dataType: "text",
+                async: false,
+                url: "/aws/providers/keypairs/" + parent.find('select.keyvalue').attr('keyID'),
+                success: function(data) {
+                    // $('#refreshpage').click();
+                    if(data != '401')
+                    {
+                      parent.remove();
+                    }
+                    else
+                    {
+                        bootbox.alert('Insufficient permission to perform this operation.');
+                    }
+                },
+                failure: function(data) {
+                    // debugger;
+                    bootbox.alert(data.responseText);
+                },
+                error: function(data) {
+                    bootbox.alert(data.responseText);
+                }
+            });
+        }
+    });
+
+      }
+
       UtilityMethods.initTooltip();
     });
 

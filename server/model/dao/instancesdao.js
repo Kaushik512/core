@@ -117,11 +117,16 @@ var InstanceSchema = new Schema({
         required: false,
         trim: true
     },
+    keyPairId: {
+        type: String,
+        required: false,
+        trim: true
+    },
     chefNodeName: String,
     runlist: [{
         type: String,
-        trim: true,
-        validate: schemaValidator.recipeValidator
+        trim: true
+        //validate: schemaValidator.recipeValidator
     }],
     platformId: String,
     instanceIP: {
@@ -987,6 +992,28 @@ var InstancesDao = function() {
         var logId = insertActionLog(instanceId, log, callback);
         log._id = logId;
         return log;
+    };
+
+    this.getInstanceByKeyPairId = function(keyPairId, callback) {
+        logger.debug("Enter getInstanceByKeyPairId (%s)", keyPairId);
+
+        Instances.find({
+            "keyPairId": keyPairId
+        }, {
+            'actionLogs': false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getInstanceByKeyPairId (%s)", keyPairId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstanceByKeyPairId (%s)", keyPairId);
+            if(data){
+            callback(null, data);
+            }else{
+                callback(null,null);
+            }
+        });
     };
 
 

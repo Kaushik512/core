@@ -3,9 +3,13 @@ var childProcess = require('child_process');
 var exec = childProcess.exec;
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
-var chefDefaults = require('../config/app_config').chef;
+var appConfig = require('../config/app_config');
+var chefDefaults = appConfig.chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 var logger = require('./logger.js')(module);
+var getDefaultCookbook = require('./defaultTaskCookbook');
+
+var app_config
 
 var Chef = function(settings) {
 
@@ -236,7 +240,7 @@ var Chef = function(settings) {
                     return;
                 }
                 console.log("chef status ", chefRes.statusCode);
-                console.log(chefResBody);
+               
                 if (chefRes.statusCode === 200) {
                     callback(null, chefResBody);
                 } else {
@@ -651,7 +655,7 @@ var Chef = function(settings) {
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {
         console.log('Chef Repo Location : ', settings.userChefRepoLocation)
         var options = {
-            cwd: settings.userChefRepoLocation + '/.chef',
+            cwd: settings.userChefRepoLocation,
             onError: function(err) {
                 callback(err, null);
             },
@@ -671,8 +675,156 @@ var Chef = function(settings) {
 
     };
 
+    this.downloadCookbook = function(cookbookName, cookbookDir, callback) {
+        var options = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                console.log(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
 
+            }
+        };
+        var argList = ['cookbook', 'download', cookbookName];
+        if (cookbookDir) {
+            argList.push('-d');
+            argList.push(cookbookDir);
+        }
+        argList.push('--force');
+        //argList.push('--latest');
+        var proc = new Process('knife', argList, options);
+        proc.start();
+    };
 
+    this.createCookbook = function(cookbookName, cookbookDir, callback) {
+        var createCookbookOption = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                console.log(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
+            },
+            onStdOut: function(outData) {
+                console.log(outData);
+            }
+        };
+        var argList = ['cookbook', 'create', cookbookName];
+        if (cookbookDir) {
+            argList.push('-o');
+            argList.push(cookbookDir);
+        }
+        console.log('cookbookDir ==> ' + argList);
+        var procCreateCookbook = new Process('knife', argList, createCookbookOption);
+        procCreateCookbook.start();
+    };
+
+    this.uploadCookbook = function(cookbookName, callback) {
+        var uploadCookbookOption = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                console.log(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
+
+            },
+            onStdOut: function(outData) {
+                console.log(outData);
+            },
+            onStdErr: function(outData) {
+                console.log("err ==> " + outData);
+            }
+        };
+        var procUploadCookbook = new Process('knife', ['cookbook', 'upload', cookbookName, '--force'], uploadCookbookOption);
+        procUploadCookbook.start();
+    };
+
+    this.createAndUploadCookbook = function(cookbookName, dependencies, callback) {
+        var self = this;
+        this.createCookbook(cookbookName, function(err, status) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (dependencies && dependencies.length) {
+                var dependecyDataToAppend = '';
+                for (var i = 0; i < dependencies.length; i++) {
+                    dependecyDataToAppend = dependecyDataToAppend + "\ndepends '" + dependencies[i] + "'";
+                    console.log(dependecyDataToAppend);
+                }
+                console.log(dependencies);
+                console.log(dependecyDataToAppend);
+                fileIo.appendToFile(settings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/metadata.rb', dependecyDataToAppend, function(err) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    self.uploadCookbook(cookbookName, function(err) {
+                        if (err) {
+                            callback(err, null);
+                            return;
+                        }
+                        callback(null, null);
+                    });
+                });
+            } else {
+                self.uploadCookbook(cookbookName, function(err) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, null);
+                });
+            }
+        });
+    };
+
+    this.getCookbookAttributes = function(cookbooksList, callback) {
+
+        var self = this;
+        var cookbooksListNew = [];
+        var count = 0;
+        var attributesList = [];
+
+        function getCookbook(cookbookName) {
+            self.getCookbook(cookbookName, function(err, cookbookData) {
+                count++;
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                var attributeObj = {
+                    cookbookName: cookbookName,
+                    attributes: cookbookData.metadata.attributes
+                };
+                attributesList.push(attributeObj);
+                if (count < cookbooksList.length) {
+                    getCookbook(cookbooksList[count]);
+                } else {
+                    callback(null, attributesList);
+                }
+            });
+        }
+
+        getCookbook(cookbooksList[count]);
+    };
 
 }
 
