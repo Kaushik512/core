@@ -52,6 +52,11 @@ var imageSchema = new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    orgId: {
+        type: [String],
+        required: true,
+        trim: true
     }
 });
 

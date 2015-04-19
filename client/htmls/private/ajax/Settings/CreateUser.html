@@ -45,6 +45,11 @@
                                           Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
                                         </div>
                                        </div>
+                                       <div class="col-lg-6 col-md-6">
+                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
+                                          <option value="">Select an Organization</option>
+                                          </select>               
+                                        </div>
                                     </div>
                                     <!-- end widget content -->
                                  </div>
@@ -166,6 +171,7 @@
 <script>
    $(document).ready(function () {
       $("#loginname").focus();
+      $("select").select2();
        $('#myForm5').submit(function() {
           
            $(this).validate();

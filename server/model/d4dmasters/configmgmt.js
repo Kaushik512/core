@@ -1482,8 +1482,10 @@ function Configmgmt() {
                                      }
                                      if (projd) {
                                          for (var j = 0; j < projd.length; j++) {
-                                             var orglist = projd[j]['orgname_rowid'].split(',');
+                                             //var orglist = projd[j]['orgname_rowid'].split(',');
+                                             var orglist = projd[j]['orgname_rowid'];
                                              var bulist = projd[j]['productgroupname_rowid'].split(',');
+                                             //var bulist = projd[j]['productgroupname_rowid'];
                                              for (var k = 0; k < orglist.length; k++) {
                                                  if (outJ[0]['orgs'].indexOf(orglist[k]) < 0)
                                                      outJ[0]['orgs'].push(orglist[k]);

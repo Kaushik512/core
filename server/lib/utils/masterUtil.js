@@ -3,9 +3,9 @@ var d4dModelNew = require('../../model/d4dmasters/d4dmastersmodelnew.js');
 
 var MasterUtil = function(){
     // Return All Orgs specific to User
-	this.getOrgs = function (loggedInUser,callback){
+	this.getOrgs = function (loggedInUser,callback){   
         var orgList = [];
-		d4dModelNew.d4dModelMastersTeams.find({
+		      /*d4dModelNew.d4dModelMastersTeams.find({
                 loginname : loggedInUser
             },function(err,teams){
                 if(teams){
@@ -60,167 +60,123 @@ var MasterUtil = function(){
                     callback(err,null);
                 }
 
-            });
+            });*/
+            d4dModelNew.d4dModelMastersUsers.find({
+                loginname: loggedInUser
+            },function(err,users){
+                if(err){
+                    logger.debug("Unable to fetch User.");
+                    callback(err,null);
+                }
+                logger.debug("Able to get User: ",JSON.stringify(users));
+                if(users){
+                    for(var x=0; x<users.length;x++){
+                        (function(countUser){
+                            if(users[countUser].id === '7'){
+                                var orgIds = users[countUser].orgname_rowid;
+                                logger.debug("orgIds: ",orgIds);
+                                for(var i=0; i<orgIds.length;i++){
+
+                                    (function(count){
+                                        logger.debug("Org orgIds for query: ",orgIds[count]);
+                                        d4dModelNew.d4dModelMastersOrg.find({
+                                            rowid : orgIds[count]
+                                            },function(err,orgs){
+                                            if(err){
+                                                logger.debug("Unable to fetch Org.");
+                                                callback(err,null);
+                                            }
+                                            if(orgs){
+                                                for(var y=0;y<orgs.length;y++){
+                                                    (function(countOrg){
+                                                        if(orgs[countOrg].id === '1'){
+                                                            logger.debug("Able to getch Org.",JSON.stringify(orgs[countOrg]));
+                                                            orgList.push(orgs[countOrg]);
+                                                        }
+                                                    })(y);
+                                                }
+                                            }
+                                            logger.debug("Returned Orgs: ",JSON.stringify(orgList));
+                                             callback(null,orgList);
+                                        });
+                                    })(i);
+                                }
+                            }
+                        })(x);
+                    }
+                }
+          });
 	}
 
     // Return all BusinessGroups specific to User
-    this.getBusinessGroups = function (loggedInUser,callback){
+    this.getBusinessGroups = function (orgId,callback){
+        logger.debug("org rowid: ",orgId);
         var productGroupList = [];
-        d4dModelNew.d4dModelMastersTeams.find({
-                loginname : loggedInUser
-            },function(err,teams){
-                if(teams){
-                    logger.debug("Team size: ",teams.length);
-                    logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i1 =0; i1< teams.length; i1++){
-                        (function(i){
-                        if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
-                            logger.debug("Only Team: ",JSON.stringify(teams[i]));
-                            d4dModelNew.d4dModelMastersProjects.find({
-                                projectname : teams[i].projectname
-                            },function(err,projects){
-                                if(err){
-                                        callback(err,null);
-                                     }
-                                if(projects){
-                                    logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j1 =0; j1< projects.length; j1++){
-                                        (function(j){
-                                        if(projects[j].id === '4'){
-                                            d4dModelNew.d4dModelMastersProductGroup.find({
-                                            productgroupname : projects[j].productgroupname
-                                            },function(err,productGroups){
-                                                if(err){
-                                                    callback(err,null);
-                                                    }
-                                            if(productGroups){
-                                                for(var x1 = 0; x1< productGroups.length; x1++){
-                                                    (function(x){
-                                                    if(productGroups[x].id ==='2'){
-                                                logger.debug("Returned BG: >>>>>>> ",JSON.stringify(productGroups[x]));
-                                                    productGroupList.push(productGroups[x]);
-                                                  }
-                                              })(x1);
-                                                }
-                                                 callback(null,productGroupList);
-                                              }
-
-                                            });
-                                        }
-                                    })(j1);
-                                    }
-                                }
-
-                            });
+        d4dModelNew.d4dModelMastersProductGroup.find({
+            orgname_rowid: orgId
+        },function(err,bgs){
+            if(err){
+                callback(err,null);
+            }
+            if(bgs){
+                for(var i=0;i<bgs.length;i++){
+                    (function(bgCount){
+                        if(bgs[i].id === '2'){
+                            logger.debug("Returned BG: ",JSON.stringify(bgs[i]));
+                            productGroupList.push(bgs[i]);
                         }
-                    })(i1);
-                    }
-                }else{
-                    callback(err,null);
+                    })(i);
                 }
-
-            });
+                logger.debug("productGroupList: ",JSON.stringify(productGroupList));
+                callback(null,productGroupList);
+            }
+        });
     }
 
     // Return all Environments specific to User
-    this.getEnvironments = function (loggedInUser,callback){
+    this.getEnvironments = function (orgId,callback){
         var envList = [];
-        d4dModelNew.d4dModelMastersTeams.find({
-                loginname : loggedInUser
-            },function(err,teams){
-                if(teams){
-                    logger.debug("Team size: ",teams.length);
-                    logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i1 =0; i1< teams.length; i1++){
-                        (function(i){
-                        if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
-                            logger.debug("Only Team: ",JSON.stringify(teams[i]));
-                            d4dModelNew.d4dModelMastersProjects.find({
-                                projectname : teams[i].projectname
-                            },function(err,projects){
-                                if(err){
-                                        callback(err,null);
-                                        }
-                                if(projects){
-                                    logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j1 =0; j1< projects.length; j1++){
-                                        (function(j){
-                                        if(projects[j].id === '4'){
-                                            d4dModelNew.d4dModelMastersEnvironments.find({
-                                            environmentname : projects[j].environmentname
-                                            },function(err,envs){
-                                                if(err){
-                                                    callback(err,null);
-                                                 }
-                                            if(envs){
-                                                for(var x1 = 0; x1< envs.length; x1++){
-                                                    (function(x){
-                                                    if(envs[x].id ==='3'){
-                                                    logger.debug("Returned Env: >>>>>>> ",JSON.stringify(envs[x]));
-                                                    envList.push(envs[x]);
-                                                  }
-                                              })(x1);
-                                                }
-                                                 callback(null,envList);
-                                              }
-
-                                            });
-                                        }
-                                    })(j1);
-                                    }
-                                }
-
-                            });
+        d4dModelNew.d4dModelMastersEnvironments.find({
+            orgname_rowid: orgId
+        },function(err,envs){
+            if(err){
+                callback(err,null);
+            }
+            if(envs){
+                for(var i=0;i<envs.length;i++){
+                    (function(envCount){
+                        if(envs[envCount].id === '3'){
+                            envList.push(envs[envCount]);
                         }
-                    })(i1);
-                    }
-                }else{
-                    callback(err,null);
+                    })(i);
                 }
-
-            });
+                logger.debug("Returned ENVs: ",JSON.stringify(envList));
+                callback(null,envList);
+            }
+        });
     }
 
     // Return all Projects specific to User
-    this.getProjects = function (loggedInUser,callback){
+    this.getProjects = function (orgId,callback){
         var projectList = [];
-        d4dModelNew.d4dModelMastersTeams.find({
-                loginname : loggedInUser
-            },function(err,teams){
-                if(teams){
-                    logger.debug("Team size: ",teams.length);
-                    logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i1 =0; i1< teams.length; i1++){
-                        (function(i){
-                        if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
-                            logger.debug("Only Team: ",JSON.stringify(teams[i]));
-                            d4dModelNew.d4dModelMastersProjects.find({
-                                projectname : teams[i].projectname
-                            },function(err,projects){
-                                if(err){
-                                        callback(err,null);
-                                        }
-                                if(projects){
-                                    logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j1 =0; j1< projects.length; j1++){
-                                        (function(j){
-                                        if(projects[j].id === '4'){
-                                            projectList.push(projects[j]);
-                                        }
-                                    })(j1);
-                                    }
-                                    callback(null,projectList);
-                                }
-
-                            });
+        d4dModelNew.d4dModelMastersProjects.find({
+            orgname_rowid: orgId
+        },function(err,projects){
+            if(err){
+                callback(err,null);
+            }
+            if(projects){
+                for(var i=0;i<projects.length;i++){
+                    (function(projectCount){
+                        if(projects[projectCount].id === '4'){
+                            projectList.push(projects[projectCount]);
                         }
-                    })(i1);
-                    }
-                }else{
-                    callback(err,null);
+                    })(i);
                 }
-
-            });
+                logger.debug("Returned Projects: ",JSON.stringify(projectList));
+                callback(null,projectList);
+            }
+        });
     }
 
     // Return all ConfigManagement specific to User
