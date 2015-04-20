@@ -22,9 +22,11 @@
 
                  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
                  var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
-                 $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
-                 $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
-
+                 $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
+                 $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
+                 /*$cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+                 $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');*/
+                 
              }
 
               //for removing the selected blueprint in the blueprint tab
@@ -916,7 +918,11 @@
                      $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
                      $('#modalSSHShellContainer').find('.modal-body').empty();
                  });
-
+                 function showRDP(){
+                    if($(this).hasClass('isStopedInstance')){
+                        return false;
+                    }
+                 }
                  //function for showing the SSH Modal
                  function showSSHModal() {
                      if ($(this).hasClass('isStopedInstance')) {
@@ -1414,8 +1420,10 @@
                      }
                      var $divActionShutdownContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
 
-
-
+                     if(data.hardware.os =='windows'){
+                        var $divActionRDPContainer = $('<div class="rdpContainer actionbutton"></div>').addClass('instance-bootstrap-ActionRDP').append($('<a class="rdpIcon" href="/instances/rdp/' + data.instanceIP + '/3389"</a>').attr('data-actionType', 'RDP').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'RDP'));
+                         $divActionBtnContainer.append($divActionRDPContainer);
+                     }
 
                      var $divActionSSHContainer = $('<div class="sshBtnContainer actionbutton"></div>').addClass('instance-bootstrap-ActionSSH').append($('<a href="javascript:void(0)" class="sshIcon devTOP" data-instanceid="' + data._id + '"></a>').attr('data-actionType', 'SSH').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'SSH'));
                      var $startStopToggler = $(cardTemplate.getStartStopToggler(data));
@@ -1502,6 +1510,9 @@
                      $rowContainter.find('.sshBtnContainer a').click(showSSHModal);
                      $li.find('.sshBtnContainer a').click(showSSHModal);
 
+                     $rowContainter.find('.rdpContainer a').click(showRDP);
+                     $li.find('.rdpContainer a').click(showRDP);
+
 
                      $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
                      $li.find('.moreInfo').click(instanceLogsHandler);
@@ -1516,7 +1527,7 @@
                      pageSetUp();
 
                      if (data.hardware.os !== 'linux') {
-                         disableSSHBtn(data._id);
+                         disableSSHBtn(data._id);                         
                      }
                      // alert($tableActionBtnContainer.find('.startstoptoggler').length);
                      //var allClass='stopped running pending unknown', addClass='';
@@ -1569,6 +1580,10 @@
                          $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
                          $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
                      }
+                     else{
+                        $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
+                         $tableViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
+                     }
 
                      $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
                      $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
@@ -1584,6 +1599,8 @@
                      $tableViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
                      $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
                      $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+                     $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
+                     $tableViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
                      $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
                      $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
                      $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
@@ -1598,6 +1615,8 @@
                      $tableViewInstanceId.find('.chefClientRunlistImage').addClass('isStopedInstance').removeClass('actionbuttonChefClientRun').addClass('actionbuttonChefClientRundisable');
                      $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
                      $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
+                     $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
+                     $tableViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
                      $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
                      $tableViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
                      $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
@@ -1614,6 +1633,10 @@
                      if (osType === 'linux') {
                          $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
                          $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshIcon');
+                     }
+                     else{
+                        $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
+                         $tableViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
                      }
 
                      $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
