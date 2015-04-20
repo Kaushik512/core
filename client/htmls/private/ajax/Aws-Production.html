@@ -1671,8 +1671,8 @@ if (!reqBody.users) {
 	
 	$('.blueprintMsgContainer').hide();
 	
-//if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
-	$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
+if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
+$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
    blueprintData: reqBody
  }, function(data) {
    console.log(data);
@@ -1685,6 +1685,21 @@ if (!reqBody.users) {
  });
  console.log('final', reqBody);
 
+}else{
+$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints/docker', {
+   blueprintData: reqBody
+ }, function(data) {
+   console.log(data);
+   $('.blueprintSaveSuccess').show();
+   var wizard = $wizard.data('bootstrapWizard');
+   wizard.disablePreviouBtn();
+ }).error(function(xhr){
+   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+   $('.blueprintSaveFail').show();
+ });
+ console.log('final', reqBody);
+}
+	
 
 //}	else{
 /*
