@@ -1,10 +1,10 @@
 <div class="col-lg-12">
-    <div class="col-lg-4" style="padding-left:0px;">
+    <div class="col-lg-4 paddingleft0">
         <label>
             <strong>Select Task Type</strong>
         </label>
         <div class="row">
-            <div class="col-lg-7" style="padding-right:0px;">
+            <div class="col-lg-7 paddingright0">
                 <select id="taskType" class="chooseTasktype width-100">
                     <option id="Chef" value="chef">Chef</option>
                     <option id="Jenkins" value="jenkins">Jenkins</option>
@@ -18,8 +18,8 @@
     
 
 <div id="chef-dropdown">
-    <div class="col-lg-3" style="padding-left:0px;padding-right:0px">
-        <div class="col-lg-12" style="margin-top:15px;">
+    <div class="col-lg-3 paddingleftright0">
+        <div class="col-lg-12 margintop15">
                 <label>
                     <strong>Task Name <span style="color:red">*</span></strong>
                 </label>
@@ -31,7 +31,7 @@
                     </div>  
                 </div>
         </div>
-        <div class="col-lg-12" style="margin-top:15px;">
+        <div class="col-lg-12 margintop15">
             <label>
                 <strong>Chef Server Name</strong>
             </label>
@@ -44,15 +44,15 @@
                 </div>  
             </div>
         </div>
-        <div class="col-lg-12" style="margin-top:15px;">
-            <div class="smart-form" style="margin-left:15px">
+        <div class="col-lg-12 margintop15">
+            <div class="smart-form marginleft15">
                 <label>
                     <img src="img/templateicons/Select-nodes---deployment.png">
                     <strong>Select Nodes <span style="color:red">*</span></strong>
                 </label>
                 <div class="row">
                     <div class="col-lg-9">
-                        <ul id="selectedNodesChefTask" class="deploymentNodeList" style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;">
+                        <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesChefTaskCSS">
                          
                         </ul>
                     </div>
@@ -60,8 +60,8 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-9" style="padding-left:0px;padding-right:0px">
-        <div class="col-lg-12" style="margin-top:-56px;padding-left:0px;padding-right:0px;">
+    <div class="col-lg-9 paddingleftright0">
+        <div class="col-lg-12 paddingleftright0 margintop-56">
             <div class="panel-group smart-accordion-default" id="accordion-assigntask">
                 <div class="panel panel-default divconfigureparameterrunlist">
                   <div class="panel-heading">
@@ -83,11 +83,11 @@
                     </div>
                     <div id="CollapsecookbookAttributes" class="panel-collapse collapse">
                         <div class="col-lg-12">
-                            <div class="smart-form" style="margin:15px;">
-                                <label style="margin-bottom:4px;">
+                            <div class="smart-form margin15">
+                                <label class="marginbottom4">
                                     <img src="img/templateicons/Select-nodes---deployment.png">
                                     <strong>Cookbook Attributes 
-                                        <a id="editAttributesBtn" class="bpEditBtn btn btn-primary" style="padding:0px 4px;margin-left:3px;border-radius:5px;" rel="tooltip" data-placement="top" data-original-title="Edit">
+                                        <a id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
                                             <i class="ace-icon fa fa-pencil"></i>
                                         </a>
                                         <span style="color:red" id="attrmessage"></span>
@@ -119,8 +119,8 @@
         
 </div>
 <div id="Jenkins-dropdown">
-    <div class="col-lg-3" style="padding-left:0px;padding-right:0px">
-        <div class="col-lg-12" style="margin-top:15px;">
+    <div class="col-lg-3 paddingleftright0">
+        <div class="col-lg-12 margintop15">
             <label><b>Task Name</b><span style="color:red">*</span>
             </label>
             <div class="row">
@@ -129,7 +129,7 @@
                 </div>
             </div>              
         </div>
-        <div class="col-lg-12" style="margin-top:15px;">
+        <div class="col-lg-12 margintop15">
             <label><b>Select Jenkins Server</b><span style="color:red">*</span>
             </label>
             <div class="row">
@@ -141,7 +141,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-12" style="margin-top:15px;">
+        <div class="col-lg-12 margintop15">
             <label><b>Select Job</b><span style="color:red">*</span></label>
             <div class="row">
                 <div class="col-lg-10">
@@ -152,55 +152,10 @@
             </div>
         </div>
     </div>
-
-        
-            
-            <!-- <div class="col-lg-4">
-                <label><b>Task Name</b><span style="color:red">*</span>
-                </label>
-                <div class="row">
-                    <div class="col-lg-10">
-                <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>
-                                           
-                </div>
-                </div>              
-            </div>
-            <div class="col-lg-4">
-                <label><b>Select Jenkins Server</b><span style="color:red">*</span>
-                </label>
-                <div class="row">
-                    <div class="col-lg-10">
-                        <select id="jenkinsServerList" class="width-100">
-                            <option value="choose">Choose</option>
-                            
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4" style="margin-top:15px;">
-                <label><b>Select Job</b><span style="color:red">*</span></label>
-                <div class="row">
-                    <div class="col-lg-10">
-                        <select id="jobListJenkins" class="width-100" disabled>
-                            
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6" style="margin-top:15px;">
-                <label><strong>Assign Users</strong><span style="color:red">*</span></label>
-                <div class="row">
-                    <div class="col-lg-7">
-                        <select id="jenkinsUserList" multiple="" class="custom-scroll userLists">
-                            
-                        </select>
-                    </div>
-                </div>
-            </div>  -->
 </div>
 <div id="Custom-dropdown">
-    <div class="col-lg-3" style="padding-left:0px;padding-right:0px">
-        <div class="col-lg-12" style="margin-top:15px;">
+    <div class="col-lg-3 paddingleftright0">
+        <div class="col-lg-12 margintop15">
             <label for="category"><b>Task Name</b><span style="color:red">*</span>
             </label>
             <div class="row">
@@ -210,15 +165,15 @@
             </div>             
         </div>
         
-        <div class="col-lg-12" style="margin-top:15px;">
-            <div class="smart-form" style="margin-left:15px">
+        <div class="col-lg-12 margintop15">
+            <div class="smart-form marginleft15">
                     <label>
                         <img src="img/templateicons/Select-nodes---deployment.png">
                         <strong>Select Nodes <span style="color:red">*</span></strong>
                     </label>
                     <div class="row">
                         <div class="col-lg-9">
-                            <ul id="selectedNodesCustomTask" class="deploymentNodeList" style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;">
+                            <ul id="selectedNodesCustomTask" class="deploymentNodeList">
                              
                             </ul>
                         </div>
@@ -226,67 +181,22 @@
                 </div>
         </div>
     </div>
-    <div class="col-lg-9" style="padding-left:0px;padding-right:0px">
-        <div class="col-lg-12" style="margin-top:15px;">
+    <div class="col-lg-9 paddingleftright0">
+        <div class="col-lg-12 margintop15">
             <label><strong>Command Line</strong></label>
-            <textarea rows="15" class="custom-scroll" style="border:1px solid #ddd"></textarea> 
+            <textarea rows="15" class="custom-scroll bordersolidgrey"></textarea> 
         </div>
     </div>
-
-        
-            
-            <!-- <div class="col-lg-4">
-                <label for="category"><b>Task Name</b><span style="color:red">*</span>
-                </label>
-                <div class="row">
-                    <div class="col-lg-10">
-                <input id="tasknameCustom" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>
-                    </div>
-                </div>                                 
-            </div>
-            <div class="col-lg-4">
-              <label><strong>Command Line</strong></label>
-              
-                <textarea rows="3" class="custom-scroll"></textarea> 
-            </div>
-            <div class="col-lg-4">
-                <div class="smart-form" style="margin-left:15px">
-                    <label>
-                        <img src="img/templateicons/Select-nodes---deployment.png">
-                        <strong>Select Nodes <span style="color:red">*</span></strong>
-                    </label>
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <ul id="selectedNodesCustomTask" class="deploymentNodeList" style="border:1px solid #dddddd;list-style:none outside none;height:200px;overflow-y:auto;">
-                             
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <label><strong>Assign Users</strong><span style="color:red">*</span></label>
-                <div class="row">
-                    <div class="col-lg-10">
-                        <select multiple="" class="custom-scroll userLists">
-                       
-                        </select>
-                    </div>
-                </div>
-            </div>  -->
-        
-    
 </div>
 <div class="row">
-        <div style="bottom:0px;position:fixed" class="col-md-10 col-sm-12 col-xs-12">
-            <div style="text-align:center" class="clearfix form-actions">
+        <div class="col-md-10 col-sm-12 col-xs-12 footerfixed">
+            <div class="clearfix form-actions text-align-center">
                 <div class="btn-group">
-                    <a style="margin-left:5px" class="btn pull-left btn-primary btnSaveTask">
+                    <a class="btn pull-left btn-primary btnSaveTask marginleft5">
                         <i class="ace-icon fa fa-check bigger-110"></i>
                         Save Task
                     </a>  
-                    <a style="margin-left:5px" class="btn pull-left btn-primary btnBack" onclick="window.history.back()">
+                    <a class="btn pull-left btn-primary btnBack marginleft5" onclick="window.history.back()">
                         <i class="ace-icon fa fa-rotate-left  bigger-110"></i>
                         Cancel
                     </a>                                     
@@ -309,9 +219,11 @@
                 </h4>
             </div>
             <div class="modal-body no-padding">
-                <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
-                <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
-                <form  class="attributesEditFormArea" action="" style="padding:10px;">
+                <div class="loadingContainer">
+                    <img class="center-block loadingContainerimageCSS" src="img/loading.gif" />
+                </div>
+                <div class="errorMsgContainer loadingerrorMsgContainerCSS"></div> 
+                <form  class="attributesEditFormArea padding10" action="">
                     <table id="attributesEditListArea" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
                      <thead>
                       <tr>
