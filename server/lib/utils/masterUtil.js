@@ -19,7 +19,7 @@ var MasterUtil = function(){
                             if(users[countUser].id === '7'){
                                 var orgIds = users[countUser].orgname_rowid;
                                 logger.debug("orgIds: ",orgIds);
-                                if(orgIds.length === 0){
+                                if(orgIds[0] === 'undefined'){
                                     d4dModelNew.d4dModelMastersOrg.find({
                                             id : "1"
                                             },function(err,orgs){
@@ -75,11 +75,16 @@ var MasterUtil = function(){
 	}
 
     // Return all BusinessGroups specific to User
-    this.getBusinessGroups = function (orgId,callback){
-        logger.debug("org rowid: ",orgId);
+    this.getBusinessGroups = function (orgList,callback){
+        
         var productGroupList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersProductGroup.find({
-            orgname_rowid: orgId
+            orgname_rowid: {$in:rowIds}
         },function(err,bgs){
             if(err){
                 callback(err,null);
@@ -87,23 +92,29 @@ var MasterUtil = function(){
             if(bgs){
                 for(var i=0;i<bgs.length;i++){
                     (function(bgCount){
-                        if(bgs[i].id === '2'){
-                            logger.debug("Returned BG: ",JSON.stringify(bgs[i]));
-                            productGroupList.push(bgs[i]);
+                        if(bgs[bgCount].id === '2'){
+                            logger.debug("Returned BG: ",JSON.stringify(bgs[bgCount]));
+                            productGroupList.push(bgs[bgCount]);
                         }
                     })(i);
                 }
                 logger.debug("productGroupList: ",JSON.stringify(productGroupList));
-                callback(null,productGroupList);
+                //callback(null,productGroupList);
             }
+            callback(null,productGroupList);
         });
     }
 
     // Return all Environments specific to User
-    this.getEnvironments = function (orgId,callback){
+    this.getEnvironments = function (orgList,callback){
         var envList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersEnvironments.find({
-            orgname_rowid: orgId
+            orgname_rowid: {$in:rowIds}
         },function(err,envs){
             if(err){
                 callback(err,null);
@@ -117,16 +128,22 @@ var MasterUtil = function(){
                     })(i);
                 }
                 logger.debug("Returned ENVs: ",JSON.stringify(envList));
-                callback(null,envList);
+                //callback(null,envList);
             }
+            callback(null,envList);
         });
     }
 
     // Return all Projects specific to User
-    this.getProjects = function (orgId,callback){
+    this.getProjects = function (orgList,callback){
         var projectList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersProjects.find({
-            orgname_rowid: orgId
+            orgname_rowid: {$in:rowIds}
         },function(err,projects){
             if(err){
                 callback(err,null);
@@ -140,16 +157,22 @@ var MasterUtil = function(){
                     })(i);
                 }
                 logger.debug("Returned Projects: ",JSON.stringify(projectList));
-                callback(null,projectList);
+                //callback(null,projectList);
             }
+            callback(null,projectList);
         });
     }
 
     // Return all ConfigManagement specific to User
-    this.getCongifMgmts = function(orgId,callback){
+    this.getCongifMgmts = function(orgList,callback){
         var congifMgmtList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersConfigManagement.find({
-            orgname_rowid : orgId
+            orgname_rowid : {$in:rowIds}
         },function(err,configMgmt){
             if(configMgmt){
                 for(var i = 0; i< configMgmt.length; i++){
@@ -165,11 +188,15 @@ var MasterUtil = function(){
     }
 
     // Return all Dockers
-    this.getDockers = function(orgId,callback){
+    this.getDockers = function(orgList,callback){
         var dockerList = [];
-        logger.debug("Enter to Docker: ",orgId);
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersDockerConfig.find({
-            orgname_rowid : orgId
+            orgname_rowid : {$in:rowIds}
         },function(err,dockers){
             if(dockers){
                 for(var i =0; i< dockers.length; i++){
@@ -186,11 +213,15 @@ var MasterUtil = function(){
     }
 
     // Return all Templates
-    this.getTemplates = function(orgId,callback){
+    this.getTemplates = function(orgList,callback){
         var templateList = [];
-        logger.debug("Enter to Template: ",orgId);
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersTemplatesList.find({
-            orgname_rowid : orgId
+            orgname_rowid : {$in:rowIds}
         },function(err,templates){
             if(templates){
                 for(var i =0; i< templates.length; i++){
@@ -207,11 +238,15 @@ var MasterUtil = function(){
     }
 
     // Return all TemplateTypes
-    this.getTemplateTypes = function(orgId,callback){
+    this.getTemplateTypes = function(orgList,callback){
         var templateTypeList = [];
-        logger.debug("Enter to TemplateType: ",orgId);
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
-            orgname_rowid : orgId
+            orgname_rowid : {$in:rowIds}
         },function(err,templateTypes){
             if(templateTypes){
                 for(var i =0; i< templateTypes.length; i++){
@@ -228,10 +263,15 @@ var MasterUtil = function(){
     }
 
     // Return all ServiceCommands
-    this.getServiceCommands = function(orgId,callback){
+    this.getServiceCommands = function(orgList,callback){
         var serviceCommandList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersServicecommands.find({
-            orgname_rowid : orgId
+            orgname_rowid : {$in:rowIds}
         },function(err,serviceCommands){
             if(serviceCommands){
                 for(var i =0; i< serviceCommands.length; i++){
@@ -248,10 +288,15 @@ var MasterUtil = function(){
     }
 
     // Return all Jenkins
-    this.getJenkins = function(orgId,callback){
+    this.getJenkins = function(orgList,callback){
         var jenkinList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelJenkinsConfig.find({
-            orgname_rowid : orgId
+            orgname_rowid : {$in:rowIds}
         },function(err,jenkins){
             if(jenkins){
                 for(var i =0; i< jenkins.length; i++){

@@ -615,93 +615,102 @@ module.exports.setRoutes = function(app, sessionVerification) {
             if(req.params.id === '1'){
                     logger.debug("Returned Org List:>>>> ",JSON.stringify(orgList));
                     res.send(orgList);
+                    return;
             }
-            for(var i=0;i<orgList.length;i++){
-                (function(count){
+           // for(var i=0;i<orgList.length;i++){
+                //(function(count){
                     if(req.params.id === '2'){
                             // For BusinessGroup
-                            masterUtil.getBusinessGroups(orgList[count].rowid,function(err,bgList){
+                            masterUtil.getBusinessGroups(orgList,function(err,bgList){
                                 if(err){
                                     res.send(500,'Not able to fetch BG.');
                                 }
                                 logger.debug("Returned BG List:>>>> ",JSON.stringify(bgList));
                                 res.send(bgList);
+                                return;
                             });
                         }
                     if(req.params.id === '3'){
                             // For Environment
-                            masterUtil.getEnvironments(orgList[count].rowid,function(err,envList){
+                            masterUtil.getEnvironments(orgList,function(err,envList){
                                 if(err){
                                     res.send(500,'Not able to fetch ENV.');
                                 }
                                 logger.debug("Returned ENV List:>>>>> ",JSON.stringify(envList));
                                 res.send(envList);
+                                return;
                             });
                         }
                     if(req.params.id === '4'){    
                             // For Projects
-                            masterUtil.getProjects(orgList[count].rowid,function(err,projectList){
+                            masterUtil.getProjects(orgList,function(err,projectList){
                                 if(err){
                                     res.send(500,'Not able to fetch Project.');
                                 }
                                 logger.debug("Returned Project List:>>>>> ",JSON.stringify(projectList));
                                 res.send(projectList);
+                                return;
                             })
                         }
                     if(req.params.id === '10'){    
                             // For ConfigManagement
-                            masterUtil.getCongifMgmts(loggedInUser,function(err,configMgmtList){
+                            masterUtil.getCongifMgmts(orgList,function(err,configMgmtList){
                                 if(err){
                                     res.send(500,'Not able to fetch ConfigManagement.');
                                 }
                                 logger.debug("Returned ConfigManagement List:>>>>> ",configMgmtList);
                                 res.send(configMgmtList);
+                                return;
                             });
                             
                         }
                     if(req.params.id === '18'){    
                             // For Docker
                             logger.debug("Id for docker:>> ",req.params.id);
-                            masterUtil.getDockers(req.params.id,function(err,dockerList){
+                            masterUtil.getDockers(orgList,function(err,dockerList){
                                 if(err){
                                     res.send(500,'Not able to fetch Dockers.');
                                 }
                                 logger.debug("Returned Dockers List:>>>>> ",JSON.stringify(dockerList));
                                 res.send(dockerList);
+                                return;
                             });
                             
                         }
                     if(req.params.id === '17'){    
                             // For Template
                             logger.debug("Id for template:>> ",req.params.id);
-                            masterUtil.getTemplates(req.params.id,function(err,templateList){
+                            masterUtil.getTemplates(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch Template.');
                                 }
                                 logger.debug("Returned Template List:>>>>> ",JSON.stringify(templateList));
                                 res.send(templateList);
+                                return;
                             });
                             
                         }
                     if(req.params.id === '19'){    
                             // For ServiceCommand
-                            masterUtil.getServiceCommands(req.params.id,function(err,serviceCommandList){
+                            masterUtil.getServiceCommands(orgList,function(err,serviceCommandList){
                                 if(err){
                                     res.send(500,'Not able to fetch ServiceCommand.');
                                 }
                                 logger.debug("Returned ServiceCommand List:>>>>> ",JSON.stringify(serviceCommandList));
                                 res.send(serviceCommandList);
+                                return;
                             });
                             
                         }
                     if(req.params.id === '20'){    
                             // For Jenkins
-                            masterUtil.getJenkins(req.params.id,function(err,jenkinList){
+                            masterUtil.getJenkins(orgList,function(err,jenkinList){
                                 if(err){
                                     res.send(500,'Not able to fetch Jenkins.');
                                 }
                                 logger.debug("Returned Jenkins List:>>>>> ",JSON.stringify(jenkinList));
                                 res.send(jenkinList);
+                                return;
                             });
                             
                         }
@@ -713,6 +722,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 logger.debug("Returned UserRole List:>>>>> ",JSON.stringify(userRoleList));
                                 res.send(userRoleList);
+                                return;
                             });
                             
                         }
@@ -724,6 +734,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 logger.debug("Returned User List:>>>>> ",JSON.stringify(userList));
                                 res.send(userList);
+                                return;
                             });
                             
                         }
@@ -735,10 +746,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 logger.debug("Returned Team List:>>>>> ",JSON.stringify(teamList));
                                 res.send(teamList);
+                                return;
                             }); 
                         }
-                 })(i);
-               }
+                // })(i);
+              // }
             });
         }
     });
@@ -1037,8 +1049,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             });
         }else{
-            settingsList =[];
+            var settingsList =[];
             var loggedInUser = req.session.user.cn;
+            var callCount = 0;
             masterUtil.getOrgs(loggedInUser,function(err,orgs){
                 if(err){
                     res.send(500,"Failed to fetch Org.");
@@ -1046,47 +1059,104 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if(orgs){
                     orgCount = orgs.length;
                     logger.debug("orgCount: ",orgCount);
-                    settingsList.push({"1":orgCount});
-                    for(var x=0;x<orgs.length;x++){
-                        (function(countOrg){
-                            logger.debug("Organization: ",orgs[countOrg].rowid);
-                            masterUtil.getBusinessGroups(orgs[countOrg].rowid,function(err,bgs){
+                    if(settingsList.length === 0){
+                        settingsList.push({"1":orgCount});
+                        logger.debug("Org if....");
+                        }
+                    for(var s=0;s<settingsList.length;s++){
+                        logger.debug("Entered orgs.....");
+                        (function(s1){
+                        if(settingsList[s1].hasOwnProperty("1")){
+                            delete settingsList[s1];
+                            settingsList.push({"1":orgCount});
+                            settingsList = settingsList.filter(Object);
+                            return;
+                                    }
+                                })(s);
+                            }
+                    //for(var x=0;x<orgs.length;x++){
+                        //(function(countOrg){
+                            logger.debug("Organization: ");
+                            masterUtil.getBusinessGroups(orgs,function(err,bgs){
                                 if(err){
                                     res.send(500,"Failed to fetch BGroups");
                                 }
                                 if(bgs){
                                     bgCount = bgs.length;
                                     logger.debug("bgCount: ",bgCount);
-                                    settingsList.push({"2":bgCount});
+                                    if(settingsList.length === 1){
+                                         settingsList.push({"2":bgCount});
+                                         logger.debug("BG if....");
+                                         }
+                                    for(var s=0;s<settingsList.length;s++){
+                                        (function(s1){
+                                            if(settingsList[s1].hasOwnProperty("2")){
+                                                delete settingsList[s1];
+                                                settingsList.push({"2":bgCount});
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                        })(s);
+                                    }
                                  }
                            // });
-                            masterUtil.getEnvironments(orgs[countOrg].rowid,function(err,envs){
+                            masterUtil.getEnvironments(orgs,function(err,envs){
                             if(err){
                                 res.send(500,"Failed to fetch ENVs.");
                             }
                             if(envs){
                                 envCount = envs.length;
                                 logger.debug("envCount: ",envCount);
-                                settingsList.push({"3":envCount});
+                                if(settingsList.length === 2){
+                                         settingsList.push({"3":envCount});
+                                         logger.debug("Env if....");
+                                         }
+                                for(var s=0;s<settingsList.length;s++){
+                                        (function(s1){
+                                            if(settingsList[s1].hasOwnProperty("3")){
+                                                delete settingsList[s1];
+                                                settingsList.push({"3":envCount});
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                        })(s);
+                                    }
                                 }
                            // });
-                            masterUtil.getProjects(orgs[countOrg].rowid,function(err,projects){
+                            masterUtil.getProjects(orgs,function(err,projects){
                                 if(err){
                                     res.send(500,"Failed to fetch Projects.");
                                 }
                                 if(projects){
                                     projectCount = projects.length;
                                     logger.debug("projectCount: ",projectCount);
-                                    settingsList.push({"4":projectCount});
-                                }
-                            logger.debug("All Counts: ",JSON.stringify(settingsList));
-                            res.send(settingsList);
+                                    if(settingsList.length === 3){
+                                         settingsList.push({"4":projectCount});
+                                         logger.debug("Proj if....");
+                                         }
+                                    for(var s=0;s<settingsList.length;s++){
+                                        (function(s1){
+                                            if(settingsList[s1].hasOwnProperty("4")){
+                                                logger.debug("Has project.");
+                                                delete settingsList[s1];
+                                                settingsList.push({"4":projectCount});
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                            })(s);
+                                            }
+                                        }
+                                        /*callCount+=1;
+                                        if(callCount === 3){*/
+                                        logger.debug("All settings: ",JSON.stringify(settingsList));
+                                        res.send(settingsList);
+                                       // }
                                     });
                                  });
                              });
                             
-                        })(x);
-                    }
+                       // })(x);
+                   // }
                 }
             });
         }
