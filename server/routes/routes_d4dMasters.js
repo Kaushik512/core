@@ -2037,8 +2037,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
             if (data == false) {
                 logger.debug('No permission to ' + permissionto + ' on ' + category);
-                res.end('401');
-
+                res.send(401,"You don't have permission to perform this operation.");
                 return;
             }
         } else {

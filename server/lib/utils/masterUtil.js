@@ -41,12 +41,12 @@ var MasterUtil = function(){
                                              callback(null,orgList);
                                         });
                                 }
-                                for(var i=0; i<orgIds.length;i++){
+                                //for(var i=0; i<orgIds.length;i++){
 
-                                    (function(count){
-                                        logger.debug("Org orgIds for query: ",orgIds[count]);
+                                   // (function(count){
+                                        logger.debug("Org orgIds for query: ",orgIds);
                                         d4dModelNew.d4dModelMastersOrg.find({
-                                            rowid : orgIds[count]
+                                            rowid : {$in:orgIds}
                                             },function(err,orgs){
                                             if(err){
                                                 logger.debug("Unable to fetch Org.");
@@ -65,8 +65,8 @@ var MasterUtil = function(){
                                             logger.debug("Returned Orgs: ",JSON.stringify(orgList));
                                              callback(null,orgList);
                                         });
-                                    })(i);
-                                }
+                                    //})(i);
+                               // }
                             }
                         })(x);
                     }
