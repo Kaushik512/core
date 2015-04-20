@@ -104,7 +104,8 @@ $(function() {
         $trHistoryRow.append($tdLogLink);
 
         dataTable.row.add($trHistoryRow).draw();
-
+        
+        pageSetUp();
     }
 
     function addDeployHistoryRow(deployHistory) {
@@ -178,6 +179,7 @@ $(function() {
     }
 
     function addAppInstanceRow(appInstance, applicationId) {
+
         var dataTable = $('#appInstancesTable').DataTable();
         var $tr = $('<tr></tr>');
         var $tdSno = $('<td/>');
@@ -266,7 +268,7 @@ $(function() {
 
         $tr.append($tdAction);
         dataTable.row.add($tr).draw();
-
+        pageSetUp();
     }
     var buildInfo = null;
 
@@ -1034,5 +1036,8 @@ $(function() {
         return (false);
     });
 
+    pageSetUp();
+});
+$(document).ready(function() {
     pageSetUp();
 });
