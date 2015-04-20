@@ -77,7 +77,7 @@
 }
 .anchorAddi{
     font-size:14px !important;
-    margin-top: 8px !important;
+    /*margin-top: 8px !important;*/
 }
 .anchorRemove{
     border-radius: 50% !important;
@@ -87,7 +87,7 @@
 }
 .anchorRemovei{
     font-size:14px !important;
-    margin-top: 8px !important;
+    /*margin-top: 8px !important;*/
 }
 .anchorUp{
     border-radius: 50% !important;
@@ -97,7 +97,7 @@
 }
 .anchorUpi{
     font-size:14px !important;
-    margin-top: 8px !important;
+    /*margin-top: 8px !important;*/
 }
 .anchorDown{
     border-radius: 50% !important;
@@ -107,7 +107,7 @@
 }
 .anchorDowni{
     font-size:14px !important;
-    margin-top: 8px !important;
+    /*margin-top: 8px !important;*/
 }
 
 
