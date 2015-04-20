@@ -5,62 +5,6 @@ var MasterUtil = function(){
     // Return All Orgs specific to User
 	this.getOrgs = function (loggedInUser,callback){   
         var orgList = [];
-		      /*d4dModelNew.d4dModelMastersTeams.find({
-                loginname : loggedInUser
-            },function(err,teams){
-                if(teams){
-                    logger.debug("Team size: ",teams.length);
-                    logger.debug("Returned Team>>>>> ",JSON.stringify(teams));
-                    for(var i1 =0; i1< teams.length; i1++){
-                        (function(i){
-                        if(teams[i].id === '21' && loggedInUser === teams[i].loginname){
-                            logger.debug("Only Team: ",JSON.stringify(teams[i]));
-                            d4dModelNew.d4dModelMastersProjects.find({
-                                projectname : teams[i].projectname
-                            },function(err,projects){
-                                if(err){
-                                    callback(err,null);
-                                }
-                                if(projects){
-                                    logger.debug("Returned Project:>>>>>> ",JSON.stringify(projects));
-                                    for(var j1 =0; j1< projects.length; j1++){
-                                        (function(j){
-                                        if(projects[j].id === '4'){
-                                            d4dModelNew.d4dModelMastersOrg.find({
-                                            orgname : projects[j].orgname
-                                            },function(err,orgs){
-                                                if(err){
-                                                    callback(err,null);
-                                                }
-                                            if(orgs){
-                                                for(var x1 = 0; x1< orgs.length; x1++){
-                                                    (function(x){
-                                                    if(orgs[x].id ==='1'){
-                                                logger.debug("Returned Org: >>>>>>> ",JSON.stringify(orgs[x]));
-                                                    orgList.push(orgs[x]);
-                                                  }
-                                              })(x1);
-                                                }
-                                                logger.debug("callback fire..");
-                                                 callback(null,orgList);
-                                              }
-
-                                            });
-                                        }
-                                    })(j1);
-                                    }
-                                }
-
-                            });
-                        }
-                    })(i1);
-                    }
-                   // callback(null,orgList);
-                }else{
-                    callback(err,null);
-                }
-
-            });*/
             d4dModelNew.d4dModelMastersUsers.find({
                 loginname: loggedInUser
             },function(err,users){
@@ -75,6 +19,28 @@ var MasterUtil = function(){
                             if(users[countUser].id === '7'){
                                 var orgIds = users[countUser].orgname_rowid;
                                 logger.debug("orgIds: ",orgIds);
+                                if(orgIds.length === 0){
+                                    d4dModelNew.d4dModelMastersOrg.find({
+                                            id : "1"
+                                            },function(err,orgs){
+                                            if(err){
+                                                logger.debug("Unable to fetch Org.");
+                                                callback(err,null);
+                                            }
+                                            if(orgs){
+                                                for(var y=0;y<orgs.length;y++){
+                                                    (function(countOrg){
+                                                        if(orgs[countOrg].id === '1'){
+                                                            logger.debug("Able to getch Org.",JSON.stringify(orgs[countOrg]));
+                                                            orgList.push(orgs[countOrg]);
+                                                        }
+                                                    })(y);
+                                                }
+                                            }
+                                            logger.debug("Returned Orgs: ",JSON.stringify(orgList));
+                                             callback(null,orgList);
+                                        });
+                                }
                                 for(var i=0; i<orgIds.length;i++){
 
                                     (function(count){
@@ -180,10 +146,10 @@ var MasterUtil = function(){
     }
 
     // Return all ConfigManagement specific to User
-    this.getCongifMgmts = function(loggedInUser,callback){
+    this.getCongifMgmts = function(orgId,callback){
         var congifMgmtList = [];
         d4dModelNew.d4dModelMastersConfigManagement.find({
-            loginname : loggedInUser
+            orgname_rowid : orgId
         },function(err,configMgmt){
             if(configMgmt){
                 for(var i = 0; i< configMgmt.length; i++){
@@ -199,11 +165,11 @@ var MasterUtil = function(){
     }
 
     // Return all Dockers
-    this.getDockers = function(anId,callback){
+    this.getDockers = function(orgId,callback){
         var dockerList = [];
-        logger.debug("Enter to Docker: ",anId);
+        logger.debug("Enter to Docker: ",orgId);
         d4dModelNew.d4dModelMastersDockerConfig.find({
-            id : anId
+            orgname_rowid : orgId
         },function(err,dockers){
             if(dockers){
                 for(var i =0; i< dockers.length; i++){
@@ -220,11 +186,11 @@ var MasterUtil = function(){
     }
 
     // Return all Templates
-    this.getTemplates = function(anId,callback){
+    this.getTemplates = function(orgId,callback){
         var templateList = [];
-        logger.debug("Enter to Template: ",anId);
+        logger.debug("Enter to Template: ",orgId);
         d4dModelNew.d4dModelMastersTemplatesList.find({
-            id : anId
+            orgname_rowid : orgId
         },function(err,templates){
             if(templates){
                 for(var i =0; i< templates.length; i++){
@@ -240,11 +206,32 @@ var MasterUtil = function(){
         });
     }
 
+    // Return all TemplateTypes
+    this.getTemplateTypes = function(orgId,callback){
+        var templateTypeList = [];
+        logger.debug("Enter to TemplateType: ",orgId);
+        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+            orgname_rowid : orgId
+        },function(err,templateTypes){
+            if(templateTypes){
+                for(var i =0; i< templateTypes.length; i++){
+                    if(templateTypes[i].id === '16'){
+                        templateTypeList.push(templateTypes[i]);
+                    }
+                }
+                callback(null,templateTypeList);
+            }else{
+                callback(err,null);
+            }
+
+        });
+    }
+
     // Return all ServiceCommands
-    this.getServiceCommands = function(anId,callback){
+    this.getServiceCommands = function(orgId,callback){
         var serviceCommandList = [];
         d4dModelNew.d4dModelMastersServicecommands.find({
-            id : anId
+            orgname_rowid : orgId
         },function(err,serviceCommands){
             if(serviceCommands){
                 for(var i =0; i< serviceCommands.length; i++){
@@ -261,10 +248,10 @@ var MasterUtil = function(){
     }
 
     // Return all Jenkins
-    this.getJenkins = function(anId,callback){
+    this.getJenkins = function(orgId,callback){
         var jenkinList = [];
         d4dModelNew.d4dModelJenkinsConfig.find({
-            id : anId
+            orgname_rowid : orgId
         },function(err,jenkins){
             if(jenkins){
                 for(var i =0; i< jenkins.length; i++){
