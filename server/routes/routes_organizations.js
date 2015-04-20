@@ -737,8 +737,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
-    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/providers/:providerId/images/:imageId/blueprints', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
+
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
         var user = req.session.user;
@@ -759,13 +761,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
+            logger.debug("Provider Id: ",req.body.providerId);
             var blueprintData = req.body.blueprintData;
             blueprintData.orgId = req.params.orgId;
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
-            blueprintData.imageId = req.params.imageId;
-            blueprintData.providerId = req.params.providerId;
+            
+            logger.debug("Enviornment ID:: ",req.params.envId);
+            //blueprintData.imageId = req.body.imageId;
+           // blueprintData.providerId = req.body.providerId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
@@ -1459,6 +1464,64 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                 });
             });
+        });
+    });
+
+    // For Docker Creation
+   app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints/docker', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+        //validating if user has permission to save a blueprint
+        logger.debug('Verifying User permission set');
+        var user = req.session.user;
+        var category = 'blueprints';
+        var permissionto = 'create';
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+            logger.debug("Provider Id: ",req.body.providerId);
+            var blueprintData = req.body.blueprintData;
+            blueprintData.orgId = req.params.orgId;
+            blueprintData.bgId = req.params.bgId;
+            blueprintData.projectId = req.params.projectId;
+            blueprintData.envId = req.params.envId;
+            
+            // for Docker
+            blueprintData.imageId = '000000';
+            blueprintData.providerId = '000000';
+            blueprintData.keyPairId = '000000';
+            blueprintData.subnetId = '000000';
+            blueprintData.vpcId = '000000';
+            blueprintData.securityGroupIds = ['000000'];
+            logger.debug("Enviornment ID:: ",req.params.envId);
+            
+            if (!blueprintData.runlist) {
+                blueprintData.runlist = [];
+            }
+            if (!blueprintData.users || !blueprintData.users.length) {
+                res.send(400);
+                return;
+            }
+
+            blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(data);
+            });
+            logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
         });
     });
 }
