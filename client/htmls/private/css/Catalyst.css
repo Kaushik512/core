@@ -496,6 +496,14 @@ label.custom-select {
     height:28px;
     width:32px;
 }
+.rdpIcondisable{
+    background-image:url('../img/galleryIcons/rsz_rdp.png');
+    background-repeat:no-repeat;
+    float: left;
+    height: 30px;
+    width: 100%;
+    margin-top: 2px;
+}
 .actionbuttonStartdisable{
     background-image:url('../img/galleryIcons/rsz_start_icon.png');
     background-repeat:no-repeat;
@@ -3703,6 +3711,13 @@ body
     float:left !important;
     margin-top: 0px !important;
 }
+.instance-bootstrap-ActionRDP {
+    /*font-size: 10px;
+  
+    text-align: center;*/
+    float:left !important;
+    margin-top: 0px !important;
+}
 .instance-bootstrap-ActionShutdown {
     /*font-size: 10px;
   
@@ -4234,6 +4249,11 @@ margin-top:0px;
     background-repeat:no-repeat;
 float: left;
 
+}
+.rdpIcon{
+    background-image:url('../img/galleryIcons/rdp.png');
+    background-repeat:no-repeat;float: left;
+    height: 30px;margin-left: 2px;width: 100%;margin-top: 2px;
 }
 .actionbuttonChefClientRun{
     /*background-image:url('../img/galleryIcons/Chefimport.png');*/
