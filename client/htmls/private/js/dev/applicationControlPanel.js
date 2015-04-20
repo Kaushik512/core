@@ -1,5 +1,4 @@
 $(function() {
-
     var urlParams = {};
     (window.onpopstate = function() {
         var url = window.location.href;
@@ -104,7 +103,7 @@ $(function() {
         $trHistoryRow.append($tdLogLink);
 
         dataTable.row.add($trHistoryRow).draw();
-        
+
         pageSetUp();
     }
 
