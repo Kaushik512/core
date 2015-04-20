@@ -1,3 +1,9 @@
+.applicationNameCSS{
+    text-align:center;
+    width:30px;
+    font-weight: bold;
+    color:white;
+}
 .pointereventsDisabled{
     pointer-events: none;
 }
@@ -30,6 +36,10 @@
 .footerfixed{
     bottom:0px;
     position:fixed;
+}
+.bordermargintop0{
+    border-top: 0px !important;
+    margin-top: 0px !important;
 }
 .padding10{
     padding: 10px !important;
@@ -119,6 +129,9 @@
 }
 .marginleft5{
     margin-left:5% !important;
+}
+.marginleft5px{
+    margin-left:5px !important;
 }
 .fontsize13{
     font-size: 13px !important;
