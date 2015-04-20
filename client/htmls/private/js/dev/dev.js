@@ -736,6 +736,7 @@
                                      $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                      $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                                      $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
+                                     $parent.find('.instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                      $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                                      if (data.appUrls && data.appUrls.length) {
                                          for (var k = 0; k < data.appUrls.length; k++) {
@@ -1301,6 +1302,7 @@
                                          $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                          $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                                          $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
+                                         $parent.find('.instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                          $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                                          if (data.appUrls && data.appUrls.length) {
                                              for (var k = 0; k < data.appUrls.length; k++) {
@@ -1421,7 +1423,7 @@
                      var $divActionShutdownContainer = $('<div class="actionbutton" style="display:none !important;"></div>').addClass('instance-bootstrap-ActionShutdown').append($('<a href="javascript:void(0)"></a>').addClass('actionbuttonShutdown instanceActionBtn').attr('data-actionType', 'Stop').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Stop'));
 
                      if(data.hardware.os =='windows'){
-                        var $divActionRDPContainer = $('<div class="rdpContainer actionbutton"></div>').addClass('instance-bootstrap-ActionRDP').append($('<a class="rdpIcon" href="/instances/rdp/' + data.instanceIP + '/3389"</a>').attr('data-actionType', 'RDP').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'RDP'));
+                        var $divActionRDPContainer = $('<div class="rdpContainer actionbutton"></div>').addClass('instance-bootstrap-ActionRDP').append($('<a class="rdpIcon"></a>').attr('href', '/instances/rdp/' + data.instanceIP + '/3389').attr('data-actionType', 'RDP').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'RDP'));
                          $divActionBtnContainer.append($divActionRDPContainer);
                      }
 
