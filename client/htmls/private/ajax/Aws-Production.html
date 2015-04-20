@@ -1451,6 +1451,10 @@ if ($('#tab2 .role-Selected').length > 0) {
 }
 	//force clicking orgnameSelect
 	$('#orgnameSelect').trigger('change');
+  $(".chooseBG").change();
+  $('.chooseProject').select2('data', null)
+  $(".chooseEnv").change();
+  $(".chooseDockerContainer").change();
 	
 	
 } else if (index == 3) {
