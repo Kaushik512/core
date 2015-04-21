@@ -9,9 +9,10 @@ var childProcess = require('child_process');
 var io = require('socket.io');
 var logger = require('./lib/logger')(module);
 var expressLogger = require('./lib/logger').ExpressLogger();
+var passport = require('passport');
+var passportLdapStrategy = require('passport-ldapauth');
 
-logger.debug('Starting Catalyst');
-logger.debug('Logger Initialized');
+
 
 var appConfig = require('./config/app_config');
 
@@ -19,6 +20,26 @@ var RedisStore = require('connect-redis')(express);
 var MongoStore = require('connect-mongo')(express.session);
 
 var mongoDbConnect = require('./lib/mongodb');
+
+
+logger.debug('Starting Catalyst');
+logger.debug('Logger Initialized');
+
+// setting up up passport authentication strategy
+
+passport.use(new passportLdapStrategy({
+    server: {
+        url: 'ldap://' + appConfig.ldap.host + ':' + appConfig.ldap.port,
+        bindDn: 'cn=superadmin,dc=d4d-ldap,dc=relevancelab,dc=com',
+        bindCredentials:'superadmin@123',
+        searchBase: 'dc=d4d-ldap,dc=relevancelab,dc=com',
+        searchFilter: '(uid={{username}})'
+        //  usernameField: 'username',
+        // passwordField: 'pass'
+    }
+}));
+
+
 var dboptions = {
     host: appConfig.db.host,
     port: appConfig.db.port,
@@ -26,7 +47,7 @@ var dboptions = {
 };
 mongoDbConnect(dboptions, function(err) {
     if (err) {
-        logger.error("Unable to connect to mongo db >>"+ err);
+        logger.error("Unable to connect to mongo db >>" + err);
         throw new Error(err);
     } else {
         logger.debug('connected to mongodb - host = %s, port = %s, database = %s', dboptions.host, dboptions.port, dboptions.dbName);
@@ -44,9 +65,9 @@ app.set('sport', appConfig.app_run_secure_port);
 app.use(express.compress());
 app.use(express.favicon());
 app.use(express.logger({
-    format:'dev', 
+    format: 'dev',
     stream: {
-        write: function(message, encoding){
+        write: function(message, encoding) {
             expressLogger.debug(message);
         }
     }
@@ -62,6 +83,11 @@ app.use(express.session({
 }));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+
+//setting up passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(app.router);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";

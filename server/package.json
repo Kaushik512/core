@@ -33,7 +33,9 @@
         "jenkins-api":"0.2.6",
         "wait-for-port":"0.0.1",
         "mongoose-schema-extend":"0.1.7",
-        "jira":"*"
+        "jira":"*",
+        "passport":"0.2.1",
+        "passport-ldapauth":"0.3.0"
     },
     "devDependencies": {
         "grunt": "0.4.5",
