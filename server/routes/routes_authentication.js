@@ -7,6 +7,7 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var logger = require('../lib/logger')(module);
 var appConfig = require('../config/app_config');
 var ldapSettings = appConfig.ldap;
+var passport = require('passport');
 
 module.exports.setRoutes = function(app) {
     app.post('/auth/createldapUser', function(req, res) {
@@ -31,7 +32,33 @@ module.exports.setRoutes = function(app) {
         } else
             res.send(req.body);
     });
+   /* app.post('/auth/signin', function(req, res, next) {
+        //if (req.body && req.body.username && req.body.pass) {
+            passport.authenticate('ldapauth', function(err, user, info) {
+                console.log('passport error ==>', err);
+                console.log('passport user ==>', user);
+                console.log('passport info ==>', info);
 
+                if (err) {
+                    return next(err);
+                }
+                if (!user) {
+                    return res.redirect('/login');
+                }
+                req.logIn(user, function(err) {
+                    if (err) {
+                        return next(err);
+                    }
+                    return res.redirect('/users/' + user.username);
+                });
+                res.send(500);
+            })(req, res, next);
+
+        //} else {
+            //res.redirect('/public/login.html?o=try');
+        //}
+    });*/
+    
     app.post('/auth/signin', function(req, res) {
 
         //logger.debug("post: /auth/signin :: Request = ", req);
@@ -64,12 +91,12 @@ module.exports.setRoutes = function(app) {
                             };
                             user.roleName = 'Admin';
                             logger.debug("Redirecting to /private/index.html")
-                                //res.redirect('/user/admin');
+                            //res.redirect('/user/admin');
                             res.redirect('/private/index.html');
                             res.send(200);
                         } else {
                             console.log('in else --- ' + user.cn); //sd1
-                            usersDao.getUser(user.cn,req, function(err, data) {
+                            usersDao.getUser(user.cn, req, function(err, data) {
                                 logger.debug("User is not a Admin.");
                                 if (data.length) {
                                     user.roleId = data[0].userrolename;
@@ -84,7 +111,7 @@ module.exports.setRoutes = function(app) {
                                     //     }
                                     // });
                                     res.redirect('/private/index.html');
-                                    
+
                                     // configmgmtDao.getAccessFilesForRole(user.cn, user, req, res, function(err, getAccessFiles) {
                                     //     if (getAccessFiles) {
                                     //         getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
@@ -96,7 +123,7 @@ module.exports.setRoutes = function(app) {
                                     //         user.authorizedfiles = getAccessFiles;
                                     //         // checking permission 
                                     //         //to test (username,category,permissionto,req,permissionset,callback)
-                                            
+
                                     //     } else {
                                     //         logger.error("getAccessFiles not available")
                                     //         res.send(500);
@@ -166,7 +193,7 @@ module.exports.setRoutes = function(app) {
         logger.debug('Enter /auth/userexists/:username. for Username ::' + req.params.username);
         var ldapClient = new LdapClient();
         ldapClient.compare(req.params.username, function(err, status) {
-           // logger.debug("/auth/userexists/:username. LDAP Response = " + status);
+            // logger.debug("/auth/userexists/:username. LDAP Response = " + status);
             res.send(status)
         });
     });
@@ -177,7 +204,7 @@ module.exports.setRoutes = function(app) {
 
     app.get('/auth/getpermissionset', function(req, res) {
         logger.debug('hit permissionset ' + req.session.user.cn);
-        if(req.session.user.password)
+        if (req.session.user.password)
             delete req.session.user.password;
         res.send(JSON.stringify(req.session.user));
     });

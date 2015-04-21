@@ -57,7 +57,7 @@
                                       </div>
                                       <!--rdp-->
                                         <div class="rdpContainer actionbutton instance-bootstrap-ActionRDP">
-                                        <a class='rdpShellBtn cpTop' data-actiontype="RDP" data-placement="top" rel="tooltip" data-original-title="RDP">
+                                        <a class='rdpIcon rdpShellBtn cpTop'>
                                         </a>
                                       </div>
                                       <!--rdp ends here-->
@@ -568,7 +568,7 @@ function enableInstanceActionStartBtn(instanceId){
       $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
   }
   else{
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpShellBtn');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
   }
   
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
@@ -580,7 +580,7 @@ function enableInstanceActionStopBtn(instanceId){
   $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
   //rdp
-   $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpShellBtn').addClass('rdpIcondisable');
+   $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
 }
@@ -590,7 +590,7 @@ function disableInstanceActionBtns(instanceId){
   $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
   //rdp
-   $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpShellBtn').addClass('rdpIcondisable');
+   $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
   $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
@@ -604,7 +604,7 @@ function disableInstanceStartStopActionBtns(instanceId){
     $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
   }
   else{
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpShellBtn');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
   }
   
   $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
@@ -817,7 +817,12 @@ $('.startstoptoggler').click(startAndStopToggler);
   if(data.hardware.os === 'windows'){
     var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
     var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').replaceWith($('<a class="rdpIcon" href="/instances/rdp/' + data.instanceIP + '/3389"</a>'));
+    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').replaceWith($('<a class="rdpIcon" href="/instances/rdp/' + data.instanceIP + '/3389"></a>').attr('data-actionType', 'RDP').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'RDP'));
+  }
+  if(data.hardware.os==='linux'){
+    var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
+    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('hidden');
   }
 
 
@@ -931,6 +936,11 @@ $('.startstoptoggler').click(startAndStopToggler);
     $('#modalSSHShellContainer').on('hide.bs.modal', function(e) {
         $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
         $('#modalSSHShellContainer').find('.modal-body').empty();
+    });
+    $('.rdpIcondisable').click(function() {
+      if($(this).hasClass('isStopedInstance')){
+        return false;
+      }
     });
     $('.sshShellBtn').click(function() {
       if($(this).hasClass('isStopedInstance')){
@@ -1053,7 +1063,7 @@ $('.startstoptoggler').click(startAndStopToggler);
                                     var cssClassed = getCssClassFromStatus(data.instanceState);
                                     $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                     $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                                    $parent.find('instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href','/instances/rdp/' + data.instanceIP + '/3389');
+                                    $parent.find('instance-bootstrap-ActionRDP a').attr('href','/instances/rdp/' + data.instanceIP + '/3389');
                                     if (data.appUrls && data.appUrls.length) {
                                              for (var k = 0; k < data.appUrls.length; k++) {
                                                  var url = data.appUrls[k].url;
