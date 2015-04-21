@@ -273,6 +273,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             projectId: blueprint.projectId,
                                                             envId: blueprint.envId,
                                                             providerId: blueprint.providerId,
+                                                            keyPairId: blueprint.keyPairId,
                                                             chefNodeName: instanceData.InstanceId,
                                                             runlist: version.runlist,
                                                             platformId: instanceData.InstanceId,
