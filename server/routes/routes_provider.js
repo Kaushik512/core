@@ -88,7 +88,7 @@ app.post('/aws/providers', function(req, res) {
                             providerName: provider.providerName,
                             providerType: provider.providerType,
                             orgId: orgs[0].rowid,
-                            orgname: orgs[0].orgname,
+                            orgName: orgs[0].orgname,
                             __v: provider.__v,
                             keyPairs: keyPair
                             };
@@ -137,7 +137,7 @@ app.get('/aws/providers/:providerId', function(req, res) {
             if (aProvider) {
              AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
                 logger.debug("keyPairs length::::: ",keyPair.length);
-                masterUtil.getOrgById(aProvider.orgId,function(err,orgs){
+                masterUtil.getOrgById(aProvider.orgId[0],function(err,orgs){
                   if(err){
                     res.send(500,"Not able to fetch org.");
                     return;

@@ -36,7 +36,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("Hit an error in getTeamsOrgBuProjForUser : " + err);
                 res.send(orgTree);
                 return;
-            } else {
+            } 
+            if(JSON.stringify(objperms) === 'null'){
+                logger.debug("getTeamsOrgBuProjForUser : is null" + err);
+                res.send(orgTree);
+                return;
+            }else {
                 logger.debug('Objperms:' + JSON.stringify(objperms));
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     logger.debug("Rowid List /organizations/getTreeNew -->%s", rowidlist);
@@ -220,7 +225,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("Hit an error in getTeamsOrgBuProjForUser : " + err);
                 res.send(orgTree);
                 return;
-            } else {
+            }
+            if(JSON.stringify(objperms) === 'null'){ 
+                logger.debug("No Object found.");
+                res.send(orgTree);
+                return;
+            }else {
                 logger.debug(' Returned from getTeamsOrgBuProjForUser : ' + JSON.stringify(objperms));
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     d4dModelNew.d4dModelMastersOrg.find({
@@ -389,7 +399,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     }
                                                 }
                                             }
-                                            logger.debug("OrgTree:%s", JSON.stringify(orgTree));
+                                            logger.debug("OrgTree:%s", JSON.stringify(orgTree.length));
+                                            logger.debug("All orgIds:>>>>>>>>>>>>>>>>>>>>>>>> ",orgids);
                                             if (counter >= docbgs.length - 1) {
                                                 d4dModelNew.d4dModelMastersEnvironments.find({
                                                     id: 3,
@@ -397,14 +408,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         $in: orgids
                                                     }
                                                 }, function(err, docenvs) {
+                                                    logger.debug("Returned env for org:>>>>>>>>>>>>>>> ",JSON.stringify(docenvs));
                                                     for (var _i = 0; _i < orgTree.length; _i++) {
                                                         for (var _env = 0; _env < docenvs.length; _env++) {
+                                                            logger.debug("Condition check:>>>>> ",orgTree[_i]['name'] == docenvs[_env]['orgname']);
                                                             if (orgTree[_i]['name'] == docenvs[_env]['orgname']) {
                                                                 var envname = configmgmtDao.convertRowIDToValue(docenvs[_env]['rowid'], rowidlist);
+                                                                logger.debug("My env>>>>>>>>>>> ",envname);
                                                                 orgTree[_i]['environments'].push(envname);
                                                             }
                                                         }
                                                         if (_i >= orgTree.length - 1) {
+                                                            logger.debug("Returned complete orgTree:>>>>>>>>>>> ",JSON.stringify(orgTree));
                                                             res.send(orgTree);
                                                             logger.debug("Exit get() for /organizations/getTreeForbtv");
                                                             return;
@@ -873,6 +888,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn, function(err, orgbuprojs) {
             logger.debug('-----------------------------------------------------getTeamsOrgBuProjForUser : ' + JSON.stringify(orgbuprojs));
+            if(JSON.stringify(orgbuprojs) === 'null'){
+                logger.debug('User not part of team to see project.');
+                    res.send(401,"User not part of team to see project.");
+                    return;
+            }
+
             if (!err) {
                 if (orgbuprojs.projects.indexOf(req.params.projectId) >= 0) {
                     Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {

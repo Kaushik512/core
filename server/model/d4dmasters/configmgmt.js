@@ -942,9 +942,13 @@ function Configmgmt() {
                                     //  console.log(k['rowid'], k['environmentname'],envdata_.length);
                                 });
 
-
-                            } 
-                                d4dModelNew.d4dModelMastersProviders.find({
+                                logger.debug("End of Team.");
+                                callback(null, rowidval);
+                            } else{
+                                logger.debug("Else in Team.");
+                                callback(null, rowidval);
+                            }
+                                /*d4dModelNew.d4dModelMastersProviders.find({
                                     id: "9"
                                 }, function(err, providerdata) {
                                 if (providerdata) {
@@ -975,7 +979,7 @@ function Configmgmt() {
                                     callback(null, rowidval);
                                 }
 
-                                }); //provviders
+                                });*/ //provviders
 
                             }); //teams
 
@@ -1454,7 +1458,7 @@ function Configmgmt() {
                      callback(err, null);
                      return;
                  }
-                 if (teamd) {
+                 if (teamd.length > 0) {
                      // logger.debug('In d4dModelMastersTeams teadd :' + JSON.stringify(teamd));
                      teamd.forEach(function(k, v) {
                          logger.debug('k:' + k + 'v:' + v);

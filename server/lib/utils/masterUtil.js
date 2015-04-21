@@ -1,5 +1,6 @@
 var logger = require('../../lib/logger')(module);
 var d4dModelNew = require('../../model/d4dmasters/d4dmastersmodelnew.js');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var MasterUtil = function(){
     // Return All Orgs specific to User
@@ -223,6 +224,9 @@ var MasterUtil = function(){
         d4dModelNew.d4dModelMastersTemplatesList.find({
             orgname_rowid : {$in:rowIds}
         },function(err,templates){
+            if(err){
+                callback(err,null);
+            }
             if(templates){
                 for(var i =0; i< templates.length; i++){
                     if(templates[i].id === '17'){
@@ -231,7 +235,7 @@ var MasterUtil = function(){
                 }
                 callback(null,templateList);
             }else{
-                callback(err,null);
+                callback(null,templateList);
             }
 
         });
@@ -239,6 +243,7 @@ var MasterUtil = function(){
 
     // Return all TemplateTypes
     this.getTemplateTypes = function(orgList,callback){
+        logger.debug("getTemplateTypes called. ",JSON.stringify(orgList));
         var templateTypeList = [];
         var rowIds = [];
         for(var x=0;x<orgList.length;x++){
@@ -248,6 +253,9 @@ var MasterUtil = function(){
         d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
             orgname_rowid : {$in:rowIds}
         },function(err,templateTypes){
+            if(err){
+                callback(err,null);
+            }
             if(templateTypes){
                 for(var i =0; i< templateTypes.length; i++){
                     if(templateTypes[i].id === '16'){
@@ -256,7 +264,7 @@ var MasterUtil = function(){
                 }
                 callback(null,templateTypeList);
             }else{
-                callback(err,null);
+                callback(null,templateTypeList);
             }
 
         });
@@ -370,11 +378,20 @@ var MasterUtil = function(){
         });
     }
 
-    this.getTeams = function(loggedInUser,callback){
+    this.getTeams = function(orgList,callback){
         var teamList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersTeams.find({
-            loginname : loggedInUser
+            orgname_rowid : {$in:rowIds}
         },function(err,teams){
+            if(err){
+                callback(err,null);
+            }
+            logger.debug("Able to fetch Team: ",JSON.stringify(teams));
             if(teams){
                 for(var i=0; i< teams.length; i++){
                     if(teams[i].id === '21'){
@@ -383,19 +400,20 @@ var MasterUtil = function(){
                 }
                 callback(null,teamList);
             }else{
-                callback(err,null);
+                callback(null,teamList);
             }
         });
     }
 
     this.getOrgById = function(orgId,callback){
         var orgList = [];
+        logger.debug("Incomming orgid: ",orgId);
         d4dModelNew.d4dModelMastersOrg.find({
-            rowid : orgId
+            _id : new ObjectId(orgId)
         },function(err,orgs){
             if(orgs){
                 for(var i=0; i< orgs.length; i++){
-                    if(orgs[i].id === '21'){
+                    if(orgs[i].id === '1'){
                         orgList.push(orgs[i]);
                     }
                 }

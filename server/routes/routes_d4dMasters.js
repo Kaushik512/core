@@ -601,6 +601,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             logger.debug("Unable to fetch Settings.");
                             res.send(500,"Unable to fetch Settings for Id: ",req.params.id);
                         }
+                        logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
                         res.send(data);
                     });
 
@@ -690,6 +691,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
+                        if(req.params.id === '16'){    
+                            // For Template
+                            logger.debug("Id for templateType:>> ",req.params.id);
+                            /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                                if(err){
+                                    res.send(500,'Not able to fetch TemplateType.');
+                                }
+                                logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
+                                res.send(templateList);
+                                return;
+                            });*/
+
+                            d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                                id: req.params.id
+                            },function(err,data){
+                                if(err){
+                                    logger.debug("Unable to fetch TemplateType.");
+                                    res.send(500,"Unable to fetch TemplateType for Id: ",req.params.id);
+                                }
+                                logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
+                                res.send(data);
+                            });
+                            
+                        }
                     if(req.params.id === '19'){    
                             // For ServiceCommand
                             masterUtil.getServiceCommands(orgList,function(err,serviceCommandList){
@@ -740,7 +765,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                     if(req.params.id === '21'){    
                             // For Team
-                            masterUtil.getTeams(loggedInUser,function(err,teamList){
+                            masterUtil.getTeams(orgList,function(err,teamList){
                                 if(err){
                                     res.send(500,'Not able to fetch Team.');
                                 }
@@ -753,6 +778,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
               // }
             });
         }
+        //res.send([]);
     });
 
      app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
