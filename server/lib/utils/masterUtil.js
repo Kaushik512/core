@@ -387,5 +387,23 @@ var MasterUtil = function(){
             }
         });
     }
+
+    this.getOrgById = function(orgId,callback){
+        var orgList = [];
+        d4dModelNew.d4dModelMastersOrg.find({
+            rowid : orgId
+        },function(err,orgs){
+            if(orgs){
+                for(var i=0; i< orgs.length; i++){
+                    if(orgs[i].id === '21'){
+                        orgList.push(orgs[i]);
+                    }
+                }
+                callback(null,orgList);
+            }else{
+                callback(err,null);
+            }
+        });
+    }
 }
 module.exports = new MasterUtil();

@@ -6,6 +6,7 @@ var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var blueprints = require('../model/dao/blueprints');
 var instances = require('../model/dao/instancesdao');
+var masterUtil = require('../lib/utils/masterUtil.js');
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/aws/providers/*",sessionVerificationFunc);
 
@@ -17,6 +18,7 @@ app.post('/aws/providers', function(req, res) {
     var secretKey = req.body.secretKey;
     var providerName = req.body.providerName;
     var providerType = req.body.providerType;
+    var orgId = req.body.orgId;
 
     if(typeof accessKey === 'undefined' || accessKey.length === 0){
         res.send(400,"{Please Enter AccessKey.}");
@@ -47,7 +49,8 @@ app.post('/aws/providers', function(req, res) {
      accessKey: accessKey,
      secretKey: secretKey,
      providerName: providerName,
-     providerType: providerType
+     providerType: providerType,
+     orgId: orgId
  };
       var ec2 = new EC2({
            "access_key": accessKey,
@@ -70,19 +73,29 @@ app.post('/aws/providers', function(req, res) {
               }
               logger.debug("Provider id:  %s",JSON.stringify(provider._id));
               AWSKeyPair.createNew(req,provider._id,function(err,keyPair){
-                  if(keyPair){
-                      var dommyProvider = {
-                          _id: provider._id,
-                          id: 9,
-                          accessKey: provider.accessKey,
-                          secretKey: provider.secretKey,
-                          providerName: provider.providerName,
-                          providerType: provider.providerType,
-                          __v: provider.__v,
-                          keyPairs: keyPair
-                          };
-                          res.send(dommyProvider);        
+                masterUtil.getOrgById(providerData.orgId,function(err,orgs){
+                  if(err){
+                    res.send(500,"Not able to fetch org.");
+                    return;
+                  }
+                  if(orgs.length > 0){
+                    if(keyPair){
+                        var dommyProvider = {
+                            _id: provider._id,
+                            id: 9,
+                            accessKey: provider.accessKey,
+                            secretKey: provider.secretKey,
+                            providerName: provider.providerName,
+                            providerType: provider.providerType,
+                            orgId: orgs[0].rowid,
+                            orgname: orgs[0].orgname,
+                            __v: provider.__v,
+                            keyPairs: keyPair
+                            };
+                            res.send(dommyProvider);        
+                        }   
                       }
+                    })
                   }); 
                   logger.debug("Exit post() for /providers");
               });
@@ -124,19 +137,29 @@ app.get('/aws/providers/:providerId', function(req, res) {
             if (aProvider) {
              AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
                 logger.debug("keyPairs length::::: ",keyPair.length);
-                if(keyPair){
-                    var dommyProvider = {
-                        _id: aProvider._id,
-                        id: 9,
-                        accessKey: aProvider.accessKey,
-                        secretKey: aProvider.secretKey,
-                        providerName: aProvider.providerName,
-                        providerType: aProvider.providerType,
-                        __v: aProvider.__v,
-                        keyPairs: keyPair
-                    };
-                    res.send(dommyProvider);        
-                }
+                masterUtil.getOrgById(aProvider.orgId,function(err,orgs){
+                  if(err){
+                    res.send(500,"Not able to fetch org.");
+                    return;
+                  }
+                  if(orgs.length > 0){
+                    if(keyPair){
+                        var dommyProvider = {
+                            _id: aProvider._id,
+                            id: 9,
+                            accessKey: aProvider.accessKey,
+                            secretKey: aProvider.secretKey,
+                            providerName: aProvider.providerName,
+                            providerType: aProvider.providerType,
+                            orgId: aProvider.orgId,
+                            orgName: orgs[0].orgname,
+                            __v: aProvider.__v,
+                            keyPairs: keyPair
+                        };
+                        res.send(dommyProvider);        
+                    }
+                  }
+                });
             });
      } else {
         res.send(404);
@@ -152,6 +175,7 @@ app.post('/aws/providers/:providerId/update', function(req, res) {
  var providerName = req.body.providerName.trim();
  var providerType = req.body.providerType.trim();
  var providerId = req.params.providerId.trim();
+ var orgId = req.body.orgId.trim();
  if(typeof providerId === 'undefined' || providerId.length === 0){
     res.send(400,"{Please Enter ProviderId.}");
     return;
@@ -186,7 +210,8 @@ var providerData= {
     accessKey: accessKey,
     secretKey: secretKey,
     providerName: providerName,
-    providerType: providerType
+    providerType: providerType,
+    orgId: orgId
 };
 logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
 var ec2 = new EC2({
