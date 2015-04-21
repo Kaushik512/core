@@ -293,6 +293,7 @@ $(document).ready(function() {
             $('.inputTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
             $('#taskType').change();
+            $('#taskType').attr('disabled','disabled');
             //$('#taskType').val(taskData.taskType);
             if(taskData.taskConfig.attributesjson != '' && taskData.taskConfig.attributesjson != null)
                 {

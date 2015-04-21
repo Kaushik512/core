@@ -12,6 +12,8 @@ var credentialCryptography = require('../lib/credentialcryptography');
 var Curl = require('../lib/utils/curl.js');
 
 var errorResponses = require('./error_responses');
+var waitForPort = require('wait-for-port');
+
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -90,10 +92,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/chef/servers/:serverId/nodes/:nodeName', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
+                console.log(err);
                 res.send(500);
                 return;
             }
             if (!chefDetails) {
+                console.log("Chef details not found");
                 res.send(404);
                 return;
             }
@@ -106,6 +110,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getNode(req.params.nodeName, function(err, nodeData) {
                 if (err) {
+                    console.log(err)
                     res.send(500);
                     return;
                 } else {
@@ -252,7 +257,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         runlist: runlist,
                         platformId: platformId,
                         instanceIP: nodeIp,
-                        instanceState: node.isAlive,
+                        instanceState: 'running',
                         bootStrapStatus: 'success',
                         hardware: hardwareData,
                         credentials: encryptedCredentials,
@@ -362,7 +367,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             });
                                             return;
                                         }
-                                        if (nodeIp != 'unknown') {
+                                        /*if (nodeIp != 'unknown') {
                                             var cmd = 'ping -c 1 -w 1 ' + nodeIp;
                                             var curl = new Curl();
                                             console.log("Pinging Node to check if alive :" + cmd);
@@ -385,7 +390,21 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             insertNodeInMongo(node);
                                             console.log('importing node ' + node.name);
                                             updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
+                                        }*/
+                                        var openport = 22;
+                                        if (node.automatic.platform === 'windows') {
+                                            openport = 5985;
                                         }
+                                        waitForPort(nodeIp, openport, function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                                updateTaskStatusNode(node.name, "Unable to ssh/winrm into node "+node.name+". Cannot import this node.", true, count);
+                                                return;
+                                            }
+                                            insertNodeInMongo(node);
+                                            updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
+                                        });
+
                                     });
                                 });
                             }
