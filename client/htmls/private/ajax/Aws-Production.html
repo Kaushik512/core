@@ -893,7 +893,7 @@ return data;
         method:"post",
         data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
         success:function(list){
-         // debugger;
+
         var str='',getTemplate=function(val,name){
           return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
           'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
@@ -1013,7 +1013,6 @@ function getSubnet(){
         method:"post",
         data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
         success:function(data){
-         // debugger;
          console.log(data);
          var str='<option value="">Select Subnet</option>';
          var filteredData=[];
@@ -1022,10 +1021,7 @@ function getSubnet(){
             filteredData.push(data.Subnets[i]);
           }
         }
-
-         // str=str+ helperConstructOption(filteredData,[],'SubnetId','SubnetId');
-
-         for(var i=0;i<filteredData.length;i++){
+        for(var i=0;i<filteredData.length;i++){
           str=str+'<option value="'+filteredData[i].SubnetId+'">'+filteredData[i].SubnetId+' ('+filteredData[i].AvailabilityZone+') '+
           (filteredData[i].Tags.length?filteredData[i].Tags[0].Value:"")+'</option>';
           
@@ -1483,6 +1479,10 @@ if ($('#tab2 .role-Selected').length > 0) {
 }
 	//force clicking orgnameSelect
 	$('#orgnameSelect').trigger('change');
+  $(".chooseBG").change();
+  $('.chooseProject').select2('data', null)
+  $(".chooseEnv").change();
+  $(".chooseDockerContainer").change();
 	
 	
 } else if (index == 3) {
@@ -1585,13 +1585,14 @@ if ($('#tab2 .role-Selected').length > 0) {
  reqBody.instanceUsername='root';
  reqBody.vpcId=vpcId;
  reqBody.subnetId=subnetId;
-
+ reqBody.imageId=imageId;
+ reqBody.providerId=providerId;
+ //alert(reqBody.providerId);
  reqBody.name = $('#blueprintNameInput').val();
 if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
  if(!reqBody.instanceOS){
   alert('Please Select Operating System');
   return false;
-
 }
 
 if(!providerId){
@@ -1621,7 +1622,7 @@ if(!subnetId){
 }
 
 if(!keyPairId){
- alert("Please Select KEyPAir");
+ alert("Please Select KeyPair");
  return false;
 }
 if(!instanceType){
@@ -1636,7 +1637,6 @@ if(!securityGroupIds.length){
 }
 
 }
-
 if (!reqBody.name) {
  alert("Please enter a blueprint name");
  return false;
@@ -1676,8 +1676,8 @@ if (!reqBody.users) {
 	
 	$('.blueprintMsgContainer').hide();
 	
-	
-	$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/providers/'+providerId+ '/images/'+imageId+'/blueprints', {
+if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
+$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints', {
    blueprintData: reqBody
  }, function(data) {
    console.log(data);
@@ -1690,7 +1690,42 @@ if (!reqBody.users) {
  });
  console.log('final', reqBody);
 
-} 
+}else{
+$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId + '/blueprints/docker', {
+   blueprintData: reqBody
+ }, function(data) {
+   console.log(data);
+   $('.blueprintSaveSuccess').show();
+   var wizard = $wizard.data('bootstrapWizard');
+   wizard.disablePreviouBtn();
+ }).error(function(xhr){
+   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+   $('.blueprintSaveFail').show();
+ });
+ console.log('final', reqBody);
+}
+	
+
+//}	else{
+/*
+		$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId+'/blueprints' , {
+   blueprintData: reqBody
+ }, function(data) {
+   console.log(data);
+   $('.blueprintSaveSuccess').show();
+   var wizard = $wizard.data('bootstrapWizard');
+   wizard.disablePreviouBtn();
+ }).error(function(xhr){
+   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+   $('.blueprintSaveFail').show();
+ });
+ console.log('final', reqBody);
+
+}*/
+
+}
+
+
 },
 'onPrevious': function(tab, navigation, index) {
 	//console.log(index);

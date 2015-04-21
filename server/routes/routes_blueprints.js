@@ -273,6 +273,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             projectId: blueprint.projectId,
                                                             envId: blueprint.envId,
                                                             providerId: blueprint.providerId,
+                                                            keyPairId: blueprint.keyPairId,
                                                             chefNodeName: instanceData.InstanceId,
                                                             runlist: version.runlist,
                                                             platformId: instanceData.InstanceId,
@@ -470,7 +471,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         hardwareData.architecture = nodeData.automatic.kernel.machine;
                                                                                         hardwareData.platform = nodeData.automatic.platform;
                                                                                         hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                                        hardwareData.memory = {};
+                                                                                        hardwareData.memory = {
+                                                                                            total: 'unknown',
+                                                                                            free: 'unknown'
+                                                                                        };
                                                                                         if (nodeData.automatic.memory) {
                                                                                             hardwareData.memory.total = nodeData.automatic.memory.total;
                                                                                             hardwareData.memory.free = nodeData.automatic.memory.free;

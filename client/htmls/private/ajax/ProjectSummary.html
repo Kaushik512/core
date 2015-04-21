@@ -2,7 +2,7 @@
 
     <article class="col-sm-12 col-md-12 col-lg-12">
 
-            <div class="widget-body" style="font-size:12px;">
+            <div class="widget-body font-size12">
 
                 <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
 
@@ -23,7 +23,7 @@
                     <div class="tab-pane active" id="l2">
                       <div class="row">
                         <div class="col-md-12">
-                          <div class="widget-box" style="border-top: 0px none; margin-top: 0px;">
+                          <div class="widget-box bordermargintop0">
                             <div class="widget-header">
                               <h5 style="color:#777;font-size:14px;" class="widget-title">
                               <strong>Applications</strong>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="widget-body">
                                <div class="widget-main" style="min-height:200px">
-                                  <div class="row appcardList" style="padding-left:0 !important;padding-right:0 !important">
+                                  <div class="row appcardList paddingleftright0">
 
                                     
 
@@ -49,7 +49,7 @@
                           
                                </div>
                             </div>
-                            <div class="widget-toolbox clearfix" style="text-align:center;">
+                            <div class="widget-toolbox clearfix text-align-center">
                                <div class="btn-group">
                                   <a class="btn btn-primary btn-mini actionnewControlPanel" style="text-align:center;">
                                   <i class="ace-icon fa fa-gears bigger-110"></i>
@@ -118,7 +118,7 @@
                         <div id="CollapseGithubRepoParameteraddApp" class="panel-collapse collapse in">
                           <div class="panel-body">
                              <div class="widget-body no-padding">
-                                  <form action="" id="checkout-form">
+                                  <form action="">
                                     <div class="row" style="margin:0px">
                                       <div class="col-lg-6 projectRepo">
                                         <label for="name">Repo URL:
@@ -154,7 +154,7 @@
                       </div>
                         <div id="CollapseConfigureBuildParameteraddApp" class="panel-collapse collapse">
                           <div class="panel-body">
-                            <form action="" id="checkout-form" class="smart-form">
+                            <form action="" id="formBuildParameters" class="smart-form">
                               <div class="widget-body no-padding">
                                 <fieldset>
                                     <section class="col col-6 projectRepo">
@@ -1074,6 +1074,9 @@ $(document).ready(function(){
   //resetting the form
   $('.createAPP').click(function(e){
       $('#appCardForm').trigger("reset");
+      $('#formBuildParameters').trigger("reset");
+      $('.chooseAppEnvironment').change();
+      //$('.chooseTasks').change();
   });
 
   //adding permission set for Adding an Application

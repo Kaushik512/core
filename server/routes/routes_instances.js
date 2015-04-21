@@ -45,7 +45,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         res.setHeader('Content-disposition', 'attachment; filename='+ req.params.vmname + '.rdp');
         res.setHeader('Content-type', 'rdp');
         //res.charset = 'UTF-8';
-        var rdptext = "full address:s:" + req.params.vmname + ".cloudapp.net:"+ req.params.port + "\n\r";
+        var rdptext = "full address:s:" + req.params.vmname + ":" + req.params.port + "\n\r";
         rdptext += "prompt for credentials:i:1"
         res.write(rdptext);
         res.end();

@@ -355,9 +355,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     // get features.appcard from app.config
 
                                                                     //console.log(appConfig);
-                                                                 
 
-                                                                   var selectable =!! appConfig.features.appcard
+
+                                                                    var selectable = !!appConfig.features.appcard
                                                                     orgTree[_i]['nodes'][__i]['nodes'].push({ //
                                                                         name: prjname,
                                                                         text: prjname,
@@ -370,7 +370,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         borderColor: '#000',
                                                                         selectable: selectable,
                                                                         itemtype: 'proj',
-                                                                        href: selectable ?'#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'] :'javascript:void(0)',
+                                                                        href: selectable ? '#ajax/ProjectSummary.html?org=' + orgTree[_i]['rowid'] + '&bg=' + orgTree[_i]['businessGroups'][__i]['rowid'] + '&projid=' + docprojs[_prj]['rowid'] : 'javascript:void(0)',
                                                                         //background: '#40baf1',
                                                                         //color: '#40baf1 !important',
                                                                         environments: envs
@@ -726,19 +726,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         //getting the list of projects and confirming if user has permission on project
 
-            blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
-                if (err) {
-                    res.send(500);
-                    return;
-                }
-                res.send(data);
-            });
-    
+        blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+        });
+
         logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
-    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/providers/:providerId/images/:imageId/blueprints', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
         var user = req.session.user;
@@ -759,13 +761,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
                 return;
             }
+            logger.debug("Provider Id: ",req.body.providerId);
             var blueprintData = req.body.blueprintData;
             blueprintData.orgId = req.params.orgId;
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
             blueprintData.envId = req.params.envId;
-            blueprintData.imageId = req.params.imageId;
-            blueprintData.providerId = req.params.providerId;
+            
+            logger.debug("Enviornment ID:: ",req.params.envId);
+            //blueprintData.imageId = req.body.imageId;
+           // blueprintData.providerId = req.body.providerId;
             if (!blueprintData.runlist) {
                 blueprintData.runlist = [];
             }
@@ -781,7 +786,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
                 res.send(data);
             });
-            logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+            logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
         });
     });
 
@@ -866,13 +871,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn,function(err,orgbuprojs){
+        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn, function(err, orgbuprojs) {
             logger.debug('-----------------------------------------------------getTeamsOrgBuProjForUser : ' + JSON.stringify(orgbuprojs));
-            if(!err)
-            {
-                if(orgbuprojs.projects.indexOf(req.params.projectId) >= 0)
-                    {
-                        Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
+            if (!err) {
+                if (orgbuprojs.projects.indexOf(req.params.projectId) >= 0) {
+                    Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
                         if (err) {
                             res.send(500);
                             return;
@@ -895,18 +898,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 });
                                 logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
                             });
-        
+
                         });
-                        
-                        });
-                    } //if(orgbuprojs.orgbuprojs.indexOf(req.params.projectId) >= 0)
-                    else{
-                        logger.debug('User not part of team to see project.');
-                        res.send(401);
-                        return;
-                    }
-            }
-            else{
+
+                    });
+                } //if(orgbuprojs.orgbuprojs.indexOf(req.params.projectId) >= 0)
+                else {
+                    logger.debug('User not part of team to see project.');
+                    res.send(401);
+                    return;
+                }
+            } else {
                 res.send(500);
                 logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
                 return;
@@ -1389,7 +1391,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 hardwareData.architecture = nodeData.automatic.kernel.machine;
                                                                 hardwareData.platform = nodeData.automatic.platform;
                                                                 hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                hardwareData.memory = {};
+                                                                hardwareData.memory = {
+                                                                    total: 'unknown',
+                                                                    free: 'unknown'
+                                                                };
                                                                 if (nodeData.automatic.memory) {
                                                                     hardwareData.memory.total = nodeData.automatic.memory.total;
                                                                     hardwareData.memory.free = nodeData.automatic.memory.free;
@@ -1459,6 +1464,64 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                 });
             });
+        });
+    });
+
+    // For Docker Creation
+   app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints/docker', function(req, res) {
+        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
+        //validating if user has permission to save a blueprint
+        logger.debug('Verifying User permission set');
+        var user = req.session.user;
+        var category = 'blueprints';
+        var permissionto = 'create';
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+            logger.debug("Provider Id: ",req.body.providerId);
+            var blueprintData = req.body.blueprintData;
+            blueprintData.orgId = req.params.orgId;
+            blueprintData.bgId = req.params.bgId;
+            blueprintData.projectId = req.params.projectId;
+            blueprintData.envId = req.params.envId;
+            
+            // for Docker
+            blueprintData.imageId = '000000';
+            blueprintData.providerId = '000000';
+            blueprintData.keyPairId = '000000';
+            blueprintData.subnetId = '000000';
+            blueprintData.vpcId = '000000';
+            blueprintData.securityGroupIds = ['000000'];
+            logger.debug("Enviornment ID:: ",req.params.envId);
+            
+            if (!blueprintData.runlist) {
+                blueprintData.runlist = [];
+            }
+            if (!blueprintData.users || !blueprintData.users.length) {
+                res.send(400);
+                return;
+            }
+
+            blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+                if (err) {
+                    res.send(500);
+                    return;
+                }
+                res.send(data);
+            });
+            logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId,req.params.providerId,req.params.imageId);
         });
     });
 }
