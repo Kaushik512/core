@@ -99,7 +99,14 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
 	data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
 
 </div>
-
+<div class="row">
+<div class="col-lg-6 col-md-6"><label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <select
+  id="orgid" name="orgId" unique="true"
+  uniqueconditionedby="orgname" class="chooseOrganization width-100"
+  style="vertical-align: central" cat-validation="required"
+  cdata="catalyst" skiprowid="yes">
+  <option value="">Select Organization</option>
+</select></div>
 </div>
 <!-- end widget div --></div>
 <!-- end widget --> </article> <!-- END COL --></div>
@@ -278,6 +285,7 @@ $(document).ready(function (){
   $("#name").focus();
   $('#accessKey').blur(KeyChangeHandler);
   $('#secretKey').blur(KeyChangeHandler);
+  getOrganizationList();
  $('#myForm54').ajaxForm( {
     beforeSubmit: function(arr, $form, options) {
     // The array of form data takes the following form: 
@@ -343,6 +351,17 @@ success: function(data, success) {
  }
 });
 
+function getOrganizationList(){
+  $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+    var str='';
+    for(var i=0;i<data.length;i++){
+      if(data[i].active){
+        str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
+      }
+    }
+    $('#orgid').html(str);
+  });
+}
 function getRegionList(){
   $.get('/vmimages/regions/list',function(data){
     var str='<option value="">Select Region</option>';
