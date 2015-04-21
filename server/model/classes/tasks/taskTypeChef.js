@@ -18,7 +18,10 @@ var taskTypeSchema = require('./taskTypeSchema');
 var chefTaskSchema = taskTypeSchema.extend({
     nodeIds: [String],
     runlist: [String],
-    attributesjson: {}
+    attributes: [{
+        name: String,
+        jsonObj: {}
+    }]
 });
 
 //Instance Methods :- getNodes
@@ -32,7 +35,7 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
     var self = this;
     //self.attributesjson = JSON.stringify(self.attributesjson);
     var parsedAttrJson = JSON.stringify(self.attributesjson);
-    if(parsedAttrJson == '\"\"'){
+    if (parsedAttrJson == '\"\"') {
         parsedAttrJson = '';
     }
     var instanceIds = this.nodeIds;
@@ -156,10 +159,10 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             hostedChefUrl: chefDetails.url,
                         });
                         console.log('instance IP ==>', instance.instanceIP);
-                       // if(self.attributesjson.toString().indexOf('"\\') <= 0)
-                           // self.attributesjson = JSON.stringify(self.attributesjson);
-                        
-                        
+                        // if(self.attributesjson.toString().indexOf('"\\') <= 0)
+                        // self.attributesjson = JSON.stringify(self.attributesjson);
+
+
                         console.log('>>>>> Task Config : ' + parsedAttrJson);
                         var chefClientOptions = {
                             privateKey: decryptedCredentials.pemFileLocation,

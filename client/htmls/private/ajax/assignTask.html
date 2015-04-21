@@ -295,10 +295,11 @@ $(document).ready(function() {
             $('#taskType').change();
             $('#taskType').attr('disabled','disabled');
             //$('#taskType').val(taskData.taskType);
-            if(taskData.taskConfig.attributesjson != '' && taskData.taskConfig.attributesjson != null)
+            if(taskData.taskConfig.attributes  && taskData.taskConfig.attributes.length)
                 {
-                    $('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
-                    createAttribTableRowFromJson(taskData.taskConfig.attributesjson);
+                    //$('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
+                     createAttribTableRowFromJson(taskData.taskConfig.attributes);
+                      //createAttribTableRowFromJson([]);
                 }
            // $('#attrtextarea').setValue(JSON.stringify(taskData.taskConfig.attributesjson));
         }
@@ -452,8 +453,17 @@ $(document).ready(function() {
             }
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
-            taskData.attributesjson = $('#attrtextarea').val().trim();
-
+            //taskData.attributesjson = $('#attrtextarea').val().trim();
+            $trAttribute = $('#attributesViewListTable').find('tbody tr');
+            var attributes = [];
+            $trAttribute.each(function(){
+              var $tr = $(this);
+              attributes.push({
+                name : $tr.attr('data-attributeName'),
+                jsonObj : $tr.data('jsonObj')
+              });
+            });
+            taskData.attributes = attributes;
         } else if (taskType === 'jenkins') {
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
@@ -560,14 +570,14 @@ $(document).ready(function() {
                 var attributesNamesList = Object.keys(attributesList[i].attributes);
                 for (var j = 0; j < attributesNamesList.length;j++) {
                     var $tr = $('<tr/>');
-                    var $tdAttribName = $('<td/>').html(attributesNamesList[j]);
+                    var $tdAttribName = $('<td/>').html(attributesList[i].attributes[attributesNamesList[j]].display_name);
                     var value = '';
 
-                    var $tdView = $tbodyViewAttributes.find('td[attributeKey="'+attributesNamesList[j]+'"]');
-                    if($tdView.length) {
-                        value = $tdView.attr('attributeValue');
+                    var $trView = $tbodyViewAttributes.find('tr[data-attributeKey="'+attributesNamesList[j]+'"]');
+                    if($trView.length) {
+                        value = $trView.attr('attributeValue');
                     }
-                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribName="'+attributesNamesList[j]+'" value="'+value+'"/>');
+                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+attributesList[i].attributes[attributesNamesList[j]].display_name+'"/>');
                     $tr.append($tdAttribName).append($tdAttribEditor);
                     //dataTable.row.add($tr).draw();
                     $tbody.append($tr)
@@ -585,61 +595,72 @@ $(document).ready(function() {
         return false;
     });
 
-    function createAttribTableRowFromJson(attributeObj) {
+    function createAttribTableRowFromJson(attributes) {
         var $table = $('#attributesViewListTable');
         var $tbody = $table.find('tbody').empty();
-
-        function getVal(obj, currentKey) {
-            var keys = Object.keys(obj);
-            for (var i = 0; i < keys.length; i++) {
-                if (typeof obj[keys[i]] === 'object') {
-                    getVal(obj[keys[i]],currentKey+'/'+keys[i]);
-                } else {
-                    var $tr = $('<tr/>');
-                    var keyString = currentKey+'/'+keys[i];
-                    keyString = keyString.substring(1);
-                    var $tdAttributeKey = $('<td/>').html(keyString);
-                    var $tdAttributeVal = $('<td/>').html(obj[keys[i]]).attr({
-                        'attributeKey': keyString,
-                        'attributeValue': obj[keys[i]]
-                    });
-                    $tr.append($tdAttributeKey).append($tdAttributeVal);
-                    $tbody.append($tr);
+        console.log(attributes);
+        for (var j = 0; j < attributes.length; j++) {
+             var attributeObj = attributes[j].jsonObj;
+            function getVal(obj, currentKey) {
+                var keys = Object.keys(obj);
+                for (var i = 0; i < keys.length; i++) {
+                    if (typeof obj[keys[i]] === 'object') {
+                        getVal(obj[keys[i]], currentKey + '/' + keys[i]);
+                    } else {
+                        var $tr = $('<tr/>').attr({
+                            'data-attributeKey': keyString,
+                            'data-attributeValue': obj[keys[i]],
+                            'data-attributeName': attributes[j].name
+                        }).data('jsonObj',attributes[j].jsonObj);;
+                        var keyString = currentKey + '/' + keys[i];
+                        keyString = keyString.substring(1);
+                        var $tdAttributeKey = $('<td/>').html(attributes[j].name);
+                        var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                        $tr.append($tdAttributeKey).append($tdAttributeVal);
+                        $tbody.append($tr);
+                    }
                 }
             }
+            getVal(attributeObj, '');
         }
-        getVal(attributeObj,'');
     }
 
     $('.saveAttribBtn').click(function(e) {
         var $modal = $('#editAttributesModalContainer');
         var $tbody = $modal.find('.attributesEditTableBody');
         var $input = $tbody.find('.attribValue');
-        var attributeObj = {};
+        var attributes = [];
         $input.each(function() {
             var $this = $(this);
-            var attributeName = $this.attr('data-attribName');
+            var attributeKey = $this.attr('data-attribKey');
+            console.log(attributeKey);
             var attribValue = $this.val();
             if (attribValue) {
-                var attribPathParts = attributeName.split('/');
+                var attribPathParts = attributeKey.split('/');
+                var attributeObj = {};
                 var currentObj = attributeObj;
                 for (var i = 0; i < attribPathParts.length; i++) {
                     if (!currentObj[attribPathParts[i]]) {
                         if (i === attribPathParts.length - 1) {
                             currentObj[attribPathParts[i]] = attribValue;
+                            continue;
                         } else {
                             currentObj[attribPathParts[i]] = {};
                         }
                     }
                     currentObj = currentObj[attribPathParts[i]];
                 }
+                attributes.push({
+                    name: $this.attr('data-attribName'),
+                    jsonObj: attributeObj
+                });
             }
         });
-        console.log('attributeObj ==>',JSON.stringify(attributeObj));
-        $('#attrtextarea').text(JSON.stringify(attributeObj));
-        createAttribTableRowFromJson(attributeObj);
+        console.log('attributeObj ==>', attributes);
+        //$('#attrtextarea').text(JSON.stringify(attributeObj));
+        createAttribTableRowFromJson(attributes);
         $modal.modal('hide');
-   
+
     });
 
 
