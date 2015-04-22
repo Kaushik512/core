@@ -235,73 +235,88 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            var tocheck = [];
-            var fieldname = '';
-            switch (req.params.id) {
-                case "1":
-                    tocheck.push('2');
-                    tocheck.push('3');
-                    tocheck.push('10');
-                    fieldname = "orgname_rowid";
-                    break;
-                case "2":
-                    tocheck.push('4');
-                    fieldname = "productgroupname_rowid";
-                    break;
-                case "3":
-                    tocheck.push('4');
-                    fieldname = "environmentname_rowid,orgname_rowid";
-                    break;
-                case "4":
-                    tocheck.push('blueprints');
-                    tocheck.push('instances');
-                    fieldname = "projectId";
-                    break;
-                case "10":
-                    tocheck.push('all');
-                    fieldname = "configname_rowid";
-                    break;
-                case "19":
-                    tocheck.push('blueprints');
-                    tocheck.push('instances');
-                    fieldname = "projectId";
-                    break;
+            masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
             }
-            configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
-                logger.debug("Delete check returned: %s", data);
-                if (data == "none") {
-                    logger.debug("entering delete");
-                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                        if (err) {
-                            logger.debug("Hit and error:", err);
-                        }
-                        if (dbtype) {
-                            //Currently rowid is hardcoded since variable declaration was working
-                            var item = '\"' + req.params.fieldname + '\"';
-                            logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
-                            //res.send(500);
-                            eval('d4dModelNew.' + dbtype).remove({
-                                rowid: req.params.fieldvalue
-                            }, function(err) {
-                                if (err) {
-                                    logger.debug("Hit an errror on delete : %s", err);
-                                    res.send(500);
-                                    return;
-                                } else {
-                                    logger.debug("Document deleted : %s", req.params.fieldvalue);
-                                    res.send(200);
-                                    logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
-                                    return;
-                                }
-                            }); //end findOne
-                        }
-                    }); //end configmgmtDao
-                } else {
-                    logger.debug("There are dependent elements cannot delete");
-                    res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }
-            }); //deleteCheck
+
+                    var tocheck = [];
+                    var fieldname = '';
+                    switch (req.params.id) {
+                        case "1":
+                            tocheck.push('2');
+                            tocheck.push('3');
+                            tocheck.push('10');
+                            fieldname = "orgname_rowid";
+                            break;
+                        case "2":
+                            tocheck.push('4');
+                            fieldname = "productgroupname_rowid";
+                            break;
+                        case "3":
+                            tocheck.push('4');
+                            fieldname = "environmentname_rowid,orgname_rowid";
+                            break;
+                        case "4":
+                            tocheck.push('blueprints');
+                            tocheck.push('instances');
+                            fieldname = "projectId";
+                            break;
+                        case "10":
+                            tocheck.push('all');
+                            fieldname = "configname_rowid";
+                            break;
+                        case "19":
+                            tocheck.push('blueprints');
+                            tocheck.push('instances');
+                            fieldname = "projectId";
+                            break;
+                    }
+                    configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
+                        logger.debug("Delete check returned: %s", data);
+                        if (data == "none") {
+                            logger.debug("entering delete");
+                            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                                if (err) {
+                                    logger.debug("Hit and error:", err);
+                                }
+                                if (dbtype) {
+                                    //Currently rowid is hardcoded since variable declaration was working
+                                    var item = '\"' + req.params.fieldname + '\"';
+                                    logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
+                                    //res.send(500);
+                                    eval('d4dModelNew.' + dbtype).remove({
+                                        rowid: req.params.fieldvalue
+                                    }, function(err) {
+                                        if (err) {
+                                            logger.debug("Hit an errror on delete : %s", err);
+                                            res.send(500);
+                                            return;
+                                        } else {
+                                            logger.debug("Document deleted : %s", req.params.fieldvalue);
+                                            res.send(200);
+                                            logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
+                                            return;
+                                        }
+                                    }); //end findOne
+                                }
+                            }); //end configmgmtDao
+                        } else {
+                            logger.debug("There are dependent elements cannot delete");
+                            res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+                            return;
+                        }
+                    }); //deleteCheck
+                }
+            });
         }); //haspermission
     });
 

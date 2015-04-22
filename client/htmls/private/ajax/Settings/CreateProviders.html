@@ -285,6 +285,7 @@ $(document).ready(function (){
   $("#name").focus();
   $('#accessKey').blur(KeyChangeHandler);
   $('#secretKey').blur(KeyChangeHandler);
+  $('select').select2();
   getOrganizationList();
  $('#myForm54').ajaxForm( {
     beforeSubmit: function(arr, $form, options) {

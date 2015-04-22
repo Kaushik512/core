@@ -7,6 +7,8 @@ var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var blueprints = require('../model/dao/blueprints');
 var instances = require('../model/dao/instancesdao');
 var masterUtil = require('../lib/utils/masterUtil.js');
+var usersDao = require('../model/users.js');
+var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all("/aws/providers/*",sessionVerificationFunc);
 
@@ -14,6 +16,9 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
 app.post('/aws/providers', function(req, res) {
 
     logger.debug("Enter post() for /providers.",typeof req.body.fileName);
+    var user = req.session.user;
+    var category = configmgmtDao.getCategoryFromID("9");
+    var permissionto = 'create';
     var accessKey = req.body.accessKey;
     var secretKey = req.body.secretKey;
     var providerName = req.body.providerName;
@@ -57,7 +62,32 @@ app.post('/aws/providers', function(req, res) {
            "secret_key": secretKey,
            "region"    : region
         });
+      usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
+            return;
+        }
 
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }
         ec2.describeKeyPairs(function(err,data){
            if(err){
             logger.debug("Unable to get AWS Keypairs");
@@ -98,8 +128,12 @@ app.post('/aws/providers', function(req, res) {
                     })
                   }); 
                   logger.debug("Exit post() for /providers");
-              });
+               });
+            });
+          }
       });
+  });
+//
 });
 
 // Return list of all available AWS Providers.
@@ -170,6 +204,9 @@ app.get('/aws/providers/:providerId', function(req, res) {
 // Update a particular AWS Provider
 app.post('/aws/providers/:providerId/update', function(req, res) {
  logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
+ var user = req.session.user;
+ var category = configmgmtDao.getCategoryFromID("9");
+ var permissionto = 'modify';
  var accessKey = req.body.accessKey.trim();
  var secretKey = req.body.secretKey.trim();
  var providerName = req.body.providerName.trim();
@@ -198,6 +235,7 @@ if(typeof providerType === 'undefined' || providerType.length === 0){
 }
 
 var region;
+logger.debug("typeof req.body.region ",typeof req.body.region);
     if(typeof req.body.region === 'string'){
       logger.debug("inside single region: ",req.body.region);
       region = req.body.region;
@@ -219,7 +257,32 @@ var ec2 = new EC2({
            "secret_key": secretKey,
            "region"    : region
         });
+      usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
+            return;
+        }
 
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }
         ec2.describeKeyPairs(function(err,data){
            if(err){
             logger.debug("Unable to get AWS Keypairs");
@@ -227,105 +290,172 @@ var ec2 = new EC2({
             return;
              }
             logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
-AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
-        if (err) {
-            logger.error(err);
-            res.send(500, errorResponses.db.error);
-            return;
-        }
-      AWSKeyPair.createNew(req,providerId,function(err,keyPair){  
-        if (updateCount) {
-         logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
-         res.send({
-            updateCount: updateCount
-        });
-     } else {
-        res.send(400);
+            AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                    if (err) {
+                        logger.error(err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                  AWSKeyPair.createNew(req,providerId,function(err,keyPair){  
+                    if (updateCount) {
+                     logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
+                     res.send({
+                        updateCount: updateCount
+                    });
+                 } else {
+                    res.send(400);
+                        }
+                    });//
+                 });
+              });
             }
-        });//
-     });
-  });
+        });
+    });
 });
 
 // Delete a particular AWS Provider.
 app.delete('/aws/providers/:providerId', function(req, res) {
  logger.debug("Enter delete() for /providers/%s",req.params.providerId);
+ var user = req.session.user;
+ var category = configmgmtDao.getCategoryFromID("9");
+ var permissionto = 'delete';
  var providerId = req.params.providerId.trim();
  if(typeof providerId === 'undefined' || providerId.length === 0){
     res.send(500,"Please Enter ProviderId.");
     return;
 }
 
-    VMImage.getImageByProviderId(providerId, function(err, anImage) {
-        if (err) {
-            logger.error(err);
-            res.send(500, errorResponses.db.error);
-            return;
-        }
-        if (anImage) {
-            res.send(403,"Provider already used by Some Images.To delete provider please delete respective Images first.");
+  usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
             return;
         }
 
-            AWSProvider.removeAWSProviderById(providerId, function(err, deleteCount) {
-             if (err) {
-                 logger.error(err);
-                 res.send(500, errorResponses.db.error);
-                 return;
-             }
-             if (deleteCount) {
-              logger.debug("Enter delete() for /providers/%s",req.params.providerId);
-              res.send({
-                 deleteCount: deleteCount
-             });
-          } else {
-             res.send(400);
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
             }
-        });
-    });
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }
+
+            VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                if (err) {
+                    logger.error(err);
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (anImage) {
+                    res.send(403,"Provider already used by Some Images.To delete provider please delete respective Images first.");
+                    return;
+                }
+
+                    AWSProvider.removeAWSProviderById(providerId, function(err, deleteCount) {
+                     if (err) {
+                         logger.error(err);
+                         res.send(500, errorResponses.db.error);
+                         return;
+                     }
+                     if (deleteCount) {
+                      logger.debug("Enter delete() for /providers/%s",req.params.providerId);
+                      res.send({
+                         deleteCount: deleteCount
+                     });
+                  } else {
+                     res.send(400);
+                    }
+                });
+            });
+          }
+      });
+    });//
 });
 
 // Delete a particular AWS Provider.
 app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
  logger.debug("Enter delete() for /aws/providers/keypairs/%s",req.params.keyPairId);
+ var user = req.session.user;
+ var category = configmgmtDao.getCategoryFromID("9");
+ var permissionto = 'delete';
  var keyPairId = req.params.keyPairId.trim();
  if(typeof keyPairId === 'undefined' || keyPairId.length === 0){
     res.send(500,"Please Enter keyPairId.");
     return;
 }
-
-    blueprints.getBlueprintByKeyPairId(keyPairId, function(err, aBluePrint) {
-        if (err) {
-            logger.error(err);
-            res.send(500, errorResponses.db.error);
+  usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
             return;
         }
-        logger.debug("BluePrints:>>>>> ",JSON.stringify(aBluePrint));
-        if (aBluePrint.length) {
-            res.send(403,"KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
-            return;
-        }else{
-                instances.getInstanceByKeyPairId(keyPairId, function(err, anInstance) {
-                 if (err) {
-                     logger.error(err);
-                     res.send(500, errorResponses.db.error);
-                     return;
-                 }
-                 if (anInstance.length) {
-                  res.send(403,"KeyPair is already used by Instance.");
-              } else {
-                  AWSKeyPair.removeAWSKeyPairById(keyPairId,function(err,deleteCount){  
-                    if (deleteCount) {
-                      logger.debug("KeyPair deleted",keyPairId);
-                      res.send({
-                        deleteCount: deleteCount
-                    });
-                  }
+
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }
+                blueprints.getBlueprintByKeyPairId(keyPairId, function(err, aBluePrint) {
+                    if (err) {
+                        logger.error(err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    logger.debug("BluePrints:>>>>> ",JSON.stringify(aBluePrint));
+                    if (aBluePrint.length) {
+                        res.send(403,"KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
+                        return;
+                    }else{
+                            instances.getInstanceByKeyPairId(keyPairId, function(err, anInstance) {
+                             if (err) {
+                                 logger.error(err);
+                                 res.send(500, errorResponses.db.error);
+                                 return;
+                             }
+                             if (anInstance.length) {
+                              res.send(403,"KeyPair is already used by Instance.");
+                          } else {
+                              AWSKeyPair.removeAWSKeyPairById(keyPairId,function(err,deleteCount){  
+                                if (deleteCount) {
+                                  logger.debug("KeyPair deleted",keyPairId);
+                                  res.send({
+                                    deleteCount: deleteCount
+                                });
+                              }
+                        });
+                      }
+                });
+            }
             });
           }
+        });
     });
-}
-});
 });
 // Return all available security groups from AWS.
 app.post('/aws/providers/securitygroups',function(req,res){
