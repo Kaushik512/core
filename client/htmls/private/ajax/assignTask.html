@@ -570,14 +570,18 @@ $(document).ready(function() {
                 var attributesNamesList = Object.keys(attributesList[i].attributes);
                 for (var j = 0; j < attributesNamesList.length;j++) {
                     var $tr = $('<tr/>');
-                    var $tdAttribName = $('<td/>').html(attributesList[i].attributes[attributesNamesList[j]].display_name);
+                    var displayName = attributesNamesList[j];
+                    if( attributesList[i].attributes[attributesNamesList[j]].display_name) {
+                        displayName = attributesList[i].attributes[attributesNamesList[j]].display_name;
+                    }
+                    var $tdAttribName = $('<td/>').html(displayName);
                     var value = '';
 
                     var $trView = $tbodyViewAttributes.find('tr[data-attributeKey="'+attributesNamesList[j]+'"]');
                     if($trView.length) {
-                        value = $trView.attr('attributeValue');
+                        value = $trView.attr('data-attributeValue');
                     }
-                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+attributesList[i].attributes[attributesNamesList[j]].display_name+'"/>');
+                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'"/>');
                     $tr.append($tdAttribName).append($tdAttribEditor);
                     //dataTable.row.add($tr).draw();
                     $tbody.append($tr)
@@ -607,13 +611,14 @@ $(document).ready(function() {
                     if (typeof obj[keys[i]] === 'object') {
                         getVal(obj[keys[i]], currentKey + '/' + keys[i]);
                     } else {
+                        var keyString = currentKey + '/' + keys[i];
+                        keyString = keyString.substring(1);
+                        
                         var $tr = $('<tr/>').attr({
                             'data-attributeKey': keyString,
                             'data-attributeValue': obj[keys[i]],
                             'data-attributeName': attributes[j].name
                         }).data('jsonObj',attributes[j].jsonObj);;
-                        var keyString = currentKey + '/' + keys[i];
-                        keyString = keyString.substring(1);
                         var $tdAttributeKey = $('<td/>').html(attributes[j].name);
                         var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
                         $tr.append($tdAttributeKey).append($tdAttributeVal);

@@ -14,6 +14,8 @@ var Chef = require('../../../lib/chef');
 
 var taskTypeSchema = require('./taskTypeSchema');
 
+var util = require('util');
+
 
 var chefTaskSchema = taskTypeSchema.extend({
     nodeIds: [String],
@@ -33,11 +35,36 @@ chefTaskSchema.methods.getNodes = function() {
 // Instance Method :- run task
 chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
     var self = this;
-    //self.attributesjson = JSON.stringify(self.attributesjson);
-    var parsedAttrJson = JSON.stringify(self.attributesjson);
-    if (parsedAttrJson == '\"\"') {
-        parsedAttrJson = '';
+
+    //merging attributes Objects
+    var attributeObj = {};
+    var currentObj;
+
+    function mergeObj(currentObj, obj) {
+        var keys = Object.keys(obj);
+        for (var j = 0; j < keys.length; j++) {
+            if (!currentObj[keys[j]]) {
+                currentObj[keys[j]] = {};
+            }
+            if (typeof obj[keys[j]] === 'object' && !util.isArray(obj[keys[j]])) {
+                mergeObj(currentObj[keys[j]], obj[keys[j]]);
+            } else {
+                currentObj[keys[j]] = obj[keys[j]];
+            }
+        }
     }
+    for (var i = 0; i < self.attributes.length; i++) {
+         currentObj = attributeObj;
+         mergeObj(currentObj,self.attributes[i].jsonObj);
+         attributeObj = currentObj; 
+    }
+    
+    var jsonAttributesString = '';
+    if(Object.keys(attributeObj).length) {
+        jsonAttributesString = JSON.stringify(attributeObj);
+    }
+   
+  
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
         if (typeof onExecute === 'function') {
@@ -163,7 +190,6 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                         // self.attributesjson = JSON.stringify(self.attributesjson);
 
 
-                        console.log('>>>>> Task Config : ' + parsedAttrJson);
                         var chefClientOptions = {
                             privateKey: decryptedCredentials.pemFileLocation,
                             username: decryptedCredentials.username,
@@ -171,7 +197,7 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             instanceOS: instance.hardware.os,
                             port: 22,
                             runlist: self.runlist, // runing service runlist
-                            jsonAttributes: parsedAttrJson,
+                            jsonAttributes: jsonAttributesString,
                             overrideRunlist: true
                         }
                         if (decryptedCredentials.pemFileLocation) {
