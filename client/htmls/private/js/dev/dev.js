@@ -723,7 +723,6 @@
                                  }
                                  if (data.instanceState == 'unknown') {
                                      disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-
                                  }
                                  if (data.instanceState === state) {
                                      pollInstanceState(instanceId, state, 5000);
@@ -736,7 +735,7 @@
                                      $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                      $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                                      $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
-                                     $parent.find('.instance-bootstrap-ActionRDP a').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
+                                     $parent.find('.instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                      $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                                      if (data.appUrls && data.appUrls.length) {
                                          for (var k = 0; k < data.appUrls.length; k++) {
@@ -1302,7 +1301,7 @@
                                          $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                          $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                                          $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
-                                         $parent.find('.instance-bootstrap-ActionRDP a').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
+                                         $parent.find('.instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                          $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                                          if (data.appUrls && data.appUrls.length) {
                                              for (var k = 0; k < data.appUrls.length; k++) {
@@ -1545,6 +1544,10 @@
                      if (data.instanceState == 'unknown') {
                          disableInstanceStartStopActionBtns(data._id, data.hardware.os);
                      }
+                     //alert(data.providerId);
+                     // if(!data.providerId){
+                     //    disableInstanceStartStopActionBtns(data._id, data.hardware.os);
+                     // }
                      $startStopToggler.click(startAndStopToggler);
                      $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
 
