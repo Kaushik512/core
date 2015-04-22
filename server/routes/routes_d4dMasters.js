@@ -631,7 +631,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // For non-catalystadmin
             }else {
 
-                // For BusinessGroup
+                // For Org
                 masterUtil.getOrgs(loggedInUser,function(err,orgList){
                     if(err){
                         res.send(500,'Not able to fetch Orgs.');
