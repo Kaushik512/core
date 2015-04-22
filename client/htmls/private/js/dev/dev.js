@@ -723,7 +723,6 @@
                                  }
                                  if (data.instanceState == 'unknown') {
                                      disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-
                                  }
                                  if (data.instanceState === state) {
                                      pollInstanceState(instanceId, state, 5000);
@@ -1545,6 +1544,10 @@
                      if (data.instanceState == 'unknown') {
                          disableInstanceStartStopActionBtns(data._id, data.hardware.os);
                      }
+                     //alert(data.providerId);
+                     // if(!data.providerId){
+                     //    disableInstanceStartStopActionBtns(data._id, data.hardware.os);
+                     // }
                      $startStopToggler.click(startAndStopToggler);
                      $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
 
