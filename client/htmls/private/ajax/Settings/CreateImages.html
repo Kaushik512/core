@@ -278,6 +278,11 @@
         str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
     }
     $('#orgId').html(str);
+    if( $('#orgId').attr('answer')){
+      $('#orgId').val($('#orgId').attr('answer')).select2();
+    }else{
+    $('#orgId').val("").select2();
+    }
   });
 }
 
@@ -396,7 +401,8 @@ $(document).ready(function () {
             $('#osType').attr('answer',data.osName).val(data.osName).select2();
             $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
             $('#userName').val(data.userName);
-            $('#orgId').val(data.orgId);
+            $('#orgId').val(data.orgId[0]).attr('answer',data.orgId[0]);
+
           });
          }
 

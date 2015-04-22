@@ -101,7 +101,7 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
 </div>
 <div class="row">
 <div class="col-lg-6 col-md-6"><label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <select
-  id="orgid" name="orgId" unique="true"
+  id="orgId" name="orgId" unique="true"
   uniqueconditionedby="orgname" class="chooseOrganization width-100"
   style="vertical-align: central" cat-validation="required"
   cdata="catalyst" skiprowid="yes">
@@ -257,6 +257,7 @@ function setValues(data){
   $('#accessKey').val(data.accessKey);
   $('#secretKey').val(data.secretKey);
   $('#providertype').val(data.providerType).select2();
+  $('#orgId').val(data.orgId[0]).attr('answer',data.orgId[0]);
   var createTemplateInstance=new createTemplate($('#appender'));
   for(var i=0;i<data.keyPairs.length;i++){
     if(i==0){
@@ -360,7 +361,12 @@ function getOrganizationList(){
         str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
       }
     }
-    $('#orgid').html(str);
+    $('#orgId').html(str);
+    if( $('#orgId').attr('answer')){
+      $('#orgId').val($('#orgId').attr('answer')).select2();
+    }else{
+    $('#orgId').val("").select2();
+    }
   });
 }
 function getRegionList(){
