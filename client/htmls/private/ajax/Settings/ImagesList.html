@@ -36,6 +36,7 @@
                                     <td>Image Identifire</td>
                                     <td>Provider</td>
                                     <td>Operating System</td>
+                                    <td>Organization</td>
                                     <td class="">Action</td>
                                 </tr>
                             </thead>
@@ -45,6 +46,7 @@
                                     <td datafield="imageIdentifier"></td>
                                     <td datafield="providerName"></td>
                                     <td datafield="osName"></td>
+                                    <td datafield="orgName"></td>
                                     <td>
                                         <div class="btn-group tableactionWidth">
                                             <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
@@ -66,6 +68,7 @@
                                     <td>Image Identifire</td>
                                     <td>Provider</td>
                                     <td>Operating System</td>
+                                    <td>Organization</td>
                                     <td class="">Action</td>
                                 </tr>
                             </thead>
@@ -105,7 +108,8 @@
         data= typeof data=="string" ?JSON.parse(data):data;
                 //d4ddata=data;
                d4ddata= updateImageListByGivingProviderName(d4ddata,data);
-                startup();
+                  getOrganizationList();
+                //startup();
             },
             error: function(jqxhr) {
                 removeLoader();
@@ -133,6 +137,7 @@
                                     data= typeof data=="string" ?JSON.parse(data):data;
                                     d4ddata=data;
                                     getProviderData();
+
                                     
                                 },
                                 error: function(jqxhr) {
@@ -431,10 +436,26 @@ function deleteItemFromProvider(docid, key, value, button) {
 });
 
 }
+function getOrganizationList(){
+                              $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+                                debugger;
+                                for(var i=0;i<d4ddata.length;i++){
+                                    for(var x=0;x<data.length;x++){
+                                        if(d4ddata[i].orgId[0]==data[x]._id){
+                                            d4ddata[i].orgName=data[x].orgname;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                debugger;
+                                startup();
+                              });
+                            }
 
 $(document).ready(function () {
    getImagesList();
-
+   
 });
 
 function startup() {

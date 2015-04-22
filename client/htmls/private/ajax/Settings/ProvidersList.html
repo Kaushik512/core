@@ -35,15 +35,18 @@
                                     <td>Name</td>
                                     <!-- <td>Description</td> -->
                                     <td>Provider</td>
-                                    <!-- <td>Account ID</td> -->
+                                    <td>Organization </td> 
                                     <td class="">Action</td>
+
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="hidden rowtemplate">
                                     <td datafield="providerName"></td>
+                                   
                                     <!-- <td datafield="description"></td> -->
                                     <td datafield="providerType"></td>
+                                     <td datafield="orgName"></td>
                                     <!-- <td datafield="accountid"></td> -->
                                     <td>
                                         <div class="btn-group tableactionWidth">
@@ -65,6 +68,7 @@
                                     <td>Name</td>
                                     <!-- <td>Description</td> -->
                                     <td>Provider</td>
+                                     <td>Organization </td> 
                                     <!-- <td>Account ID</td> -->
                                     <td class="">Action</td>
                                 </tr>
@@ -88,6 +92,21 @@
 
                                 getProviderData();
                             });
+                            function getOrganizationList(){
+                              $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+                                
+                                for(var i=0;i<d4ddata.length;i++){
+                                    for(var x=0;x<data.length;x++){
+                                        if(d4ddata[i].orgId[0]==data[x]._id){
+                                            d4ddata[i].orgName=data[x].orgname;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                startup();
+                              });
+                            }
 
                             function getProviderData(){
 
@@ -103,7 +122,8 @@
          success: function(data, success) {
                 data= typeof data=="string" ?JSON.parse(data):data;
                 d4ddata=data;
-                startup();
+                getOrganizationList();
+                
             },
             error: function(jqxhr) {
                 removeLoader();

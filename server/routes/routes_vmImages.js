@@ -18,7 +18,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
         var osType = req.body.osType.trim();
         var osName = req.body.osName.trim();
         var userName = req.body.userName.trim();
+        var orgId = req.body.orgId;
 
+
+            logger.debug("orgId: ",orgId);
 
             // Field validation for undefined and empty
             if(typeof providerId === 'undefined' || providerId.length === 0){
@@ -53,7 +56,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             	name: name,
               osType: osType,
               osName: osName,
-              userName: userName
+              userName: userName,
+              orgId: orgId
             };
             
             AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
@@ -148,6 +152,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        var osType = req.body.osType.trim();
        var osName = req.body.osName.trim();
        var userName = req.body.userName.trim();
+       var orgId = req.body.orgId;
 
        if(typeof providerId === 'undefined' || providerId.length === 0){
         res.send(400,"{Please Enter ProviderId.}");
@@ -185,7 +190,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        name: name,
        osType: osType,
        osName: osName,
-       userName: userName
+       userName: userName,
+       orgId: orgId
     };
     logger.debug("image >>>>>>>>>>>>",vmimageData);
 
