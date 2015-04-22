@@ -438,7 +438,7 @@ function deleteItemFromProvider(docid, key, value, button) {
 }
 function getOrganizationList(){
                               $.get('/d4dMasters/readmasterjsonnew/1',function(data){
-                                debugger;
+                                
                                 for(var i=0;i<d4ddata.length;i++){
                                     for(var x=0;x<data.length;x++){
                                         if(d4ddata[i].orgId[0]==data[x]._id){
@@ -448,7 +448,7 @@ function getOrganizationList(){
                                     }
 
                                 }
-                                debugger;
+                                
                                 startup();
                               });
                             }
