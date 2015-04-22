@@ -488,7 +488,25 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
         logger.debug("Logged in user: ",req.session.user.cn);
         var loggedInUser = req.session.user.cn;
-        if(loggedInUser === 'superadmin'){
+        masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            if(!anUser){
+                res.send(500,"Invalid User.");
+            }
+            if(anUser.orgname_rowid[0] === ""){
+                d4dModelNew.find({
+                        id: req.params.id
+                    },function(err,data){
+                        if(err){
+                            logger.debug("Unable to fetch Settings.");
+                            res.send(500,"Unable to fetch Settings for Id: ",req.params.id);
+                        }
+                        logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
+                        res.send(data);
+                    });
+
          /*configmgmtDao.getRowids(function(err,rowidlist){
 
             logger.debug("Rowid List----&&&&----> %s", rowidlist);
@@ -594,16 +612,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                     });
                 });*/ //rowidlist
-                    d4dModelNew.find({
-                        id: req.params.id
-                    },function(err,data){
-                        if(err){
-                            logger.debug("Unable to fetch Settings.");
-                            res.send(500,"Unable to fetch Settings for Id: ",req.params.id);
-                        }
-                        logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
-                        res.send(data);
-                    });
 
                 // For non-catalystadmin
             }else {
@@ -778,6 +786,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
               // }
             });
         }
+    });
         //res.send([]);
     });
 
@@ -1021,7 +1030,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var ret = [];
         var masts = ['2', '3', '4'];
         var counts = [];
-        if(req.session.user.cn === 'superadmin'){
+        masterUtil.getLoggedInUser(req.session.user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            if(!anUser){
+                res.send(500,"Invalid User.");
+            }
+        if(anUser.orgname_rowid[0] === ""){
                 for(var i =1;i<5;i++)
                     counts[i] = 0;
                   d4dModelNew.d4dModelMastersOrg.find({
@@ -1185,8 +1201,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                    // }
                 }
             });
-        }
-//else
+        }//else
+    });
+
 });
 
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
@@ -2072,10 +2089,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
             return;
         }
 
-
-
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }
+        
         logger.debug('EditMode: %s', editMode);
         bodyJson["id"] = req.params.id; //storing the form id.
+
+        // Handled for "any" field Org for User.
+        if(req.params.id === '7' && bodyJson["orgname"] === 'any'){
+            logger.debug("Inside User check for any value.");
+            bodyJson["orgname"]= "";
+            bodyJson["orgname_rowid"]= "";
+        }
+
+        logger.debug("Full bodyJson: ",JSON.stringify(bodyJson));
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {
                 logger.error("Hit and error:", err);
@@ -2119,11 +2156,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             var thisVal = bodyJson[itm];
                             logger.debug(thisVal);
                             var item = null;
-                            if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
-                                item = "\"" + itm + "\" : \"" + thisVal + "\"";
-                            } else //
-                                item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
-
+                                if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
+                                    item = "\"" + itm + "\" : \"" + thisVal + "\"";
+                                } else //
+                                    item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
                             rowFLD.push(item);
                             if (itm == 'folderpath') { //special variable to hold the folder to which the files will be copied.
                                 rowFLD.push("\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"");
@@ -2169,7 +2205,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (!editMode) { //push new values only when not in edit mode
                         //dMasterJson = JSON.parse(FLD);
                         //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
-
+                        logger.debug("FLD>>>>>>>>>>>>> ",FLD);
                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                         mastersrdb.save(function(err, data) {
                             if (err) {
@@ -2268,8 +2304,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }); //end findone
                 //console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
 
-            }
-        }); //end getdbmodelfromid
+                }
+             }); //end getdbmodelfromid
+            } // if
+        }); // getSingleUser
     }); //end of haspermission
 
 });

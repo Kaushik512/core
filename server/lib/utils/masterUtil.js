@@ -423,5 +423,25 @@ var MasterUtil = function(){
             }
         });
     }
+
+    // Return only loggedIn User.
+    this.getLoggedInUser = function(loggedInUser,callback){
+        var anUser;
+        d4dModelNew.d4dModelMastersUsers.find({
+            loginname : loggedInUser
+        },function(err,users){
+            if(users){
+                for(var i =0; i< users.length; i++){
+                    if(users[i].id === '7'){
+                        anUser = users[i];
+                    }
+                }
+                callback(null,anUser);
+            }else{
+                callback(err,null);
+            }
+
+        });
+    }
 }
 module.exports = new MasterUtil();

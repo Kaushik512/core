@@ -32,6 +32,15 @@
 
 
                                   <fieldset>
+                                  <div class="row">
+                                    <div class="col-lg-6 col-md-6"><label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <select
+                                      id="orgid" name="orgId" unique="true"
+                                      uniqueconditionedby="orgname" class="chooseOrganization width-100"
+                                      style="vertical-align: central" cat-validation="required"
+                                      cdata="catalyst" skiprowid="yes">
+                                      <option value="">Select Organization</option>
+                                    </select></div>
+                                    </div>
                                     <div class="row">
                                       <div class="col-lg-6">
                                        <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -262,6 +271,18 @@
     }
   }
 
+  function getOrganizationList(){
+  $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+    var str='';
+    for(var i=0;i<data.length;i++){
+      if(data[i].active){
+        str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
+      }
+    }
+    $('#orgid').html(str);
+  });
+}
+
   function populateOSList(){
     $.ajax({
      type: "GET",
@@ -366,6 +387,7 @@ $(document).ready(function () {
           // populateVirtualizationType();
           populateOSList();
           getProviderList();
+          getOrganizationList();
           $('select').select2();
 
           if(UtilityMethods.getIdFromURL()){
