@@ -147,7 +147,8 @@ var config = {
         rootuser: 'Admin',
         rootpass: 'ReleV@ance',
         //baseDn: 'cn=root',
-        baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com'
+        baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
+        ou:''
 
     },
 

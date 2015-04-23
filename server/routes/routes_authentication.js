@@ -59,7 +59,6 @@ module.exports.setRoutes = function(app) {
                         user.roleName = "Admin";
                         user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
 
-                        
                         req.logIn(user, function(err) {
                             if (err) {
                                 return next(err);
@@ -67,9 +66,10 @@ module.exports.setRoutes = function(app) {
                             return res.redirect('/private/index.html');
                         });
                     } else {
-                        next({
-                            message: "User not found"
-                        });
+                        // next({
+                        //     message: "User not found"
+                        // });
+                        res.redirect('/public/login.html?o=try');
                     }
                 });
             })(req, res, next);

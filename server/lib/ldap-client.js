@@ -5,6 +5,7 @@ var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
     options.port || (options.port = '389');
     options.baseDn || (options.baseDn = 'dc=d4d-ldap,dc=relevancelab,dc=com');
+    options.ou || (options.ou = '');
 
     return options;
 };
@@ -36,6 +37,7 @@ function createDnString(username, baseDn, ou) {
 }
 
 var Ldap = function(options) {
+    console.log('options ==>',options);
     options = setDefaults(options);
 
     var client = ldap.createClient({
@@ -44,12 +46,12 @@ var Ldap = function(options) {
 
     this.authenticate = function(username, password, callback) {
 
-        var dnString = createDnString(username, options.baseDn);
+        var dnString = createDnString(username, options.baseDn, options.ou);
         console.log('hit authenticate =========>' + dnString);
         client.bind(dnString, password, function(err, user) {
             if (err) {
                 console.log("err ==> ", err);
-                callback(true, null);
+                callback(err, null);
             } else {
                 console.log("User String:{" + dnString + '}');
                 callback(null, createDnObject(dnString));
@@ -60,18 +62,16 @@ var Ldap = function(options) {
 
     };
     this.compare = function(username, callback) {
-        var dnString = createDnString(username, options.baseDn);
+        var dnString = createDnString(username, options.baseDn, options.ou);
         client.compare(dnString, 'sn', username, function(err, matched) {
             if (err) {
                 callback(null, "false");
             } else {
-
                 console.log('matched: ' + matched);
                 callback(null, "true");
             }
         });
-
-    }
+    };
 
     this.close = function(callback) {
         client.unbind(function(err) {
@@ -79,7 +79,7 @@ var Ldap = function(options) {
                 callback(err);
             }
         });
-    }
+    };
 
     this.createUser = function(ldaproot, ldaprootpass, username, password, fname, lname, callback) {
         console.log('Entered Create User in Ldap', username, password, fname, lname);
@@ -95,7 +95,7 @@ var Ldap = function(options) {
             //homeDirectory: '/home/users/' + username
             //dc=['d4d-ldap','relevancelab','com']
         };
-        var dnString = createDnString(ldaproot, options.baseDn);
+        var dnString = createDnString(ldaproot, options.baseDn, options.ou);
         client.bind(dnString, ldaprootpass, function(err) {
             if (err) {
                 console.log('Error in binding for createuser' + err);
@@ -117,9 +117,7 @@ var Ldap = function(options) {
                 }
             });
         });
-
-
-    }
+    };
 
 }
 

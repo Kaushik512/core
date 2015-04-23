@@ -8,7 +8,7 @@ var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
     options.port || (options.port = '389');
     options.baseDn || (options.baseDn = '');
-
+    options.ou || (options.ou = '');
     return options;
 };
 
@@ -31,7 +31,8 @@ LDAPPassportstrategy.prototype.authenticate = function(req, options) {
     var ldapClient = new LdapClient({
         host: opts.host,
         port: opts.port,
-        baseDn: opts.baseDn
+        baseDn: opts.baseDn,
+        ou:opts.ou
     });
     console.log(req.body);
     var username = req.body[opts.usernameField];
