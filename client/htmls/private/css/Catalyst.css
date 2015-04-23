@@ -1,3 +1,10 @@
+.assignedRunlists{
+    border:1px solid #dddddd;
+    list-style:none outside none;
+    height:150px;
+    overflow-y:auto;
+    margin-bottom:10px !important;
+}
 .applicationNameCSS{
     text-align:center;
     width:30px;
