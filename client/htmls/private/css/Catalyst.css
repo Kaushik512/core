@@ -7557,6 +7557,13 @@ background:url('../img/galleryIcons/start_icon.png');
     height:25px;
     cursor:pointer;
 }
+.instanceActionBtnCtr >.shutdown{
+background:url('../img/galleryIcons/rsz_shut_down.png') !important;
+    width:26px;
+    height:25px;
+    cursor:pointer;
+}
+
 .ipLEFT{
     margin-left: -13px;
 }
