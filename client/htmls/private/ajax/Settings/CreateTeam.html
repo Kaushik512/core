@@ -108,8 +108,16 @@
    $(document).ready(function() {
        $(".chooseOrganization").select2();
        $(".chooseBG").select2();
+       isUserTypeSuperAdmin();
    });
    
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
    function inLineReady() {
        $("input[type='text']").on("click", function () {
            $(this).select();

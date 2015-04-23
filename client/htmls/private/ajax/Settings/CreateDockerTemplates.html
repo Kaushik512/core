@@ -177,6 +177,7 @@
 <script>
    $(document).ready(function () {
       $("#dockerreponame").focus();
+      isUserTypeSuperAdmin();
       $('select').select2();
        $('#myForm45').submit(function() {
            $(this).validate();
@@ -190,5 +191,12 @@
            return false; // for demo
        });
    });
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
        
 </script>

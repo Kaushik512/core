@@ -96,7 +96,13 @@
        $(".modal-backdrop.fade.in").detach();
        $('#btncancel').click();
    }
-   
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
    function inLineReady() {
        $("input[type='text']").on("click", function () {
            $(this).select();
@@ -177,6 +183,7 @@
 <script>
    $(document).ready(function () {
       $("#loginname").focus();
+      isUserTypeSuperAdmin();
       $("select").select2();
        $('#myForm5').submit(function() {
           

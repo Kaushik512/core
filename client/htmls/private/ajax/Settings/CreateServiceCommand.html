@@ -219,7 +219,7 @@
    $(document).ready(function() {
    $("#commandtype").select2();
    $("#commandtype").trigger('change').select2();
-   
+   isUserTypeSuperAdmin();
    });
 
    $("#customScript-dropdown").hide();
@@ -241,6 +241,13 @@
       $(".chooseChefServer").hide();
    }
    });
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
 </script>
 <script>
    //Form Name

@@ -268,8 +268,16 @@
    $(".choosedockerRepo").select2();
    $(".choosechefserver").trigger('change').select2();
    $("select").select2();
-   
+   isUserTypeSuperAdmin();
    });
+
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
    function cancelClicked() {
        $("#popupSelectProvider").modal('hide');
        $(".modal-backdrop.fade.in").detach();
