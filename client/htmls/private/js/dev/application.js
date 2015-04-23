@@ -520,7 +520,7 @@ $(function() {
 
 
         if (!appCardData.git.repoUrl) {
-            alert("Enter a URL");
+            alert("Enter a Repo URL");
             return;
         }
         if(!regexpURL.test(appCardData.git.repoUrl)){

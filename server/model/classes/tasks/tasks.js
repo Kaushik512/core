@@ -145,17 +145,12 @@ taskSchema.statics.createNew = function(taskData, callback) {
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
-        console.log(taskData.attributesjson != '');
-        if (taskData.attributesjson != '') {
-
-            attrJson = JSON.parse(taskData.attributesjson);
-            logger.debug('attrJson:' + JSON.stringify(attrJson));
-        }
+        
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
-            attributesjson: attrJson
+            attributes: taskData.attributes
         });
     } else {
         callback({
@@ -268,16 +263,12 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
-        var attrJson = '';
-        if (taskData.attributesjson != '') {
-            attrJson = JSON.parse(taskData.attributesjson);
-        }
-        logger.debug('attrJson:' + JSON.stringify(attrJson));
+       
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
-            attributesjson: attrJson
+            attributes: taskData.attributes
         });
     } else {
         callback({
