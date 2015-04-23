@@ -266,7 +266,13 @@
    
    }
    
-   $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+       $.fn.getType = function() {
+        if($(this).length){
+        return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+        }else{
+            return "undefined";
+        }
+    }
    
    function saveform_todelete(formName) {
        $("#savespinner").show();

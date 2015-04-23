@@ -221,6 +221,13 @@
  }
 }); 
   }
+  function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgId').attr('disabled','disabled').select2();
+      }
+    });
+  }
 
   function saveImageForm(){
     appendLoader();
@@ -372,7 +379,7 @@
 
 $(document).ready(function () {
 
-
+isUserTypeSuperAdmin();
   $("#name").focus();
 
            // $('#imageidentifire').blur(saveImageForm);
@@ -401,7 +408,7 @@ $(document).ready(function () {
             $('#osType').attr('answer',data.osName).val(data.osName).select2();
             $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
             $('#userName').val(data.userName);
-            $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0],'disabled':'disabled'}).select2();
+            $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0]}).select2();
 
           });
          }

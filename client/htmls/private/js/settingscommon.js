@@ -295,7 +295,11 @@ function readMasterJsontv(id) {
 }
 
 $.fn.getType = function() {
+    if($(this).length){
     return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+    }else{
+        return "undefined";
+    }
 }
 
 function CreateTableFromJson__(formID, idFieldName, createFileName) {
@@ -1997,11 +2001,14 @@ function saveform(formID, operationTypes) {
         error: function(jqxhr) {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
-
-            alert(jqxhr.status);
+            bootbox.alert(jqxhr.responseText);
+           // alert(jqxhr.status);
+          // logger.debug("jqxhr.status>>> ",jqxhr.status);
+           //alert('Insufficient permission to perform this operation.');
         },
         failure: function(data) {
             alert(data);
+           //alert('Insufficient permission to perform this operation.');
         }
     });
 
