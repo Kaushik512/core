@@ -81,6 +81,32 @@ awsProviderSchema.statics.getAWSProviders = function(callback) {
     });
 };
 
+awsProviderSchema.statics.getAWSProvidersForOrg = function(orgList,callback) {
+    logger.debug("Enter getAWSProvidersForOrg");
+    var orgIds = [];
+        for(var x=0;x<orgList.length;x++){
+            orgIds.push(orgList[x]._id);
+        }
+        logger.debug("org id: ",orgIds);
+    this.find({
+        orgId : {$in:orgIds}
+    }, function(err, providers) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (providers.length) {
+            logger.debug("Exit getAWSProvidersForOrg with providers present");
+            callback(null, providers);
+        } else {
+            logger.debug("Exit getAWSProvidersForOrg with no providers present");
+            callback(null, null);
+        }
+
+    });
+};
+
 awsProviderSchema.statics.getAWSProviderById = function(providerId, callback) {
     logger.debug("Enter getAWSProviderById");
     this.find({

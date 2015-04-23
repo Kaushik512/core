@@ -139,19 +139,51 @@ app.post('/aws/providers', function(req, res) {
 // Return list of all available AWS Providers.
 app.get('/aws/providers', function(req, res) {
  logger.debug("Enter get() for /providers");
- AWSProvider.getAWSProviders(function(err, providers) {
-        if (err) {
-            logger.error(err);
-            res.send(500, errorResponses.db.error);
-            return;
-        }
-        logger.debug("providers>>> ",   JSON.stringify(providers));
-        if (providers) {
-            res.send(providers);
-        } else {
-            res.send([]);
-        }
-    });
+ var loggedInUser = req.session.user.cn;
+   masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+              if(err){
+                  res.send(500,"Failed to fetch User.");
+              }
+              if(!anUser){
+                  res.send(500,"Invalid User.");
+              }
+   if(anUser.orgname_rowid[0] === ""){
+       AWSProvider.getAWSProviders(function(err, providers) {
+              if (err) {
+                  logger.error(err);
+                  res.send(500, errorResponses.db.error);
+                  return;
+              }
+              logger.debug("providers>>> ",   JSON.stringify(providers));
+              if (providers) {
+                  res.send(providers);
+              } else {
+                  res.send([]);
+              }
+      });
+    }else{
+      masterUtil.getOrgs(loggedInUser,function(err,orgList){
+          if(err){
+            res.send(500,'Not able to fetch Orgs.');
+          }
+          if(orgList){
+            AWSProvider.getAWSProvidersForOrg(orgList,function(err, providers) {
+              if (err) {
+                  logger.error(err);
+                  res.send(500, errorResponses.db.error);
+                  return;
+              }
+              logger.debug("providers>>> ",   JSON.stringify(providers));
+              if (providers) {
+                  res.send(providers);
+              } else {
+                  res.send([]);
+              }
+            });
+          }
+      });
+    }
+  });
 });
 
 // Return AWS Provider respect to id.
@@ -234,82 +266,100 @@ if(typeof providerType === 'undefined' || providerType.length === 0){
     return;
 }
 
-var region;
+/*var region;
 logger.debug("typeof req.body.region ",typeof req.body.region);
     if(typeof req.body.region === 'string'){
       logger.debug("inside single region: ",req.body.region);
       region = req.body.region;
+    }else if(typeof req.body.region){
+
     }else{
       region = req.body.region[0];
-    }
+    }*/
+    AWSKeyPair.getAWSKeyPairByProviderId(providerId,function(err,keypairs){
+      if(err){
+        res.send(500,"Failed to fetch Keypairs.")
+      }
+      if(keypairs){
+        var region = keypairs[0].region;
     logger.debug("Final Region:  ",region)
-var providerData= {
-    id: 9,
-    accessKey: accessKey,
-    secretKey: secretKey,
-    providerName: providerName,
-    providerType: providerType,
-    orgId: orgId
-};
-logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
-var ec2 = new EC2({
-           "access_key": accessKey,
-           "secret_key": secretKey,
-           "region"    : region
-        });
-      usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-        if (!err) {
-            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-            if (data == false) {
-                logger.debug('No permission to ' + permissionto + ' on ' + category);
-                res.send(401,"You don't have permission to perform this operation.");
-                return;
-            }
-        } else {
-            logger.error("Hit and error in haspermission:", err);
-            res.send(500);
-            return;
-        }
-
-        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
-            }
-            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
-            if(anUser){
-                //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
+    var providerData= {
+        id: 9,
+        accessKey: accessKey,
+        secretKey: secretKey,
+        providerName: providerName,
+        providerType: providerType,
+        orgId: orgId
+    };
+    logger.debug("provider>>>>>>>>>>>> %s",providerData.providerType);
+    var ec2 = new EC2({
+               "access_key": accessKey,
+               "secret_key": secretKey,
+               "region"    : region
+            });
+          usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }
-        ec2.describeKeyPairs(function(err,data){
-           if(err){
-            logger.debug("Unable to get AWS Keypairs");
-            res.send("Invalid AccessKey or SecretKey.",500);
-            return;
-             }
-            logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
-            AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
-                    if (err) {
-                        logger.error(err);
-                        res.send(500, errorResponses.db.error);
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+                if(err){
+                    res.send(500,"Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+                if(anUser){
+                    //data == true (create permission)
+                    if(data && anUser.orgname_rowid[0] !== ""){
+                        logger.debug("Inside check not authorized.");
+                        res.send(401,"You don't have permission to perform this operation.");
                         return;
                     }
-                  AWSKeyPair.createNew(req,providerId,function(err,keyPair){  
-                    if (updateCount) {
-                     logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
-                     res.send({
-                        updateCount: updateCount
-                    });
-                 } else {
-                    res.send(400);
+            ec2.describeKeyPairs(function(err,data){
+               if(err){
+                logger.debug("Unable to get AWS Keypairs");
+                res.send("Invalid AccessKey or SecretKey.",500);
+                return;
+                 }
+                logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
+                AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
                         }
-                    });//
-                 });
-              });
-            }
+                        logger.debug("req.body.keyPairName: ",typeof req.body.keyPairName);
+                        if(typeof req.body.keyPairName === 'undefined'){
+                              res.send({
+                            updateCount: updateCount
+                              });
+                              return;
+                        }else{
+                          AWSKeyPair.createNew(req,providerId,function(err,keyPair){  
+                        if (updateCount) {
+                         logger.debug("Enter post() for /providers/%s/update",req.params.providerId);
+                         res.send({
+                            updateCount: updateCount
+                        });
+                     } else {
+                        res.send(400);
+                            }
+                        });
+                        }//
+                     });
+                  });
+                }
+            });
         });
+      }
     });
 });
 
