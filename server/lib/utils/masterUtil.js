@@ -15,62 +15,77 @@ var MasterUtil = function(){
                 }
                 logger.debug("Able to get User: ",JSON.stringify(users));
                 if(users){
+                    var count = 0;
+                    var errOccured = false;
                     for(var x=0; x<users.length;x++){
                         (function(countUser){
+                            logger.debug("x+++++++++++++++++++++++ ",countUser);
                             if(users[countUser].id === '7'){
                                 var orgIds = users[countUser].orgname_rowid;
-                                logger.debug("orgIds: ",orgIds);
-                                if(orgIds[0] === 'undefined'){
+                                logger.debug("orgIds: ",typeof orgIds[0]);
+                                if(typeof orgIds[0] === 'undefined'){
                                     d4dModelNew.d4dModelMastersOrg.find({
                                             id : "1"
                                             },function(err,orgs){
+                                                count++;
                                             if(err){
-                                                logger.debug("Unable to fetch Org.");
-                                                callback(err,null);
+                                                logger.debug("Unable to fetch Org.",err);
+                                                errOccured = true;
+                                                return;
                                             }
                                             if(orgs){
                                                 for(var y=0;y<orgs.length;y++){
                                                     (function(countOrg){
+                                                        logger.debug("y++++++++++++++++ ",countOrg);
                                                         if(orgs[countOrg].id === '1'){
-                                                            logger.debug("Able to getch Org.",JSON.stringify(orgs[countOrg]));
+                                                            logger.debug("Able to get Org.",JSON.stringify(orgs[countOrg]));
                                                             orgList.push(orgs[countOrg]);
                                                         }
                                                     })(y);
                                                 }
-                                            }
-                                            logger.debug("Returned Orgs: ",JSON.stringify(orgList));
-                                             callback(null,orgList);
+                                               
+                                        }
+                                         if(count === users.length) { 
+                                                 logger.debug("Returned Orgs: ",JSON.stringify(orgList));
+                                                 callback(errOccured,orgList);
+                                                }
+                                           
+                                             
                                         });
-                                }
-                                //for(var i=0; i<orgIds.length;i++){
-
-                                   // (function(count){
+                                }else{
+                                
                                         logger.debug("Org orgIds for query: ",orgIds);
                                         d4dModelNew.d4dModelMastersOrg.find({
                                             rowid : {$in:orgIds}
                                             },function(err,orgs){
+                                                count++;
                                             if(err){
-                                                logger.debug("Unable to fetch Org.");
-                                                callback(err,null);
+                                                logger.debug("Unable to fetch Org.",err);
+                                                 errOccured = true;
+                                                return;
                                             }
                                             if(orgs){
                                                 for(var y=0;y<orgs.length;y++){
                                                     (function(countOrg){
                                                         if(orgs[countOrg].id === '1'){
-                                                            logger.debug("Able to getch Org.",JSON.stringify(orgs[countOrg]));
+                                                            logger.debug("Able to get Org.",JSON.stringify(orgs[countOrg]));
                                                             orgList.push(orgs[countOrg]);
                                                         }
                                                     })(y);
                                                 }
                                             }
-                                            logger.debug("Returned Orgs: ",JSON.stringify(orgList));
-                                             callback(null,orgList);
+                                            logger.debug('count ==>',count, "user length = >",users.length);
+                                         if(count === users.length) { 
+                                                 logger.debug("Returned Orgs: ",JSON.stringify(orgList));
+                                                 callback(errOccured,orgList);
+                                                }
                                         });
-                                    //})(i);
-                               // }
+                                   } 
                             }
                         })(x);
                     }
+                } else {
+                    callback(null,orgList);
                 }
           });
 	}

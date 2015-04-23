@@ -502,6 +502,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
         logger.debug("Logged in user: ",req.session.user.cn);
+        logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ",req.params.id);
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
             if(err){
@@ -630,20 +631,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 // For non-catalystadmin
             }else {
-
+                    logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ",req.params.id);
                 // For Org
                 masterUtil.getOrgs(loggedInUser,function(err,orgList){
+                    logger.debug("got org list ==>",JSON.stringify(orgList));
                     if(err){
                         res.send(500,'Not able to fetch Orgs.');
+                        return;
                     }
-            if(req.params.id === '1'){
+            else if(req.params.id === '1'){
                     logger.debug("Returned Org List:>>>> ",JSON.stringify(orgList));
                     res.send(orgList);
                     return;
             }
            // for(var i=0;i<orgList.length;i++){
                 //(function(count){
-                    if(req.params.id === '2'){
+                    else if(req.params.id === '2'){
                             // For BusinessGroup
                             masterUtil.getBusinessGroups(orgList,function(err,bgList){
                                 if(err){
@@ -654,7 +657,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 return;
                             });
                         }
-                    if(req.params.id === '3'){
+                    else if(req.params.id === '3'){
                             // For Environment
                             masterUtil.getEnvironments(orgList,function(err,envList){
                                 if(err){
@@ -665,7 +668,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 return;
                             });
                         }
-                    if(req.params.id === '4'){    
+                    else if(req.params.id === '4'){    
                             // For Projects
                             masterUtil.getProjects(orgList,function(err,projectList){
                                 if(err){
@@ -676,7 +679,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 return;
                             })
                         }
-                    if(req.params.id === '10'){    
+                    else if(req.params.id === '10'){    
                             // For ConfigManagement
                             masterUtil.getCongifMgmts(orgList,function(err,configMgmtList){
                                 if(err){
@@ -688,7 +691,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                    if(req.params.id === '18'){    
+                    else if(req.params.id === '18'){    
                             // For Docker
                             logger.debug("Id for docker:>> ",req.params.id);
                             masterUtil.getDockers(orgList,function(err,dockerList){
@@ -701,7 +704,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                    if(req.params.id === '17'){    
+                    else if(req.params.id === '17'){    
                             // For Template
                             logger.debug("Id for template:>> ",req.params.id);
                             masterUtil.getTemplates(orgList,function(err,templateList){
@@ -714,7 +717,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                        if(req.params.id === '16'){    
+                        else if(req.params.id === '16'){    
                             // For Template
                             logger.debug("Id for templateType:>> ",req.params.id);
                             /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
@@ -738,7 +741,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                    if(req.params.id === '19'){    
+                    else if(req.params.id === '19'){    
                             // For ServiceCommand
                             masterUtil.getServiceCommands(orgList,function(err,serviceCommandList){
                                 if(err){
@@ -750,7 +753,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                    if(req.params.id === '20'){    
+                    else if(req.params.id === '20'){    
                             // For Jenkins
                             masterUtil.getJenkins(orgList,function(err,jenkinList){
                                 if(err){
@@ -762,7 +765,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                     if(req.params.id === '6'){    
+                     else if(req.params.id === '6'){    
                             // For User Role
                             masterUtil.getUserRoles(loggedInUser,function(err,userRoleList){
                                 if(err){
@@ -774,7 +777,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                     if(req.params.id === '7'){    
+                     else if(req.params.id === '7'){    
                             // For User
                             masterUtil.getUsers(loggedInUser,function(err,userList){
                                 if(err){
@@ -786,7 +789,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             });
                             
                         }
-                    if(req.params.id === '21'){    
+                     else if(req.params.id === '21'){    
                             // For Team
                             masterUtil.getTeams(orgList,function(err,teamList){
                                 if(err){
@@ -796,122 +799,135 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 res.send(teamList);
                                 return;
                             }); 
+                        } else {
+                            logger.debug('nothin here');
+                            res.send([]);
                         }
+
+                        //res.send(200,[]);
+
                 // })(i);
               // }
-            });
-        }
-    });
-        //res.send([]);
+                });
+            }
+        });
+        
     });
 
      app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
         var loggedInUser = req.session.user.cn;
-        if(loggedInUser === 'superadmin'){
-         configmgmtDao.getRowids(function(err,rowidlist){
+        masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            if(!anUser){
+                res.send(500,"Invalid User.");
+            }
+            if(anUser.orgname_rowid[0] === ""){
+                 configmgmtDao.getRowids(function(err,rowidlist){
 
-            logger.debug("Rowid List----&&&&----> ", rowidlist);
-            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                if (err) {
-                    logger.error("Hit and error:", err);
-                }
-                if (dbtype) {
-                    logger.debug("Master Type: %s", dbtype);
-                    
-                    var query = {};
-                    
-                    query['id'] = req.params.id;
-                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
-                        query['active'] = true;
-                    }
-
-
-                    eval('d4dModelNew.' + dbtype).find(
-                        {id:req.params.id
-                        }
-                    , function(err, d4dMasterJson) {
+                    logger.debug("Rowid List----&&&&----> ", rowidlist);
+                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
-                            logger.debug("Hit and error:", err);
+                            logger.error("Hit and error:", err);
                         }
-                        //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
-                            var _keys = Object.keys(d4dMasterJson);
-                            logger.debug("Master Length:" + _keys.length);
-                            if(_keys.length <= 0){
-                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                                res.end(JSON.stringify(d4dMasterJson));
-                            }
-                            var counter = 0;
-                            var todelete = [];
-                            //_keys.forEach(function(k,v){
-                            for(var k=0,v=0;k<_keys.length;k++,v++) {
-                                //var __keys = Object.keys(d4dMasterJson[k]);
-                               
-                                //console.log('OBject:' + d4dMasterJson[k]);
-                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                        if (dbtype) {
+                            logger.debug("Master Type: %s", dbtype);
                             
-                                for(var k1 in jobj){
-                                    //if any key has _rowid then update     corresponding field
-                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
-                                    if(k1.indexOf('_rowid') > 0){
-                                        //check if its an array of rowid's
-                                        var flds = k1.split('_');
-                                        var names = '';
-                                        if(jobj[k1].indexOf(',') > 0){
-                                            //Will handle this seperately : Vinod to Do
-                                            var itms = jobj[k1].split(',');
-                                            for(_itms in itms){
-                                                var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                if(_itmsName != '')
-                                                {
-                                                        if(names == '')
+                            var query = {};
+                            
+                            query['id'] = req.params.id;
+                            if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                                query['active'] = true;
+                            }
+
+
+                            eval('d4dModelNew.' + dbtype).find(
+                                {id:req.params.id
+                                }
+                            , function(err, d4dMasterJson) {
+                                if (err) {
+                                    logger.debug("Hit and error:", err);
+                                }
+                                //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
+                                    var _keys = Object.keys(d4dMasterJson);
+                                    logger.debug("Master Length:" + _keys.length);
+                                    if(_keys.length <= 0){
+                                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                                        res.end(JSON.stringify(d4dMasterJson));
+                                    }
+                                    var counter = 0;
+                                    var todelete = [];
+                                    //_keys.forEach(function(k,v){
+                                    for(var k=0,v=0;k<_keys.length;k++,v++) {
+                                        //var __keys = Object.keys(d4dMasterJson[k]);
+                                       
+                                        //console.log('OBject:' + d4dMasterJson[k]);
+                                        var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                                    
+                                        for(var k1 in jobj){
+                                            //if any key has _rowid then update     corresponding field
+                                            //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                            if(k1.indexOf('_rowid') > 0){
+                                                //check if its an array of rowid's
+                                                var flds = k1.split('_');
+                                                var names = '';
+                                                if(jobj[k1].indexOf(',') > 0){
+                                                    //Will handle this seperately : Vinod to Do
+                                                    var itms = jobj[k1].split(',');
+                                                    for(_itms in itms){
+                                                        var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        if(_itmsName != '')
                                                         {
-                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                                if(names == '')
+                                                                {
+                                                                    names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                                }
+                                                                else{
+                                                                    names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                                }
+                                                                logger.debug("names: %s",names);
                                                         }
-                                                        else{
-                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                        }
-                                                        logger.debug("names: %s",names);
+                                                    }
+                                                    
                                                 }
+                                                else{
+                                                    names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
+                                                }
+
+                                                d4dMasterJson[k][flds[0]] = names;
+
+                                                if(names == '' && k1.indexOf('orgname_rowid') >= 0)
+                                                    todelete.push(k);
+                                                //console.log('jobj[flds[0]]',jobj[flds[0]]);
+                                                logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                             }
                                             
+                                          //  console.log("key**:",k1," val**:",jobj[k1]);
+                                           
                                         }
-                                        else{
-                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
-                                        }
-
-                                        d4dMasterJson[k][flds[0]] = names;
-
-                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
-                                            todelete.push(k);
-                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                        logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
-                                    }
-                                    
-                                  //  console.log("key**:",k1," val**:",jobj[k1]);
-                                   
-                                }
-                                logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
-                                
-                                
-                                counter++;
-                            };//);
-                                    logger.debug("To Delete Array: %s", todelete.toString());
-                                    var collection = [];
-                                    
-                                    for(var i = 0; i < d4dMasterJson.length;i++){
-                                        if(todelete.indexOf(i) === -1) {
-                                            collection.push(d4dMasterJson[i]);
-                                        }
+                                        logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
                                         
-                                    }
-                                    logger.debug("sent response 686 %s", JSON.stringify(collection));
-                                    res.end(JSON.stringify(collection));
-                                    logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
-                         });
-                     }
-                });
-             }); //rowidlist
+                                        
+                                        counter++;
+                                    };//);
+                                            logger.debug("To Delete Array: %s", todelete.toString());
+                                            var collection = [];
+                                            
+                                            for(var i = 0; i < d4dMasterJson.length;i++){
+                                                if(todelete.indexOf(i) === -1) {
+                                                    collection.push(d4dMasterJson[i]);
+                                                }
+                                                
+                                            }
+                                            logger.debug("sent response 686 %s", JSON.stringify(collection));
+                                            res.end(JSON.stringify(collection));
+                                            logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
+                                 });
+                             }
+                        });
+                     }); //rowidlist
         }else{
             // For non-catalystadmin
 
@@ -919,10 +935,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if(orgList){
                     logger.debug("Returned Org List: >>>>>> ",JSON.stringify(orgList));
                     res.send(orgList);
-                }
-            })
+                    }
+                });
 
-        }
+            }
+        });
     });
     //for kana to be reverted to the original function 
     app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
@@ -1106,10 +1123,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             });
         }else{
+            // For Settings Button
             var settingsList =[];
             var loggedInUser = req.session.user.cn;
             var callCount = 0;
             masterUtil.getOrgs(loggedInUser,function(err,orgs){
+                logger.debug("got org list ==>",JSON.stringify(orgs));
                 if(err){
                     res.send(500,"Failed to fetch Org.");
                 }
@@ -1214,6 +1233,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             
                        // })(x);
                    // }
+                } else {
+                    res.send(200,settingsList);
                 }
             });
         }//else
