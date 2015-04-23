@@ -2838,5 +2838,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
+    app.get('/d4dMasters/loggedInUser', function(req, res) {
+        var loggedInUser = req.session.user.cn;
+            masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+                if(err){
+                    res.send(500,"Failed to fetch User.");
+                }
+                if(!anUser){
+                    res.send(500,"Invalid User.");
+                }
+                if(anUser.orgname_rowid[0] === ""){
+                    res.send({"isSuperAdmin":true});
+                    return;
+                }else{
+                    res.send({"isSuperAdmin":false});
+                    return;
+                }
+            });
+    });
+
 
 }

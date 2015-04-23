@@ -401,7 +401,7 @@ $(document).ready(function () {
             $('#osType').attr('answer',data.osName).val(data.osName).select2();
             $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
             $('#userName').val(data.userName);
-            $('#orgId').val(data.orgId[0]).attr('answer',data.orgId[0]);
+            $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0],'disabled':'disabled'}).select2();
 
           });
          }
