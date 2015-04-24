@@ -11,6 +11,7 @@ var logger = require('./lib/logger')(module);
 var expressLogger = require('./lib/logger').ExpressLogger();
 var passport = require('passport');
 var passportLdapStrategy = require('./lib/ldapPassportStrategy.js');
+var passportADStrategy = require('./lib/adPassportStrategy.js');
 
 
 
@@ -37,7 +38,7 @@ passport.use(new passportLdapStrategy({
     passwordField: 'pass'
 }));
 
-// passport.use(new passportLdapStrategy({
+// passport.use(new passportADStrategy({
 //     host:'192.168.105.11',
 //     port: 389,
 //     baseDn: 'DC=rlindia,DC=com',
