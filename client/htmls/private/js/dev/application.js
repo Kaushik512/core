@@ -587,8 +587,8 @@ $(function() {
                 console.log(errorMessage); // Optional
             }
         });*/
-        var i;
-        for(i=0;i<=100;i++){
+        //var i;
+        //for(i=0;i<=100;i++){
             
             $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications', {
                 appData: appCardData
@@ -598,7 +598,7 @@ $(function() {
                 $('.appcard-role-inner:first').trigger('click');
                 $('#modaladdAppCard').modal('hide');
             });
-        }
+        //}
     });
     $('.actionnewControlPanel').click(function(e) {
         var $selectedCard = $('.role-Selectedcard-app');
