@@ -1,10 +1,15 @@
 var ldap = require('ldapjs');
+var appConfig = require('../config/app_config.js');
 
 
 var setDefaults = function(options) {
-    options.host || (options.host = 'localhost');
+    /*options.host || (options.host = 'localhost');
     options.port || (options.port = '389');
     options.baseDn || (options.baseDn = 'dc=d4d-ldap,dc=relevancelab,dc=com');
+    options.ou || (options.ou = '');*/
+    options.host || (options.host = appConfig.ldap.host);
+    options.port || (options.port = appConfig.ldap.port);
+    options.baseDn || (options.baseDn = appConfig.ldap.baseDn);
     options.ou || (options.ou = '');
 
     return options;

@@ -16,11 +16,13 @@ var MasterUtil = function(){
                 logger.debug("Able to get User: ",JSON.stringify(users));
                 if(users){
                     var count = 0;
+                    var usrCount = 0;
                     var errOccured = false;
                     for(var x=0; x<users.length;x++){
                         (function(countUser){
                             logger.debug("x+++++++++++++++++++++++ ",countUser);
                             if(users[countUser].id === '7'){
+                                usrCount++;
                                 var orgIds = users[countUser].orgname_rowid;
                                 logger.debug("orgIds: ",typeof orgIds[0]);
                                 if(typeof orgIds[0] === 'undefined'){
@@ -45,7 +47,7 @@ var MasterUtil = function(){
                                                 }
                                                
                                         }
-                                         if(count === users.length) { 
+                                         if(count === usrCount) { 
                                                  logger.debug("Returned Orgs: ",JSON.stringify(orgList));
                                                  callback(errOccured,orgList);
                                                 }
@@ -74,8 +76,8 @@ var MasterUtil = function(){
                                                     })(y);
                                                 }
                                             }
-                                            logger.debug('count ==>',count, "user length = >",users.length);
-                                         if(count === users.length) { 
+                                            logger.debug('count ==>',count, "user length = >",usrCount);
+                                         if(count === usrCount) { 
                                                  logger.debug("Returned Orgs: ",JSON.stringify(orgList));
                                                  callback(errOccured,orgList);
                                                 }
@@ -493,6 +495,7 @@ var MasterUtil = function(){
                                     teams.push(team[tm].rowid);
                                 }
                             }
+                        }
                             logger.debug("Team array: ",JSON.stringify(teams));
                             returnObj.teams=teams;
                             d4dModelNew.d4dModelMastersOrg.find({
@@ -510,6 +513,7 @@ var MasterUtil = function(){
                                         }
                                     }
                                     returnObj.orgs = orgs;
+                                }
                                     d4dModelNew.d4dModelMastersProjects.find({
                                         orgname_rowid: {$in:users[usr].orgname_rowid}
                                     },function(err,project){
@@ -545,10 +549,10 @@ var MasterUtil = function(){
                                             });
                                             
                                         });
-                                    }
+                                   // }
                                     
                                 });
-                            }
+                            //}
                              
                         });
                        
