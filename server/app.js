@@ -10,7 +10,7 @@ var io = require('socket.io');
 var logger = require('./lib/logger')(module);
 var expressLogger = require('./lib/logger').ExpressLogger();
 var passport = require('passport');
-var passportLdapStrategy = require('passport-ldapauth');
+var passportLdapStrategy = require('./lib/ldapPassportStrategy.js');
 
 
 
@@ -27,18 +27,33 @@ logger.debug('Logger Initialized');
 
 // setting up up passport authentication strategy
 
+
 passport.use(new passportLdapStrategy({
-    server: {
-        url: 'ldap://' + appConfig.ldap.host + ':' + appConfig.ldap.port,
-        bindDn: 'cn=superadmin,dc=d4d-ldap,dc=relevancelab,dc=com',
-        bindCredentials:'superadmin@123',
-        searchBase: 'dc=d4d-ldap,dc=relevancelab,dc=com',
-        searchFilter: '(uid={{username}})'
-        //  usernameField: 'username',
-        // passwordField: 'pass'
-    }
+    host: appConfig.ldap.host,
+    port: appConfig.ldap.port,
+    baseDn: appConfig.ldap.baseDn,
+    ou: appConfig.ldap.ou,
+    usernameField: 'username',
+    passwordField: 'pass'
 }));
 
+// passport.use(new passportLdapStrategy({
+//     host:'192.168.105.11',
+//     port: 389,
+//     baseDn: 'DC=rlindia,DC=com',
+//     ou: '',
+//     usernameField: 'username',
+//     passwordField: 'pass'
+// }));
+
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
 
 var dboptions = {
     host: appConfig.db.host,
