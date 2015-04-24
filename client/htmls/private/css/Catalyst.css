@@ -474,7 +474,7 @@ label.custom-select {
 }
 .role-Selectedcard-app {
     /*border: 4px solid #e7e7e7;*/
-    border: 2px solid #40baf1 !important;
+    border: 1px solid #40baf1 !important;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
     /*box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);*/
@@ -7557,6 +7557,13 @@ background:url('../img/galleryIcons/start_icon.png');
     height:25px;
     cursor:pointer;
 }
+.instanceActionBtnCtr >.shutdown{
+background:url('../img/galleryIcons/rsz_shut_down.png') !important;
+    width:26px;
+    height:25px;
+    cursor:pointer;
+}
+
 .ipLEFT{
     margin-left: -13px;
 }

@@ -123,7 +123,7 @@ module.exports.getUser = function(username, req, callback) {
         if (err) {
             console.log("Hit and error:" + err);
         }
-        if (d4dMasterJson) {
+        if (d4dMasterJson && d4dMasterJson.length) {
             //Fetching the permission set for the role defined for the user
             d4dMasterJson = JSON.parse(JSON.stringify(d4dMasterJson));
             logger.debug('Entering  permissionsetDao.getPermissionSet. d4dMasterJson : ' + JSON.stringify(d4dMasterJson));

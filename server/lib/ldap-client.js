@@ -37,7 +37,10 @@ function createDnString(username, baseDn, ou) {
 }
 
 var Ldap = function(options) {
-    console.log('options ==>',options);
+    console.log('options ==>', options);
+    if (!options) {
+        options = {};
+    }
     options = setDefaults(options);
 
     var client = ldap.createClient({

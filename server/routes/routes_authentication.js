@@ -49,10 +49,13 @@ module.exports.setRoutes = function(app) {
                 req.session.user = user;
                 usersDao.getUser(user.cn, req, function(err, data) {
                     logger.debug("User is not a Admin.");
+                    console.log('user ==>', data);
                     if (err) {
+                        req.session.destroy();
                         next(err);
+                        return;
                     }
-                    if (data.length) {
+                    if (data && data.length) {
                         user.roleId = data[0].userrolename;
 
                         console.log('Just before role:', data[0].userrolename);
@@ -66,9 +69,7 @@ module.exports.setRoutes = function(app) {
                             return res.redirect('/private/index.html');
                         });
                     } else {
-                        // next({
-                        //     message: "User not found"
-                        // });
+                        req.session.destroy();
                         res.redirect('/public/login.html?o=try');
                     }
                 });
