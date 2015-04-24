@@ -458,5 +458,110 @@ var MasterUtil = function(){
 
         });
     }
+
+// Return all settings for User.
+    this.getAllSettingsForUser = function(loggedInUser,callback){
+        var userid;
+        var teams =[];
+        var orgs =[];
+        var projects =[];
+        var bunits =[];
+        var returnObj={};
+        d4dModelNew.d4dModelMastersUsers.find({
+            loginname : loggedInUser
+        },function(err,users){
+            if(users){
+                for(var x =0;x<users.length;x++){
+                    (function(usr){
+                    if(users[usr].id==='7'){
+                        logger.debug("Got User");
+                        returnObj={
+                            userid : users[usr].rowid,
+                            teams:[],
+                            orgs:[],
+                            projects:[],
+                            bunits:[]
+                        };
+                        d4dModelNew.d4dModelMastersTeams.find({
+                            orgname_rowid: {$in:users[usr].orgname_rowid}
+                        },function(err,team){
+                            logger.debug("Available team: ",JSON.stringify(team));
+                            if(team){
+                            for(var tm =0;tm<team.length;tm++){
+                                if(team[tm].id === '21'){
+                                    logger.debug("Inside team : ",team[tm].rowid);
+                                    teams.push(team[tm].rowid);
+                                }
+                            }
+                            logger.debug("Team array: ",JSON.stringify(teams));
+                            returnObj.teams=teams;
+                            d4dModelNew.d4dModelMastersOrg.find({
+                                rowid:{$in:users[usr].orgname_rowid}
+                            },function(err,org){
+                                if(err){
+                                    callback(err,null);
+                                }
+                                if(org){
+                                    logger.debug("Available Org: ",JSON.stringify(org));
+                                    for(var x=0;x<org.length;x++){
+                                        if(org[x].id === '1'){
+                                            orgs.push(org[x].rowid);
+                                            logger.debug("Orgs list rowid: ",org[x].rowid);
+                                        }
+                                    }
+                                    returnObj.orgs = orgs;
+                                    d4dModelNew.d4dModelMastersProjects.find({
+                                        orgname_rowid: {$in:users[usr].orgname_rowid}
+                                    },function(err,project){
+                                            if(err){
+                                                callback(err,null);
+                                            }
+                                            if(project){
+                                                logger.debug("Available project:>>>>> ",JSON.stringify(project));
+                                                for(var x1=0;x1<project.length;x1++){
+                                                    if(project[x1].id === '4'){
+                                                        projects.push(project[x1].rowid);
+                                                        logger.debug("projectList:>>> ",project[x1].rowid);
+                                                    }
+                                                }
+                                                returnObj.projects = projects;
+                                            }
+                                            d4dModelNew.d4dModelMastersProductGroup.find({
+                                                orgname_rowid: {$in:users[usr].orgname_rowid}
+                                            },function(err,bg){
+                                                if(err){
+                                                    callback(err,null);
+                                                }
+                                                if(bg){
+                                                    for(var x2=0;x2<bg.length;x2++){
+                                                        if(bg[x2].id === '2'){
+                                                            bunits.push(bg[x2].rowid);
+                                                        }
+                                                    }
+                                                    returnObj.bunits=bunits;
+                                                    logger.debug("returnObj: ",returnObj);
+                                                    callback(null,returnObj);
+                                                }
+                                            });
+                                            
+                                        });
+                                    }
+                                    
+                                });
+                            }
+                             
+                        });
+                       
+                    }
+                })(x);
+                }
+            }else{
+                callback(err,returnObj);
+            }
+
+        });
+    }
 }
+
+
 module.exports = new MasterUtil();
