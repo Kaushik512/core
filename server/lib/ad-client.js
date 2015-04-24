@@ -38,6 +38,9 @@ function createDnString(username, baseDn, ou) {
 
 var ADClient = function(options) {
     console.log('options ==>', options);
+    if (!options) {
+        options = {};
+    }
     options = setDefaults(options);
 
     var client = new ActiveDirectory({
