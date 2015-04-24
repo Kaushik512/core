@@ -1544,10 +1544,10 @@
                      if (data.instanceState == 'unknown') {
                          disableInstanceStartStopActionBtns(data._id, data.hardware.os);
                      }
-                     //alert(data.providerId);
-                     // if(!data.providerId){
-                     //    disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-                     // }
+                     if(!data.providerId){
+                        disableInstanceStartStopActionBtns(data._id, data.hardware.os);
+                        $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
+                     }
                      $startStopToggler.click(startAndStopToggler);
                      $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
 
