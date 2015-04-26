@@ -520,10 +520,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(500,"Unable to fetch Settings for Id: ",req.params.id);
                         }
                         logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
+                        if(req.params.id === "16"){
+                            res.send(JSON.stringify(data));
+                            return;
+                        }else{
                         res.send(data);
+                        }
                     });
 
-         /*configmgmtDao.getRowids(function(err,rowidlist){
+
+                /*configmgmtDao.getRowids(function(err,rowidlist){
 
             logger.debug("Rowid List----&&&&----> %s", rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
@@ -555,7 +561,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             logger.debug("Master Length: %s", _keys.length);
                             if(_keys.length <= 0){
                                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                                res.send(JSON.stringify(d4dMasterJson));
+                                res.end(JSON.stringify(d4dMasterJson));
                             }
                             var counter = 0;
                             var todelete = [];
@@ -622,12 +628,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         
                                     }
                                     logger.debug("sent response 579 %s", JSON.stringify(collection));
-                                    res.send(JSON.stringify(collection));
+                                    res.end(JSON.stringify(collection));
                                     logger.debug("Exit get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
-                            });
-                        }
                     });
-                });*/ //rowidlist
+                }
+            });
+        });*/ //rowidlist
 
                 // For non-catalystadmin
             }else {
@@ -737,7 +743,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     res.send(500,"Unable to fetch TemplateType for Id: ",req.params.id);
                                 }
                                 logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
-                                res.send(data);
+                                res.send(JSON.stringify(data));
                             });
                             
                         }

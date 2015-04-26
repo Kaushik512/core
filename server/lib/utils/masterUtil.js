@@ -464,6 +464,25 @@ var MasterUtil = function(){
         });
     }
 
+    getOrgsByRowIds = function(orgIds,callback){
+        var orgList = [];
+        logger.debug("Incomming orgid: ",orgIds);
+        d4dModelNew.d4dModelMastersOrg.find({
+            rowid : {$in:orgIds}
+        },function(err,orgs){
+            if(orgs){
+                for(var i=0; i< orgs.length; i++){
+                    if(orgs[i].id === '1'){
+                        orgList.push(orgs[i]);
+                    }
+                }
+                callback(null,orgList);
+            }else{
+                callback(err,null);
+            }
+        });
+    }
+
     // Return only loggedIn User.
     this.getLoggedInUser = function(loggedInUser,callback){
         var anUser;
@@ -616,6 +635,104 @@ var MasterUtil = function(){
               }
         });
 
+    }
+
+    this.getJsonForNewTree = function(loggedInUser,callback){
+        var jsonTree = [];
+        var businessGroups =[];
+        var projects = [];
+        var environments =[];
+        var orgObj = {};
+        this.getLoggedInUser(loggedInUser,function(err,anUser){
+            if(err){
+                callback(err,null);
+            }
+            if(anUser){
+                this.getOrgsByRowIds(anUser.orgname_rowid,function(err,orgList){
+                    if(err){
+                        callback(err,null);
+                    }
+                    if(orgList){
+                        for(var i = 0;i<orgList.length;i++){
+                            (function(orgCount){
+                                if(orgList[orgCount].id === "1"){
+                                    orgObj = {
+                                        name: orgList[orgCount].name,
+                                        orgid: orgList[orgCount].rowid,
+                                        rowid: orgList[orgCount].rowid,
+                                        businessGroups: [],
+                                        environments: []
+                                    };
+                                    d4dModelNew.d4dModelMastersProductGroup.find({
+                                        orgname_rowid : orgList[orgCount].rowid
+                                    },function(err,bgs){
+                                        if(err){
+                                            callback(err,null);
+                                        }
+                                        if(bgs){
+                                            for(var x=0;x<bgs.length;x++){
+                                                (function(bgCount){
+                                                    if(bgs[bgCount].id === "2"){
+                                                        businessGroups.push(bgs[bgCount]);
+                                                        d4dModelNew.d4dModelMastersProjects.find({
+                                                            productgroupname_rowid: bgs[bgCount].rowid
+                                                        },function(err,project){
+                                                            if(err){
+                                                                callback(err,null);
+                                                            }
+                                                            if(project){
+                                                                for(var p=0;p<project.length;p++){
+                                                                    (function(pCount){
+                                                                        if(project[pCount].id === "4"){
+                                                                            projects.push({"name":bgs[bgCount].projectname,"rowid":project[pCount].rowid,"environments":project[pCount].environmentname});
+                                                                        }
+                                                                    })(p);
+                                                                }
+                                                                businessGroups.push(projects);
+                                                            }else{
+                                                                callback(null,jsonTree);
+                                                            }
+                                                        })
+                                                    }
+
+                                                })(x);
+                                            }
+                                            orgObj.businessGroups = businessGroups;
+                                        }else{
+                                            callback(null,jsonTree);
+                                        }
+                                    });
+                                    d4dModelNew.d4dModelMastersEnvironments.find({
+                                        orgname_rowid: orgList[orgCount].rowid
+                                    },function(err,envs){
+                                        if(err){
+                                            callback(err,null);
+                                        }
+                                        if(envs){
+                                            for(var e=0;e<envs.length;e++){
+                                                (function(envCount){
+                                                    if(envs[envCount].id === "3"){
+                                                        environments.push({"name":envs[envCount].environmentname,"rowid":envs[envCount].rowid});
+                                                    }
+                                                })(e);
+                                            }
+                                            orgObj.environments = environments;
+                                        }else{
+                                            callback(null,jsonTree);
+                                        }
+                                    })
+                                }
+                            })(i);
+                            jsonTree.push(orgObj);
+                        }
+
+                        callback(null,jsonTree);
+                    }else{
+                        callback(null,jsonTree);
+                    }
+                })
+            }
+        })
     }
 }
 
