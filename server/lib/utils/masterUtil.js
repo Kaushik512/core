@@ -1,6 +1,7 @@
 var logger = require('../../lib/logger')(module);
 var d4dModelNew = require('../../model/d4dmasters/d4dmastersmodelnew.js');
 var ObjectId = require('mongoose').Types.ObjectId;
+var permissionsetDao = require('../../model/dao/permissionsetsdao');
 
 var MasterUtil = function(){
     // Return All Orgs specific to User
@@ -338,7 +339,7 @@ var MasterUtil = function(){
     }
 
     // Return all UserRoles specific to User
-    this.getUserRoles = function(loggedInUser,callback){
+    /*this.getUserRoles = function(loggedInUser,callback){
         var userRoleList = [];
         d4dModelNew.d4dModelMastersUsers.find({
             loginname : loggedInUser
@@ -373,6 +374,28 @@ var MasterUtil = function(){
             }
 
         });
+    }*/
+
+    this.getUserRoles = function(callback){
+        var userRoleList = [];
+        d4dModelNew.d4dModelMastersUserroles.find({
+                            id : "6"
+                        },function(err,userRoles){
+                            if(err){
+                                    callback(err,null);
+                                    }
+                            if(userRoles){
+                                for(var j1=0; j1< userRoles.length; j1++){
+                                    if(userRoles[j1].id === '6'){
+                                        userRoleList.push(userRoles[j1]);
+                                    }
+                                }
+                                 callback(null,userRoleList);
+                            }else{
+                                callback(null,userRoleList);
+                            }
+
+                        });
     }
 
     // Return all Users whose are associated to loggedIn User
@@ -564,6 +587,35 @@ var MasterUtil = function(){
             }
 
         });
+    }
+
+    // check valid user permission
+    this.checkPermission = function(username,callback){
+        logger.debug("User for permission: ",JSON.stringify(username));
+        this.getLoggedInUser(username,function(err,anUser){
+            if(err){
+                callback(err,null);
+            }
+            if(anUser){
+                //var roles = [];
+                //roles = anUser.userrolename.split(',');
+                //logger.debug("Roles:>>>>>> ",JSON.stringify(roles));
+                permissionsetDao.getPermissionSet(anUser.userrolename,function(err,permissionSet){
+                    if(err){
+                        callback(err,null);
+                    }
+                    if(permissionSet){
+                        logger.debug("Fetched permissionSet:>>>>>>> ",JSON.stringify(permissionSet));
+                        callback(null,permissionSet);
+                    }else{
+                        callback(null,[]);
+                    }
+                });
+              }else{
+                callback(null,[]);
+              }
+        });
+
     }
 }
 

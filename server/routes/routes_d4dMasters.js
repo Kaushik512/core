@@ -767,7 +767,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                      else if(req.params.id === '6'){    
                             // For User Role
-                            masterUtil.getUserRoles(loggedInUser,function(err,userRoleList){
+                            masterUtil.getUserRoles(function(err,userRoleList){
                                 if(err){
                                     res.send(500,'Not able to fetch UserRole.');
                                 }
@@ -2132,7 +2132,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
+                logger.debug("All condition:>>>>> data",data," rowid: ",anUser.orgname_rowid[0]," role: ",anUser.userrolename);
+                if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;

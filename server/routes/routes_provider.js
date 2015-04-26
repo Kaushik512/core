@@ -244,7 +244,7 @@ app.post('/aws/providers/:providerId/update', function(req, res) {
  var providerName = req.body.providerName.trim();
  var providerType = req.body.providerType.trim();
  var providerId = req.params.providerId.trim();
- var orgId = req.body.orgId.trim();
+ var orgId = req.body.orgId;
  if(typeof providerId === 'undefined' || providerId.length === 0){
     res.send(400,"{Please Enter ProviderId.}");
     return;
@@ -318,7 +318,7 @@ logger.debug("typeof req.body.region ",typeof req.body.region);
                 logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
                 if(anUser){
                     //data == true (create permission)
-                    if(data && anUser.orgname_rowid[0] !== ""){
+                    if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
                         logger.debug("Inside check not authorized.");
                         res.send(401,"You don't have permission to perform this operation.");
                         return;
@@ -608,5 +608,18 @@ app.post('/aws/providers/keypairs/list',function(req,res){
             logger.debug("Success to describeSubnets from AWS.",data);
             res.send(data);
         });
+    });
+
+    app.get('/aws/providers/permission/set',function(req,res){
+      masterUtil.checkPermission(req.session.user.cn,function(err,permissionSet){
+        if(err){
+          res.send(500,"Error for permissionSet.");
+        }
+        if(permissionSet){
+          res.send(permissionSet);
+        }else{
+          res.send([]);
+        }
+      });
     });
 }

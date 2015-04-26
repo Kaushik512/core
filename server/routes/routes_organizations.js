@@ -53,10 +53,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             $in: objperms.orgs
                         }
                     }, function(err, docorgs) {
-                        var orgids = docorgs.map(function(docorgs1) {
+                        var orgids = [];
+                        if(docorgs){
+                         orgids = docorgs.map(function(docorgs1) {
                             return docorgs1.rowid;
                         });
-
+                     }
                         var orgCount = 0;
                         orgids.forEach(function(k, v) {
                             //orgTree.push('{\"name\":\"' + k + '\",\"businessGroups\":[],\"environments\":[]}');
@@ -81,10 +83,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 $in: objperms.bunits
                             }
                         }, function(err, docbgs) {
-                            if (docbgs.length <= 0) {
-                                res.send(orgTree);
-                                return;
-                            }
+                            if(typeof docbgs === 'undefined' || docbgs.length <= 0){
+                               // if (docbgs.length <= 0) {
+                                    res.send(orgTree);
+                                    return;
+                               // }
+                        }
                             var counter = 0;
                             for (var k = 0; k < docbgs.length; k++) {
                                 for (var i = 0; i < orgTree.length; i++) {
