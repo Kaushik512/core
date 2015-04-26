@@ -83,7 +83,15 @@
                                         if(!hasCreateEnvConceptPermission){
                                             $('#newENV').addClass('hidden');
                                         }
+                                        isUserTypeSuperAdmin();
                                 });
+                                function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newENV').attr('disabled','disabled');
+                                          }
+                                        });
+                                      }
                                     function inLineReady(){
                                         /* $('#envtable').dataTable({
                                         "paging": false,

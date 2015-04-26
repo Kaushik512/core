@@ -90,8 +90,18 @@
                                     $('#newProvider').addClass('hidden');
                                 }
 
-                                getProviderData();
+                                isUserTypeSuperAdmin();
                             });
+
+                            function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#addnewitem').attr('disabled','disabled');
+                                      }
+                                      getProviderData(); 
+                                    });
+                                   
+                                }
                             function getOrganizationList(){
                               $.get('/d4dMasters/readmasterjsonnew/1',function(data){
                                 

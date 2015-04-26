@@ -82,7 +82,15 @@
                                         if(!hasCreateProductPermission){
                                             $('#newProd').addClass('hidden');
                                         }
+                                        isUserTypeSuperAdmin();
                                     });
+                                function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newProd').attr('disabled','disabled');
+                                          }
+                                        });
+                                      }
                                 </script>
                                 <script id="onpagescript">
                                     function inLineReady() {

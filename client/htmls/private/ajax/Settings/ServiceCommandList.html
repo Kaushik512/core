@@ -97,7 +97,17 @@
                                         $('#newService').addClass('hidden');
                                     }
                                     $("select").select2();
+                                    isUserTypeSuperAdmin();
                                 });
+
+                                function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newService').attr('disabled','disabled');
+                                      }
+                                    });
+                                   
+                                 }
                                 </script>
                                 <script id="onpagescript">
                                     function inLineReady() {

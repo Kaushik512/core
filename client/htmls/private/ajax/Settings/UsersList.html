@@ -90,8 +90,18 @@
                                             $('#newUser').addClass('hidden');
                                         }
                                        
-                                        startup();
+                                        isUserTypeSuperAdmin();
                                     });
+
+                                    function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newUser').attr('disabled','disabled');
+                                      }
+                                      startup(); 
+                                    });
+                                   
+                                }
 
                                     function startup() {
                                        

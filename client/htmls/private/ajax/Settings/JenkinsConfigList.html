@@ -25,7 +25,7 @@
                             <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/DockerTemplatesList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                     
-                            <a class="btn btn-minier btn-primary" href="index.html#ajax/Settings/CreateJenkinsConfig.html?new">
+                            <a id="newJen" class="btn btn-minier btn-primary" href="index.html#ajax/Settings/CreateJenkinsConfig.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -90,7 +90,7 @@
                                 function isUserTypeSuperAdmin(){
                                     $.get('/d4dMasters/loggedInUser',function(data){
                                       if(!data.isSuperAdmin){
-                                      $('#orgname').attr('disabled','disabled').select2();
+                                      $('#newJen').attr('disabled','disabled');
                                       }
                                     });
                                    

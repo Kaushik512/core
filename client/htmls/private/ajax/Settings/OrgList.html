@@ -106,9 +106,16 @@
                                     if(!hasCreatePermissionOrg){
                                             $('#newOrg').addClass('hidden');
                                     }
+                                    isUserTypeSuperAdmin();
                                 });
 
-
+                                    function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newOrg').attr('disabled','disabled');
+                                          }
+                                        });
+                                      }
                                     function filterColumn () {
                                        // alert('hi ' + $("#filteractive").val());
                                         var filter = $("#filteractive").val();

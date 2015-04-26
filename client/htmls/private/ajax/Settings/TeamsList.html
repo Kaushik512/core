@@ -96,8 +96,18 @@
                                             $('#newTeam').addClass('hidden');
                                         }
                                        
-                                        startup();
+                                        isUserTypeSuperAdmin();
                                     });
+
+                                    function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newTeam').attr('disabled','disabled');
+                                      }
+                                      startup(); 
+                                        });
+                                   
+                                     }
 
                                     function startup() {
 

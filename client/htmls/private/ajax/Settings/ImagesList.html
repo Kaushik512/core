@@ -83,7 +83,7 @@
                         <script>
                             function updateImageListByGivingProviderName(imageList,ProviderList){
                                 for(var i=0;i<imageList.length;i++){
-                                    for(var j=0;i<ProviderList.length;j++){
+                                    for(var j=0;j<ProviderList.length;j++){
                                         if(imageList[i].providerId ===ProviderList[j]._id){
                                             imageList[i].providerName=ProviderList[j].providerName;
                                             break;
@@ -453,12 +453,22 @@ function getOrganizationList(){
                               });
                             }
 
-$(document).ready(function () {
-   getImagesList();
-   
-});
+                                $(document).ready(function () {
+                                   isUserTypeSuperAdmin();
+                                   
+                                });
 
-function startup() {
+                                function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#addnewitem').attr('disabled','disabled');
+                                      }
+                                      getImagesList(); 
+                                        });
+                                   
+                                     }
+
+                                function startup() {
 
                                         //setting the addnew button to launch popup
                                         $("#addnewitem").attr('data-toggle', 'modal');
