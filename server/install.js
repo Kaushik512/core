@@ -130,7 +130,8 @@ function getDefaultsConfig() {
             port: '27017'
         },
         ldap: {
-            host: '54.149.26.254',
+            // host: '54.149.26.254',
+            host: '54.68.204.110',
             port: 389
 
         },
