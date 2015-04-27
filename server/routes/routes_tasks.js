@@ -1,4 +1,3 @@
-
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 
@@ -8,6 +7,8 @@ var Jenkins = require('../lib/jenkins');
 var errorResponses = require('./error_responses.js');
 
 var Tasks = require('../model/classes/tasks/tasks.js');
+var Application = require('../model/classes/application/application');
+
 
 var logger = require('../lib/logger')(module);
 
@@ -21,12 +22,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            task.execute(req.session.user.cn,function(err, taskRes) {
+            task.execute(req.session.user.cn, function(err, taskRes) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
                     return;
-                } 
+                }
                 res.send(taskRes);
             });
         });
@@ -34,20 +35,35 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.delete('/tasks/:taskId', function(req, res) {
-        Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
+        Application.getBuildsByTaskId(req.params.taskId, function(err, builds) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (deleteCount) {
-                res.send({
-                    deleteCount: deleteCount
+            if (builds && builds.length) {
+                res.send(409, {
+                    message: "An Application is using this task"
                 });
+                return;
             } else {
-                res.send(400);
+                Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
+                    if (err) {
+                        logger.error(err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    if (deleteCount) {
+                        res.send({
+                            deleteCount: deleteCount
+                        });
+                    } else {
+                        res.send(400);
+                    }
+                });
             }
-        });
+        })
+
     });
 
     app.get('/tasks/:taskId', function(req, res) {

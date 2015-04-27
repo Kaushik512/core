@@ -2568,6 +2568,9 @@
                                      //var totalTask = $taskListArea.children('tr').length;
                                      //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
                                      $taskDatatable.row($(that).parents('tr')).remove().draw(false);
+                                 },
+                                 fail:function(msg){
+                                   console.log("fail ==>",msg);
                                  }
                              })
                          });

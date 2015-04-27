@@ -63,7 +63,7 @@ buildSchema.methods.execute = function(user, callback) {
             });
             callback(err, taskRes);
         }, function(err, status) {
-            
+
             if (buildHistory) {
                 buildHistory.timestampEnded = new Date().getTime();
                 if (status === 0) {
@@ -115,6 +115,24 @@ buildSchema.statics.getBuildById = function(buildId, callback) {
         //console.log('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
+        } else {
+            callback(null, null);
+        }
+    });
+};
+
+buildSchema.statics.getBuildsByTaskId = function(taskId, callback) {
+    this.find({
+        "taskId": taskId
+    }, function(err, data) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        //console.log('data ==>', data);
+        if (data.length) {
+            callback(null, data);
         } else {
             callback(null, null);
         }
