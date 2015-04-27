@@ -98,7 +98,8 @@ app.post('/aws/providers', function(req, res) {
            AWSProvider.createNew(providerData, function(err, provider) {
               if (err) {
                   logger.debug("err.....",err);
-                  res.send(500,"Provider creation failed due to Provider name already exist.");
+                  res.status(409);
+                  res.send("Provider name already exist.");
                   return;
               }
               logger.debug("Provider id:  %s",JSON.stringify(provider._id));

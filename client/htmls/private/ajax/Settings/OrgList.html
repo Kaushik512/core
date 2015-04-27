@@ -113,6 +113,9 @@
                                         $.get('/d4dMasters/loggedInUser',function(data){
                                           if(!data.isSuperAdmin){
                                           $('#newOrg').attr('disabled','disabled');
+                                          //debugger;
+                                          $('.tableactionWidth').find("[title='Remove']").attr('disabled','disabled');
+                                          $('.tableactionWidth').find("[title='Update']").attr('disabled','disabled');
                                           }
                                         });
                                       }
@@ -325,6 +328,7 @@
                                         $(".savespinner").hide();
                                     }
                                     inLineReady();
+                                    isUserTypeSuperAdmin();
                                 </script>
                             <div class="col-md-5">
 

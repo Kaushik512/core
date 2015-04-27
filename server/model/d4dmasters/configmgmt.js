@@ -1445,8 +1445,8 @@ function Configmgmt() {
              //callback(null,userd);
              var qry = {};
              qry['id'] = '21';
-             if(userd[0]['userrolename'] != 'Admin')
-                qry['loginname_rowid'] = {$regex:userd[0]['rowid']};
+             /*if(userd[0]['userrolename'] != 'Admin')
+                qry['loginname_rowid'] = {$regex:userd[0]['rowid']};*/
              // {
              //     loginname_rowid: {
              //         $regex: userd[0]['rowid']

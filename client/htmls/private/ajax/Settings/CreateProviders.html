@@ -69,7 +69,7 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
 	style="vertical-align: central" cat-validation="required"
 	cdata="catalyst" skiprowid="yes">
 	<option value="">Select Provider</option>
-	<option value="aws">AWS</option>
+	<option value="AWS">AWS</option>
 </select></div>
 <div class="col-lg-6 col-md-6"><label for="">Name:<span
 	style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
@@ -290,7 +290,7 @@ parentList.eq(i).find('input.file').attr('disabled','disabled').removeAttr('cat-
 
 $(document).ready(function (){
   $("#name").focus();
-  isUserTypeSuperAdmin();
+  //isUserTypeSuperAdmin();
   $('#accessKey').blur(KeyChangeHandler);
   $('#secretKey').blur(KeyChangeHandler);
   $('select').select2();
@@ -321,13 +321,25 @@ success: function(data, success) {
              removeLoader();
            },
            error: function(jqxhr) {
-         removeLoader();
-         bootbox.alert(jqxhr.responseText);
-       },
+      removeLoader();
+ console.log(jqxhr);
+       // debugger;
+      if(jqxhr.status==409){
+        errormessageforInput('name',jqxhr.responseText);
+      }else{
+       bootbox.alert(jqxhr.status+" :: "+jqxhr.responseText);
+      }
+  },
        failure: function(data) {
-           removeLoader();
-           bootbox.alert(data);
-         }
+       removeLoader();
+ console.log(jqxhr);
+       // debugger;
+      if(jqxhr.status==409){
+        errormessageforInput('name',jqxhr.responseText);
+      }else{
+       bootbox.alert(jqxhr.status+" :: "+jqxhr.responseText);
+      }
+    }
        }); 
 
   if(!UtilityMethods.getIdFromURL()){

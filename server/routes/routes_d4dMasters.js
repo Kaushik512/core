@@ -242,7 +242,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
+                if(!data){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;

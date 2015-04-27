@@ -2665,7 +2665,7 @@ function isFormValid(formid) {
                     if (/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false && str != '') {
                         isValid = false;
                         //updating error message
-                        errormessageforInput(currCtrl.attr('id'), "Email address is required");
+                        errormessageforInput(currCtrl.attr('id'), "Invalid Email Address.");
                         currCtrl.focus();
                     }
                     break;

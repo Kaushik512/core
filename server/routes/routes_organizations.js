@@ -441,6 +441,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter get() for /organizations/getTreeForbtv");
         //console.log("Enter /organizations/getTreeForbtv");
         var loggedInUser = req.session.user.cn;
+        logger.debug("LoggedInUser:>>>>>>>>>>>>>> ",loggedInUser);
         masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
             if(err){
                 res.send(500,"Failed to fetch User.");
@@ -448,7 +449,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
             if(!anUser){
                 res.send(500,"Invalid User.");
             }
+            logger.debug("anUser.orgname_rowid[0]:>>>>>>>>>> ",JSON.stringify(anUser));
             if(anUser.orgname_rowid[0] === ""){
+                logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 /*d4dModelNew.find({
                         id: req.params.id
                     },function(err,data){
@@ -1391,7 +1394,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
 
             if (!err) {
-                if (orgbuprojs.projects.indexOf(req.params.projectId) >= 0) {
+                if (typeof orgbuprojs.projects !== "undefined" && orgbuprojs.projects.indexOf(req.params.projectId) >= 0) {
                     Task.getTasksByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, tasksData) {
                         if (err) {
                             res.send(500);
