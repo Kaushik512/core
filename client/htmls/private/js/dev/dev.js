@@ -2331,8 +2331,23 @@
 
                          });
                      }
+                     if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
+                         //var $taskListArea = $('.taskListArea').empty();
+                         $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
+                             "pagingType": "full_numbers",
+                             "aoColumns": [
+                                 null, {
+                                     "bSortable": false
+                                 }, {
+                                     "bSortable": false
+                                 }
+                             ]
 
+                         });
+                     }
 
+                     $('#tablehistoryTask_length').hide();
+                     $('#tablehistoryTask_filter').hide();
                      for (var i = 0; i < data.length; i++) {
                          var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
                          var $tdName = $('<td></td>').append(data[i].name);
@@ -2496,7 +2511,20 @@
                              });
                          });
                          $tr.append($tdExecute);
-                         var timestamp = "-";
+
+                        //History starts here
+                        var $tdHistory = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
+                            $tdHistory.find('a').click(function(e) {
+                             //var $taskHistoryContent = $('#taskHistoryContent').show();
+                             var $modal = $('#assignedTaskHistory');
+                             $modal.find('.loadingContainer').hide();
+                             $modal.find('.errorMsgContainer').hide();
+                             //$modal.find('.outputArea').hide();
+                             $modal.modal('show');
+                         });
+                        $tr.append($tdHistory);
+
+                        var timestamp = "-";
                          if (data[i].lastRunTimestamp) {
                              var date = new Date().setTime(data[i].lastRunTimestamp);
                              timestamp = new Date(date).toLocaleString(); //converts to human readable strings

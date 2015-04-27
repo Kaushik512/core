@@ -11,6 +11,9 @@
     font-weight: bold;
     color:white;
 }
+.margin-left40per{
+    margin-left: 40% !important;
+}
 .pointereventsDisabled{
     pointer-events: none;
 }
