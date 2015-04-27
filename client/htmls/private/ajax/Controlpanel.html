@@ -1739,6 +1739,13 @@ $(document).ready(function(e){
                    url: appUrl
                }, function(data) {
                    var url = appUrl.replace('$host',instanceIP); 
+                 /*  if(url==""){
+                    $('.app-url[data-appUrlId="'+appUrlId+'"]').attr('href',url);
+                    bootbox.alert('Please enter a Url');
+
+                    return false;
+
+                   }*/
                    $('.app-url[data-appUrlId="'+appUrlId+'"]').attr('href',url);
                    $this.find('.urlsaved').removeClass('hidden');
                    setTimeout(function() {
