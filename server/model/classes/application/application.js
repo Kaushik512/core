@@ -420,6 +420,17 @@ ApplicationSchema.statics.getAppCardsByOrgBgAndProjectId = function(orgId, bgId,
     });
 };
 
+ApplicationSchema.statics.getBuildsByTaskId = function(taskId, callback) {
+    Build.getBuildsByTaskId(taskId, function(err, builds) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, builds);
+
+    });
+};
+
 var Application = mongoose.model('application', ApplicationSchema);
 
 module.exports = Application;

@@ -1008,13 +1008,42 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit getInstanceByKeyPairId (%s)", keyPairId);
-            if(data){
-            callback(null, data);
-            }else{
-                callback(null,null);
+            if (data) {
+                callback(null, data);
+            } else {
+                callback(null, null);
             }
         });
     };
+
+    this.getInstancesFilterByChefServerIdAndNodeNames = function(chefServerId, nodeNames, callback) {
+        if (!nodeNames) {
+            nodeNames = [];
+        }
+        console.log('serverId -->', chefServerId);
+        Instances.find({
+            "chef.serverId": chefServerId,
+            "chef.chefNodeName": {
+                $in: nodeNames
+            }
+
+        }, {
+            'actionLogs': false
+        }, function(err, data) {
+            if (err) {
+                logger.error("getInstancesFilterByNotChefServerIdAndNodeNames", err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesFilterByNotChefServerIdAndNodeNames ");
+            if (data) {
+                callback(null, data);
+            } else {
+                callback(null, null);
+            }
+        });
+    };
+
 
 
 };
