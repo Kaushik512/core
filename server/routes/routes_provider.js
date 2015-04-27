@@ -83,11 +83,11 @@ app.post('/aws/providers', function(req, res) {
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
+                /*if(data && anUser.orgname_rowid[0] !== ""){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
+                }*/
         ec2.describeKeyPairs(function(err,data){
            if(err){
             logger.debug("Unable to get AWS Keypairs");
@@ -318,11 +318,11 @@ logger.debug("typeof req.body.region ",typeof req.body.region);
                 logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
                 if(anUser){
                     //data == true (create permission)
-                    if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
+                    /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
                         logger.debug("Inside check not authorized.");
                         res.send(401,"You don't have permission to perform this operation.");
                         return;
-                    }
+                    }*/
             ec2.describeKeyPairs(function(err,data){
                if(err){
                 logger.debug("Unable to get AWS Keypairs");
@@ -396,11 +396,11 @@ app.delete('/aws/providers/:providerId', function(req, res) {
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
+                /*if(data && anUser.orgname_rowid[0] !== ""){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
+                }*/
 
             VMImage.getImageByProviderId(providerId, function(err, anImage) {
                 if (err) {

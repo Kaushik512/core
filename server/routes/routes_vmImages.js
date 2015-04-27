@@ -86,11 +86,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
+                /*if(data && anUser.orgname_rowid[0] !== ""){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
+                }*/
             
                 AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                    if (err) {
@@ -285,11 +285,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
+                /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
+                }*/
             AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                if (err) {
                    logger.error(err);
@@ -381,11 +381,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
             if(anUser){
                 //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
+                /*if(data && anUser.orgname_rowid[0] !== ""){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
+                }*/
                 blueprintsDao.getBlueprintByImageId(imageId, function(err, data) {
                         if (err) {
                             logger.error('Failed to getBlueprint. Error = ', err);

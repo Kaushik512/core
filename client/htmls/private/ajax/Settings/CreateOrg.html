@@ -422,16 +422,14 @@
        });
    
    
-   //isUserTypeSuperAdmin();
+   isUserTypeSuperAdmin();
    
    });
    function isUserTypeSuperAdmin(){
-    $.get('/d4dMasters/loggedInUser',function(err,data){
-        //alert(data);
-      if(!data.isSuperAdmin){
-        alert(data);
-      $('#orgname').attr('disabled','disabled');
-      }
-    });
-  }
+       $.get('/d4dMasters/loggedInUser',function(data){
+         if(!data.isSuperAdmin){
+          $('#orgname').attr('disabled','disabled');
+            }
+            });
+          }
 </script>

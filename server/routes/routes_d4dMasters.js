@@ -785,7 +785,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                      else if(req.params.id === '7'){    
                             // For User
-                            masterUtil.getUsers(loggedInUser,function(err,userList){
+                            masterUtil.getUsersForOrg(orgList,function(err,userList){
                                 if(err){
                                     res.send(500,'Not able to fetch User.');
                                 }
@@ -2139,11 +2139,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             if(anUser){
                 //data == true (create permission)
                 logger.debug("All condition:>>>>> data",data," rowid: ",anUser.orgname_rowid[0]," role: ",anUser.userrolename);
-                if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
+                /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
+                }*/
         
         logger.debug('EditMode: %s', editMode);
         bodyJson["id"] = req.params.id; //storing the form id.
@@ -2863,6 +2863,4 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
             });
     });
-
-
 }

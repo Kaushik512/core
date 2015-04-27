@@ -480,9 +480,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             $in: objperms.orgs
                         }
                     }, function(err, docorgs) {
-                        var orgids = docorgs.map(function(docorgs1) {
+                        /*var orgids = docorgs.map(function(docorgs1) {
                             return docorgs1.rowid;
-                        });
+                        });*/
+                        var orgids =[];
+                        if(docorgs){
+                            orgids = docorgs.map(function(docorgs1) {
+                            return docorgs1.rowid;
+                            });
+                        }
+
 
 
                         var orgCount = 0;
@@ -514,7 +521,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 $in: objperms.bunits
                             }
                         }, function(err, docbgs) {
-                            if (docbgs.length <= 0) { //no bgs for any org return tree
+                            logger.debug("loading bgs:>>>>>>>>>>>>>> ",JSON.stringify(docbgs));
+                            if (!docbgs || typeof docbgs === 'undefined') { //no bgs for any org return tree
                                 logger.debug("Not found any BUs returing empty orgs");
                                 res.send(orgTree);
                                 return;

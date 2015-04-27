@@ -418,6 +418,32 @@ var MasterUtil = function(){
         });
     }
 
+    // Return all Users whose are associated to loggedIn User
+    this.getUsersForOrg = function(orgList,callback){
+        var userList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
+        d4dModelNew.d4dModelMastersUsers.find({
+            orgname_rowid : rowIds
+        },function(err,users){
+            if(users){
+                for(var i =0; i< users.length; i++){
+                    if(users[i].id === '7'){
+                        userList.push(users[i]);
+                    }
+                }
+                callback(null,userList);
+            }else{
+                callback(err,null);
+            }
+
+        });
+    }
+
+
     this.getTeams = function(orgList,callback){
         var teamList = [];
         var rowIds = [];
@@ -464,6 +490,7 @@ var MasterUtil = function(){
         });
     }
 
+    // Now not in use
     getOrgsByRowIds = function(orgIds,callback){
         var orgList = [];
         logger.debug("Incomming orgid: ",orgIds);
@@ -616,9 +643,6 @@ var MasterUtil = function(){
                 callback(err,null);
             }
             if(anUser){
-                //var roles = [];
-                //roles = anUser.userrolename.split(',');
-                //logger.debug("Roles:>>>>>> ",JSON.stringify(roles));
                 permissionsetDao.getPermissionSet(anUser.userrolename,function(err,permissionSet){
                     if(err){
                         callback(err,null);
@@ -637,6 +661,7 @@ var MasterUtil = function(){
 
     }
 
+    // Now not in use
     this.getJsonForNewTree = function(loggedInUser,callback){
         var jsonTree = [];
         var businessGroups =[];
