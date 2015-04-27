@@ -35,6 +35,7 @@
                                         <td>Name</td>
                                         <td>Action Type</td>
                                         <td>Service Action</td>
+                                        <td>Organization</td>
                                         <td class="">Actions</td>
                                     </tr>
                                 </thead>
@@ -55,6 +56,7 @@
                                                 <div class="hidden commandactionicon cardGreenRedYellowBlack frontRestart"  title="ReStart" icondata="restart"><i class="fa fa-undo fa-16px txt-color-white"></i></div>
                                                 <div class="hidden commandactionicon cardGreenRedYellowBlack frontKill"  title="Kill" icondata="kill"><i class="fa fa-times-circle fa-16px txt-color-white"></i></div>
                                         </td>
+                                        <td datafield="orgname"></td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -75,6 +77,7 @@
                                             <td>Name</td>
                                             <td>Action Type</td>
                                             <td>Service Action</td>
+                                            <td>Organization</td>
                                             <td class="">Action</td>
                                         </tr>
                                     </thead>
@@ -93,7 +96,18 @@
                                     if(!hasCreateServicePermission){
                                         $('#newService').addClass('hidden');
                                     }
+                                    $("select").select2();
+                                    //isUserTypeSuperAdmin();
                                 });
+
+                                function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newService').attr('disabled','disabled');
+                                      }
+                                    });
+                                   
+                                 }
                                 </script>
                                 <script id="onpagescript">
                                     function inLineReady() {
@@ -200,7 +214,13 @@
                                         }
 
                                     }
-                                    $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+                                    $.fn.getType = function() {
+                                            if($(this).length){
+                                            return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+                                            }else{
+                                                return "undefined";
+                                            }
+                                        }
                                     function CreateTableFromJson_todelete(formName) {
 
                                         //To Do SAve...

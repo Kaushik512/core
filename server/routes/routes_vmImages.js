@@ -5,20 +5,28 @@ var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvid
 var appConfig = require('../config/app_config');
 var blueprintsDao = require('../model/dao/blueprints');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
+var masterUtil = require('../lib/utils/masterUtil.js');
+var usersDao = require('../model/users.js');
+var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 module.exports.setRoutes = function(app, sessionVerificationFunc){
 	app.all('/vmimages/*',sessionVerificationFunc);
 
     // Create Image for a AWS Provider.
     app.post('/vmimages', function(req, res) {
         logger.debug("Enter post() for /vmimages");
-
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("22");
+        var permissionto = 'create';
         var providerId = req.body.providerId.trim();
         var imageIdentifier = req.body.imageIdentifier.trim();
         var name = req.body.name.trim();
         var osType = req.body.osType.trim();
         var osName = req.body.osName.trim();
         var userName = req.body.userName.trim();
+        var orgId = req.body.orgId;
 
+
+            logger.debug("orgId: ",orgId);
 
             // Field validation for undefined and empty
             if(typeof providerId === 'undefined' || providerId.length === 0){
@@ -53,66 +61,129 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             	name: name,
               osType: osType,
               osName: osName,
-              userName: userName
+              userName: userName,
+              orgId: orgId
             };
+
+          usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
+            return;
+        }
+
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
             
-            AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-               if (err) {
-                   logger.error(err);
-                   res.send(500, "Image creation failed due to Image name already exist.");
-                   return;
-               }
-               logger.debug("Returned Provider: ",aProvider);
-               AWSKeyPair.getAWSKeyPairByProviderId(providerId,function(err,keyPair){
-                logger.debug("keyPairs length::::: ",keyPair[0].region);
-                if(err){
-                    res.send(500,"Error getting to fetch Keypair.")      
-                }
-                logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
-                var ec2 = new EC2({
-                    "access_key": aProvider.accessKey,
-                    "secret_key": aProvider.secretKey,
-                    "region"    : keyPair[0].region
-                });
-                logger.debug("ec2>>>>>>>>>>>>>>>>> ",JSON.stringify(ec2));
-                ec2.checkImageAvailability(vmimageData.imageIdentifier,function(err,data){
+                AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
+                   if (err) {
+                       logger.error(err);
+                       res.send(500, "Image creation failed due to Image name already exist.");
+                       return;
+                   }
+                   logger.debug("Returned Provider: ",aProvider);
+                   AWSKeyPair.getAWSKeyPairByProviderId(providerId,function(err,keyPair){
+                    logger.debug("keyPairs length::::: ",keyPair[0].region);
                     if(err){
-                        logger.debug("Unable to describeImages from AWS.",err);
-                        res.send(500,"Invalid Image Id.");
-                        return;
+                        res.send(500,"Error getting to fetch Keypair.")      
                     }
-                    logger.debug("Success to Describe Images from AWS. %s",data.Images[0].VirtualizationType);
-                    vmimageData.vType = data.Images[0].VirtualizationType;
-                    VMImage.createNew(vmimageData, function(err, anImage) {
-                       if (err) {
-                           logger.debug("err.....",err);
-                           res.send(500,"Image creation fail.");
-                           return;
-                       }
-                       res.send(anImage);
-                       logger.debug("Exit post() for /vmimages");
-                   });
+                    logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s",vmimageData);
+                    var ec2 = new EC2({
+                        "access_key": aProvider.accessKey,
+                        "secret_key": aProvider.secretKey,
+                        "region"    : keyPair[0].region
+                    });
+                    logger.debug("ec2>>>>>>>>>>>>>>>>> ",JSON.stringify(ec2));
+                    ec2.checkImageAvailability(vmimageData.imageIdentifier,function(err,data){
+                        if(err){
+                            logger.debug("Unable to describeImages from AWS.",err);
+                            res.send(500,"Invalid Image Id.");
+                            return;
+                        }
+                        logger.debug("Success to Describe Images from AWS. %s",data.Images[0].VirtualizationType);
+                        vmimageData.vType = data.Images[0].VirtualizationType;
+                        VMImage.createNew(vmimageData, function(err, anImage) {
+                           if (err) {
+                               logger.debug("err.....",err);
+                               res.send(500,"Image creation fail.");
+                               return;
+                           }
+                           res.send(anImage);
+                           logger.debug("Exit post() for /vmimages");
+                       });
+                    });
                 });
             });
+          }
         });
+      });
     });
 
     // Return list of all Images.
     app.get('/vmimages', function(req, res) {
        logger.debug("Enter get() for /vmimages");
-       VMImage.getImages(function(err, images) {
-            if (err) {
-                logger.error(err);
-                res.send(500, errorResponses.db.error);
-                return;
+       var loggedInUser = req.session.user.cn;
+   masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+              if(err){
+                  res.send(500,"Failed to fetch User.");
+              }
+              if(!anUser){
+                  res.send(500,"Invalid User.");
+              }
+       if(anUser.orgname_rowid[0] === ""){
+           VMImage.getImages(function(err, images) {
+                if (err) {
+                    logger.error(err);
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (images) {
+                   logger.debug("Exit get() for /vmimages");
+                   res.send(images);
+               } else {
+                res.send([]);
+                }
+            });
+         }else{
+           masterUtil.getOrgs(loggedInUser,function(err,orgList){
+          if(err){
+            res.send(500,'Not able to fetch Orgs.');
+          }
+          if(orgList){
+              VMImage.getImagesForOrg(orgList,function(err, images) {
+                if (err) {
+                    logger.error(err);
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (images) {
+                   logger.debug("Exit get() for /vmimages");
+                   res.send(images);
+               } else {
+                res.send([]);
+                }
+              });
             }
-            if (images) {
-               logger.debug("Enter get() for /vmimages");
-               res.send(images);
-           } else {
-            res.send([]);
-            }
-        });
+          });
+         }
+      });
     });
 
     // Return a particular Image for id.
@@ -141,6 +212,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
     // Update a paricular Image values.
     app.post('/vmimages/:imageId/update', function(req, res) {
        logger.debug("Enter Post() for /vmimages/%s/update",req.params.imageId);
+       var user = req.session.user;
+       var category = configmgmtDao.getCategoryFromID("22");
+       var permissionto = 'modify';
        var imageId = req.params.imageId.trim();
        var providerId = req.body.providerId.trim();
        var imageIdentifier = req.body.imageIdentifier.trim();
@@ -148,6 +222,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        var osType = req.body.osType.trim();
        var osName = req.body.osName.trim();
        var userName = req.body.userName.trim();
+       var orgId = req.body.orgId;
 
        if(typeof providerId === 'undefined' || providerId.length === 0){
         res.send(400,"{Please Enter ProviderId.}");
@@ -185,10 +260,36 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
        name: name,
        osType: osType,
        osName: osName,
-       userName: userName
+       userName: userName,
+       orgId: orgId
     };
     logger.debug("image >>>>>>>>>>>>",vmimageData);
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
+            return;
+        }
 
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
             AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                if (err) {
                    logger.error(err);
@@ -243,42 +344,77 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
             });
         });
       });
+}
+        });
+      });
     });
 
     // Delete a particular Image from DB.
     app.delete('/vmimages/:imageId', function(req, res) {
        logger.debug("Enter delete() for /vmimages/%s",req.params.imageId);
+       var user = req.session.user;
+       var category = configmgmtDao.getCategoryFromID("9");
+       var permissionto = 'delete';
        var imageId = req.params.imageId.trim();
        if(typeof imageId === 'undefined' || imageId.length === 0){
         res.send(500,"Please Enter ImageId.");
         return;
     }
-        blueprintsDao.getBlueprintByImageId(imageId, function(err, data) {
-                if (err) {
-                    logger.error('Failed to getBlueprint. Error = ', err);
-                    res.send(500);
+    usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+        if (!err) {
+            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+            if (data == false) {
+                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                res.send(401,"You don't have permission to perform this operation.");
+                return;
+            }
+        } else {
+            logger.error("Hit and error in haspermission:", err);
+            res.send(500);
+            return;
+        }
+
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }
-                if (data) {
-                    logger.debug("Returned Blueprint:>>>>> %s",data.imageId);
-                    res.send(403,"Image already used by some Blueprints.To delete Image please delete respective Blueprints first.");
-                    return;
-                }
-                VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
-                    if (err) {
-                        logger.error(err);
-                        res.send(500, errorResponses.db.error);
-                        return;
-                    }
-                    if (deleteCount) {
-                       logger.debug("Exit delete() for /vmimages/%s",req.params.imageId);
-                       res.send({
-                        deleteCount: deleteCount
+                }*/
+                blueprintsDao.getBlueprintByImageId(imageId, function(err, data) {
+                        if (err) {
+                            logger.error('Failed to getBlueprint. Error = ', err);
+                            res.send(500);
+                            return;
+                        }
+                        if (data) {
+                            logger.debug("Returned Blueprint:>>>>> %s",data.imageId);
+                            res.send(403,"Image already used by some Blueprints.To delete Image please delete respective Blueprints first.");
+                            return;
+                        }
+                        VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                               logger.debug("Exit delete() for /vmimages/%s",req.params.imageId);
+                               res.send({
+                                deleteCount: deleteCount
+                            });
+                           } else {
+                            res.send(400);
+                        }
                     });
-                   } else {
-                    res.send(400);
-                }
-            });
+                });
+            }
+          });
         });
     });
 

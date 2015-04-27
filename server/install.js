@@ -75,7 +75,7 @@ function getDefaultsConfig() {
                     'r3.8xlarge', 'i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge', 'hs1.8xlarge'
                 ]
             }, {
-                paravirtual: ['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge','m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge', 'c3.large', 'c3.xlarge', 'c3.2xlarge',
+                paravirtual: ['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge', 'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge', 'c3.large', 'c3.xlarge', 'c3.2xlarge',
                     'c3.4xlarge', 'c3.8xlarge', 'hs1.8xlarge'
                 ]
             }],
@@ -130,10 +130,19 @@ function getDefaultsConfig() {
             port: '27017'
         },
         ldap: {
-            // host: '54.149.26.254',
             host: '54.68.204.110',
-            port: 389
-
+            port: 389,
+            rootuser: 'Admin',
+            rootpass: 'ReleV@ance',
+            //baseDn: 'cn=root',
+            baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
+            ou: ''
+           /* host: '192.168.105.11',
+            port: 389,
+            rootuser: 'Admin',
+            rootpass: 'ReleV@ance',
+            baseDn: 'dc=rlindia,dc=com',
+            ou: ''*/
         },
         features: {
             appcard: true

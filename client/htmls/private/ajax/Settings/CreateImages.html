@@ -32,6 +32,7 @@
 
 
                                   <fieldset>
+                                  
                                     <div class="row">
                                       <div class="col-lg-6">
                                        <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -90,7 +91,14 @@
                                  <!-- <i class="icon-append fa fa-building"></i> -->
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin UserName" id="UserName" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
                                </div>                               
-                             </div>
+                                    <div class="col-lg-6 "><label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <select
+                                      id="orgId" name="orgId" unique="true"
+                                      uniqueconditionedby="orgname" class="chooseOrganization width-100"
+                                      style="vertical-align: central" cat-validation="required"
+                                      cdata="catalyst" skiprowid="yes">
+                                      <option value="">Select Organization</option>
+                                    </select></div>
+                                    </div>
                            </fieldset>
                          </div>
                          <!-- end widget content -->
@@ -213,6 +221,13 @@
  }
 }); 
   }
+  function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgId').attr('disabled','disabled').select2();
+      }
+    });
+  }
 
   function saveImageForm(){
     appendLoader();
@@ -222,8 +237,9 @@
     providerId=$('#providerId').val().trim()
     ,url
     ,osType=$('#osType').find('option:selected').attr('ostype'),
-    userName=$('#UserName').val();
-
+    userName=$('#UserName').val(),
+    orgId = $('#orgId').val();
+    //alert(orgId);
     if(imageIdentifier && providerId && osType && name && osName && userName){
       appendLoader();
       if(!UtilityMethods.getIdFromURL()){
@@ -236,7 +252,7 @@
       $.ajax({
         method:"POST",
         url:url,
-        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName},
+        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId},
         success: function(data, success) {
           if (data!=500) {
             if ($('#btncancel').length){
@@ -261,6 +277,21 @@
 
     }
   }
+
+  function getOrganizationList(){
+  $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+    var str='';
+    for(var i=0;i<data.length;i++){
+        str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
+    }
+    $('#orgId').html(str);
+    if( $('#orgId').attr('answer')){
+      $('#orgId').val($('#orgId').attr('answer')).select2();
+    }else{
+    $('#orgId').val("").select2();
+    }
+  });
+}
 
   function populateOSList(){
     $.ajax({
@@ -348,7 +379,7 @@
 
 $(document).ready(function () {
 
-
+//isUserTypeSuperAdmin();
   $("#name").focus();
 
            // $('#imageidentifire').blur(saveImageForm);
@@ -366,6 +397,7 @@ $(document).ready(function () {
           // populateVirtualizationType();
           populateOSList();
           getProviderList();
+          getOrganizationList();
           $('select').select2();
 
           if(UtilityMethods.getIdFromURL()){
@@ -376,6 +408,8 @@ $(document).ready(function () {
             $('#osType').attr('answer',data.osName).val(data.osName).select2();
             $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
             $('#userName').val(data.userName);
+            $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0]}).select2();
+
           });
          }
 

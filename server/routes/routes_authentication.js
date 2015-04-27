@@ -32,9 +32,10 @@ module.exports.setRoutes = function(app) {
         } else
             res.send(req.body);
     });
-   /* app.post('/auth/signin', function(req, res, next) {
-        //if (req.body && req.body.username && req.body.pass) {
-            passport.authenticate('ldapauth', function(err, user, info) {
+    app.post('/auth/signin', function(req, res, next) {
+        console.log(req.body);
+        if (req.body && req.body.username && req.body.pass) {
+            passport.authenticate('ldap-custom-auth', function(err, user, info) {
                 console.log('passport error ==>', err);
                 console.log('passport user ==>', user);
                 console.log('passport info ==>', info);
@@ -43,140 +44,45 @@ module.exports.setRoutes = function(app) {
                     return next(err);
                 }
                 if (!user) {
-                    return res.redirect('/login');
+                    return res.redirect('/public/login.html?o=try');
                 }
-                req.logIn(user, function(err) {
+                req.session.user = user;
+                usersDao.getUser(user.cn, req, function(err, data) {
+                    logger.debug("User is not a Admin.");
+                    console.log('user ==>', data);
                     if (err) {
-                        return next(err);
+                        req.session.destroy();
+                        next(err);
+                        return;
                     }
-                    return res.redirect('/users/' + user.username);
+                    if (data && data.length) {
+                        user.roleId = data[0].userrolename;
+
+                        console.log('Just before role:', data[0].userrolename);
+                        user.roleName = "Admin";
+                        user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+
+                        req.logIn(user, function(err) {
+                            if (err) {
+                                return next(err);
+                            }
+                            return res.redirect('/private/index.html');
+                        });
+                    } else {
+                        req.session.destroy();
+                        res.redirect('/public/login.html?o=try');
+                    }
                 });
-                res.send(500);
             })(req, res, next);
 
-        //} else {
-            //res.redirect('/public/login.html?o=try');
-        //}
-    });*/
-    
-    app.post('/auth/signin', function(req, res) {
-
-        //logger.debug("post: /auth/signin :: Request = ", req);
-
-        if (req.body && req.body.username && req.body.pass) {
-            logger.debug("Creating LDAP Client");
-            var ldapClient = new LdapClient();
-            logger.debug("Authenticating LDAP Client with user = %s and passwd = %s", req.body.username, req.body.pass);
-            ldapClient.authenticate(req.body.username, req.body.pass, function(err, user) {
-                if (err) {
-                    logger.error("Authentication Failed : Redirecting user to index");
-                    res.redirect('/../public/login.html?o=try');
-
-                } else {
-                    logger.debug("Authentication Passed. User = ", user);
-
-                    user.password = req.body.pass;
-                    req.session.user = user;
-                    ldapClient.close(function(err) {
-                        logger.debug("Attempting to Closing LDAP Connection");
-                        if (err) {
-                            logger.error("Failed to close LDAP Connection .>> ", err);
-                        }
-                        if (user.cn === 'admin') {
-                            logger.debug("User is Admin");
-                            user.permissions = {
-                                read: true,
-                                write: true,
-                                execute: true
-                            };
-                            user.roleName = 'Admin';
-                            logger.debug("Redirecting to /private/index.html")
-                            //res.redirect('/user/admin');
-                            res.redirect('/private/index.html');
-                            res.send(200);
-                        } else {
-                            console.log('in else --- ' + user.cn); //sd1
-                            usersDao.getUser(user.cn, req, function(err, data) {
-                                logger.debug("User is not a Admin.");
-                                if (data.length) {
-                                    user.roleId = data[0].userrolename;
-
-                                    //user.groupId = data[0].groupId;
-                                    console.log('Just before role:', data[0].userrolename);
-                                    user.roleName = "Admin";
-                                    user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
-                                    // usersDao.haspermission(user.cn,'services','read',null,req.session.user.permissionset,function(err,data){
-                                    //     if(!err){
-                                    //         logger.debug('Returned from haspermission' + data);
-                                    //     }
-                                    // });
-                                    res.redirect('/private/index.html');
-
-                                    // configmgmtDao.getAccessFilesForRole(user.cn, user, req, res, function(err, getAccessFiles) {
-                                    //     if (getAccessFiles) {
-                                    //         getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
-                                    //         console.log('Rcvd in call: ' + getAccessFiles);
-                                    //         //req.session.user.authorizedfiles = getAccessFiles;
-                                    //         //res.end(req.session.user.authorizedfiles);
-                                    //         user.roleName = "Admin";
-                                    //         logger.debug('getAccessFiles' + getAccessFiles);
-                                    //         user.authorizedfiles = getAccessFiles;
-                                    //         // checking permission 
-                                    //         //to test (username,category,permissionto,req,permissionset,callback)
-
-                                    //     } else {
-                                    //         logger.error("getAccessFiles not available")
-                                    //         res.send(500);
-                                    //         return;
-                                    //     }
-                                    // });
-                                } else {
-                                    //making an entry of that user in data base
-                                    usersDao.createUser(user.cn, 'firstname', 'lastname', 0, 3, function(err, data) {
-                                        if (err) {
-                                            logger.error("Failed Creating User >> ", err);
-                                            //console.log(err);
-                                            res.send(500);
-                                        } else {
-
-                                            user.roleId = 3;
-                                            user.groupId = 'tempUsers'
-                                            usersRoles.getRoleById(user.roleId, function(err, roleData) {
-                                                if (err) {
-                                                    logger.err("Failed to getRoleById(%s)", user.roleId, err);
-                                                    res.send(500);
-                                                    return;
-                                                } else {
-                                                    if (roleData.length) {
-                                                        user.roleName = roleData[0].name;
-                                                        user.permissions = roleData[0].permissions;
-                                                        res.redirect('/private/index.html');
-                                                        //res.send(200);
-                                                    } else {
-                                                        logger.debug("No roleData available")
-                                                        res.send(500);
-                                                    }
-                                                }
-                                            });
-
-                                            //res.send(201);
-                                        }
-                                    });
-
-                                }
-                            });
-                        }
-                    });
-                }
-            });
         } else {
             res.redirect('/public/login.html?o=try');
         }
     });
 
-
     app.get('/auth/signout', function(req, res) {
         logger.debug("/auth/signout. Signing out user")
+        req.logout(); //passport logout
         req.session.destroy();
         //res.send(200);
         res.redirect('/public/login.html');
@@ -206,6 +112,7 @@ module.exports.setRoutes = function(app) {
         logger.debug('hit permissionset ' + req.session.user.cn);
         if (req.session.user.password)
             delete req.session.user.password;
+        logger.debug("Return User from session:>>>> ",JSON.stringify(req.session.user));
         res.send(JSON.stringify(req.session.user));
     });
 

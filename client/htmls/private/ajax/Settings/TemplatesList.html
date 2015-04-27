@@ -38,6 +38,7 @@
                                         <!--<td>Template Provider Path</td>-->
                                         <!--<td>Chef Server</td>-->
                                         <td>Cookbooks</td>
+                                        <td>Organization</td>
                                         <td class="">Action</td>
                                     </tr>
                                 </thead>
@@ -49,6 +50,7 @@
                                         <!--<td datafield="templateproviderpath"></td>-->
                                         <!--<td datafield="Templateschefserver"></td>-->
                                         <td datafield="templatescookbooks" cleanquotes="yes"></td>
+                                        <td datafield="orgname"></td>
                                         <td>
                                             <div class="btn-group tableactionWidth">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -72,6 +74,7 @@
                                         <!--<td>Template Provider Path</td>-->
                                         <!--<td>Chef Server</td>-->
                                             <td>Cookbooks</td>
+                                            <td>Organization</td>
                                             <td class="">Action</td>
                                             </tr>
                                     </thead>
@@ -92,9 +95,19 @@
                                         if(!hasCreateTemplatePermission){
                                             $('#newTemplate').addClass('hidden');
                                         }
-                                       
-                                        startup();
+                                       startup();
+                                        //isUserTypeSuperAdmin();
                                     });
+
+                                    function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newTemplate').attr('disabled','disabled');
+                                      }
+                                      startup(); 
+                                        });
+                                   
+                                     }
 
                                     function startup() {
                                        

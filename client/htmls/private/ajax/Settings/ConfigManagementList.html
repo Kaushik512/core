@@ -89,9 +89,17 @@
                                         if(!hasCreateConfigPermission){
                                             $('#newConfig').addClass('hidden');
                                         }
-                                       
-                                        startup();
+                                       startup();
+                                        //isUserTypeSuperAdmin();
                                     });
+                                    function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newConfig').attr('disabled','disabled');
+                                          }
+                                          startup();
+                                        });
+                                      }
 
                                     function startup() {
                                        
