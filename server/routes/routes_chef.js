@@ -42,7 +42,25 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(500, errorResponses.chef.connectionError);
                     return;
                 } else {
-                    res.send(nodeList);
+                    instancesDao.getInstancesFilterByChefServerIdAndNodeNames(req.params.serverId, nodeList, function(err, instances) {
+                        if (err) {
+                            res.send(500, errorResponses.chef.connectionError);
+                            return;
+                        }
+                        if (instances && instances.length) {
+                            for (var i = 0; i < instances.length; i++) {
+                                //nodeNames.push(instances[i].chef.chefNodeName);
+                                var index = nodeList.indexOf(instances[i].chef.chefNodeName);
+                                if( index !== -1) {
+                                  nodeList.splice(index,1); 
+                                }
+                            }
+                            res.send(nodeList);
+                        } else {
+                            res.send([]);
+                        }
+
+                    });
                 }
             });
 
@@ -398,7 +416,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         waitForPort(nodeIp, openport, function(err) {
                                             if (err) {
                                                 console.log(err);
-                                                updateTaskStatusNode(node.name, "Unable to ssh/winrm into node "+node.name+". Cannot import this node.", true, count);
+                                                updateTaskStatusNode(node.name, "Unable to ssh/winrm into node " + node.name + ". Cannot import this node.", true, count);
                                                 return;
                                             }
                                             insertNodeInMongo(node);
