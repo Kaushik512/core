@@ -22,7 +22,7 @@
                                     <div class="componentlistContainer">
                                       <div class="instance-bootstrap-list">
                                         <span style="overflow:hidden;text-overflow:ellipsis;width:62px;" class="instance-details-item">
-                                          <a class="btn instance-bootstrap-list-faimage" href="javascript:void;" rel="tooltip" data-placement="top" data-original-title="View All Runlist"><i class="fa fa-2x fa-exchange txt-color-blue"></i>
+                                          <a class="btn instance-bootstrap-list-faimage" href="javascript:void(0);" rel="tooltip" data-placement="top" data-original-title="View All Runlist"><i class="fa fa-2x fa-exchange txt-color-blue"></i>
                                           </a>
                                         </span>
                                       </div>
@@ -1180,12 +1180,16 @@ $('.startstoptoggler').click(startAndStopToggler);
             var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
             $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
             var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
+            console.log($backRunlistContainer.length);
+            console.log(runlist);
+            
             for (var j = 0; j < runlist.length; j++) {
                var $divComponentItem;
       
                 $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
                 $backRunlistContainer.append($divComponentItem);
             }
+            $('.runlistInfoContainer').empty().append(runlist.join());
 
             //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
             $parent.data('runlist',runlist);
@@ -1249,27 +1253,11 @@ $('.startstoptoggler').click(startAndStopToggler);
   $cfmwareTbody.append($tr);
 
   $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.runlist.join()+'</td>');
+  console.log('data --runlist',data.runlist.join());
+  $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;" class="runlistInfoContainer" > '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
 
-/*
- if(data.appUrl2 && data.appUrl2.name && data.appUrl2.url) {
-     var anchor = "<a class='app-url1' href='"+data.appUrl2.url+"'' target='_blank' title='"+data.appUrl2.url+"'>"+data.appUrl2.name+"</a>";
-     $('.instance-bootstrap-list').last().append(anchor);
-     $('#appURL2NameInput').val(data.appUrl2.name);
-     $('#appURL2name').html(data.appUrl2.name);
-     $('#txtapplicationurl1').val(data.appUrl2.url);
-     $('#myForm31').show();
- }
 
- if(data.appUrl1 && data.appUrl1.name && data.appUrl1.url) {
-     var anchor = "<a class='app-url' href='"+data.appUrl1.url+"'' target='_blank' title='"+data.appUrl1.url+"'>"+data.appUrl1.name+"</a>";
-     $('.instance-bootstrap-list').last().append(anchor);
-     $('#appURL1NameInput').val(data.appUrl1.name);
-     $('#appURL1name').html(data.appUrl1.name);
-      $('#txtapplicationurl').val(data.appUrl1.url);
-      $('#myForm30').show();
- }*/
 
     if (data.appUrls && data.appUrls.length) {
       var $collapseAppURL = $('#collapseAppURL');
