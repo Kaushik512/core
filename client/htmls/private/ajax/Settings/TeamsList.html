@@ -34,6 +34,7 @@
                                         <td>Name</td>
                                         <td>Users</td>
                                         <td>Projects</td>
+                                        <td>Organization</td>
                                         <!-- <td>Business Group</td>
                                         <td>Project</td>
                                         <td>Environments</td> -->
@@ -46,6 +47,7 @@
                                         <td datafield="teamname"></td>
                                         <td datafield="loginname" datatype="list"></td>
                                         <td datafield="projectname" datatype="list"></td>
+                                        <td datafield="orgname"></td>
                                        <!--  <td datafield="productgroupname"></td>
                                         <td datafield="projectname"></td>
                                         <td datafield="environmentname"></td> -->
@@ -70,6 +72,7 @@
                                             <td>Name</td>
                                             <td>Users</td>
                                             <td>Projects</td>
+                                            <td>Organization</td>
                                             <!-- <td>Business Group</td>
                                             <td>Project</td>
                                             <td>Environments</td> -->
@@ -92,9 +95,19 @@
                                         if(!hasCreateTeamPermission){
                                             $('#newTeam').addClass('hidden');
                                         }
-                                       
-                                        startup();
+                                       startup(); 
+                                        //isUserTypeSuperAdmin();
                                     });
+
+                                    function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newTeam').attr('disabled','disabled');
+                                      }
+                                      startup(); 
+                                        });
+                                   
+                                     }
 
                                     function startup() {
 
@@ -182,7 +195,13 @@
 
                                     }
 
-                                    $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+                                    $.fn.getType = function() {
+                                            if($(this).length){
+                                            return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+                                            }else{
+                                                return "undefined";
+                                            }
+                                        }
                                     function CreateTableFromJson_old(formName) {
 
                                         //To Do SAve...

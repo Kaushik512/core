@@ -32,6 +32,7 @@
                                           <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                           <input type="text" name="ctl00$MainContent$orgname" value="" id="email" class="form-control" type="email" cdata="catalyst" cat-validation="required,email">
                                        </div>
+
                                        <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px">
                                           <label for="category">Roles:</label>
                                           <div id="userrolename" multiselect="multiselect" datatype="select" sourcepath="6" datapath="userrolename" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"  cdata="catalyst">
@@ -45,6 +46,17 @@
                                           Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
                                         </div>
                                        </div>
+                                       <div class="col-lg-6 col-md-6" style="margin-top:25px">
+
+                                                        <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        </label>
+
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
+                                                            <option value="">Select an Organization</option>
+                                                            <option value="any">Any</option>
+                                                        </select>
+
+                                                    </div>
                                     </div>
                                     <!-- end widget content -->
                                  </div>
@@ -85,7 +97,13 @@
        $(".modal-backdrop.fade.in").detach();
        $('#btncancel').click();
    }
-   
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
    function inLineReady() {
        $("input[type='text']").on("click", function () {
            $(this).select();
@@ -166,6 +184,8 @@
 <script>
    $(document).ready(function () {
       $("#loginname").focus();
+      //isUserTypeSuperAdmin();
+      $("select").select2();
        $('#myForm5').submit(function() {
           
            $(this).validate();

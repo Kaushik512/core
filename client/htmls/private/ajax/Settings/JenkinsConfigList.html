@@ -25,7 +25,7 @@
                             <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/DockerTemplatesList.html" style="display:none">
                                 <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
                             </a>                     
-                            <a class="btn btn-minier btn-primary" href="index.html#ajax/Settings/CreateJenkinsConfig.html?new">
+                            <a id="newJen" class="btn btn-minier btn-primary" href="index.html#ajax/Settings/CreateJenkinsConfig.html?new">
                                 <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
                                 New
                             </a>                                                
@@ -42,6 +42,7 @@
                                         <td>Reference Name</td>
                                         <td>Jenkins Location (URL)</td>
                                         <td>Jenkins Username</td>
+                                        <td>Organization</td>
                                         <td>Action</td>
                                     </tr>
                                 </thead>
@@ -50,6 +51,7 @@
                                         <td datafield="jenkinsname"></td>
                                         <td datafield="jenkinsurl"></td>
                                         <td datafield="jenkinsusername"></td>
+                                        <td datafield="orgname"></td>
                                        <td>
                                             <div class="btn-group tableactionWidth">
                                                 <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
@@ -68,6 +70,7 @@
                                             <td>Reference Name</td>
                                             <td>Jenkins Location (URL)</td>
                                             <td>Jenkins Username</td>
+                                            <td>Organization</td>
                                             <td>Action</td>
                                         </tr>
                                     </thead>
@@ -80,9 +83,18 @@
                             
                              <script>
                                     $(document).ready(function () {
-                                       
-                                        startup();
+                                        $('select').select2();
+                                        startup(); 
                                     });
+
+                                function isUserTypeSuperAdmin(){
+                                    $.get('/d4dMasters/loggedInUser',function(data){
+                                      if(!data.isSuperAdmin){
+                                      $('#newJen').attr('disabled','disabled');
+                                      }
+                                    });
+                                   
+                                }
 
                                     function startup() {
                                        
@@ -114,6 +126,7 @@
                                             }
                                         });
                                    //     drawBreadCrumb1();
+                                   //isUserTypeSuperAdmin();
 
                                     }   
                     

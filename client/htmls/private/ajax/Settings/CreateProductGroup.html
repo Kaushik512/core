@@ -71,9 +71,17 @@
 <script>
    //Form Name
    $(document).ready(function() {
+    //isUserTypeSuperAdmin();
    $(".chooseOrganization").select2();
    });
    
+   function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
    
    function inLineReady() {
        $("input[type='text']").on("click", function () {
@@ -266,7 +274,13 @@
    
    }
    
-   $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+       $.fn.getType = function() {
+        if($(this).length){
+        return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+        }else{
+            return "undefined";
+        }
+    }
    
    function saveform_todelete(formName) {
        $("#savespinner").show();

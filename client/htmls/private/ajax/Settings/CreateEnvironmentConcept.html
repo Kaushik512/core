@@ -130,7 +130,16 @@
 //Form Name
 $(document).ready(function() {
     $(".chooseOrganization").select2();
+    //isUserTypeSuperAdmin();
 });
+
+function isUserTypeSuperAdmin(){
+    $.get('/d4dMasters/loggedInUser',function(data){
+      if(!data.isSuperAdmin){
+      $('#orgname').attr('disabled','disabled').select2();
+      }
+    });
+  }
 function preprocess(){
     $('#createenvinchefform')[0].reset();
     if(typeof $('#configname').find('option:selected').attr('rowid') == 'undefined'){
@@ -382,7 +391,11 @@ function readform_todelete(formName) {
 }
 
 $.fn.getType = function() {
+    if($(this).length){
     return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+    }else{
+        return "undefined";
+    }
 }
 
 function saveform_todelete(formName) {

@@ -295,7 +295,11 @@ function readMasterJsontv(id) {
 }
 
 $.fn.getType = function() {
+    if($(this).length){
     return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+    }else{
+        return "undefined";
+    }
 }
 
 function CreateTableFromJson__(formID, idFieldName, createFileName) {
@@ -1997,11 +2001,14 @@ function saveform(formID, operationTypes) {
         error: function(jqxhr) {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
-
-            alert(jqxhr.status);
+            bootbox.alert(jqxhr.responseText);
+           // alert(jqxhr.status);
+          // logger.debug("jqxhr.status>>> ",jqxhr.status);
+           //alert('Insufficient permission to perform this operation.');
         },
         failure: function(data) {
             alert(data);
+           //alert('Insufficient permission to perform this operation.');
         }
     });
 
@@ -2658,7 +2665,7 @@ function isFormValid(formid) {
                     if (/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false && str != '') {
                         isValid = false;
                         //updating error message
-                        errormessageforInput(currCtrl.attr('id'), "Email address is required");
+                        errormessageforInput(currCtrl.attr('id'), "Invalid Email Address.");
                         currCtrl.focus();
                     }
                     break;

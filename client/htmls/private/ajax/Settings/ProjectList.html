@@ -89,8 +89,19 @@
                                        if(!hasCreateProjPermission){
                                             $('#newProj').addClass('hidden');
                                        }
-                                        startup();
+                                       startup();
+                                       //isUserTypeSuperAdmin();
+                                        
                                     });
+
+                                    function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newProj').attr('disabled','disabled');
+                                          }
+                                          startup();
+                                        });
+                                      }
 
                                     function startup() {
 
@@ -178,7 +189,13 @@
 
                                     }
 
-                                    $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+                                    $.fn.getType = function() {
+                                            if($(this).length){
+                                            return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+                                            }else{
+                                                return "undefined";
+                                            }
+                                        }
                                     function CreateTableFromJson_old(formName) {
 
                                         //To Do SAve...

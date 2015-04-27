@@ -1,6 +1,7 @@
 var ldap = require('ldapjs');
 
 
+
 var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
     options.port || (options.port = '389');

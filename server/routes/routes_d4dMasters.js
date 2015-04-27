@@ -10,6 +10,7 @@ var appConfig = require('../config/app_config');
 var logger  = require('../lib/logger')(module);
 var childProcess = require('child_process');
 var exec = childProcess.exec;
+var masterUtil = require('../lib/utils/masterUtil.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -234,73 +235,88 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            var tocheck = [];
-            var fieldname = '';
-            switch (req.params.id) {
-                case "1":
-                    tocheck.push('2');
-                    tocheck.push('3');
-                    tocheck.push('10');
-                    fieldname = "orgname_rowid";
-                    break;
-                case "2":
-                    tocheck.push('4');
-                    fieldname = "productgroupname_rowid";
-                    break;
-                case "3":
-                    tocheck.push('4');
-                    fieldname = "environmentname_rowid,orgname_rowid";
-                    break;
-                case "4":
-                    tocheck.push('blueprints');
-                    tocheck.push('instances');
-                    fieldname = "projectId";
-                    break;
-                case "10":
-                    tocheck.push('all');
-                    fieldname = "configname_rowid";
-                    break;
-                case "19":
-                    tocheck.push('blueprints');
-                    tocheck.push('instances');
-                    fieldname = "projectId";
-                    break;
+            masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
             }
-            configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
-                logger.debug("Delete check returned: %s", data);
-                if (data == "none") {
-                    logger.debug("entering delete");
-                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                        if (err) {
-                            logger.debug("Hit and error:", err);
-                        }
-                        if (dbtype) {
-                            //Currently rowid is hardcoded since variable declaration was working
-                            var item = '\"' + req.params.fieldname + '\"';
-                            logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
-                            //res.send(500);
-                            eval('d4dModelNew.' + dbtype).remove({
-                                rowid: req.params.fieldvalue
-                            }, function(err) {
-                                if (err) {
-                                    logger.debug("Hit an errror on delete : %s", err);
-                                    res.send(500);
-                                    return;
-                                } else {
-                                    logger.debug("Document deleted : %s", req.params.fieldvalue);
-                                    res.send(200);
-                                    logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
-                                    return;
-                                }
-                            }); //end findOne
-                        }
-                    }); //end configmgmtDao
-                } else {
-                    logger.debug("There are dependent elements cannot delete");
-                    res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                if(!data){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }
-            }); //deleteCheck
+
+                    var tocheck = [];
+                    var fieldname = '';
+                    switch (req.params.id) {
+                        case "1":
+                            tocheck.push('2');
+                            tocheck.push('3');
+                            tocheck.push('10');
+                            fieldname = "orgname_rowid";
+                            break;
+                        case "2":
+                            tocheck.push('4');
+                            fieldname = "productgroupname_rowid";
+                            break;
+                        case "3":
+                            tocheck.push('4');
+                            fieldname = "environmentname_rowid,orgname_rowid";
+                            break;
+                        case "4":
+                            tocheck.push('blueprints');
+                            tocheck.push('instances');
+                            fieldname = "projectId";
+                            break;
+                        case "10":
+                            tocheck.push('all');
+                            fieldname = "configname_rowid";
+                            break;
+                        case "19":
+                            tocheck.push('blueprints');
+                            tocheck.push('instances');
+                            fieldname = "projectId";
+                            break;
+                    }
+                    configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
+                        logger.debug("Delete check returned: %s", data);
+                        if (data == "none") {
+                            logger.debug("entering delete");
+                            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                                if (err) {
+                                    logger.debug("Hit and error:", err);
+                                }
+                                if (dbtype) {
+                                    //Currently rowid is hardcoded since variable declaration was working
+                                    var item = '\"' + req.params.fieldname + '\"';
+                                    logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
+                                    //res.send(500);
+                                    eval('d4dModelNew.' + dbtype).remove({
+                                        rowid: req.params.fieldvalue
+                                    }, function(err) {
+                                        if (err) {
+                                            logger.debug("Hit an errror on delete : %s", err);
+                                            res.send(500);
+                                            return;
+                                        } else {
+                                            logger.debug("Document deleted : %s", req.params.fieldvalue);
+                                            res.send(200);
+                                            logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
+                                            return;
+                                        }
+                                    }); //end findOne
+                                }
+                            }); //end configmgmtDao
+                        } else {
+                            logger.debug("There are dependent elements cannot delete");
+                            res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+                            return;
+                        }
+                    }); //deleteCheck
+                }
+            });
         }); //haspermission
     });
 
@@ -486,7 +502,34 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
         logger.debug("Logged in user: ",req.session.user.cn);
-         configmgmtDao.getRowids(function(err,rowidlist){
+        logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ",req.params.id);
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            if(!anUser){
+                res.send(500,"Invalid User.");
+            }
+            if(anUser.orgname_rowid[0] === ""){
+                d4dModelNew.find({
+                        id: req.params.id
+                    },function(err,data){
+                        if(err){
+                            logger.debug("Unable to fetch Settings.");
+                            res.send(500,"Unable to fetch Settings for Id: ",req.params.id);
+                        }
+                        logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
+                        if(req.params.id === "16"){
+                            res.send(JSON.stringify(data));
+                            return;
+                        }else{
+                        res.send(data);
+                        }
+                    });
+
+
+                /*configmgmtDao.getRowids(function(err,rowidlist){
 
             logger.debug("Rowid List----&&&&----> %s", rowidlist);
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
@@ -590,114 +633,319 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                 }
             });
-        }); //rowidlist
+        });*/ //rowidlist
+
+                // For non-catalystadmin
+            }else {
+                    logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ",req.params.id);
+                // For Org
+                masterUtil.getOrgs(loggedInUser,function(err,orgList){
+                    logger.debug("got org list ==>",JSON.stringify(orgList));
+                    if(err){
+                        res.send(500,'Not able to fetch Orgs.');
+                        return;
+                    }
+            else if(req.params.id === '1'){
+                    logger.debug("Returned Org List:>>>> ",JSON.stringify(orgList));
+                    res.send(orgList);
+                    return;
+            }
+           // for(var i=0;i<orgList.length;i++){
+                //(function(count){
+                    else if(req.params.id === '2'){
+                            // For BusinessGroup
+                            masterUtil.getBusinessGroups(orgList,function(err,bgList){
+                                if(err){
+                                    res.send(500,'Not able to fetch BG.');
+                                }
+                                logger.debug("Returned BG List:>>>> ",JSON.stringify(bgList));
+                                res.send(bgList);
+                                return;
+                            });
+                        }
+                    else if(req.params.id === '3'){
+                            // For Environment
+                            masterUtil.getEnvironments(orgList,function(err,envList){
+                                if(err){
+                                    res.send(500,'Not able to fetch ENV.');
+                                }
+                                logger.debug("Returned ENV List:>>>>> ",JSON.stringify(envList));
+                                res.send(envList);
+                                return;
+                            });
+                        }
+                    else if(req.params.id === '4'){    
+                            // For Projects
+                            masterUtil.getProjects(orgList,function(err,projectList){
+                                if(err){
+                                    res.send(500,'Not able to fetch Project.');
+                                }
+                                logger.debug("Returned Project List:>>>>> ",JSON.stringify(projectList));
+                                res.send(projectList);
+                                return;
+                            })
+                        }
+                    else if(req.params.id === '10'){    
+                            // For ConfigManagement
+                            masterUtil.getCongifMgmts(orgList,function(err,configMgmtList){
+                                if(err){
+                                    res.send(500,'Not able to fetch ConfigManagement.');
+                                }
+                                logger.debug("Returned ConfigManagement List:>>>>> ",configMgmtList);
+                                res.send(configMgmtList);
+                                return;
+                            });
+                            
+                        }
+                    else if(req.params.id === '18'){    
+                            // For Docker
+                            logger.debug("Id for docker:>> ",req.params.id);
+                            masterUtil.getDockers(orgList,function(err,dockerList){
+                                if(err){
+                                    res.send(500,'Not able to fetch Dockers.');
+                                }
+                                logger.debug("Returned Dockers List:>>>>> ",JSON.stringify(dockerList));
+                                res.send(dockerList);
+                                return;
+                            });
+                            
+                        }
+                    else if(req.params.id === '17'){    
+                            // For Template
+                            logger.debug("Id for template:>> ",req.params.id);
+                            masterUtil.getTemplates(orgList,function(err,templateList){
+                                if(err){
+                                    res.send(500,'Not able to fetch Template.');
+                                }
+                                logger.debug("Returned Template List:>>>>> ",JSON.stringify(templateList));
+                                res.send(templateList);
+                                return;
+                            });
+                            
+                        }
+                        else if(req.params.id === '16'){    
+                            // For Template
+                            logger.debug("Id for templateType:>> ",req.params.id);
+                            /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                                if(err){
+                                    res.send(500,'Not able to fetch TemplateType.');
+                                }
+                                logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
+                                res.send(templateList);
+                                return;
+                            });*/
+
+                            d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                                id: req.params.id
+                            },function(err,data){
+                                if(err){
+                                    logger.debug("Unable to fetch TemplateType.");
+                                    res.send(500,"Unable to fetch TemplateType for Id: ",req.params.id);
+                                }
+                                logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
+                                res.send(JSON.stringify(data));
+                            });
+                            
+                        }
+                    else if(req.params.id === '19'){    
+                            // For ServiceCommand
+                            masterUtil.getServiceCommands(orgList,function(err,serviceCommandList){
+                                if(err){
+                                    res.send(500,'Not able to fetch ServiceCommand.');
+                                }
+                                logger.debug("Returned ServiceCommand List:>>>>> ",JSON.stringify(serviceCommandList));
+                                res.send(serviceCommandList);
+                                return;
+                            });
+                            
+                        }
+                    else if(req.params.id === '20'){    
+                            // For Jenkins
+                            masterUtil.getJenkins(orgList,function(err,jenkinList){
+                                if(err){
+                                    res.send(500,'Not able to fetch Jenkins.');
+                                }
+                                logger.debug("Returned Jenkins List:>>>>> ",JSON.stringify(jenkinList));
+                                res.send(jenkinList);
+                                return;
+                            });
+                            
+                        }
+                     else if(req.params.id === '6'){    
+                            // For User Role
+                            masterUtil.getUserRoles(function(err,userRoleList){
+                                if(err){
+                                    res.send(500,'Not able to fetch UserRole.');
+                                }
+                                logger.debug("Returned UserRole List:>>>>> ",JSON.stringify(userRoleList));
+                                res.send(userRoleList);
+                                return;
+                            });
+                            
+                        }
+                     else if(req.params.id === '7'){    
+                            // For User
+                            masterUtil.getUsersForOrg(orgList,function(err,userList){
+                                if(err){
+                                    res.send(500,'Not able to fetch User.');
+                                }
+                                logger.debug("Returned User List:>>>>> ",JSON.stringify(userList));
+                                res.send(userList);
+                                return;
+                            });
+                            
+                        }
+                     else if(req.params.id === '21'){    
+                            // For Team
+                            masterUtil.getTeams(orgList,function(err,teamList){
+                                if(err){
+                                    res.send(500,'Not able to fetch Team.');
+                                }
+                                logger.debug("Returned Team List:>>>>> ",JSON.stringify(teamList));
+                                res.send(teamList);
+                                return;
+                            }); 
+                        } else {
+                            logger.debug('nothin here');
+                            res.send([]);
+                        }
+
+                        //res.send(200,[]);
+
+                // })(i);
+              // }
+                });
+            }
+        });
+        
     });
 
      app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
-         configmgmtDao.getRowids(function(err,rowidlist){
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            if(!anUser){
+                res.send(500,"Invalid User.");
+            }
+            if(anUser.orgname_rowid[0] === ""){
+                 configmgmtDao.getRowids(function(err,rowidlist){
 
-            logger.debug("Rowid List----&&&&----> ", rowidlist);
-            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                if (err) {
-                    logger.error("Hit and error:", err);
-                }
-                if (dbtype) {
-                    logger.debug("Master Type: %s", dbtype);
-                    
-                    var query = {};
-                    
-                    query['id'] = req.params.id;
-                    if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
-                        query['active'] = true;
-                    }
-
-
-                    eval('d4dModelNew.' + dbtype).find(
-                        {id:req.params.id
-                        }
-                    , function(err, d4dMasterJson) {
+                    logger.debug("Rowid List----&&&&----> ", rowidlist);
+                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
-                            logger.debug("Hit and error:", err);
+                            logger.error("Hit and error:", err);
                         }
-                        //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
-                            var _keys = Object.keys(d4dMasterJson);
-                            logger.debug("Master Length:" + _keys.length);
-                            if(_keys.length <= 0){
-                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                                res.end(JSON.stringify(d4dMasterJson));
-                            }
-                            var counter = 0;
-                            var todelete = [];
-                            //_keys.forEach(function(k,v){
-                            for(var k=0,v=0;k<_keys.length;k++,v++) {
-                                //var __keys = Object.keys(d4dMasterJson[k]);
-                               
-                                //console.log('OBject:' + d4dMasterJson[k]);
-                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                        if (dbtype) {
+                            logger.debug("Master Type: %s", dbtype);
                             
-                                for(var k1 in jobj){
-                                    //if any key has _rowid then update     corresponding field
-                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
-                                    if(k1.indexOf('_rowid') > 0){
-                                        //check if its an array of rowid's
-                                        var flds = k1.split('_');
-                                        var names = '';
-                                        if(jobj[k1].indexOf(',') > 0){
-                                            //Will handle this seperately : Vinod to Do
-                                            var itms = jobj[k1].split(',');
-                                            for(_itms in itms){
-                                                var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                if(_itmsName != '')
-                                                {
-                                                        if(names == '')
+                            var query = {};
+                            
+                            query['id'] = req.params.id;
+                            if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                                query['active'] = true;
+                            }
+
+
+                            eval('d4dModelNew.' + dbtype).find(
+                                {id:req.params.id
+                                }
+                            , function(err, d4dMasterJson) {
+                                if (err) {
+                                    logger.debug("Hit and error:", err);
+                                }
+                                //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
+                                    var _keys = Object.keys(d4dMasterJson);
+                                    logger.debug("Master Length:" + _keys.length);
+                                    if(_keys.length <= 0){
+                                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                                        res.end(JSON.stringify(d4dMasterJson));
+                                    }
+                                    var counter = 0;
+                                    var todelete = [];
+                                    //_keys.forEach(function(k,v){
+                                    for(var k=0,v=0;k<_keys.length;k++,v++) {
+                                        //var __keys = Object.keys(d4dMasterJson[k]);
+                                       
+                                        //console.log('OBject:' + d4dMasterJson[k]);
+                                        var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+                                    
+                                        for(var k1 in jobj){
+                                            //if any key has _rowid then update     corresponding field
+                                            //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                            if(k1.indexOf('_rowid') > 0){
+                                                //check if its an array of rowid's
+                                                var flds = k1.split('_');
+                                                var names = '';
+                                                if(jobj[k1].indexOf(',') > 0){
+                                                    //Will handle this seperately : Vinod to Do
+                                                    var itms = jobj[k1].split(',');
+                                                    for(_itms in itms){
+                                                        var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        if(_itmsName != '')
                                                         {
-                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                                if(names == '')
+                                                                {
+                                                                    names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                                }
+                                                                else{
+                                                                    names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                                }
+                                                                logger.debug("names: %s",names);
                                                         }
-                                                        else{
-                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                        }
-                                                        logger.debug("names: %s",names);
+                                                    }
+                                                    
                                                 }
+                                                else{
+                                                    names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
+                                                }
+
+                                                d4dMasterJson[k][flds[0]] = names;
+
+                                                if(names == '' && k1.indexOf('orgname_rowid') >= 0)
+                                                    todelete.push(k);
+                                                //console.log('jobj[flds[0]]',jobj[flds[0]]);
+                                                logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
                                             }
                                             
+                                          //  console.log("key**:",k1," val**:",jobj[k1]);
+                                           
                                         }
-                                        else{
-                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
-                                        }
-
-                                        d4dMasterJson[k][flds[0]] = names;
-
-                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
-                                            todelete.push(k);
-                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                        logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
-                                    }
-                                    
-                                  //  console.log("key**:",k1," val**:",jobj[k1]);
-                                   
-                                }
-                                logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
-                                
-                                
-                                counter++;
-                            };//);
-                                    logger.debug("To Delete Array: %s", todelete.toString());
-                                    var collection = [];
-                                    
-                                    for(var i = 0; i < d4dMasterJson.length;i++){
-                                        if(todelete.indexOf(i) === -1) {
-                                            collection.push(d4dMasterJson[i]);
-                                        }
+                                        logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
                                         
-                                    }
-                                    logger.debug("sent response 686 %s", JSON.stringify(collection));
-                                    res.end(JSON.stringify(collection));
-                                    logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
-                    });
-                }
-            });
-        }); //rowidlist
+                                        
+                                        counter++;
+                                    };//);
+                                            logger.debug("To Delete Array: %s", todelete.toString());
+                                            var collection = [];
+                                            
+                                            for(var i = 0; i < d4dMasterJson.length;i++){
+                                                if(todelete.indexOf(i) === -1) {
+                                                    collection.push(d4dMasterJson[i]);
+                                                }
+                                                
+                                            }
+                                            logger.debug("sent response 686 %s", JSON.stringify(collection));
+                                            res.end(JSON.stringify(collection));
+                                            logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
+                                 });
+                             }
+                        });
+                     }); //rowidlist
+        }else{
+            // For non-catalystadmin
+
+            masterUtil.getOrgs(loggedInUser,function(err,orgList){
+                if(orgList){
+                    logger.debug("Returned Org List: >>>>>> ",JSON.stringify(orgList));
+                    res.send(orgList);
+                    }
+                });
+
+            }
+        });
     });
     //for kana to be reverted to the original function 
     app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
@@ -815,61 +1063,190 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
         logger.debug("Enter get() for  /d4dMasters/readmasterjsoncounts");
+        logger.debug("Logged in User: ",req.session.user.cn);
+       
         var ret = [];
         var masts = ['2', '3', '4'];
         var counts = [];
-        for(var i =1;i<5;i++)
-            counts[i] = 0;
-          d4dModelNew.d4dModelMastersOrg.find({
-            id: 1,
-            active:true
-        }, function(err, docorgs) {
-            var orgnames = docorgs.map(function(docorgs1) {
-                return docorgs1.rowid;
-            });
-        d4dModelNew.d4dModelMastersOrg.find({
-            id: {
-                $in: masts,
-            },
-            orgname_rowid:{$in:orgnames}
-        }, function(err, d4dMasterJson) {
-            if (err) {
-                logger.error("Hit and error:", err);
+        masterUtil.getLoggedInUser(req.session.user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
             }
-            if (d4dMasterJson) {
-                // res.send(200, d4dMasterJson);
-                // res.writeHead(200, { 'Content-Type': 'text/plain' });
-                res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                });
-                
-                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                logger.debug(d4dMasterJson.length);
-                var i = 0;
-                for(var i=0;i < d4dMasterJson.length;i++){
-                    //Need to do a org check.
+            if(!anUser){
+                res.send(500,"Invalid User.");
+            }
+        if(anUser.orgname_rowid[0] === ""){
+                for(var i =1;i<5;i++)
+                    counts[i] = 0;
+                  d4dModelNew.d4dModelMastersOrg.find({
+                    id: 1,
+                    active:true
+                }, function(err, docorgs) {
+                    var orgnames = docorgs.map(function(docorgs1) {
+                        return docorgs1.rowid;
+                    });
+                d4dModelNew.d4dModelMastersOrg.find({
+                    id: {
+                        $in: masts,
+                    },
+                    orgname_rowid:{$in:orgnames}
+                }, function(err, d4dMasterJson) {
+                    if (err) {
+                        logger.error("Hit and error:", err);
+                    }
+                    if (d4dMasterJson) {
+                        // res.send(200, d4dMasterJson);
+                        // res.writeHead(200, { 'Content-Type': 'text/plain' });
+                        res.writeHead(200, {
+                            'Content-Type': 'application/json'
+                        });
+                        
+                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                        logger.debug(d4dMasterJson.length);
+                        var i = 0;
+                        for(var i=0;i < d4dMasterJson.length;i++){
+                            //Need to do a org check.
 
-                    logger.debug(d4dMasterJson[i]["id"]);
-                    counts[d4dMasterJson[i]["id"]]++;
+                            logger.debug(d4dMasterJson[i]["id"]);
+                            counts[d4dMasterJson[i]["id"]]++;
+                        }
+                        for(var i =2;i<5;i++){
+                            ret.push('{"' + i + '":"' + counts[i] + '"}');
+                        }
+                        ret.push('{"1":"' + orgnames.length + '"}');
+                        logger.debug("Configured json:>>>>> ", '[' + ret.join(',') + ']');
+                        res.end('[' + ret.join(',') + ']');
+                        //res.end();
+                        logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
+                        return;
+                    } else {
+                        //res.send(400, {
+                        ret.push(i + ':' + '');
+                        // "error": err
+                        // });
+                        logger.debug("none found");
+                    }
+                });
+            });
+        }else{
+            // For Settings Button
+            var settingsList =[];
+            var loggedInUser = req.session.user.cn;
+            var callCount = 0;
+            masterUtil.getOrgs(loggedInUser,function(err,orgs){
+                logger.debug("got org list ==>",JSON.stringify(orgs));
+                if(err){
+                    res.send(500,"Failed to fetch Org.");
                 }
-                for(var i =2;i<5;i++){
-                    ret.push('{"' + i + '":"' + counts[i] + '"}');
+                if(orgs){
+                    orgCount = orgs.length;
+                    logger.debug("orgCount: ",orgCount);
+                    if(settingsList.length === 0){
+                        settingsList.push({"1":orgCount});
+                        logger.debug("Org if....");
+                        }
+                    for(var s=0;s<settingsList.length;s++){
+                        logger.debug("Entered orgs.....");
+                        (function(s1){
+                        if(settingsList[s1].hasOwnProperty("1")){
+                            delete settingsList[s1];
+                            settingsList.push({"1":orgCount});
+                            settingsList = settingsList.filter(Object);
+                            return;
+                                    }
+                                })(s);
+                            }
+                    //for(var x=0;x<orgs.length;x++){
+                        //(function(countOrg){
+                            logger.debug("Organization: ");
+                            masterUtil.getBusinessGroups(orgs,function(err,bgs){
+                                if(err){
+                                    res.send(500,"Failed to fetch BGroups");
+                                }
+                                if(bgs){
+                                    bgCount = bgs.length;
+                                    logger.debug("bgCount: ",bgCount);
+                                    if(settingsList.length === 1){
+                                         settingsList.push({"2":bgCount});
+                                         logger.debug("BG if....");
+                                         }
+                                    for(var s=0;s<settingsList.length;s++){
+                                        (function(s1){
+                                            if(settingsList[s1].hasOwnProperty("2")){
+                                                delete settingsList[s1];
+                                                settingsList.push({"2":bgCount});
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                        })(s);
+                                    }
+                                 }
+                           // });
+                            masterUtil.getEnvironments(orgs,function(err,envs){
+                            if(err){
+                                res.send(500,"Failed to fetch ENVs.");
+                            }
+                            if(envs){
+                                envCount = envs.length;
+                                logger.debug("envCount: ",envCount);
+                                if(settingsList.length === 2){
+                                         settingsList.push({"3":envCount});
+                                         logger.debug("Env if....");
+                                         }
+                                for(var s=0;s<settingsList.length;s++){
+                                        (function(s1){
+                                            if(settingsList[s1].hasOwnProperty("3")){
+                                                delete settingsList[s1];
+                                                settingsList.push({"3":envCount});
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                        })(s);
+                                    }
+                                }
+                           // });
+                            masterUtil.getProjects(orgs,function(err,projects){
+                                if(err){
+                                    res.send(500,"Failed to fetch Projects.");
+                                }
+                                if(projects){
+                                    projectCount = projects.length;
+                                    logger.debug("projectCount: ",projectCount);
+                                    if(settingsList.length === 3){
+                                         settingsList.push({"4":projectCount});
+                                         logger.debug("Proj if....");
+                                         }
+                                    for(var s=0;s<settingsList.length;s++){
+                                        (function(s1){
+                                            if(settingsList[s1].hasOwnProperty("4")){
+                                                logger.debug("Has project.");
+                                                delete settingsList[s1];
+                                                settingsList.push({"4":projectCount});
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                            })(s);
+                                            }
+                                        }
+                                        /*callCount+=1;
+                                        if(callCount === 3){*/
+                                        logger.debug("All settings: ",JSON.stringify(settingsList));
+                                        res.send(settingsList);
+                                       // }
+                                    });
+                                 });
+                             });
+                            
+                       // })(x);
+                   // }
+                } else {
+                    res.send(200,settingsList);
                 }
-                ret.push('{"1":"' + orgnames.length + '"}');
-                res.end('[' + ret.join(',') + ']');
-                //res.end();
-                logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
-                return;
-            } else {
-                //res.send(400, {
-                ret.push(i + ':' + '');
-                // "error": err
-                // });
-                logger.debug("none found");
-            }
-        });
+            });
+        }//else
     });
-    });
+
+});
 
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
         logger.debug("Enter get() for  /d4dMasters/getdashboardvalues/%s", req.params.items);
@@ -1745,8 +2122,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
             if (data == false) {
                 logger.debug('No permission to ' + permissionto + ' on ' + category);
-                res.end('401');
-
+                res.send(401,"You don't have permission to perform this operation.");
                 return;
             }
         } else {
@@ -1755,10 +2131,31 @@ module.exports.setRoutes = function(app, sessionVerification) {
             return;
         }
 
-
-
+        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
+            if(err){
+                res.send(500,"Failed to fetch User.");
+            }
+            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
+            if(anUser){
+                //data == true (create permission)
+                logger.debug("All condition:>>>>> data",data," rowid: ",anUser.orgname_rowid[0]," role: ",anUser.userrolename);
+                /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
+        
         logger.debug('EditMode: %s', editMode);
         bodyJson["id"] = req.params.id; //storing the form id.
+
+        // Handled for "any" field Org for User.
+        if(req.params.id === '7' && bodyJson["orgname"] === 'any'){
+            logger.debug("Inside User check for any value.");
+            bodyJson["orgname"]= "";
+            bodyJson["orgname_rowid"]= "";
+        }
+
+        logger.debug("Full bodyJson: ",JSON.stringify(bodyJson));
         configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
             if (err) {
                 logger.error("Hit and error:", err);
@@ -1802,11 +2199,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             var thisVal = bodyJson[itm];
                             logger.debug(thisVal);
                             var item = null;
-                            if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
-                                item = "\"" + itm + "\" : \"" + thisVal + "\"";
-                            } else //
-                                item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
-
+                                if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
+                                    item = "\"" + itm + "\" : \"" + thisVal + "\"";
+                                } else //
+                                    item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
                             rowFLD.push(item);
                             if (itm == 'folderpath') { //special variable to hold the folder to which the files will be copied.
                                 rowFLD.push("\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"");
@@ -1852,7 +2248,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (!editMode) { //push new values only when not in edit mode
                         //dMasterJson = JSON.parse(FLD);
                         //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
-
+                        logger.debug("FLD>>>>>>>>>>>>> ",FLD);
                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                         mastersrdb.save(function(err, data) {
                             if (err) {
@@ -1951,8 +2347,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }); //end findone
                 //console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
 
-            }
-        }); //end getdbmodelfromid
+                }
+             }); //end getdbmodelfromid
+            } // if
+        }); // getSingleUser
     }); //end of haspermission
 
 });
@@ -2447,5 +2845,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
-
+    app.get('/d4dMasters/loggedInUser', function(req, res) {
+        var loggedInUser = req.session.user.cn;
+            masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
+                if(err){
+                    res.send(500,"Failed to fetch User.");
+                }
+                if(!anUser){
+                    res.send(500,"Invalid User.");
+                }
+                if(anUser.orgname_rowid[0] === ""){
+                    res.send({"isSuperAdmin":true});
+                    return;
+                }else{
+                    res.send({"isSuperAdmin":false});
+                    return;
+                }
+            });
+    });
 }

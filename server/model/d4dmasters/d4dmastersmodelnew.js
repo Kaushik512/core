@@ -62,8 +62,8 @@ var d4dModelMastersOrg = mongoose.model('d4dModelMastersOrg',d4dMastersOrg,'d4dm
 var d4dMastersProductGroup = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
-	orgname: {type:String,required:true, trim:true},
-	orgname_rowid: {type:String, trim:true},
+	orgname: {type:[String],required:true, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	productgroupname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
@@ -75,8 +75,8 @@ var d4dModelMastersProductGroup = mongoose.model('d4dModelMastersProductGroup',d
 var d4dMastersEnvironments = new mongoose.Schema(
 	{id: {type:String, trim:true},
 	name: {type:String,trim:true},
-	orgname: {type:String,required:false, trim:true},
-	orgname_rowid: {type:String, trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
@@ -93,8 +93,8 @@ var d4dModelMastersEnvironments = mongoose.model('d4dModelMastersEnvironments',d
 var d4dMastersGeneric = new mongoose.Schema(
 	{
 	active: {type:Boolean, trim:true,default:true},
-	orgname: {type:String, trim:true},
-	orgname_rowid: {type:String, trim:true}
+	orgname: {type:[String], trim:true},
+	orgname_rowid: {type:[String], trim:true}
 	},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersGeneric = mongoose.model('d4dModelMastersGeneric',d4dMastersGeneric,'d4dmastersnew');
@@ -113,8 +113,8 @@ var d4dModelMastersDynamic = mongoose.model('d4dModelMastersDynamic',d4dMastersD
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
-	orgname: {type:String,required:false, trim:true},
-	orgname_rowid: {type:String, trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	projectname: {type:String, trim:true, validate:nameValidator},
 	productgroupname: {type:String, trim:true},
 	productgroupname_rowid: {type:String, trim:true},
@@ -129,8 +129,8 @@ var d4dModelMastersProjects = mongoose.model('d4dModelMastersProjects',d4dMaster
 var d4dMastersConfigManagement = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true, validate:nameValidator},
-	orgname: {type:String,required:true, trim:true, validate:nameValidator},
-	orgname_rowid: {type:String, trim:true},
+	orgname: {type:[String],required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:[String], trim:true},
 	orgrowid: {type:String, trim:true},
 	configname: {type:String,required:true, trim:true},
 	loginname: {type:String,required:true, trim:true},
@@ -152,6 +152,8 @@ var d4dMastersDockerConfig = new mongoose.Schema(
 	dockeruserid: {type:String,required:true, trim:true},
 	dockeremailid: {type:String, trim:true},
 	dockerpassword: {type:String,required:true, trim:true},
+	orgname: {type:[String],required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:[String], trim:true},
 	folderpath: {type:String,trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}	
@@ -164,6 +166,8 @@ var d4dMastersUsers = new mongoose.Schema(
 	loginname: {type:String, trim:true, validate:nameValidator},
 	email: {type:String, trim:true},
 	userrolename: {type:String, trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -177,6 +181,8 @@ var d4dMastersTeams = new mongoose.Schema(
 	loginname_rowid: {type:String,trim:true},
 	projectname: {type:String, trim:true},
 	projectname_rowid: {type:String,trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -187,6 +193,8 @@ var d4dMastersUserroles = new mongoose.Schema(
 	userrolename: {type:String,required:true, trim:true, validate:nameValidator},
 	description: {type:String,required:true, trim:true, validate:descValidator},
 	globalaccessname: {type:String,required:true, trim:true, validate:nameValidator},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersUserroles = mongoose.model('d4dModelMastersUserroles',d4dMastersUserroles,'d4dmastersnew');
@@ -214,6 +222,8 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 	dockercontainerpathstitle: {type:String, trim:true},
 	dockercontainerpaths: {type:String, trim:true},
 	templatescookbooks: {type:String, trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -238,6 +248,8 @@ var d4dMastersServicecommands = new mongoose.Schema(
 	servicekill: {type:String, trim:true},
 	command: {type:String, trim:true},
 	commandaction: {type:String, trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -258,6 +270,8 @@ var d4dMastersJenkinsConfig = new mongoose.Schema(
 	jenkinsusername: {type:String,required:true, trim:true, validate:nameValidator},
 	jenkinspassword: {type:String,required:true, trim:true},
 	jenkinstokenfile_filename: {type:String, trim:true},
+	orgname: {type:[String],required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:[String], trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}

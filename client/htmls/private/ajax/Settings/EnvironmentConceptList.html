@@ -83,7 +83,15 @@
                                         if(!hasCreateEnvConceptPermission){
                                             $('#newENV').addClass('hidden');
                                         }
+                                        //isUserTypeSuperAdmin();
                                 });
+                                function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newENV').attr('disabled','disabled');
+                                          }
+                                        });
+                                      }
                                     function inLineReady(){
                                         /* $('#envtable').dataTable({
                                         "paging": false,
@@ -171,7 +179,13 @@
 
                                     }
 
-                                    $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+                                    $.fn.getType = function() {
+                                            if($(this).length){
+                                            return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+                                            }else{
+                                                return "undefined";
+                                            }
+                                        }
                                     function CreateTableFromJson_todelete(formName) {
 
                                         //To Do SAve...

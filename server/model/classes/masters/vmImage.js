@@ -52,6 +52,11 @@ var imageSchema = new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    orgId: {
+        type: [String],
+        required: true,
+        trim: true
     }
 });
 
@@ -93,6 +98,33 @@ imageSchema.statics.getImages = function(callback) {
     });
 };
 
+imageSchema.statics.getImagesForOrg = function(orgList,callback) {
+    logger.debug("Enter getImagesForOrg");
+    var orgIds = [];
+        for(var x=0;x<orgList.length;x++){
+            orgIds.push(orgList[x]._id);
+        }
+        logger.debug("org id: ",orgIds);
+    this.find({
+        orgId : {$in:orgIds}
+    }, function(err, images) {
+        if (err) {
+            logger.error(err);
+            logger.debug("Exit getImagesForOrg with error");
+            callback(err, null);
+            return;
+        }
+        if (images.length) {
+            logger.debug("Exit getImagesForOrg with Images present");
+            callback(null, images);
+        } else {
+            logger.debug("Exit getImagesForOrg with no Images present");
+            callback(null, null);
+        }
+
+    });
+};
+
 imageSchema.statics.getImageById = function(imageId, callback) {
     logger.debug("Enter getImageById");
     this.find({
@@ -127,7 +159,8 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
             name: imageData.name,
             vType: imageData.vType,
             osName: imageData.osType,
-            userName: imageData.userName
+            userName: imageData.userName,
+            orgId: imageData.orgId
         }
     }, {
         upsert: false

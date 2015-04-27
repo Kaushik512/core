@@ -112,6 +112,7 @@ module.exports.setRoutes = function(app) {
         logger.debug('hit permissionset ' + req.session.user.cn);
         if (req.session.user.password)
             delete req.session.user.password;
+        logger.debug("Return User from session:>>>> ",JSON.stringify(req.session.user));
         res.send(JSON.stringify(req.session.user));
     });
 

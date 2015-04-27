@@ -106,9 +106,19 @@
                                     if(!hasCreatePermissionOrg){
                                             $('#newOrg').addClass('hidden');
                                     }
+                                    isUserTypeSuperAdmin();
                                 });
 
-
+                                    function isUserTypeSuperAdmin(){
+                                        $.get('/d4dMasters/loggedInUser',function(data){
+                                          if(!data.isSuperAdmin){
+                                          $('#newOrg').attr('disabled','disabled');
+                                          //debugger;
+                                          $('.tableactionWidth').find("[title='Remove']").attr('disabled','disabled');
+                                          $('.tableactionWidth').find("[title='Update']").attr('disabled','disabled');
+                                          }
+                                        });
+                                      }
                                     function filterColumn () {
                                        // alert('hi ' + $("#filteractive").val());
                                         var filter = $("#filteractive").val();
@@ -218,7 +228,13 @@
                                     }
 
 
-                                    $.fn.getType = function () { return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase(); }
+                                    $.fn.getType = function() {
+                                            if($(this).length){
+                                            return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+                                            }else{
+                                                return "undefined";
+                                            }
+                                        }
                                     function CreateTableFromJson_todelete(formName) {
 
                                         //To Do SAve...
@@ -312,6 +328,7 @@
                                         $(".savespinner").hide();
                                     }
                                     inLineReady();
+                                    isUserTypeSuperAdmin();
                                 </script>
                             <div class="col-md-5">
 
