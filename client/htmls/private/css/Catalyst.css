@@ -7490,6 +7490,7 @@ body .ui-tooltip {
     height:430px;
     overflow-y:auto;
     overflow-x:hidden;
+    word-break:break-word;
 }
 
 .dockerModal{
