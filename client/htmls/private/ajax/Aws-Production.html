@@ -563,18 +563,7 @@
 </div>
                              </form>
                              <div class="col-lg-12">
-                                <div class="panel-group smart-accordion-default hidden" id="accordion-2" style="height:444px;overflow-y: auto;">
-                                    <!-- div class="devopsRolePanel panel panel-default blueprintContainer">
-                                        <div id="collapseOne-2" class="panel-collapse collapse">
-                                            <div class="panel-body">
-
-
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-                                    
+                                <div class="panel-group smart-accordion-default hidden" id="accordion-2" style="height:444px;overflow-y: auto;">                                 
 
                                 </div>
                             </div>
@@ -588,13 +577,13 @@
 
                     <footer class="footer">
                         <div class="clearfix form-actions" style="text-align:center">
-                        	<div class="btn-group">
+                        	<!-- <div class="btn-group">
 
                                 <button class="btn pull-left btn-primary launchBtn" style="margin-left:200px;">
                                     <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
                                     Launch
                                 </button>
-                            </div>
+                            </div> -->
                             <button class="btn pull-right btn-danger right-button" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
                         </div>
 
@@ -627,11 +616,20 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
             </div>
-            <div class="modal-body readHeight">
+            <div class="modal-body">
             	<!--os and the 1st tier-->
             	
- 
- <form action="" id="checkout-formNew">
+ <div class="panel-group smart-accordion-default" id="accordion-DesignNew">
+ <div class="panel panel-default">
+ <div class="panel-heading">
+ <h4 class="panel-title">
+ <a data-toggle="collapse" data-parent="#accordion-DesignNew" href="#CollapseBlueprintDetails"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Blueprint Details</a>
+ </h4>
+ </div>
+ <div id="CollapseBlueprintDetails" class="panel-collapse collapse in">
+ <div class="panel-body">
+ <div class="widget-body no-padding">
+ <form class="projectRepo" action="" id="checkout-formNew">
 
  
  <div class="col-lg-4 col-md-4">
@@ -647,18 +645,32 @@
  <label for="name">Instance Size:</label>
  <input id="instancesizeNew" disabled="disabled" class="form-control width-100">
  </div> 
-
- <div class="col-lg-4 col-md-4 projectRepo">
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+ <div class="panel-heading">
+ <h4 class="panel-title">
+ <a data-toggle="collapse" data-parent="#accordion-DesignNew" href="#CollapseproviderParameterNew"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Provider Parameters</a>
+ </h4>
+ </div>
+ <div id="CollapseproviderParameterNew" class="panel-collapse collapse">
+ <div class="panel-body">
+ <div class="widget-body no-padding">
+<form class="projectRepo">
+ <div class="col-lg-4 col-md-4">
  <label for="name">Provider Type:</label>
  <input id="instanceProviderType" disabled="disabled" class="form-control width-100">
  </div> 
 
-  <div class="col-lg-4 col-md-4 projectRepo">
+  <div class="col-lg-4 col-md-4">
  <label for="name">Provider Name:</label>
  <input id="instanceProviderName" disabled="disabled" class="form-control width-100">
  </div> 
 
-  <div class="col-lg-4 col-md-4 projectRepo">
+  <div class="col-lg-4 col-md-4">
  <label for="name">Region:</label>
  <input id="instanceRegion" disabled="disabled" class="form-control width-100">
  </div> 
@@ -674,14 +686,6 @@
  </div> 
 
  <div class="col-lg-4 col-md-4 projectRepo">
- <label for="">Version:</label>
- <input id="instanceVersion" class="form-control width-100" disabled="disabled">                                                      
- </div>
- <div class="col-lg-4 col-md-4 projectRepo">
- <label for="">Runlist:</label>
- <input id="instanceRunlist" class="form-control width-100" disabled="disabled">                                                      
- </div>
-  <div class="col-lg-4 col-md-4 projectRepo">
  <label for="">VPC ID:</label>
  <input id="instanceVPC" class="form-control width-100" disabled="disabled">                                                      
  </div>
@@ -693,9 +697,37 @@
   <label for="">Security Group:</label>
   <input id="instanceSecurityGroupId" class="form-control width-100" disabled="disabled">
 </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+ <div class="panel-heading">
+ <h4 class="panel-title">
+ <a data-toggle="collapse" data-parent="#accordion-DesignNew" href="#CollapseRunlist"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Runlist Details</a>
+ </h4>
+ </div>
+ <div id="CollapseRunlist" class="panel-collapse collapse">
+ <div class="panel-body">
+ <div class="widget-body no-padding">
+<form class="projectRepo">
+ <div class="col-lg-4 col-md-4">
+ <label for="">Version:</label>
+ <input id="instanceVersion" class="form-control width-100" disabled="disabled">                                                      
+ </div>
+ <div class="col-lg-4 col-md-4">
+ <label for="">Runlist:</label>
+ <input id="instanceRunlist" class="form-control width-100" disabled="disabled">                                                      
+ </div>
+  
                            
  
  </form><!--end-->
+</div>
+</div>
+</div>
+</div>
  
             </div>	<!-- 1st tier ends here-->
             
@@ -2404,11 +2436,12 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                          var getDesignTypeRowID;
                          var getDesignTypeName;
                          $('#accordion-2').empty();
-                         console.log(tdata);
+                         //alert(JSON.stringify(tdata));
                          for (var i = 0; i < rowLength; i += 1) {
                              getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
                              getDesignTypeRowID = tdata[i]['rowid'];
                              getDesignTypeName = tdata[i]['templatetypename'];
+                             
                              
                              //Extracting the TT definitions. Add New Template types
                              var $currRolePanel = null;
@@ -2440,7 +2473,6 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                      break;
 
                              }
-
                              console.log(tdata);
                              $containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' +
                                  '<div class="panel-heading">' +
@@ -2450,14 +2482,15 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                  '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                  '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                  '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                 '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                                 '<div class="panel-body ' + getDesignTypeName +'"></div>' +
                                  '</div>';
                              $('#accordion-2').append($containerTempNew);
+
 
                          }
                          //To fix template id and template type
                          // alert('in' + data.length);
-                         for (var i = 0; i < data.length; i++) {
+                         for (var i = 0; i < data.length; i++) {                   
                              //alert(JSON.stringify(data[i]));
                              //Find a panel-body with the template type class
                              var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
@@ -2469,7 +2502,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                  var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
                                      'text-align': 'center'
                                  });
-                                 var $liRead = $('<a style="float:right" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Read');
+                                 var $liRead = $('<a style="float:right;margin:5px;" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Read');
                                  $ul.append($liRead);	
                                  var $img
                                  if (data[i].iconpath)
@@ -2514,22 +2547,58 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                          //alert(JSON.stringify(data[i]));
                                      } else {
                                          $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
-
+                                         
+                                         
+                                         
                                          //code for info about blueprints
                                          (function(blueprint){
                                          	$liRead.click(function(e){
+
+                                            //for getting the image Name
+                                            $.ajax({
+                                               type: "GET",
+                                               url: "/vmimages/"+blueprint.imageId,
+                                               success: function (data) {
+                                                console.log(data);
+                                                $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
+                                                //alert(data.name);
+                                               }
+                                            });
+
+                                              //for getting the Provider name,Type,Region,KeyPair
+                                               $.ajax({
+                                               type: "GET",
+                                               url: "/aws/providers/"+blueprint.providerId,
+                                               success: function (data) {
+                                                $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                                $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                               // loop for getting region and Keypair
+                                               
+                                                for (var k = 0; k < data.keyPairs.length; k++){
+                                                  
+                                                  $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                                                  $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                                }
+                                                 //console.log(data);
+                                               },
+                                               failure: function (data) {
+                                                 alert(data.toString());
+                                               }
+                                             }); 
                                         
                                          	var $parent = $(this).parents('.cardimage');
                                          	var $blueprintReadContainer = $('#modalForRead');
                                          	var version = $parent.find('.blueprintVersionDropDown').val();
                                          	$blueprintReadContainer.modal('show');
-                                         	console.log(blueprint);
-                                         	console.log(blueprint.name);
-                                         	//alert(version);
+                                         //for getting the blueprint name
                                          	$blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
+                                          //for getting the OsName
                                          	$blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.instanceOS);
+                                          //for getting the instance Size
                                          	$blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.instanceType);
+                                          //for getting the version
                                          	$blueprintReadContainer.find('.modal-body #instanceVersion').val(version);
+                                          //for getting the SubnetId
                                          	$blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.subnetId);
                                           //loop for getting the Security Group
                                         
@@ -2542,14 +2611,13 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                          		}	
                                              
                                          	}
+                                          //for getting the VPC
                                           $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.vpcId)
-                                          /*$.get('../aws/ + /providers/' + '/providerId/' + providerId, function(data){
-
-                                          });*/
-
+                                          
                                          });})(data[i]);
                                          //info ends here
 
+                                         //for updating 
                                          $selectVerEdit.click(function(e) {
 
                                              var $parent = $(this).parents('.cardimage');
@@ -2568,7 +2636,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                                  var $ccrs = $chefCookbookRoleSelector(reqBodyNew.orgId, function(data) {
 
                                                  }, versionData.runlist);
-                                                 alert(JSON.stringify(data));
+                                                 //alert(JSON.stringify(data));
                                                  $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId', blueprintId);
                                                  $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs).data('$ccrs',$ccrs);
                                                  
