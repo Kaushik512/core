@@ -26,13 +26,18 @@ $(function() {
         var applicationId = data._id;
         $appCard.data('applicationId', data._id);
         $appCard.find('.applicationName').html(data.name);
-
+        //$('.appcard-role-inner:first').trigger('click');
         $appCard.find('.appcard-role-inner').click(function(e) {
             var selectedappcardDesign = $(".appcard-role-inner").index($(this));
             localStorage.setItem("appCardListDisplay", "true");
             localStorage.setItem("selectedappcardDesign", selectedappcardDesign);
-            $('.appcard-role-inner').removeClass('role-Selectedcard-app');
-            $(this).addClass('role-Selectedcard-app');
+            if($('.appcard-role-inner').hasClass('role-Selectedcard-app')){
+                $('.appcard-role-inner').removeClass('role-Selectedcard-app');
+                $(this).addClass('role-Selectedcard-app');
+            }else{
+                $('.appcard-role-inner:first').addClass('role-Selectedcard-app');
+            }
+            
         });
 
         $.get('../applications/' + applicationId + '/buildConf', function(buildData) {
@@ -450,7 +455,6 @@ $(function() {
     $(".chooseEnvironment").select2();
     $(".chooseInstances").select2();
 
-
     // loading cards
 
     $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications', function(apps) {
@@ -458,6 +462,7 @@ $(function() {
         for (var i = 0; i < apps.length; i++) {
             $cardList.append(createAppCard(apps[i]));
         }
+        $('.appcard-role-inner:first').trigger('click');
     });
 
 
@@ -520,7 +525,7 @@ $(function() {
 
 
         if (!appCardData.git.repoUrl) {
-            alert("Enter a URL");
+            alert("Enter a Repo URL");
             return;
         }
         if(!regexpURL.test(appCardData.git.repoUrl)){
@@ -582,15 +587,18 @@ $(function() {
                 console.log(errorMessage); // Optional
             }
         });*/
-
-        $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications', {
-            appData: appCardData
-        }, function(appCard) {
-            console.log(appCard);
-            $('.appcardList').append(createAppCard(appCard));
-            $('#modaladdAppCard').modal('hide');
-        });
-
+        //var i;
+        //for(i=0;i<=100;i++){
+            
+            $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams.bg + '/projects/' + urlParams.projid + '/applications', {
+                appData: appCardData
+            }, function(appCard) {
+                console.log(appCard);
+                $('.appcardList').append(createAppCard(appCard));
+                $('.appcard-role-inner:first').trigger('click');
+                $('#modaladdAppCard').modal('hide');
+            });
+        //}
     });
     $('.actionnewControlPanel').click(function(e) {
         var $selectedCard = $('.role-Selectedcard-app');

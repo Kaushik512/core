@@ -40,9 +40,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/instances/rdp/:vmname/:port',function(req,res){
+    app.get('/instances/rdp/:vmname/:port', function(req, res) {
 
-        res.setHeader('Content-disposition', 'attachment; filename='+ req.params.vmname + '.rdp');
+        res.setHeader('Content-disposition', 'attachment; filename=' + req.params.vmname + '.rdp');
         res.setHeader('Content-type', 'rdp');
         //res.charset = 'UTF-8';
         var rdptext = "full address:s:" + req.params.vmname + ":" + req.params.port + "\n\r";
@@ -807,20 +807,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send(500);
                             return;
                         }
-                        logger.debug("data.providerId: ::::   ",JSON.stringify(data[0]));
+                        logger.debug("data.providerId: ::::   ", JSON.stringify(data[0]));
                         if (data.length) {
-                            AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
-                               if (err) {
-                                   logger.error(err);
-                                   res.send(500, "Unable to get Provider.");
-                                   return;
-                               }
-                               logger.debug("Provider:>>>>>>>>>> ",JSON.stringify(aProvider));
-                               AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
-                                logger.debug("keyPairs length::::: ",keyPair[0].region);
-                                if(err){
-                                    res.send(500,"Error getting to fetch Keypair.")      
-                                }
                             var timestampStarted = new Date().getTime();
 
                             var actionLog = instancesDao.insertStopActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
@@ -836,65 +824,90 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 timestamp: timestampStarted
                             });
 
-                            var ec2 = new EC2({
-                             "access_key": aProvider.accessKey,
-                             "secret_key": aProvider.secretKey,
-                             "region"    : keyPair[0].region
-                            });
-                            ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
-                                if (err) {
-                                    var timestampEnded = new Date().getTime();
-                                    logsDao.insertLog({
-                                        referenceId: logReferenceIds,
-                                        err: true,
-                                        log: "Unable to stop instance",
-                                        timestamp: timestampEnded
-                                    });
-                                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                    res.send(500, {
-                                        actionLogId: actionLog._id
-                                    });
-                                    return;
-                                }
-                                logger.debug("Exit get() for /instances/%s/stopInstance", req.params.instanceId);
-                                res.send(200, {
-                                    instanceCurrentState: stoppingInstances[0].CurrentState.Name,
-                                    actionLogId: actionLog._id
+                            if (!data[0].providerId) {
+                                res.send(500, {
+                                    message: "Insufficient provider details, to complete the operation"
                                 });
-
-                                instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
-                                    if (err) {
-                                        logger.error("update instance state err ==>", err);
-                                        return;
-                                    }
-                                    logger.debug('instance state upadated');
-                                });
-
-                            }, function(err, state) {
-                                if (err) {
-                                    return;
-                                }
-                                instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-                                    if (err) {
-                                        logger.error("update instance state err ==>", err);
-                                        return;
-                                    }
-                                    logger.debug('instance state upadated');
-                                });
-                                var timestampEnded = new Date().getTime();
-
-
                                 logsDao.insertLog({
                                     referenceId: logReferenceIds,
-                                    err: false,
-                                    log: "Instance Stopped",
-                                    timestamp: timestampEnded
+                                    err: true,
+                                    log: "Insufficient provider details, to complete the operation",
+                                    timestamp: new Date().getTime()
                                 });
-                                instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+                                return;
+                            }
+                            AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
+                                if (err) {
+                                    logger.error(err);
+                                    res.send(500, "Unable to get Provider.");
+                                    return;
+                                }
+                                logger.debug("Provider:>>>>>>>>>> ", JSON.stringify(aProvider));
+                                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
+                                    logger.debug("keyPairs length::::: ", keyPair[0].region);
+                                    if (err) {
+                                        res.send(500, "Error getting to fetch Keypair.")
+                                    }
 
-                                 });
+                                    var ec2 = new EC2({
+                                        "access_key": aProvider.accessKey,
+                                        "secret_key": aProvider.secretKey,
+                                        "region": keyPair[0].region
+                                    });
+                                    ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
+                                        if (err) {
+                                            var timestampEnded = new Date().getTime();
+                                            logsDao.insertLog({
+                                                referenceId: logReferenceIds,
+                                                err: true,
+                                                log: "Unable to stop instance",
+                                                timestamp: timestampEnded
+                                            });
+                                            instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+                                            res.send(500, {
+                                                actionLogId: actionLog._id
+                                            });
+                                            return;
+                                        }
+                                        logger.debug("Exit get() for /instances/%s/stopInstance", req.params.instanceId);
+                                        res.send(200, {
+                                            instanceCurrentState: stoppingInstances[0].CurrentState.Name,
+                                            actionLogId: actionLog._id
+                                        });
+
+                                        instancesDao.updateInstanceState(req.params.instanceId, stoppingInstances[0].CurrentState.Name, function(err, updateCount) {
+                                            if (err) {
+                                                logger.error("update instance state err ==>", err);
+                                                return;
+                                            }
+                                            logger.debug('instance state upadated');
+                                        });
+
+                                    }, function(err, state) {
+                                        if (err) {
+                                            return;
+                                        }
+                                        instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                            if (err) {
+                                                logger.error("update instance state err ==>", err);
+                                                return;
+                                            }
+                                            logger.debug('instance state upadated');
+                                        });
+                                        var timestampEnded = new Date().getTime();
+
+
+                                        logsDao.insertLog({
+                                            referenceId: logReferenceIds,
+                                            err: false,
+                                            log: "Instance Stopped",
+                                            timestamp: timestampEnded
+                                        });
+                                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
+                                    });
+                                });
                             });
-                        });
 
 
                         } else {
@@ -929,108 +942,108 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         if (data.length) {
 
                             AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
-                               if (err) {
-                                   logger.error(err);
-                                   res.send(500, "Unable to find Provider.");
-                                   return;
-                               }
-                               AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id,function(err,keyPair){
-                                logger.debug("keyPairs length::::: ",keyPair[0].region);
-                                if(err){
-                                    res.send(500,"Error getting to fetch Keypair.")      
-                                }
-
-                            var timestampStarted = new Date().getTime();
-
-                            var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
-
-                            var logReferenceIds = [req.params.instanceId];
-                            if (actionLog) {
-                                logReferenceIds.push(actionLog._id);
-                            }
-
-
-                            logsDao.insertLog({
-                                referenceId: logReferenceIds,
-                                err: false,
-                                log: "Instance Starting",
-                                timestamp: timestampStarted
-                            });
-
-                            var ec2 = new EC2({
-                             "access_key": aProvider.accessKey,
-                             "secret_key": aProvider.secretKey,
-                             "region"    : keyPair[0].region
-                            });
-                            ec2.startInstance([data[0].platformId], function(err, startingInstances) {
                                 if (err) {
-                                    var timestampEnded = new Date().getTime();
+                                    logger.error(err);
+                                    res.send(500, "Unable to find Provider.");
+                                    return;
+                                }
+                                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
+                                    logger.debug("keyPairs length::::: ", keyPair[0].region);
+                                    if (err) {
+                                        res.send(500, "Error getting to fetch Keypair.")
+                                    }
+
+                                    var timestampStarted = new Date().getTime();
+
+                                    var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                                    var logReferenceIds = [req.params.instanceId];
+                                    if (actionLog) {
+                                        logReferenceIds.push(actionLog._id);
+                                    }
+
+
                                     logsDao.insertLog({
                                         referenceId: logReferenceIds,
-                                        err: true,
-                                        log: "Unable to start instance",
-                                        timestamp: timestampEnded
+                                        err: false,
+                                        log: "Instance Starting",
+                                        timestamp: timestampStarted
                                     });
-                                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                    res.send(500, {
-                                        actionLogId: actionLog._id
+
+                                    var ec2 = new EC2({
+                                        "access_key": aProvider.accessKey,
+                                        "secret_key": aProvider.secretKey,
+                                        "region": keyPair[0].region
                                     });
-                                    return;
-                                }
-                                logger.debug("Exit get() for /instances/%s/startInstance", req.params.instanceId);
-                                res.send(200, {
-                                    instanceCurrentState: startingInstances[0].CurrentState.Name,
-                                    actionLogId: actionLog._id
-                                });
+                                    ec2.startInstance([data[0].platformId], function(err, startingInstances) {
+                                        if (err) {
+                                            var timestampEnded = new Date().getTime();
+                                            logsDao.insertLog({
+                                                referenceId: logReferenceIds,
+                                                err: true,
+                                                log: "Unable to start instance",
+                                                timestamp: timestampEnded
+                                            });
+                                            instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+                                            res.send(500, {
+                                                actionLogId: actionLog._id
+                                            });
+                                            return;
+                                        }
+                                        logger.debug("Exit get() for /instances/%s/startInstance", req.params.instanceId);
+                                        res.send(200, {
+                                            instanceCurrentState: startingInstances[0].CurrentState.Name,
+                                            actionLogId: actionLog._id
+                                        });
 
-                                instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
-                                    if (err) {
-                                        logger.error("update instance state err ==>", err);
-                                        return;
-                                    }
-                                    logger.debug('instance state upadated');
-                                });
-
-                            }, function(err, state) {
-                                if (err) {
-                                    return;
-                                }
-                                instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
-                                    if (err) {
-                                        logger.error("update instance state err ==>", err);
-                                        return;
-                                    }
-                                    logger.debug('instance state upadated');
-                                });
-                                var timestampEnded = new Date().getTime()
-                                logsDao.insertLog({
-                                    referenceId: logReferenceIds,
-                                    err: false,
-                                    log: "Instance Started",
-                                    timestamp: timestampEnded
-                                });
-                                instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
-
-
-                                ec2.describeInstances([data[0].platformId], function(err, data) {
-                                    if (err) {
-                                        logger.error("Hit some error: ", err);
-                                        return;
-                                    }
-                                    if (data.Reservations.length && data.Reservations[0].Instances.length) {
-                                        logger.debug("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
-                                        instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
+                                        instancesDao.updateInstanceState(req.params.instanceId, startingInstances[0].CurrentState.Name, function(err, updateCount) {
                                             if (err) {
-                                                logger.error("update instance ip err ==>", err);
+                                                logger.error("update instance state err ==>", err);
                                                 return;
                                             }
-                                            logger.debug('instance ip upadated');
+                                            logger.debug('instance state upadated');
                                         });
-                                    }
+
+                                    }, function(err, state) {
+                                        if (err) {
+                                            return;
+                                        }
+                                        instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                            if (err) {
+                                                logger.error("update instance state err ==>", err);
+                                                return;
+                                            }
+                                            logger.debug('instance state upadated');
+                                        });
+                                        var timestampEnded = new Date().getTime()
+                                        logsDao.insertLog({
+                                            referenceId: logReferenceIds,
+                                            err: false,
+                                            log: "Instance Started",
+                                            timestamp: timestampEnded
+                                        });
+                                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
+
+                                        ec2.describeInstances([data[0].platformId], function(err, data) {
+                                            if (err) {
+                                                logger.error("Hit some error: ", err);
+                                                return;
+                                            }
+                                            if (data.Reservations.length && data.Reservations[0].Instances.length) {
+                                                logger.debug("ip =>", data.Reservations[0].Instances[0].PublicIpAddress);
+                                                instancesDao.updateInstanceIp(req.params.instanceId, data.Reservations[0].Instances[0].PublicIpAddress, function(err, updateCount) {
+                                                    if (err) {
+                                                        logger.error("update instance ip err ==>", err);
+                                                        return;
+                                                    }
+                                                    logger.debug('instance ip upadated');
+                                                });
+                                            }
+                                        });
+                                    });
                                 });
                             });
-                        });
-                        });
 
                         } else {
                             res.send(404);
