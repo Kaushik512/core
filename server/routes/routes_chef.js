@@ -57,7 +57,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                             }
                             res.send(nodeList);
                         } else {
-                            res.send([]);
+                            res.send(nodeList);
                         }
 
                     });
