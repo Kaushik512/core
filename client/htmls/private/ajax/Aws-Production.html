@@ -1072,7 +1072,7 @@
                      //alert(JSON.stringify(data));
 
                      //Syncing up the tree view based on url
-                     initializeBlueprintArea(data.blueprints);
+                     initializeBlueprintAreaNew(data.blueprints);
                      if(data.blueprints.length>0){
                      $('#accordion-2').removeClass('hidden');
 						}
@@ -2396,17 +2396,15 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                  /*Binding Click events to Blueprints*/
 
                  function initializeBluePrints() {
-                     bindClick_bluePrintUpdate();
-                     bindClick_updateInstanceRunList();
-                     getProviderData();
-
+                     bindClick_bluePrintUpdateNew();
+                     bindClick_updateInstanceRunListNew();
                  }
 
                
 
                  //Initializing the blueprint area according to the Template-Type and showing
                  //the differnt template types whenever a blueprint is added
-                 function initializeBlueprintArea(data) {
+                 function initializeBlueprintAreaNew(data) {
 
                  	
                  	             var reqBodyNew = {};
@@ -2714,7 +2712,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                  };
 
                  //Updating blueprints
-                 function bindClick_bluePrintUpdate() {
+                 function bindClick_bluePrintUpdateNew() {
                      $('.blueprintUpdateBtn').click(function(e) {
 
                          var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
@@ -2744,7 +2742,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                  }
 
                  //Updating the blueprint Runlist
-                 function bindClick_updateInstanceRunList() {
+                 function bindClick_updateInstanceRunListNew() {
                      // Blueprint runtlist updation
                      $('.btnUpdateInstanceRunlist').click(function(e) {
                          bootbox.confirm("Update runlist?", function(result) {
