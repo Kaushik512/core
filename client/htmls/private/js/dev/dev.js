@@ -322,7 +322,7 @@
                          //$('#addInstanceForm').get(0).reset();
                          var _org = getUrlParameter('org');
                          $.get('/d4dMasters/readmasterjsonnew/10', function(data) {
-                             if (data && JSON.parse(data).length <= 0) {
+                             if (data && data.length <= 0) {
                                  $('#modalContainerimportInstance').modal('hide');
                                  alert('A chef server is required to import an instance. Use settings to add a new one.');
                                  return false;
@@ -341,7 +341,7 @@
                                      alert('A chef server is required to import an instance. Use settings to add a new one.');
                                  }
                              }
-                             importbyipusers();
+                             //importbyipusers();
                          });
                      });
                  }
@@ -369,7 +369,7 @@
                          var $form = $('#addInstanceForm');
                          reqBody.fqdn = $form.find('#instanceFQDN').val().trim();
                          reqBody.os = $form.find('#importinstanceOS').val();
-                         reqBody.users = $('#importbyipuserListSelect').val();
+                         //reqBody.users = $('#importbyipuserListSelect').val();
                          reqBody.credentials = {
                              username: $form.find('#instanceUsername').val()
                          };
@@ -411,11 +411,11 @@
                              return false;
                          }
 
-                         if (!reqBody.users) {
+                         /*if (!reqBody.users) {
                              alert('Please assign atleast one user');
                              e.preventDefault();
                              return false;
-                         }
+                         }*/
                          if (!reqBody.os) {
                              alert('Please choose OS');
                              e.preventDefault();
@@ -518,7 +518,7 @@
 
 
                  /*Checking for The User Selection for Import By IP*/
-                 function importbyipusers() {
+                 /*function importbyipusers() {
 
                      var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
                      $.get('../users', function(userList) {
@@ -547,7 +547,7 @@
                      }).error(function() {
                          $loadingContainer.empty().append('Unable to load users. Please try again later.');
                      });
-                 }
+                 }*/
 
                  function createInstanceUI(data) {
                      //alert('starting');
