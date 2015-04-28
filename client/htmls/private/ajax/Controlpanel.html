@@ -227,7 +227,7 @@
                                   <!--1st text box-->
                                   <div class="col-lg-6 col-md-6 appTop">
                                     <input type="hidden" class="appUrlId" />
-                                    <label class="appNameLabel" for=""></label><span class="hidden urlsaved" >&nbsp;&nbsp;Saved</span>
+                                    <label class="appNameLabel" for=""></label>&nbsp;&nbsp;<a class="appUrlRemoveLink" href="javascript:void(0)">Remove</a><span class="hidden urlsaved" >&nbsp;&nbsp;Saved</span>
                                     <br>
                                       <input name="check" type="text" class="appUrlInput" type="url">
 
@@ -1755,6 +1755,26 @@ $(document).ready(function(e){
            }
             e.preventDefault();
             return false;
+       });
+       
+       $('.appUrlRemoveLink').click(function(e){
+          var $this = $(this);
+          var $form = $this.parents('form');
+          var appUrlId = $form.find('.appUrlId').val();
+          $.ajax({
+            url:'../instances/'+urlParams.id+'/appUrl/'+appUrlId,
+            method:'DELETE',
+            success:function(){
+              $form.remove();
+              $('.app-url[data-appUrlId="'+appUrlId+'"]').parent('span').remove();
+              if($('.appUrlForm').length === 1) {
+                $('#appUrlTemplateFormCreate').removeClass('hidden');
+              }
+            },
+            fail:function(){
+               alert("Unable to delete URL please try again later");
+            }
+          });
        });
 
    });

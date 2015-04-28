@@ -157,7 +157,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter post() for /instances/%s/appUrl/update", req.params.instanceId);
         instancesDao.updateAppUrl(req.params.instanceId, req.params.appUrlId, req.body.url, function(err, updateCount) {
             if (err) {
-                logger.error("Failed to update instanceip", err);
+                logger.error("Failed to update appurl", err);
                 res.send(500);
                 return;
             }
@@ -167,6 +167,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    app.delete('/instances/:instanceId/appUrl/:appUrlId', function(req, res) { //function(instanceId, ipaddress, callback)
+        logger.debug("Enter post() for /instances/%s/appUrl/update", req.params.instanceId);
+        instancesDao.removeAppUrl(req.params.instanceId, req.params.appUrlId, function(err, deleteCount) {
+            if (err) {
+                logger.error("Failed to remove app url", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            res.send({
+                deleteCount: deleteCount
+            });
+        });
+    });
     //updateInstanceIp
     app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
         logger.debug("Enter get() for /instances/updateip/%s/%s", req.params.instanceId, req.params.ipaddress);
